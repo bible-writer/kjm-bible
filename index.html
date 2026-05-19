@@ -285,21 +285,27 @@
       scroll-margin-top: 27vh;
       scroll-margin-top: 27dvh;
     }
-    /* v142: iPad Safari 전용 보정
-       iPad는 가상 키보드 떠도 viewport 높이가 거의 안 줄어들어 27dvh가 과도하게 큼.
-       → 본문창과 입력창 사이 큰 빈 공간 발생.
-       JS에서 body.is-ipad 클래스 부여 → 여백/높이 조정 */
+    /* v142 → v143: iPad Safari 전용 보정
+       iPad는 가상 키보드 떠도 viewport가 안 줄어들어서, fixed 본문창 + 큰 여백 자체가
+       불필요. 키보드 모드에서도 일반 레이아웃 유지하면 빈 공간 사라짐.
+       !important로 기존 fixed 규칙 모두 무력화. */
     body.is-ipad.keyboard-mode.virtual-keyboard-up .split-left .text-display {
-      max-height: 30vh;
+      position: static !important;
+      max-height: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      margin: inherit !important;
+      padding: inherit !important;
     }
     body.is-ipad.keyboard-mode.virtual-keyboard-up .split-left .text-display .text-content {
-      max-height: 24vh;
+      max-height: 22vh !important;
+      min-height: auto !important;
     }
     body.is-ipad.keyboard-mode.virtual-keyboard-up .split-right {
-      margin-top: 32vh;
+      margin-top: 0 !important;
     }
     body.is-ipad.keyboard-mode.virtual-keyboard-up .write-textarea {
-      scroll-margin-top: 32vh;
+      scroll-margin-top: 0 !important;
     }
   }
 
@@ -14651,7 +14657,7 @@ try {
   dbg.id = 'ipad-debug';
   dbg.style.cssText = 'position:fixed;top:5px;right:5px;z-index:99999;background:#000;color:#0f0;padding:6px 10px;font-size:11px;font-family:monospace;border-radius:6px;max-width:280px;line-height:1.5;opacity:0.9;';
   dbg.innerHTML =
-    'v142 디버그<br>' +
+    'v143 디버그<br>' +
     'iPad UA: ' + (hasIPad ? '✅' : '❌') + '<br>' +
     'MacTouch: ' + (isMacTouch ? '✅' : '❌') + '<br>' +
     'maxTouch: ' + navigator.maxTouchPoints + '<br>' +
