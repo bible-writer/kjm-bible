@@ -6531,6 +6531,32 @@ function drawSinglePoint(e) {
   }
 
   const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
+  // ============ 진단 코드 (압력 값 실시간 표시) ============
+  try {
+    let dbg = document.getElementById('pressure-debug');
+    if (!dbg) {
+      dbg = document.createElement('div');
+      dbg.id = 'pressure-debug';
+      dbg.style.cssText = 'position:fixed;top:5px;right:5px;z-index:99999;background:#000;color:#0f0;padding:8px 12px;font-size:12px;font-family:monospace;border-radius:6px;line-height:1.6;opacity:0.92;min-width:200px;';
+      dbg.onclick = () => dbg.remove();
+      document.body.appendChild(dbg);
+    }
+    const ptype = e.pointerType || 'unknown';
+    const rawP = (typeof e.pressure === 'number') ? e.pressure.toFixed(3) : 'undef';
+    const usedP = pressure.toFixed(3);
+    const force = e.touches?.[0]?.force;
+    const forceStr = (typeof force === 'number') ? force.toFixed(3) : '-';
+    const finalSize = (currentStroke.size * (0.4 + pressure * 1.2)).toFixed(2);
+    dbg.innerHTML =
+      '압력 진단 (탭하면 사라짐)<br>' +
+      'pointerType: ' + ptype + '<br>' +
+      'e.pressure: ' + rawP + '<br>' +
+      'touch.force: ' + forceStr + '<br>' +
+      '사용된 pressure: ' + usedP + '<br>' +
+      '굵기 배율: ' + (0.4 + pressure * 1.2).toFixed(2) + '<br>' +
+      '최종 굵기: ' + finalSize + 'px (기본 ' + currentStroke.size + ')';
+  } catch(e) {}
+  // ============ 진단 코드 끝 ============
   const dynamicSize = currentStroke.eraser ? currentStroke.size : currentStroke.size * (0.4 + pressure * 1.2);
 
   ctx.globalCompositeOperation = currentStroke.eraser ? 'destination-out' : 'source-over';
