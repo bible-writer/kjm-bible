@@ -309,6 +309,138 @@
     }
   }
 
+  /* v145 → v146: 빠른 이동 패널 전체 숨김
+     이유: 빠른 이동 입력 + 칩 모두 혼선 발생. 책/장/절 선택 UI로만 이동하도록 단순화.
+     HTML, JS, 저장 로직은 그대로 보존 (CSS 한 줄만 풀면 복구). */
+  #quickJumpPanel {
+    display: none !important;
+  }
+
+  /* v147: 책/장 그리드 선택 UI (참고 앱 스타일)
+     기존 input + datalist는 그대로 유지하고, 그 위에 시각적 그리드 추가.
+     그리드 버튼 클릭 → 해당 input 값 변경 + change 이벤트 발생 → 기존 로직 그대로 동작
+     v148: 단계적 표시 (초기 숨김 + 클릭 시 펼침/접힘) */
+  .book-grid-section,
+  .chapter-grid-section {
+    display: none;   /* v148: 기본 숨김 */
+  }
+  .book-grid-section.open,
+  .chapter-grid-section.open {
+    display: block;  /* v148: 클래스 추가 시 펼침 */
+  }
+  .book-grid-section {
+    padding: 8px 10px 4px;
+    border-bottom: 1px solid #ead9bc;
+  }
+  .book-grid-section .grid-section-label {
+    font-size: 12px;
+    color: #8b6f3f;
+    font-weight: 700;
+    margin: 8px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .book-grid-section .grid-section-label::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 13px;
+    background: currentColor;
+    border-radius: 1px;
+  }
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 5px;
+    margin-bottom: 4px;
+  }
+  .book-btn {
+    padding: 8px 4px;
+    border: 1px solid;
+    border-radius: 6px;
+    background: var(--paper);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .book-btn:active { transform: scale(0.95); }
+  .book-btn.selected {
+    background: var(--accent) !important;
+    color: #fff !important;
+    border-color: var(--accent) !important;
+  }
+  /* 분류별 색상 (참고 앱과 비슷한 톤) */
+  .book-btn.cat-pentateuch { color: #2d7a4a; border-color: #b4d9bf; background: #ecf7ef; }
+  .book-btn.cat-history    { color: #2d7a4a; border-color: #b4d9bf; background: #ecf7ef; }
+  .book-btn.cat-poetry     { color: #2563a8; border-color: #b8d0e8; background: #ecf3fa; }
+  .book-btn.cat-major      { color: #8e44ad; border-color: #d4b8e0; background: #f5eef8; }
+  .book-btn.cat-minor      { color: #c27500; border-color: #e8c896; background: #fdf3e0; }
+  .book-btn.cat-gospel     { color: #c0392b; border-color: #e8b8b0; background: #fbecea; }
+  .book-btn.cat-acts       { color: #c0392b; border-color: #e8b8b0; background: #fbecea; }
+  .book-btn.cat-paul       { color: #6a4ba0; border-color: #c8b8e0; background: #f0ebf8; }
+  .book-btn.cat-general    { color: #2d7a4a; border-color: #b4d9bf; background: #ecf7ef; }
+  .book-btn.cat-revelation { color: #c27500; border-color: #e8c896; background: #fdf3e0; }
+  /* 분류 라벨 색상 */
+  .grid-section-label.cat-pentateuch,
+  .grid-section-label.cat-history,
+  .grid-section-label.cat-general    { color: #2d7a4a; }
+  .grid-section-label.cat-poetry     { color: #2563a8; }
+  .grid-section-label.cat-major      { color: #8e44ad; }
+  .grid-section-label.cat-minor,
+  .grid-section-label.cat-revelation { color: #c27500; }
+  .grid-section-label.cat-gospel,
+  .grid-section-label.cat-acts       { color: #c0392b; }
+  .grid-section-label.cat-paul       { color: #6a4ba0; }
+
+  /* 장 그리드 */
+  .chapter-grid-section {
+    padding: 8px 10px;
+    border-bottom: 1px solid #ead9bc;
+  }
+  .chapter-grid-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .chapter-grid-title {
+    font-size: 13px;
+    color: #8b6f3f;
+    font-weight: 700;
+  }
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+  }
+  @media (max-width: 600px) {
+    .chapter-grid { grid-template-columns: repeat(7, 1fr); }
+  }
+  .chapter-btn {
+    padding: 8px 0;
+    border: 1px solid #d4b896;
+    border-radius: 5px;
+    background: var(--paper);
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b5430;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .chapter-btn:active { transform: scale(0.92); }
+  .chapter-btn.selected {
+    background: var(--accent) !important;
+    color: #fff !important;
+    border-color: var(--accent) !important;
+  }
+
   /* ============ 종이 끝 도달 시 액션 바 ============ */
   .paper-end-actions {
     position: absolute;
@@ -3693,6 +3825,12 @@
               <input type="number" id="verseInput" min="1" value="1">
             </div>
           </div>
+
+          <!-- v147: 책 그리드 (분류별 색상) — JS로 자동 채움 -->
+          <div class="book-grid-section" id="bookGridSection"></div>
+
+          <!-- v147: 장 그리드 (1~N 숫자) — JS로 자동 채움 -->
+          <div class="chapter-grid-section" id="chapterGridSection"></div>
         </div>
       </div>
 
@@ -5248,8 +5386,33 @@ async function init() {
       loadBooks();
       loadChapters();
       await loadAll();
+      // v148: 구약/신약 탭 클릭 → 책 그리드 열기, 장 그리드 닫기
+      const bSec = document.getElementById('bookGridSection');
+      const cSec = document.getElementById('chapterGridSection');
+      if (bSec) bSec.classList.add('open');
+      if (cSec) cSec.classList.remove('open');
     });
   });
+
+  // v148: input 클릭 시 해당 그리드 토글 펼침 (재선택용)
+  const bookInputEl = document.getElementById('bookInput');
+  if (bookInputEl) {
+    bookInputEl.addEventListener('click', () => {
+      const bSec = document.getElementById('bookGridSection');
+      const cSec = document.getElementById('chapterGridSection');
+      if (bSec) bSec.classList.add('open');
+      if (cSec) cSec.classList.remove('open');
+    });
+  }
+  const chapterInputEl = document.getElementById('chapterInput');
+  if (chapterInputEl) {
+    chapterInputEl.addEventListener('click', () => {
+      const bSec = document.getElementById('bookGridSection');
+      const cSec = document.getElementById('chapterGridSection');
+      if (bSec) bSec.classList.remove('open');
+      if (cSec) cSec.classList.add('open');
+    });
+  }
 
   bookSelect.addEventListener('change', async () => {
     await saveAll(true);
@@ -5731,6 +5894,8 @@ function loadBooks() {
   if (bookInput && books[currentBookIdx]) {
     bookInput.value = books[currentBookIdx].name;
   }
+  // v147: 책 그리드 갱신
+  if (typeof buildBookGrid === 'function') buildBookGrid();
 }
 
 function loadChapters() {
@@ -5759,6 +5924,92 @@ function loadChapters() {
     chInput.value = currentChapter;
     chInput.max = book.chapters;
   }
+  // v147: 장 그리드 갱신
+  if (typeof buildChapterGrid === 'function') buildChapterGrid();
+}
+
+// v147: 책 분류 — 인덱스 범위로 카테고리 매핑
+//   bookInput change 이벤트와 호환 → 그리드 클릭 시 input value 변경 + change 발화로 처리
+const BOOK_CATEGORIES = {
+  old: [
+    { label: '모세오경',  cls: 'cat-pentateuch', start: 0,  end: 4  },   // 창~신
+    { label: '역사서',    cls: 'cat-history',    start: 5,  end: 16 },   // 수~에
+    { label: '시가서',    cls: 'cat-poetry',     start: 17, end: 21 },   // 욥~아
+    { label: '대선지서',  cls: 'cat-major',      start: 22, end: 26 },   // 사~단
+    { label: '소선지서',  cls: 'cat-minor',      start: 27, end: 38 }    // 호~말
+  ],
+  new: [
+    { label: '복음서',    cls: 'cat-gospel',     start: 0,  end: 3  },   // 마~요
+    { label: '사도행전',  cls: 'cat-acts',       start: 4,  end: 4  },   // 행
+    { label: '바울서신',  cls: 'cat-paul',       start: 5,  end: 17 },   // 롬~몬
+    { label: '일반서신',  cls: 'cat-general',    start: 18, end: 25 },   // 히~유
+    { label: '계시록',    cls: 'cat-revelation', start: 26, end: 26 }    // 계
+  ]
+};
+
+function buildBookGrid() {
+  const sec = document.getElementById('bookGridSection');
+  if (!sec) return;
+  const books = BIBLE_DATA[currentTestament];
+  const cats = BOOK_CATEGORIES[currentTestament];
+  let html = '';
+  cats.forEach(cat => {
+    html += `<div class="grid-section-label ${cat.cls}">${cat.label}</div>`;
+    html += '<div class="book-grid">';
+    for (let i = cat.start; i <= cat.end; i++) {
+      const b = books[i];
+      if (!b) continue;
+      const sel = (i === currentBookIdx) ? ' selected' : '';
+      // 책 이름이 길면 약어로 표시할 수도 있으나 일단 그대로
+      html += `<button class="book-btn ${cat.cls}${sel}" data-idx="${i}">${b.name}</button>`;
+    }
+    html += '</div>';
+  });
+  sec.innerHTML = html;
+  // 클릭 → bookInput.value 변경 후 change 이벤트 발화 → 기존 흐름 그대로
+  sec.querySelectorAll('.book-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx, 10);
+      const targetName = books[idx]?.name;
+      if (!targetName) return;
+      const bookInput = document.getElementById('bookInput');
+      if (!bookInput) return;
+      bookInput.value = targetName;
+      bookInput.dispatchEvent(new Event('change'));
+      // v148: 책 선택 완료 → 책 그리드 닫고, 장 그리드 열기
+      sec.classList.remove('open');
+      const chSec = document.getElementById('chapterGridSection');
+      if (chSec) chSec.classList.add('open');
+    });
+  });
+}
+
+function buildChapterGrid() {
+  const sec = document.getElementById('chapterGridSection');
+  if (!sec) return;
+  const book = BIBLE_DATA[currentTestament][currentBookIdx];
+  if (!book) return;
+  const unit = (typeof chapterUnit === 'function') ? chapterUnit(book.name) : '장';
+  let html = `<div class="chapter-grid-header"><span class="chapter-grid-title">${book.name} — ${unit} 선택 (총 ${book.chapters}${unit})</span></div>`;
+  html += '<div class="chapter-grid">';
+  for (let i = 1; i <= book.chapters; i++) {
+    const sel = (i === currentChapter) ? ' selected' : '';
+    html += `<button class="chapter-btn${sel}" data-ch="${i}">${i}</button>`;
+  }
+  html += '</div>';
+  sec.innerHTML = html;
+  // 클릭 → chapterInput.value 변경 후 change 이벤트 발화
+  sec.querySelectorAll('.chapter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ch = parseInt(btn.dataset.ch, 10);
+      const chInput = document.getElementById('chapterInput');
+      if (!chInput) return;
+      chInput.value = ch;
+      chInput.dispatchEvent(new Event('change'));
+      // v148: 장 선택 완료 → 장 그리드 닫기 (모두 숨김 상태)
+      sec.classList.remove('open');
+    });
+  });
 }
 
 function updateRef() {
