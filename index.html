@@ -14710,11 +14710,15 @@ if (writeAreaForKb) {
       // 해당 줄의 텍스트 추출
       const lines = ta.value.split('\n');
       if (middleVisibleLine >= lines.length) {
-        // textarea가 끝에 가까우면 마지막 절번호로
+        // v144: textarea가 끝에 가까우면 마지막 입력 절번호로 가운데 정렬
+        //   이전(v143): 'end' 모드 → 본문창 맨 아래(scrollHeight)로 점프하는 버그
+        //   증상: 9절 입력 중인데 본문창이 갑자기 마지막 절로 점프
+        //   원인: 'end' 모드는 scrollOffset = scrollHeight로 본문창 끝으로 보냄
+        //   수정: 'center'로 변경 → 마지막 입력 절을 본문창 가운데 표시
         for (let i = lines.length - 1; i >= 0; i--) {
           const m = lines[i].match(/^\s*(\d{1,3})[\.\s]/);
           if (m) {
-            scrollSourceToVerse(parseInt(m[1]), 'end');
+            scrollSourceToVerse(parseInt(m[1]), 'center');
             return;
           }
         }
