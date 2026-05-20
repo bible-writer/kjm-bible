@@ -6282,6 +6282,20 @@ function isLikelyApplePencil(e) {
   return false;
 }
 
+// v153: 압력 → 굵기 배율 계산 (iPad 정규화 포함)
+//   진단 결과: iPad Pro 2세대 + Apple Pencil 1세대는 Safari가 압력을 0~0.2 범위로만 보고함.
+//   (갤탭 S-Pen은 0~1 전체 사용)
+//   → iPad에서만 압력을 5배 증폭해서 0~1 범위로 정규화 → 갤탭과 동일한 강약 표현
+//   기존 식: size * (0.4 + pressure * 1.2) → 40%~160%
+function computeSizeMultiplier(pressure) {
+  let p = pressure;
+  // iPad 환경에서만 압력 정규화 (갤탭/안드로이드/PC는 영향 없음)
+  if (document.body.classList.contains('is-ipad')) {
+    p = Math.min(1, pressure * 5);
+  }
+  return 0.4 + p * 1.2;
+}
+
 // v47j127: 펜 진단 표시 토글 (URL에 ?debug 붙이면 켜짐)
 function isPenDebugEnabled() {
   return location.search.includes('debug') || localStorage.getItem('bible_penDebug') === '1';
@@ -6531,33 +6545,7 @@ function drawSinglePoint(e) {
   }
 
   const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
-  // ============ 진단 코드 (압력 값 실시간 표시) ============
-  try {
-    let dbg = document.getElementById('pressure-debug');
-    if (!dbg) {
-      dbg = document.createElement('div');
-      dbg.id = 'pressure-debug';
-      dbg.style.cssText = 'position:fixed;top:5px;right:5px;z-index:99999;background:#000;color:#0f0;padding:8px 12px;font-size:12px;font-family:monospace;border-radius:6px;line-height:1.6;opacity:0.92;min-width:200px;';
-      dbg.onclick = () => dbg.remove();
-      document.body.appendChild(dbg);
-    }
-    const ptype = e.pointerType || 'unknown';
-    const rawP = (typeof e.pressure === 'number') ? e.pressure.toFixed(3) : 'undef';
-    const usedP = pressure.toFixed(3);
-    const force = e.touches?.[0]?.force;
-    const forceStr = (typeof force === 'number') ? force.toFixed(3) : '-';
-    const finalSize = (currentStroke.size * (0.4 + pressure * 1.2)).toFixed(2);
-    dbg.innerHTML =
-      '압력 진단 (탭하면 사라짐)<br>' +
-      'pointerType: ' + ptype + '<br>' +
-      'e.pressure: ' + rawP + '<br>' +
-      'touch.force: ' + forceStr + '<br>' +
-      '사용된 pressure: ' + usedP + '<br>' +
-      '굵기 배율: ' + (0.4 + pressure * 1.2).toFixed(2) + '<br>' +
-      '최종 굵기: ' + finalSize + 'px (기본 ' + currentStroke.size + ')';
-  } catch(e) {}
-  // ============ 진단 코드 끝 ============
-  const dynamicSize = currentStroke.eraser ? currentStroke.size : currentStroke.size * (0.4 + pressure * 1.2);
+  const dynamicSize = currentStroke.eraser ? currentStroke.size : currentStroke.size * computeSizeMultiplier(pressure);
 
   ctx.globalCompositeOperation = currentStroke.eraser ? 'destination-out' : 'source-over';
   ctx.strokeStyle = currentStroke.color || 'rgba(0,0,0,1)';
@@ -6690,7 +6678,7 @@ function drawStroke(s) {
   if (s.points.length === 2) {
     const p0 = s.points[0], p1 = s.points[1];
     const pressure = p1.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
+    ctx.lineWidth = s.eraser ? s.size : s.size * computeSizeMultiplier(pressure);
     ctx.beginPath();
     ctx.moveTo(p0.x, p0.y);
     ctx.lineTo(p1.x, p1.y);
@@ -6707,7 +6695,7 @@ function drawStroke(s) {
   {
     const p0 = pts[0], p1 = pts[1];
     const pressure = p0.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
+    ctx.lineWidth = s.eraser ? s.size : s.size * computeSizeMultiplier(pressure);
     const mid01x = (p0.x + p1.x) / 2;
     const mid01y = (p0.y + p1.y) / 2;
     ctx.beginPath();
@@ -6722,7 +6710,7 @@ function drawStroke(s) {
     const curr = pts[i];
     const next = pts[i + 1];
     const pressure = curr.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
+    ctx.lineWidth = s.eraser ? s.size : s.size * computeSizeMultiplier(pressure);
 
     const prevMidX = (prev.x + curr.x) / 2;
     const prevMidY = (prev.y + curr.y) / 2;
@@ -6740,7 +6728,7 @@ function drawStroke(s) {
     const pn1 = pts[pts.length - 2];
     const pn = pts[pts.length - 1];
     const pressure = pn.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
+    ctx.lineWidth = s.eraser ? s.size : s.size * computeSizeMultiplier(pressure);
     const midX = (pn1.x + pn.x) / 2;
     const midY = (pn1.y + pn.y) / 2;
     ctx.beginPath();
@@ -9865,7 +9853,7 @@ function hinaDrawPoint(e, sec, canvas) {
   }
 
   const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
-  const dynamicSize = s.currentStroke.eraser ? s.currentStroke.size : s.currentStroke.size * (0.4 + pressure * 1.2);
+  const dynamicSize = s.currentStroke.eraser ? s.currentStroke.size : s.currentStroke.size * computeSizeMultiplier(pressure);
   const midX = (s.lastX + pos.x) / 2, midY = (s.lastY + pos.y) / 2;
 
   ctx.globalCompositeOperation = 'source-over';
@@ -11819,7 +11807,7 @@ function renderStrokesToImage(strokes, width, height) {
       const p = s.points[i];
       const prev = s.points[i-1];
       const pressure = p.p || 0.5;
-      tctx.lineWidth = (s.eraser ? s.size : s.size * (0.4 + pressure * 1.2)) * scale;
+      tctx.lineWidth = (s.eraser ? s.size : s.size * computeSizeMultiplier(pressure)) * scale;
       tctx.beginPath();
       // crop offset 적용 (원본 좌표를 crop 영역 기준으로 평행이동)
       tctx.moveTo((prev.x - cropMinX) * scale, (prev.y - cropMinY) * scale);
