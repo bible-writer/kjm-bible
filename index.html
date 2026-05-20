@@ -356,18 +356,35 @@
     margin-bottom: 4px;
   }
   .book-btn {
-    padding: 8px 4px;
+    padding: 6px 4px;
     border: 1px solid;
     border-radius: 6px;
     background: var(--paper);
-    font-size: 13px;
-    font-weight: 600;
     cursor: pointer;
     text-align: center;
     transition: all 0.15s;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+  }
+  /* v150: 약어(크게) + 전체이름(작게) 2줄 */
+  .book-btn .abbr {
+    font-size: 14px;
+    font-weight: 700;
+    display: block;
+  }
+  .book-btn .full {
+    font-size: 9.5px;
+    font-weight: 500;
+    opacity: 0.75;
+    display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
   }
   .book-btn:active { transform: scale(0.95); }
   .book-btn.selected {
@@ -5947,6 +5964,41 @@ const BOOK_CATEGORIES = {
   ]
 };
 
+// v149: 책 약어 (한국 성경 표준)
+//   그리드 버튼 표시는 약어, 클릭 시 BIBLE_DATA 원래 이름으로 input 채움 → 본문 로드 영향 0
+const BOOK_ABBR_SHORT = {
+  '창세기': '창', '출애굽기': '출', '레위기': '레', '민수기': '민', '신명기': '신',
+  '여호수아': '수', '사사기': '삿', '룻기': '룻',
+  '사무엘상': '삼상', '사무엘하': '삼하', '열왕기상': '왕상', '열왕기하': '왕하',
+  '역대상': '대상', '역대하': '대하', '에스라': '스', '느헤미야': '느', '에스더': '에',
+  '욥기': '욥', '시편': '시', '잠언': '잠', '전도서': '전', '아가': '아',
+  '이사야': '사', '예레미야': '렘', '예레미야애가': '애', '에스겔': '겔', '다니엘': '단',
+  '호세아': '호', '요엘': '욜', '아모스': '암', '오바댜': '옵', '요나': '욘',
+  '미가': '미', '나훔': '나', '하박국': '합', '스바냐': '습', '학개': '학', '스가랴': '슥', '말라기': '말',
+  '마태복음': '마', '마가복음': '막', '누가복음': '눅', '요한복음': '요', '사도행전': '행',
+  '로마서': '롬', '고린도전서': '고전', '고린도후서': '고후',
+  '갈라디아서': '갈', '에베소서': '엡', '빌립보서': '빌', '골로새서': '골',
+  '데살로니가전서': '살전', '데살로니가후서': '살후',
+  '디모데전서': '딤전', '디모데후서': '딤후', '디도서': '딛', '빌레몬서': '몬',
+  '히브리서': '히', '야고보서': '약', '베드로전서': '벧전', '베드로후서': '벧후',
+  '요한일서': '요일', '요한이서': '요이', '요한삼서': '요삼', '유다서': '유', '요한계시록': '계'
+};
+
+// v151: 버튼 작은 글씨용 표시명 — 5글자 이상은 약어/축약형으로 (잘림 방지)
+//   기본은 BIBLE_DATA의 원래 이름, 매핑에 있는 책만 짧게 표시
+const BOOK_FULL_DISPLAY = {
+  '예레미야애가': '애가',
+  '고린도전서': '고린도전',
+  '고린도후서': '고린도후',
+  '데살로니가전서': '살전',
+  '데살로니가후서': '살후',
+  '디모데전서': '디모데전',
+  '디모데후서': '디모데후',
+  '베드로전서': '베드로전',
+  '베드로후서': '베드로후',
+  '요한계시록': '계시록'
+};
+
 function buildBookGrid() {
   const sec = document.getElementById('bookGridSection');
   if (!sec) return;
@@ -5960,8 +6012,12 @@ function buildBookGrid() {
       const b = books[i];
       if (!b) continue;
       const sel = (i === currentBookIdx) ? ' selected' : '';
-      // 책 이름이 길면 약어로 표시할 수도 있으나 일단 그대로
-      html += `<button class="book-btn ${cat.cls}${sel}" data-idx="${i}">${b.name}</button>`;
+      // v149: 그리드는 약어 표시 + 전체 이름 툴팁 (title 속성) — 마우스 호버용
+      // v150: S-Pen에서 title이 안 뜨는 문제 → 버튼 안에 약어(크게) + 전체이름(작게) 2줄 표시
+      // v151: 5글자 이상 책은 작은 글씨 축약 (잘림 방지)
+      const abbr = BOOK_ABBR_SHORT[b.name] || b.name;
+      const fullDisp = BOOK_FULL_DISPLAY[b.name] || b.name;
+      html += `<button class="book-btn ${cat.cls}${sel}" data-idx="${i}" title="${b.name}"><span class="abbr">${abbr}</span><span class="full">${fullDisp}</span></button>`;
     }
     html += '</div>';
   });
@@ -6475,7 +6531,7 @@ function drawSinglePoint(e) {
   }
 
   const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
-  const dynamicSize = currentStroke.eraser ? currentStroke.size : currentStroke.size * (0.85 + pressure * 0.3);
+  const dynamicSize = currentStroke.eraser ? currentStroke.size : currentStroke.size * (0.4 + pressure * 1.2);
 
   ctx.globalCompositeOperation = currentStroke.eraser ? 'destination-out' : 'source-over';
   ctx.strokeStyle = currentStroke.color || 'rgba(0,0,0,1)';
@@ -6608,7 +6664,7 @@ function drawStroke(s) {
   if (s.points.length === 2) {
     const p0 = s.points[0], p1 = s.points[1];
     const pressure = p1.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.85 + pressure * 0.3);
+    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
     ctx.beginPath();
     ctx.moveTo(p0.x, p0.y);
     ctx.lineTo(p1.x, p1.y);
@@ -6625,7 +6681,7 @@ function drawStroke(s) {
   {
     const p0 = pts[0], p1 = pts[1];
     const pressure = p0.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.85 + pressure * 0.3);
+    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
     const mid01x = (p0.x + p1.x) / 2;
     const mid01y = (p0.y + p1.y) / 2;
     ctx.beginPath();
@@ -6640,7 +6696,7 @@ function drawStroke(s) {
     const curr = pts[i];
     const next = pts[i + 1];
     const pressure = curr.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.85 + pressure * 0.3);
+    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
 
     const prevMidX = (prev.x + curr.x) / 2;
     const prevMidY = (prev.y + curr.y) / 2;
@@ -6658,7 +6714,7 @@ function drawStroke(s) {
     const pn1 = pts[pts.length - 2];
     const pn = pts[pts.length - 1];
     const pressure = pn.p || 0.5;
-    ctx.lineWidth = s.eraser ? s.size : s.size * (0.85 + pressure * 0.3);
+    ctx.lineWidth = s.eraser ? s.size : s.size * (0.4 + pressure * 1.2);
     const midX = (pn1.x + pn.x) / 2;
     const midY = (pn1.y + pn.y) / 2;
     ctx.beginPath();
@@ -9783,7 +9839,7 @@ function hinaDrawPoint(e, sec, canvas) {
   }
 
   const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
-  const dynamicSize = s.currentStroke.eraser ? s.currentStroke.size : s.currentStroke.size * (0.85 + pressure * 0.3);
+  const dynamicSize = s.currentStroke.eraser ? s.currentStroke.size : s.currentStroke.size * (0.4 + pressure * 1.2);
   const midX = (s.lastX + pos.x) / 2, midY = (s.lastY + pos.y) / 2;
 
   ctx.globalCompositeOperation = 'source-over';
@@ -11737,7 +11793,7 @@ function renderStrokesToImage(strokes, width, height) {
       const p = s.points[i];
       const prev = s.points[i-1];
       const pressure = p.p || 0.5;
-      tctx.lineWidth = (s.eraser ? s.size : s.size * (0.85 + pressure * 0.3)) * scale;
+      tctx.lineWidth = (s.eraser ? s.size : s.size * (0.4 + pressure * 1.2)) * scale;
       tctx.beginPath();
       // crop offset 적용 (원본 좌표를 crop 영역 기준으로 평행이동)
       tctx.moveTo((prev.x - cropMinX) * scale, (prev.y - cropMinY) * scale);
