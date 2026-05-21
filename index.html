@@ -6285,13 +6285,14 @@ function isLikelyApplePencil(e) {
 // v153: 압력 → 굵기 배율 계산 (iPad 정규화 포함)
 //   진단 결과: iPad Pro 2세대 + Apple Pencil 1세대는 Safari가 압력을 0~0.2 범위로만 보고함.
 //   (갤탭 S-Pen은 0~1 전체 사용)
-//   → iPad에서만 압력을 5배 증폭해서 0~1 범위로 정규화 → 갤탭과 동일한 강약 표현
+//   → iPad에서만 압력을 증폭해서 갤탭과 비슷한 표현 → 강약 살아남
 //   기존 식: size * (0.4 + pressure * 1.2) → 40%~160%
+// v154: 증폭 5배 → 2.5배로 감소 (5배는 너무 굵었음; 사용자 진단: iPad 2단계 ≈ 갤탭 4단계 → 약 2배 차이)
 function computeSizeMultiplier(pressure) {
   let p = pressure;
   // iPad 환경에서만 압력 정규화 (갤탭/안드로이드/PC는 영향 없음)
   if (document.body.classList.contains('is-ipad')) {
-    p = Math.min(1, pressure * 5);
+    p = Math.min(1, pressure * 2.5);
   }
   return 0.4 + p * 1.2;
 }
