@@ -18,6 +18,16 @@
   user-select: none;
   -webkit-touch-callout: none;
 }
+/* v1-12: 묵상노트 보조 설명 텍스트도 선택 방지
+   (iPad에서 손글씨 쓰는 도중 펜 끝이 텍스트 영역을 지나면 자동 선택되던 문제)
+   textarea(qt-input)은 제외 → 입력 정상 */
+.hanna-title, .hanna-desc {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
 
 :root {
   --gold: #8B6914;
