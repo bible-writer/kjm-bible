@@ -6292,11 +6292,13 @@ function isLikelyApplePencil(e) {
 // v156: 비선형 매핑 (제곱근) - 약한 압력 구간(시작/끝)을 더 굵게, 강한 압력은 적당히
 //   v153(5배)은 시작/끝 좋았지만 평균 굵음. v154/v155는 평균 OK지만 시작/끝 거침.
 //   sqrt(pressure * 2.5) 사용: 시작/끝(0.04)=76%, 강한 압력(0.19)=108% - 둘 다 만족
+// v157: 제곱근 매핑 유지하되 배수 2.5 → 1.8 (v156 평균 굵기가 갤탭보다 두꺼웠음)
+//   시작/끝(0.04)=64%, 보통(0.10)=74%, 강한 압력(0.19)=92% - 갤탭과 비슷 + 시작/끝 자연스러움
 function computeSizeMultiplier(pressure) {
   let p = pressure;
   // iPad 환경에서만 압력 정규화 (갤탭/안드로이드/PC는 영향 없음)
   if (document.body.classList.contains('is-ipad')) {
-    p = Math.sqrt(Math.min(1, pressure * 2.5));
+    p = Math.sqrt(Math.min(1, pressure * 1.8));
   }
   return 0.4 + p * 1.2;
 }
