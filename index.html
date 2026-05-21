@@ -4051,6 +4051,12 @@
           <button class="size-btn" data-size="3.25" onclick="pickFloatSize(this, 3.25)"><span class="size-dot" style="width:9px;height:9px"></span></button>
           <button class="size-btn" data-size="4" onclick="pickFloatSize(this, 4)"><span class="size-dot" style="width:11px;height:11px"></span></button>
         </div>
+        <!-- v158: 플로팅 팝업에도 굵기 슬라이더 (미세 조정용) -->
+        <div class="tool-popover-row">
+          <span class="tool-popover-label">미세</span>
+          <input type="range" id="penSizeSliderFloat" min="0.5" max="8" step="0.25" value="2.5" class="size-slider" style="flex:1;">
+          <span class="size-slider-value" id="penSizeValueFloat">2.5</span>
+        </div>
         <hr class="tool-popover-divider">
         <div class="tool-popover-row">
           <button class="small-btn" onclick="document.getElementById('clearCanvas').click(); closeToolPopover();">🗑 전체 지우기</button>
@@ -5759,31 +5765,45 @@ async function init() {
       });
       // v46b: 굵기 저장 (새로고침해도 유지)
       try { localStorage.setItem('bible_penSize', String(penSize)); } catch(e){}
-      // v158: 슬라이더도 동기화
-      const slider = document.getElementById('penSizeSlider');
-      const sval = document.getElementById('penSizeValue');
-      if (slider) slider.value = penSize;
-      if (sval) sval.textContent = penSize;
+      // v158: 메인+팝업 슬라이더 동기화 (함수는 아래에서 정의됨)
+      const s1 = document.getElementById('penSizeSlider');
+      const v1 = document.getElementById('penSizeValue');
+      const s2 = document.getElementById('penSizeSliderFloat');
+      const v2 = document.getElementById('penSizeValueFloat');
+      if (s1) s1.value = penSize;
+      if (v1) v1.textContent = penSize;
+      if (s2) s2.value = penSize;
+      if (v2) v2.textContent = penSize;
     });
   });
 
-  // v158: 굵기 슬라이더 (미세 조정)
-  const penSizeSlider = document.getElementById('penSizeSlider');
-  const penSizeValue = document.getElementById('penSizeValue');
-  if (penSizeSlider) {
-    penSizeSlider.addEventListener('input', () => {
-      penSize = parseFloat(penSizeSlider.value);
-      if (penSizeValue) penSizeValue.textContent = penSize;
-      // 5단계 버튼은 비활성화 (슬라이더 값이 5단계와 정확히 일치하지 않는 한)
-      document.querySelectorAll('.canvas-toolbar .size-btn').forEach(b => {
-        b.classList.toggle('active', parseFloat(b.dataset.size) === penSize);
-      });
-      document.querySelectorAll('#toolPopover .size-btn').forEach(b => {
-        b.classList.toggle('active', parseFloat(b.dataset.size) === penSize);
-      });
-      try { localStorage.setItem('bible_penSize', String(penSize)); } catch(e){}
+  // v158: 굵기 슬라이더 (미세 조정) - 메인 도구바 + 플로팅 팝업
+  function syncAllSliders(newSize) {
+    const slider1 = document.getElementById('penSizeSlider');
+    const sval1 = document.getElementById('penSizeValue');
+    const slider2 = document.getElementById('penSizeSliderFloat');
+    const sval2 = document.getElementById('penSizeValueFloat');
+    if (slider1) slider1.value = newSize;
+    if (sval1) sval1.textContent = newSize;
+    if (slider2) slider2.value = newSize;
+    if (sval2) sval2.textContent = newSize;
+    // 5단계 버튼 active 동기화
+    document.querySelectorAll('.canvas-toolbar .size-btn').forEach(b => {
+      b.classList.toggle('active', parseFloat(b.dataset.size) === newSize);
+    });
+    document.querySelectorAll('#toolPopover .size-btn').forEach(b => {
+      b.classList.toggle('active', parseFloat(b.dataset.size) === newSize);
     });
   }
+  const penSizeSlider = document.getElementById('penSizeSlider');
+  const penSizeSliderFloat = document.getElementById('penSizeSliderFloat');
+  function onSliderInput(slider) {
+    penSize = parseFloat(slider.value);
+    syncAllSliders(penSize);
+    try { localStorage.setItem('bible_penSize', String(penSize)); } catch(e){}
+  }
+  if (penSizeSlider) penSizeSlider.addEventListener('input', () => onSliderInput(penSizeSlider));
+  if (penSizeSliderFloat) penSizeSliderFloat.addEventListener('input', () => onSliderInput(penSizeSliderFloat));
 
   // 지우개
   document.getElementById('eraserBtn').addEventListener('click', (e) => {
@@ -9365,11 +9385,15 @@ function restorePenSize() {
       document.querySelectorAll('#toolPopover .size-btn').forEach(b => {
         b.classList.toggle('active', parseFloat(b.dataset.size) === saved);
       });
-      // v158: 슬라이더도 동기화
+      // v158: 슬라이더도 동기화 (메인 + 팝업)
       const slider = document.getElementById('penSizeSlider');
       const sval = document.getElementById('penSizeValue');
       if (slider) slider.value = saved;
       if (sval) sval.textContent = saved;
+      const slider2 = document.getElementById('penSizeSliderFloat');
+      const sval2 = document.getElementById('penSizeValueFloat');
+      if (slider2) slider2.value = saved;
+      if (sval2) sval2.textContent = saved;
     }
   } catch(e){}
 }
@@ -10722,6 +10746,11 @@ function pickFloatSize(btn, size) {
   btn.classList.add('active');
   const orig = document.querySelector('.canvas-toolbar .size-btn[data-size="' + size + '"]');
   if (orig) orig.click();
+  // v158: 슬라이더도 동기화 (orig.click()이 메인 슬라이더는 갱신하지만 팝업 슬라이더는 별도)
+  const s2 = document.getElementById('penSizeSliderFloat');
+  const v2 = document.getElementById('penSizeValueFloat');
+  if (s2) s2.value = size;
+  if (v2) v2.textContent = size;
 }
 
 // 팝오버 외부 클릭 시 닫기
