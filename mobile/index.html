@@ -9,6 +9,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Gowun+Batang:wght@400;700&display=swap');
 
 * { box-sizing: border-box; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+/* v1-11: 본문 영역 텍스트 선택 방지 (iPad에서 길게 누르면 뜨는 복사/번역 메뉴 차단)
+   입력란(textarea, input)은 제외해서 입력은 정상 동작 */
+.source-box, .source-box * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
 
 :root {
   --gold: #8B6914;
@@ -1112,6 +1121,36 @@ html, body { height: 100%; background: var(--bg); font-family: "Gowun Batang", s
 <div class="m-toast" id="mToast"></div>
 
 <script>
+// ============================================
+// ============ v1-11: iPad 감지 + 압력 정규화 ============
+// ============================================
+// iPad에서만 Apple Pencil 압력을 5배 증폭 (Safari가 0~0.2 범위로만 보고하는 문제)
+// 갤탭/안드로이드/PC는 영향 없음 (is-ipad 클래스 없으면 증폭 안 됨)
+(function detectIPad(){
+  const ua = navigator.userAgent || '';
+  const isIPad =
+    /iPad/.test(ua) ||
+    (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  if (isIPad && document.body) {
+    document.body.classList.add('is-ipad');
+  } else if (isIPad) {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('is-ipad');
+    });
+  }
+})();
+
+// v1-11: 압력 → 굵기 배율 (v152 + v153 통합)
+//   기본: size * (0.4 + pressure * 1.2) → 40%~160% (강약 풍부)
+//   iPad: 압력 5배 증폭 (Apple Pencil 정규화)
+function computeSizeMultiplier(pressure) {
+  let p = pressure;
+  if (document.body && document.body.classList.contains('is-ipad')) {
+    p = Math.min(1, pressure * 5);
+  }
+  return 0.4 + p * 1.2;
+}
+
 // ============================================
 // ============ IndexedDB 저장소 래퍼 ============
 // ============================================
@@ -2893,7 +2932,7 @@ function qtDrawPoint(e, sec, canvas) {
   // v1-9: 캐싱된 rect 사용 (그리는 동안 좌표 안정)
   const pos = qtGetPos(e, canvas, s._cachedRect);
   const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
-  const size = s.currentStroke.eraser ? s.currentStroke.size : s.currentStroke.size * (0.8 + pressure * 0.4);
+  const size = s.currentStroke.eraser ? s.currentStroke.size : s.currentStroke.size * computeSizeMultiplier(pressure);
   const midX = (s.lastX + pos.x) / 2, midY = (s.lastY + pos.y) / 2;
   ctx.globalCompositeOperation = 'source-over';
   ctx.strokeStyle = s.currentStroke.eraser ? '#ffffff' : (s.currentStroke.color || '#2b2419');
