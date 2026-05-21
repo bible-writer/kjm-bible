@@ -2124,6 +2124,28 @@
   }
   .size-btn.active { border-color: var(--accent-deep); background: var(--paper); }
   .size-btn .dot { background: var(--ink); border-radius: 50%; }
+  /* v158: 굵기 슬라이더 (미세 조정용) */
+  .size-slider-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px dashed #d4c5a4;
+  }
+  .size-slider {
+    width: 100px;
+    height: 4px;
+    cursor: pointer;
+    accent-color: var(--accent-deep);
+  }
+  .size-slider-value {
+    font-size: 12px;
+    color: var(--ink);
+    min-width: 28px;
+    text-align: center;
+    font-family: monospace;
+  }
 
   .action-btn {
     padding: 8px 14px;
@@ -3935,6 +3957,11 @@
         <button class="size-btn active" data-size="2.5"><span class="dot" style="width:7px;height:7px"></span></button>
         <button class="size-btn" data-size="3.25"><span class="dot" style="width:9px;height:9px"></span></button>
         <button class="size-btn" data-size="4"><span class="dot" style="width:11px;height:11px"></span></button>
+        <!-- v158: 굵기 슬라이더 (미세 조정용, 5단계 버튼과 별도) -->
+        <span class="size-slider-wrap">
+          <input type="range" id="penSizeSlider" min="0.5" max="8" step="0.25" value="2.5" class="size-slider">
+          <span class="size-slider-value" id="penSizeValue">2.5</span>
+        </span>
       </div>
       <div class="tool-group">
         <button class="action-btn" id="eraserBtn">🧽 지우개</button>
@@ -5706,8 +5733,31 @@ async function init() {
       });
       // v46b: 굵기 저장 (새로고침해도 유지)
       try { localStorage.setItem('bible_penSize', String(penSize)); } catch(e){}
+      // v158: 슬라이더도 동기화
+      const slider = document.getElementById('penSizeSlider');
+      const sval = document.getElementById('penSizeValue');
+      if (slider) slider.value = penSize;
+      if (sval) sval.textContent = penSize;
     });
   });
+
+  // v158: 굵기 슬라이더 (미세 조정)
+  const penSizeSlider = document.getElementById('penSizeSlider');
+  const penSizeValue = document.getElementById('penSizeValue');
+  if (penSizeSlider) {
+    penSizeSlider.addEventListener('input', () => {
+      penSize = parseFloat(penSizeSlider.value);
+      if (penSizeValue) penSizeValue.textContent = penSize;
+      // 5단계 버튼은 비활성화 (슬라이더 값이 5단계와 정확히 일치하지 않는 한)
+      document.querySelectorAll('.canvas-toolbar .size-btn').forEach(b => {
+        b.classList.toggle('active', parseFloat(b.dataset.size) === penSize);
+      });
+      document.querySelectorAll('#toolPopover .size-btn').forEach(b => {
+        b.classList.toggle('active', parseFloat(b.dataset.size) === penSize);
+      });
+      try { localStorage.setItem('bible_penSize', String(penSize)); } catch(e){}
+    });
+  }
 
   // 지우개
   document.getElementById('eraserBtn').addEventListener('click', (e) => {
@@ -9279,17 +9329,21 @@ async function goToLastPosition() {
 function restorePenSize() {
   try {
     const saved = parseFloat(localStorage.getItem('bible_penSize'));
-    // 5단계 굵기 중 하나여야 함 (악성 값 방지)
-    const validSizes = [1, 1.75, 2.5, 3.25, 4];
-    if (validSizes.includes(saved)) {
+    // v158: 슬라이더 범위 허용 (0.5 ~ 8, 0.25 단위)
+    if (!isNaN(saved) && saved >= 0.5 && saved <= 8) {
       penSize = saved;
-      // UI 동기화
+      // UI 동기화 - 5단계 버튼 (정확히 일치하는 것만 active)
       document.querySelectorAll('.canvas-toolbar .size-btn').forEach(b => {
         b.classList.toggle('active', parseFloat(b.dataset.size) === saved);
       });
       document.querySelectorAll('#toolPopover .size-btn').forEach(b => {
         b.classList.toggle('active', parseFloat(b.dataset.size) === saved);
       });
+      // v158: 슬라이더도 동기화
+      const slider = document.getElementById('penSizeSlider');
+      const sval = document.getElementById('penSizeValue');
+      if (slider) slider.value = saved;
+      if (sval) sval.textContent = saved;
     }
   } catch(e){}
 }
