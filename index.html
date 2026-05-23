@@ -2830,6 +2830,16 @@
     font-size: 15px;
     color: #5c4a30;
     border: 1px solid rgba(184,148,92,0.25);
+    transition: background 0.15s, transform 0.1s;
+  }
+  /* v162: 클릭 가능 시각 신호 */
+  .backup-done-card .save-option:hover {
+    background: #faf2e3;
+    border-color: rgba(184,148,92,0.5);
+  }
+  .backup-done-card .save-option:active {
+    transform: scale(0.98);
+    background: #f0e6cf;
   }
   .backup-done-card .save-option .icon {
     font-size: 20px;
@@ -4718,7 +4728,7 @@
         <button class="action-btn" onclick="autoCleanup()">🧹 손글씨 정리</button>
         <button class="action-btn" onclick="resetAll()" style="color:#a83232; border-color:#d4a8a8;">🗑 전체 초기화</button>
       </div>
-      <input type="file" id="restoreFileInput" accept=".json,application/json">
+      <input type="file" id="restoreFileInput" accept=".bak,.json,application/json,application/octet-stream">
       <div class="backup-info" id="backupInfo">
         <b>📌 추천 사용법:</b><br>
         ① 매주 [📦 전체 백업] → JSON 파일이 다운로드 폴더에 저장됨<br>
@@ -4818,15 +4828,15 @@
     </div>
     <div class="save-options">
       <div class="save-options-title">✨ 안전하게 보관하세요 (택1)</div>
-      <div class="save-option">
+      <div class="save-option" id="shareOptionKakao" onclick="shareBackupFile('kakao')" style="cursor:pointer;">
         <span class="icon">📱</span>
         <span>카카오톡 → <b>나에게 보내기</b>로 파일 전송</span>
       </div>
-      <div class="save-option">
+      <div class="save-option" id="shareOptionDrive" onclick="shareBackupFile('drive')" style="cursor:pointer;">
         <span class="icon">☁️</span>
         <span>구글 드라이브 / 네이버 MYBOX에 업로드</span>
       </div>
-      <div class="save-option">
+      <div class="save-option" id="shareOptionMail" onclick="shareBackupFile('mail')" style="cursor:pointer;">
         <span class="icon">📧</span>
         <span>본인 이메일로 첨부해서 보내기</span>
       </div>
@@ -11010,9 +11020,12 @@ async function backupAll() {
   } catch (e) {}
 
   const json = JSON.stringify(backup);
-  const blob = new Blob([json], {type: 'application/json;charset=utf-8'});
+  // v163: MIME 타입 변경 (application/json → application/octet-stream)
+  // v164: 파일 확장자 .json → .bak (Chrome 안드로이드가 .json을 텍스트로 미리보기하는 문제 우회)
+  //   복구 시 .json과 .bak 둘 다 지원 (기존 백업 파일도 복구 가능)
+  const blob = new Blob([json], {type: 'application/octet-stream'});
   const today = getLocalToday();
-  const filename = `bible_tablet_backup_${today}.json`;
+  const filename = `bible_tablet_backup_${today}.bak`;
 
   // v47b: iOS Safari 호환 — iOS는 Web Share, 그 외는 기존 다운로드 방식
   const result = await downloadOrShareFile(blob, filename);
@@ -11032,18 +11045,89 @@ async function backupAll() {
     showToast(`✓ 백업 완료 (${backup.itemCount}개, ${sizeMB}MB) — 저장 위치를 선택하세요`, 3500);
   } else {
     // v47c: 다운로드 방식 — 어르신 친화 안내 카드 표시
+    // v162: blob도 함께 전달 → 카드의 버튼이 공유 시트 호출 가능
     showToast(`✓ 백업 완료 (${backup.itemCount}개, ${sizeMB}MB)`);
-    showBackupDoneCard(filename);
+    showBackupDoneCard(filename, blob);
   }
 }
 
 // v47c: 백업 완료 카드 표시
-function showBackupDoneCard(filename) {
+// v162: 공유용 blob/filename도 저장 (카드의 버튼이 실제 동작하도록)
+let _lastBackupBlob = null;
+let _lastBackupFilename = null;
+function showBackupDoneCard(filename, blob) {
   const overlay = document.getElementById('backupDoneOverlay');
   const filenameEl = document.getElementById('backupDoneFilename');
   if (!overlay || !filenameEl) return;
   filenameEl.textContent = filename;
+  // v162: 공유용으로 보관
+  _lastBackupBlob = blob || null;
+  _lastBackupFilename = filename;
   overlay.classList.add('show');
+}
+
+// v162: 백업 파일 공유 (카드의 옵션 버튼 클릭 시)
+// Web Share API 지원 기기는 시스템 공유 시트 호출 → 카톡/드라이브/메일 선택 가능
+// 미지원 기기는 안내 메시지
+async function shareBackupFile(target) {
+  if (!_lastBackupBlob || !_lastBackupFilename) {
+    showToast('백업 파일을 다시 만들어주세요');
+    return;
+  }
+  // Web Share API 시도 (v162b: canShare 체크 안 하고 직접 share() — 갤탭 Chrome 대응)
+  if (navigator.share) {
+    try {
+      const file = new File([_lastBackupBlob], _lastBackupFilename, { type: _lastBackupBlob.type });
+      // canShare가 false 반환해도 실제 share()는 동작할 수 있어서 둘 다 시도
+      const shareData = { files: [file], title: '성경필사 백업', text: _lastBackupFilename };
+      // canShare가 있고 true면 그대로, false거나 없으면 그냥 시도
+      if (!navigator.canShare || navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+        closeBackupDoneCard();
+        return;
+      }
+      // canShare가 명시적으로 false 반환 — 그래도 한 번 시도
+      await navigator.share(shareData);
+      closeBackupDoneCard();
+      return;
+    } catch (e) {
+      if (e && e.name === 'AbortError') return; // 사용자 취소
+      console.warn('공유 실패:', e);
+      // 떨어져서 fallback
+    }
+  }
+  // 미지원/실패 시 안내 (v162 final: Chrome 알림 활용 안내 추가)
+  // v164: 다운로드 페이지 ⋮ 메뉴 활용법 추가 (내용 미리보기 안 거치는 가장 깔끔한 방법)
+  const guide = {
+    kakao: '📱 카톡으로 보내는 방법:\n\n' +
+           '✨ 가장 깔끔한 방법 (내용 안 보임):\n' +
+           '1. 새 탭 → 주소창에 chrome://downloads/ 입력\n' +
+           '2. 백업 파일 옆 ⋮ (점 3개) 누르기\n' +
+           '3. 공유 → 카카오톡 선택\n\n' +
+           '또는:\n' +
+           '카카오톡 앱 → 나에게 보내기\n' +
+           '→ 📎 첨부 → 다운로드 폴더\n' +
+           '→ 백업 파일 선택',
+    drive: '☁️ 클라우드 업로드 방법:\n\n' +
+           '✨ 가장 깔끔한 방법:\n' +
+           '1. 새 탭 → 주소창에 chrome://downloads/ 입력\n' +
+           '2. 백업 파일 옆 ⋮ (점 3개) 누르기\n' +
+           '3. 공유 → 구글 드라이브/네이버 메일\n\n' +
+           '또는:\n' +
+           '구글 드라이브 / 네이버 MYBOX 앱\n' +
+           '→ 업로드 → 다운로드 폴더\n' +
+           '→ 백업 파일 선택',
+    mail: '📧 이메일 첨부 방법:\n\n' +
+          '✨ 가장 깔끔한 방법:\n' +
+          '1. 새 탭 → 주소창에 chrome://downloads/ 입력\n' +
+          '2. 백업 파일 옆 ⋮ (점 3개) 누르기\n' +
+          '3. 공유 → Gmail/네이버 메일 선택\n\n' +
+          '또는:\n' +
+          '메일 앱 → 새 메일 → 본인 주소\n' +
+          '→ 📎 첨부 → 다운로드 폴더\n' +
+          '→ 백업 파일 선택'
+  };
+  alert(guide[target] || '다운로드 폴더의 백업 파일을 원하는 곳에 업로드하세요.');
 }
 
 function closeBackupDoneCard() {
