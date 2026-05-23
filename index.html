@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>성경 필사 + QT (v141 절탭 자동채움)</title>
+<title>성경 필사 + QT</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap');
@@ -11096,38 +11096,59 @@ async function shareBackupFile(target) {
       // 떨어져서 fallback
     }
   }
-  // 미지원/실패 시 안내 (v162 final: Chrome 알림 활용 안내 추가)
-  // v164: 다운로드 페이지 ⋮ 메뉴 활용법 추가 (내용 미리보기 안 거치는 가장 깔끔한 방법)
+  // 미지원/실패 시 안내 (v166: 더 친절하고 따라하기 쉽게)
   const guide = {
-    kakao: '📱 카톡으로 보내는 방법:\n\n' +
-           '✨ 가장 깔끔한 방법 (내용 안 보임):\n' +
-           '1. 새 탭 → 주소창에 chrome://downloads/ 입력\n' +
-           '2. 백업 파일 옆 ⋮ (점 3개) 누르기\n' +
-           '3. 공유 → 카카오톡 선택\n\n' +
-           '또는:\n' +
-           '카카오톡 앱 → 나에게 보내기\n' +
+    kakao: '📱 카톡으로 백업 보내기\n\n' +
+           '━━━━━━━━━━━━━━\n' +
+           '✨ 추천 방법 (내용 안 보임)\n' +
+           '━━━━━━━━━━━━━━\n\n' +
+           '① Chrome 새 탭 열기 (+)\n' +
+           '② 주소창에 입력:\n' +
+           '    chrome://downloads/\n' +
+           '③ 백업 파일 옆 ⋮ (점 3개)\n' +
+           '④ 공유 → 카카오톡\n' +
+           '⑤ "나에게 보내기" 선택\n\n' +
+           '━━━━━━━━━━━━━━\n' +
+           '다른 방법\n' +
+           '━━━━━━━━━━━━━━\n\n' +
+           '카카오톡 앱 직접 열기\n' +
+           '→ 나에게 보내기\n' +
            '→ 📎 첨부 → 다운로드 폴더\n' +
-           '→ 백업 파일 선택',
-    drive: '☁️ 클라우드 업로드 방법:\n\n' +
-           '✨ 가장 깔끔한 방법:\n' +
-           '1. 새 탭 → 주소창에 chrome://downloads/ 입력\n' +
-           '2. 백업 파일 옆 ⋮ (점 3개) 누르기\n' +
-           '3. 공유 → 구글 드라이브/네이버 메일\n\n' +
-           '또는:\n' +
-           '구글 드라이브 / 네이버 MYBOX 앱\n' +
+           '→ .bak 백업 파일 선택',
+    drive: '☁️ 클라우드에 백업 보관\n\n' +
+           '━━━━━━━━━━━━━━\n' +
+           '✨ 추천 방법\n' +
+           '━━━━━━━━━━━━━━\n\n' +
+           '① Chrome 새 탭 열기 (+)\n' +
+           '② 주소창에 입력:\n' +
+           '    chrome://downloads/\n' +
+           '③ 백업 파일 옆 ⋮ (점 3개)\n' +
+           '④ 공유 → 드라이브 선택\n\n' +
+           '━━━━━━━━━━━━━━\n' +
+           '다른 방법\n' +
+           '━━━━━━━━━━━━━━\n\n' +
+           '구글 드라이브 / 네이버 MYBOX\n' +
            '→ 업로드 → 다운로드 폴더\n' +
-           '→ 백업 파일 선택',
-    mail: '📧 이메일 첨부 방법:\n\n' +
-          '✨ 가장 깔끔한 방법:\n' +
-          '1. 새 탭 → 주소창에 chrome://downloads/ 입력\n' +
-          '2. 백업 파일 옆 ⋮ (점 3개) 누르기\n' +
-          '3. 공유 → Gmail/네이버 메일 선택\n\n' +
-          '또는:\n' +
-          '메일 앱 → 새 메일 → 본인 주소\n' +
-          '→ 📎 첨부 → 다운로드 폴더\n' +
-          '→ 백업 파일 선택'
+           '→ .bak 백업 파일 선택',
+    mail: '📧 이메일로 백업 보내기\n\n' +
+          '━━━━━━━━━━━━━━\n' +
+          '✨ 추천 방법\n' +
+          '━━━━━━━━━━━━━━\n\n' +
+          '① Chrome 새 탭 열기 (+)\n' +
+          '② 주소창에 입력:\n' +
+          '    chrome://downloads/\n' +
+          '③ 백업 파일 옆 ⋮ (점 3개)\n' +
+          '④ 공유 → Gmail/네이버메일\n' +
+          '⑤ 본인 이메일 입력 → 전송\n\n' +
+          '━━━━━━━━━━━━━━\n' +
+          '다른 방법\n' +
+          '━━━━━━━━━━━━━━\n\n' +
+          '메일 앱 → 새 메일\n' +
+          '→ 본인 주소 → 📎 첨부\n' +
+          '→ 다운로드 폴더\n' +
+          '→ .bak 백업 파일 선택'
   };
-  alert(guide[target] || '다운로드 폴더의 백업 파일을 원하는 곳에 업로드하세요.');
+  alert(guide[target] || '다운로드 폴더의 백업 파일을\n원하는 곳에 업로드하세요.');
 }
 
 function closeBackupDoneCard() {
@@ -12698,16 +12719,44 @@ function closeBackupReminderToast() {
   setTimeout(() => wrap.remove(), 400);
 }
 
-function updateBackupInfo() {
+async function updateBackupInfo() {
   const info = document.getElementById('backupInfo');
   if (!info) return;
 
   const lastBackup = localStorage.getItem('bible_lastBackup');
   const verseCount = JSON.parse(localStorage.getItem('bible_history') || '[]').length;
   const qtCount = JSON.parse(localStorage.getItem('bible_qtList') || '[]').length;
-  const ratio = getStorageRatio();
-  const percent = Math.round(ratio * 100);
-  const usage = formatBytes(getStorageUsage());
+  
+  // v165: 정확한 저장 용량 - IndexedDB 포함 (navigator.storage.estimate)
+  //   이전: getStorageUsage()는 LocalStorage만 + 5MB 한도 (잘못된 정보)
+  //   변경: 실제 사용량 + 실제 한도 (GB 단위)
+  let ratio = 0;
+  let percent = 0;
+  let usage = '0 B';
+  let usageDetail = '';
+  try {
+    if (navigator.storage && navigator.storage.estimate) {
+      const est = await navigator.storage.estimate();
+      const used = est.usage || 0;
+      const quota = est.quota || (5 * 1024 * 1024 * 1024); // fallback 5GB
+      ratio = used / quota;
+      percent = Math.round(ratio * 100);
+      usage = formatBytes(used);
+      const quotaStr = formatBytes(quota);
+      usageDetail = `${usage} / ${quotaStr}`;
+    } else {
+      // 구형 브라우저 fallback
+      ratio = getStorageRatio();
+      percent = Math.round(ratio * 100);
+      usage = formatBytes(getStorageUsage());
+      usageDetail = usage;
+    }
+  } catch(e) {
+    ratio = getStorageRatio();
+    percent = Math.round(ratio * 100);
+    usage = formatBytes(getStorageUsage());
+    usageDetail = usage;
+  }
 
   // 사용량 색상
   let usageColor = '#5c4a30';
@@ -12721,7 +12770,7 @@ function updateBackupInfo() {
       <div style="background:${usageColor}; height:100%; width:${barWidth}%; transition:width 0.3s;"></div>
     </div>
     <div style="font-size:11px; margin-top:4px; color:${usageColor};">
-      저장 사용량: ${usage} (${percent}%)
+      저장 사용량: ${usageDetail} (${percent}%)
     </div>
   `;
 
