@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>성경 필사 + QT</title>
+<title>성경 필사 + QT (v168)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap');
@@ -1049,7 +1049,7 @@
   /* 장 단위 본문 표시 */
   .chapter-text-content {
     font-size: 20px;
-    line-height: 2;
+    line-height: 1.7;  /* v167: 2 → 1.7 (PC에서 절 사이 공간 너무 컸음, 갤탭과 통일) */
     color: var(--ink);
     max-height: 600px;
     overflow-y: auto;
@@ -1057,12 +1057,13 @@
     word-break: keep-all;
   }
   .chapter-verse-line {
-    margin-bottom: 8px;
-    padding: 6px 8px;
+    margin-bottom: 4px;  /* v167: 8 → 4 (PC에서 절 사이 공간 줄임) */
+    padding: 4px 8px;    /* v167: 6 → 4 (위아래 패딩 줄임) */
     border-radius: 4px;
     cursor: pointer; /* v141: 절 탭으로 입력칸 자동 채움 가능 */
   }
   /* v43: 좁은 화면(세로 모드)에서 line-height 줄여서 가로 모드와 시각적 일치 */
+  /* v167: PC와 통일했으므로 미디어 쿼리 동일 값 유지 */
   @media (max-width: 900px) {
     .chapter-text-content {
       line-height: 1.7;
@@ -11469,6 +11470,7 @@ async function exportPDF() {
   if (!pickResult) return;
   const selectedDates = pickResult.dates || [];
   const hqMode = !!pickResult.hq;
+  const noCoverMode = !!pickResult.noCover;  // v168: 표지 제외 옵션
   if (selectedDates.length === 0) {
     showToast('선택된 날짜가 없습니다');
     return;
@@ -11513,10 +11515,13 @@ async function exportPDF() {
     const strokeH = hqMode ? 600 : 300;
 
     // 표지 (v141: 한글화 — pdf.text는 한글 깨지므로 dti 사용)
-    await dti(null, '聖經筆寫', 0, 75, pageW, { fontSize: 32, color: '#3c3228', align: 'center', noWrap: true });
-    await dti(null, '성경 필사 & 묵상노트', 0, 100, pageW, { fontSize: 16, color: '#3c3228', align: 'center', noWrap: true });
-    await dti(null, new Date().toLocaleDateString('ko-KR'), 0, 245, pageW, { fontSize: 11, color: '#3c3228', align: 'center', noWrap: true });
-    await dti(null, `필사 ${filteredHistory.length}건  |  묵상 ${filteredQt.length}건`, 0, 258, pageW, { fontSize: 10, color: '#3c3228', align: 'center', noWrap: true });
+    // v168: noCover 옵션 시 표지 생략
+    if (!noCoverMode) {
+      await dti(null, '聖經筆寫', 0, 75, pageW, { fontSize: 32, color: '#3c3228', align: 'center', noWrap: true });
+      await dti(null, '성경 필사 & 묵상노트', 0, 100, pageW, { fontSize: 16, color: '#3c3228', align: 'center', noWrap: true });
+      await dti(null, new Date().toLocaleDateString('ko-KR'), 0, 245, pageW, { fontSize: 11, color: '#3c3228', align: 'center', noWrap: true });
+      await dti(null, `필사 ${filteredHistory.length}건  |  묵상 ${filteredQt.length}건`, 0, 258, pageW, { fontSize: 10, color: '#3c3228', align: 'center', noWrap: true });
+    }
 
     // 필사 내용
     if (choice === '1' || choice === '3') {
@@ -11528,7 +11533,8 @@ async function exportPDF() {
       );
 
       if (sortedHistory.length > 0) {
-        pdf.addPage();
+        // v168: 표지 제외 모드면 첫 페이지가 빈 상태이므로 addPage 안 함 → 거기에 "1부" 그리기
+        if (!noCoverMode) pdf.addPage();
         await dti(null, '1부. 성경 필사', 0, pageH/2, pageW, { fontSize: 22, color: '#3c3228', align: 'center', noWrap: true });
 
         for (const h of sortedHistory) {
@@ -11601,7 +11607,10 @@ async function exportPDF() {
         (a.date || '').localeCompare(b.date || ''));
 
       if (sortedQT.length > 0) {
-        pdf.addPage();
+        // v168: 표지 제외 + 묵상만 선택 + 필사 없음 = 첫 페이지에 "2부" 시작
+        // (필사가 있으면 그게 첫 페이지를 이미 썼으므로 새 페이지)
+        const skipAddPage = noCoverMode && (choice === '2' || filteredHistory.length === 0);
+        if (!skipAddPage) pdf.addPage();
         pdf.setFontSize(20);
         pdf.setTextColor(60, 50, 40);
         await dti(null, '2부. 묵상노트', 0, pageH/2, pageW, { fontSize: 22, color: '#3c3228', align: 'center', noWrap: true });
@@ -11737,6 +11746,7 @@ function pickDatesForPDF(history, qtList, choice) {
 
     const selected = new Set();
     let hq = false;  // 고품질 옵션
+    let noCover = false;  // v168: 표지 제외 옵션
 
     // 오버레이 생성
     const overlay = document.createElement('div');
@@ -11793,6 +11803,13 @@ function pickDatesForPDF(history, qtList, choice) {
             <div style="font-size:11px;color:#888;margin-top:2px;">해상도 ↑ · 파일 크기 2~3배 ↑ · 생성 시간 ↑</div>
           </div>
         </label>
+        <label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f9f5ee;border:1px solid #ead9bc;border-radius:8px;margin-bottom:12px;cursor:pointer;font-size:13px;color:#3c3228;">
+          <input type="checkbox" id="pdfCalNoCover" ${noCover?'checked':''} style="width:18px;height:18px;cursor:pointer;">
+          <div style="flex:1;">
+            <div style="font-weight:600;">표지 제외</div>
+            <div style="font-size:11px;color:#888;margin-top:2px;">첫 페이지(聖經筆寫 표지) 없이 본문부터 시작</div>
+          </div>
+        </label>
         <div style="display:flex;gap:8px;">
           <button id="pdfCalCancel" style="flex:1;border:1px solid #ddd;background:#fff;color:#666;border-radius:8px;padding:11px;cursor:pointer;font-size:14px;">취소</button>
           <button id="pdfCalOK" style="flex:1;border:none;background:#b8945c;color:#fff;border-radius:8px;padding:11px;cursor:pointer;font-size:14px;font-weight:600;">확인</button>
@@ -11829,13 +11846,18 @@ function pickDatesForPDF(history, qtList, choice) {
       if (hqCheckbox) {
         hqCheckbox.onchange = (e) => { hq = !!e.target.checked; };
       }
+      // v168: 표지 제외 체크박스
+      const noCoverCheckbox = modal.querySelector('#pdfCalNoCover');
+      if (noCoverCheckbox) {
+        noCoverCheckbox.onchange = (e) => { noCover = !!e.target.checked; };
+      }
       modal.querySelector('#pdfCalCancel').onclick = () => {
         document.body.removeChild(overlay);
         reject();
       };
       modal.querySelector('#pdfCalOK').onclick = () => {
         document.body.removeChild(overlay);
-        resolve({ dates: [...selected], hq: hq });
+        resolve({ dates: [...selected], hq: hq, noCover: noCover });
       };
     };
 
