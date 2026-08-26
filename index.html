@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>성경 필사 + QT (v168)</title>
+  <!-- PWA 설정 -->
+  <link rel="manifest" href="manifest-writing.json">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="성경필사">
+  <link rel="apple-touch-icon" href="icon-writing-192.png">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap');
@@ -15472,6 +15480,16 @@ function applySplitRatio(leftPercent) {
 }
 
 initSplitHandle();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw-writing.js')
+      .then(reg => console.log('[PWA-Writing] SW 등록:', reg.scope))
+      .catch(err => console.warn('[PWA-Writing] SW 실패:', err));
+  });
+}
 </script>
 </body>
 </html>
