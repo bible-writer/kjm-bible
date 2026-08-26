@@ -7442,7 +7442,7 @@ showToast = function(msg, type) {
     })();
 
     /* ═══════════════════════════════════════════════════════════════
-     * [TTS] 성경 본문 읽기 — Web Speech API
+     * [TTS] 성경 본문 읽기 — Web Speech API (음성 선택 + 속도/높낮이)
      * ═══════════════════════════════════════════════════════════════ */
     (function() {
       const btnPlay = document.getElementById('bs-btn-tts');
@@ -7452,6 +7452,9 @@ showToast = function(msg, type) {
       let utterances = [];
       let currentIdx = -1;
       let verseEls = [];
+      let selectedVoice = null;
+      let ttsRate = 0.9;
+      let ttsPitch = 1.0;
 
       if (!('speechSynthesis' in window)) {
         btnPlay.title = 'TTS 미지원 브라우저';
@@ -7460,11 +7463,131 @@ showToast = function(msg, type) {
         return;
       }
 
-      function getKoreanVoice() {
+      /* ── TTS 설정 패널 생성 ── */
+      const panel = document.createElement('div');
+      panel.id = 'tts-settings';
+      panel.style.cssText = 'display:none;position:absolute;top:36px;right:0;background:#fff;border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);padding:12px;z-index:9999;min-width:260px;font-size:12px;';
+      panel.innerHTML = `
+        <div style="font-weight:700;margin-bottom:8px;color:#1e293b;">🔊 음성 설정</div>
+        <label style="display:block;margin-bottom:6px;color:#475569;">음성 선택</label>
+        <select id="tts-voice-select" style="width:100%;padding:5px;border:1px solid #cbd5e1;border-radius:5px;font-size:12px;margin-bottom:10px;"></select>
+        <label style="display:block;margin-bottom:4px;color:#475569;">속도: <span id="tts-rate-val">0.9</span></label>
+        <input type="range" id="tts-rate" min="0.5" max="1.5" step="0.1" value="0.9" style="width:100%;margin-bottom:10px;">
+        <label style="display:block;margin-bottom:4px;color:#475569;">높낮이: <span id="tts-pitch-val">1.0</span></label>
+        <input type="range" id="tts-pitch" min="0.5" max="1.5" step="0.1" value="1.0" style="width:100%;margin-bottom:10px;">
+        <div style="display:flex;gap:6px;">
+          <button id="tts-test" style="flex:1;padding:5px;border:1px solid #3b82f6;border-radius:5px;background:#eff6ff;color:#2563eb;cursor:pointer;font-size:11px;font-weight:600;">미리 듣기</button>
+          <button id="tts-close" style="flex:1;padding:5px;border:1px solid #cbd5e1;border-radius:5px;background:#f8fafc;cursor:pointer;font-size:11px;">닫기</button>
+        </div>
+      `;
+      btnPlay.parentElement.style.position = 'relative';
+      btnPlay.parentElement.appendChild(panel);
+
+      /* ── 음성 목록 로드 ── */
+      function loadVoices() {
         const voices = speechSynthesis.getVoices();
-        return voices.find(v => v.lang.startsWith('ko')) || voices[0] || null;
+        const select = document.getElementById('tts-voice-select');
+        if (!select) return;
+        select.innerHTML = '';
+
+        const koVoices = voices.filter(v => v.lang.startsWith('ko'));
+        const otherVoices = voices.filter(v => !v.lang.startsWith('ko'));
+
+        if (koVoices.length) {
+          const grp = document.createElement('optgroup');
+          grp.label = '한국어';
+          koVoices.forEach((v, i) => {
+            const opt = document.createElement('option');
+            opt.value = v.name;
+            opt.textContent = v.name.replace('Microsoft ', '').replace('Google ', '') + (v.localService ? '' : ' (온라인)');
+            if (i === 0) opt.selected = true;
+            grp.appendChild(opt);
+          });
+          select.appendChild(grp);
+        }
+
+        if (otherVoices.length) {
+          const grp = document.createElement('optgroup');
+          grp.label = '기타';
+          otherVoices.slice(0, 10).forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v.name;
+            opt.textContent = v.name.replace('Microsoft ', '') + ' (' + v.lang + ')';
+            grp.appendChild(opt);
+          });
+          select.appendChild(grp);
+        }
+
+        if (koVoices.length) selectedVoice = koVoices[0];
+        else if (voices.length) selectedVoice = voices[0];
+
+        // 저장된 설정 복원
+        try {
+          const saved = JSON.parse(localStorage.getItem('ttsSettings') || '{}');
+          if (saved.voice) {
+            const found = voices.find(v => v.name === saved.voice);
+            if (found) { selectedVoice = found; select.value = found.name; }
+          }
+          if (saved.rate) { ttsRate = saved.rate; document.getElementById('tts-rate').value = saved.rate; document.getElementById('tts-rate-val').textContent = saved.rate; }
+          if (saved.pitch) { ttsPitch = saved.pitch; document.getElementById('tts-pitch').value = saved.pitch; document.getElementById('tts-pitch-val').textContent = saved.pitch; }
+        } catch(e) {}
       }
 
+      function saveSettings() {
+        try {
+          localStorage.setItem('ttsSettings', JSON.stringify({
+            voice: selectedVoice ? selectedVoice.name : '',
+            rate: ttsRate,
+            pitch: ttsPitch
+          }));
+        } catch(e) {}
+      }
+
+      speechSynthesis.onvoiceschanged = loadVoices;
+      setTimeout(loadVoices, 500);
+
+      /* ── 이벤트 ── */
+      document.addEventListener('change', function(e) {
+        if (e.target.id === 'tts-voice-select') {
+          const voices = speechSynthesis.getVoices();
+          selectedVoice = voices.find(v => v.name === e.target.value) || null;
+          saveSettings();
+        }
+      });
+      document.addEventListener('input', function(e) {
+        if (e.target.id === 'tts-rate') {
+          ttsRate = parseFloat(e.target.value);
+          document.getElementById('tts-rate-val').textContent = ttsRate.toFixed(1);
+          saveSettings();
+        }
+        if (e.target.id === 'tts-pitch') {
+          ttsPitch = parseFloat(e.target.value);
+          document.getElementById('tts-pitch-val').textContent = ttsPitch.toFixed(1);
+          saveSettings();
+        }
+      });
+      document.addEventListener('click', function(e) {
+        if (e.target.id === 'tts-test') {
+          speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance('태초에 하나님이 천지를 창조하시니라');
+          u.lang = 'ko-KR';
+          u.rate = ttsRate;
+          u.pitch = ttsPitch;
+          if (selectedVoice) u.voice = selectedVoice;
+          speechSynthesis.speak(u);
+        }
+        if (e.target.id === 'tts-close') {
+          panel.style.display = 'none';
+        }
+      });
+
+      /* ── 설정 패널 토글 (길게 누르기 or 우클릭) ── */
+      btnPlay.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      });
+
+      /* ── 하이라이트 ── */
       function clearHighlights() {
         verseEls.forEach(el => el.classList.remove('tts-highlight'));
       }
@@ -7489,9 +7612,9 @@ showToast = function(msg, type) {
           if (!allText) { showToast('읽을 본문이 없습니다.', 'info'); return; }
           const utter = new SpeechSynthesisUtterance(allText);
           utter.lang = 'ko-KR';
-          utter.rate = 0.95;
-          const voice = getKoreanVoice();
-          if (voice) utter.voice = voice;
+          utter.rate = ttsRate;
+          utter.pitch = ttsPitch;
+          if (selectedVoice) utter.voice = selectedVoice;
           utter.onend = stopTTS;
           speechSynthesis.speak(utter);
           isSpeaking = true;
@@ -7502,49 +7625,43 @@ showToast = function(msg, type) {
 
         verseEls = Array.from(lines);
         utterances = [];
-        currentIdx = 0;
 
-        verseEls.forEach((el, idx) => {
+        verseEls.forEach(function(el) {
           const text = el.innerText.trim();
           if (!text) return;
           const utter = new SpeechSynthesisUtterance(text);
           utter.lang = 'ko-KR';
-          utter.rate = 0.95;
-          const voice = getKoreanVoice();
-          if (voice) utter.voice = voice;
+          utter.rate = ttsRate;
+          utter.pitch = ttsPitch;
+          if (selectedVoice) utter.voice = selectedVoice;
 
-          utter.onstart = () => {
+          utter.onstart = function() {
             clearHighlights();
             el.classList.add('tts-highlight');
             el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           };
-
-          utter.onend = () => {
+          utter.onend = function() {
             el.classList.remove('tts-highlight');
             currentIdx++;
-            if (currentIdx >= utterances.length) {
-              stopTTS();
-            }
+            if (currentIdx >= utterances.length) stopTTS();
           };
-
           utterances.push(utter);
         });
 
         if (!utterances.length) { showToast('읽을 본문이 없습니다.', 'info'); return; }
 
         isSpeaking = true;
+        currentIdx = 0;
         btnPlay.style.display = 'none';
         btnStop.style.display = '';
-
-        utterances.forEach(u => speechSynthesis.speak(u));
+        utterances.forEach(function(u) { speechSynthesis.speak(u); });
       }
 
-      btnPlay.addEventListener('click', startTTS);
+      btnPlay.addEventListener('click', function(e) {
+        if (panel.style.display !== 'none') { panel.style.display = 'none'; return; }
+        startTTS();
+      });
       btnStop.addEventListener('click', stopTTS);
-
-      if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = getKoreanVoice;
-      }
     })();
 
 </script>
