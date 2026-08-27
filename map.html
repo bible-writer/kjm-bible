@@ -1879,6 +1879,19 @@
             const arrayBuffer = this.result;
             sqliteDbInstance = new window.SQL.Database(new Uint8Array(arrayBuffer));
             detectedSchema = detectBibleSchema(sqliteDbInstance);
+            // red letter 컬럼 확인
+            if (detectedSchema) {
+              try {
+                const colRes = sqliteDbInstance.exec(`PRAGMA table_info("${detectedSchema.table}");`);
+                if (colRes && colRes[0]) {
+                  const cols = colRes[0].values.map(r => r[1]);
+                  console.log('DB 컬럼:', cols);
+                  // red, isRed, words_of_christ 등 컬럼 확인
+                  detectedSchema.redCol = cols.find(c => /red|christ|jesus/i.test(c)) || null;
+                  if (detectedSchema.redCol) console.log('Red Letter 컬럼 발견:', detectedSchema.redCol);
+                }
+              } catch(e) {}
+            }
             await setLocalItem('saved_bdb_binary', arrayBuffer);
             // bdb-file-input 호환을 위해 전역 상태 동기화
             if (detectedSchema) {
