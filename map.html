@@ -4720,22 +4720,42 @@
     }
 
     function navigateToBibleVerse(bookId, chapter, targetVerse) {
-      // 모바일: 본문 탭으로 전환
       if (window.innerWidth <= 768) {
         switchMobileTab('bible');
       }
-      setSelectValuesAndLoad(bookId, chapter);
 
+      const targetBook = BIBLE_BOOKS.find(b => b.id === bookId);
+      if (!targetBook) return;
+
+      window._suppressLoadEvent = true;
+      const testamentSelect = document.getElementById('testament-select');
+      const bookSelect = document.getElementById('book-select');
+      const chapterSelect = document.getElementById('chapter-select');
+
+      if (testamentSelect.value !== targetBook.testament) {
+        testamentSelect.value = targetBook.testament;
+        updateBookSelect();
+      }
+      bookSelect.value = bookId;
+      updateChapters();
+      chapterSelect.value = chapter;
+
+      loadBibleText(bookId, chapter);
+
+      // suppress를 충분히 지연 후 해제 (onchange 이벤트 완전 소진 후)
+      setTimeout(() => { window._suppressLoadEvent = false; }, 500);
+
+      // 구절 스크롤 (loadBibleText 직후 DOM이 준비됨)
       setTimeout(() => {
-        const targetElement = document.getElementById(`verse-row-${targetVerse}`);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          targetElement.classList.add('highlight-target');
-          setTimeout(() => {
-            targetElement.classList.remove('highlight-target');
-          }, 3000);
+        const el = document.getElementById('verse-row-' + targetVerse);
+        if (el) {
+          el.scrollIntoView(true);
+          el.style.background = '#fef08a';
+          setTimeout(() => { el.style.background = ''; }, 3000);
         }
       }, 300);
+
+      if (typeof buildBookGrid === 'function') { buildBookGrid(); buildChapGrid(); }
     }
 
     async function updatePlaceCoords(placeId) {
@@ -6806,16 +6826,20 @@
       const bookSelect = document.getElementById('book-select');
       const chapterSelect = document.getElementById('chapter-select');
 
+      window._suppressLoadEvent = true;
+
       if (testamentSelect.value !== targetBook.testament) {
         testamentSelect.value = targetBook.testament;
         updateBookSelect();
       }
-
       bookSelect.value = bookId;
       updateChapters();
       chapterSelect.value = chapter;
 
-      loadBibleText();
+      window._suppressLoadEvent = false;
+
+      // 파라미터로 직접 전달 (select 값 무관)
+      loadBibleText(bookId, chapter);
       if (typeof buildBookGrid === 'function') { buildBookGrid(); buildChapGrid(); }
     }
 
@@ -6943,12 +6967,14 @@
       const bookSelect = document.getElementById('book-select');
 
       testamentSelect.onchange = function() {
+        if (window._suppressLoadEvent) return;
         updateBookSelect();
         loadBibleText();
         if (typeof buildBookGrid === 'function') { buildBookGrid(); buildChapGrid(); }
       };
 
       bookSelect.onchange = function() {
+        if (window._suppressLoadEvent) return;
         updateChapters();
         loadBibleText();
         if (typeof buildBookGrid === 'function') { buildBookGrid(); buildChapGrid(); }
@@ -6998,9 +7024,9 @@
       renderMapMarkers();
     }
 
-    function loadBibleText() {
-      const bookId = parseInt(document.getElementById('book-select').value);
-      const chapter = parseInt(document.getElementById('chapter-select').value);
+    function loadBibleText(forceBookId, forceChapter) {
+      const bookId = forceBookId || parseInt(document.getElementById('book-select').value);
+      const chapter = forceChapter || parseInt(document.getElementById('chapter-select').value);
       const bookObj = BIBLE_BOOKS.find(b => b.id === bookId);
       if (!bookObj) return;
 
@@ -7131,10 +7157,12 @@
       });
 
       container.innerHTML = html;
-      container.scrollTop = 0;
 
       // 현재 장의 모든 지명을 지도에 표시 + fitBounds
       showChapterPlaces(container);
+
+      // 구절 이동 or 맨 위
+      container.scrollTop = 0;
     }
 
     function showChapterPlaces(container) {
@@ -7236,7 +7264,7 @@
         tag.onmouseover = () => tag.style.background = tagHover;
         tag.onmouseout  = () => tag.style.background = tagBg;
         tag.onclick = () => {
-          let places = placeKeywordMap[name] || [];
+              let places = placeKeywordMap[name] || [];
           if (places.length === 0) places = placeDatabase.filter(p => p.name && p.name === name);
           // 부분 매칭 시도
           if (places.length === 0) places = placeDatabase.filter(p => p.name && p.name.startsWith(name));
@@ -7269,7 +7297,12 @@
         };
         tagsList.appendChild(tag);
       });
-      document.getElementById('cp-title-text').textContent = `📍 이 장의 지명 (${sortedNames.length}개)`;
+      // 현재 장 정보 표시
+      const curBook = document.getElementById('book-select');
+      const curChap = document.getElementById('chapter-select');
+      const bookName = curBook ? curBook.options[curBook.selectedIndex]?.text || '' : '';
+      const chapNum = curChap ? curChap.value : '';
+      document.getElementById('cp-title-text').textContent = `📍 ${bookName} ${chapNum}장의 지명 (${sortedNames.length}개)`;
       panel.style.display = sortedNames.length > 0 ? 'block' : 'none';
 
       // fitBounds: 모든 마커가 보이도록 지도 줌/이동
@@ -8465,7 +8498,7 @@ showToast = function(msg, type) {
             pt += ' <span class="bsr-place-tag" onclick="event.stopPropagation();BibleGeoEngine.flyToPlace(placeDatabase.find(x=>x.id===' + p.id + '))" title="\uc9c0\ub3c4\uc5d0\uc11c \ubcf4\uae30">\ud83d\udccd' + escHtml(p.name) + '</span>';
           });
 
-          h += '<div class="bsr-item" onclick="navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');closeBibleSearch();">' +
+          h += '<div class="bsr-item" onclick="closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
             '<span class="bsr-ref">' + escHtml(ref) + '</span>' +
             '<span class="bsr-text">' + dt + pt + '</span></div>';
         });
@@ -8487,8 +8520,8 @@ showToast = function(msg, type) {
         const ref = parseVerseRef(raw);
         if (ref) {
           if (ref.verse != null) {
-            navigateToBibleVerse(ref.bookId, ref.chapter, ref.verse);
             closeBibleSearch();
+            navigateToBibleVerse(ref.bookId, ref.chapter, ref.verse);
             showToast(ref.bookObj.name + ' ' + ref.chapter + ':' + ref.verse + ' \uc774\ub3d9', 'info');
           } else {
             setSelectValuesAndLoad(ref.bookId, ref.chapter);
