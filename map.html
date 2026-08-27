@@ -5524,6 +5524,7 @@
      * 13. 지도 타일 및 마커 렌더링
      */
     var map = L.map('map', { center: [31.77, 35.23], zoom: 7 });
+    window.map = map;
 
     var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19, attribution: '© OpenStreetMap'
@@ -5543,6 +5544,7 @@
       spiderfyOnMaxZoom: true,
       disableClusteringAtZoom: 14
     });
+    window.markerClusterGroup = markerClusterGroup;
     map.addLayer(markerClusterGroup);
 
     
@@ -5656,8 +5658,12 @@
           markerClusterGroup.addLayer(marker);
         });
       });
-      // 안전장치: 마커 렌더 후 반드시 map에 표시
-      if (!map.hasLayer(markerClusterGroup)) map.addLayer(markerClusterGroup);
+      // 안전장치: 12지파 이미지 지도 활성 중이 아닐 때만 표시
+      if (!window._tribesMapActive && !map.hasLayer(markerClusterGroup)) {
+        map.addLayer(markerClusterGroup);
+      } else if (window._tribesMapActive && map.hasLayer(markerClusterGroup)) {
+        map.removeLayer(markerClusterGroup);
+      }
     }
 
     /**
@@ -7079,6 +7085,7 @@ function pointInPolygon(lat, lng, polygon) {
 }
 
 var _tribeFilterActive = null;
+var _tribeCenterMarker = null;
 
 function toggleSingleRegion(name) {
   if (Object.keys(regionIndividualLayers).length === 0) buildRegionLayers();
@@ -7121,43 +7128,38 @@ function hideAllRegions() {
 function toggleAll12Tribes(show) {
   var tribes = ['르우벤 지파','갓 지파','동므낫세 지파','유다 지파','시므온 지파','베냐민 지파','단 지파','에브라임 지파','서므낫세 지파','잇사갈 지파','스불론 지파','아셀 지파','납달리 지파'];
   if (Object.keys(regionIndividualLayers).length === 0) buildRegionLayers();
-  console.log('[12tribes] show='+show+', markerClusterGroup exists='+(typeof markerClusterGroup !== 'undefined')+', map exists='+(typeof map !== 'undefined'));
+  var mcg = window.markerClusterGroup;
+  var m = window.map;
+  console.log('[T12] show='+show+' mcg='+!!mcg+' map='+!!m+' hasLayer='+!!(mcg&&m&&m.hasLayer(mcg)));
+  if (!mcg || !m) { console.log('[T12] ABORT: mcg or map missing'); return; }
   if (show) {
+    window._tribesMapActive = true;
     if (!_fullTribesMapLayer) {
       _fullTribesMapLayer = L.imageOverlay(FULL_TRIBES_MAP.url, FULL_TRIBES_MAP.bounds, {opacity: FULL_TRIBES_MAP.opacity, interactive: false});
     }
-    if (!map.hasLayer(_fullTribesMapLayer)) map.addLayer(_fullTribesMapLayer);
+    if (!m.hasLayer(_fullTribesMapLayer)) m.addLayer(_fullTribesMapLayer);
     _fullMapUsers = 1;
-    if (map.hasLayer(markerClusterGroup)) {
-      map.removeLayer(markerClusterGroup);
-      console.log('[12tribes] markers hidden');
-    }
+    var removed = m.hasLayer(mcg);
+    if (removed) m.removeLayer(mcg);
+    console.log('[T12] ON done. removed='+removed+' hasLayer after='+m.hasLayer(mcg));
   } else {
+    window._tribesMapActive = false;
     _fullMapUsers = 0;
-    if (_fullTribesMapLayer && map.hasLayer(_fullTribesMapLayer)) {
-      map.removeLayer(_fullTribesMapLayer);
-      console.log('[12tribes] overlay removed');
-    }
+    if (_fullTribesMapLayer && m.hasLayer(_fullTribesMapLayer)) m.removeLayer(_fullTribesMapLayer);
     tribes.forEach(function(name) {
       var layer = regionIndividualLayers[name];
-      if (layer && map.hasLayer(layer)) map.removeLayer(layer);
+      if (layer && m.hasLayer(layer)) m.removeLayer(layer);
     });
-    if (_tribeCenterMarker && map.hasLayer(_tribeCenterMarker)) {
-      map.removeLayer(_tribeCenterMarker);
-      _tribeCenterMarker = null;
+    if (_tribeCenterMarker && m.hasLayer(_tribeCenterMarker)) {
+      m.removeLayer(_tribeCenterMarker); _tribeCenterMarker = null;
     }
     _tribeFilterActive = null;
-    if (!map.hasLayer(markerClusterGroup)) {
-      map.addLayer(markerClusterGroup);
-    }
-    // 마커가 비어있으면 재생성
-    if (markerClusterGroup.getLayers().length === 0) {
-      console.log('[12tribes] cluster empty, re-rendering markers');
-      renderMapMarkers();
-    }
-    console.log('[12tribes] markers restored, count='+markerClusterGroup.getLayers().length);
+    var wasOn = !m.hasLayer(mcg);
+    if (!m.hasLayer(mcg)) m.addLayer(mcg);
+    console.log('[T12] OFF done. wasRemoved='+wasOn+' hasLayer after='+m.hasLayer(mcg)+' layers='+mcg.getLayers().length);
   }
 }
+
 
 function initRegionPanel() {
   if (Object.keys(regionIndividualLayers).length === 0) buildRegionLayers();
