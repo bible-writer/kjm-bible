@@ -2634,6 +2634,55 @@
     }
 
     /* 인명 하이라이트 엔진 (지명과 별개, 보라색 태그) */
+    /* 패널을 마우스/터치로 자유롭게 드래그할 수 있게 만드는 범용 헬퍼 */
+    function makeDraggable(panelEl, handleSelector) {
+      const handle = handleSelector ? panelEl.querySelector(handleSelector) : panelEl;
+      if (!handle || handle._dragBound) return;
+      handle._dragBound = true;
+      let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
+
+      function onDown(clientX, clientY) {
+        const rect = panelEl.getBoundingClientRect();
+        // top/right 기반 배치를 top/left 기반으로 전환해 드래그 계산을 단순화
+        panelEl.style.left = rect.left + 'px';
+        panelEl.style.top = rect.top + 'px';
+        panelEl.style.right = 'auto';
+        panelEl.style.bottom = 'auto';
+        startLeft = rect.left;
+        startTop = rect.top;
+        startX = clientX;
+        startY = clientY;
+        dragging = true;
+      }
+      function onMove(clientX, clientY) {
+        if (!dragging) return;
+        let newLeft = startLeft + (clientX - startX);
+        let newTop = startTop + (clientY - startY);
+        const maxLeft = window.innerWidth - 40;
+        const maxTop = window.innerHeight - 40;
+        newLeft = Math.max(-panelEl.offsetWidth + 60, Math.min(newLeft, maxLeft));
+        newTop = Math.max(0, Math.min(newTop, maxTop));
+        panelEl.style.left = newLeft + 'px';
+        panelEl.style.top = newTop + 'px';
+      }
+      function onUp() { dragging = false; }
+
+      handle.addEventListener('mousedown', e => { onDown(e.clientX, e.clientY); e.preventDefault(); });
+      window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+      window.addEventListener('mouseup', onUp);
+
+      handle.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        onDown(t.clientX, t.clientY);
+      }, { passive: true });
+      window.addEventListener('touchmove', e => {
+        if (!dragging) return;
+        const t = e.touches[0];
+        onMove(t.clientX, t.clientY);
+      }, { passive: true });
+      window.addEventListener('touchend', onUp);
+    }
+
     const PersonEngine = {
       // 이미 지명 하이라이트가 끝난 HTML에 대해, <태그> 밖의 순수 텍스트에만 인명을 하이라이트
       highlightOutsideTags: function(html, regex, replacer) {
@@ -2678,6 +2727,7 @@
           panel.id = 'person-info-panel';
           panel.style.cssText = 'position:fixed;top:60px;right:30px;z-index:10001;background:var(--card,#fff);border:1px solid #a78bfa;border-radius:8px;padding:14px;width:320px;max-height:75vh;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.25);font-family:sans-serif';
           document.body.appendChild(panel);
+          makeDraggable(panel, '#person-info-drag-handle');
         }
         const briefest = p.briefest_ko || p.briefest || '';
         let mainKo = '';
@@ -2695,7 +2745,7 @@
         const moreBtn = articleText ? `<button onclick="PersonEngine.toggleArticle()" id="person-article-toggle" style="margin-top:8px;font-size:11px;color:#7c3aed;background:none;border:1px solid #ddd6fe;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
         const articleBody = articleText ? `<div id="person-article-body" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#334155;white-space:pre-wrap">${escHtml(articleText)}</div>` : '';
         panel.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div id="person-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
             <span style="font-weight:bold;font-size:16px;color:#5b21b6">👤 ${escHtml(clickedName || p.name_ko)}${strongNote}${aliasNote}</span>
             <button onclick="document.getElementById('person-info-panel').style.display='none'" style="border:none;background:none;font-size:16px;cursor:pointer;color:#999">✕</button>
           </div>
@@ -6445,6 +6495,40 @@
      */
     var map = L.map('map', { center: [31.77, 35.23], zoom: 7 });
     window.map = map;
+
+    // [지도창 드래그] 지명 팝업(Leaflet 기본 팝업)을 마우스/터치로 자유롭게 옮길 수 있게 함
+    map.on('popupopen', function(e) {
+      var container = e.popup && e.popup._container;
+      var wrapper = container && container.querySelector('.leaflet-popup-content-wrapper');
+      if (!wrapper || wrapper._dragBound) return;
+      wrapper._dragBound = true;
+      wrapper.style.cursor = 'move';
+      var dragging = false, startX = 0, startY = 0, curX = 0, curY = 0;
+      function getTransform() {
+        var m = /translate\(([-\d.]+)px,\s*([-\d.]+)px\)/.exec(wrapper.style.transform || '');
+        return m ? { x: parseFloat(m[1]), y: parseFloat(m[2]) } : { x: 0, y: 0 };
+      }
+      function onDown(cx, cy) {
+        dragging = true;
+        var t = getTransform();
+        curX = t.x; curY = t.y;
+        startX = cx; startY = cy;
+      }
+      function onMove(cx, cy) {
+        if (!dragging) return;
+        var dx = cx - startX, dy = cy - startY;
+        wrapper.style.transform = 'translate(' + (curX + dx) + 'px,' + (curY + dy) + 'px)';
+        var tip = container.querySelector('.leaflet-popup-tip-container');
+        if (tip) tip.style.visibility = 'hidden';
+      }
+      function onUp() { dragging = false; }
+      wrapper.addEventListener('mousedown', function(ev) { onDown(ev.clientX, ev.clientY); });
+      document.addEventListener('mousemove', function(ev) { onMove(ev.clientX, ev.clientY); });
+      document.addEventListener('mouseup', onUp);
+      wrapper.addEventListener('touchstart', function(ev) { var t = ev.touches[0]; onDown(t.clientX, t.clientY); }, { passive: true });
+      document.addEventListener('touchmove', function(ev) { if (!dragging) return; var t = ev.touches[0]; onMove(t.clientX, t.clientY); }, { passive: true });
+      document.addEventListener('touchend', onUp);
+    });
 
     var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19, attribution: '© OpenStreetMap'
