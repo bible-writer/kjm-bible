@@ -2829,6 +2829,7 @@
       panelEl.style.width = baseWidth + 'px';
       panelEl.style.height = 'auto';
       panelEl._lastFontSize = baseFontPx; // 옵저버가 참조하는 기준값도 매번 초기화
+
       if (panelEl._autoFontObserver) return; // 옵저버는 한 번만 등록(중복 방지), 크기 자체는 위에서 이미 초기화됨
       const observer = new ResizeObserver(entries => {
         for (const entry of entries) {
@@ -2843,6 +2844,57 @@
       });
       observer.observe(panelEl);
       panelEl._autoFontObserver = observer;
+    }
+
+    // CSS resize(both)는 마우스 드래그 전용이라 휴대폰(터치)에서는 작동하지 않으므로,
+    // 손가락으로도 크기를 조절할 수 있도록 별도의 크기조절 손잡이를 만들어 붙인다.
+    // panel.innerHTML을 새로 채울 때마다 자식 노드가 통째로 사라지므로,
+    // 반드시 innerHTML을 설정한 "이후"에 호출해서 다시 붙여야 한다.
+    function ensureTouchResizeGrip(panelEl) {
+      if (panelEl._touchResizeGrip) {
+        panelEl.appendChild(panelEl._touchResizeGrip); // 이미 만들어 둔 손잡이를 다시 붙이기만 함(리스너 유지)
+        return;
+      }
+      panelEl.style.position = panelEl.style.position || 'fixed';
+      const grip = document.createElement('div');
+      grip.textContent = '⤡';
+      grip.style.cssText = 'position:absolute;right:2px;bottom:2px;width:26px;height:26px;line-height:26px;text-align:center;font-size:16px;color:#94a3b8;cursor:se-resize;user-select:none;touch-action:none;z-index:2;';
+      panelEl.appendChild(grip);
+      panelEl._touchResizeGrip = grip;
+
+      let dragState = null;
+      function startDrag(clientX, clientY) {
+        const rect = panelEl.getBoundingClientRect();
+        dragState = { startX: clientX, startY: clientY, startW: rect.width, startH: rect.height };
+      }
+      function moveDrag(clientX, clientY) {
+        if (!dragState) return;
+        const minW = 260, minH = 160;
+        const maxW = window.innerWidth * 0.9, maxH = window.innerHeight * 0.85;
+        const newW = Math.max(minW, Math.min(maxW, dragState.startW + (clientX - dragState.startX)));
+        const newH = Math.max(minH, Math.min(maxH, dragState.startH + (clientY - dragState.startY)));
+        panelEl.style.width = newW + 'px';
+        panelEl.style.height = newH + 'px';
+      }
+      function endDrag() { dragState = null; }
+
+      grip.addEventListener('mousedown', e => { startDrag(e.clientX, e.clientY); e.preventDefault(); e.stopPropagation(); });
+      window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+      window.addEventListener('mouseup', endDrag);
+
+      grip.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        startDrag(t.clientX, t.clientY);
+        e.preventDefault();
+        e.stopPropagation();
+      }, { passive: false });
+      window.addEventListener('touchmove', e => {
+        if (!dragState) return;
+        const t = e.touches[0];
+        moveDrag(t.clientX, t.clientY);
+        e.preventDefault();
+      }, { passive: false });
+      window.addEventListener('touchend', endDrag);
     }
 
     const PersonEngine = {
@@ -2922,6 +2974,7 @@
           ${sourceCredit}
         `;
         panel.style.display = 'block';
+        ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#person-info-drag-handle');
       },
 
@@ -3016,6 +3069,7 @@
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${source}</div>
         `;
         panel.style.display = 'block';
+        ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#term-info-drag-handle');
       },
 
