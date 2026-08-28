@@ -2766,16 +2766,20 @@
       // 스크롤바가 나타나거나 사라질 때 콘텐츠 폭이 미세하게 바뀌면서
       // 글자 크기 ↔ 스크롤바 유무가 서로를 계속 건드려 팝업이 떨리는(진동) 현상을 방지
       panelEl.style.scrollbarGutter = 'stable';
-      if (panelEl._autoFontObserver) return; // 이미 관찰 중이면 중복 등록 방지
-      let lastFontSize = baseFontPx;
+      // 사용자가 이전에 모서리를 드래그해서 늘려놓은 크기가 남아있지 않도록,
+      // 새 항목을 열 때마다(팝업을 호출할 때마다) 항상 기본 크기로 되돌린다
+      panelEl.style.width = baseWidth + 'px';
+      panelEl.style.height = 'auto';
+      panelEl._lastFontSize = baseFontPx; // 옵저버가 참조하는 기준값도 매번 초기화
+      if (panelEl._autoFontObserver) return; // 옵저버는 한 번만 등록(중복 방지), 크기 자체는 위에서 이미 초기화됨
       const observer = new ResizeObserver(entries => {
         for (const entry of entries) {
           const w = entry.contentRect.width;
           const scale = w / baseWidth;
           const newSize = Math.max(baseFontPx * 0.85, Math.min(baseFontPx * 2.4, baseFontPx * scale));
           // 아주 미세한 폭 변동(스크롤바 유무 등)으로 인한 떨림을 걸러낸다
-          if (Math.abs(newSize - lastFontSize) < 0.5) continue;
-          lastFontSize = newSize;
+          if (Math.abs(newSize - panelEl._lastFontSize) < 0.5) continue;
+          panelEl._lastFontSize = newSize;
           panelEl.style.fontSize = newSize.toFixed(1) + 'px';
         }
       });
@@ -2843,26 +2847,8 @@
         const enLine = (mainEn && mainEn.trim() && mainEn.trim() !== mainKo.trim()) ? `<div style="font-size:0.85em;line-height:1.4;color:#94a3b8;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic">${escHtml(mainEn)}</div>` : '';
         const articleText = p.article_ko || p.article || '';
         const moreBtn = articleText ? `<button onclick="PersonEngine.toggleArticle()" id="person-article-toggle" style="margin-top:8px;font-size:0.85em;color:#7c3aed;background:none;border:1px solid #ddd6fe;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
-        const articleBody = articleText ? `<div id="person-article-body" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:0.92em;line-height:1.6;color:#334155;white-space:pre-wrap">${escHtml(articleText)}</div>` : '';
-        // 등장 구절 목록: 클릭하면 좌측 본문 창이 해당 구절로 바로 이동
-        const versesList = Array.isArray(p.verses) ? p.verses : [];
-        const MAX_VERSE_SHOW = 150;
-        let versesHtml = '';
-        if (versesList.length > 0) {
-          const items = versesList.slice(0, MAX_VERSE_SHOW).map(v => {
-            const bookObj = BIBLE_BOOKS.find(b => b.id === v.book);
-            const abbr = bookObj ? bookObj.abbr : v.book;
-            return `<span class="person-verse-ref" onclick="navigateToBibleVerse(${v.book},${v.chapter},${v.verse})" style="display:inline-block;margin:2px 4px 2px 0;padding:1px 6px;background:#ede9fe;color:#5b21b6;border-radius:4px;cursor:pointer;font-size:0.8em;white-space:nowrap">${abbr} ${v.chapter}:${v.verse}</span>`;
-          }).join('');
-          const moreNote = versesList.length > MAX_VERSE_SHOW ? `<div style="font-size:0.75em;color:#94a3b8;margin-top:4px">외 ${versesList.length - MAX_VERSE_SHOW}개 구절 더 있음</div>` : '';
-          versesHtml = `
-            <div style="margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0">
-              <div style="font-size:0.85em;color:#64748b;margin-bottom:4px">등장 구절 (${versesList.length}개, 클릭 시 본문 이동)</div>
-              <div>${items}</div>
-              ${moreNote}
-            </div>
-          `;
-        }
+        // 더보기(상세) 안의 성경구절 표기는 클릭 시 본문 이동이 가능한 링크로 변환
+        const articleBody = articleText ? `<div id="person-article-body" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:0.92em;line-height:1.6;color:#334155;white-space:pre-wrap">${linkifyVerseRefs(escHtml(articleText))}</div>` : '';
         const sourceCredit = `<div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">출처: STEPBible TIPNR (CC BY 4.0)${articleText ? " · 해설: Easton/Smith Bible Dictionary 참조" : ""}</div>`;
         panel.innerHTML = `
           <div id="person-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
@@ -2875,7 +2861,6 @@
           ${enLine}
           ${moreBtn}
           ${articleBody}
-          ${versesHtml}
           ${sourceCredit}
         `;
         panel.style.display = 'block';
