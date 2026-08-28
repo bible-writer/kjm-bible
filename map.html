@@ -2730,6 +2730,7 @@
         const articleText = p.article_ko || p.article || '';
         const moreBtn = articleText ? `<button onclick="PersonEngine.toggleArticle()" id="person-article-toggle" style="margin-top:8px;font-size:11px;color:#7c3aed;background:none;border:1px solid #ddd6fe;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
         const articleBody = articleText ? `<div id="person-article-body" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#334155;white-space:pre-wrap">${escHtml(articleText)}</div>` : '';
+        const sourceCredit = `<div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">출처: STEPBible TIPNR (CC BY 4.0)${articleText ? " · 해설: Easton/Smith Bible Dictionary 참조" : ""}</div>`;
         panel.innerHTML = `
           <div id="person-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
             <span style="font-weight:bold;font-size:16px;color:#5b21b6">👤 ${escHtml(clickedName || p.name_ko)}${strongNote}${aliasNote}</span>
@@ -2741,6 +2742,7 @@
           ${enLine}
           ${moreBtn}
           ${articleBody}
+          ${sourceCredit}
         `;
         panel.style.display = 'block';
         makeDraggable(panel, '#person-info-drag-handle');
@@ -6381,6 +6383,7 @@
             <a class="link-btn" href="https://www.google.com/maps?layer=c&cbll=${item.lat},${item.lng}" target="_blank" rel="noopener">📷 거리뷰</a>
             <a class="link-btn" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('성경 ' + (item.name||'') + ' ' + englishName + ' ' + modernName + ' 고고학 성지')}" target="_blank" rel="noopener">🖼 구글 이미지 더보기</a>
           </div>
+          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">좌표 출처: OpenBible.info Bible Geocoding Data (CC BY 4.0)${(item.eastonKo||item.eastonEn||item.smithKo||item.smithEn) ? ' · 해설: Easton/Smith Bible Dictionary 참조' : ''}</div>
         </div>
       `;
     }
