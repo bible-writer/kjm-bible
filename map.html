@@ -2814,7 +2814,9 @@
     /* 팝업창을 마우스로 드래그해서 크기 확대/축소 가능하게 만들고,
        확대한 만큼 안의 글자 크기도 비례해서 자동으로 커지게 하는 헬퍼 */
     function makeResizableWithAutoFont(panelEl, baseWidth, baseFontPx) {
-      panelEl.style.resize = 'both';
+      // 네이티브 CSS resize는 기기마다 마우스/터치 지원이 들쭉날쭉해서(특히 안드로이드 태블릿) 끄고,
+      // 대신 아래 ensureTouchResizeGrip()이 만드는 손잡이 하나로 마우스·터치·펜을 통일해서 처리한다.
+      panelEl.style.resize = 'none';
       panelEl.style.overflow = 'auto';
       panelEl.style.minWidth = '260px';
       panelEl.style.minHeight = '160px';
@@ -2858,43 +2860,34 @@
       panelEl.style.position = panelEl.style.position || 'fixed';
       const grip = document.createElement('div');
       grip.textContent = '⤡';
-      grip.style.cssText = 'position:absolute;right:2px;bottom:2px;width:26px;height:26px;line-height:26px;text-align:center;font-size:16px;color:#94a3b8;cursor:se-resize;user-select:none;touch-action:none;z-index:2;';
+      grip.style.cssText = 'position:absolute;right:0;bottom:0;width:34px;height:34px;line-height:34px;text-align:center;font-size:18px;color:#94a3b8;cursor:se-resize;user-select:none;touch-action:none;z-index:3;';
       panelEl.appendChild(grip);
       panelEl._touchResizeGrip = grip;
 
+      // 마우스/터치/펜을 하나의 방식(Pointer Events)으로 통일해서 처리한다.
+      // 기기·브라우저마다 마우스/터치 이벤트 처리 방식이 제각각이라(특히 안드로이드 태블릿),
+      // 표준화된 Pointer Events를 쓰는 편이 훨씬 안정적으로 동작한다.
       let dragState = null;
-      function startDrag(clientX, clientY) {
+      grip.addEventListener('pointerdown', e => {
         const rect = panelEl.getBoundingClientRect();
-        dragState = { startX: clientX, startY: clientY, startW: rect.width, startH: rect.height };
-      }
-      function moveDrag(clientX, clientY) {
+        dragState = { startX: e.clientX, startY: e.clientY, startW: rect.width, startH: rect.height };
+        grip.setPointerCapture(e.pointerId);
+        e.preventDefault();
+        e.stopPropagation();
+      });
+      grip.addEventListener('pointermove', e => {
         if (!dragState) return;
         const minW = 260, minH = 160;
         const maxW = window.innerWidth * 0.9, maxH = window.innerHeight * 0.85;
-        const newW = Math.max(minW, Math.min(maxW, dragState.startW + (clientX - dragState.startX)));
-        const newH = Math.max(minH, Math.min(maxH, dragState.startH + (clientY - dragState.startY)));
+        const newW = Math.max(minW, Math.min(maxW, dragState.startW + (e.clientX - dragState.startX)));
+        const newH = Math.max(minH, Math.min(maxH, dragState.startH + (e.clientY - dragState.startY)));
         panelEl.style.width = newW + 'px';
         panelEl.style.height = newH + 'px';
-      }
-      function endDrag() { dragState = null; }
-
-      grip.addEventListener('mousedown', e => { startDrag(e.clientX, e.clientY); e.preventDefault(); e.stopPropagation(); });
-      window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
-      window.addEventListener('mouseup', endDrag);
-
-      grip.addEventListener('touchstart', e => {
-        const t = e.touches[0];
-        startDrag(t.clientX, t.clientY);
         e.preventDefault();
-        e.stopPropagation();
-      }, { passive: false });
-      window.addEventListener('touchmove', e => {
-        if (!dragState) return;
-        const t = e.touches[0];
-        moveDrag(t.clientX, t.clientY);
-        e.preventDefault();
-      }, { passive: false });
-      window.addEventListener('touchend', endDrag);
+      });
+      const endDrag = e => { dragState = null; try { grip.releasePointerCapture(e.pointerId); } catch (err) {} };
+      grip.addEventListener('pointerup', endDrag);
+      grip.addEventListener('pointercancel', endDrag);
     }
 
     const PersonEngine = {
