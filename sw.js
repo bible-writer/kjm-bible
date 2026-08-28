@@ -1,11 +1,12 @@
-// 성경지도 PWA Service Worker v4.2.0
-const CACHE_NAME = 'bible-map-v4.2.0';
+// 성경지도 PWA Service Worker v4.3.0
+const CACHE_NAME = 'bible-map-v4.3.0';
 
 // 핵심 캐시 대상
 const CORE_ASSETS = [
   './map.html',
   './manifest.json',
   './placeDatabase.json',
+  './personDatabase.json',
   // CDN 라이브러리
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
   'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
@@ -45,8 +46,8 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // placeDatabase.json은 항상 네트워크 우선 (업데이트 반영)
-  if (url.pathname.endsWith('placeDatabase.json')) {
+  // placeDatabase.json, personDatabase.json은 항상 네트워크 우선 (업데이트 반영)
+  if (url.pathname.endsWith('placeDatabase.json') || url.pathname.endsWith('personDatabase.json')) {
     event.respondWith(
       fetch(event.request).then(response => {
         const clone = response.clone();
