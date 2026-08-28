@@ -6860,6 +6860,27 @@
         buildPersonVerseIndex(personDatabase);
       }
 
+      // [자동 업데이트] 네트워크로 최신 personDatabase.json 확인 (file:// 로컬 실행 시에는 자동 실패 후 무시됨)
+      try {
+        const netRes = await fetch('./personDatabase.json', { cache: 'no-store' });
+        if (netRes && netRes.ok) {
+          const netPkg = await netRes.json();
+          if (netPkg && Array.isArray(netPkg.persons) && netPkg.persons.length > 0) {
+            const isNewer = !savedPersons || netPkg.persons.length !== savedPersons.length || netPkg.version !== await getLocalItem('saved_person_database_version');
+            if (isNewer) {
+              personDatabase = netPkg.persons;
+              buildPersonVerseIndex(personDatabase);
+              await setLocalItem('saved_person_database', personDatabase);
+              await setLocalItem('saved_person_database_version', netPkg.version || '');
+              showToast(`인명 DB 자동 업데이트: ${personDatabase.length}명 (v${netPkg.version || '?'})`, 'success');
+            }
+          }
+        }
+      } catch (e) {
+        // 로컬 file:// 실행이거나 personDatabase.json이 같은 폴더에 없으면 조용히 무시하고 기존 캐시 사용
+        console.log('[자동 업데이트] personDatabase.json 네트워크 로드 생략:', e.message);
+      }
+
       const savedBdb = await getLocalItem("saved_bdb_binary");
       if (savedBdb && window.SQL) {
         try {
