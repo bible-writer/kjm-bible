@@ -6734,7 +6734,20 @@
             statusBar.classList.add('connected');
             document.getElementById('db-status-text').innerText = `자동 복원 완료 ✓ DB: ${detectedSchema.table} 테이블 | 지명: ${placeDatabase.length}개`;
           }
-          loadBibleText();
+          // [마지막 읽던 위치 복원] 창세기 1장 기본값 대신, 저장된 마지막 위치가 있으면 그쪽으로 이동
+          let _restoredToLastPosition = false;
+          try {
+            const saved = JSON.parse(localStorage.getItem('lastReadPosition') || 'null');
+            if (saved && saved.bookId && saved.chapter && BIBLE_BOOKS.find(b => b.id === saved.bookId)) {
+              navigateToBibleVerse(saved.bookId, saved.chapter, 1);
+              _restoredToLastPosition = true;
+            }
+          } catch (e) {
+            console.warn('마지막 읽던 위치 복원 실패:', e);
+          }
+          if (!_restoredToLastPosition) {
+            loadBibleText();
+          }
         } catch (err) {
           console.error("성경 DB 자동 복원 오류:", err);
         }
@@ -7163,6 +7176,13 @@
 
       // 구절 이동 or 맨 위
       container.scrollTop = 0;
+
+      // [마지막 읽던 위치 저장] 다음 접속 시 창세기 대신 여기서 이어보기
+      try {
+        localStorage.setItem('lastReadPosition', JSON.stringify({ bookId, chapter, savedAt: Date.now() }));
+      } catch (e) {
+        console.warn('마지막 읽던 위치 저장 실패:', e);
+      }
     }
 
     function showChapterPlaces(container) {
