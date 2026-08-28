@@ -2763,12 +2763,19 @@
       panelEl.style.maxWidth = '90vw';
       panelEl.style.maxHeight = '85vh';
       panelEl.style.fontSize = baseFontPx + 'px';
+      // 스크롤바가 나타나거나 사라질 때 콘텐츠 폭이 미세하게 바뀌면서
+      // 글자 크기 ↔ 스크롤바 유무가 서로를 계속 건드려 팝업이 떨리는(진동) 현상을 방지
+      panelEl.style.scrollbarGutter = 'stable';
       if (panelEl._autoFontObserver) return; // 이미 관찰 중이면 중복 등록 방지
+      let lastFontSize = baseFontPx;
       const observer = new ResizeObserver(entries => {
         for (const entry of entries) {
           const w = entry.contentRect.width;
           const scale = w / baseWidth;
           const newSize = Math.max(baseFontPx * 0.85, Math.min(baseFontPx * 2.4, baseFontPx * scale));
+          // 아주 미세한 폭 변동(스크롤바 유무 등)으로 인한 떨림을 걸러낸다
+          if (Math.abs(newSize - lastFontSize) < 0.5) continue;
+          lastFontSize = newSize;
           panelEl.style.fontSize = newSize.toFixed(1) + 'px';
         }
       });
