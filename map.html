@@ -389,6 +389,33 @@
       color: #5b21b6;
     }
 
+    /* 본문 용어사전 클릭 링크 태그 (인명/지명과 색 구분: 호박색) */
+    .bible-term-tag {
+      color: #b45309;
+      font-weight: 700;
+      background-color: #fffbeb;
+      padding: 1px 5px;
+      border-radius: 4px;
+      border-bottom: 1.5px dashed #d97706;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+    .bible-term-tag:hover {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    /* 용어 정의문 안의 성경 구절 참조 링크 (파란색, 밑줄) */
+    .term-verse-ref {
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .term-verse-ref:hover {
+      color: #1d4ed8;
+    }
+
     /* ═══════════════════════════════════════════════════
        비교성경 패널 UI (다중 번역 병렬 보기)
        ═══════════════════════════════════════════════════ */
@@ -1444,6 +1471,10 @@
         <button class="btn-status-action primary" id="btn-open-add-link" title="수동 링크 추가">링크 추가</button>
         <button class="btn-status-action" id="btn-open-blacklist" title="제외 단어 관리">제외 관리</button>
         <button class="btn-status-action danger" id="btn-clear-db" title="저장소 초기화">초기화</button>
+        <label class="label-toggle-group" style="margin-left:6px;">
+          <input type="checkbox" id="chk-term-highlight" checked>
+          <span>용어 표시</span>
+        </label>
       </div>
     </div>
 
@@ -1985,6 +2016,16 @@
               loadBibleText();
               const reliableCnt = personDatabase.filter(p => !p.pending_review && p.name_ko).length;
               showToast(`인명 DB 로드 완료: ${personDatabase.length}명 (반영 가능 ${reliableCnt}명)`, 'success');
+              resolve();
+              return;
+            }
+            // termDatabase.json 직접 로드 (terms 배열이 있는 경우)
+            if (pkg.terms && Array.isArray(pkg.terms)) {
+              termDatabase = pkg.terms;
+              await setLocalItem('saved_term_database', termDatabase);
+              buildTermIndex(termDatabase);
+              loadBibleText();
+              showToast(`용어 DB 로드 완료: ${termDatabase.length}개`, 'success');
               resolve();
               return;
             }
@@ -2578,6 +2619,37 @@
       { id: 66, testament: "NT", name: "요한계시록", abbr: "계", chapters: 22, osis: "Rev" }
     ];
 
+    // 정의문 안의 성경 구절 표기(예: "창세기 15장", "창 2:2", "예레미야 34:18-19")를
+    // 자동으로 인식해 클릭 시 본문 이동이 가능한 링크로 바꾸기 위한 책 이름 색인
+    const BOOK_REF_NAMES = [];
+    const BOOK_REF_MAP = {};
+    BIBLE_BOOKS.forEach(b => {
+      [b.name, b.abbr].forEach(n => {
+        if (n && !BOOK_REF_MAP[n]) {
+          BOOK_REF_MAP[n] = b.id;
+          BOOK_REF_NAMES.push(n);
+        }
+      });
+    });
+    BOOK_REF_NAMES.sort((a, b) => b.length - a.length);
+    const BOOK_REF_REGEX = new RegExp(
+      `(${BOOK_REF_NAMES.map(n => n.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')).join('|')})\\s?(\\d{1,3})\\s?장?(?::\\s?(\\d{1,3}(?:\\s?[-,]\\s?\\d{1,3})*))?`,
+      'g'
+    );
+
+    // 정의문(HTML 이스케이프 완료된 텍스트)에서 성경 구절 표기를 찾아 클릭 가능한 링크로 변환
+    function linkifyVerseRefs(escapedText) {
+      if (!escapedText) return '';
+      return escapedText.replace(BOOK_REF_REGEX, (whole, bookName, chapterStr, versesStr) => {
+        const bookId = BOOK_REF_MAP[bookName];
+        if (!bookId) return whole;
+        const chapter = parseInt(chapterStr, 10);
+        const firstVerseMatch = versesStr && versesStr.match(/\d+/);
+        const verse = firstVerseMatch ? parseInt(firstVerseMatch[0], 10) : 1;
+        return `<span class="term-verse-ref" onclick="navigateToBibleVerse(${bookId},${chapter},${verse})">${whole}</span>`;
+      });
+    }
+
     /**
      * 3. 기본 불용어 목록 및 사용자 추가 링크 저장소
      */
@@ -2616,6 +2688,17 @@
     let placeDatabase = [];
     let personDatabase = [];
     let personVerseIndex = {}; // key: "bookId-chapter-verse" -> { "표시이름": person레코드, ... }
+    let termDatabase = [];
+    let termIndex = {}; // key: "표시용어(term_ko)" -> term레코드 (구절 무관, 전역 사전)
+
+    function buildTermIndex(termList) {
+      termIndex = {};
+      if (!Array.isArray(termList)) return;
+      termList.forEach(t => {
+        if (!t.term_ko) return;
+        termIndex[t.term_ko] = t;
+      });
+    }
 
     function buildPersonVerseIndex(personList) {
       personVerseIndex = {};
@@ -2670,6 +2753,29 @@
       handle.ontouchstart = e => { const t = e.touches[0]; onDown(t.clientX, t.clientY); };
     }
 
+    /* 팝업창을 마우스로 드래그해서 크기 확대/축소 가능하게 만들고,
+       확대한 만큼 안의 글자 크기도 비례해서 자동으로 커지게 하는 헬퍼 */
+    function makeResizableWithAutoFont(panelEl, baseWidth, baseFontPx) {
+      panelEl.style.resize = 'both';
+      panelEl.style.overflow = 'auto';
+      panelEl.style.minWidth = '260px';
+      panelEl.style.minHeight = '160px';
+      panelEl.style.maxWidth = '90vw';
+      panelEl.style.maxHeight = '85vh';
+      panelEl.style.fontSize = baseFontPx + 'px';
+      if (panelEl._autoFontObserver) return; // 이미 관찰 중이면 중복 등록 방지
+      const observer = new ResizeObserver(entries => {
+        for (const entry of entries) {
+          const w = entry.contentRect.width;
+          const scale = w / baseWidth;
+          const newSize = Math.max(baseFontPx * 0.85, Math.min(baseFontPx * 2.4, baseFontPx * scale));
+          panelEl.style.fontSize = newSize.toFixed(1) + 'px';
+        }
+      });
+      observer.observe(panelEl);
+      panelEl._autoFontObserver = observer;
+    }
+
     const PersonEngine = {
       // 이미 지명 하이라이트가 끝난 HTML에 대해, <태그> 밖의 순수 텍스트에만 인명을 하이라이트
       highlightOutsideTags: function(html, regex, replacer) {
@@ -2712,9 +2818,10 @@
         if (!panel) {
           panel = document.createElement('div');
           panel.id = 'person-info-panel';
-          panel.style.cssText = 'position:fixed;top:60px;right:30px;z-index:10001;background:var(--card,#fff);border:1px solid #a78bfa;border-radius:8px;padding:14px;width:320px;max-height:75vh;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.25);font-family:sans-serif';
+          panel.style.cssText = 'position:fixed;top:60px;right:30px;z-index:10001;background:var(--card,#fff);border:1px solid #a78bfa;border-radius:8px;padding:14px;width:320px;box-shadow:0 4px 16px rgba(0,0,0,0.25);font-family:sans-serif';
           document.body.appendChild(panel);
         }
+        makeResizableWithAutoFont(panel, 320, 13);
         const briefest = p.briefest_ko || p.briefest || '';
         let mainKo = '';
         let mainEn = '';
@@ -2725,23 +2832,43 @@
         const aliasNote = (clickedName && clickedName !== p.name_ko) ? ` <span style="font-weight:400;color:#94a3b8">(현재 이름: ${escHtml(p.name_ko)})</span>` : '';
         const strongRaw = (p.ustrong || '').trim();
         const strongValid = /^[HG]\d{1,5}[A-Za-z]?$/.test(strongRaw);
-        const strongNote = strongValid ? ` <span style="font-weight:400;color:#a78bfa;font-size:11px">[${escHtml(strongRaw)}]</span>` : '';
-        const enLine = (mainEn && mainEn.trim() && mainEn.trim() !== mainKo.trim()) ? `<div style="font-size:11px;line-height:1.4;color:#94a3b8;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic">${escHtml(mainEn)}</div>` : '';
+        const strongNote = strongValid ? ` <span style="font-weight:400;color:#a78bfa;font-size:0.85em">[${escHtml(strongRaw)}]</span>` : '';
+        const enLine = (mainEn && mainEn.trim() && mainEn.trim() !== mainKo.trim()) ? `<div style="font-size:0.85em;line-height:1.4;color:#94a3b8;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic">${escHtml(mainEn)}</div>` : '';
         const articleText = p.article_ko || p.article || '';
-        const moreBtn = articleText ? `<button onclick="PersonEngine.toggleArticle()" id="person-article-toggle" style="margin-top:8px;font-size:11px;color:#7c3aed;background:none;border:1px solid #ddd6fe;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
-        const articleBody = articleText ? `<div id="person-article-body" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:12px;line-height:1.6;color:#334155;white-space:pre-wrap">${escHtml(articleText)}</div>` : '';
-        const sourceCredit = `<div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">출처: STEPBible TIPNR (CC BY 4.0)${articleText ? " · 해설: Easton/Smith Bible Dictionary 참조" : ""}</div>`;
+        const moreBtn = articleText ? `<button onclick="PersonEngine.toggleArticle()" id="person-article-toggle" style="margin-top:8px;font-size:0.85em;color:#7c3aed;background:none;border:1px solid #ddd6fe;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
+        const articleBody = articleText ? `<div id="person-article-body" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0;font-size:0.92em;line-height:1.6;color:#334155;white-space:pre-wrap">${escHtml(articleText)}</div>` : '';
+        // 등장 구절 목록: 클릭하면 좌측 본문 창이 해당 구절로 바로 이동
+        const versesList = Array.isArray(p.verses) ? p.verses : [];
+        const MAX_VERSE_SHOW = 150;
+        let versesHtml = '';
+        if (versesList.length > 0) {
+          const items = versesList.slice(0, MAX_VERSE_SHOW).map(v => {
+            const bookObj = BIBLE_BOOKS.find(b => b.id === v.book);
+            const abbr = bookObj ? bookObj.abbr : v.book;
+            return `<span class="person-verse-ref" onclick="navigateToBibleVerse(${v.book},${v.chapter},${v.verse})" style="display:inline-block;margin:2px 4px 2px 0;padding:1px 6px;background:#ede9fe;color:#5b21b6;border-radius:4px;cursor:pointer;font-size:0.8em;white-space:nowrap">${abbr} ${v.chapter}:${v.verse}</span>`;
+          }).join('');
+          const moreNote = versesList.length > MAX_VERSE_SHOW ? `<div style="font-size:0.75em;color:#94a3b8;margin-top:4px">외 ${versesList.length - MAX_VERSE_SHOW}개 구절 더 있음</div>` : '';
+          versesHtml = `
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0">
+              <div style="font-size:0.85em;color:#64748b;margin-bottom:4px">등장 구절 (${versesList.length}개, 클릭 시 본문 이동)</div>
+              <div>${items}</div>
+              ${moreNote}
+            </div>
+          `;
+        }
+        const sourceCredit = `<div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">출처: STEPBible TIPNR (CC BY 4.0)${articleText ? " · 해설: Easton/Smith Bible Dictionary 참조" : ""}</div>`;
         panel.innerHTML = `
           <div id="person-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
-            <span style="font-weight:bold;font-size:16px;color:#5b21b6">👤 ${escHtml(clickedName || p.name_ko)}${strongNote}${aliasNote}</span>
-            <button onclick="document.getElementById('person-info-panel').style.display='none'" style="border:none;background:none;font-size:16px;cursor:pointer;color:#999">✕</button>
+            <span style="font-weight:bold;font-size:1.2em;color:#5b21b6">👤 ${escHtml(clickedName || p.name_ko)}${strongNote}${aliasNote}</span>
+            <button onclick="document.getElementById('person-info-panel').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
           </div>
-          <div style="font-size:12px;color:#7c3aed;font-weight:600;margin-bottom:4px">${escHtml(p.name_en || '')} ${briefest ? '· ' + escHtml(briefest) : ''}</div>
-          <div style="font-size:12px;color:#64748b;margin-bottom:6px">${escHtml(desc)}</div>
-          <div style="font-size:13px;line-height:1.5;color:#1e293b">${escHtml(mainKo)}</div>
+          <div style="font-size:0.92em;color:#7c3aed;font-weight:600;margin-bottom:4px">${escHtml(p.name_en || '')} ${briefest ? '· ' + escHtml(briefest) : ''}</div>
+          <div style="font-size:0.92em;color:#64748b;margin-bottom:6px">${escHtml(desc)}</div>
+          <div style="font-size:1em;line-height:1.5;color:#1e293b">${escHtml(mainKo)}</div>
           ${enLine}
           ${moreBtn}
           ${articleBody}
+          ${versesHtml}
           ${sourceCredit}
         `;
         panel.style.display = 'block';
@@ -2751,6 +2878,100 @@
       toggleArticle: function() {
         const body = document.getElementById('person-article-body');
         const btn = document.getElementById('person-article-toggle');
+        if (!body || !btn) return;
+        const isHidden = body.style.display === 'none';
+        body.style.display = isHidden ? 'block' : 'none';
+        btn.textContent = isHidden ? '접기 ▴' : '더보기 ▾';
+      }
+    };
+
+    /* 용어사전 하이라이트 엔진 (인명/지명과 별개, 구절 무관 전역 사전, 호박색 태그) */
+    let termHighlightEnabled = true;
+    const TermEngine = {
+      // 지명/인명 하이라이트가 끝난 HTML에 대해, <태그> 밖의 순수 텍스트에만 용어를 하이라이트
+      highlightOutsideTags: function(html, regex, replacer) {
+        const parts = html.split(/(<[^>]+>)/);
+        for (let i = 0; i < parts.length; i++) {
+          if (i % 2 === 0 && parts[i]) {
+            parts[i] = parts[i].replace(regex, replacer);
+          }
+        }
+        return parts.join('');
+      },
+
+      // termIndex 전체를 대상으로 텍스트 안의 용어를 찾아 클릭 가능한 태그로 감싼다
+      parseAndHighlight: function(html) {
+        const names = Object.keys(termIndex || {});
+        if (!html || names.length === 0) return html;
+        const particlePattern = '(에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
+        const sortedNames = names.sort((a, b) => b.length - a.length);
+        const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).join('|');
+        if (!escapedNames) return html;
+        const regex = new RegExp(`(?<![가-힣])(${escapedNames})${particlePattern}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
+        return this.highlightOutsideTags(html, regex, (match, p1, p2) => {
+          const particle = p2 || '';
+          const safeName = p1.replace(/'/g, "\\'");
+          return `<span class="bible-term-tag" onclick="TermEngine.handleClick('${safeName}')" title="${p1} (용어사전)">${p1}</span>${particle}`;
+        });
+      },
+
+      handleClick: function(name) {
+        const t = termIndex[name];
+        if (!t) { showToast(`'${name}' 용어 정보를 찾을 수 없습니다.`, 'info'); return; }
+        this.showPopup(t);
+      },
+
+      showPopup: function(t) {
+        let panel = document.getElementById('term-info-panel');
+        if (!panel) {
+          panel = document.createElement('div');
+          panel.id = 'term-info-panel';
+          panel.style.cssText = 'position:fixed;top:60px;right:30px;z-index:10001;background:var(--card,#fff);border:1px solid #d97706;border-radius:8px;padding:14px;width:320px;box-shadow:0 4px 16px rgba(0,0,0,0.25);font-family:sans-serif';
+          document.body.appendChild(panel);
+        }
+        makeResizableWithAutoFont(panel, 320, 13);
+        const hg = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${escHtml(t.hebrew_greek)}</div>` : '';
+        const def = t.definition_ko || '';
+        const rawSource = t.source || '';
+        const urlMatch = rawSource.match(/https?:\/\/\S+/);
+        const source = urlMatch
+          ? escHtml(rawSource.slice(0, urlMatch.index)) + `<a href="${urlMatch[0]}" target="_blank" rel="noopener" style="color:#94a3b8;text-decoration:underline">${escHtml(urlMatch[0])}</a>`
+          : escHtml(rawSource);
+
+        // 정의문이 길면 미리보기 + "더보기"로 나누고, 성경 구절 표기는 클릭 가능한 링크로 변환
+        const PREVIEW_LEN = 140;
+        let previewPlain = def, restPlain = '';
+        const needsToggle = def.length > PREVIEW_LEN;
+        if (needsToggle) {
+          let cut = def.indexOf('. ', PREVIEW_LEN);
+          cut = cut === -1 ? PREVIEW_LEN : cut + 1;
+          previewPlain = def.slice(0, cut).trim();
+          restPlain = def.slice(cut).trim();
+        }
+        const previewHtml = linkifyVerseRefs(escHtml(previewPlain));
+        const restHtml = restPlain ? linkifyVerseRefs(escHtml(restPlain)) : '';
+        const toggleBtn = needsToggle ? `<button onclick="TermEngine.toggleDef()" id="term-def-toggle" style="margin-top:6px;font-size:0.85em;color:#b45309;background:none;border:1px solid #fde68a;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
+        const restBlock = needsToggle ? `<div id="term-def-rest" style="display:none;margin-top:6px;font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">${restHtml}</div>` : '';
+
+        panel.innerHTML = `
+          <div id="term-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
+            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${escHtml(t.term_ko || '')}</span>
+            <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
+          </div>
+          <div style="font-size:0.9em;color:#d97706;font-weight:600;margin-bottom:6px">${escHtml(t.term_en || '')}</div>
+          ${hg}
+          <div style="font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">${previewHtml}${needsToggle ? '…' : ''}</div>
+          ${toggleBtn}
+          ${restBlock}
+          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${source}</div>
+        `;
+        panel.style.display = 'block';
+        makeDraggable(panel, '#term-info-drag-handle');
+      },
+
+      toggleDef: function() {
+        const body = document.getElementById('term-def-rest');
+        const btn = document.getElementById('term-def-toggle');
         if (!body || !btn) return;
         const isHidden = body.style.display === 'none';
         body.style.display = isHidden ? 'block' : 'none';
@@ -6583,6 +6804,11 @@
       renderMapMarkers();
     });
 
+    document.getElementById('chk-term-highlight').addEventListener('change', function() {
+      termHighlightEnabled = this.checked;
+      loadBibleText();
+    });
+
     function renderMapMarkers() {
       markerClusterGroup.clearLayers();
       var isPermanent = document.getElementById('chk-permanent-labels').checked;
@@ -6932,6 +7158,32 @@
       if (savedPersons && savedPersons.length > 0) {
         personDatabase = savedPersons;
         buildPersonVerseIndex(personDatabase);
+      }
+
+      const savedTerms = await getLocalItem("saved_term_database");
+      if (savedTerms && savedTerms.length > 0) {
+        termDatabase = savedTerms;
+        buildTermIndex(termDatabase);
+      }
+
+      // [자동 업데이트] 네트워크로 최신 termDatabase.json 확인 (file:// 로컬 실행 시에는 자동 실패 후 무시됨)
+      try {
+        const netTermRes = await fetch('./termDatabase.json', { cache: 'no-store' });
+        if (netTermRes && netTermRes.ok) {
+          const netTermPkg = await netTermRes.json();
+          if (netTermPkg && Array.isArray(netTermPkg.terms) && netTermPkg.terms.length > 0) {
+            const isNewer = !savedTerms || netTermPkg.terms.length !== savedTerms.length || netTermPkg.version !== await getLocalItem('saved_term_database_version');
+            if (isNewer) {
+              termDatabase = netTermPkg.terms;
+              buildTermIndex(termDatabase);
+              await setLocalItem('saved_term_database', termDatabase);
+              await setLocalItem('saved_term_database_version', netTermPkg.version || '');
+              showToast(`용어 DB 자동 업데이트: ${termDatabase.length}개 (v${netTermPkg.version || '?'})`, 'success');
+            }
+          }
+        }
+      } catch (e) {
+        console.log('[자동 업데이트] termDatabase.json 네트워크 로드 생략:', e.message);
       }
 
       // [자동 업데이트] 네트워크로 최신 personDatabase.json 확인 (file:// 로컬 실행 시에는 자동 실패 후 무시됨)
@@ -7399,6 +7651,10 @@
         const personNameMap = personVerseIndex[personKey];
         if (personNameMap && Object.keys(personNameMap).length > 0) {
           highlightedText = PersonEngine.parseAndHighlightByNames(highlightedText, personNameMap, bookId, chapter, vNum);
+        }
+        // 용어사전 하이라이트 (인명/지명 하이라이트 이후, 전역 사전 매칭)
+        if (termHighlightEnabled && termDatabase.length > 0) {
+          highlightedText = TermEngine.parseAndHighlight(highlightedText);
         }
         html += `
           <div class="verse-row" id="verse-row-${vNum}">
