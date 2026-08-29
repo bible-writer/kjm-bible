@@ -2964,7 +2964,7 @@
         const strongRaw = (p.ustrong || '').trim();
         const strongValid = /^[HG]\d{1,5}[A-Za-z]?$/.test(strongRaw);
         const safeStrong = strongRaw.replace(/'/g, "\\'");
-        const strongNote = strongValid ? ` <span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${safeStrong}')" title="원어 뜻 보기">[${escHtml(strongRaw)}]</span>` : '';
+        const strongNote = strongValid ? ` <span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${safeStrong}','person-strong-inline')" title="원어 뜻 보기">[${escHtml(strongRaw)}]</span>` : '';
         const enLine = (mainEn && mainEn.trim() && mainEn.trim() !== mainKo.trim()) ? `<div style="font-size:0.85em;line-height:1.4;color:#94a3b8;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic">${linkifyVerseRefs(escHtml(mainEn))}</div>` : '';
         const articleText = p.article_ko || p.article || '';
         const moreBtn = articleText ? `<button onclick="PersonEngine.toggleArticle()" id="person-article-toggle" style="margin-top:8px;font-size:0.85em;color:#7c3aed;background:none;border:1px solid #ddd6fe;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
@@ -2977,6 +2977,7 @@
             <button onclick="document.getElementById('person-info-panel').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
           </div>
           <div style="font-size:0.92em;color:#7c3aed;font-weight:600;margin-bottom:4px">${escHtml(p.name_en || '')} ${briefest ? '· ' + escHtml(briefest) : ''}</div>
+          <div id="person-strong-inline"></div>
           <div style="font-size:0.92em;color:#64748b;margin-bottom:6px">${escHtml(desc)}</div>
           <div style="font-size:1em;line-height:1.5;color:#1e293b">${escHtml(mainKo)}</div>
           ${enLine}
@@ -3044,7 +3045,7 @@
           document.body.appendChild(panel);
         }
         makeResizableWithAutoFont(panel, 320, 13);
-        const hg = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek))}</div>` : '';
+        const hg = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '';
         const def = t.definition_ko || '';
         const rawSource = t.source || '';
         const urlMatch = rawSource.match(/https?:\/\/\S+/);
@@ -3141,22 +3142,66 @@
       },
 
       // 텍스트 안의 [H1234] / (H1234) / G1234 형태의 스트롱 코드를 찾아 클릭 가능한 태그로 감싼다 (용어사전 원어 필드용)
-      linkifyCodes: function(text) {
+      // targetId: 클릭 시 원어 뜻을 펼쳐 보여줄 같은 팝업 내부의 컨테이너 id (기본값: 용어 팝업 내부 슬롯)
+      linkifyCodes: function(text, targetId) {
         if (!text) return text;
+        const tid = targetId || 'term-strong-inline';
         return text.replace(/\b([HG]\d{3,5}[A-Za-z]?)\b/g, (match) => {
           const safe = match.replace(/'/g, "\\'");
-          return `<span class="strong-tag" onclick="StrongEngine.handleClick('${safe}')">${match}</span>`;
+          return `<span class="strong-tag" onclick="StrongEngine.handleClick('${safe}','${tid}')">${match}</span>`;
         });
       },
 
-      handleClick: async function(code) {
-        showToast('원어 사전 조회 중...', 'info');
+      // code: 조회할 스트롱 번호. targetId: 결과를 끼워 넣을, 현재 열려있는 팝업 안의 컨테이너 id (별도 창을 새로 띄우지 않고 같은 팝업 안에서 펼쳐짐)
+      handleClick: async function(code, targetId) {
+        const container = targetId ? document.getElementById(targetId) : null;
+        // 같은 코드를 다시 누르면 접기(토글)
+        if (container && container.dataset.strongCode === code && container.innerHTML) {
+          container.innerHTML = '';
+          container.dataset.strongCode = '';
+          return;
+        }
+        if (container) {
+          container.innerHTML = '<div style="font-size:0.8em;color:#94a3b8;margin:4px 0">원어 사전 조회 중...</div>';
+        } else {
+          showToast('원어 사전 조회 중...', 'info');
+        }
         await this.ensureLoaded();
         const entry = this.lookup(code);
-        if (!entry) { showToast(`'${code}' 원어 정보를 찾을 수 없습니다.`, 'info'); return; }
-        this.showPopup(code, entry);
+        if (!entry) {
+          if (container) { container.innerHTML = `<div style="font-size:0.8em;color:#94a3b8;margin:4px 0">'${escHtml(code)}' 원어 정보를 찾을 수 없습니다.</div>`; }
+          else { showToast(`'${code}' 원어 정보를 찾을 수 없습니다.`, 'info'); }
+          return;
+        }
+        if (container) {
+          this.renderInline(container, code, entry);
+        } else {
+          this.showPopup(code, entry);
+        }
       },
 
+      // 같은 팝업(인명/용어) 안의 지정된 슬롯에 원어 뜻을 바로 펼쳐 보여준다 — 별도 창이 뜨지 않음
+      renderInline: function(container, code, entry) {
+        container.dataset.strongCode = code;
+        container.innerHTML = `
+          <div style="margin:6px 0;padding:8px 10px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;position:relative">
+            <button onclick="StrongEngine.closeInline('${container.id}')" style="position:absolute;top:4px;right:6px;border:none;background:none;font-size:0.9em;cursor:pointer;color:#94a3b8">✕</button>
+            <div style="font-size:0.75em;color:#047857;font-weight:600;margin-bottom:2px">📜 ${escHtml(code)}</div>
+            <div style="font-size:1.15em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
+            <div style="font-size:0.85em;color:#059669;margin-bottom:4px">${escHtml(entry.xlit || '')}</div>
+            <div style="font-size:0.85em;line-height:1.4;color:#334155">${escHtml(entry.gloss || '')}</div>
+          </div>
+        `;
+      },
+
+      closeInline: function(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+        container.dataset.strongCode = '';
+      },
+
+      // 인라인 슬롯을 못 찾은 예외적인 경우를 위한 대체용 별도 팝업 (평소엔 사용되지 않음)
       showPopup: function(code, entry) {
         let panel = document.getElementById('strong-info-panel');
         if (!panel) {
