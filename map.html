@@ -7353,6 +7353,8 @@
       const container = document.querySelector(`#verse-row-${vNum} [data-ref]`);
       const ref = container ? container.dataset.ref : '';
       const [bookId, chapter] = ref.split('-').map(Number);
+      const bookObjForTitle = BIBLE_BOOKS.find(b => b.id === bookId);
+      const refLabel = bookObjForTitle ? `${bookObjForTitle.abbr}${chapter}:${vNum} ` : '';
       const words = getInterlinearWordsFull(bookId, chapter, vNum);
       const body = words.length === 0
         ? `<div style="color:#94a3b8;font-size:0.85em;">원전분해 정보를 찾을 수 없습니다.</div>`
@@ -7368,7 +7370,7 @@
           }).join('');
       panel.innerHTML = `
         <div id="interlinear-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
-          <span style="font-weight:bold;font-size:1.05em;color:#047857">🔤 ${vNum}절 원어분해</span>
+          <span style="font-weight:bold;font-size:1.05em;color:#047857">🔤 ${refLabel}${vNum}절 원어분해</span>
           <button onclick="document.getElementById('interlinear-panel').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
         </div>
         <div id="interlinear-panel-strong-inline"></div>
