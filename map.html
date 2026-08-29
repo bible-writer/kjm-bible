@@ -405,6 +405,23 @@
       color: #92400e;
     }
 
+    /* 스트롱 번호 클릭 링크 태그 (원어 사전 팝업, 인명/용어 팝업 안에서 사용: 초록색) */
+    .strong-tag {
+      color: #047857;
+      font-weight: 600;
+      background-color: #ecfdf5;
+      padding: 0px 4px;
+      border-radius: 3px;
+      border-bottom: 1px dotted #059669;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+      white-space: nowrap;
+    }
+    .strong-tag:hover {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
     /* 용어 정의문 안의 성경 구절 참조 링크 (파란색, 밑줄) */
     .term-verse-ref {
       color: #2563eb;
@@ -2946,7 +2963,8 @@
         const aliasNote = (clickedName && clickedName !== p.name_ko) ? ` <span style="font-weight:400;color:#94a3b8">(현재 이름: ${escHtml(p.name_ko)})</span>` : '';
         const strongRaw = (p.ustrong || '').trim();
         const strongValid = /^[HG]\d{1,5}[A-Za-z]?$/.test(strongRaw);
-        const strongNote = strongValid ? ` <span style="font-weight:400;color:#a78bfa;font-size:0.85em">[${escHtml(strongRaw)}]</span>` : '';
+        const safeStrong = strongRaw.replace(/'/g, "\\'");
+        const strongNote = strongValid ? ` <span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${safeStrong}')" title="원어 뜻 보기">[${escHtml(strongRaw)}]</span>` : '';
         const enLine = (mainEn && mainEn.trim() && mainEn.trim() !== mainKo.trim()) ? `<div style="font-size:0.85em;line-height:1.4;color:#94a3b8;margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0;font-style:italic">${linkifyVerseRefs(escHtml(mainEn))}</div>` : '';
         const articleText = p.article_ko || p.article || '';
         const moreBtn = articleText ? `<button onclick="PersonEngine.toggleArticle()" id="person-article-toggle" style="margin-top:8px;font-size:0.85em;color:#7c3aed;background:none;border:1px solid #ddd6fe;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
@@ -3026,7 +3044,7 @@
           document.body.appendChild(panel);
         }
         makeResizableWithAutoFont(panel, 320, 13);
-        const hg = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${escHtml(t.hebrew_greek)}</div>` : '';
+        const hg = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek))}</div>` : '';
         const def = t.definition_ko || '';
         const rawSource = t.source || '';
         const urlMatch = rawSource.match(/https?:\/\/\S+/);
@@ -3073,6 +3091,94 @@
         const isHidden = body.style.display === 'none';
         body.style.display = isHidden ? 'block' : 'none';
         btn.textContent = isHidden ? '접기 ▴' : '더보기 ▾';
+      }
+    };
+
+    /* 스트롱 원어 사전 엔진 — 인명/용어 팝업 속 스트롱 번호를 클릭하면 원어(히브리어/그리스어) 뜻을 보여줌 */
+    let strongDict = null;      // { "H0175": {lemma, xlit, pron, def}, ... } 지연 로드
+    let strongDictLoading = null;
+    const StrongEngine = {
+      // strongDict.json을 최초 클릭 시점에 1회만 네트워크에서 불러오고, 이후에는 메모리 캐시 사용
+      ensureLoaded: async function() {
+        if (strongDict) return strongDict;
+        if (strongDictLoading) return strongDictLoading;
+        strongDictLoading = (async () => {
+          try {
+            const cached = await getLocalItem('saved_strong_dict');
+            if (cached && Object.keys(cached).length > 0) {
+              strongDict = cached;
+            }
+          } catch (e) { /* 캐시 없으면 무시 */ }
+          try {
+            const resp = await fetch('./strongDict.json', { cache: 'no-store' });
+            if (resp && resp.ok) {
+              const netDict = await resp.json();
+              if (netDict && Object.keys(netDict).length > 0) {
+                strongDict = netDict;
+                setLocalItem('saved_strong_dict', netDict).catch(() => {});
+              }
+            }
+          } catch (e) {
+            console.log('[스트롱사전] strongDict.json 네트워크 로드 생략:', e.message);
+          }
+          return strongDict;
+        })();
+        return strongDictLoading;
+      },
+
+      // "H0175", "G0223G" 처럼 접미 문자가 붙은 변형 코드도 기본 코드로 정규화해서 재조회
+      normalize: function(code) {
+        return (code || '').trim().toUpperCase();
+      },
+
+      lookup: function(code) {
+        if (!strongDict) return null;
+        const norm = this.normalize(code);
+        if (strongDict[norm]) return strongDict[norm];
+        const base = norm.replace(/[A-Z]$/, '');
+        if (base !== norm && strongDict[base]) return strongDict[base];
+        return null;
+      },
+
+      // 텍스트 안의 [H1234] / (H1234) / G1234 형태의 스트롱 코드를 찾아 클릭 가능한 태그로 감싼다 (용어사전 원어 필드용)
+      linkifyCodes: function(text) {
+        if (!text) return text;
+        return text.replace(/\b([HG]\d{3,5}[A-Za-z]?)\b/g, (match) => {
+          const safe = match.replace(/'/g, "\\'");
+          return `<span class="strong-tag" onclick="StrongEngine.handleClick('${safe}')">${match}</span>`;
+        });
+      },
+
+      handleClick: async function(code) {
+        showToast('원어 사전 조회 중...', 'info');
+        await this.ensureLoaded();
+        const entry = this.lookup(code);
+        if (!entry) { showToast(`'${code}' 원어 정보를 찾을 수 없습니다.`, 'info'); return; }
+        this.showPopup(code, entry);
+      },
+
+      showPopup: function(code, entry) {
+        let panel = document.getElementById('strong-info-panel');
+        if (!panel) {
+          panel = document.createElement('div');
+          panel.id = 'strong-info-panel';
+          panel.style.cssText = 'position:fixed;top:60px;right:30px;z-index:10002;background:var(--card,#fff);border:1px solid #059669;border-radius:8px;padding:14px;width:300px;box-shadow:0 4px 16px rgba(0,0,0,0.25);font-family:sans-serif';
+          document.body.appendChild(panel);
+        }
+        makeResizableWithAutoFont(panel, 300, 13);
+        panel.innerHTML = `
+          <div id="strong-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
+            <span style="font-weight:bold;font-size:1.15em;color:#047857">📜 ${escHtml(code)}</span>
+            <button onclick="document.getElementById('strong-info-panel').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
+          </div>
+          <div style="font-size:1.3em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
+          <div style="font-size:0.95em;color:#059669;margin-bottom:6px">${escHtml(entry.xlit || '')}</div>
+          <div style="font-size:0.95em;line-height:1.5;color:#334155">${escHtml(entry.gloss || '')}</div>
+          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">출처: 원어사전 (스트롱번호 기준 히브리어/헬라어-한글 사전)</div>
+        `;
+        panel.style.display = 'block';
+        ensureTouchResizeGrip(panel);
+        makeDraggable(panel, '#strong-info-drag-handle');
       }
     };
 
