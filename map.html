@@ -2874,8 +2874,18 @@
       if (!Array.isArray(termList)) return;
       termList.forEach(t => {
         if (!t.term_ko) return;
-        termIndex[t.term_ko] = t;
+        const raw = t.term_ko.trim();
+        termIndex[raw] = t;
+        // "흑암(어둠)" 형태 → "흑암"과 "어둠" 둘 다 별도 하이라이트 키로 등록 (본문엔 괄호 없이 단독으로 나오므로)
+        const m = raw.match(/^([^()]+)\(([^()]+)\)$/);
+        if (m) {
+          const main = m[1].trim();
+          const alt = m[2].trim();
+          if (main && !termIndex[main]) termIndex[main] = t;
+          if (alt && !termIndex[alt]) termIndex[alt] = t;
+        }
       });
+      TermEngine._enIndexCache = null; // 목록이 바뀌었으니 영어(NIV 등) 인덱스도 다음 사용 시 재생성
     }
 
     function buildPersonVerseIndex(personList) {
@@ -3131,6 +3141,42 @@
           const safeName = p1.replace(/'/g, "\\'");
           return `<span class="bible-term-tag" onclick="TermEngine.handleClick('${safeName}', ${bookId}, ${chapter}, ${vNum})" title="${p1} (용어사전)">${p1}</span>${particle}`;
         });
+      },
+
+      // 영어(term_en) 기준 용어 하이라이트 — NIV 등 영어 번역 비교보기용
+      _enIndexCache: null,
+      buildEnglishIndex: function() {
+        const idx = {};
+        (termDatabase || []).forEach(t => {
+          if (t.term_en && t.term_en.trim()) {
+            idx[t.term_en.trim().toLowerCase()] = t;
+          }
+        });
+        this._enIndexCache = idx;
+        return idx;
+      },
+      parseAndHighlightEnglish: function(html, bookId, chapter, vNum) {
+        if (!termDatabase || termDatabase.length === 0 || !html) return html;
+        const idx = this._enIndexCache || this.buildEnglishIndex();
+        const names = Object.keys(idx);
+        if (names.length === 0) return html;
+        const sorted = names.sort((a, b) => b.length - a.length);
+        const escaped = sorted.map(n => n.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&'));
+        const regex = new RegExp(`\\b(${escaped.join('|')})\\b`, 'gi');
+        return html.replace(regex, (match) => {
+          const t = idx[match.toLowerCase()];
+          if (!t) return match;
+          const safeName = t.term_en.replace(/'/g, "\\'");
+          return `<span class="bible-term-tag" onclick="TermEngine.handleClickEn('${safeName}', ${bookId}, ${chapter}, ${vNum})" title="${match} (용어사전)">${match}</span>`;
+        });
+      },
+      handleClickEn: function(termEn, bookId, chapter, vNum) {
+        const idx = this._enIndexCache || this.buildEnglishIndex();
+        const t = idx[termEn.trim().toLowerCase()];
+        if (!t) { showToast(`'${termEn}' 용어 정보를 찾을 수 없습니다.`, 'info'); return; }
+        const bookObjForTerm = BIBLE_BOOKS.find(b => b.id === bookId);
+        const refLabel = bookObjForTerm ? `${bookObjForTerm.abbr}${chapter}:${vNum} ` : '';
+        this.showPopup(t, refLabel);
       },
 
       handleClick: function(name, bookId, chapter, vNum) {
@@ -8881,7 +8927,10 @@
 
       let html = `<div class="chapter-title" style="font-size:14px;margin-bottom:10px;">${tr.label} ${bookObj.name} ${chapter}장</div>`;
       verses.forEach(([vNum, text]) => {
-        const safeText = escHtml(text).replace(/&lt;br&gt;/gi, '<br>').replace(/&lt;br ?\/&gt;/gi, '<br>');
+        let safeText = escHtml(text).replace(/&lt;br&gt;/gi, '<br>').replace(/&lt;br ?\/&gt;/gi, '<br>');
+        if (tr.lang === 'en' && termHighlightEnabled && termDatabase.length > 0) {
+          safeText = TermEngine.parseAndHighlightEnglish(safeText, bookId, chapter, vNum);
+        }
         html += `<div class="verse-row" id="cmp-verse-${vNum}">
           <span class="verse-num">${vNum}</span>
           <span class="verse-text">${safeText}</span>
