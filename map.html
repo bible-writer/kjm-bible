@@ -422,6 +422,16 @@
       color: #065f46;
     }
 
+    /* 본문 인터리니어 단어 태그 (시험 기능: 원전분해 DB 연동, 은은한 초록 밑줄만) */
+    .interlinear-tag {
+      cursor: pointer;
+      border-bottom: 1px dotted #6ee7b7;
+      transition: background-color 0.15s ease;
+    }
+    .interlinear-tag:hover {
+      background-color: #ecfdf5;
+    }
+
     /* 용어 정의문 안의 성경 구절 참조 링크 (파란색, 밑줄) */
     .term-verse-ref {
       color: #2563eb;
@@ -1489,7 +1499,7 @@
         <button class="btn-status-action" id="btn-open-blacklist" title="제외 단어 관리">제외 관리</button>
         <button class="btn-status-action danger" id="btn-clear-db" title="저장소 초기화">초기화</button>
         <label class="label-toggle-group" style="margin-left:6px;">
-          <input type="checkbox" id="chk-term-highlight" checked>
+          <input type="checkbox" id="chk-term-highlight">
           <span>용어 표시</span>
         </label>
       </div>
@@ -1526,7 +1536,13 @@
           <span class="upload-badge xlsx"     data-type="xlsx" title="지명 데이터 시트 선택 (.xlsx/.csv)">📊 지명시트 (.xlsx)</span>
           <span class="upload-badge json"     data-type="json" title="백업 JSON 파일 복원 (.json)">💾 백업 (.json)</span>
           <span class="upload-badge bdb-extra" data-type="extra" title="추가 번역 bdb 파일 등록">🌐 추가번역 (.bdb)</span>
+          <span class="upload-badge" id="interlinear-badge" data-type="interlinear" title="원전분해 DB 등록 (.sdb) — 본문 단어 클릭 시 원어 뜻 표시 (시험 기능)" style="background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;">🔤 원전분해 (.sdb)</span>
+          <input type="file" id="interlinear-file-input" style="display:none">
         </div>
+      </div>
+
+      <div id="interlinear-status" style="display:none;margin:4px 0 0;padding:6px 10px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;font-size:11px;color:#047857;">
+        🔤 원전분해 DB 연결됨 — 본문 단어를 클릭하면 원어 뜻이 표시됩니다 (시험 기능)
       </div>
 
       <!-- 업로드 진행 바 -->
@@ -1863,7 +1879,7 @@
     // ── 파일 유형 감지 ──
     function detectFileType(file) {
       const name = file.name.toLowerCase();
-      if (name.endsWith('.bdb') || name.endsWith('.db') || name.endsWith('.sqlite') || name.endsWith('.sqlite3'))
+      if (name.endsWith('.bdb') || name.endsWith('.db') || name.endsWith('.sqlite') || name.endsWith('.sqlite3') || name.endsWith('.sdb'))
         return 'bdb';
       if (name.endsWith('.xlsx') || name.endsWith('.xls') || name.endsWith('.csv'))
         return 'xlsx';
@@ -1888,7 +1904,7 @@
       const existing = list.querySelector(`[data-filename="${escHtml(file.name)}"]`);
       if (existing) existing.remove();
 
-      const icons = { bdb: '📖', xlsx: '📊', json: '💾', 'bdb-extra': '🌐' };
+      const icons = { bdb: '📖', xlsx: '📊', json: '💾', 'bdb-extra': '🌐', interlinear: '🔤' };
       const item = document.createElement('div');
       item.className = `uploaded-file-item ${type}`;
       item.dataset.filename = file.name;
@@ -1906,6 +1922,21 @@
     }
 
     // ── 파일 처리 라우터 (유형별 처리 함수 호출) ──
+    // 원전분해 DB인지 자동 판별 — 일반 성경 번역 DB와 테이블 구조(book/chapter/verse)는 같지만,
+    // 본문에 <WH1234>/<WG1234> 형태의 스트롱코드 태그가 들어있다는 점으로 구분한다.
+    async function looksLikeInterlinearDb(file) {
+      if (!window.SQL) return false;
+      try {
+        const buf = await file.arrayBuffer();
+        const testDb = new window.SQL.Database(new Uint8Array(buf));
+        const res = testDb.exec("SELECT btext FROM Bible WHERE btext LIKE '%<W%>%' LIMIT 1;");
+        testDb.close();
+        return !!(res && res[0] && res[0].values && res[0].values.length > 0);
+      } catch (e) {
+        return false;
+      }
+    }
+
     async function routeFile(file, forcedType = null) {
       const type = forcedType || detectFileType(file);
       const zone = document.getElementById('upload-zone');
@@ -1914,7 +1945,12 @@
       showProgress(20);
 
       try {
-        if (type === 'bdb') {
+        if (type === 'bdb' && await looksLikeInterlinearDb(file)) {
+          await handleInterlinearFile(file);
+          showProgress(100);
+          zone.classList.add('drop-success');
+          addUploadedFileItem(file, 'interlinear', '원전분해 DB 등록');
+        } else if (type === 'bdb') {
           // [핵심수정] 마스터 DB가 이미 있으면 용도 선택 모달 표시
           if (sqliteDbInstance) {
             await askBdbRole(file);
@@ -2193,6 +2229,7 @@
             // 추가번역은 드롭다운에서 번역 선택
             toggleAddTransDropdown();
           }
+          if (type === 'interlinear') document.getElementById('interlinear-file-input').click();
         });
       });
 
@@ -3001,7 +3038,7 @@
     };
 
     /* 용어사전 하이라이트 엔진 (인명/지명과 별개, 구절 무관 전역 사전, 호박색 태그) */
-    let termHighlightEnabled = true;
+    let termHighlightEnabled = false; // 용어사전 하이라이트: 기본값 off (제외 요청 반영)
     const TermEngine = {
       // 지명/인명 하이라이트가 끝난 HTML에 대해, <태그> 밖의 순수 텍스트에만 용어를 하이라이트
       highlightOutsideTags: function(html, regex, replacer) {
@@ -3127,9 +3164,14 @@
         return strongDictLoading;
       },
 
-      // "H0175", "G0223G" 처럼 접미 문자가 붙은 변형 코드도 기본 코드로 정규화해서 재조회
+      // "H175", "G223a" 처럼 자릿수를 안 맞춘 코드(원전분해 DB 등)나 접미 문자가 붙은 변형 코드를
+      // 사전 키 형식인 "H0175" 4자리로 정규화한다.
       normalize: function(code) {
-        return (code || '').trim().toUpperCase();
+        const raw = (code || '').trim().toUpperCase();
+        const m = raw.match(/^([HG])(\d+)([A-Z]?)$/);
+        if (!m) return raw;
+        const [, letter, num, suf] = m;
+        return `${letter}${num.padStart(4, '0')}${suf}`;
       },
 
       lookup: function(code) {
@@ -7199,6 +7241,145 @@
      */
     let sqliteDbInstance = null;
     let detectedSchema = null;
+    let interlinearDbInstance = null; // 원전분해 DB (시험 기능: 본문 단어 클릭 시 원어 뜻)
+
+    // 원전분해 DB(.sdb) 파일 처리 — 개역개정.bdb와 동일한 방식(sql.js)으로 통째로 불러와 실시간 조회
+    async function handleInterlinearFile(file) {
+      if (!window.SQL) { showToast('SQLite 엔진 로딩 중. 잠시 후 다시 시도하세요.', 'warn'); return; }
+      const reader = new FileReader();
+      reader.onload = async function() {
+        try {
+          const arrayBuffer = this.result;
+          interlinearDbInstance = new window.SQL.Database(new Uint8Array(arrayBuffer));
+          await setLocalItem('saved_interlinear_binary', arrayBuffer);
+          const statusEl = document.getElementById('interlinear-status');
+          if (statusEl) statusEl.style.display = 'block';
+          showToast(`원전분해 DB 로드 완료: ${file.name}`, 'success');
+          loadBibleText();
+        } catch (err) {
+          console.error('원전분해 DB 로드 오류:', err);
+          showToast('원전분해 DB 로드 실패: ' + err.message, 'warn');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    document.getElementById('interlinear-file-input')?.addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (file) await routeFile(file, 'bdb'); // 자동판별 로직(looksLikeInterlinearDb)을 타도록 bdb 경로로 전달
+      this.value = '';
+    });
+
+    // 원전분해 DB에서 해당 절의 [스트롱코드, 한글번역어] 목록을 순서대로 반환 (기존 인라인 하이라이트용, 호환 유지)
+    function getInterlinearWords(bookId, chapter, verse) {
+      if (!interlinearDbInstance) return [];
+      try {
+        const res = interlinearDbInstance.exec(
+          `SELECT btext FROM Bible WHERE book=${bookId} AND chapter=${chapter} AND verse=${verse};`
+        );
+        if (!res || !res[0] || !res[0].values || !res[0].values[0]) return [];
+        const btext = res[0].values[0][0] || '';
+        const words = [];
+        const re = /<W([HG]\d+)>[^#]*#\s*([^*]+)\*/g;
+        let m;
+        while ((m = re.exec(btext)) !== null) {
+          words.push([m[1], m[2].trim()]);
+        }
+        return words;
+      } catch (e) {
+        console.warn('원전분해 조회 오류:', e);
+        return [];
+      }
+    }
+
+    // 원전분해 DB에서 해당 절의 단어별 상세 정보(원어형, 코드, 기본형, 음역, 품사분석, 번역)를 순서대로 반환
+    // 절별 원어분해 줄 표시(베들레헴 소프트웨어 스타일)에 사용 — 본문 텍스트를 건드리지 않으므로 표기 불일치 문제가 없다
+    function getInterlinearWordsFull(bookId, chapter, verse) {
+      if (!interlinearDbInstance) return [];
+      try {
+        const res = interlinearDbInstance.exec(
+          `SELECT btext FROM Bible WHERE book=${bookId} AND chapter=${chapter} AND verse=${verse};`
+        );
+        if (!res || !res[0] || !res[0].values || !res[0].values[0]) return [];
+        const btext = res[0].values[0][0] || '';
+        const words = [];
+        const re = /\[([^\]]+)\]\s*\(기본\s*<W([HG]\d+)>\s*\[([^\]]+)\]\s*([^)]+)\)@([^#]+)#\s*([^*]+)\*/g;
+        let m;
+        while ((m = re.exec(btext)) !== null) {
+          words.push({
+            surface: m[1].trim(),
+            code: m[2].trim(),
+            root: m[3].trim(),
+            xlit: m[4].trim(),
+            morph: m[5].trim(),
+            gloss: m[6].trim()
+          });
+        }
+        return words;
+      } catch (e) {
+        console.warn('원전분해 상세 조회 오류:', e);
+        return [];
+      }
+    }
+
+    // 절 번호 옆 "▼ 원어" 토글 클릭 시 — 해당 절의 원어분해 줄을 펼치거나 접는다
+    function toggleInterlinearRow(vNum) {
+      const row = document.getElementById(`interlinear-row-${vNum}`);
+      const btn = document.getElementById(`interlinear-toggle-${vNum}`);
+      if (!row) return;
+      const isHidden = row.style.display === 'none' || !row.style.display;
+      row.style.display = isHidden ? 'block' : 'none';
+      if (btn) btn.textContent = isHidden ? '▲ 원어' : '▼ 원어';
+      // 최초로 펼칠 때만 내용을 채워 넣는다 (지연 렌더링)
+      if (isHidden && !row.dataset.filled) {
+        const [bookId, chapter] = row.dataset.ref.split('-').map(Number);
+        const words = getInterlinearWordsFull(bookId, chapter, vNum);
+        if (words.length === 0) {
+          row.innerHTML = `<div style="color:#94a3b8;font-size:0.85em;">원전분해 정보를 찾을 수 없습니다.</div>`;
+        } else {
+          row.innerHTML = words.map(w => {
+            const safe = w.code.replace(/'/g, "\\'");
+            return `
+              <div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px dashed #e2e8f0;">
+                <span style="font-size:1.15em;font-weight:600;color:#1e293b;direction:rtl;unicode-bidi:isolate">${escHtml(w.surface)}</span>
+                <span style="font-size:0.85em;color:#64748b;"> (기본 <span class="strong-tag" onclick="StrongEngine.handleClick('${safe}','interlinear-word-inline-${vNum}')">${escHtml(w.code)}</span> <span style="direction:rtl;unicode-bidi:isolate">${escHtml(w.root)}</span> ${escHtml(w.xlit)})</span>
+                <div style="font-size:0.85em;color:#94a3b8;margin-top:2px;">→ ${escHtml(w.morph)} : <span style="color:#334155;font-weight:500">${escHtml(w.gloss)}</span></div>
+              </div>
+            `;
+          }).join('') + `<div id="interlinear-word-inline-${vNum}"></div>`;
+        }
+        row.dataset.filled = '1';
+      }
+    }
+
+    // 이미 태그(인명/지명/용어)로 감싸진 부분은 건드리지 않고, 순수 텍스트 구간에서만 순서대로 단어를 찾아 클릭 가능한 태그로 감싼다
+    function applyInterlinearHighlight(html, bookId, chapter, verse) {
+      const words = getInterlinearWords(bookId, chapter, verse);
+      if (!words || words.length === 0) return html;
+      const parts = html.split(/(<[^>]+>)/);
+      let qi = 0; // words 배열 진행 위치
+      for (let i = 0; i < parts.length; i++) {
+        if (i % 2 !== 0) continue; // 태그 부분은 건너뜀
+        let remaining = parts[i];
+        if (!remaining) continue;
+        let result = '';
+        while (qi < words.length) {
+          const [code, ko] = words[qi];
+          const kw = (ko || '').trim();
+          if (!kw || kw === '_') { qi++; continue; }
+          const idx = remaining.indexOf(kw);
+          if (idx === -1) break; // 이 텍스트 조각에는 다음 단어가 없음 → 다음 조각에서 계속 시도
+          result += remaining.slice(0, idx);
+          const safe = code.replace(/'/g, "\\'");
+          result += `<span class="interlinear-tag" onclick="StrongEngine.handleClick('${safe}','interlinear-inline')" title="원어 뜻 보기">${remaining.slice(idx, idx + kw.length)}</span>`;
+          remaining = remaining.slice(idx + kw.length);
+          qi++;
+        }
+        result += remaining;
+        parts[i] = result;
+      }
+      return parts.join('');
+    }
 
     function detectBibleSchema(db) {
       try {
@@ -7529,6 +7710,16 @@
           }
         } catch (err) {
           console.error("성경 DB 자동 복원 오류:", err);
+        }
+      }
+      const savedInterlinear = await getLocalItem("saved_interlinear_binary");
+      if (savedInterlinear && window.SQL) {
+        try {
+          interlinearDbInstance = new window.SQL.Database(new Uint8Array(savedInterlinear));
+          const statusEl = document.getElementById('interlinear-status');
+          if (statusEl) statusEl.style.display = 'block';
+        } catch (err) {
+          console.error("원전분해 DB 자동 복원 오류:", err);
         }
       }
       // DB 등록 여부와 관계없이, 앱을 열 때는 항상 시작 화면을 먼저 보여준다.
@@ -7918,7 +8109,7 @@
         map.removeLayer(chapterPlaceLayer);
         chapterPlaceLayer = null;
       }
-      let html = `<div class="chapter-title">${bookObj.name} ${chapter}장</div>`;
+      let html = `<div class="chapter-title">${bookObj.name} ${chapter}장</div><div id="interlinear-inline"></div>`;
       verses.forEach(([vNum, text]) => {
         const safeText = String(text || "");
         // OB 구절 단위 정확 매칭
@@ -7973,10 +8164,18 @@
         if (termHighlightEnabled && termDatabase.length > 0) {
           highlightedText = TermEngine.parseAndHighlight(highlightedText);
         }
+        // 원전분해 원어분해 토글 버튼 (시험 기능) — 본문 텍스트는 건드리지 않고, 절 아래 별도 줄로 펼쳐 보여준다
+        const interlinearToggle = interlinearDbInstance
+          ? `<button id="interlinear-toggle-${vNum}" onclick="toggleInterlinearRow(${vNum})" style="margin-left:6px;font-size:0.7em;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle;">▼ 원어</button>`
+          : '';
+        const interlinearRow = interlinearDbInstance
+          ? `<div id="interlinear-row-${vNum}" data-ref="${bookId}-${chapter}" style="display:none;margin:6px 0 4px 20px;padding:8px 10px;background:#f8fafc;border-left:2px solid #a7f3d0;border-radius:4px;"></div>`
+          : '';
         html += `
           <div class="verse-row" id="verse-row-${vNum}">
             <span class="verse-num">${vNum}</span>
-            <span class="verse-text">${highlightedText}</span>
+            <span class="verse-text">${highlightedText}</span>${interlinearToggle}
+            ${interlinearRow}
           </div>
         `;
       });
