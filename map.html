@@ -4710,6 +4710,10 @@
         <button onclick="document.getElementById('place-quick-panel').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:14px;color:#94a3b8;padding:0 0 0 6px;line-height:1;flex-shrink:0;" title="닫기">✕</button>
       </div>`;
       html += `<div class="pqp-info">${escHtml(place.modern || '')} ${place.country ? '(' + escHtml(place.country) + ')' : ''}</div>`;
+      if (place.ustrong && /^[HG]\d{1,5}[A-Za-z]?$/.test(place.ustrong)) {
+        const safeUstrong = place.ustrong.replace(/'/g,"\\'");
+        html += `<div><span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${safeUstrong}','pqp-strong-inline')" title="원어 뜻 보기">[${escHtml(place.ustrong)}]</span></div><div id="pqp-strong-inline"></div>`;
+      }
       // 지도보기 버튼 최상단 배치
       html += `<button class="pqp-map-btn" style="margin-bottom:6px;" onclick="document.getElementById('place-quick-panel').style.display='none'; BibleGeoEngine.flyToPlace(placeDatabase.find(p=>p.id===${place.id}) || placeDatabase.find(p=>p.name==='${safeName}'))">🗺 지도에서 보기</button>`;
 
@@ -6874,7 +6878,8 @@
             </span>
           </div>
           <div><b>현대지명:</b> ${escHtml(item.modern || '-')} (${escHtml(item.country || '-')})</div>
-          <div><b>원어/영문:</b> ${escHtml(item.orig || '-')}</div>
+          <div><b>원어/영문:</b> ${escHtml(item.orig || '-')}${(item.ustrong && /^[HG]\d{1,5}[A-Za-z]?$/.test(item.ustrong)) ? ` <span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${item.ustrong.replace(/'/g,"\\'")}','place-strong-inline-${item.id}')" title="원어 뜻 보기">[${escHtml(item.ustrong)}]</span>` : ''}</div>
+          <div id="place-strong-inline-${item.id}"></div>
           <div class="popup-coord-row" style="margin-top:4px;font-size:11px;color:#475569;">
             <b>좌표:</b> 
             <span id="coord-display-${item.id}" style="cursor:pointer;border-bottom:1px dashed #94a3b8;" onclick="this.style.display='none';document.getElementById('coord-edit-${item.id}').style.display='inline';" title="클릭하여 수정">${item.lat}, ${item.lng}</span>
