@@ -2134,13 +2134,13 @@
         this._password = pw;
         return pw;
       },
-      showPasswordModal(isRetry) {
+      showPasswordModal(isRetry, titleText) {
         return new Promise((resolve) => {
           const overlay = document.createElement('div');
           overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:sans-serif';
           overlay.innerHTML = `
             <div style="background:#fff;border-radius:10px;padding:24px;width:300px;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
-              <div style="font-weight:bold;font-size:1.05em;margin-bottom:10px;color:#1e293b">🔒 데이터 잠금 해제</div>
+              <div style="font-weight:bold;font-size:1.05em;margin-bottom:10px;color:#1e293b">${titleText || '🔒 데이터 잠금 해제'}</div>
               ${isRetry ? `<div style="color:#dc2626;font-size:0.85em;margin-bottom:8px">비밀번호가 올바르지 않습니다. 다시 입력하세요.</div>` : ''}
               <input type="password" id="pw-modal-input" placeholder="비밀번호" style="width:100%;box-sizing:border-box;padding:8px;border:1px solid #cbd5e1;border-radius:6px;font-size:1em;margin-bottom:12px" autocomplete="off">
               <div style="display:flex;gap:8px;justify-content:flex-end">
@@ -2156,6 +2156,32 @@
           overlay.querySelector('#pw-modal-cancel').onclick = () => cleanup(null);
           input.addEventListener('keydown', (e) => { if (e.key === 'Enter') cleanup(input.value); });
         });
+      },
+      async encrypt(data, password) {
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+        const key = await crypto.subtle.deriveKey(
+          { name: 'PBKDF2', salt, iterations: 200000, hash: 'SHA-256' },
+          keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['encrypt']
+        );
+        const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(data)));
+        const bufToBase64 = (buf) => {
+          let binary = '';
+          const bytes = new Uint8Array(buf);
+          for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+          return btoa(binary);
+        };
+        return {
+          encrypted: true, algo: 'AES-GCM-256', kdf: 'PBKDF2-SHA256', iterations: 200000,
+          salt: bufToBase64(salt), iv: bufToBase64(iv), ciphertext: bufToBase64(ciphertext)
+        };
+      },
+      // 내보내기(다운로드) 전용 비밀번호 확인 — 세션 캐시를 쓰지 않고 매번 새로 물어봄
+      async askPasswordForExport() {
+        const pw = await this.showPasswordModal(false, '🔒 내보낼 파일 암호화 비밀번호를 입력하세요:');
+        if (!pw) throw new Error('비밀번호가 입력되지 않았습니다.');
+        return pw;
       },
       async decrypt(wrapper, isRetry) {
         if (!wrapper || wrapper.encrypted !== true) return wrapper; // 평문 파일은 그대로 통과
@@ -3275,6 +3301,29 @@
         const toggleBtn = needsToggle ? `<button onclick="TermEngine.toggleDef()" id="term-def-toggle" style="margin-top:6px;font-size:0.85em;color:#b45309;background:none;border:1px solid #fde68a;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button>` : '';
         const restBlock = needsToggle ? `<div id="term-def-rest" style="display:none;margin-top:6px;font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">${restHtml}</div>` : '';
 
+        const eastonRaw = t.easton_raw || '';
+        const smithRaw = t.smith_raw || '';
+        const tabBar = `
+          <div style="display:flex;gap:4px;margin:8px 0 6px;border-bottom:1px solid #f1f5f9">
+            <button class="term-tab-btn active" data-tab="ko" onclick="TermEngine.switchTab('ko')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid #b45309;color:#b45309;font-weight:600">한글해설</button>
+            <button class="term-tab-btn" data-tab="easton" onclick="TermEngine.switchTab('easton')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">Easton 원문</button>
+            <button class="term-tab-btn" data-tab="smith" onclick="TermEngine.switchTab('smith')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">Smith 원문</button>
+          </div>`;
+        const eastonBlock = `<div id="term-tab-content-easton" style="display:none">
+          ${eastonRaw
+            ? `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(eastonRaw))}</div>`
+            : `<textarea id="term-easton-input" placeholder="Easton's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
+               <button onclick="TermEngine.saveRawText(${t.id},'easton')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`
+          }
+        </div>`;
+        const smithBlock = `<div id="term-tab-content-smith" style="display:none">
+          ${smithRaw
+            ? `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(smithRaw))}</div>`
+            : `<textarea id="term-smith-input" placeholder="Smith's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
+               <button onclick="TermEngine.saveRawText(${t.id},'smith')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`
+          }
+        </div>`;
+
         panel.innerHTML = `
           <div id="term-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
             <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${refLabel ? `<span style="font-size:0.7em;color:#94a3b8;font-weight:500">${refLabel}</span> ` : ''}${escHtml(t.term_ko || '')}</span>
@@ -3282,14 +3331,48 @@
           </div>
           <div style="font-size:0.9em;color:#d97706;font-weight:600;margin-bottom:6px">${escHtml(t.term_en || '')}</div>
           ${hg}
-          <div style="font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">${previewHtml}${needsToggle ? '…' : ''}</div>
-          ${toggleBtn}
-          ${restBlock}
+          ${tabBar}
+          <div id="term-tab-content-ko">
+            <div style="font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">${previewHtml}${needsToggle ? '…' : ''}</div>
+            ${toggleBtn}
+            ${restBlock}
+          </div>
+          ${eastonBlock}
+          ${smithBlock}
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${source}</div>
         `;
         panel.style.display = 'block';
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#term-info-drag-handle');
+      },
+
+      saveRawText: function(id, which) {
+        const inputId = which === 'easton' ? 'term-easton-input' : 'term-smith-input';
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        const val = input.value.trim();
+        if (!val) { showToast('붙여넣을 원문을 입력하세요.', 'warn'); return; }
+        const t = termDatabase.find(x => x.id === id);
+        if (!t) { showToast('용어를 찾을 수 없습니다.', 'warn'); return; }
+        t[which === 'easton' ? 'easton_raw' : 'smith_raw'] = val;
+        setLocalItem('saved_term_database', termDatabase);
+        showToast(`'${t.term_ko}' ${which === 'easton' ? 'Easton' : 'Smith'} 원문 저장됨`, 'success');
+        this.showPopup(t); // 팝업 새로고침
+        this.switchTab(which);
+      },
+
+      switchTab: function(tab) {
+        ['ko', 'easton', 'smith'].forEach(name => {
+          const content = document.getElementById(`term-tab-content-${name}`);
+          if (content) content.style.display = (name === tab) ? 'block' : 'none';
+          const btn = document.querySelector(`#term-info-panel .term-tab-btn[data-tab="${name}"]`);
+          if (btn) {
+            const active = name === tab;
+            btn.style.borderBottomColor = active ? '#b45309' : 'transparent';
+            btn.style.color = active ? '#b45309' : '#94a3b8';
+            btn.style.fontWeight = active ? '600' : '400';
+          }
+        });
       },
 
       unlockStrong: function() {
@@ -7153,10 +7236,13 @@
       }
     }
 
-    function exportPlaceDatabaseJson() {
+    async function exportPlaceDatabaseJson() {
       if (placeDatabase.length === 0) {
         showToast('내보낼 지명 데이터가 없습니다.', 'warn'); return;
       }
+      let password;
+      try { password = await EncryptedDB.askPasswordForExport(); }
+      catch (e) { showToast('비밀번호를 입력하지 않아 내보내기가 취소되었습니다.', 'info'); return; }
       const db = {
         version: '5.1.0',
         date: new Date().toISOString().slice(0, 10),
@@ -7164,20 +7250,24 @@
         source: 'OpenBible.info + IAA + Satellite Bible Atlas',
         places: placeDatabase // 필드를 임의로 재구성하지 않고 전체 그대로 내보냄 (ob_id/ob_score/이스턴·스미스 연동 등 데이터 손실 방지)
       };
-      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+      const encrypted = await EncryptedDB.encrypt(db, password);
+      const blob = new Blob([JSON.stringify(encrypted)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'placeDatabase.json';
       a.click();
       URL.revokeObjectURL(a.href);
-      showToast(`📦 placeDatabase.json 생성 완료 (${placeDatabase.length}개 지명) — GitHub에 업로드하세요`, 'success');
+      showToast(`📦 placeDatabase.json(암호화됨) 생성 완료 (${placeDatabase.length}개 지명) — GitHub에 업로드하세요`, 'success');
     }
 
     // 용어DB(스트롱코드 등 수동 수정분 포함) 내보내기 — 팝업에서 저장한 내용이 termDatabase 배열에 반영되어 있음
-    function exportTermDatabaseJson() {
+    async function exportTermDatabaseJson() {
       if (termDatabase.length === 0) {
         showToast('내보낼 용어 데이터가 없습니다.', 'warn'); return;
       }
+      let password;
+      try { password = await EncryptedDB.askPasswordForExport(); }
+      catch (e) { showToast('비밀번호를 입력하지 않아 내보내기가 취소되었습니다.', 'info'); return; }
       const db = {
         version: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
         date: new Date().toISOString().slice(0, 10),
@@ -7186,13 +7276,14 @@
         note: termDatabaseMeta.note || '',
         terms: termDatabase
       };
-      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+      const encrypted = await EncryptedDB.encrypt(db, password);
+      const blob = new Blob([JSON.stringify(encrypted)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'termDatabase.json';
       a.click();
       URL.revokeObjectURL(a.href);
-      showToast(`📦 termDatabase.json 생성 완료 (${termDatabase.length}개 용어) — GitHub에 업로드하세요`, 'success');
+      showToast(`📦 termDatabase.json(암호화됨) 생성 완료 (${termDatabase.length}개 용어) — GitHub에 업로드하세요`, 'success');
     }
 
 
