@@ -7361,7 +7361,7 @@
             return `
               <div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px dashed #e2e8f0;">
                 <span style="font-size:1.15em;font-weight:600;color:#1e293b;direction:rtl;unicode-bidi:isolate">${escHtml(w.surface)}</span>
-                <span style="font-size:0.85em;color:#64748b;"> (기본 <span class="strong-tag" onclick="StrongEngine.handleClick('${safe}')">${escHtml(w.code)}</span> <span style="direction:rtl;unicode-bidi:isolate">${escHtml(w.root)}</span> ${escHtml(w.xlit)})</span>
+                <span style="font-size:0.85em;color:#64748b;"> (기본 <span class="strong-tag" onclick="StrongEngine.handleClick('${safe}','interlinear-panel-strong-inline')">${escHtml(w.code)}</span> <span style="direction:rtl;unicode-bidi:isolate">${escHtml(w.root)}</span> ${escHtml(w.xlit)})</span>
                 <div style="font-size:0.85em;color:#94a3b8;margin-top:2px;">→ ${escHtml(w.morph)} : <span style="color:#334155;font-weight:500">${escHtml(w.gloss)}</span></div>
               </div>
             `;
@@ -7372,6 +7372,7 @@
           <button onclick="document.getElementById('interlinear-panel').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
         </div>
         ${body}
+        <div id="interlinear-panel-strong-inline"></div>
       `;
       panel.style.display = 'block';
       makeResizableWithAutoFont(panel, 320, 13);
