@@ -738,6 +738,23 @@
     }
     .btn-catalog-trigger:hover { background: #1e293b; }
 
+    .dict-filter-btn {
+      padding: 5px 12px; font-size: 12px; font-weight: 600; border-radius: 14px;
+      border: 1px solid #cbd5e1; background: #fff; color: #475569; cursor: pointer;
+    }
+    .dict-filter-btn.active { background: #b45309; color: #fff; border-color: #b45309; }
+    .dict-result-item {
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+      padding: 10px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer;
+    }
+    .dict-result-item:hover { background: #f8fafc; }
+    .dict-result-tag {
+      font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0;
+    }
+    .dict-result-tag.PERSON { background: #ede9fe; color: #7c3aed; }
+    .dict-result-tag.PLACE { background: #dcfce7; color: #059669; }
+    .dict-result-tag.TERM { background: #fef3c7; color: #b45309; }
+
     .label-toggle-group {
       display: flex;
       align-items: center;
@@ -1677,6 +1694,7 @@
         <ul id="search-autocomplete-list"></ul>
       </div>
       <button class="btn-catalog-trigger" id="btn-open-catalog">지명 도감</button>
+      <button class="btn-catalog-trigger" id="btn-open-dict" style="margin-left:4px">📚 사전</button>
       <label class="label-toggle-group">
         <input type="checkbox" id="chk-permanent-labels">
         <span>지명 표시</span>
@@ -1709,6 +1727,27 @@
     <div class="disambig-header" id="disambig-title">'지명' 선택</div>
     <div class="disambig-guide">현재 읽으시는 성경 본문과 일치하는 장소를 선택해 주십시오.</div>
     <ul id="disambig-list"></ul>
+  </div>
+
+  <!-- 통합 사전(인물·지명·용어) 모달 -->
+  <div id="dict-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20000"></div>
+  <div id="dict-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(720px,92vw);height:88vh;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;display:flex;flex-direction:column;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
+      <span style="font-weight:bold;font-size:1.1em" id="dict-modal-title">📚 통합 사전</span>
+      <button id="btn-close-dict" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
+    </div>
+    <div style="padding:10px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
+      <input type="text" id="dict-search-input" placeholder="인물·지명·용어 검색 (예: 모세, 가나안, 회막)" autocomplete="off"
+        style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.95em">
+      <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap" id="dict-filter-tabs">
+        <button class="dict-filter-btn active" data-type="ALL">전체</button>
+        <button class="dict-filter-btn" data-type="PERSON">인물</button>
+        <button class="dict-filter-btn" data-type="PLACE">지명</button>
+        <button class="dict-filter-btn" data-type="TERM">용어</button>
+      </div>
+    </div>
+    <div id="dict-results" style="flex:1;overflow-y:auto;padding:6px 0"></div>
+    <div style="padding:8px 16px;border-top:1px solid var(--border,#e2e8f0);text-align:center" id="dict-load-more-wrap"></div>
   </div>
 
   <!-- 801 전체 지명 탐색기 모달 -->
@@ -4722,6 +4761,137 @@
       });
     }
 
+    // ── 통합 사전(인물·지명·용어) 모달 ──
+    let dictFilterType = 'ALL';
+    let dictShownCount = 0;
+    const DICT_PAGE_SIZE = 100;
+    let dictCombinedCache = null;
+
+    function buildDictCombined() {
+      const list = [];
+      termDatabase.forEach(t => {
+        list.push({
+          type: 'TERM', sortKey: t.term_ko || '',
+          nameKo: t.term_ko || '', nameEn: t.term_en || '',
+          def: t.definition_ko || '', strong: t.hebrew_greek || '',
+          ref: t
+        });
+      });
+      personDatabase.forEach(p => {
+        const def = p.briefest_ko || p.short_ko || p.brief_ko || '';
+        list.push({
+          type: 'PERSON', sortKey: p.name_ko || '',
+          nameKo: p.name_ko || '', nameEn: p.name_en || p.name || '',
+          def, strong: p.ustrong || '',
+          ref: p
+        });
+      });
+      placeDatabase.forEach(p => {
+        list.push({
+          type: 'PLACE', sortKey: p.name || '',
+          nameKo: p.name || '', nameEn: p.modern || p.orig || '',
+          def: p.desc || '', strong: '',
+          ref: p
+        });
+      });
+      list.sort((a, b) => a.sortKey.localeCompare(b.sortKey, 'ko'));
+      return list;
+    }
+
+    function openDictModal() {
+      document.getElementById('dict-modal').style.display = 'flex';
+      document.getElementById('dict-modal-backdrop').style.display = 'block';
+      dictCombinedCache = buildDictCombined();
+      updateDictFilterCounts();
+      dictShownCount = 0;
+      renderDictResults(true);
+      document.getElementById('dict-search-input').focus();
+    }
+    function closeDictModal() {
+      document.getElementById('dict-modal').style.display = 'none';
+      document.getElementById('dict-modal-backdrop').style.display = 'none';
+    }
+    function updateDictFilterCounts() {
+      if (!dictCombinedCache) return;
+      const counts = { ALL: dictCombinedCache.length, PERSON: 0, PLACE: 0, TERM: 0 };
+      dictCombinedCache.forEach(it => counts[it.type]++);
+      document.querySelectorAll('#dict-filter-tabs .dict-filter-btn').forEach(btn => {
+        const type = btn.dataset.type;
+        const label = { ALL: '전체', PERSON: '인물', PLACE: '지명', TERM: '용어' }[type];
+        btn.textContent = `${label} (${counts[type]})`;
+      });
+    }
+    function renderDictResults(reset) {
+      const container = document.getElementById('dict-results');
+      const loadMoreWrap = document.getElementById('dict-load-more-wrap');
+      if (reset) { container.innerHTML = ''; dictShownCount = 0; }
+      if (!dictCombinedCache) dictCombinedCache = buildDictCombined();
+
+      const q = (document.getElementById('dict-search-input').value || '').trim().toLowerCase();
+      let filtered = dictCombinedCache;
+      if (dictFilterType !== 'ALL') filtered = filtered.filter(it => it.type === dictFilterType);
+      if (q) {
+        filtered = filtered.filter(it =>
+          it.nameKo.toLowerCase().includes(q) ||
+          it.nameEn.toLowerCase().includes(q) ||
+          it.def.toLowerCase().includes(q)
+        );
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center;padding:30px;color:#94a3b8">검색 결과가 없습니다.</div>`;
+        loadMoreWrap.innerHTML = '';
+        return;
+      }
+
+      const slice = filtered.slice(dictShownCount, dictShownCount + DICT_PAGE_SIZE);
+      slice.forEach(it => {
+        const row = document.createElement('div');
+        row.className = 'dict-result-item';
+        const defPreview = it.def ? escHtml(it.def.slice(0, 70)) + (it.def.length > 70 ? '…' : '') : '';
+        row.innerHTML = `
+          <div style="min-width:0">
+            <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}</div>
+            ${defPreview ? `<div style="font-size:0.82em;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${defPreview}</div>` : ''}
+          </div>
+          <span class="dict-result-tag ${it.type}">${it.strong ? escHtml(it.strong) : { PERSON: '인물', PLACE: '지명', TERM: '용어' }[it.type]}</span>
+        `;
+        row.onclick = () => {
+          closeDictModal();
+          if (it.type === 'TERM') TermEngine.showPopup(it.ref);
+          else if (it.type === 'PERSON') PersonEngine.showPopup(it.ref, it.ref.name_ko);
+          else if (it.type === 'PLACE') BibleGeoEngine.flyToPlace(it.ref);
+        };
+        container.appendChild(row);
+      });
+      dictShownCount += slice.length;
+
+      if (dictShownCount < filtered.length) {
+        loadMoreWrap.innerHTML = `<button onclick="renderDictResults(false)" style="padding:6px 16px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;cursor:pointer;font-size:0.85em">더 보기 (${filtered.length - dictShownCount}개 남음)</button>`;
+      } else {
+        loadMoreWrap.innerHTML = `<span style="font-size:0.8em;color:#94a3b8">총 ${filtered.length}개 표시됨</span>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnOpen = document.getElementById('btn-open-dict');
+      if (btnOpen) btnOpen.onclick = openDictModal;
+      const btnClose = document.getElementById('btn-close-dict');
+      if (btnClose) btnClose.onclick = closeDictModal;
+      const backdrop = document.getElementById('dict-modal-backdrop');
+      if (backdrop) backdrop.onclick = closeDictModal;
+      const searchInput = document.getElementById('dict-search-input');
+      if (searchInput) searchInput.addEventListener('input', () => renderDictResults(true));
+      document.querySelectorAll('#dict-filter-tabs .dict-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#dict-filter-tabs .dict-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          dictFilterType = btn.dataset.type;
+          renderDictResults(true);
+        });
+      });
+    });
+
     function renderCatalogList() {
       const container = document.getElementById("catalog-places-container");
       container.innerHTML = "";
@@ -6980,17 +7150,11 @@
         showToast('내보낼 지명 데이터가 없습니다.', 'warn'); return;
       }
       const db = {
-        version: '4.0.3',
+        version: '5.1.0',
         date: new Date().toISOString().slice(0, 10),
         count: placeDatabase.length,
         source: 'OpenBible.info + IAA + Satellite Bible Atlas',
-        places: placeDatabase.map(p => ({
-          id: p.id, name: p.name, orig: p.orig || '', modern: p.modern || '',
-          country: p.country || '', era: p.era || '',
-          lat: p.lat, lng: p.lng,
-          verse: p.verse || '', desc: p.desc || '',
-          terrainType: p.terrainType || '', mapLink: p.mapLink || ''
-        }))
+        places: placeDatabase // 필드를 임의로 재구성하지 않고 전체 그대로 내보냄 (ob_id/ob_score/이스턴·스미스 연동 등 데이터 손실 방지)
       };
       const blob = new Blob([JSON.stringify(db, null, 1)], { type: 'application/json' });
       const a = document.createElement('a');
