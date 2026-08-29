@@ -7164,7 +7164,7 @@
         source: 'OpenBible.info + IAA + Satellite Bible Atlas',
         places: placeDatabase // 필드를 임의로 재구성하지 않고 전체 그대로 내보냄 (ob_id/ob_score/이스턴·스미스 연동 등 데이터 손실 방지)
       };
-      const blob = new Blob([JSON.stringify(db, null, 1)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'placeDatabase.json';
@@ -7186,7 +7186,7 @@
         note: termDatabaseMeta.note || '',
         terms: termDatabase
       };
-      const blob = new Blob([JSON.stringify(db, null, 1)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'termDatabase.json';
