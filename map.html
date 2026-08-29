@@ -3095,7 +3095,7 @@
       },
 
       // termIndex 전체를 대상으로 텍스트 안의 용어를 찾아 클릭 가능한 태그로 감싼다
-      parseAndHighlight: function(html) {
+      parseAndHighlight: function(html, bookId, chapter, vNum) {
         const names = Object.keys(termIndex || {});
         if (!html || names.length === 0) return html;
         const particlePattern = '(에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
@@ -3106,17 +3106,19 @@
         return this.highlightOutsideTags(html, regex, (match, p1, p2) => {
           const particle = p2 || '';
           const safeName = p1.replace(/'/g, "\\'");
-          return `<span class="bible-term-tag" onclick="TermEngine.handleClick('${safeName}')" title="${p1} (용어사전)">${p1}</span>${particle}`;
+          return `<span class="bible-term-tag" onclick="TermEngine.handleClick('${safeName}', ${bookId}, ${chapter}, ${vNum})" title="${p1} (용어사전)">${p1}</span>${particle}`;
         });
       },
 
-      handleClick: function(name) {
+      handleClick: function(name, bookId, chapter, vNum) {
         const t = termIndex[name];
         if (!t) { showToast(`'${name}' 용어 정보를 찾을 수 없습니다.`, 'info'); return; }
-        this.showPopup(t);
+        const bookObjForTerm = BIBLE_BOOKS.find(b => b.id === bookId);
+        const refLabel = bookObjForTerm ? `${bookObjForTerm.abbr}${chapter}:${vNum} ` : '';
+        this.showPopup(t, refLabel);
       },
 
-      showPopup: function(t) {
+      showPopup: function(t, refLabel) {
         let panel = document.getElementById('term-info-panel');
         if (!panel) {
           panel = document.createElement('div');
@@ -3150,7 +3152,7 @@
 
         panel.innerHTML = `
           <div id="term-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
-            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${escHtml(t.term_ko || '')}</span>
+            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${refLabel ? `<span style="font-size:0.7em;color:#94a3b8;font-weight:500">${refLabel}</span> ` : ''}${escHtml(t.term_ko || '')}</span>
             <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
           </div>
           <div style="font-size:0.9em;color:#d97706;font-weight:600;margin-bottom:6px">${escHtml(t.term_en || '')}</div>
@@ -8235,7 +8237,7 @@
         }
         // 용어사전 하이라이트 (인명/지명 하이라이트 이후, 전역 사전 매칭)
         if (termHighlightEnabled && termDatabase.length > 0) {
-          highlightedText = TermEngine.parseAndHighlight(highlightedText);
+          highlightedText = TermEngine.parseAndHighlight(highlightedText, bookId, chapter, vNum);
         }
         // 원전분해 원어분해 토글 버튼 — 본문 텍스트는 건드리지 않고, 절 아래 별도 줄로 펼쳐 보여준다
         const interlinearToggle = interlinearDbInstance
