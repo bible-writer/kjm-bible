@@ -4799,6 +4799,11 @@
     }
 
     function openDictModal() {
+      const totalCount = termDatabase.length + personDatabase.length + placeDatabase.length;
+      if (totalCount === 0) {
+        showToast('사전 데이터가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.', 'warn');
+        return;
+      }
       document.getElementById('dict-modal').style.display = 'flex';
       document.getElementById('dict-modal-backdrop').style.display = 'block';
       dictCombinedCache = buildDictCombined();
