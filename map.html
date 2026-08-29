@@ -2077,13 +2077,56 @@
       });
     }
 
+    // 암호화된 DB 파일(termDatabase.json 등) 복호화 모듈
+    // 파일이 { encrypted:true, ... } 형태면 비밀번호를 물어 AES-GCM으로 복호화, 평문(하위호환)이면 그대로 반환
+    const EncryptedDB = {
+      _password: null,
+      base64ToBuf(b64) {
+        const bin = atob(b64);
+        const buf = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+        return buf;
+      },
+      async getPassword(forceAsk) {
+        if (this._password && !forceAsk) return this._password;
+        const pw = prompt('🔒 데이터 잠금 해제 비밀번호를 입력하세요:');
+        if (!pw) throw new Error('비밀번호가 입력되지 않았습니다.');
+        this._password = pw;
+        return pw;
+      },
+      async decrypt(wrapper, isRetry) {
+        if (!wrapper || wrapper.encrypted !== true) return wrapper; // 평문 파일은 그대로 통과
+        const password = await this.getPassword(!!isRetry);
+        try {
+          const salt = this.base64ToBuf(wrapper.salt);
+          const iv = this.base64ToBuf(wrapper.iv);
+          const ciphertext = this.base64ToBuf(wrapper.ciphertext);
+          const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+          const key = await crypto.subtle.deriveKey(
+            { name: 'PBKDF2', salt, iterations: wrapper.iterations || 200000, hash: 'SHA-256' },
+            keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+          );
+          const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+          return JSON.parse(new TextDecoder().decode(plainBuf));
+        } catch (e) {
+          this._password = null;
+          if (!isRetry) {
+            alert('비밀번호가 올바르지 않습니다. 다시 시도하세요.');
+            return this.decrypt(wrapper, true);
+          }
+          throw new Error('복호화 실패: 비밀번호가 올바르지 않습니다.');
+        }
+      }
+    };
+
     async function handleJsonFile(file) {
       return new Promise((resolve, reject) => {
         showProgress(40);
         const reader = new FileReader();
         reader.onload = async function() {
           try {
-            const pkg = JSON.parse(this.result);
+            let pkg = JSON.parse(this.result);
+            pkg = await EncryptedDB.decrypt(pkg);
             // personDatabase.json 직접 로드 (persons 배열이 있는 경우)
             if (pkg.persons && Array.isArray(pkg.persons)) {
               personDatabase = pkg.persons;
@@ -6772,7 +6815,7 @@
         const resp = await fetch(GITHUB_DB_URL + '?t=' + Date.now());
         if (!resp.ok) throw new Error('서버 응답 오류: ' + resp.status);
         
-        const db = await resp.json();
+        const db = await EncryptedDB.decrypt(await resp.json());
         if (!db.places || !Array.isArray(db.places) || db.places.length === 0) {
           throw new Error('유효한 지명 데이터가 없습니다.');
         }
@@ -7689,7 +7732,7 @@
       try {
         const netTermRes = await fetch('./termDatabase.json', { cache: 'no-store' });
         if (netTermRes && netTermRes.ok) {
-          const netTermPkg = await netTermRes.json();
+          const netTermPkg = await EncryptedDB.decrypt(await netTermRes.json());
           if (netTermPkg && Array.isArray(netTermPkg.terms) && netTermPkg.terms.length > 0) {
             const isNewer = !savedTerms || netTermPkg.terms.length !== savedTerms.length || netTermPkg.version !== await getLocalItem('saved_term_database_version');
             if (isNewer) {
@@ -7709,7 +7752,7 @@
       try {
         const netRes = await fetch('./personDatabase.json', { cache: 'no-store' });
         if (netRes && netRes.ok) {
-          const netPkg = await netRes.json();
+          const netPkg = await EncryptedDB.decrypt(await netRes.json());
           if (netPkg && Array.isArray(netPkg.persons) && netPkg.persons.length > 0) {
             const isNewer = !savedPersons || netPkg.persons.length !== savedPersons.length || netPkg.version !== await getLocalItem('saved_person_database_version');
             if (isNewer) {
