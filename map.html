@@ -2203,7 +2203,9 @@
             // termDatabase.json 직접 로드 (terms 배열이 있는 경우)
             if (pkg.terms && Array.isArray(pkg.terms)) {
               termDatabase = pkg.terms;
+              termDatabaseMeta = { note: pkg.note || '' };
               await setLocalItem('saved_term_database', termDatabase);
+              await setLocalItem('saved_term_database_meta', termDatabaseMeta);
               buildTermIndex(termDatabase);
               loadBibleText();
               showToast(`용어 DB 로드 완료: ${termDatabase.length}개`, 'success');
@@ -2906,6 +2908,7 @@
     let personDatabase = [];
     let personVerseIndex = {}; // key: "bookId-chapter-verse" -> { "표시이름": person레코드, ... }
     let termDatabase = [];
+    let termDatabaseMeta = {}; // termDatabase.json 최상위 메타(note 등) 보관 — 내보내기 시 원본과 동일하게 유지
     let termIndex = {}; // key: "표시용어(term_ko)" -> term레코드 (구절 무관, 전역 사전)
 
     function buildTermIndex(termList) {
@@ -7180,6 +7183,7 @@
         date: new Date().toISOString().slice(0, 10),
         count: termDatabase.length,
         source: "Easton's Bible Dictionary (1897, Public Domain) + Smith's/ISBE (1915)",
+        note: termDatabaseMeta.note || '',
         terms: termDatabase
       };
       const blob = new Blob([JSON.stringify(db, null, 1)], { type: 'application/json' });
@@ -8027,6 +8031,8 @@
       if (savedTerms && savedTerms.length > 0) {
         termDatabase = savedTerms;
         buildTermIndex(termDatabase);
+        const savedMeta = await getLocalItem("saved_term_database_meta");
+        if (savedMeta) termDatabaseMeta = savedMeta;
       }
 
       // [자동 업데이트] 네트워크로 최신 termDatabase.json 확인 (file:// 로컬 실행 시에는 자동 실패 후 무시됨)
@@ -8038,8 +8044,10 @@
             const isNewer = !savedTerms || netTermPkg.terms.length !== savedTerms.length || netTermPkg.version !== await getLocalItem('saved_term_database_version');
             if (isNewer) {
               termDatabase = netTermPkg.terms;
+              termDatabaseMeta = { note: netTermPkg.note || '' };
               buildTermIndex(termDatabase);
               await setLocalItem('saved_term_database', termDatabase);
+              await setLocalItem('saved_term_database_meta', termDatabaseMeta);
               await setLocalItem('saved_term_database_version', netTermPkg.version || '');
               showToast(`용어 DB 자동 업데이트: ${termDatabase.length}개 (v${netTermPkg.version || '?'})`, 'success');
             }
