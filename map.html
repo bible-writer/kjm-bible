@@ -2090,10 +2090,33 @@
       },
       async getPassword(forceAsk) {
         if (this._password && !forceAsk) return this._password;
-        const pw = prompt('🔒 데이터 잠금 해제 비밀번호를 입력하세요:');
+        const pw = await this.showPasswordModal(forceAsk);
         if (!pw) throw new Error('비밀번호가 입력되지 않았습니다.');
         this._password = pw;
         return pw;
+      },
+      showPasswordModal(isRetry) {
+        return new Promise((resolve) => {
+          const overlay = document.createElement('div');
+          overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99999;display:flex;align-items:center;justify-content:center;font-family:sans-serif';
+          overlay.innerHTML = `
+            <div style="background:#fff;border-radius:10px;padding:24px;width:300px;box-shadow:0 8px 24px rgba(0,0,0,0.3)">
+              <div style="font-weight:bold;font-size:1.05em;margin-bottom:10px;color:#1e293b">🔒 데이터 잠금 해제</div>
+              ${isRetry ? `<div style="color:#dc2626;font-size:0.85em;margin-bottom:8px">비밀번호가 올바르지 않습니다. 다시 입력하세요.</div>` : ''}
+              <input type="password" id="pw-modal-input" placeholder="비밀번호" style="width:100%;box-sizing:border-box;padding:8px;border:1px solid #cbd5e1;border-radius:6px;font-size:1em;margin-bottom:12px" autocomplete="off">
+              <div style="display:flex;gap:8px;justify-content:flex-end">
+                <button id="pw-modal-cancel" style="padding:6px 14px;border:1px solid #e2e8f0;background:#fff;border-radius:6px;cursor:pointer">취소</button>
+                <button id="pw-modal-ok" style="padding:6px 14px;border:none;background:#2563eb;color:#fff;border-radius:6px;cursor:pointer">확인</button>
+              </div>
+            </div>`;
+          document.body.appendChild(overlay);
+          const input = overlay.querySelector('#pw-modal-input');
+          input.focus();
+          const cleanup = (val) => { overlay.remove(); resolve(val); };
+          overlay.querySelector('#pw-modal-ok').onclick = () => cleanup(input.value);
+          overlay.querySelector('#pw-modal-cancel').onclick = () => cleanup(null);
+          input.addEventListener('keydown', (e) => { if (e.key === 'Enter') cleanup(input.value); });
+        });
       },
       async decrypt(wrapper, isRetry) {
         if (!wrapper || wrapper.encrypted !== true) return wrapper; // 평문 파일은 그대로 통과
@@ -2112,7 +2135,6 @@
         } catch (e) {
           this._password = null;
           if (!isRetry) {
-            alert('비밀번호가 올바르지 않습니다. 다시 시도하세요.');
             return this.decrypt(wrapper, true);
           }
           throw new Error('복호화 실패: 비밀번호가 올바르지 않습니다.');
