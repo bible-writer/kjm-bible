@@ -1492,6 +1492,7 @@
         <button class="btn-status-action" id="btn-update-db" title="GitHub에서 최신 지명 DB 다운로드" style="background:#7c3aed;" onclick="updateFromGitHub()">🔄 업데이트</button>
         <button class="btn-status-action" id="btn-sync-openbible" title="OpenBible.info 학술 좌표와 동기화" style="background:#d97706;" onclick="syncWithOpenBible()">📡 OpenBible</button>
         <button class="btn-status-action" id="btn-export-json" title="placeDatabase.json 생성 (GitHub 업로드용)" style="background:#059669;" onclick="exportPlaceDatabaseJson()">📦 JSON</button>
+        <button class="btn-status-action" id="btn-export-term-json" title="termDatabase.json 생성 (스트롱코드 수정분 포함, GitHub 업로드용)" style="background:#b45309;" onclick="exportTermDatabaseJson()">📦 용어DB</button>
         <button class="btn-status-action" id="btn-coord-overrides" title="좌표 보정 이력 보기 / 제외행 확인" style="background:#0891b2;" onclick="openCoordOverrideManager()">📍 보정</button>
         <button class="btn-status-action" id="btn-name-overrides" title="한글 지명 수정 이력 보기" style="background:#7c3aed;" onclick="openNameOverrideManager()">✏️ 지명</button>
         <input type="file" id="backup-file-input" accept=".json" style="display:none;" />
@@ -3127,7 +3128,14 @@
           document.body.appendChild(panel);
         }
         makeResizableWithAutoFont(panel, 320, 13);
-        const hg = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '';
+        const strongVal = escHtml(t.hebrew_greek || '');
+        const hgDisplay = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '';
+        const hg = `
+          ${hgDisplay}
+          <div style="display:flex;gap:4px;align-items:center;margin-bottom:6px">
+            <input type="text" id="term-strong-input" value="${strongVal}" placeholder="예: H8179 또는 아마르(H559)" style="flex:1;font-size:0.8em;padding:3px 6px;border:1px solid #fde68a;border-radius:4px;">
+            <button onclick="TermEngine.saveStrong(${t.id})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">저장</button>
+          </div>`;
         const def = t.definition_ko || '';
         const rawSource = t.source || '';
         const urlMatch = rawSource.match(/https?:\/\/\S+/);
@@ -3165,6 +3173,18 @@
         panel.style.display = 'block';
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#term-info-drag-handle');
+      },
+
+      saveStrong: function(id) {
+        const input = document.getElementById('term-strong-input');
+        if (!input) return;
+        const newVal = input.value.trim();
+        const t = termDatabase.find(x => x.id === id);
+        if (!t) { showToast('용어를 찾을 수 없습니다.', 'warn'); return; }
+        t.hebrew_greek = newVal;
+        setLocalItem('saved_term_database', termDatabase);
+        showToast(`'${t.term_ko}' 스트롱코드 저장됨: ${newVal || '(비움)'}`, 'success');
+        this.showPopup(t); // 팝업 새로고침해서 반영된 결과 바로 보여줌
       },
 
       toggleDef: function() {
@@ -6892,6 +6912,28 @@
       URL.revokeObjectURL(a.href);
       showToast(`📦 placeDatabase.json 생성 완료 (${placeDatabase.length}개 지명) — GitHub에 업로드하세요`, 'success');
     }
+
+    // 용어DB(스트롱코드 등 수동 수정분 포함) 내보내기 — 팝업에서 저장한 내용이 termDatabase 배열에 반영되어 있음
+    function exportTermDatabaseJson() {
+      if (termDatabase.length === 0) {
+        showToast('내보낼 용어 데이터가 없습니다.', 'warn'); return;
+      }
+      const db = {
+        version: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+        date: new Date().toISOString().slice(0, 10),
+        count: termDatabase.length,
+        source: "Easton's Bible Dictionary (1897, Public Domain) + Smith's/ISBE (1915)",
+        terms: termDatabase
+      };
+      const blob = new Blob([JSON.stringify(db, null, 1)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'termDatabase.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast(`📦 termDatabase.json 생성 완료 (${termDatabase.length}개 용어) — GitHub에 업로드하세요`, 'success');
+    }
+
 
     function exportPlaceDatabaseToXlsx() {
       if (placeDatabase.length === 0) {
