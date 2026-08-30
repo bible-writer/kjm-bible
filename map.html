@@ -1754,8 +1754,8 @@
   <!-- 원문사전(Easton/Smith 영문 원문 전체) 뷰어 모달 -->
   <div id="rawdict-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20000"></div>
   <div id="rawdict-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(720px,92vw);height:88vh;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
-      <span style="font-weight:bold;font-size:1.1em">📜 원문사전 (영문)</span>
+    <div id="rawdict-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0);cursor:move;user-select:none">
+      <span style="font-weight:bold;font-size:1.1em">📜 원문사전 (영문) <span style="font-size:0.7em;font-weight:400;color:#94a3b8">(드래그하여 이동)</span></span>
       <div style="display:flex;align-items:center;gap:8px">
         <button id="btn-export-rawdict" title="한글 설명 입력분 포함하여 easton_full.json / smith_full.json 내보내기 (평문, GitHub 업로드용)" style="font-size:11px;padding:4px 9px;background:#b45309;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:600">📥 내보내기</button>
         <button id="btn-close-rawdict" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
@@ -2985,6 +2985,7 @@
       '인명', '저주', '전도', '족보', '족속', '주막', '지하', '직가', '직속', '처가', 
       '초기', '최후', '치유', '터널', '턱뼈', '포로', '풀무', '피난', '피밭', '피신', 
       '피의', '하구', '향유', '험골', '회개', '회당', '이', '그', '저', '것', '수',
+      '우리', '너희', '저희',
       '가인', '아벨', '노아', '아담', '에서', '모세', '아론', '갈렙',
       '삼손', '기드온', '보아스', '나오미', '한나', '압살롬', '사울',
       '엘리야', '엘리사', '호세아', '요나', '미가', '나훔', '학개', '말라기',
@@ -3011,14 +3012,16 @@
       termList.forEach(t => {
         if (!t.term_ko) return;
         const raw = t.term_ko.trim();
-        termIndex[raw] = t;
+        if (!userBlacklist.has(raw)) termIndex[raw] = t;
         // "흑암(어둠)" 형태 → "흑암"과 "어둠" 둘 다 별도 하이라이트 키로 등록 (본문엔 괄호 없이 단독으로 나오므로)
+        // 단, "우리(가축 우리)"처럼 괄호 앞부분이 본문에서 흔히 다른 뜻(대명사 등)으로 훨씬 자주 쓰이는
+        // 단어일 경우 오매칭이 나므로, userBlacklist에 등록된 단어는 하이라이트 키로 쓰지 않는다.
         const m = raw.match(/^([^()]+)\(([^()]+)\)$/);
         if (m) {
           const main = m[1].trim();
           const alt = m[2].trim();
-          if (main && !termIndex[main]) termIndex[main] = t;
-          if (alt && !termIndex[alt]) termIndex[alt] = t;
+          if (main && !termIndex[main] && !userBlacklist.has(main)) termIndex[main] = t;
+          if (alt && !termIndex[alt] && !userBlacklist.has(alt)) termIndex[alt] = t;
         }
       });
       TermEngine._enIndexCache = null; // 목록이 바뀌었으니 영어(NIV 등) 인덱스도 다음 사용 시 재생성
@@ -3034,7 +3037,7 @@
           const key = `${v.book}-${v.chapter}-${v.verse}`;
           if (!personVerseIndex[key]) personVerseIndex[key] = {};
           names.forEach(n => {
-            if (n) personVerseIndex[key][n] = p; // 같은 구절 안에서는 이름이 유일하다고 가정
+            if (n && !userBlacklist.has(n)) personVerseIndex[key][n] = p; // 같은 구절 안에서는 이름이 유일하다고 가정
           });
         });
       });
@@ -3181,7 +3184,7 @@
         return this.highlightOutsideTags(html, regex, (match, p1, p2) => {
           const particle = p2 || '';
           const safeName = p1.replace(/'/g, "\\'");
-          return `<span class="bible-person-tag" onclick="PersonEngine.handleClickAt('${safeName}', ${book}, ${chapter}, ${verse})" title="${p1}">${p1}</span>${particle}`;
+          return `<span class="bible-person-tag" onclick="PersonEngine.handleClickAt('${safeName}', ${book}, ${chapter}, ${verse})" oncontextmenu="handleTagContextMenu(event, '${safeName}')" title="${p1}">${p1}</span>${particle}`;
         });
       },
 
@@ -3275,7 +3278,7 @@
         return this.highlightOutsideTags(html, regex, (match, p1, p2) => {
           const particle = p2 || '';
           const safeName = p1.replace(/'/g, "\\'");
-          return `<span class="bible-term-tag" onclick="TermEngine.handleClick('${safeName}', ${bookId}, ${chapter}, ${vNum})" title="${p1} (용어사전)">${p1}</span>${particle}`;
+          return `<span class="bible-term-tag" onclick="TermEngine.handleClick('${safeName}', ${bookId}, ${chapter}, ${vNum})" oncontextmenu="handleTagContextMenu(event, '${safeName}')" title="${p1} (용어사전)">${p1}</span>${particle}`;
         });
       },
 
@@ -5010,6 +5013,48 @@
 
     let rawdictCatFilter = ''; // '', '인명', '지명', '용어'
 
+    let rawdictModalDragInit = false;
+    function initRawDictModalDrag() {
+      if (rawdictModalDragInit) return;
+      rawdictModalDragInit = true;
+      const modal = document.getElementById('rawdict-modal');
+      const header = document.getElementById('rawdict-modal-header');
+      let dragging = false, startX, startY, startLeft, startTop;
+      function onPointerDown(e) {
+        dragging = true;
+        const rect = modal.getBoundingClientRect();
+        // 드래그 시작 시 중앙정렬용 transform을 절대좌표로 전환해야 이후 위치 계산이 정확해진다
+        modal.style.left = rect.left + 'px';
+        modal.style.top = rect.top + 'px';
+        modal.style.transform = 'none';
+        const point = e.touches ? e.touches[0] : e;
+        startX = point.clientX;
+        startY = point.clientY;
+        startLeft = rect.left;
+        startTop = rect.top;
+        e.preventDefault();
+      }
+      function onPointerMove(e) {
+        if (!dragging) return;
+        const point = e.touches ? e.touches[0] : e;
+        const dx = point.clientX - startX;
+        const dy = point.clientY - startY;
+        let newLeft = startLeft + dx;
+        let newTop = startTop + dy;
+        // 화면 밖으로 완전히 사라지지 않도록 최소한의 여유만 남겨 제한
+        newLeft = Math.max(-modal.offsetWidth + 80, Math.min(newLeft, window.innerWidth - 80));
+        newTop = Math.max(0, Math.min(newTop, window.innerHeight - 40));
+        modal.style.left = newLeft + 'px';
+        modal.style.top = newTop + 'px';
+      }
+      function onPointerUp() { dragging = false; }
+      header.addEventListener('mousedown', onPointerDown);
+      document.addEventListener('mousemove', onPointerMove);
+      document.addEventListener('mouseup', onPointerUp);
+      header.addEventListener('touchstart', onPointerDown, { passive: false });
+      document.addEventListener('touchmove', onPointerMove, { passive: false });
+      document.addEventListener('touchend', onPointerUp);
+    }
     function openRawDictModal() {
       const total = eastonFullDict.length + smithFullDict.length;
       if (total === 0) {
@@ -5017,6 +5062,7 @@
       }
       document.getElementById('rawdict-modal').style.display = 'flex';
       document.getElementById('rawdict-modal-backdrop').style.display = 'block';
+      initRawDictModalDrag();
       document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(btn => {
         const label = btn.dataset.src === 'easton' ? 'Easton' : 'Smith';
         const count = btn.dataset.src === 'easton' ? eastonFullDict.length : smithFullDict.length;
@@ -5863,6 +5909,8 @@
       userBlacklist.add(currentRightClickedWord);
       await setLocalItem("saved_user_blacklist", Array.from(userBlacklist));
       buildKeywordIndex(placeDatabase);
+      buildTermIndex(termDatabase); // 지명뿐 아니라 용어 하이라이트에도 제외 단어가 반영되도록
+      buildPersonVerseIndex(personDatabase); // 인명 하이라이트에도 동일하게 반영
       loadBibleText();
       showToast(`'${currentRightClickedWord}' 단어가 제외 목록에 등록되었습니다.`, 'success')
     });
