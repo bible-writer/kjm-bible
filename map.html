@@ -4891,19 +4891,21 @@
     function mergeRawDictEntries(localList, networkList) {
       if (!Array.isArray(networkList) || networkList.length === 0) return localList;
       if (!Array.isArray(localList) || localList.length === 0) return networkList;
-      if (networkList.length > localList.length) return networkList;
-      const byTerm = {};
-      localList.forEach(e => { byTerm[e.term] = e; });
-      let changed = false;
-      networkList.forEach(netE => {
-        const localE = byTerm[netE.term];
-        if (!localE) { byTerm[netE.term] = netE; changed = true; return; }
-        if (netE.definition && netE.definition !== localE.definition) { localE.definition = netE.definition; changed = true; }
-        if (netE.definition_ko && netE.definition_ko !== localE.definition_ko) { localE.definition_ko = netE.definition_ko; changed = true; }
-        if (netE.category && netE.category !== localE.category) { localE.category = netE.category; changed = true; }
-        if (netE.hebrew_greek && netE.hebrew_greek !== localE.hebrew_greek) { localE.hebrew_greek = netE.hebrew_greek; changed = true; }
+      // 네트워크(GitHub) 목록을 기준으로 삼는다 — 로컬에만 남아있는 옛 항목(삭제/정리된 중복 등)은 자연히 제거된다.
+      // 다만 로컬에서 방금 편집했지만 아직 GitHub에 올리지 않은 한글 설명/스트롱코드는 보존한다.
+      const localByTerm = {};
+      localList.forEach(e => { localByTerm[e.term] = e; });
+      let changed = (networkList.length !== localList.length);
+      const merged = networkList.map(netE => {
+        const localE = localByTerm[netE.term];
+        if (!localE) { changed = true; return netE; }
+        const result = Object.assign({}, netE);
+        if (localE.definition_ko && localE.definition_ko !== netE.definition_ko) { result.definition_ko = localE.definition_ko; changed = true; }
+        if (localE.hebrew_greek && localE.hebrew_greek !== netE.hebrew_greek) { result.hebrew_greek = localE.hebrew_greek; changed = true; }
+        if (netE.category !== localE.category || netE.definition !== localE.definition) { changed = true; }
+        return result;
       });
-      return changed ? Object.values(byTerm) : localList;
+      return changed ? merged : localList;
     }
 
     async function loadRawDictionaries() {
