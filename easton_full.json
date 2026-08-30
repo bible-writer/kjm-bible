@@ -3,7 +3,7 @@
  "date": "2026-08-30",
  "count": 3964,
  "source": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축",
- "note": "A-N자 완료. O자 15/63 진행중(번역+분류+인명지명 음역).",
+ "note": "A-O자 완료(번역+분류+인명지명 음역). P-Z 미착수.",
  "entries": [
   {
    "id": 1,
@@ -19982,14 +19982,16 @@
    "term": "Oak",
    "definition": "There are six Hebrew words rendered “oak.” (1.) ‘El occurs only in the word El-paran (Genesis 14:6). The LXX. renders by “terebinth.” In the plural form this word occurs in Isaiah 1:29; 57:5 (A.V. marg. and R.V., “among the oaks”); 61:3 (“trees”). The word properly means strongly, mighty, and hence a strong tree. (2.) ‘Elah, Genesis 35:4, “under the oak which was by Shechem” (R.V. marg., “terebinth”). Isaiah 6:13, A.V., “teil-tree;” R.V., “terebinth.” Isaiah 1:30, R.V. marg., “terebinth.” Absalom in his flight was caught in the branches of a “great oak” (2 Samuel 18:9; R.V. marg., “terebinth”). (3.) ‘Elon, Judges 4:11; 9:6 (R.V., “oak;” A.V., following the Targum, “plain”) properly the deciduous species of oak shedding its foliage in autumn. (4.) ‘Elan, only in Daniel 4:11,14,20, rendered “tree” in Nebuchadnezzar’s dream. Probably some species of the oak is intended. (5.) ‘Allah, Joshua 24:26. The place here referred to is called Allon-moreh (“the oak of Moreh,” as in R.V.) in Genesis 12:6 and 35:4. (6.) ‘Allon, always rendered “oak.” Probably the evergreen oak (called also ilex and holm oak) is intended. The oak woods of Bashan are frequently alluded to (Isaiah 2:13; Ezekiel 27:6). Three species of oaks are found in Palestine, of which the “prickly evergreen oak” (Quercus coccifera) is the most abundant. “It covers the rocky hills of Palestine with a dense brushwood of trees from 8 to 12 feet high, branching from the base, thickly covered with small evergreen rigid leaves, and bearing acorns copiously.” The so-called Abraham’s oak at Hebron is of this species. Tristram says that this oak near Hebron “has for several centuries taken the place of the once renowned terebinth which marked the site of Mamre on the other side of the city. The terebinth existed at Mamre in the time of Vespasian, and under it the captive Jews were sold as slaves. It disappeared about A.D. 330, and no tree now marks the grove of Mamre. The present oak is the noblest tree in Southern Palestine, being 23 feet in girth, and the diameter  of the foliage, which is unsymmetrical, being about 90 feet.” (See HEBRON; TEIL-TREE.)",
    "definition_ko": "'상수리나무'로 번역되는 히브리어 단어는 여섯 개다. (1.) '엘'은 엘바란이라는 단어에만 나온다(창세기 14:6). 칠십인역은 '테레빈'으로 옮긴다. 복수형은 이사야 1:29; 57:5(흠정역 난외주·개정역 '상수리나무들 가운데')에 나온다.",
-   "category": "용어"
+   "category": "용어",
+   "hebrew_greek": "H352,H424,H427,H437"
   },
   {
    "id": 2767,
    "term": "Oath",
    "definition": "a solemn appeal to God, permitted on fitting occasions (Deuteronomy 6:13; Jeremiah 4:2), in various forms (Genesis 16:5; 2 Samuel 12:5; Ruth 1:17; Hos. 4:15; Romans 1:9), and taken in different ways (Genesis 14:22; 24:2; 2 Chronicles 6:22). God is represented as taking an oath (Hebrews 6:16-18), so also Christ (Matthew 26:64), and Paul (Romans 9:1; Galatians 1:20; Phil. 1:8). The precept, “Swear not at all,” refers probably to ordinary conversation between man and man (Matthew 5:34,37). But if the words are taken as referring to oaths, then their intention may have been to show “that the proper state of Christians is to require no oaths; that when evil is expelled from among them every yea and nay will be as decisive as an oath, every promise as binding as a vow.”",
    "definition_ko": "하나님께 엄숙히 호소하는 것으로, 합당한 경우에 허용되었다(신명기 6:13; 예레미야 4:2), 여러 형식으로(창세기 16:5; 사무엘하 12:5) 다양한 방식으로 행해졌다(창세기 14:22; 24:2).",
-   "category": "용어"
+   "category": "용어",
+   "hebrew_greek": "G3727,H423,H7621"
   },
   {
    "id": 2768,
@@ -20066,7 +20068,8 @@
    "term": "Offering",
    "definition": "an oblation, dedicated to God. Thus Cain consecrated to God of the first-fruits of the earth, and Abel of the firstlings of the flock (Genesis 4:3, 4). Under the Levitical system different kinds of offerings are specified, and laws laid down as to their presentation. These are described under their distinctive names.",
    "definition_ko": "하나님께 헌정된 예물. 이렇게 가인은 땅의 첫 열매를, 아벨은 양 떼의 첫 새끼를 하나님께 구별해 드렸다(창세기 4:3,4). 레위기 제도 아래에서는 여러 종류의 제물이 규정되고 그 규례가 정해져 있다.",
-   "category": "용어"
+   "category": "용어",
+   "hebrew_greek": "H4503,H7133,H8573"
   },
   {
    "id": 2779,
@@ -20084,243 +20087,350 @@
   },
   {
    "id": 2781,
-   "term": "Ohel",
-   "definition": "a house; tent, the fourth son of Zerubbabel (1 Chronicles 3:20)."
+   "term": "Ohel(오헬)",
+   "definition": "a house; tent, the fourth son of Zerubbabel (1 Chronicles 3:20).",
+   "definition_ko": "'집; 장막'이라는 뜻으로, 스룹바벨의 넷째 아들(역대상 3:20).",
+   "category": "인명"
   },
   {
    "id": 2782,
    "term": "Oil",
-   "definition": "Only olive oil seems to have been used among the Hebrews. It was used for many purposes: for anointing the body or the hair (Exodus 29:7; 2 Samuel 14:2; Psalm 23:5; 92:10; 104:15; Luke 7:46); in some of the offerings (Exodus 29:40; Leviticus 7:12; Numbers 6:15; 15:4), but was excluded from the sin-offering (Leviticus 5:11) and the jealousy-offering (Numbers 5:15); for burning in lamps (Exodus 25:6; 27:20; Matthew 25:3); for medicinal purposes (Isaiah 1:6; Luke 10:34; James 5:14); and for anointing the dead (Matthew 26:12; Luke 23:56). It was one of the most valuable products of the country (Deuteronomy 32:13; Ezekiel 16:13), and formed an article of extensive commerce with Tyre (27:17). The use of it was a sign of gladness (Psalm 92:10; Isaiah 61:3), and its omission a token of sorrow (2 Samuel 14:2; Matthew 6:17). It was very abundant in Galilee. (See OLIVE.)"
+   "definition": "Only olive oil seems to have been used among the Hebrews. It was used for many purposes: for anointing the body or the hair (Exodus 29:7; 2 Samuel 14:2; Psalm 23:5; 92:10; 104:15; Luke 7:46); in some of the offerings (Exodus 29:40; Leviticus 7:12; Numbers 6:15; 15:4), but was excluded from the sin-offering (Leviticus 5:11) and the jealousy-offering (Numbers 5:15); for burning in lamps (Exodus 25:6; 27:20; Matthew 25:3); for medicinal purposes (Isaiah 1:6; Luke 10:34; James 5:14); and for anointing the dead (Matthew 26:12; Luke 23:56). It was one of the most valuable products of the country (Deuteronomy 32:13; Ezekiel 16:13), and formed an article of extensive commerce with Tyre (27:17). The use of it was a sign of gladness (Psalm 92:10; Isaiah 61:3), and its omission a token of sorrow (2 Samuel 14:2; Matthew 6:17). It was very abundant in Galilee. (See OLIVE.)",
+   "definition_ko": "히브리인들 사이에서는 오직 올리브 기름만 쓰인 것으로 보인다. 몸이나 머리에 바르는 데(출애굽기 29:7; 사무엘하 14:2; 시편 23:5), 일부 제물에(출애굽기 29:40) 여러 용도로 쓰였다.",
+   "category": "용어",
+   "hebrew_greek": "H3323,H8081"
   },
   {
    "id": 2783,
    "term": "Oil-Tree",
-   "definition": "(Isaiah 41:19; R.V. marg., “oleaster”), Hebrews ‘etz shemen, rendered “olive tree” in 1 Kings 6:23, 31, 32, 33 (R.V., “olive wood”) and “pine branches” in Nehemiah 8:15 (R.V., “branches of wild olive”), was some tree distinct from the olive. It was probably the oleaster (Eleagnus angustifolius), which grows abundantly in almost all parts of Palestine, especially about Hebron and Samaria. “It has a fine hard wood,” says Tristram, “and yields an inferior oil, but it has no relationship to the olive, which, however, it resembles in general appearance.”"
+   "definition": "(Isaiah 41:19; R.V. marg., “oleaster”), Hebrews ‘etz shemen, rendered “olive tree” in 1 Kings 6:23, 31, 32, 33 (R.V., “olive wood”) and “pine branches” in Nehemiah 8:15 (R.V., “branches of wild olive”), was some tree distinct from the olive. It was probably the oleaster (Eleagnus angustifolius), which grows abundantly in almost all parts of Palestine, especially about Hebron and Samaria. “It has a fine hard wood,” says Tristram, “and yields an inferior oil, but it has no relationship to the olive, which, however, it resembles in general appearance.”",
+   "definition_ko": "(이사야 41:19, 개정역 난외주 '들올리브') 히브리어 '에츠 셰멘'은 열왕기상 6:23,31,32,33에서 '감람목'으로, 느헤미야 8:15에서는 '소나무 가지'로 번역되며 올리브와는 다른 어떤 나무였다.",
+   "category": "용어"
   },
   {
    "id": 2784,
    "term": "Ointment",
-   "definition": "Various fragrant preparations, also compounds for medical purposes, are so called (Exodus 30:25; Psalm 133:2; Isaiah 1:6; Amos 6:6; John 12:3; Revelation 18:13)."
+   "definition": "Various fragrant preparations, also compounds for medical purposes, are so called (Exodus 30:25; Psalm 133:2; Isaiah 1:6; Amos 6:6; John 12:3; Revelation 18:13).",
+   "definition_ko": "다양한 향기로운 조제품, 의료 목적의 혼합물도 이렇게 불린다(출애굽기 30:25; 시편 133:2; 이사야 1:6; 아모스 6:6; 요한복음 12:3; 요한계시록 18:13).",
+   "category": "용어",
+   "hebrew_greek": "H4842,H4888,H7545,H8081"
   },
   {
    "id": 2785,
    "term": "Old Gate",
-   "definition": "one of the gates in the north wall of Jerusalem, so called because built by the Jebusites (Nehemiah 3:6; 12:39)."
+   "definition": "one of the gates in the north wall of Jerusalem, so called because built by the Jebusites (Nehemiah 3:6; 12:39).",
+   "definition_ko": "여부스 사람들이 지었다 하여 이렇게 불리는, 예루살렘 북쪽 성벽의 문 중 하나(느헤미야 3:6; 12:39).",
+   "category": "지명"
   },
   {
    "id": 2786,
    "term": "Olive",
-   "definition": "the fruit of the olive-tree. This tree yielded oil which was highly valued. The best oil was from olives that were plucked before being fully ripe, and then beaten or squeezed (Deuteronomy 24:20; Isaiah 17:6; 24:13). It was called “beaten,” or “fresh oil” (Exodus 27:20). There were also oil-presses, in which the oil was trodden out by the feet (Micah 6:15). James (3:12) calls the fruit “olive berries.” The phrase “vineyards and olives” (Judges 15:5, A.V.) should be simply “olive-yard,” or “olive-garden,” as in the Revised Version. (See OIL.)"
+   "definition": "the fruit of the olive-tree. This tree yielded oil which was highly valued. The best oil was from olives that were plucked before being fully ripe, and then beaten or squeezed (Deuteronomy 24:20; Isaiah 17:6; 24:13). It was called “beaten,” or “fresh oil” (Exodus 27:20). There were also oil-presses, in which the oil was trodden out by the feet (Micah 6:15). James (3:12) calls the fruit “olive berries.” The phrase “vineyards and olives” (Judges 15:5, A.V.) should be simply “olive-yard,” or “olive-garden,” as in the Revised Version. (See OIL.)",
+   "definition_ko": "올리브나무의 열매. 이 나무는 매우 귀히 여겨진 기름을 냈다. 최고급 기름은 완전히 익기 전에 딴 올리브를 두드리거나 짜서 얻었다(신명기 24:20; 이사야 17:6).",
+   "category": "용어",
+   "hebrew_greek": "G1636,H2132,H8081"
   },
   {
    "id": 2787,
    "term": "Olive-Tree",
-   "definition": "is frequently mentioned in Scripture. The dove from the ark brought an olive-branch to Noah (Genesis 8:11). It is mentioned among the most notable trees of Palestine, where it was cultivated long before the time of the Hebrews (Deuteronomy 6:11; 8:8). It is mentioned in the first Old Testament parable, that of Jotham (Judges 9:9), and is named among the blessings of the “good land,” and is at the present day the one characteristic tree of Palestine. The oldest olive-trees in the country are those which are enclosed in the Garden of Gethsemane. It is referred to as an emblem of prosperity and beauty and religious privilege (Psalm 52:8; Jeremiah 11:16; Hos. 14:6). The two “witnesses” mentioned in Revelation 11:4 are spoken of as “two olive trees standing before the God of the earth.” (Comp. Zechariah 4:3, 11-14.) The “olive-tree, wild by nature” (Romans 11:24), is the shoot or cutting of the good olive-tree which, left ungrafted, grows up to be a “wild olive.” In Romans 11:17 Paul refers to the practice of grafting shoots of the wild  olive into a “good” olive which has become unfruitful. By such a process the sap of the good olive, by pervading the branch which is “graffed in,” makes it a good branch, bearing good olives. Thus the Gentiles, being a “wild olive,” but now “graffed in,” yield fruit, but only through the sap of the tree into which they have been graffed. This is a process “contrary to nature” (11:24)."
+   "definition": "is frequently mentioned in Scripture. The dove from the ark brought an olive-branch to Noah (Genesis 8:11). It is mentioned among the most notable trees of Palestine, where it was cultivated long before the time of the Hebrews (Deuteronomy 6:11; 8:8). It is mentioned in the first Old Testament parable, that of Jotham (Judges 9:9), and is named among the blessings of the “good land,” and is at the present day the one characteristic tree of Palestine. The oldest olive-trees in the country are those which are enclosed in the Garden of Gethsemane. It is referred to as an emblem of prosperity and beauty and religious privilege (Psalm 52:8; Jeremiah 11:16; Hos. 14:6). The two “witnesses” mentioned in Revelation 11:4 are spoken of as “two olive trees standing before the God of the earth.” (Comp. Zechariah 4:3, 11-14.) The “olive-tree, wild by nature” (Romans 11:24), is the shoot or cutting of the good olive-tree which, left ungrafted, grows up to be a “wild olive.” In Romans 11:17 Paul refers to the practice of grafting shoots of the wild  olive into a “good” olive which has become unfruitful. By such a process the sap of the good olive, by pervading the branch which is “graffed in,” makes it a good branch, bearing good olives. Thus the Gentiles, being a “wild olive,” but now “graffed in,” yield fruit, but only through the sap of the tree into which they have been graffed. This is a process “contrary to nature” (11:24).",
+   "definition_ko": "성경에 자주 언급된다. 방주에서 나온 비둘기는 노아에게 올리브 가지를 물어다 주었다(창세기 8:11). 팔레스타인에서 히브리인들의 시대보다 훨씬 이전부터 재배된 가장 유명한 나무 중 하나로 언급된다.",
+   "category": "용어"
   },
   {
    "id": 2788,
-   "term": "Olves, Mount Of",
-   "definition": "so called from the olive trees with which its sides are clothed, is a mountain ridge on the east of Jerusalem (1 Kings 11:7; Ezekiel 11:23; Zechariah 14:4), from which it is separated by the valley of Kidron. It is first mentioned in connection with David’s flight from Jerusalem through the rebellion of Absalom (2 Samuel 15:30), and is only once again mentioned in the Old Testament, in Zechariah 14:4. It is, however, frequently alluded to (1 Kings 11:7; 2 Kings 23:13; Nehemiah 8:15; Ezekiel 11:23). It is frequently mentioned in the New Testament (Matthew 21:1; 26:30, etc.). It now bears the name of Jebel et-Tur, i.e., “Mount of the Summit;” also sometimes called Jebel ez-Zeitun, i.e., “Mount of Olives.” It is about 200 feet above the level of the city. The road from Jerusalem to Bethany runs as of old over this mount. It was on this mount that Jesus stood when he wept over Jerusalem. “No name in Scripture,” says Dr. Porter, “calls up associations at once so sacred and so pleasing as that of Olivet. The ‘mount’ is so intimately connected with the private, the devotional life of the Saviour, that we read of it and look at it with feelings of deepest interest and affection. Here he often sat with his disciples, telling them of wondrous events yet to come, of the destruction of the Holy City; of the sufferings, the persecution, and the final triumph of his followers (Matthew 24). Here he gave them the beautiful parables of the ten virgins and the five talents (25); here he was wont to retire on each evening for meditation, and prayer, and rest of body, when weary and harassed by the labours and trials of the day (Luke 21:37); and here he came on the night of his betrayal to utter that wonderful prayer, ‘O my Father, if it be possible, let this cup pass from me: nevertheless not as I will, but as thou wilt’ (Matthew 26:39). And when the cup of God’s wrath had been drunk, and death and the grave conquered, he led his disciples out again over Olivet as far as to Bethany, and after a parting blessing ascended to heaven (Luke 24:50, 51; Acts 1:12).”  This mount, or rather mountain range, has four summits or peaks: (1) the “Galilee” peak, so called from a tradition that the angels stood here when they spoke to the disciples (Acts 1:11); (2) the “Mount of Ascension,” the supposed site of that event, which was, however, somewhere probably nearer Bethany (Luke 24:51, 52); (3) the “Prophets,” from the catacombs on its side, called “the prophets’ tombs;” and (4) the “Mount of Corruption,” so called because of the “high places” erected there by Solomon for the idolatrous worship of his foreign wives (1 Kings 11:7; 2 Kings 23:13; Vulg., “Mount of Offence”)."
+   "term": "Olives, Mount Of",
+   "definition": "so called from the olive trees with which its sides are clothed, is a mountain ridge on the east of Jerusalem (1 Kings 11:7; Ezekiel 11:23; Zechariah 14:4), from which it is separated by the valley of Kidron. It is first mentioned in connection with David’s flight from Jerusalem through the rebellion of Absalom (2 Samuel 15:30), and is only once again mentioned in the Old Testament, in Zechariah 14:4. It is, however, frequently alluded to (1 Kings 11:7; 2 Kings 23:13; Nehemiah 8:15; Ezekiel 11:23). It is frequently mentioned in the New Testament (Matthew 21:1; 26:30, etc.). It now bears the name of Jebel et-Tur, i.e., “Mount of the Summit;” also sometimes called Jebel ez-Zeitun, i.e., “Mount of Olives.” It is about 200 feet above the level of the city. The road from Jerusalem to Bethany runs as of old over this mount. It was on this mount that Jesus stood when he wept over Jerusalem. “No name in Scripture,” says Dr. Porter, “calls up associations at once so sacred and so pleasing as that of Olivet. The ‘mount’ is so intimately connected with the private, the devotional life of the Saviour, that we read of it and look at it with feelings of deepest interest and affection. Here he often sat with his disciples, telling them of wondrous events yet to come, of the destruction of the Holy City; of the sufferings, the persecution, and the final triumph of his followers (Matthew 24). Here he gave them the beautiful parables of the ten virgins and the five talents (25); here he was wont to retire on each evening for meditation, and prayer, and rest of body, when weary and harassed by the labours and trials of the day (Luke 21:37); and here he came on the night of his betrayal to utter that wonderful prayer, ‘O my Father, if it be possible, let this cup pass from me: nevertheless not as I will, but as thou wilt’ (Matthew 26:39). And when the cup of God’s wrath had been drunk, and death and the grave conquered, he led his disciples out again over Olivet as far as to Bethany, and after a parting blessing ascended to heaven (Luke 24:50, 51; Acts 1:12).”  This mount, or rather mountain range, has four summits or peaks: (1) the “Galilee” peak, so called from a tradition that the angels stood here when they spoke to the disciples (Acts 1:11); (2) the “Mount of Ascension,” the supposed site of that event, which was, however, somewhere probably nearer Bethany (Luke 24:51, 52); (3) the “Prophets,” from the catacombs on its side, called “the prophets’ tombs;” and (4) the “Mount of Corruption,” so called because of the “high places” erected there by Solomon for the idolatrous worship of his foreign wives (1 Kings 11:7; 2 Kings 23:13; Vulg., “Mount of Offence”).",
+   "definition_ko": "그 산비탈을 덮은 올리브나무들 때문에 이렇게 불리며, 예루살렘 동쪽의 산등성이다(열왕기상 11:7; 에스겔 11:23; 스가랴 14:4), 기드론 골짜기로 예루살렘과 나뉜다.",
+   "category": "지명"
   },
   {
    "id": 2789,
-   "term": "Olympas",
-   "definition": "a Roman Christian whom Paul salutes (Romans 16:15)."
+   "term": "Olympas(올름바)",
+   "definition": "a Roman Christian whom Paul salutes (Romans 16:15).",
+   "definition_ko": "바울이 문안한 로마의 그리스도인(로마서 16:15).",
+   "category": "인명"
   },
   {
    "id": 2790,
-   "term": "Omar",
-   "definition": "eloquent, the son of Eliphaz, who was Esau’s eldest son (Genesis 36:11-15)."
+   "term": "Omar(오말)",
+   "definition": "eloquent, the son of Eliphaz, who was Esau’s eldest son (Genesis 36:11-15).",
+   "definition_ko": "'유창한'이라는 뜻으로, 에서의 맏아들 엘리바스의 아들(창세기 36:11-15).",
+   "category": "인명"
   },
   {
    "id": 2791,
    "term": "Omega",
-   "definition": "(Revelation 1:8), the last letter in the Greek alphabet. (See A.)"
+   "definition": "(Revelation 1:8), the last letter in the Greek alphabet. (See A.)",
+   "definition_ko": "(요한계시록 1:8) 그리스어 알파벳의 마지막 글자(A 항목 참조).",
+   "category": "용어"
   },
   {
    "id": 2792,
    "term": "Omer",
-   "definition": "a handful, one-tenth of an ephah=half a gallon dry measure (Exodus 16:22, 32, 33, 36)=“tenth deal.”"
+   "definition": "a handful, one-tenth of an ephah=half a gallon dry measure (Exodus 16:22, 32, 33, 36)=“tenth deal.”",
+   "definition_ko": "'한 움큼'이라는 뜻으로, 에바의 십분의 일, 곧 반 갤런 건량 단위(출애굽기 16:22,32,33,36) = '십분의 일'.",
+   "category": "용어",
+   "hebrew_greek": "H6016"
   },
   {
    "id": 2793,
-   "term": "Omri",
-   "definition": "servant of Jehovah. When Elah was murdered by Zimri at Tirzah (1 Kings 16:15-27), Omri, his captain, was made king (B.C. 931). For four years there was continued opposition to his reign, Tibni, another claimant to the throne, leading the opposing party; but at the close of that period all his rivals were defeated, and he became king of Israel, “Tibni died and Omri reigned” (B.C. 927). By his vigour and power he gained great eminence and consolidated the kingdom. He fixed his dynasty on the throne so firmly that it continued during four succeeding reigns. Tirza was for six years the seat of his government. He then removed the capital to Samaria (q.v.), where he died, and was succeeded by his son Ahab. “He wrought evil in the eyes of the Lord, and did worse than all that were before him.” Beth-omri, “the house” or “city of Omri,” is the name usually found on Assyrian inscriptions for Samaria. In the stele of Mesha (the “Moabite stone”), which was erected in Moab about twenty or thirty years after Omri’s death, it is recorded that Omri oppressed Moab till Mesha delivered the land: “Omri, king of Israel, oppressed Moab many days, for Chemosh was angry with his land. His son succeeded him, and he also said, I will oppress Moab” (comp. 2 Kings 1:1; 3:4, 5). The “Moabite  stone” also records that “Omri took the land of Medeba, and occupied it in his day and in the days of his son forty years.”"
+   "term": "Omri(오므리)",
+   "definition": "servant of Jehovah. When Elah was murdered by Zimri at Tirzah (1 Kings 16:15-27), Omri, his captain, was made king (B.C. 931). For four years there was continued opposition to his reign, Tibni, another claimant to the throne, leading the opposing party; but at the close of that period all his rivals were defeated, and he became king of Israel, “Tibni died and Omri reigned” (B.C. 927). By his vigour and power he gained great eminence and consolidated the kingdom. He fixed his dynasty on the throne so firmly that it continued during four succeeding reigns. Tirza was for six years the seat of his government. He then removed the capital to Samaria (q.v.), where he died, and was succeeded by his son Ahab. “He wrought evil in the eyes of the Lord, and did worse than all that were before him.” Beth-omri, “the house” or “city of Omri,” is the name usually found on Assyrian inscriptions for Samaria. In the stele of Mesha (the “Moabite stone”), which was erected in Moab about twenty or thirty years after Omri’s death, it is recorded that Omri oppressed Moab till Mesha delivered the land: “Omri, king of Israel, oppressed Moab many days, for Chemosh was angry with his land. His son succeeded him, and he also said, I will oppress Moab” (comp. 2 Kings 1:1; 3:4, 5). The “Moabite  stone” also records that “Omri took the land of Medeba, and occupied it in his day and in the days of his son forty years.”",
+   "definition_ko": "'여호와의 종'이라는 뜻. 엘라가 디르사에서 시므리에게 암살당했을 때(열왕기상 16:15-27), 그의 군대 지휘관 오므리가 왕이 되었다(주전 931년). 사 년간 그의 통치에 계속 반대가 있었다.",
+   "category": "인명"
   },
   {
    "id": 2794,
    "term": "On",
-   "definition": "light; the sun, (Genesis 41:45, 50), the great seat of sun-worship, called also Bethshemesh (Jeremiah 43:13) and Aven (Ezekiel 30:17), stood on the east bank of the Nile, a few miles north of Memphis, and near Cairo, in the north-east. The Vulgate and the LXX. Versions have “Heliopolis” (“city of the sun”) instead of On in Genesis and of Aven in Ezekiel. The “city of destruction” Isaiah speaks of (19:18, marg. “of Heres;” Hebrews ‘Ir-ha-heres, which some MSS. read Ir-ha-heres, i.e., “city of the sun”) may be the name given to On, the prophecy being that the time will come when that city which was known as the “city of the sun-God” shall become the “city of destruction” of the sun-God, i.e., when idolatry shall cease, and the worship of the true God be established. In ancient times this city was full of obelisks dedicated to the sun. Of these only one now remains standing. “Cleopatra’s Needle” was one of those which stood in this city in front of the Temple of Tum, i.e., “the sun.” It is now erected on the Thames Embankment, London. “It was at On that Joseph wooed and won the dark-skinned Asenath, the daughter of the high priest of its great temple.” This was a noted university town, and here Moses gained his acquaintance with “all the wisdom of the Egyptians.”"
+   "definition": "light; the sun, (Genesis 41:45, 50), the great seat of sun-worship, called also Bethshemesh (Jeremiah 43:13) and Aven (Ezekiel 30:17), stood on the east bank of the Nile, a few miles north of Memphis, and near Cairo, in the north-east. The Vulgate and the LXX. Versions have “Heliopolis” (“city of the sun”) instead of On in Genesis and of Aven in Ezekiel. The “city of destruction” Isaiah speaks of (19:18, marg. “of Heres;” Hebrews ‘Ir-ha-heres, which some MSS. read Ir-ha-heres, i.e., “city of the sun”) may be the name given to On, the prophecy being that the time will come when that city which was known as the “city of the sun-God” shall become the “city of destruction” of the sun-God, i.e., when idolatry shall cease, and the worship of the true God be established. In ancient times this city was full of obelisks dedicated to the sun. Of these only one now remains standing. “Cleopatra’s Needle” was one of those which stood in this city in front of the Temple of Tum, i.e., “the sun.” It is now erected on the Thames Embankment, London. “It was at On that Joseph wooed and won the dark-skinned Asenath, the daughter of the high priest of its great temple.” This was a noted university town, and here Moses gained his acquaintance with “all the wisdom of the Egyptians.”",
+   "definition_ko": "'빛; 태양'이라는 뜻으로(창세기 41:45,50), 태양 숭배의 큰 중심지이며 벧세메스(예레미야 43:13)와 아웬(에스겔 30:17)이라고도 불린다. 나일강 동쪽 기슭, 멤피스 북쪽 몇 마일, 카이로 근처에 있었다.",
+   "category": "지명"
   },
   {
    "id": 2795,
-   "term": "Onan",
-   "definition": "strong, the second son of Judah (Genesis 38:4-10; comp. Deuteronomy 25:5; Matthew 22:24). He died before the going down of Jacob and his family into Egypt."
+   "term": "Onan(오난)",
+   "definition": "strong, the second son of Judah (Genesis 38:4-10; comp. Deuteronomy 25:5; Matthew 22:24). He died before the going down of Jacob and his family into Egypt.",
+   "definition_ko": "'강한'이라는 뜻으로, 유다의 둘째 아들(창세기 38:4-10; 신명기 25:5 참조). 야곱과 그 가족이 애굽으로 내려가기 전에 죽었다.",
+   "category": "인명"
   },
   {
    "id": 2796,
-   "term": "Onesimus",
-   "definition": "useful, a slave who, after robbing his master Philemon (q.v.) at Colosse, fled to Rome, where he was converted by the apostle Paul, who sent him back to his master with the epistle which bears his name. In it he beseeches Philemon to receive his slave as a “faithful and beloved brother.” Paul offers to pay to Philemon anything his slave had taken, and to bear the wrong he had done him. He was accompanied on his return by Tychicus, the bearer of the Epistle to the Colossians (Philemon 1:16, 18). The story of this fugitive Colossian slave is a remarkable evidence of the freedom of access to the prisoner which was granted to all, and “a beautiful illustration both of the character of St. Paul and the transfiguring power and righteous principles of the gospel.”"
+   "term": "Onesimus(오네시모)",
+   "definition": "useful, a slave who, after robbing his master Philemon (q.v.) at Colosse, fled to Rome, where he was converted by the apostle Paul, who sent him back to his master with the epistle which bears his name. In it he beseeches Philemon to receive his slave as a “faithful and beloved brother.” Paul offers to pay to Philemon anything his slave had taken, and to bear the wrong he had done him. He was accompanied on his return by Tychicus, the bearer of the Epistle to the Colossians (Philemon 1:16, 18). The story of this fugitive Colossian slave is a remarkable evidence of the freedom of access to the prisoner which was granted to all, and “a beautiful illustration both of the character of St. Paul and the transfiguring power and righteous principles of the gospel.”",
+   "definition_ko": "'유용한'이라는 뜻으로, 골로새에서 주인 빌레몬(참조)의 것을 훔친 뒤 로마로 도망친 종, 그곳에서 사도 바울에게 회심했고, 바울은 그의 이름을 딴 서신과 함께 그를 주인에게 돌려보냈다.",
+   "category": "인명"
   },
   {
    "id": 2797,
-   "term": "Onesiphorus",
-   "definition": "bringing profit, an Ephesian Christian who showed great kindness to Paul at Rome. He served him in many things, and had oft refreshed him. Paul expresses a warm interest in him and his household (2 Timothy 1:16-18; 4:19)."
+   "term": "Onesiphorus(오네시보로)",
+   "definition": "bringing profit, an Ephesian Christian who showed great kindness to Paul at Rome. He served him in many things, and had oft refreshed him. Paul expresses a warm interest in him and his household (2 Timothy 1:16-18; 4:19).",
+   "definition_ko": "'유익을 가져오는'이라는 뜻으로, 로마에서 바울에게 큰 친절을 베푼 에베소의 그리스도인. 여러 가지로 그를 섬겼고 자주 그를 격려했다. 바울은 그와 그 집안에 대한 따뜻한 관심을 표현한다(디모데후서 1:16-18).",
+   "category": "인명"
   },
   {
    "id": 2798,
    "term": "Onion",
-   "definition": "The Israelites in the wilderness longed for the “onions and garlick of Egypt” (Numbers 11:5). This was the betsel of the Hebrews, the Allium cepe of botanists, of which it is said that there are some thirty or forty species now growing in Palestine. The onion is “the ‘undivided’ leek, unio, unus, one.”"
+   "definition": "The Israelites in the wilderness longed for the “onions and garlick of Egypt” (Numbers 11:5). This was the betsel of the Hebrews, the Allium cepe of botanists, of which it is said that there are some thirty or forty species now growing in Palestine. The onion is “the ‘undivided’ leek, unio, unus, one.”",
+   "definition_ko": "광야의 이스라엘 백성은 '애굽의 파와 마늘'을 그리워했다(민수기 11:5). 이는 히브리어 '베첼', 식물학자들의 '알리움 케파'로, 지금 팔레스타인에는 서른에서 마흔 종이 자란다고 한다.",
+   "category": "용어"
   },
   {
    "id": 2799,
    "term": "Ono",
-   "definition": "a town of Benjamin, in the “plain of Ono” (1 Chronicles 8:12; Ezra 2:33); now Kefr ‘Ana, 5 miles north of Lydda, and about 30 miles north-west of Jerusalem. Not succeeding in their attempts to deter Nehemiah from rebuilding the walls of Jerusalem, Sanballat and Tobiah resorted to strategem, and pretending to wish a conference with him, they invited him to meet them at Ono. Four times they made the request, and every time Nehemiah refused to come. Their object was to take him prisoner."
+   "definition": "a town of Benjamin, in the “plain of Ono” (1 Chronicles 8:12; Ezra 2:33); now Kefr ‘Ana, 5 miles north of Lydda, and about 30 miles north-west of Jerusalem. Not succeeding in their attempts to deter Nehemiah from rebuilding the walls of Jerusalem, Sanballat and Tobiah resorted to strategem, and pretending to wish a conference with him, they invited him to meet them at Ono. Four times they made the request, and every time Nehemiah refused to come. Their object was to take him prisoner.",
+   "definition_ko": "'오노 평지'에 있는 베냐민의 성읍(역대상 8:12; 에스라 2:33); 지금의 케프르 아나로, 룻다에서 북쪽 5마일, 예루살렘에서 북서쪽 약 30마일에 있다. 느헤미야의 성벽 재건을 막지 못하자...",
+   "category": "지명"
   },
   {
    "id": 2800,
    "term": "Onycha",
-   "definition": "a nail; claw; hoof, (Hebrews sheheleth; Exodus 30:34), a Latin word applied to the operculum, i.e., the claw or nail of the strombus or wing-shell, a univalve common in the Red Sea. The opercula of these shell-fish when burned emit a strong odour “like castoreum.” This was an ingredient in the sacred incense."
+   "definition": "a nail; claw; hoof, (Hebrews sheheleth; Exodus 30:34), a Latin word applied to the operculum, i.e., the claw or nail of the strombus or wing-shell, a univalve common in the Red Sea. The opercula of these shell-fish when burned emit a strong odour “like castoreum.” This was an ingredient in the sacred incense.",
+   "definition_ko": "'손톱; 발톱; 발굽'이라는 뜻(히브리어 '쉐헬레트', 출애굽기 30:34), 라틴어로 홍해에 흔한 권패류 스트롬부스의 뚜껑, 곧 발톱이나 손톱을 가리키는 데 쓰인 단어. 이 조개껍질의 뚜껑을 태우면 강한 냄새를 낸다.",
+   "category": "용어"
   },
   {
    "id": 2801,
    "term": "Onyx",
-   "definition": "a hail; claw; hoof, (Hebrews shoham), a precious stone adorning the breast-plate of the high priest and the shoulders of the ephod (Exodus 28:9-12, 20; 35:27; Job 28:16; Ezekiel 28:13). It was found in the land of Havilah (Genesis 2:12). The LXX. translates the Hebrew word by smaragdos, an emerald. Some think that the sardonyx is meant. But the onyx differs from the sardonyx in this, that while the latter has two layers (black and white) the former has three (black, white, and red)."
+   "definition": "a hail; claw; hoof, (Hebrews shoham), a precious stone adorning the breast-plate of the high priest and the shoulders of the ephod (Exodus 28:9-12, 20; 35:27; Job 28:16; Ezekiel 28:13). It was found in the land of Havilah (Genesis 2:12). The LXX. translates the Hebrew word by smaragdos, an emerald. Some think that the sardonyx is meant. But the onyx differs from the sardonyx in this, that while the latter has two layers (black and white) the former has three (black, white, and red).",
+   "definition_ko": "'우박; 발톱; 발굽'이라는 뜻(히브리어 '쇼함'), 대제사장의 흉패와 에봇 어깨받이를 장식하는 보석(출애굽기 28:9-12,20; 욥기 28:16). 하윌라 땅에서 발견되었다(창세기 2:12).",
+   "category": "용어",
+   "hebrew_greek": "H7718"
   },
   {
    "id": 2802,
    "term": "Open Place",
-   "definition": "Genesis 38:14, 21, mar. Enaim; the same probably as Enam (Joshua 15:34), a city in the lowland or Shephelah."
+   "definition": "Genesis 38:14, 21, mar. Enaim; the same probably as Enam (Joshua 15:34), a city in the lowland or Shephelah.",
+   "definition_ko": "창세기 38:14,21 난외주 '에나임'; 아마도 에남(여호수아 15:34)과 같은 곳으로, 저지대 곧 셰펠라의 성읍.",
+   "category": "지명"
   },
   {
    "id": 2803,
    "term": "Ophel",
-   "definition": "hill; mound, the long, narrow, rounded promontory on the southern slope of the temple hill, between the Tyropoeon and the Kedron valley (2 Chronicles 27:3; 33:14; Nehemiah 3:26, 27). It was surrounded by a separate wall, and was occupied by the Nethinim after the Captivity.  This wall has been discovered by the engineers of the Palestine Exploration Fund at the south-eastern angle of the temple area. It is 4 feet below the present surface. In 2 Kings 5:24 this word is translated “tower” (R.V., “hill”), denoting probably some eminence near Elisha’s house."
+   "definition": "hill; mound, the long, narrow, rounded promontory on the southern slope of the temple hill, between the Tyropoeon and the Kedron valley (2 Chronicles 27:3; 33:14; Nehemiah 3:26, 27). It was surrounded by a separate wall, and was occupied by the Nethinim after the Captivity.  This wall has been discovered by the engineers of the Palestine Exploration Fund at the south-eastern angle of the temple area. It is 4 feet below the present surface. In 2 Kings 5:24 this word is translated “tower” (R.V., “hill”), denoting probably some eminence near Elisha’s house.",
+   "definition_ko": "'언덕; 둔덕'이라는 뜻으로, 성전산 남쪽 비탈, 두로베온 골짜기와 기드론 골짜기 사이에 길고 좁게 둥글린 곶(역대하 27:3; 33:14; 느헤미야 3:26,27). 별도의 성벽으로 둘러싸였고 느디님 사람들이 거주했다.",
+   "category": "지명"
   },
   {
    "id": 2804,
    "term": "Ophir (1.)",
-   "definition": "One of the sons of Joktan (Genesis 10:29). (2.) Some region famous for its gold (1 Kings 9:28; 10:11; 22:48; Job 22:24; 28:16; Isaiah 13:12). In the LXX. this word is rendered “Sophir,” and “Sofir” is the Coptic name for India, which is the rendering of the Arabic version, as also of the Vulgate. Josephus has identified it with the Golden Chersonese, i.e., the Malay peninsula. It is now generally identified with Abhira, at the mouth of the Indus. Much may be said, however, in favour of the opinion that it was somewhere in Arabia."
+   "definition": "One of the sons of Joktan (Genesis 10:29). (2.) Some region famous for its gold (1 Kings 9:28; 10:11; 22:48; Job 22:24; 28:16; Isaiah 13:12). In the LXX. this word is rendered “Sophir,” and “Sofir” is the Coptic name for India, which is the rendering of the Arabic version, as also of the Vulgate. Josephus has identified it with the Golden Chersonese, i.e., the Malay peninsula. It is now generally identified with Abhira, at the mouth of the Indus. Much may be said, however, in favour of the opinion that it was somewhere in Arabia.",
+   "definition_ko": "(1.) 욕단의 아들 중 하나(창세기 10:29). (2.) 금으로 유명한 어떤 지역(열왕기상 9:28; 10:11; 욥기 22:24; 이사야 13:12). 칠십인역에서는 '소피르'로 번역되며, 이는 인도를 가리키는 콥트어 이름이다.",
+   "category": "지명"
   },
   {
    "id": 2805,
    "term": "Ophni",
-   "definition": "mouldy, a city of Benjamin (Joshua 18:24)."
+   "definition": "mouldy, a city of Benjamin (Joshua 18:24).",
+   "definition_ko": "'곰팡이 핀'이라는 뜻으로, 베냐민의 성읍(여호수아 18:24).",
+   "category": "지명"
   },
   {
    "id": 2806,
    "term": "Ophrah",
-   "definition": "a fawn. 1 Chronicles 4:14. (1.) A city of Benjamin (Joshua 18:23); probably identical with Ephron (2 Chronicles 13:19) and Ephraim (John 11:54). (2.) “Of the Abi-ezrites.” A city of Manasseh, 6 miles south-west of Shechem, the residence of Gideon (Judges 6:11; 8:27, 32). After his great victory over the Midianites, he slew at this place the captive kings (8:18-21). He then assumed the function of high priest, and sought to make Ophrah what Shiloh should have been. This thing “became a snare” to Gideon and his house. After Gideon’s death his family resided here till they were put to death by Abimelech (Judges 9:5). It is identified with Ferata."
+   "definition": "a fawn. 1 Chronicles 4:14. (1.) A city of Benjamin (Joshua 18:23); probably identical with Ephron (2 Chronicles 13:19) and Ephraim (John 11:54). (2.) “Of the Abi-ezrites.” A city of Manasseh, 6 miles south-west of Shechem, the residence of Gideon (Judges 6:11; 8:27, 32). After his great victory over the Midianites, he slew at this place the captive kings (8:18-21). He then assumed the function of high priest, and sought to make Ophrah what Shiloh should have been. This thing “became a snare” to Gideon and his house. After Gideon’s death his family resided here till they were put to death by Abimelech (Judges 9:5). It is identified with Ferata.",
+   "definition_ko": "'새끼 사슴'이라는 뜻, 역대상 4:14. (1.) 베냐민의 성읍(여호수아 18:23); 아마도 에브론(역대하 13:19)과 에브라임(요한복음 11:54)과 같은 곳일 것이다. (2.) '아비에셀 사람들의' 므낫세 성읍, 세겜 남서쪽 6마일, 기드온의 거처.",
+   "category": "지명"
   },
   {
    "id": 2807,
    "term": "Oracle",
-   "definition": "In the Old Testament used in every case, except 2 Samuel 16:23, to denote the most holy place in the temple (1 Kings 6:5, 19-23; 8:6). In 2 Samuel 16:23 it means the Word of God. A man inquired “at the oracle of God” by means of the Urim and Thummim in the breastplate on the high priest’s ephod. In the New Testament it is used only in the plural, and always denotes the Word of God (Romans 3:2; Hebrews 5:12, etc.). The Scriptures are called “living oracles” (comp. Hebrews 4:12) because of their quickening power (Acts 7:38)."
+   "definition": "In the Old Testament used in every case, except 2 Samuel 16:23, to denote the most holy place in the temple (1 Kings 6:5, 19-23; 8:6). In 2 Samuel 16:23 it means the Word of God. A man inquired “at the oracle of God” by means of the Urim and Thummim in the breastplate on the high priest’s ephod. In the New Testament it is used only in the plural, and always denotes the Word of God (Romans 3:2; Hebrews 5:12, etc.). The Scriptures are called “living oracles” (comp. Hebrews 4:12) because of their quickening power (Acts 7:38).",
+   "definition_ko": "구약에서는 사무엘하 16:23을 제외한 모든 경우 성전의 지성소를 가리키는 데 쓰인다(열왕기상 6:5,19-23). 사무엘하 16:23에서는 하나님의 말씀을 뜻한다. 사람은 우림과 둠밈을 통해 '하나님의 신탁'에 물었다.",
+   "category": "용어",
+   "hebrew_greek": "G3051,H1687,H1697"
   },
   {
    "id": 2808,
-   "term": "Oreb",
-   "definition": "raven, a prince of Midian, who, being defeated by Gideon and put to straits, was slain along with Zeeb (Judges 7:20-25). Many of the Midianites perished along with him (Psalm 83:9; Isaiah 10:26)."
+   "term": "Oreb(오렙)",
+   "definition": "raven, a prince of Midian, who, being defeated by Gideon and put to straits, was slain along with Zeeb (Judges 7:20-25). Many of the Midianites perished along with him (Psalm 83:9; Isaiah 10:26).",
+   "definition_ko": "'까마귀'라는 뜻으로, 미디안의 방백. 기드온에게 패해 궁지에 몰려 스엡과 함께 죽임을 당했다(사사기 7:20-25). 많은 미디안 사람이 그와 함께 멸망했다.",
+   "category": "인명"
   },
   {
    "id": 2809,
    "term": "Oreb, The Rock Of",
-   "definition": "the place where Gideon slew Oreb after the defeat of the Midianites (Judges 7:25; Isaiah 10:26). It was probably the place now called Orbo, on the east of Jordan, near Bethshean."
+   "definition": "the place where Gideon slew Oreb after the defeat of the Midianites (Judges 7:25; Isaiah 10:26). It was probably the place now called Orbo, on the east of Jordan, near Bethshean.",
+   "definition_ko": "미디안이 패한 뒤 기드온이 오렙을 죽인 장소(사사기 7:25; 이사야 10:26). 아마도 요단강 동편, 벧스안 근처의 지금 오르보라 불리는 곳일 것이다.",
+   "category": "지명"
   },
   {
    "id": 2810,
-   "term": "Oren",
-   "definition": "ash or pine, the son of Jerahmeel (1 Chronicles 2:25)."
+   "term": "Oren(오렌)",
+   "definition": "ash or pine, the son of Jerahmeel (1 Chronicles 2:25).",
+   "definition_ko": "'물푸레나무 또는 소나무'라는 뜻으로, 여라므엘의 아들(역대상 2:25).",
+   "category": "인명"
   },
   {
    "id": 2811,
    "term": "Organ",
-   "definition": "some kind of wind instrument, probably a kind of Pan’s pipes (Genesis 4:21; Job 21:12; Psalm 150:4), which consisted of seven or eight reeds of unequal length."
+   "definition": "some kind of wind instrument, probably a kind of Pan’s pipes (Genesis 4:21; Job 21:12; Psalm 150:4), which consisted of seven or eight reeds of unequal length.",
+   "definition_ko": "어떤 종류의 관악기로, 아마도 길이가 다른 일곱이나 여덟 개의 갈대로 이루어진 팬파이프의 일종이었을 것이다(창세기 4:21; 욥기 21:12; 시편 150:4).",
+   "category": "용어",
+   "hebrew_greek": "H5748"
   },
   {
    "id": 2812,
    "term": "Orion",
-   "definition": "Hebrews Kesil; i.e., “the fool”, the name of a constellation (Job 9:9; 38:31; Amos 5:8) consisting of about eighty stars. The Vulgate renders thus, but the LXX. renders by Hesperus, i.e., “the evening-star,” Venus. The Orientals “appear to have conceived of this constellation under the figure of an impious giant bound upon the sky.” This giant was, according to tradition, Nimrod, the type of the folly that contends against God. In Isaiah 13:10 the plural form of the Hebrew word is rendered “constellations.”"
+   "definition": "Hebrews Kesil; i.e., “the fool”, the name of a constellation (Job 9:9; 38:31; Amos 5:8) consisting of about eighty stars. The Vulgate renders thus, but the LXX. renders by Hesperus, i.e., “the evening-star,” Venus. The Orientals “appear to have conceived of this constellation under the figure of an impious giant bound upon the sky.” This giant was, according to tradition, Nimrod, the type of the folly that contends against God. In Isaiah 13:10 the plural form of the Hebrew word is rendered “constellations.”",
+   "definition_ko": "히브리어 '케실', 곧 '어리석은 자'라는 뜻으로, 약 팔십 개의 별로 이루어진 별자리 이름(욥기 9:9; 38:31; 아모스 5:8). 불가타역은 이렇게 옮기나 칠십인역은 '헤스페루스', 곧 저녁별 금성으로 옮긴다.",
+   "category": "용어",
+   "hebrew_greek": "H3685"
   },
   {
    "id": 2813,
-   "term": "Ornan 1",
-   "definition": "Chronicles 21:15. (See ARAUNAH.)"
+   "term": "Ornan(오르난)",
+   "definition": "Chronicles 21:15. (See ARAUNAH.)",
+   "definition_ko": "역대상 21:15(아라우나 항목 참조).",
+   "category": "인명"
   },
   {
    "id": 2814,
-   "term": "Orpah",
-   "definition": "forelock or fawn, a Moabitess, the wife of Chilion (Ruth 1:4; 4:10). On the death of her husband she accompanied Naomi, her mother-in-law, part of the way to Bethlehem, and then returned to Moab."
+   "term": "Orpah(오르바)",
+   "definition": "forelock or fawn, a Moabitess, the wife of Chilion (Ruth 1:4; 4:10). On the death of her husband she accompanied Naomi, her mother-in-law, part of the way to Bethlehem, and then returned to Moab.",
+   "definition_ko": "'앞머리 또는 새끼 사슴'이라는 뜻으로, 모압 여인이며 기룐의 아내(룻기 1:4; 4:10). 남편이 죽자 시어머니 나오미와 함께 베들레헴으로 가는 길 일부를 동행하다가 모압으로 돌아갔다.",
+   "category": "인명"
   },
   {
    "id": 2815,
    "term": "Orphans",
-   "definition": "(Lamentations 5:3), i.e., desolate and without protectors. The word occurs only here. In John 14:18 the word there rendered “comfortless” (R.V., “desolate;” marg., “orphans”) properly means “orphans.” The same Greek word is rendered “fatherless” in James 1:27."
+   "definition": "(Lamentations 5:3), i.e., desolate and without protectors. The word occurs only here. In John 14:18 the word there rendered “comfortless” (R.V., “desolate;” marg., “orphans”) properly means “orphans.” The same Greek word is rendered “fatherless” in James 1:27.",
+   "definition_ko": "(예레미야애가 5:3) 곧 황폐하고 보호자 없는 상태. 이 단어는 이곳에만 나온다. 요한복음 14:18에서 '고아'(개정역 '외로운')로 번역된 단어는 정확히 '고아들'을 뜻한다.",
+   "category": "용어"
   },
   {
    "id": 2816,
    "term": "Osprey",
-   "definition": "Hebrews ‘ozniyyah, an unclean bird according to the Mosaic law (Leviticus 11:13; Deuteronomy 14:12); the fish-eating eagle (Pandion haliaetus); one of the lesser eagles. But the Hebrew word may be taken to denote the short-toed eagle (Circaetus gallicus of Southern Europe), one of the most abundant of the eagle tribe found in Palestine."
+   "definition": "Hebrews ‘ozniyyah, an unclean bird according to the Mosaic law (Leviticus 11:13; Deuteronomy 14:12); the fish-eating eagle (Pandion haliaetus); one of the lesser eagles. But the Hebrew word may be taken to denote the short-toed eagle (Circaetus gallicus of Southern Europe), one of the most abundant of the eagle tribe found in Palestine.",
+   "definition_ko": "히브리어 '오즈니야', 모세 율법에 따르면 부정한 새(레위기 11:13; 신명기 14:12); 물고기를 먹는 물수리(판디온 할리아에투스); 작은 독수리류 중 하나. 다만 이 히브리어 단어는 발가락 짧은 뱀잡이수리를 가리킬 수도 있다.",
+   "category": "용어"
   },
   {
    "id": 2817,
    "term": "Ossifrage",
-   "definition": "Hebrews peres = to “break” or “crush”, the lammer-geier, or bearded vulture, the largest of the whole vulture tribe. It was an unclean bird (Leviticus 11:13; Deuteronomy 14:12). It is not a gregarious bird, and is found but rarely in Palestine. “When the other vultures have picked the flesh off any animal, he comes in at the end of the feast, and swallows the bones, or breaks them, and swallows the pieces if he cannot otherwise extract the marrow. The bones he cracks [hence the appropriateness of the name ossifrage, i.e., “bone-breaker”] by letting them fall on a rock from a great height. He does not, however, confine himself to these delicacies, but whenever he has an opportunity will devour lambs, kids, or hares. These he generally obtains by pushing them over cliffs, when he has watched his opportunity; and he has been known to attack men while climbing rocks, and dash them against the bottom. But tortoises and serpents are his ordinary food...No doubt it was a lammer-geier that mistook the bald head of the poet AEschylus for a stone, and dropped on it the tortoise which killed him” (Tristram’s Nat. Hist.)."
+   "definition": "Hebrews peres = to “break” or “crush”, the lammer-geier, or bearded vulture, the largest of the whole vulture tribe. It was an unclean bird (Leviticus 11:13; Deuteronomy 14:12). It is not a gregarious bird, and is found but rarely in Palestine. “When the other vultures have picked the flesh off any animal, he comes in at the end of the feast, and swallows the bones, or breaks them, and swallows the pieces if he cannot otherwise extract the marrow. The bones he cracks [hence the appropriateness of the name ossifrage, i.e., “bone-breaker”] by letting them fall on a rock from a great height. He does not, however, confine himself to these delicacies, but whenever he has an opportunity will devour lambs, kids, or hares. These he generally obtains by pushing them over cliffs, when he has watched his opportunity; and he has been known to attack men while climbing rocks, and dash them against the bottom. But tortoises and serpents are his ordinary food...No doubt it was a lammer-geier that mistook the bald head of the poet AEschylus for a stone, and dropped on it the tortoise which killed him” (Tristram’s Nat. Hist.).",
+   "definition_ko": "히브리어 '페레스', '부수다, 으스러뜨리다'라는 뜻으로, 수염수리 또는 턱수염 대머리수리로 온 독수리 무리 중 가장 크다. 부정한 새였다(레위기 11:13; 신명기 14:12). 무리 짓지 않는 새로 팔레스타인에서는 드물게 발견된다.",
+   "category": "용어",
+   "hebrew_greek": "H6538"
   },
   {
    "id": 2818,
    "term": "Ostrich",
-   "definition": "(Lamentations 4:3), the rendering of Hebrew pl. enim; so called from its greediness and gluttony. The allusion here is to the habit of the ostrich with reference to its eggs, which is thus described: “The outer layer of eggs is generally so ill covered that they are destroyed in quantities by jackals, wild-cats, etc., and that the natives carry them away, only taking care not to leave the marks of their footsteps, since, when the ostrich comes and finds that her nest is discovered, she crushes the whole brood, and builds a nest elsewhere.” In Job 39:13 this word in the Authorized Version is the rendering of a Hebrew word (notsah) which means “feathers,” as in the Revised Version. In the same verse the word “peacocks” of the Authorized Version is the rendering of the Hebrew pl. renanim, properly meaning “ostriches,” as in the Revised Version. (See OWL [1].)"
+   "definition": "(Lamentations 4:3), the rendering of Hebrew pl. enim; so called from its greediness and gluttony. The allusion here is to the habit of the ostrich with reference to its eggs, which is thus described: “The outer layer of eggs is generally so ill covered that they are destroyed in quantities by jackals, wild-cats, etc., and that the natives carry them away, only taking care not to leave the marks of their footsteps, since, when the ostrich comes and finds that her nest is discovered, she crushes the whole brood, and builds a nest elsewhere.” In Job 39:13 this word in the Authorized Version is the rendering of a Hebrew word (notsah) which means “feathers,” as in the Revised Version. In the same verse the word “peacocks” of the Authorized Version is the rendering of the Hebrew pl. renanim, properly meaning “ostriches,” as in the Revised Version. (See OWL [1].)",
+   "definition_ko": "(예레미야애가 4:3) 히브리어 복수형 '예님'의 번역으로, 그 탐욕과 게걸스러움에서 이름이 유래했다. 여기서 암시하는 것은 타조가 알을 대하는 습성이다.",
+   "category": "용어",
+   "hebrew_greek": "H3283,H5133"
   },
   {
    "id": 2819,
-   "term": "Othni",
-   "definition": "a lion of Jehovah, a son of Shemaiah, and one of the temple porters in the time of David (1 Chronicles 26:7). He was a “mighty man of valour.”"
+   "term": "Othni(오드니)",
+   "definition": "a lion of Jehovah, a son of Shemaiah, and one of the temple porters in the time of David (1 Chronicles 26:7). He was a “mighty man of valour.”",
+   "definition_ko": "'여호와의 사자'라는 뜻으로, 스마야의 아들이며 다윗 시대 성전 문지기 중 하나(역대상 26:7). '큰 용사'였다.",
+   "category": "인명"
   },
   {
    "id": 2820,
-   "term": "Othniel",
-   "definition": "lion of God, the first of the judges. His wife Achsah was the daughter of Caleb (Joshua 15:16, 17; Judges 1:13). He gained her hand as a reward for his bravery in leading a successful expedition against Debir (q.v.). Some thirty years after the death of Joshua, the Israelites fell under the subjection of Chushan-rishathaim (q.v.), the king of Mesopotamia. He oppressed them for full eight years, when they “cried” unto Jehovah, and Othniel was raised up to be their deliverer. He was the younger brother of Caleb (Judges 3:8, 9-11). He is the only judge mentioned connected with the tribe of Judah. Under him the land had rest forty years."
+   "term": "Othniel(옷니엘)",
+   "definition": "lion of God, the first of the judges. His wife Achsah was the daughter of Caleb (Joshua 15:16, 17; Judges 1:13). He gained her hand as a reward for his bravery in leading a successful expedition against Debir (q.v.). Some thirty years after the death of Joshua, the Israelites fell under the subjection of Chushan-rishathaim (q.v.), the king of Mesopotamia. He oppressed them for full eight years, when they “cried” unto Jehovah, and Othniel was raised up to be their deliverer. He was the younger brother of Caleb (Judges 3:8, 9-11). He is the only judge mentioned connected with the tribe of Judah. Under him the land had rest forty years.",
+   "definition_ko": "'하나님의 사자'라는 뜻으로, 첫 사사. 그의 아내 악사는 갈렙의 딸이었다(여호수아 15:16,17; 사사기 1:13). 드빌(참조)을 향한 성공적 원정을 이끈 용맹의 보상으로 그녀를 얻었다.",
+   "category": "인명"
   },
   {
    "id": 2821,
    "term": "Ouches",
-   "definition": "an Old English word denoting cavities or sockets in which gems were set (Exodus 28:11)."
+   "definition": "an Old English word denoting cavities or sockets in which gems were set (Exodus 28:11).",
+   "definition_ko": "보석을 박는 오목한 홈이나 자리를 뜻하는 고어(출애굽기 28:11).",
+   "category": "용어"
   },
   {
    "id": 2822,
    "term": "Oven",
-   "definition": "Hebrews tannur, (Hos. 7:4). In towns there appear to have been public ovens. There was a street in Jerusalem (Jeremiah 37:21) called “bakers’ street” (the only case in which the name of a street in Jerusalem is preserved). The words “tower of the furnaces” (Nehemiah 3:11; 12:38) is more properly “tower of the ovens” (Hebrews tannurim). These resemble the ovens in use among ourselves. There were other private ovens of different kinds. Some were like large jars made of earthenware or copper, which were heated inside with wood (1 Kings 17:12; Isaiah 44:15; Jeremiah 7:18) or grass (Matthew 6:30), and when the fire had burned out, small pieces of dough were placed inside or spread in thin layers on the outside, and were thus baked. (See FURNACE.) Pits were also formed for the same purposes, and lined with cement. These were used after the same manner. Heated stones, or sand heated by a fire heaped over it, and also flat irons pans, all served as ovens for the preparation of bread. (See Genesis 18:6; 1 Kings 19:6.)"
+   "definition": "Hebrews tannur, (Hos. 7:4). In towns there appear to have been public ovens. There was a street in Jerusalem (Jeremiah 37:21) called “bakers’ street” (the only case in which the name of a street in Jerusalem is preserved). The words “tower of the furnaces” (Nehemiah 3:11; 12:38) is more properly “tower of the ovens” (Hebrews tannurim). These resemble the ovens in use among ourselves. There were other private ovens of different kinds. Some were like large jars made of earthenware or copper, which were heated inside with wood (1 Kings 17:12; Isaiah 44:15; Jeremiah 7:18) or grass (Matthew 6:30), and when the fire had burned out, small pieces of dough were placed inside or spread in thin layers on the outside, and were thus baked. (See FURNACE.) Pits were also formed for the same purposes, and lined with cement. These were used after the same manner. Heated stones, or sand heated by a fire heaped over it, and also flat irons pans, all served as ovens for the preparation of bread. (See Genesis 18:6; 1 Kings 19:6.)",
+   "definition_ko": "히브리어 '탄누르'(호세아 7:4). 성읍에는 공용 화덕이 있었던 것으로 보인다. 예루살렘에는 '빵 굽는 자들의 거리'라 불리는 거리가 있었다(예레미야 37:21, 예루살렘 거리 이름이 보존된 유일한 사례).",
+   "category": "용어",
+   "hebrew_greek": "G2823,H8574"
   },
   {
    "id": 2823,
    "term": "Owl (1.)",
-   "definition": "Hebrews bath-haya’anah, “daughter of greediness” or of “shouting.” In the list of unclean birds (Leviticus 11:16; Deuteronomy 14:15); also mentioned in Job 30:29; Isaiah 13:21; 34:13; 43:20; Jeremiah  50:39; Micah 1:8. In all these passages the Revised Version translates “ostrich” (q.v.), which is the correct rendering. (2.) Hebrews yanshuph, rendered “great owl” in Leviticus 11:17; Deuteronomy 14:16, and “owl” in Isaiah 34:11. This is supposed to be the Egyptian eagle-owl (Bubo ascalaphus), which takes the place of the eagle-owl (Bubo maximus) found in Southern Europe. It is found frequenting the ruins of Egypt and also of the Holy Land. “Its cry is a loud, prolonged, and very powerful hoot. I know nothing which more vividly brought to my mind the sense of desolation and loneliness than the re-echoing hoot of two or three of these great owls as I stood at midnight among the ruined temples of Baalbek” (Tristram). The LXX. and Vulgate render this word by “ibis”, i.e., the Egyptian heron. (3.) Hebrews kos, rendered “little owl” in Leviticus 11:17; Deuteronomy 14:16, and “owl” in Psalm 102:6. The Arabs call this bird “the mother of ruins.” It is by far the most common of all the owls of Palestine. It is the Athene persica, the bird of Minerva, the symbol of ancient Athens. (4.) Hebrews kippoz, the “great owl” (Isaiah 34:15); Revised Version, “arrow-snake;” LXX. and Vulgate, “hedgehog,” reading in the text, kippod, instead of kippoz. There is no reason to doubt the correctness of the rendering of the Authorized Version. Tristram says: “The word [i.e., kippoz] is very possibly an imitation of the cry of the scops owl (Scops giu), which is very common among ruins, caves, and old walls of towns...It is a migrant, returning to Palestine in spring.” (5.) Hebrews lilith, “screech owl” (Isaiah 34:14, marg. and R.V., “night monster”). The Hebrew word is from a root signifying “night.” Some species of the owl is obviously intended by this word. It may be the hooting or tawny owl (Syrnium aluco), which is common in Egypt and in many parts of Palestine. This verse in Isaiah is “descriptive of utter and perpetual desolation, of a land that should be full of ruins, and inhabited by the animals that usually make such ruins their abode.”"
+   "definition": "Hebrews bath-haya’anah, “daughter of greediness” or of “shouting.” In the list of unclean birds (Leviticus 11:16; Deuteronomy 14:15); also mentioned in Job 30:29; Isaiah 13:21; 34:13; 43:20; Jeremiah  50:39; Micah 1:8. In all these passages the Revised Version translates “ostrich” (q.v.), which is the correct rendering. (2.) Hebrews yanshuph, rendered “great owl” in Leviticus 11:17; Deuteronomy 14:16, and “owl” in Isaiah 34:11. This is supposed to be the Egyptian eagle-owl (Bubo ascalaphus), which takes the place of the eagle-owl (Bubo maximus) found in Southern Europe. It is found frequenting the ruins of Egypt and also of the Holy Land. “Its cry is a loud, prolonged, and very powerful hoot. I know nothing which more vividly brought to my mind the sense of desolation and loneliness than the re-echoing hoot of two or three of these great owls as I stood at midnight among the ruined temples of Baalbek” (Tristram). The LXX. and Vulgate render this word by “ibis”, i.e., the Egyptian heron. (3.) Hebrews kos, rendered “little owl” in Leviticus 11:17; Deuteronomy 14:16, and “owl” in Psalm 102:6. The Arabs call this bird “the mother of ruins.” It is by far the most common of all the owls of Palestine. It is the Athene persica, the bird of Minerva, the symbol of ancient Athens. (4.) Hebrews kippoz, the “great owl” (Isaiah 34:15); Revised Version, “arrow-snake;” LXX. and Vulgate, “hedgehog,” reading in the text, kippod, instead of kippoz. There is no reason to doubt the correctness of the rendering of the Authorized Version. Tristram says: “The word [i.e., kippoz] is very possibly an imitation of the cry of the scops owl (Scops giu), which is very common among ruins, caves, and old walls of towns...It is a migrant, returning to Palestine in spring.” (5.) Hebrews lilith, “screech owl” (Isaiah 34:14, marg. and R.V., “night monster”). The Hebrew word is from a root signifying “night.” Some species of the owl is obviously intended by this word. It may be the hooting or tawny owl (Syrnium aluco), which is common in Egypt and in many parts of Palestine. This verse in Isaiah is “descriptive of utter and perpetual desolation, of a land that should be full of ruins, and inhabited by the animals that usually make such ruins their abode.”",
+   "definition_ko": "(1.) 히브리어 '바트 하야아나', '탐욕의 딸' 또는 '울부짖음의 딸'. 부정한 새 목록에 나온다(레위기 11:16; 신명기 14:15); 욥기 30:29; 이사야 13:21에도 언급된다. 이 모든 구절에서 개정역은...",
+   "category": "용어"
   },
   {
    "id": 2824,
    "term": "Ox",
-   "definition": "Hebrews bakar, “cattle;” “neat cattle”, (Genesis 12:16; 34:28; Job 1:3, 14; 42:12, etc.); not to be muzzled when treading the corn (Deuteronomy 25:4). Referred to by our Lord in his reproof to the Pharisees (Luke 13:15; 14:5)."
+   "definition": "Hebrews bakar, “cattle;” “neat cattle”, (Genesis 12:16; 34:28; Job 1:3, 14; 42:12, etc.); not to be muzzled when treading the corn (Deuteronomy 25:4). Referred to by our Lord in his reproof to the Pharisees (Luke 13:15; 14:5).",
+   "definition_ko": "히브리어 '바카르', '가축; 소'(창세기 12:16; 34:28; 욥기 1:3,14); 곡식을 밟을 때 입에 망을 씌우지 말라 했다(신명기 25:4). 우리 주님이 바리새인을 책망하실 때 언급하셨다(누가복음 13:15; 14:5).",
+   "category": "용어"
   },
   {
    "id": 2825,
    "term": "Ox Goad",
-   "definition": "mentioned only in Judges 3:31, the weapon with which Shamgar (q.v.) slew six hundred Philistines. “The ploughman still carries his goad, a weapon apparently more fitted for the hand of the soldier than the peaceful husbandman. The one I saw was of the ‘oak of Bashan,’ and measured upwards of ten feet in length. At one end was an iron spear, and at the other a piece of the same metal flattened. One can well understand how a warrior might use such a weapon with effect in the battle-field” (Porter’s Syria, etc.). (See GOAD.)"
+   "definition": "mentioned only in Judges 3:31, the weapon with which Shamgar (q.v.) slew six hundred Philistines. “The ploughman still carries his goad, a weapon apparently more fitted for the hand of the soldier than the peaceful husbandman. The one I saw was of the ‘oak of Bashan,’ and measured upwards of ten feet in length. At one end was an iron spear, and at the other a piece of the same metal flattened. One can well understand how a warrior might use such a weapon with effect in the battle-field” (Porter’s Syria, etc.). (See GOAD.)",
+   "definition_ko": "사사기 3:31에만 언급되며, 삼갈(참조)이 블레셋 사람 육백 명을 죽인 무기다. '농부는 지금도 몰이 막대를 지니는데, 이는 평화로운 농부의 손보다는 군인의 손에 더 어울리는 무기로 보인다.'",
+   "category": "용어"
   },
   {
    "id": 2826,
-   "term": "Ozem",
-   "definition": "strong. (1.) One of David’s brothers; the sixth son of Jesse (1 Chronicles 2:15). (2.) A son of Jerahmeel (1 Chronicles 2:25)."
+   "term": "Ozem(오셈)",
+   "definition": "strong. (1.) One of David’s brothers; the sixth son of Jesse (1 Chronicles 2:15). (2.) A son of Jerahmeel (1 Chronicles 2:25).",
+   "definition_ko": "'강한'이라는 뜻. (1.) 다윗의 형제 중 하나로 이새의 여섯째 아들(역대상 2:15). (2.) 여라므엘의 아들(역대상 2:25).",
+   "category": "인명"
   },
   {
    "id": 2827,
-   "term": "Ozias",
-   "definition": "son of Joram (Matthew 1:8); called also Uzziah (2 Kings 15:32, 34)."
+   "term": "Ozias(오시아)",
+   "definition": "son of Joram (Matthew 1:8); called also Uzziah (2 Kings 15:32, 34).",
+   "definition_ko": "요람의 아들(마태복음 1:8); 웃시야라고도 불린다(열왕기하 15:32,34).",
+   "category": "인명"
   },
   {
    "id": 2828,
-   "term": "Ozni",
-   "definition": "hearing, one of the sons of Gad; also called Ezbon (Genesis 46:16; Numbers 26:16).  P"
+   "term": "Ozni(오스니)",
+   "definition": "hearing, one of the sons of Gad; also called Ezbon (Genesis 46:16; Numbers 26:16).  P",
+   "definition_ko": "'들음'이라는 뜻으로, 갓의 아들 중 하나; 에스본이라고도 불린다(창세기 46:16; 민수기 26:16).",
+   "category": "인명"
   },
   {
    "id": 2829,

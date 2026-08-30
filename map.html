@@ -4994,7 +4994,7 @@
         const isEditing = rawdictEditingSet.has(editKey);
         const koBlock = (e.definition_ko && !isEditing)
           ? `<div style="display:flex;gap:4px;align-items:flex-start;margin-top:6px">
-               <div style="flex:1;font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${escHtml(e.definition_ko)}</div>
+               <div style="flex:1;font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyVerseRefs(escHtml(e.definition_ko))}</div>
                <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
              </div>`
           : `<div style="margin-top:6px">
@@ -5043,7 +5043,7 @@
           ${headerBlock}
           ${strongDisplay}
           <div style="display:flex;gap:6px;align-items:flex-start;margin-top:2px">
-            <div style="flex:1;font-size:0.85em;color:#64748b;line-height:1.5">${escHtml(e.definition)}</div>
+            <div style="flex:1;font-size:0.85em;color:#64748b;line-height:1.5">${linkifyVerseRefs(escHtml(e.definition))}</div>
             <button onclick="RawDict.copyDefinition('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">📋 복사</button>
           </div>
           ${koBlock}
