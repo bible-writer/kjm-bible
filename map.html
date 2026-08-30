@@ -4900,6 +4900,7 @@
         if (!localE) { byTerm[netE.term] = netE; changed = true; return; }
         if (netE.definition && netE.definition !== localE.definition) { localE.definition = netE.definition; changed = true; }
         if (netE.definition_ko && netE.definition_ko !== localE.definition_ko) { localE.definition_ko = netE.definition_ko; changed = true; }
+        if (netE.category && netE.category !== localE.category) { localE.category = netE.category; changed = true; }
       });
       return changed ? Object.values(byTerm) : localList;
     }
