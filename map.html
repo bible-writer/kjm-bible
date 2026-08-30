@@ -4901,6 +4901,7 @@
         if (netE.definition && netE.definition !== localE.definition) { localE.definition = netE.definition; changed = true; }
         if (netE.definition_ko && netE.definition_ko !== localE.definition_ko) { localE.definition_ko = netE.definition_ko; changed = true; }
         if (netE.category && netE.category !== localE.category) { localE.category = netE.category; changed = true; }
+        if (netE.hebrew_greek && netE.hebrew_greek !== localE.hebrew_greek) { localE.hebrew_greek = netE.hebrew_greek; changed = true; }
       });
       return changed ? Object.values(byTerm) : localList;
     }
@@ -5006,8 +5007,13 @@
         const catBadge = e.category
           ? `<span style="display:inline-block;font-size:0.7em;font-weight:700;color:#fff;background:${catBadgeColors[e.category] || '#64748b'};border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:middle">${escHtml(e.category)}</span>`
           : '';
+        const strongTargetId = `rawdict-strong-${rawdictSrc}-${e.id}`;
+        const strongDisplay = e.hebrew_greek
+          ? `<div style="font-size:0.8em;color:#b45309;margin-top:4px">📜 ${StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), strongTargetId)}</div><div id="${strongTargetId}"></div>`
+          : '';
         row.innerHTML = `
           <div style="font-weight:600;color:#1e293b">${catBadge}<span style="font-style:italic">${escHtml(e.term)}</span></div>
+          ${strongDisplay}
           <div style="font-size:0.85em;color:#64748b;margin-top:2px;line-height:1.5">${escHtml(e.definition)}</div>
           ${koBlock}
         `;
