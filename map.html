@@ -4877,6 +4877,26 @@
     let rawdictShownCount = 0;
     const RAWDICT_PAGE_SIZE = 100;
 
+    // 네트워크에서 받은 최신 원문사전(entries)과 로컬에 저장된 사본을 병합.
+    // - 항목 수가 늘었으면(신규 알파벳 추가 등) 통째로 교체
+    // - 항목 수가 같아도, 네트워크 쪽에 새로 채워진 definition/definition_ko가 있으면 그 값으로 갱신
+    //   (로컬에서 사용자가 직접 입력해 아직 파일로 내보내지 않은 값은 덮어쓰지 않음)
+    function mergeRawDictEntries(localList, networkList) {
+      if (!Array.isArray(networkList) || networkList.length === 0) return localList;
+      if (!Array.isArray(localList) || localList.length === 0) return networkList;
+      if (networkList.length > localList.length) return networkList;
+      const byTerm = {};
+      localList.forEach(e => { byTerm[e.term] = e; });
+      let changed = false;
+      networkList.forEach(netE => {
+        const localE = byTerm[netE.term];
+        if (!localE) { byTerm[netE.term] = netE; changed = true; return; }
+        if (netE.definition && netE.definition !== localE.definition) { localE.definition = netE.definition; changed = true; }
+        if (netE.definition_ko && !localE.definition_ko) { localE.definition_ko = netE.definition_ko; changed = true; }
+      });
+      return changed ? Object.values(byTerm) : localList;
+    }
+
     async function loadRawDictionaries() {
       // 로컬 캐시 먼저
       const savedEaston = await getLocalItem('easton_full_dict');
@@ -4888,9 +4908,12 @@
         const res = await fetch('./easton_full.json', { cache: 'no-store' });
         if (res && res.ok) {
           const pkg = await res.json();
-          if (pkg && Array.isArray(pkg.entries) && pkg.entries.length > (eastonFullDict.length || 0)) {
-            eastonFullDict = pkg.entries;
-            await setLocalItem('easton_full_dict', eastonFullDict);
+          if (pkg && Array.isArray(pkg.entries) && pkg.entries.length > 0) {
+            const merged = mergeRawDictEntries(eastonFullDict, pkg.entries);
+            if (merged !== eastonFullDict) {
+              eastonFullDict = merged;
+              await setLocalItem('easton_full_dict', eastonFullDict);
+            }
           }
         }
       } catch (e) { /* 로컬 실행 등에서는 무시 */ }
@@ -4898,9 +4921,12 @@
         const res2 = await fetch('./smith_full.json', { cache: 'no-store' });
         if (res2 && res2.ok) {
           const pkg2 = await res2.json();
-          if (pkg2 && Array.isArray(pkg2.entries) && pkg2.entries.length > (smithFullDict.length || 0)) {
-            smithFullDict = pkg2.entries;
-            await setLocalItem('smith_full_dict', smithFullDict);
+          if (pkg2 && Array.isArray(pkg2.entries) && pkg2.entries.length > 0) {
+            const merged2 = mergeRawDictEntries(smithFullDict, pkg2.entries);
+            if (merged2 !== smithFullDict) {
+              smithFullDict = merged2;
+              await setLocalItem('smith_full_dict', smithFullDict);
+            }
           }
         }
       } catch (e) { /* smith_full.json 아직 없을 수 있음 */ }
