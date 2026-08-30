@@ -1,9 +1,9 @@
 {
   "version": "0.1.0",
   "date": "2026-08-30",
-  "count": 99,
+  "count": 672,
   "source": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain)",
-  "note": "전체 약 4,000개 항목 중 A자 첫 페이지(99개)만 수집됨. 이후 세션에서 B~Z 계속 추가 예정.",
+  "note": "전체 약 4,000개 항목 목표 중 A자(99개, id1-99) + B자(295개, id100-394) + C자(278개, id395-672) 수집 완료. 항목은 요약(축약) 방식. 다음 세션 D자부터 이어서 추가 예정.",
   "entries": [
     {
       "id": 1,
@@ -338,7 +338,7 @@
     {
       "id": 67,
       "term": "Achbor",
-      "definition": "gnawing = mouse. (1.) An Edomitish king (Gen. 36:38; 1 Chr. 1:49)."
+      "definition": "gnawing, = mouse. (1.) An Edomitish king (Gen. 36:38; 1 Chr. 1:49)."
     },
     {
       "id": 68,
@@ -499,6 +499,2871 @@
       "id": 99,
       "term": "Adoni-zedec",
       "definition": "lord of justice or righteousness, was king in Jerusalem at the time when the Israelites invaded Palestine (Josh. 10:1,3)."
+    },
+    {
+      "id": 100,
+      "term": "Baal",
+      "definition": "lord. (1.) The name appropriated to the principal male god of the Phoenicians. It is found in several places in the plural BAALIM (Judg. 2:11; 10:10; 1 Kings 18:18; Jer. 2:23; Hos. 2:17). Baal is identified with Molech (Jer. 19:5). It was known to the Israelites as Baal-peor, was worshipped till the time of Samuel, and was afterwards the religion of the ten tribes in the time of Ahab. (2.) A Benjamite, son of Jehiel, the progenitor of the Gibeonites (1 Chr. 8:30; 9:36). (3.) The name of a place inhabited by the Simeonites, the same probably as Baal-ath-beer (1 Chr. 4:33; Josh. 19:8)."
+    },
+    {
+      "id": 101,
+      "term": "Baalah",
+      "definition": "mistress; city. A city in the south of Judah (Josh. 15:29), elsewhere called Balah (Josh. 19:3) and Bilhah (1 Chr. 4:29). Now Khurbet Zebalah."
+    },
+    {
+      "id": 102,
+      "term": "Baalath",
+      "definition": "a town of the tribe of Dan (Josh. 19:44). It was fortified by Solomon (1 Kings 9:18; 2 Chr. 8:6)."
+    },
+    {
+      "id": 103,
+      "term": "Baalath-beer",
+      "definition": "Baalah of the well (Josh. 19:8), probably the same as Baal, mentioned in 1 Chr. 4:33, a city of Simeon."
+    },
+    {
+      "id": 104,
+      "term": "Baalbec",
+      "definition": "called by the Greeks Heliopolis, i.e., \"the city of the sun,\" because of its famous Temple of the Sun. It was a city of Coele-Syria, on the lowest declivity of Anti-Libanus, about 42 miles north-west of Damascus, finally destroyed by an earthquake in 1759."
+    },
+    {
+      "id": 105,
+      "term": "Baal-berith",
+      "definition": "covenant lord, the name of the god worshipped in Shechem after the death of Gideon (Judg. 8:33; 9:4)."
+    },
+    {
+      "id": 106,
+      "term": "Baale of Judah",
+      "definition": "lords of Judah, a city in the tribe of Judah from which David brought the ark into Jerusalem (2 Sam. 6:2). Elsewhere called Kirjath-jearim."
+    },
+    {
+      "id": 107,
+      "term": "Baal-gad",
+      "definition": "lord of fortune, or troop of Baal, a Canaanite city in the valley of Lebanon at the foot of Hermon, near the source of the Jordan."
+    },
+    {
+      "id": 108,
+      "term": "Baal-hamon",
+      "definition": "place of a multitude, a place where Solomon had an extensive vineyard (Cant. 8:11)."
+    },
+    {
+      "id": 109,
+      "term": "Baal-hanan",
+      "definition": "lord of grace. (1.) A king of Edom, son of Achbor. (2.) An overseer of \"the olive trees and sycomore trees\" under David."
+    },
+    {
+      "id": 110,
+      "term": "Baal-hazor",
+      "definition": "having a courtyard, or Baal's village, the place where Absalom held the feast of sheep-shearing when Amnon was assassinated (2 Sam. 13:23)."
+    },
+    {
+      "id": 111,
+      "term": "Baal-hermon",
+      "definition": "lord of Hermon, a city near Mount Hermon inhabited by the Ephraimites (1 Chr. 5:23)."
+    },
+    {
+      "id": 112,
+      "term": "Baali",
+      "definition": "my lord, a title the prophet (Hos. 2:16) reproaches the Jewish church for applying to Jehovah, instead of the more endearing title Ishi, meaning \"my husband.\""
+    },
+    {
+      "id": 113,
+      "term": "Baalim",
+      "definition": "plural of Baal; images of the god Baal (Judg. 2:11; 1 Sam. 7:4)."
+    },
+    {
+      "id": 114,
+      "term": "Baalis",
+      "definition": "king of the Ammonites at the time of the Babylonian captivity (Jer. 40:14). He hired Ishmael to slay Gedaliah."
+    },
+    {
+      "id": 115,
+      "term": "Baal-meon",
+      "definition": "lord of dwelling, a town of Reuben (Num. 32:38), called also Beth-meon."
+    },
+    {
+      "id": 116,
+      "term": "Baal-peor",
+      "definition": "lord of the opening, a god of the Moabites (Num. 25:3; 31:16; Josh. 22:17), worshipped by obscene rites."
+    },
+    {
+      "id": 117,
+      "term": "Baal-perazim",
+      "definition": "Baal having rents, bursts, or destructions, the scene of a victory gained by David over the Philistines (2 Sam. 5:20; 1 Chr. 14:11)."
+    },
+    {
+      "id": 118,
+      "term": "Baal-shalisha",
+      "definition": "lord of Shalisha, a place from which a man brought provisions to Elisha, apparently not far from Gilgal (2 Kings 4:42)."
+    },
+    {
+      "id": 119,
+      "term": "Baal-tamar",
+      "definition": "lord of palm trees, a place in the tribe of Benjamin near Gibeah of Saul (Judg. 20:33), one of the sanctuaries of Baal."
+    },
+    {
+      "id": 120,
+      "term": "Baal-zebub",
+      "definition": "fly-lord, the god of the Philistines at Ekron (2 Kings 1:2, 3, 16), supposed able to avert the plague of flies. He was consulted by Ahaziah as to his recovery."
+    },
+    {
+      "id": 121,
+      "term": "Baal-zephon",
+      "definition": "Baal of the north, an Egyptian town on the shores of the Gulf of Suez (Ex. 14:2; Num. 33:7), over against which Israel encamped before crossing the Red Sea."
+    },
+    {
+      "id": 122,
+      "term": "Baana",
+      "definition": "son of affliction. (1.) One of Solomon's purveyors (1 Kings 4:12). (2.) Son of Hushai, another purveyor. (3.) Father of Zadok (Neh. 3:4)."
+    },
+    {
+      "id": 123,
+      "term": "Baanah",
+      "definition": "son of affliction. One of two sons of Rimmon the Beerothite who assassinated Ishbosheth (2 Sam. 4:2), and were slain by David for it."
+    },
+    {
+      "id": 124,
+      "term": "Baasha",
+      "definition": "bravery, third king of the separate kingdom of Israel and founder of its second dynasty (1 Kings 15-16), son of Ahijah of Issachar, reigned twenty-four years from Tirzah; his family was later exterminated for his idolatry."
+    },
+    {
+      "id": 125,
+      "term": "Babe",
+      "definition": "used of children generally (Matt. 11:25), and also of those weak in Christian faith and knowledge (1 Cor. 3:1; Heb. 5:13)."
+    },
+    {
+      "id": 126,
+      "term": "Babel, tower of",
+      "definition": "the tower built in the land of Shinar after the Deluge (Gen. 11:1-9), meant as a rallying point to prevent the people being scattered; God confounded their language, hence \"confusion.\""
+    },
+    {
+      "id": 127,
+      "term": "Babylon",
+      "definition": "the Greek form of Babel, capital of the Babylonian empire on the Euphrates, made splendid under Nebuchadnezzar, captured by Cyrus in B.C. 538, and eventually reduced to ruins."
+    },
+    {
+      "id": 128,
+      "term": "Babylonish garment",
+      "definition": "a robe of rich colours fabricated at Babylon, hence of great value (Josh. 7:21)."
+    },
+    {
+      "id": 129,
+      "term": "Babylon, kingdom of",
+      "definition": "\"the land of the Chaldeans,\" an extensive province along the Tigris valley, famed for fertility and riches, whose capital was Babylon."
+    },
+    {
+      "id": 130,
+      "term": "Baca, Valley of",
+      "definition": "(Ps. 84:6), probably a valley in Palestine through which pilgrims passed on their way to the sanctuary, or figuratively \"a valley of weeping.\""
+    },
+    {
+      "id": 131,
+      "term": "Backbite",
+      "definition": "to run about tattling or calumniating (Ps. 15:3); secret talebearing (Prov. 25:23); maliciously defaming the absent (Rom. 1:30)."
+    },
+    {
+      "id": 132,
+      "term": "Backslide",
+      "definition": "to draw back or apostatize in matters of religion (Acts 21:21; 2 Thess. 2:3), which may be partial or complete."
+    },
+    {
+      "id": 133,
+      "term": "Badger",
+      "definition": "the tabernacle covering rendered \"badgers' skins\" (Ex. 25:5) is now understood as sealskins or dugong hide, per the Revised Version."
+    },
+    {
+      "id": 134,
+      "term": "Bag",
+      "definition": "several Hebrew words denote pouches for weights, money, or provisions carried by travellers (Deut. 25:13; Prov. 7:20); Judas kept \"the bag\" (John 12:6)."
+    },
+    {
+      "id": 135,
+      "term": "Bahurim",
+      "definition": "young men, a place east of Jerusalem (2 Sam. 3:16; 19:16) where Shimei cursed David and Jonathan and Ahimaaz hid."
+    },
+    {
+      "id": 136,
+      "term": "Bajith",
+      "definition": "house, probably a city of Moab with a celebrated idol-temple (Isa. 15:2)."
+    },
+    {
+      "id": 137,
+      "term": "Bake",
+      "definition": "bread-making was usually done by women or slaves; public bakers appear later (Hos. 7:4); ovens or hot pebbles were used (1 Kings 19:6)."
+    },
+    {
+      "id": 138,
+      "term": "Bake-meats",
+      "definition": "baked provisions (Gen. 40:17), literally \"works of the baker.\""
+    },
+    {
+      "id": 139,
+      "term": "Balaam",
+      "definition": "son of Beor, a Midianite diviner hired by Balak to curse Israel, but constrained by God to bless them instead (Num. 22-24); later slain fighting for Balak (Num. 31:8)."
+    },
+    {
+      "id": 140,
+      "term": "Baladan",
+      "definition": "he has given a son, father of the Babylonian king Merodach-baladan (2 Kings 20:12)."
+    },
+    {
+      "id": 141,
+      "term": "Balah",
+      "definition": "a city in the tribe of Simeon (Josh. 19:3), elsewhere called Bilhah and Baalah."
+    },
+    {
+      "id": 142,
+      "term": "Balak",
+      "definition": "empty; spoiler, son of Zippor and king of the Moabites, who hired Balaam to curse Israel (Num. 22:2)."
+    },
+    {
+      "id": 143,
+      "term": "Balance",
+      "definition": "rendered from Hebrew words for a rod or beam of scales, a symbol of justice and fair dealing (Job 31:6; Prov. 11:1)."
+    },
+    {
+      "id": 144,
+      "term": "Baldness",
+      "definition": "artificial baldness was a sign of mourning among the Jews (Isa. 22:12; Jer. 16:6) and marked the end of a Nazarite's vow; forbidden in imitation of pagan customs (Deut. 14:1)."
+    },
+    {
+      "id": 145,
+      "term": "Balm",
+      "definition": "a fragrant resin, the gum of a tree growing in Gilead (Gen. 37:25; Jer. 8:22), valued for its medicinal qualities and traded by merchants."
+    },
+    {
+      "id": 146,
+      "term": "Bamah",
+      "definition": "a height, denoting a high place where the Jews worshipped idols (Ezek. 20:29)."
+    },
+    {
+      "id": 147,
+      "term": "Bamoth",
+      "definition": "heights, the forty-seventh station of the Israelites in Moabite territory (Num. 21:19, 20)."
+    },
+    {
+      "id": 148,
+      "term": "Bamoth-baal",
+      "definition": "heights of Baal, a place on the river Arnon east of Jordan (Josh. 13:17), perhaps the same as Bamoth."
+    },
+    {
+      "id": 149,
+      "term": "Bands",
+      "definition": "used variously of love, unity of Christ's body the church, captivity, brotherhood, and a shepherd's staff (Hos. 11:4; Col. 3:14; Ezek. 34:27)."
+    },
+    {
+      "id": 150,
+      "term": "Bani",
+      "definition": "built, the name of several Old Testament men, including a Gadite warrior of David (2 Sam. 23:36) and a Levite prominent in post-exilic reforms (Neh. 8:7)."
+    },
+    {
+      "id": 151,
+      "term": "Banner",
+      "definition": "flags of various kinds used to mark tribal divisions on the march and as stationary signals calling people to war (Num. 2:2; Ps. 60:4)."
+    },
+    {
+      "id": 152,
+      "term": "Banquet",
+      "definition": "a feast for guests (Esther 5; 1 Pet. 4:3), with customs of invitation, seating by rank, washing of hands, and honour shown by extra portions."
+    },
+    {
+      "id": 153,
+      "term": "Baptism, Christian",
+      "definition": "the ordinance instituted by Christ (Matt. 28:19-20), signifying the work of the Holy Spirit; its mode (dipping, pouring, or sprinkling) and its extension to the infant children of believers are both discussed at length by Easton."
+    },
+    {
+      "id": 154,
+      "term": "Baptism for the dead",
+      "definition": "mentioned only in 1 Cor. 15:29, possibly referring to a Corinthian custom of proxy baptism for those who died unbaptized, which Paul aimed to correct."
+    },
+    {
+      "id": 155,
+      "term": "Baptism, John's",
+      "definition": "not Christian baptism but one binding its subjects to repentance rather than faith in Christ; those John baptized were later rebaptized by Paul (Acts 19:7)."
+    },
+    {
+      "id": 156,
+      "term": "Baptism of Christ",
+      "definition": "Christ's formal inauguration into his public ministry by John, undertaken not for his own sake but as surety for his people, to \"fulfil all righteousness\" (Matt. 3:15)."
+    },
+    {
+      "id": 157,
+      "term": "Bar",
+      "definition": "used of the means by which a door is bolted, a rock or shore, and figuratively of fortifications or defences (Neh. 3:3; Isa. 45:2)."
+    },
+    {
+      "id": 158,
+      "term": "Barabbas",
+      "definition": "son of Abba, a notorious robber released by Pilate instead of Jesus at the demand of the Jews (Matt. 27:16-26)."
+    },
+    {
+      "id": 159,
+      "term": "Barachel",
+      "definition": "whom God has blessed, a Buzite, father of Elihu, one of Job's friends (Job 32:2)."
+    },
+    {
+      "id": 160,
+      "term": "Barachias, Berechiah",
+      "definition": "whom Jehovah hath blessed, father of the prophet Zechariah (Zech. 1:1; Matt. 23:35)."
+    },
+    {
+      "id": 161,
+      "term": "Barak",
+      "definition": "lightning, son of Abinoam, who at Deborah's summons defeated Jabin's army (Judg. 4); commended for his faith (Heb. 11:32)."
+    },
+    {
+      "id": 162,
+      "term": "Barbarian",
+      "definition": "a Greek term for one of another nation, or one not speaking Greek (Rom. 1:14; Col. 3:11; 1 Cor. 14:11)."
+    },
+    {
+      "id": 163,
+      "term": "Barber",
+      "definition": "mentioned only in Ezek. 5:1, regarding shaving the head as a sign of mourning; Nazarites were untouched by the razor."
+    },
+    {
+      "id": 164,
+      "term": "Barefoot",
+      "definition": "going barefoot was a sign of great distress or calamity (Isa. 20:2-4; 2 Sam. 15:30)."
+    },
+    {
+      "id": 165,
+      "term": "Bariah",
+      "definition": "fugitive, one of Shemaiah's five sons (1 Chr. 3:22)."
+    },
+    {
+      "id": 166,
+      "term": "Bar-jesus",
+      "definition": "son of Joshua, the patronymic of Elymas the sorcerer who opposed Paul and Barnabas at Paphos (Acts 13:6)."
+    },
+    {
+      "id": 167,
+      "term": "Bar-jona",
+      "definition": "son of Jonah, the patronymic of Peter (Matt. 16:17)."
+    },
+    {
+      "id": 168,
+      "term": "Barkos",
+      "definition": "painter (Ezra 2:53), father of some of the Nethinim."
+    },
+    {
+      "id": 169,
+      "term": "Barley",
+      "definition": "a grain much cultivated in Egypt and Palestine, often food for the poor and for horses; ready for harvest by Passover time (Ruth 1:22; John 6:9)."
+    },
+    {
+      "id": 170,
+      "term": "Barn",
+      "definition": "a storehouse for grain, usually underground though sometimes above ground (Deut. 28:8; Luke 12:18)."
+    },
+    {
+      "id": 171,
+      "term": "Barnabas",
+      "definition": "son of consolation, surname of Joses, a Levite of Cyprus (Acts 4:36) who introduced Paul to the apostles, laboured with him at Antioch, and later separated from him over John Mark (Acts 15:36-41)."
+    },
+    {
+      "id": 172,
+      "term": "Barrel",
+      "definition": "a vessel for keeping flour (1 Kings 17:12), the same word elsewhere rendered \"pitcher.\""
+    },
+    {
+      "id": 173,
+      "term": "Barren",
+      "definition": "barrenness was regarded as a severe reproach among the Jews (Gen. 30:1; 1 Sam. 1:6; Luke 1:25)."
+    },
+    {
+      "id": 174,
+      "term": "Barsabas",
+      "definition": "son of Saba, surname of Joseph (also called Justus, Acts 1:23) and of Judas the prophet (Acts 15:32)."
+    },
+    {
+      "id": 175,
+      "term": "Bartholomew",
+      "definition": "son of Tolmai, one of the twelve apostles (Matt. 10:3), generally identified with Nathanael."
+    },
+    {
+      "id": 176,
+      "term": "Bartimaeus",
+      "definition": "son of Timaeus, a blind beggar of Jericho healed by Jesus for his faith (Mark 10:46)."
+    },
+    {
+      "id": 177,
+      "term": "Baruch",
+      "definition": "blessed, the secretary of the prophet Jeremiah, who wrote and read his prophecies, was imprisoned with him, and probably died in Babylon (Jer. 32, 36)."
+    },
+    {
+      "id": 178,
+      "term": "Barzillai",
+      "definition": "of iron. A Gileadite of Rogelim distinguished for loyalty to David, providing for his followers during Absalom's revolt; David commended his children to Solomon (2 Sam. 17:27; 1 Kings 2:7)."
+    },
+    {
+      "id": 179,
+      "term": "Bashan",
+      "definition": "light soil, a fertile region east of Jordan ruled by Og until defeated by Israel (Num. 21:33-35), later given to the half-tribe of Manasseh, noted for its cattle and oaks."
+    },
+    {
+      "id": 180,
+      "term": "Bashan-havoth-jair",
+      "definition": "the Bashan of the villages of Jair, the general name given to Argob by Jair the son of Manasseh (Deut. 3:14)."
+    },
+    {
+      "id": 181,
+      "term": "Bashan, Hill of",
+      "definition": "(Ps. 68:15), probably another name for Hermon."
+    },
+    {
+      "id": 182,
+      "term": "Bashemath",
+      "definition": "sweet-smelling. (1.) Daughter of Ishmael, one of Esau's three wives (Gen. 36:3), also called Mahalath. (2.) A daughter of Solomon (1 Kings 4:15)."
+    },
+    {
+      "id": 183,
+      "term": "Basilisk",
+      "definition": "the \"king serpent\" (Isa. 11:8), a fabulous serpent, probably referring to the yellow snake."
+    },
+    {
+      "id": 184,
+      "term": "Basin",
+      "definition": "several Hebrew words for vessels used for washing, holding blood, or sprinkling, made of brass in the tabernacle and gold in the temple."
+    },
+    {
+      "id": 185,
+      "term": "Basket",
+      "definition": "five different Hebrew words denote various kinds of baskets, for bread, grapes, first fruits, or figs, and Greek terms for the baskets used in the feeding miracles and Paul's escape (Acts 9:25)."
+    },
+    {
+      "id": 186,
+      "term": "Bastard",
+      "definition": "in Deut. 23:2, illegitimate offspring; in Heb. 12:8, one who does not share the privileges of God's children."
+    },
+    {
+      "id": 187,
+      "term": "Bastinado",
+      "definition": "beating, a common Eastern punishment referred to as \"the rod of correction,\" limited to forty blows (Deut. 25:2-3)."
+    },
+    {
+      "id": 188,
+      "term": "Bat",
+      "definition": "a creature \"flying in the dark,\" reckoned among unclean birds (Lev. 11:19); casting idols to bats means consigning them to desolate places (Isa. 2:20)."
+    },
+    {
+      "id": 189,
+      "term": "Bath",
+      "definition": "a Hebrew liquid measure, the tenth part of a homer, about 8 gallons 3 quarts (1 Kings 7:26)."
+    },
+    {
+      "id": 190,
+      "term": "Bath-rabbim",
+      "definition": "daughter of many, one of the gates of Heshbon, near which were pools (Cant. 7:4)."
+    },
+    {
+      "id": 191,
+      "term": "Baths",
+      "definition": "the use of the bath was frequent among the Hebrews, required of the high priest at his inauguration and on the Day of Atonement (Lev. 8:6; 16:4)."
+    },
+    {
+      "id": 192,
+      "term": "Bath-sheba",
+      "definition": "daughter of the oath, daughter of Eliam and wife of Uriah the Hittite; David committed adultery with her and later married her; she became mother of Solomon (2 Sam. 11-12)."
+    },
+    {
+      "id": 193,
+      "term": "Battering-ram",
+      "definition": "a military engine consisting of a beam shaped like a ram's head, used to breach walls (Ezek. 4:2; 21:22)."
+    },
+    {
+      "id": 194,
+      "term": "Battle-axe",
+      "definition": "a mallet or heavy war-club, applied metaphorically to Cyrus as God's instrument against Babylon (Jer. 51:20)."
+    },
+    {
+      "id": 195,
+      "term": "Battle-bow",
+      "definition": "the war-bow used in fighting (Zech. 9:10; 10:4)."
+    },
+    {
+      "id": 196,
+      "term": "Battlement",
+      "definition": "a parapet wall surrounding flat house roofs, required by law to prevent accidents (Deut. 22:8)."
+    },
+    {
+      "id": 197,
+      "term": "Bay",
+      "definition": "denotes the estuary of the Dead Sea at the Jordan's mouth (Josh. 15:5); in Zech. 6:3 it describes the strong or spirited colour of horses."
+    },
+    {
+      "id": 198,
+      "term": "Bay tree",
+      "definition": "named in Ps. 37:35, probably meaning a tree \"native born,\" growing luxuriantly in its own soil; possibly the evergreen bay laurel."
+    },
+    {
+      "id": 199,
+      "term": "Bdellium",
+      "definition": "a product of the land of Havilah (Gen. 2:12), probably an aromatic gum resembling myrrh, to which manna is compared in colour (Num. 11:7)."
+    },
+    {
+      "id": 200,
+      "term": "Beacon",
+      "definition": "a pole or standard set on mountain tops as a call to assemble for some national purpose (Isa. 30:17)."
+    },
+    {
+      "id": 201,
+      "term": "Bealiah",
+      "definition": "whose Lord is Jehovah, a Benjamite warrior of David (1 Chr. 12:5)."
+    },
+    {
+      "id": 202,
+      "term": "Bealoth",
+      "definition": "citizens, a town in the extreme south of Judah (Josh. 15:24)."
+    },
+    {
+      "id": 203,
+      "term": "Beam",
+      "definition": "rendered from various Hebrew words for a weaver's frame, crossbeam, rafter, or plank; in the New Testament contrasted with \"mote\" as a large versus small piece of wood (Matt. 7:3-5)."
+    },
+    {
+      "id": 204,
+      "term": "Beans",
+      "definition": "an article of diet mentioned as brought to David (2 Sam. 17:28) and used in the bread Ezekiel was commanded to make (Ezek. 4:9)."
+    },
+    {
+      "id": 205,
+      "term": "Bear",
+      "definition": "a native of Western Asian mountains; David defended his flock against one (1 Sam. 17:34-37); in Daniel's vision it represents the Medo-Persian empire (Dan. 7:5)."
+    },
+    {
+      "id": 206,
+      "term": "Beard",
+      "definition": "its care was prescribed by law (Lev. 19:27); shaving or plucking it was a sign of mourning, and cutting off another's beard a mark of indignity (2 Sam. 10:4)."
+    },
+    {
+      "id": 207,
+      "term": "Beast",
+      "definition": "used of grazing animals, beasts of burden, food animals, and figuratively of an infuriated multitude or wicked men (1 Cor. 15:32; 2 Pet. 2:12); the four beasts of Daniel 7 represent four kingdoms."
+    },
+    {
+      "id": 208,
+      "term": "Beaten gold",
+      "definition": "in Num. 8:4 means turned or rounded work in gold; elsewhere possibly \"mixed\" gold or thin gold plates."
+    },
+    {
+      "id": 209,
+      "term": "Beaten oil",
+      "definition": "oil obtained by pounding olives in a mortar rather than crushing them in a mill, reckoned the best (Ex. 27:20)."
+    },
+    {
+      "id": 210,
+      "term": "Beautiful gate",
+      "definition": "a gate of the temple (Acts 3:2), of massive structure covered with Corinthian brass, likely leading from the court of the Gentiles to the court of the women."
+    },
+    {
+      "id": 211,
+      "term": "Becher",
+      "definition": "first-born, the second son of Benjamin (Gen. 46:21), whose descendants were reckoned among Ephraim."
+    },
+    {
+      "id": 212,
+      "term": "Bed",
+      "definition": "Hebrew terms denote a simple mat, a canopied bed with curtains, or in the New Testament a litter with a coverlet (Ex. 8:3; Deut. 3:11; Mark 2:4)."
+    },
+    {
+      "id": 213,
+      "term": "Bedan",
+      "definition": "one of the judges of Israel (1 Sam. 12:11), possibly a contracted form of Abdon."
+    },
+    {
+      "id": 214,
+      "term": "Bed-chamber",
+      "definition": "an apartment furnished with an elevated platform for sleeping, used by family and guests (2 Kings 4:10)."
+    },
+    {
+      "id": 215,
+      "term": "Bedstead",
+      "definition": "used in Deut. 3:11, elsewhere rendered \"couch\" or \"bed\"; refers to the divan common in Eastern houses."
+    },
+    {
+      "id": 216,
+      "term": "Bee",
+      "definition": "mentioned from Deut. 1:44; wild bees laid up honey in rocks (Ps. 81:16); Samson found a swarm in a lion's carcass (Judg. 14:8)."
+    },
+    {
+      "id": 217,
+      "term": "Beelzebub",
+      "definition": "a name given to Satan (Matt. 10:25), probably the same as Baal-zebub, meaning \"lord of flies\" or \"lord of dung.\""
+    },
+    {
+      "id": 218,
+      "term": "Beer",
+      "definition": "well. (1.) A station of the Hebrews in the wilderness of Moab where a well was dug by Moses' direction (Num. 21:16-18). (2.) A town in Judah to which Jotham fled from Abimelech (Judg. 9:21)."
+    },
+    {
+      "id": 219,
+      "term": "Beer-elim",
+      "definition": "well of heroes, probably the same as Beer, where the chiefs of Israel dug a well (Num. 21:16; Isa. 15:8)."
+    },
+    {
+      "id": 220,
+      "term": "Beeri",
+      "definition": "illustrious. (1.) Father of Judith, one of Esau's wives (Gen. 26:34). (2.) Father of the prophet Hosea (1:1)."
+    },
+    {
+      "id": 221,
+      "term": "Beer-lahai-roi",
+      "definition": "\"the well of him that liveth and seeth me,\" the well where the Lord met Hagar (Gen. 16:7-14); Isaac dwelt beside it."
+    },
+    {
+      "id": 222,
+      "term": "Beeroth",
+      "definition": "wells, one of the four Hivite cities that entered by fraud into a league with Joshua, belonging to Benjamin (Josh. 18:25)."
+    },
+    {
+      "id": 223,
+      "term": "Beeroth of the children of Jaakan",
+      "definition": "(Deut. 10:6), the same as Bene-jaakan."
+    },
+    {
+      "id": 224,
+      "term": "Beersheba",
+      "definition": "well of the oath, or of seven, dug by Abraham and renamed by Isaac after a compact with Abimelech (Gen. 21:31; 26:31-33); \"from Dan to Beersheba\" became a proverbial phrase for the whole Promised Land."
+    },
+    {
+      "id": 225,
+      "term": "Beetle",
+      "definition": "(Heb. hargol, \"leaper\"), mentioned in Lev. 11:22, denoting a winged, leaping creature akin to the locust, rendered \"cricket\" in the Revised Version."
+    },
+    {
+      "id": 226,
+      "term": "Beeves",
+      "definition": "an old plural of \"beef,\" applicable to ruminating animals except camels, especially horned cattle (Lev. 22:19)."
+    },
+    {
+      "id": 227,
+      "term": "Beg",
+      "definition": "the poor were provided for under Mosaic law (Lev. 19:10), though vagrant beggars as a class are not mentioned until the New Testament (Mark 10:46)."
+    },
+    {
+      "id": 228,
+      "term": "Behead",
+      "definition": "a method of execution practised among the Egyptians and Hebrews (Gen. 40:17-19; 2 Sam. 4:8), also mentioned in the New Testament (Matt. 14:8-12)."
+    },
+    {
+      "id": 229,
+      "term": "Behemoth",
+      "definition": "(Job 40:15-24), probably meaning \"water-ox,\" likely the hippopotamus."
+    },
+    {
+      "id": 230,
+      "term": "Bekah",
+      "definition": "a half shekel (Ex. 38:26), meaning a \"division\" or \"part.\""
+    },
+    {
+      "id": 231,
+      "term": "Bel",
+      "definition": "the Aramaic form of Baal, the national god of the Babylonians, meaning \"lord\" (Isa. 46:1)."
+    },
+    {
+      "id": 232,
+      "term": "Bela",
+      "definition": "a thing swallowed. (1.) A city near Sodom, also called Zoar, spared at Lot's intercession (Gen. 19:20-23). (2.) The eldest son of Benjamin (Num. 26:38). (3.) A king of Edom, son of Beor (Gen. 36:32)."
+    },
+    {
+      "id": 233,
+      "term": "Belial",
+      "definition": "worthlessness, used in the Old Testament as a proper name and in 2 Cor. 6:15 as a name of Satan; \"son of Belial\" means simply a worthless, lawless person."
+    },
+    {
+      "id": 234,
+      "term": "Bell",
+      "definition": "small golden bells were attached to the hem of the high priest's ephod (Ex. 28:33-35); \"bells of the horses\" (Zech. 14:20) were attached to bridles for war horses."
+    },
+    {
+      "id": 235,
+      "term": "Bellows",
+      "definition": "mentioned only in Jer. 6:29, likely leather bags similar to those used in Egypt for casting metal."
+    },
+    {
+      "id": 236,
+      "term": "Belly",
+      "definition": "used symbolically for carnal affections or the heart (Titus 1:12; Prov. 18:8); \"belly of hell\" means the grave (Jonah 2:2)."
+    },
+    {
+      "id": 237,
+      "term": "Belshazzar",
+      "definition": "\"Bel protect the king,\" the last king of Babylon, whose feast and doom are recorded in Dan. 5; identified in modern scholarship with the Marduk-sar-uzur of contract tablets."
+    },
+    {
+      "id": 238,
+      "term": "Belteshazzar",
+      "definition": "\"Beltis protect the king,\" the Chaldee name given to Daniel by Nebuchadnezzar (Dan. 1:7)."
+    },
+    {
+      "id": 239,
+      "term": "Benaiah",
+      "definition": "built up by Jehovah, son of Jehoiada, chief priest, commander of David's bodyguard, later made commander-in-chief by Solomon (2 Sam. 8:18; 1 Kings 2:35)."
+    },
+    {
+      "id": 240,
+      "term": "Ben-ammi",
+      "definition": "son of my kindred, i.e., \"born of incest,\" son of Lot by his youngest daughter (Gen. 19:38)."
+    },
+    {
+      "id": 241,
+      "term": "Bench",
+      "definition": "the deck of a Tyrian ship, overlaid with box-wood (Ezek. 27:6)."
+    },
+    {
+      "id": 242,
+      "term": "Bene-jaakan",
+      "definition": "children of Jaakan (Num. 33:31-32), the same as Beeroth."
+    },
+    {
+      "id": 243,
+      "term": "Ben-hadad",
+      "definition": "the standing title of Syrian kings meaning \"son of Hadad\"; several kings by this name warred against Israel and Judah (1 Kings 15:18; 2 Kings 8:7-15; 13:3-4)."
+    },
+    {
+      "id": 244,
+      "term": "Benjamin",
+      "definition": "son of my right hand, the younger son of Jacob by Rachel, born near Bethlehem, whose mother died naming him Ben-oni before Jacob renamed him; his tribe was famed for archers and slingers and nearly exterminated in a civil war (Judg. 20-21)."
+    },
+    {
+      "id": 245,
+      "term": "Beor",
+      "definition": "a torch. (1.) Father of Bela, a king of Edom (Gen. 36:32). (2.) Father of Balaam (Num. 22:5)."
+    },
+    {
+      "id": 246,
+      "term": "Bera",
+      "definition": "gift, or son of evil, king of Sodom at the time of the invasion of the four kings under Chedorlaomer (Gen. 14:2)."
+    },
+    {
+      "id": 247,
+      "term": "Berachah",
+      "definition": "blessing. (1.) A valley near Engedi where Jehoshaphat overthrew the Moabites and Ammonites (2 Chr. 20:26). (2.) One of David's Benjamite warriors (1 Chr. 12:3)."
+    },
+    {
+      "id": 248,
+      "term": "Berea",
+      "definition": "a city of Macedonia visited by Paul, Silas, and Timothy after persecution at Thessalonica (Acts 17:10-13)."
+    },
+    {
+      "id": 249,
+      "term": "Berechiah",
+      "definition": "blessed by Jehovah, father of the prophet Zechariah (1:1), among several other Old Testament men of this name."
+    },
+    {
+      "id": 250,
+      "term": "Bered",
+      "definition": "hail. (1.) A town in southern Palestine near Lahai-roi (Gen. 16:14). (2.) A grandson of Ephraim (1 Chr. 7:20)."
+    },
+    {
+      "id": 251,
+      "term": "Beriah",
+      "definition": "a gift, or \"in evil.\" (1.) One of Asher's sons (Gen. 46:17). (2.) A son of Ephraim, born after the slaughter of his brothers (1 Chr. 7:20-23). (3.) A Benjamite who founded Ajalon (1 Chr. 8:13)."
+    },
+    {
+      "id": 252,
+      "term": "Bernice",
+      "definition": "bearer of victory, eldest daughter of Agrippa I., who lived incestuously with her brother Agrippa II. and appears with him in Acts 25-26."
+    },
+    {
+      "id": 253,
+      "term": "Berodach-baladan",
+      "definition": "the king of Babylon who sent a friendly deputation to Hezekiah (2 Kings 20:12), elsewhere called Merodach-baladan."
+    },
+    {
+      "id": 254,
+      "term": "Beryl",
+      "definition": "a precious stone, rendering of Hebrew tarshish, one of the stones on the high priest's breastplate (Ex. 28:20), possibly what is now called chrysolite."
+    },
+    {
+      "id": 255,
+      "term": "Besom",
+      "definition": "a Hebrew word meaning \"sweeper,\" occurs only in Isa. 14:23, of the sweeping away of Babylon."
+    },
+    {
+      "id": 256,
+      "term": "Besor",
+      "definition": "cold, a ravine in the extreme south-west of Judah where 200 of David's men stayed behind while pursuing the Amalekites (1 Sam. 30:9-10)."
+    },
+    {
+      "id": 257,
+      "term": "Bestead",
+      "definition": "occurring only in Isa. 8:21, meaning to be oppressed or in hardship."
+    },
+    {
+      "id": 258,
+      "term": "Betah",
+      "definition": "confidence, a city belonging to Hadadezer, king of Zobah, that yielded much spoil of brass to David (2 Sam. 8:8), also called Tibhath."
+    },
+    {
+      "id": 259,
+      "term": "Beth",
+      "definition": "occurs frequently as the appellation for \"house\" or \"dwelling-place\" in compound place names."
+    },
+    {
+      "id": 260,
+      "term": "Bethabara",
+      "definition": "house of the ford, a place on the east bank of the Jordan where John was baptizing (John 1:28), possibly identical with Bethbarah."
+    },
+    {
+      "id": 261,
+      "term": "Beth-anath",
+      "definition": "house of response, a fenced city of Naphtali (Josh. 19:38)."
+    },
+    {
+      "id": 262,
+      "term": "Beth-anoth",
+      "definition": "house of answers, a city in the mountainous district of Judah (Josh. 15:59)."
+    },
+    {
+      "id": 263,
+      "term": "Bethany",
+      "definition": "house of dates. (1.) A place east of Jordan, per the Revised Version of John 1:28. (2.) A village on the Mount of Olives, residence of Lazarus and his sisters, frequently mentioned in Christ's life (John 11:1; Mark 11:1)."
+    },
+    {
+      "id": 264,
+      "term": "Beth-arabah",
+      "definition": "house of the desert, one of the six cities of Judah in the Jordan valley (Josh. 18:22)."
+    },
+    {
+      "id": 265,
+      "term": "Beth-aram",
+      "definition": "house of the height, a town of Gad east of Jordan opposite Jericho (Josh. 13:27), later renamed Julias or Livias by Herod."
+    },
+    {
+      "id": 266,
+      "term": "Beth-arbel",
+      "definition": "house of God's court, a place alluded to by Hosea (10:14) as the scene of a military exploit by Shalman, probably Shalmaneser."
+    },
+    {
+      "id": 267,
+      "term": "Beth-aven",
+      "definition": "house of nothingness, i.e., \"of idols,\" a place in the mountains of Benjamin east of Bethel (Josh. 7:2), used by Hosea as a contemptuous name for Bethel."
+    },
+    {
+      "id": 268,
+      "term": "Beth-barah",
+      "definition": "house of crossing, a ford of the Jordan south of the scene of Gideon's victory (Judg. 7:24)."
+    },
+    {
+      "id": 269,
+      "term": "Beth-car",
+      "definition": "sheep-house, a place to which Israel pursued the Philistines west from Mizpeh (1 Sam. 7:11)."
+    },
+    {
+      "id": 270,
+      "term": "Beth-dagon",
+      "definition": "house of Dagon, the name of two Palestinian cities, one in Judah and one near Asher (Josh. 15:41; 19:27)."
+    },
+    {
+      "id": 271,
+      "term": "Beth-diblathaim",
+      "definition": "house of two cakes of figs, a city of Moab denounced by Jeremiah (48:22), also called Almon-diblathaim."
+    },
+    {
+      "id": 272,
+      "term": "Bethel",
+      "definition": "house of God, a place near Jerusalem originally called Luz, site of Jacob's vision of the ladder (Gen. 28:19; 35:1-15), later one of the seats of golden-calf worship under Jeroboam, hence called Beth-aven by Hosea in contempt."
+    },
+    {
+      "id": 273,
+      "term": "Bethelite",
+      "definition": "a designation of Hiel, who rebuilt Jericho under the curse pronounced by Joshua (1 Kings 16:34)."
+    },
+    {
+      "id": 274,
+      "term": "Bether",
+      "definition": "dissection or separation, mountains mentioned in Cant. 2:17, probably near Lebanon."
+    },
+    {
+      "id": 275,
+      "term": "Bethesda",
+      "definition": "house of mercy, a reservoir with five porches near the sheep-gate in Jerusalem where the infirm waited for the troubling of the water (John 5:2); its exact site remains uncertain."
+    },
+    {
+      "id": 276,
+      "term": "Beth-gamul",
+      "definition": "camel-house, a city in the plain country of Moab denounced by Jeremiah (48:23)."
+    },
+    {
+      "id": 277,
+      "term": "Beth-gilgal",
+      "definition": "house of Gilgal, a place from which people gathered to celebrate the rebuilding of Jerusalem's walls (Neh. 12:29)."
+    },
+    {
+      "id": 278,
+      "term": "Beth-haccerem",
+      "definition": "house of a vineyard, a place in Judah where a war beacon was to be set up against the Babylonians (Jer. 6:1)."
+    },
+    {
+      "id": 279,
+      "term": "Beth-horon",
+      "definition": "house of the hollow, the name of two towns in Ephraim, \"the upper\" and \"the nether,\" the scene of Joshua's victory over the five Amorite kings (Josh. 10:10-11)."
+    },
+    {
+      "id": 280,
+      "term": "Beth-jeshimoth",
+      "definition": "house of wastes, a town near Abel-shittim east of Jordan where Israel encamped before crossing (Num. 33:49)."
+    },
+    {
+      "id": 281,
+      "term": "Beth-le-Aphrah",
+      "definition": "house of dust (Micah 1:10), probably a town in the Shephelah between Joppa and Gaza."
+    },
+    {
+      "id": 282,
+      "term": "Bethlehem",
+      "definition": "house of bread. (1.) A city in the hill country of Judah, originally Ephrath, birthplace of David and of Christ, scene of Herod's slaughter of the innocents (Gen. 35:19; Matt. 2:6, 16). (2.) A city of Zebulun (Josh. 19:15)."
+    },
+    {
+      "id": 283,
+      "term": "Beth-peor",
+      "definition": "house of Peor, a place in Moab near which Moses was probably buried (Deut. 3:29; 34:6)."
+    },
+    {
+      "id": 284,
+      "term": "Beth-phage",
+      "definition": "house of the unripe fig, a village on the Mount of Olives near Bethany, on the road from Jerusalem to Jericho (Matt. 21:1)."
+    },
+    {
+      "id": 285,
+      "term": "Bethsaida",
+      "definition": "house of fish. (1.) A town in Galilee, native place of Peter, Andrew, and Philip (John 1:44). (2.) A city near which Christ fed 5,000, east of the lake, enlarged by Philip the tetrarch as \"Julias\" (Luke 9:10)."
+    },
+    {
+      "id": 286,
+      "term": "Beth-shean",
+      "definition": "house of security, a city belonging to Manasseh where the bodies of Saul and his sons were fastened to the walls (1 Chr. 7:29; 1 Sam. 31:10), later called Scythopolis."
+    },
+    {
+      "id": 287,
+      "term": "Beth-shemesh",
+      "definition": "house of the sun, the name of several cities, notably a sacerdotal city of Dan on Judah's border, scene of a battle between Jehoash and Amaziah (2 Kings 14:11-13)."
+    },
+    {
+      "id": 288,
+      "term": "Beth-tappuah",
+      "definition": "house of apples, a town of Judah, now Tuffuh, near Hebron (Josh. 15:53)."
+    },
+    {
+      "id": 289,
+      "term": "Bethuel",
+      "definition": "man of God. (1.) Son of Nahor by Milcah, father of Rebekah (Gen. 22:22-23). (2.) A southern city of Judah (1 Chr. 4:30)."
+    },
+    {
+      "id": 290,
+      "term": "Bethzur",
+      "definition": "house of rock, a town in the mountains of Judah built by Rehoboam for defence (2 Chr. 11:7)."
+    },
+    {
+      "id": 291,
+      "term": "Betroth",
+      "definition": "to promise \"by one's truth\"; from betrothal, a woman was regarded as the lawful wife of the man to whom she was engaged (Deut. 28:30; Matt. 1:18-21)."
+    },
+    {
+      "id": 292,
+      "term": "Beulah",
+      "definition": "married, used metaphorically in Isa. 62:4 as a name for Judea, signifying it was favoured and blessed of the Lord."
+    },
+    {
+      "id": 293,
+      "term": "Bewray",
+      "definition": "to reveal or disclose, an old English word equivalent to \"betray\" (Prov. 27:16; Matt. 26:73)."
+    },
+    {
+      "id": 294,
+      "term": "Beyond",
+      "definition": "used with reference to Jordan, meaning the west side in the writings of Moses and the east side in the writings of Joshua, depending on the writer's location."
+    },
+    {
+      "id": 295,
+      "term": "Bezaleel",
+      "definition": "\"in the shadow of God,\" the chief artificer of the tabernacle's metal, wood, and stone work, of the tribe of Judah (Ex. 31:2; 35:30)."
+    },
+    {
+      "id": 296,
+      "term": "Bezek",
+      "definition": "lightning. (1.) The residence of Adoni-bezek in Judah (Judg. 1:5). (2.) The place where Saul numbered the forces of Israel and Judah (1 Sam. 11:8)."
+    },
+    {
+      "id": 297,
+      "term": "Bezer",
+      "definition": "ore of gold or silver. (1.) A city of the Reubenites, one of three cities of refuge east of Jordan (Josh. 20:8). (2.) A descendant of Asher (1 Chr. 7:37)."
+    },
+    {
+      "id": 298,
+      "term": "Bible",
+      "definition": "the English form of the Greek Biblia, \"books,\" the collection of sixty-six sacred books composed by many writers over about 1600 years, divided into the Old Testament (thirty-nine books) and New Testament (twenty-seven books)."
+    },
+    {
+      "id": 299,
+      "term": "Bier",
+      "definition": "the frame on which dead bodies were conveyed to the grave (Luke 7:14)."
+    },
+    {
+      "id": 300,
+      "term": "Bigtha",
+      "definition": "garden, or gift of fortune, one of the seven eunuchs of Ahasuerus's harem (Esther 1:10)."
+    },
+    {
+      "id": 301,
+      "term": "Bigthan",
+      "definition": "one of the eunuchs who conspired against Ahasuerus's life, detected by Mordecai and hanged (Esther 2:21-23)."
+    },
+    {
+      "id": 302,
+      "term": "Bildad",
+      "definition": "son of contention, \"the Shuhite,\" one of Job's three friends who spoke against him in stern, severe tones (Job 8, 18, 25)."
+    },
+    {
+      "id": 303,
+      "term": "Bilgah",
+      "definition": "cheerful. (1.) Head of the fifteenth priestly course (1 Chr. 24:14). (2.) A priest who returned from Babylon (Neh. 12:5)."
+    },
+    {
+      "id": 304,
+      "term": "Bilhah",
+      "definition": "faltering, Rachel's handmaid given to Jacob, mother of Dan and Naphtali (Gen. 29:29; 30:3-8); Reuben was cursed for committing adultery with her."
+    },
+    {
+      "id": 305,
+      "term": "Bilshan",
+      "definition": "son of the tongue, i.e., \"eloquent,\" a man who returned from the Captivity with Zerubbabel (Ezra 2:2)."
+    },
+    {
+      "id": 306,
+      "term": "Bird",
+      "definition": "divided under the Mosaic law into clean and unclean species (Lev. 11:13-20); birds offered in sacrifice were not divided as other victims were (Gen. 15:10)."
+    },
+    {
+      "id": 307,
+      "term": "Birsha",
+      "definition": "son of wickedness, a king of Gomorrah succoured by Abraham in the invasion of Chedorlaomer (Gen. 14:2)."
+    },
+    {
+      "id": 308,
+      "term": "Birth",
+      "definition": "a newborn child was washed, rubbed with salt, and swathed (Ezek. 16:4); a mother remained in seclusion forty or eighty days before offering a purification sacrifice (Lev. 12:1-8)."
+    },
+    {
+      "id": 309,
+      "term": "Birth-day",
+      "definition": "the observance of birthdays was common in early times, especially in Egypt (Gen. 40:20); John the Baptist was beheaded on Herod's birthday (Matt. 14:6)."
+    },
+    {
+      "id": 310,
+      "term": "Birthright",
+      "definition": "special privileges of the first-born son, including priesthood of the family and a double portion of inheritance, which could be forfeited or transferred (Gen. 25:33; 49:4; Deut. 21:15-17)."
+    },
+    {
+      "id": 311,
+      "term": "Bishop",
+      "definition": "an overseer; in apostolic times there was no distinction of order between bishops and elders/presbyters, the terms designating the same office (Acts 20:17-28; Phil. 1:1)."
+    },
+    {
+      "id": 312,
+      "term": "Bit",
+      "definition": "the curb placed in horses' mouths to restrain them, generally made of bronze or iron (Ps. 32:9; James 3:3)."
+    },
+    {
+      "id": 313,
+      "term": "Bith-ron",
+      "definition": "the broken or divided place, a district in the Jordan valley east of the river (2 Sam. 2:29)."
+    },
+    {
+      "id": 314,
+      "term": "Bithynia",
+      "definition": "a province in Asia Minor south of the Euxine where early Christian congregations formed (1 Pet. 1:1); Paul was prevented by the Spirit from entering it (Acts 16:7)."
+    },
+    {
+      "id": 315,
+      "term": "Bitter",
+      "definition": "symbolic of affliction, misery, and servitude (Ex. 1:14; Ruth 1:20); the Passover was eaten with bitter herbs representing the harshness of Egyptian bondage."
+    },
+    {
+      "id": 316,
+      "term": "Bittern",
+      "definition": "mentioned in connection with the desolation of Babylon, Idumea, and Nineveh (Isa. 14:23), a solitary marsh-dwelling bird, though the Hebrew word is rendered \"porcupine\" in the Revised Version."
+    },
+    {
+      "id": 317,
+      "term": "Bitumen",
+      "definition": "(Gen. 11:3), a mineral pitch, rendered \"slime\" in the Authorized Version, used to seal Noah's ark and the ark of bulrushes (Ex. 2:3)."
+    },
+    {
+      "id": 318,
+      "term": "Black",
+      "definition": "properly the absence of colour; in Prov. 7:9 the Hebrew word means \"the pupil of the eye,\" elsewhere the ordinary colour term (Lev. 13:31; Cant. 1:5)."
+    },
+    {
+      "id": 319,
+      "term": "Blade",
+      "definition": "applied to the point of a spear or sword, the blade of a dagger, the \"shoulder blade,\" or the blade of grain (Job 39:23; Matt. 13:26)."
+    },
+    {
+      "id": 320,
+      "term": "Blains",
+      "definition": "occurs only with the sixth plague of Egypt (Ex. 9:9-10), called \"the botch of Egypt,\" likely a form of black leprosy producing burning ulcers."
+    },
+    {
+      "id": 321,
+      "term": "Blasphemy",
+      "definition": "speaking evil of God (Ps. 74:18) or any kind of calumny or abuse; Christ was accused of blasphemy for claiming to be the Son of God (Matt. 26:65); blasphemy against the Holy Ghost is regarded as continued, obstinate rejection of the gospel (Matt. 12:31-32)."
+    },
+    {
+      "id": 322,
+      "term": "Blastus",
+      "definition": "chamberlain to King Herod Agrippa I. (Acts 12:20)."
+    },
+    {
+      "id": 323,
+      "term": "Blemish",
+      "definition": "imperfection or bodily deformity excluding men from the priesthood and animals from sacrifice (Lev. 21:17-23); the church is described as \"without blemish\" in Christ (Eph. 5:27)."
+    },
+    {
+      "id": 324,
+      "term": "Bless",
+      "definition": "God blesses his people with gifts; people bless God in thanksgiving, bless themselves in invoking God's favour, and bless one another in prayer or good wishes (Gen. 1:22; Ps. 103:1; Gen. 24:60)."
+    },
+    {
+      "id": 325,
+      "term": "Blind",
+      "definition": "blind beggars are frequently mentioned (Matt. 9:27); blindness was sometimes a punishment (1 Sam. 11:2) and figuratively denotes ignorance of spiritual things (Isa. 6:10)."
+    },
+    {
+      "id": 326,
+      "term": "Blood",
+      "definition": "prohibited as food (Gen. 9:4; Acts 15:29); sacrificial blood was sprinkled on the altar and people to consecrate a covenant (Ex. 24:8); human bloodshed required avenging by the nearest relative (Num. 35:24, 27)."
+    },
+    {
+      "id": 327,
+      "term": "Bloody sweat",
+      "definition": "the sign of our Lord's agony in Gethsemane (Luke 22:44)."
+    },
+    {
+      "id": 328,
+      "term": "Blot",
+      "definition": "a stain or reproach (Job 31:7); to blot out sin is to forgive it (Ps. 51:1, 9)."
+    },
+    {
+      "id": 329,
+      "term": "Blue",
+      "definition": "a colour generally associated with purple, used for the high priest's ephod and various sacred cloths (Ex. 25:4; 28:31)."
+    },
+    {
+      "id": 330,
+      "term": "Boanerges",
+      "definition": "sons of thunder, a surname given by Christ to James and John for their fervid, impetuous temper (Mark 3:17)."
+    },
+    {
+      "id": 331,
+      "term": "Boar",
+      "definition": "occurs only in Ps. 80:13, the same Hebrew word elsewhere rendered \"swine,\" an animal the Hebrews abhorred as food."
+    },
+    {
+      "id": 332,
+      "term": "Boaz",
+      "definition": "alacrity. (1.) The wealthy Bethlehemite who married Ruth under the levirate law (Ruth 4:1-13). (2.) The name of one of two brazen pillars Solomon set up in the temple court (1 Kings 7:21)."
+    },
+    {
+      "id": 333,
+      "term": "Bochim",
+      "definition": "weepers, a place where the angel of the Lord reproved Israel for making a league with the Canaanites, causing them bitterly to weep (Judg. 2:1, 5)."
+    },
+    {
+      "id": 334,
+      "term": "Boil",
+      "definition": "an aggravated ulcer, as in the case of Hezekiah (2 Kings 20:7) or the Egyptians (Ex. 9:9-11), also the disease of Job, probably black leprosy."
+    },
+    {
+      "id": 335,
+      "term": "Bolled",
+      "definition": "(Ex. 9:31), meaning \"swollen or podded for seed,\" or as the Revised Version has it, \"was in bloom.\""
+    },
+    {
+      "id": 336,
+      "term": "Bolster",
+      "definition": "a Hebrew term for a counterpane, cushion, or the place \"at his head\" where a sleeper rested (1 Sam. 19:13; 26:7)."
+    },
+    {
+      "id": 337,
+      "term": "Bond",
+      "definition": "an obligation of any kind (Num. 30:2); Christian love is called \"the bond of perfectness\" (Col. 3:14)."
+    },
+    {
+      "id": 338,
+      "term": "Bondage",
+      "definition": "used of Israel's slavery in Egypt, \"the house of bondage\" (Ex. 13:3), and later of the Babylonian captivity."
+    },
+    {
+      "id": 339,
+      "term": "Bonnet",
+      "definition": "a turban worn by priests, or a head-dress worn by women, consisting of a piece of cloth twisted about the head (Ex. 39:28; Isa. 3:20)."
+    },
+    {
+      "id": 340,
+      "term": "Book",
+      "definition": "rendered from Hebrew sepher, \"a writing\" or \"roll\"; ancient books were written on skins, cloth, or papyrus and rolled up like scrolls; \"the book of life\" symbolizes the roll of citizens of God's kingdom (Ps. 69:28; Rev. 20:15)."
+    },
+    {
+      "id": 341,
+      "term": "Booth",
+      "definition": "a hut of branches, such as Jacob made at Succoth (Gen. 33:17) and Israelites erected at the Feast of Tabernacles (Lev. 23:42-43)."
+    },
+    {
+      "id": 342,
+      "term": "Booty",
+      "definition": "captives, cattle, or valuables taken in war, whose division was regulated by law (Num. 31:26-47); David introduced sharing the booty equally with the baggage-guard (1 Sam. 30:24-26)."
+    },
+    {
+      "id": 343,
+      "term": "Borrow",
+      "definition": "the Israelites \"borrowed\" from the Egyptians at the Exodus (Ex. 12:35), though the Hebrew word properly means to \"ask\" or \"request,\" not to borrow with intent to return."
+    },
+    {
+      "id": 344,
+      "term": "Bosom",
+      "definition": "carrying objects in the bosom denotes kindness, secrecy, or intimacy (Gen. 16:5); Christ is said to be \"in the bosom of the Father\" (John 1:18), signifying perfect intimacy."
+    },
+    {
+      "id": 345,
+      "term": "Bosor",
+      "definition": "the Chaldee form of the name Beor, father of Balaam (2 Pet. 2:15)."
+    },
+    {
+      "id": 346,
+      "term": "Bosses",
+      "definition": "the projecting, convex parts of a shield (Job 15:26)."
+    },
+    {
+      "id": 347,
+      "term": "Botch",
+      "definition": "the name given in Deut. 28:27 to one of the Egyptian plagues, usually rendered \"boil.\""
+    },
+    {
+      "id": 348,
+      "term": "Bottle",
+      "definition": "a skin vessel for holding wine, milk, or water (Josh. 9:4; Judg. 4:19); earthenware bottles were also used, and the \"bottles of heaven\" figuratively denote the clouds (Job 38:37)."
+    },
+    {
+      "id": 349,
+      "term": "Bow",
+      "definition": "used in war and hunting from earliest times (Gen. 21:20); the tribe of Benjamin was famous for archery; the bow is a symbol of victory and, when broken or deceitful, of falsehood (Ps. 7:12; Hos. 7:16)."
+    },
+    {
+      "id": 350,
+      "term": "Bowels",
+      "definition": "compassionate feelings (Phil. 1:8), rendered \"tender mercies\" in the Revised Version."
+    },
+    {
+      "id": 351,
+      "term": "Bowing",
+      "definition": "a common gesture of respect or adoration, to men, idols, or God (Gen. 23:7; Josh. 5:14)."
+    },
+    {
+      "id": 352,
+      "term": "Bowl",
+      "definition": "the sockets of the golden candlestick's lamps are called bowls, the same word elsewhere rendered \"cup\" (Ex. 25:31)."
+    },
+    {
+      "id": 353,
+      "term": "Box",
+      "definition": "a small vessel for holding oil or perfume, more properly rendered \"vial\" (Mark 14:3; 1 Sam. 10:1)."
+    },
+    {
+      "id": 354,
+      "term": "Box-tree",
+      "definition": "(Heb. teashshur), a species of tree mentioned in Isa. 60:13, identified as the Buxus sempervirens, noted for its hard, durable wood."
+    },
+    {
+      "id": 355,
+      "term": "Bozrah",
+      "definition": "enclosure; fortress. (1.) The city of Jobab, an early Edomite king (Gen. 36:33). (2.) A Moabite city in the plain country (Jer. 48:24)."
+    },
+    {
+      "id": 356,
+      "term": "Bracelet",
+      "definition": "ornaments worn on the wrist or ankle by both men and women, of various Hebrew terms and forms (Gen. 24:22; Cant. 5:14)."
+    },
+    {
+      "id": 357,
+      "term": "Bramble",
+      "definition": "rendered from two Hebrew words for thorny shrubs common in Palestine, resembling the hawthorn or common thistle (Judg. 9:14; Isa. 34:13)."
+    },
+    {
+      "id": 358,
+      "term": "Branch",
+      "definition": "a symbol of kings descended from royal ancestors, of prosperity, and especially of the Messiah, \"the Branch\" springing from the root of Jesse (Isa. 11:1; Jer. 23:5; Zech. 3:8)."
+    },
+    {
+      "id": 359,
+      "term": "Brass",
+      "definition": "properly copper, used for fetters, armour, musical instruments, and money; a symbol of insensibility in sin and of strength; the brazen serpent Moses made was later destroyed by Hezekiah for becoming an object of superstition (Num. 21:4-9; 2 Kings 18:4)."
+    },
+    {
+      "id": 360,
+      "term": "Bravery",
+      "definition": "(Isa. 3:18), an old English word meaning comeliness or beauty."
+    },
+    {
+      "id": 361,
+      "term": "Breach",
+      "definition": "an opening in a wall, the fracture of a limb, or figuratively a bay or harbour (1 Kings 11:27; Lev. 24:20)."
+    },
+    {
+      "id": 362,
+      "term": "Bread",
+      "definition": "generally made of wheat, kneaded and baked as thin cakes, often in public ovens; unleavened at Passover; the twelve loaves of showbread represented the twelve tribes (Ex. 29:2; 25:30)."
+    },
+    {
+      "id": 363,
+      "term": "Breastplate",
+      "definition": "(1.) Armour protecting the breast, used figuratively in Eph. 6:14. (2.) An ornament on the high priest's breast set with twelve precious stones bearing the tribal names, called \"the breastplate of judgment\" (Ex. 28:15-29)."
+    },
+    {
+      "id": 364,
+      "term": "Breeches",
+      "definition": "linen drawers worn by priests, reaching from the waist above the knee (Ex. 28:42)."
+    },
+    {
+      "id": 365,
+      "term": "Bribe",
+      "definition": "forbidden under the law, \"for the gift maketh open eyes blind\" (Ex. 23:8)."
+    },
+    {
+      "id": 366,
+      "term": "Bricks",
+      "definition": "the chief labour of the Israelites in Egypt (Ex. 1:13-14), usually dried in the sun though sometimes kiln-fired; the tower of Babel used burnt bricks cemented with bitumen (Gen. 11:3)."
+    },
+    {
+      "id": 367,
+      "term": "Bride",
+      "definition": "used in the ordinary sense and figuratively of the church's relation to Christ, \"the Bridegroom\" (John 3:29; Rev. 21:9)."
+    },
+    {
+      "id": 368,
+      "term": "Bridle",
+      "definition": "three Hebrew words denote a muzzle, bit, or halter-rein by which a rider controls a horse, used figuratively of divine restraint (Ps. 32:9; Isa. 37:29)."
+    },
+    {
+      "id": 369,
+      "term": "Brier",
+      "definition": "several Hebrew terms for thorny shrubs used for hedges or growing wild, sometimes symbolizing troublesome men (Micah 7:4; Isa. 10:17)."
+    },
+    {
+      "id": 370,
+      "term": "Brigandine",
+      "definition": "(Jer. 46:4), an obsolete term for a scale coat of armour, rendered \"coat of mail\" in the Revised Version."
+    },
+    {
+      "id": 371,
+      "term": "Brimstone",
+      "definition": "an inflammable mineral found near the Dead Sea, associated with the destruction of Sodom and Gomorrah and figuratively of punishment (Gen. 19:24; Rev. 14:10)."
+    },
+    {
+      "id": 372,
+      "term": "Brook",
+      "definition": "a torrent, applied to small streams, winter torrents, or their beds, and in Isa. 19:7 to the river Nile."
+    },
+    {
+      "id": 373,
+      "term": "Brother",
+      "definition": "used variously of natural siblings, near relations, fellow-countrymen, disciples, fellow believers, colleagues, and fellow men (Matt. 1:2; Gen. 13:8; Acts 9:30); the \"brethren of Jesus\" were probably the younger children of Joseph and Mary."
+    },
+    {
+      "id": 374,
+      "term": "Bruit",
+      "definition": "a rumour or report (Jer. 10:22; Nah. 3:19)."
+    },
+    {
+      "id": 375,
+      "term": "Bucket",
+      "definition": "a vessel for drawing water, used figuratively of a numerous issue (Num. 24:7)."
+    },
+    {
+      "id": 376,
+      "term": "Buckler",
+      "definition": "a portable or full-body shield, sometimes a lance improperly translated \"buckler\"; shields taken from enemies were kept as mementoes in the temple (2 Sam. 22:31; 2 Kings 11:10)."
+    },
+    {
+      "id": 377,
+      "term": "Building",
+      "definition": "Jewish architecture adopted Canaanite styles, with Phoenician assistance in constructing the temple and palace; believers are called \"God's building\" (1 Cor. 3:9)."
+    },
+    {
+      "id": 378,
+      "term": "Bul",
+      "definition": "rainy, the eighth ecclesiastical month, later called Marchesvan (1 Kings 6:38)."
+    },
+    {
+      "id": 379,
+      "term": "Bullock",
+      "definition": "a generic term for horned cattle or an animal of the ox kind used in sacrifice, sometimes rendered \"cow,\" \"ox,\" or \"calf\" (Isa. 65:25; Lev. 9:3)."
+    },
+    {
+      "id": 380,
+      "term": "Bulrush",
+      "definition": "the Egyptian papyrus plant, used for garments, ropes, and paper, and for the ark in which Moses was placed (Ex. 2:3)."
+    },
+    {
+      "id": 381,
+      "term": "Bulwarks",
+      "definition": "mural towers or bastions, introduced by King Uzziah (2 Chr. 26:15)."
+    },
+    {
+      "id": 382,
+      "term": "Bunch",
+      "definition": "used of a bundle of twigs, a cake of raisins, or the hump of a camel (Ex. 12:22; 2 Sam. 16:1; Isa. 30:6)."
+    },
+    {
+      "id": 383,
+      "term": "Burden",
+      "definition": "a load, a severe task, a difficult duty, or a prophecy of calamity (Ex. 23:5; Isa. 13:1)."
+    },
+    {
+      "id": 384,
+      "term": "Burial",
+      "definition": "patriarchal and later Hebrew burial customs, from Abraham's purchase of the cave of Machpelah for Sarah to the burial of kings \"in the city of David\" and Christ's burial in a new rock-hewn tomb (Gen. 23; Matt. 27:57-60)."
+    },
+    {
+      "id": 385,
+      "term": "Burnt offering",
+      "definition": "Hebrew olah, \"ascending,\" a sacrifice wholly consumed by fire, the most frequent form of offering from Abel onward, later regulated in detail by the law of Moses (Gen. 4:4; Lev. 1)."
+    },
+    {
+      "id": 386,
+      "term": "Bush",
+      "definition": "the plant, probably a mimosa or acacia, in which Jehovah appeared to Moses (Ex. 3:2)."
+    },
+    {
+      "id": 387,
+      "term": "Butler",
+      "definition": "a servant in charge of the wine, such as Pharaoh's cupbearer and Nehemiah, cupbearer to Artaxerxes (Gen. 40:1-13; Neh. 1:11)."
+    },
+    {
+      "id": 388,
+      "term": "Butter",
+      "definition": "curdled milk or a semi-fluid cream, distinguished from modern churned butter (Gen. 18:8; Job 20:17)."
+    },
+    {
+      "id": 389,
+      "term": "Buz",
+      "definition": "contempt. (1.) The second son of Nahor, ancestor of Elihu (Gen. 22:21). (2.) A chief of Gad (1 Chr. 5:14). (3.) A district in Arabia (Jer. 25:23)."
+    },
+    {
+      "id": 390,
+      "term": "Buzi",
+      "definition": "the father of the prophet Ezekiel (1:3)."
+    },
+    {
+      "id": 391,
+      "term": "By",
+      "definition": "in \"by myself\" (1 Cor. 4:4), meaning \"against myself\" per the Revised Version."
+    },
+    {
+      "id": 392,
+      "term": "By and by",
+      "definition": "immediately (Matt. 13:21)."
+    },
+    {
+      "id": 393,
+      "term": "By-ways",
+      "definition": "winding or twisted roads (Judg. 5:6; Ps. 125:5)."
+    },
+    {
+      "id": 394,
+      "term": "By-word",
+      "definition": "an object of talk, taunt, or derision, rendered from several Hebrew terms (Job 30:9; Deut. 28:37)."
+    },
+    {
+      "id": 395,
+      "term": "Cab",
+      "definition": "a dry measure, the sixth part of a seah, equal to about two English quarts (2 Kings 6:25)."
+    },
+    {
+      "id": 396,
+      "term": "Cabins",
+      "definition": "arched vaults or recesses off a passage, cells for closer confinement of prisoners (Jer. 37:16)."
+    },
+    {
+      "id": 397,
+      "term": "Cabul",
+      "definition": "(1.) A town on the eastern border of Asher (Josh. 19:27). (2.) A district of twenty cities given by Solomon to Hiram, who was displeased with the gift and gave the district the name meaning \"good for nothing\" (1 Kings 9:13)."
+    },
+    {
+      "id": 398,
+      "term": "Caesar",
+      "definition": "the title assumed by Roman emperors after Julius Caesar, given in the New Testament to various emperors as sovereigns of Judea, including Augustus, Tiberius, Claudius, and Nero."
+    },
+    {
+      "id": 399,
+      "term": "Caesara Philippi",
+      "definition": "a city near the source of the Jordan at the base of Mount Hermon, originally a Canaanite sanctuary of Baal, later enlarged by Herod Philip and named for himself and Augustus; the northern limit of Christ's public ministry (Matt. 16:13)."
+    },
+    {
+      "id": 400,
+      "term": "Caesarea",
+      "definition": "a city on the Mediterranean coast built by Herod the Great and named for Augustus, capital of Roman Judea and seat of its governors; Cornelius was converted here (Acts 10), and Paul was imprisoned here for two years."
+    },
+    {
+      "id": 401,
+      "term": "Cage",
+      "definition": "a basket of wicker-work for holding captured birds (Jer. 5:27; Amos 8:1); in Rev. 18:2 rendered from a Greek word for prison."
+    },
+    {
+      "id": 402,
+      "term": "Caiaphas",
+      "definition": "the Jewish high priest (A.D. 27-36) during Christ's ministry and at his trial, who advised that Jesus should die \"for the people\" (John 11:50), sending him to Pilate since he lacked power to inflict death."
+    },
+    {
+      "id": 403,
+      "term": "Cain",
+      "definition": "(1.) The first-born son of Adam and Eve, a tiller of the ground, who murdered his brother Abel out of jealousy over God's acceptance of Abel's offering, and was expelled from Eden as a marked wanderer (Gen. 4). (2.) A town of the Kenites near Engedi (Josh. 15:57)."
+    },
+    {
+      "id": 404,
+      "term": "Cainan",
+      "definition": "(1.) The fourth antediluvian patriarch, son of Enos, who lived 910 years (Gen. 5:9-14). (2.) The son of Arphaxad, named in Luke 3:36 but not in the Old Testament."
+    },
+    {
+      "id": 405,
+      "term": "Cake",
+      "definition": "wheat or barley bread offered in the temple, salted but unleavened; various kinds are described in Lev. 2, including honey-cakes and fig-cakes."
+    },
+    {
+      "id": 406,
+      "term": "Calah",
+      "definition": "one of the most ancient cities of Assyria, founded by Nimrod (Gen. 10:11), later capital of the empire, identified with the Nimrud ruins."
+    },
+    {
+      "id": 407,
+      "term": "Calamus",
+      "definition": "an aromatic reed, one of the ingredients of the holy anointing oil (Ex. 30:23), imported from Arabia or India, also called \"sweet cane.\""
+    },
+    {
+      "id": 408,
+      "term": "Calcol",
+      "definition": "one of the four sages whom Solomon excelled in wisdom (1 Kings 4:31)."
+    },
+    {
+      "id": 409,
+      "term": "Caleb",
+      "definition": "a dog. Several Old Testament men of this name; most notably the son of Jephunneh, one of the twelve spies sent to Canaan, who alone with Joshua encouraged the people and was spared the wilderness plague, later receiving Hebron as his inheritance (Num. 13-14; Josh. 14)."
+    },
+    {
+      "id": 410,
+      "term": "Calf",
+      "definition": "commonly used in sacrifice; the golden calf Aaron made was likely modeled on Moloch rather than the Egyptian Apis; Jeroboam later set up two golden calves at Dan and Bethel to keep Israel from worshipping in Jerusalem (Ex. 32:4; 1 Kings 12:28)."
+    },
+    {
+      "id": 411,
+      "term": "Calkers",
+      "definition": "workmen who stopped the seams of ships' decks and sides, employed by Tyre (Ezek. 27:9, 27)."
+    },
+    {
+      "id": 412,
+      "term": "Call",
+      "definition": "used of crying to God in prayer, and of God's calling men to office or to accept his grace; an \"effectual call\" is the internal work of the Holy Spirit enabling belief (John 6:44-45)."
+    },
+    {
+      "id": 413,
+      "term": "Calling",
+      "definition": "a profession or vocation (1 Cor. 7:20); \"the hope of your calling\" (Eph. 4:4) is the hope from being called into God's kingdom."
+    },
+    {
+      "id": 414,
+      "term": "Calneh",
+      "definition": "one of the four cities founded by Nimrod (Gen. 10:10), a trading partner of Tyre, later destroyed by Assyria; also called Calno and Canneh."
+    },
+    {
+      "id": 415,
+      "term": "Calvary",
+      "definition": "the Latin name for the place of the skull where Christ was crucified, outside the city walls, likely named for its skull-like shape (Luke 23:33)."
+    },
+    {
+      "id": 416,
+      "term": "Camel",
+      "definition": "a beast of burden and riding from earliest times, unclean as food, used in war and commerce; John the Baptist wore raiment of camel's hair; proverbially it is \"easier for a camel to go through a needle's eye\" than for a rich man to enter the kingdom (Matt. 19:24)."
+    },
+    {
+      "id": 417,
+      "term": "Camon",
+      "definition": "the place where Jair the judge was buried (Judg. 10:5), probably the modern Tell-el-Kaimun on the slopes of Carmel."
+    },
+    {
+      "id": 418,
+      "term": "Camp",
+      "definition": "the Israelite tribes formed structured encampments during their wilderness journey, arranged around the tabernacle (Num. 2); after entering Canaan, \"camp\" referred exclusively to war camps."
+    },
+    {
+      "id": 419,
+      "term": "Camphire",
+      "definition": "the henna plant (Cant. 1:14), producing flowers from which Eastern women made an auburn dye for their nails and hands, found at Engedi."
+    },
+    {
+      "id": 420,
+      "term": "Cana",
+      "definition": "a town of Galilee near Capernaum where Christ turned water into wine, his first miracle (John 2:1-11), and the birthplace of Nathanael."
+    },
+    {
+      "id": 421,
+      "term": "Canaan",
+      "definition": "(1.) The fourth son of Ham, cursed for his father's transgression, ancestor of eleven tribes (Gen. 9-10). (2.) The land west of the Jordan named for him, meaning \"the lowlands,\" whose extent is described throughout the Pentateuch."
+    },
+    {
+      "id": 422,
+      "term": "Canaanite",
+      "definition": "a name given to the apostle Simon (Matt. 10:4), a transliteration of an Aramaic word for the Zealot sect, not indicating descent from Canaan."
+    },
+    {
+      "id": 423,
+      "term": "Canaanites",
+      "definition": "descendants of Canaan who spread across Palestine and beyond, famous as merchants and seamen worshipping Baal, whom Israel was commanded to destroy upon entering the Promised Land but never fully dispossessed."
+    },
+    {
+      "id": 424,
+      "term": "Canaan, the language of",
+      "definition": "(Isa. 19:18) the language spoken by Jews in Palestine, essentially the same as Phoenician and closely related to Hebrew."
+    },
+    {
+      "id": 425,
+      "term": "Candace",
+      "definition": "the queen of the Ethiopians whose treasurer was converted by Philip the evangelist (Acts 8:27); \"Candace\" was a title common to several successive queens."
+    },
+    {
+      "id": 426,
+      "term": "Candle",
+      "definition": "Hebrew ner, properly \"lamp,\" used figuratively of conscience, Christian example, and prosperity (Prov. 20:27; Matt. 5:14-15)."
+    },
+    {
+      "id": 427,
+      "term": "Candlestick",
+      "definition": "the golden lamp-stand Moses was commanded to make for the tabernacle (Ex. 25:31-40), lighted nightly to provide light in the windowless tent and symbolizing the church as light of the world; Solomon's temple had ten, the post-exilic temple one, later carried to Rome by Titus."
+    },
+    {
+      "id": 428,
+      "term": "Cane",
+      "definition": "a tall sedgy reed plant (Isa. 43:24), used figuratively of weak, fragile things."
+    },
+    {
+      "id": 429,
+      "term": "Canker",
+      "definition": "a spreading gangrene (2 Tim. 2:17); in James 5:3 \"cankered\" means rusted or tarnished."
+    },
+    {
+      "id": 430,
+      "term": "Cankerworm",
+      "definition": "\"the licking locust\" that consumes grass, probably a stage of the locust's growth (Joel 1:4)."
+    },
+    {
+      "id": 431,
+      "term": "Canneh",
+      "definition": "mentioned only in Ezek. 27:23, likely the same as Calneh."
+    },
+    {
+      "id": 432,
+      "term": "Canon",
+      "definition": "the authoritative collection of inspired Scripture, the Old Testament closed probably by the time of Ezra and Nehemiah, the New Testament substantially fixed by the middle of the second century."
+    },
+    {
+      "id": 433,
+      "term": "Capernaum",
+      "definition": "a Galilean city on the Sea of Galilee that became Christ's \"own city\" after his rejection at Nazareth, the scene of many miracles, denounced for its unbelief (Matt. 11:23), identified with Tell Hum."
+    },
+    {
+      "id": 434,
+      "term": "Caphtor",
+      "definition": "the original home of the Philistines (Deut. 2:23), possibly Crete or a part of the Nile Delta."
+    },
+    {
+      "id": 435,
+      "term": "Cappadocia",
+      "definition": "the largest eastern province of Asia Minor, where Christianity spread early; Cappadocians were present at Pentecost (Acts 2:9)."
+    },
+    {
+      "id": 436,
+      "term": "Captain",
+      "definition": "several Hebrew and Greek words denote military, civil, and honorary leaders; Christ is called \"the Captain of our salvation\" (Heb. 2:10) as author and head of his people's deliverance."
+    },
+    {
+      "id": 437,
+      "term": "Captive",
+      "definition": "one taken in war, often treated with great cruelty; conquered cities' men were slain and women and children carried away as slaves."
+    },
+    {
+      "id": 438,
+      "term": "Captivity",
+      "definition": "the successive Assyrian deportations of the ten tribes of Israel (culminating 721 B.C.) and the Babylonian deportations of Judah under Nebuchadnezzar (culminating in the destruction of Jerusalem, 586 B.C.), ended by Cyrus's decree permitting return in 536 B.C."
+    },
+    {
+      "id": 439,
+      "term": "Carbuncle",
+      "definition": "a red gem in the high priest's breastplate, from a root meaning \"to glitter\" (Ex. 28:17), possibly the garnet."
+    },
+    {
+      "id": 440,
+      "term": "Carcase",
+      "definition": "contact with a dead body made an Israelite ceremonially unclean under Mosaic law (Num. 19:16)."
+    },
+    {
+      "id": 441,
+      "term": "Carchemish",
+      "definition": "\"fortress of Chemosh,\" a city on the Euphrates, capital of the northern Hittite kingdom, where Nebuchadnezzar defeated Pharaoh-necho (B.C. 607)."
+    },
+    {
+      "id": 442,
+      "term": "Carmel",
+      "definition": "a park. (1.) A prominent wooded headland of Central Palestine where Elijah defeated the prophets of Baal (1 Kings 18). (2.) A town in the hill country of Judah, home of Nabal and Abigail (1 Sam. 25)."
+    },
+    {
+      "id": 443,
+      "term": "Carmi",
+      "definition": "vine-dresser, the name of several Old Testament men, including the father of Achan, \"the troubler of Israel\" (Josh. 7:1)."
+    },
+    {
+      "id": 444,
+      "term": "Carnal",
+      "definition": "used of the unconverted mind at enmity with God (Rom. 8:6-7), of fleshly enjoyments, and of the outward, bodily rites of the Mosaic ceremonial law."
+    },
+    {
+      "id": 445,
+      "term": "Carpenter",
+      "definition": "an artificer in stone, iron, and copper as well as wood; Christ was called \"the carpenter's son\" and \"the carpenter\" (Matt. 13:55; Mark 6:3)."
+    },
+    {
+      "id": 446,
+      "term": "Carriage",
+      "definition": "rendered from several Hebrew words meaning valuables, baggage, or equipment carried by travellers (Judg. 18:21; Acts 21:15)."
+    },
+    {
+      "id": 447,
+      "term": "Cart",
+      "definition": "a wheeled vehicle usually drawn by oxen, used to transport the ark and its utensils (1 Sam. 6:7; Num. 7:3)."
+    },
+    {
+      "id": 448,
+      "term": "Carve",
+      "definition": "engraving and carving were practised in constructing the tabernacle and temple and ornamenting priestly dress; Isaiah describes the carving of wooden idols (Isa. 44:13-17)."
+    },
+    {
+      "id": 449,
+      "term": "Casement",
+      "definition": "an open-work barrier before windows, admitting cool air (Prov. 7:6)."
+    },
+    {
+      "id": 450,
+      "term": "Casiphia",
+      "definition": "a place between Babylon and Jerusalem where Iddo resided (Ezra 8:17)."
+    },
+    {
+      "id": 451,
+      "term": "Casluhim",
+      "definition": "a people descended from Mizraim, probably settled in Lower Egypt (Gen. 10:14)."
+    },
+    {
+      "id": 452,
+      "term": "Cassia",
+      "definition": "an aromatic spice from the inner bark of a cinnamon-like tree, one ingredient of the holy anointing oil (Ex. 30:24)."
+    },
+    {
+      "id": 453,
+      "term": "Castaway",
+      "definition": "one regarded as unworthy or rejected, used by Paul of himself if disqualified through lack of self-discipline (1 Cor. 9:27)."
+    },
+    {
+      "id": 454,
+      "term": "Castle",
+      "definition": "a military fortress or watch-tower; the \"castle\" of Acts 21:34 was the Roman garrison quarters in the fortress of Antonia at Jerusalem."
+    },
+    {
+      "id": 455,
+      "term": "Castor and Pollux",
+      "definition": "the \"Dioscuri,\" twin heroes of Greek mythology regarded as patrons of sailors, whose figures were on the prow of the ship Paul sailed in (Acts 28:11)."
+    },
+    {
+      "id": 456,
+      "term": "Caterpillar",
+      "definition": "\"the consumer,\" probably a species or growth-stage of the locust (1 Kings 8:37)."
+    },
+    {
+      "id": 457,
+      "term": "Catholic epistles",
+      "definition": "the epistles of James, Peter, John, and Jude, so called because addressed to Christians generally rather than to a specific church."
+    },
+    {
+      "id": 458,
+      "term": "Cattle",
+      "definition": "the chief occupation of the inhabitants of Palestine; classified as neat cattle (oxen) and small cattle (sheep and goats), central to sacrifice, food, and wealth."
+    },
+    {
+      "id": 459,
+      "term": "Caul",
+      "definition": "the membrane covering the upper part of the liver, offered in sacrifice (Ex. 29:13); a different word denotes the pericardium in Hos. 13:8."
+    },
+    {
+      "id": 460,
+      "term": "Cauls",
+      "definition": "ornamental network caps for containing women's hair (Isa. 3:18)."
+    },
+    {
+      "id": 461,
+      "term": "Causeway",
+      "definition": "a raised way or ascent between Zion and the temple (1 Chr. 26:16)."
+    },
+    {
+      "id": 462,
+      "term": "Cave",
+      "definition": "numerous natural caves in Palestine's limestone rocks served as burial places (the cave of Machpelah), refuges (Adullam, Engedi), and dwellings."
+    },
+    {
+      "id": 463,
+      "term": "Cedar",
+      "definition": "a stately, durable, fragrant tree, abundant on Lebanon, used extensively in Solomon's temple and palace and often used figuratively of might and majesty (Isa. 2:13)."
+    },
+    {
+      "id": 464,
+      "term": "Cedron",
+      "definition": "\"the black torrent,\" the brook flowing through the ravine below Jerusalem's eastern wall (John 18:1); also spelled Kidron."
+    },
+    {
+      "id": 465,
+      "term": "Ceiling",
+      "definition": "the covering of a house's inside roof and walls with wood planks, sometimes adorned with stucco, gold, or ivory (1 Kings 6:9)."
+    },
+    {
+      "id": 466,
+      "term": "Cellar",
+      "definition": "a subterranean vault or storehouse, also used for the temple or royal treasury (1 Chr. 27:28)."
+    },
+    {
+      "id": 467,
+      "term": "Cenchrea",
+      "definition": "the eastern harbour of Corinth, from which Paul sailed on his return from his second missionary journey, and where a church existed (Acts 18:18; Rom. 16:1)."
+    },
+    {
+      "id": 468,
+      "term": "Censer",
+      "definition": "a vessel for burning incense before the Lord, of brass for daily use and gold for the Day of Atonement (Lev. 16:12)."
+    },
+    {
+      "id": 469,
+      "term": "Census",
+      "definition": "five recorded censuses of Israel are noted in Scripture, from the Exodus (603,550 men) through the post-exilic count (42,360), plus one under Roman rule in Christ's time (Luke 2:1)."
+    },
+    {
+      "id": 470,
+      "term": "Centurion",
+      "definition": "a Roman officer commanding a hundred men; several centurions in the New Testament, including Cornelius and the one who watched Christ's crucifixion, are spoken of favourably."
+    },
+    {
+      "id": 471,
+      "term": "Cephas",
+      "definition": "a Syriac surname meaning \"rock\" given by Christ to Simon (John 1:42), translated Petros/Peter in Greek."
+    },
+    {
+      "id": 472,
+      "term": "Cesarea",
+      "definition": "see Caesarea."
+    },
+    {
+      "id": 473,
+      "term": "Chaff",
+      "definition": "the refuse of winnowed grain, usually burned, used figuratively of the wicked's powerlessness and destruction (Ps. 1:4; Matt. 3:12)."
+    },
+    {
+      "id": 474,
+      "term": "Chain",
+      "definition": "used as insignia of office (Gen. 41:42), as ornament, and as fetters for prisoners, sometimes attaching a captive to a soldier as with Paul and Peter."
+    },
+    {
+      "id": 475,
+      "term": "Chalcedony",
+      "definition": "a precious stone in the foundation of the New Jerusalem (Rev. 21:19), likely the Hebrew nophekh elsewhere translated \"emerald.\""
+    },
+    {
+      "id": 476,
+      "term": "Chaldea",
+      "definition": "the southern portion of Babylonia along the Euphrates, homeland of Abraham's ancestor Ur, whose ancient history has been illuminated by archaeological discoveries."
+    },
+    {
+      "id": 477,
+      "term": "Chaldee language",
+      "definition": "the Aramaic dialect used in portions of Daniel and Ezra, the common language of commerce that gradually became the popular speech of post-exilic Palestine."
+    },
+    {
+      "id": 478,
+      "term": "Chaldees",
+      "definition": "the Chaldeans, inhabitants of Babylon's territory, later a learned class of astrologers and magi under the Babylonian empire."
+    },
+    {
+      "id": 479,
+      "term": "Chamber",
+      "definition": "an upper or inner room, sometimes used for prayer or private lodging; \"chambers of imagery\" (Ezek. 8:12) refers to idolatrous images the prophet saw in vision."
+    },
+    {
+      "id": 480,
+      "term": "Chambering",
+      "definition": "wantonness or impurity (Rom. 13:13)."
+    },
+    {
+      "id": 481,
+      "term": "Chamberlain",
+      "definition": "a confidential royal servant or eunuch; Erastus \"the chamberlain\" of Rom. 16:23 was the city treasurer of Corinth."
+    },
+    {
+      "id": 482,
+      "term": "Chameleon",
+      "definition": "a lizard able to change skin colour, ranked among unclean animals (Lev. 11:30)."
+    },
+    {
+      "id": 483,
+      "term": "Chamois",
+      "definition": "likely the wild sheep, an animal permitted as food under the Mosaic law (Deut. 14:5)."
+    },
+    {
+      "id": 484,
+      "term": "Champion",
+      "definition": "the single combatant representing an army, as Goliath before the Israelite and Philistine camps (1 Sam. 17:4)."
+    },
+    {
+      "id": 485,
+      "term": "Chance",
+      "definition": "Scripture teaches there is no true chance in God's providence; apparent coincidence is really the outworking of his plan (Luke 10:31)."
+    },
+    {
+      "id": 486,
+      "term": "Chancellor",
+      "definition": "a Persian title for a provincial governor with judicial authority (Ezra 4:8)."
+    },
+    {
+      "id": 487,
+      "term": "Changes of raiment",
+      "definition": "additional garments reckoned among the treasures of wealthy men (Gen. 45:22)."
+    },
+    {
+      "id": 488,
+      "term": "Channel",
+      "definition": "the bed of a sea or river (Ps. 18:15), or, in Job 31:22, the collarbone."
+    },
+    {
+      "id": 489,
+      "term": "Chapel",
+      "definition": "a sanctuary, used once contemptuously of Bethel as \"the king's chapel\" (Amos 7:13)."
+    },
+    {
+      "id": 490,
+      "term": "Chapiter",
+      "definition": "the ornamental capital of a pillar (1 Kings 7:16)."
+    },
+    {
+      "id": 491,
+      "term": "Chapter",
+      "definition": "the ancient and modern divisions of Scripture into chapters, standardized by Cardinal Hugo of St. Cher around A.D. 1240."
+    },
+    {
+      "id": 492,
+      "term": "Charashim",
+      "definition": "\"craftsmen,\" a valley named in 1 Chr. 4:14, otherwise unknown."
+    },
+    {
+      "id": 493,
+      "term": "Charger",
+      "definition": "a bowl or deep dish; the one presenting John the Baptist's head was a flat platter (Matt. 14:8)."
+    },
+    {
+      "id": 494,
+      "term": "Chariot",
+      "definition": "a vehicle chiefly for war, first mentioned with Joseph's honour in Egypt, later used extensively by Israel's kings from Solomon onward; Elijah was translated in \"a chariot of fire\" (2 Kings 2:11)."
+    },
+    {
+      "id": 495,
+      "term": "Charity",
+      "definition": "the Authorized Version's rendering of the Greek word for love, the greatest of the Christian graces (1 Cor. 13)."
+    },
+    {
+      "id": 496,
+      "term": "Charmer",
+      "definition": "one who practises serpent-charming or enchantment (Ps. 58:5; Deut. 18:11)."
+    },
+    {
+      "id": 497,
+      "term": "Charran",
+      "definition": "another form of Haran (Acts 7:2)."
+    },
+    {
+      "id": 498,
+      "term": "Chebar",
+      "definition": "a river in the land of the Chaldeans where exiled Jews, including Ezekiel, were settled (Ezek. 1:1-3)."
+    },
+    {
+      "id": 499,
+      "term": "Chedorlaomer",
+      "definition": "the king of Elam who invaded Canaan in Abraham's time and was defeated by Abraham's small force after taking Lot captive (Gen. 14)."
+    },
+    {
+      "id": 500,
+      "term": "Cheek",
+      "definition": "smiting on the cheek was accounted a grievous insult; \"turning the other cheek\" (Luke 6:29) teaches non-resistance of evil."
+    },
+    {
+      "id": 501,
+      "term": "Cheese",
+      "definition": "curd or curdled milk, mentioned three times under different Hebrew words (1 Sam. 17:18; 2 Sam. 17:29; Job 10:10)."
+    },
+    {
+      "id": 502,
+      "term": "Chemarim",
+      "definition": "idolatrous priests (Zeph. 1:4), possibly meaning those who prostrate themselves before idols."
+    },
+    {
+      "id": 503,
+      "term": "Chemosh",
+      "definition": "the national god of the Moabites, whose worship Solomon introduced at Jerusalem and Josiah abolished (1 Kings 11:7; 2 Kings 23:13)."
+    },
+    {
+      "id": 504,
+      "term": "Chenaanah",
+      "definition": "merchant, the name of a Benjamite and of the father of a false prophet."
+    },
+    {
+      "id": 505,
+      "term": "Chenaiah",
+      "definition": "\"chief of the Levites\" under David, probably a Kohathite (1 Chr. 15:22)."
+    },
+    {
+      "id": 506,
+      "term": "Chephirah",
+      "definition": "a Gibeonite Hivite city with which Joshua made a league, belonging to Benjamin (Josh. 9:17)."
+    },
+    {
+      "id": 507,
+      "term": "Cherethim",
+      "definition": "more often Cherethites, inhabitants of southern Philistia who with the Pelethites formed David's bodyguard (1 Sam. 30:14; 2 Sam. 8:18)."
+    },
+    {
+      "id": 508,
+      "term": "Cherith",
+      "definition": "the brook where Elijah hid during the drought, fed by ravens (1 Kings 17:3-5)."
+    },
+    {
+      "id": 509,
+      "term": "Cherub",
+      "definition": "plural cherubim, symbolic composite figures guarding Eden and forming the throne and chariot of God's presence over the ark's mercy-seat (Gen. 3:24; Ex. 25:17-22)."
+    },
+    {
+      "id": 510,
+      "term": "Chesalon",
+      "definition": "a place on the border of Judah (Josh. 15:10)."
+    },
+    {
+      "id": 511,
+      "term": "Chesed",
+      "definition": "the son of Nahor (Gen. 22:22)."
+    },
+    {
+      "id": 512,
+      "term": "Chesil",
+      "definition": "a town in southern Judah, probably the same as Bethul (Josh. 15:30)."
+    },
+    {
+      "id": 513,
+      "term": "Chest",
+      "definition": "a coffer for temple contributions, rendered \"ark\" or \"coffin\" elsewhere (2 Kings 12:9; Gen. 50:26)."
+    },
+    {
+      "id": 514,
+      "term": "Chestnut tree",
+      "definition": "likely the Oriental plane tree, which sheds its bark annually, mentioned in Jacob's dealings with Laban's flocks (Gen. 30:37)."
+    },
+    {
+      "id": 515,
+      "term": "Chesulloth",
+      "definition": "a town of Issachar, identified with Chisloth-tabor (Josh. 19:18)."
+    },
+    {
+      "id": 516,
+      "term": "Chezib",
+      "definition": "the town where Shelah, son of Judah, was born, probably the same as Achzib (Gen. 38:5)."
+    },
+    {
+      "id": 517,
+      "term": "Chidon",
+      "definition": "the threshing-floor where Uzzah died for touching the ark, called Nachon's threshing-floor in 2 Sam. 6:6 (1 Chr. 13:9)."
+    },
+    {
+      "id": 518,
+      "term": "Chief of the three",
+      "definition": "a title given to Adino the Eznite, one of David's greatest heroes, also called Jashobeam (2 Sam. 23:8)."
+    },
+    {
+      "id": 519,
+      "term": "Chief priest",
+      "definition": "see Priest."
+    },
+    {
+      "id": 520,
+      "term": "Chiefs of Asia",
+      "definition": "\"Asiarchs,\" wealthy officials who presided over religious festivals and games in the cities of proconsular Asia (Acts 19:31)."
+    },
+    {
+      "id": 521,
+      "term": "Child",
+      "definition": "a word with wide latitude in Scripture, applied even to adults; figuratively used of the ignorant or narrow-minded, and of simplicity and humility as Christ commended in children."
+    },
+    {
+      "id": 522,
+      "term": "Chileab",
+      "definition": "David's second son by Abigail, also called Daniel, who apparently died young (2 Sam. 3:3)."
+    },
+    {
+      "id": 523,
+      "term": "Chilion",
+      "definition": "the younger son of Elimelech and Naomi, husband of Orpah (Ruth 1:2)."
+    },
+    {
+      "id": 524,
+      "term": "Chilmad",
+      "definition": "an unknown place or country that traded with Tyre (Ezek. 27:23)."
+    },
+    {
+      "id": 525,
+      "term": "Chimham",
+      "definition": "probably the youngest son of Barzillai, to whom David gave a possession at Bethlehem as reward for his father's loyalty (2 Sam. 19:37-40)."
+    },
+    {
+      "id": 526,
+      "term": "Chinnereth",
+      "definition": "a fenced city near the Sea of Galilee that gave its name to the lake, later called the Sea of Galilee or Tiberias (Deut. 3:17)."
+    },
+    {
+      "id": 527,
+      "term": "Chios",
+      "definition": "an island in the Aegean Sea where Paul anchored on his third missionary return journey (Acts 20:15)."
+    },
+    {
+      "id": 528,
+      "term": "Chisleu",
+      "definition": "the third civil (ninth ecclesiastical) Jewish month, corresponding roughly to November (Neh. 1:1)."
+    },
+    {
+      "id": 529,
+      "term": "Chittim",
+      "definition": "or Kittim, descendants of Javan, probably denoting Cyprus and later the islands and coasts of the Mediterranean generally (Gen. 10:4; Num. 24:24)."
+    },
+    {
+      "id": 530,
+      "term": "Chiun",
+      "definition": "an idol mentioned in Amos 5:26, likely representing the planet Saturn, to which the Phoenicians offered human sacrifices."
+    },
+    {
+      "id": 531,
+      "term": "Chloe",
+      "definition": "a Christian woman whose household informed Paul of divisions in the Corinthian church (1 Cor. 1:11)."
+    },
+    {
+      "id": 532,
+      "term": "Chor-ashan",
+      "definition": "a place David and his men frequented, probably identical with Ashan (1 Sam. 30:30)."
+    },
+    {
+      "id": 533,
+      "term": "Chorazin",
+      "definition": "a city near Capernaum where Christ's mighty works were done but which was doomed for its unbelief (Matt. 11:21)."
+    },
+    {
+      "id": 534,
+      "term": "Chosen",
+      "definition": "used of warriors, the Hebrew nation, Jerusalem, Christ, and the apostles; \"many are called, but few are chosen\" refers to those who fail to profit from their opportunities (Matt. 20:16)."
+    },
+    {
+      "id": 535,
+      "term": "Chozeba",
+      "definition": "the same as Chezib and Achzib, a place in the Judean lowlands (1 Chr. 4:22)."
+    },
+    {
+      "id": 536,
+      "term": "Christ",
+      "definition": "\"anointed,\" the Greek translation of \"Messiah,\" the official title of Jesus as Prophet, Priest, and King, occurring over 500 times in the New Testament, fulfilling the Old Testament's prophetic portrait of the promised Deliverer."
+    },
+    {
+      "id": 537,
+      "term": "Christian",
+      "definition": "the name given, probably in reproach, to Christ's followers, first used at Antioch, occurring only three times in the New Testament (Acts 11:26)."
+    },
+    {
+      "id": 538,
+      "term": "Christs, False",
+      "definition": "persons who have falsely claimed to be the Messiah, as Christ warned would arise (Matt. 24:24)."
+    },
+    {
+      "id": 539,
+      "term": "Chronicles",
+      "definition": "\"the words of the days,\" the daily or yearly records of a kingdom's transactions, recorded in order of time."
+    },
+    {
+      "id": 540,
+      "term": "Chronicles, Books of",
+      "definition": "originally one book, covering genealogies and the reigns of David and Solomon and the subsequent kingdom of Judah to the Exile, likely compiled by Ezra after the Exile from public records and earlier writings, emphasizing ecclesiastical over political history."
+    },
+    {
+      "id": 541,
+      "term": "Chronicles of king David",
+      "definition": "statistical state records that were among the sources used by the compiler of Chronicles (1 Chr. 27:24)."
+    },
+    {
+      "id": 542,
+      "term": "Chronology",
+      "definition": "the arrangement of biblical events in order of time, complicated by differing systems (Hebrew, Septuagint, Samaritan) for the patriarchal period and by Ussher's and Hales's differing modern calculations."
+    },
+    {
+      "id": 543,
+      "term": "Chrysoprasus",
+      "definition": "a greenish-golden precious stone (Rev. 21:20)."
+    },
+    {
+      "id": 544,
+      "term": "Chub",
+      "definition": "a people allied with Egypt in Nebuchadnezzar's time, probably of Northern Africa (Ezek. 30:5)."
+    },
+    {
+      "id": 545,
+      "term": "Chun",
+      "definition": "a city of Hadarezer from which David took bronze for the temple, called Berothai elsewhere (1 Chr. 18:8)."
+    },
+    {
+      "id": 546,
+      "term": "Church",
+      "definition": "from Greek ecclesia (\"assembly\"), used in the New Testament for a local congregation, all Christians in a city, or the whole body of the redeemed (the invisible church); marked by unity, universality, and perpetuity, and continuous with the Old Testament people of God."
+    },
+    {
+      "id": 547,
+      "term": "Churl",
+      "definition": "a coarse, ill-natured, or deceiving person (1 Sam. 25:3)."
+    },
+    {
+      "id": 548,
+      "term": "Chushan-rishathaim",
+      "definition": "the king of Mesopotamia who oppressed Israel in the generation after Joshua (Judg. 3:8)."
+    },
+    {
+      "id": 549,
+      "term": "Cilicia",
+      "definition": "a maritime province of south-east Asia Minor, home of Tarsus and Paul, famous for goat's-hair cloth used in tentmaking."
+    },
+    {
+      "id": 550,
+      "term": "Cinnamon",
+      "definition": "an aromatic spice from a Laurel-family tree of India and Ceylon, an ingredient of the holy anointing oil (Ex. 30:23)."
+    },
+    {
+      "id": 551,
+      "term": "Cinnereth",
+      "definition": "a fenced city and district of Naphtali near the lake later called Gennesaret (Josh. 19:35)."
+    },
+    {
+      "id": 552,
+      "term": "Circuit",
+      "definition": "used of the sun's apparent revolution and the changes of the wind (Ps. 19:6; Eccl. 1:6)."
+    },
+    {
+      "id": 553,
+      "term": "Circumcision",
+      "definition": "the covenant rite instituted with Abraham as the sign of Israel's consecration to God, obligatory for all Hebrew males and their household servants, continued until superseded by baptism under the New Testament, though some Jewish Christians wrongly sought to impose it on Gentile converts."
+    },
+    {
+      "id": 554,
+      "term": "Cistern",
+      "definition": "a receptacle for collected rainwater, distinguished from a natural spring; empty cisterns were sometimes used as prisons (Jer. 38:6)."
+    },
+    {
+      "id": 555,
+      "term": "Citizenship",
+      "definition": "rights and privileges distinguishing a citizen from a foreigner; Roman citizenship, which Paul possessed, guaranteed protection from arbitrary imprisonment or scourging (Acts 22:25-28)."
+    },
+    {
+      "id": 556,
+      "term": "City",
+      "definition": "urban settlement first mentioned with Cain's founding of Enoch; cities of refuge and fenced cities with walls and towers are described throughout the Old Testament; Jerusalem is called \"the Holy City.\""
+    },
+    {
+      "id": 557,
+      "term": "Clauda",
+      "definition": "a small island off south-west Crete passed by Paul on his voyage to Rome (Acts 27:16)."
+    },
+    {
+      "id": 558,
+      "term": "Claudia",
+      "definition": "a Christian woman mentioned by Paul, possibly a British princess (2 Tim. 4:21)."
+    },
+    {
+      "id": 559,
+      "term": "Claudius",
+      "definition": "(1.) The fourth Roman emperor, who banished the Jews (and Christians) from Rome about A.D. 49 (Acts 18:2). (2.) Claudius Lysias, a Roman officer who rescued Paul at Jerusalem (Acts 21:31-40)."
+    },
+    {
+      "id": 560,
+      "term": "Clay",
+      "definition": "used of sediment, potter's material, and sealing substance; Christ's tomb may have been sealed with clay (Matt. 27:66)."
+    },
+    {
+      "id": 561,
+      "term": "Clean",
+      "definition": "the Mosaic distinction between clean and unclean animals and substances, existing before the Flood and regulated in detail by the law of Moses, designed partly to distinguish Israel from other nations."
+    },
+    {
+      "id": 562,
+      "term": "Clement",
+      "definition": "a Christian of Philippi, Paul's \"fellow-labourer,\" possibly identified with Clement of Rome (Phil. 4:3)."
+    },
+    {
+      "id": 563,
+      "term": "Cleopas",
+      "definition": "one of the two disciples who met the risen Christ on the road to Emmaus (Luke 24:18)."
+    },
+    {
+      "id": 564,
+      "term": "Cleophas",
+      "definition": "the Aramaic form Clopas, possibly the same as Alphaeus, husband of the Mary mentioned in John 19:25."
+    },
+    {
+      "id": 565,
+      "term": "Cloak",
+      "definition": "an outer garment worn by priests, kings, and others of rank; the Roman traveling cloak Paul left at Troas (2 Tim. 4:13) was called the paenula."
+    },
+    {
+      "id": 566,
+      "term": "Closet",
+      "definition": "a storehouse, and hence a place of privacy for prayer (Matt. 6:6)."
+    },
+    {
+      "id": 567,
+      "term": "Cloud",
+      "definition": "used as a symbol of the Divine presence and glory (the Shechinah), of transitory things, and of Christ's second coming \"in the clouds\"; the pillar of cloud led Israel through the wilderness by day and became fire by night."
+    },
+    {
+      "id": 568,
+      "term": "Cnidus",
+      "definition": "a town and harbour in Asia Minor passed by Paul on his voyage to Rome (Acts 27:7)."
+    },
+    {
+      "id": 569,
+      "term": "Coal",
+      "definition": "the Hebrews' common fuel was dried dung and wood charcoal rather than mineral coal; \"coals of fire\" is used figuratively of divine judgment and of overcoming evil with kindness (Rom. 12:20)."
+    },
+    {
+      "id": 570,
+      "term": "Coat",
+      "definition": "the tunic worn next to the skin, sometimes woven without seam (John 19:23) or of \"many colours\" as Joseph's coat (Gen. 37:3)."
+    },
+    {
+      "id": 571,
+      "term": "Coat of mail",
+      "definition": "armor of glittering scales, also called a habergeon or brigandine (1 Sam. 17:5)."
+    },
+    {
+      "id": 572,
+      "term": "Cockatrice",
+      "definition": "a fabulous serpent, likely denoting the cerastes or another dangerous viper (Isa. 11:8)."
+    },
+    {
+      "id": 573,
+      "term": "Cock-crowing",
+      "definition": "in Christ's time this term, along with the Roman four-watch division of the night, marked a recognized time signal, referenced in the Gospels' accounts of Peter's denial."
+    },
+    {
+      "id": 574,
+      "term": "Cockle",
+      "definition": "a noisome weed, possibly darnel or \"tares\" (Job 31:40)."
+    },
+    {
+      "id": 575,
+      "term": "Coele-Syria",
+      "definition": "\"hollow Syria,\" the Greek name for the valley between the Lebanon and Anti-Lebanon mountain ranges."
+    },
+    {
+      "id": 576,
+      "term": "Coffer",
+      "definition": "the small box in which the Philistines placed their trespass-offering beside the ark (1 Sam. 6:8)."
+    },
+    {
+      "id": 577,
+      "term": "Coffin",
+      "definition": "used of Joseph's burial, referring to an Egyptian mummy-chest (Gen. 50:26)."
+    },
+    {
+      "id": 578,
+      "term": "Cogitations",
+      "definition": "earnest thoughts or meditations (Dan. 7:28)."
+    },
+    {
+      "id": 579,
+      "term": "Coin",
+      "definition": "before the Exile the Jews used weighed, uncoined silver rather than stamped money; the shekel was the standard unit of value."
+    },
+    {
+      "id": 580,
+      "term": "Collar",
+      "definition": "the neck-opening of a garment (Job 30:18); also used of ear-pendants taken as spoil from the Midianites (Judg. 8:26)."
+    },
+    {
+      "id": 581,
+      "term": "Collection",
+      "definition": "the pecuniary contributions Paul gathered from Gentile churches for poor Christians in Palestine (Rom. 15:25-26; 1 Cor. 16:1-3)."
+    },
+    {
+      "id": 582,
+      "term": "College",
+      "definition": "properly \"the second quarter\" of Jerusalem, the residence of the prophetess Huldah (2 Kings 22:14)."
+    },
+    {
+      "id": 583,
+      "term": "Colony",
+      "definition": "Philippi was a Roman colony, a military settlement of Roman citizens governed under Roman municipal law (Acts 16:12)."
+    },
+    {
+      "id": 584,
+      "term": "Colossae",
+      "definition": "a city of Phrygia on the Lycus, whose church was probably founded by Epaphras and to which Paul wrote his epistle without having personally visited it."
+    },
+    {
+      "id": 585,
+      "term": "Colossians, Epistle to the",
+      "definition": "written by Paul from Rome during his first imprisonment (about A.D. 57 or 62) to counteract false teaching combining Oriental mysticism with Christianity, emphasizing Christ's supremacy (doctrinal, chs. 1-2) and its practical implications (chs. 3-4)."
+    },
+    {
+      "id": 586,
+      "term": "Colour",
+      "definition": "white symbolized purity, joy, and victory; black, mourning and calamity; red, bloodshed; purple and blue, royalty; scarlet, wealth and luxury; these colours featured prominently in the tabernacle curtains and priestly garments."
+    },
+    {
+      "id": 587,
+      "term": "Comforter",
+      "definition": "the designation of the Holy Spirit (Gr. paracletos, properly \"Advocate\"), one summoned to plead a cause on another's behalf (John 14:16)."
+    },
+    {
+      "id": 588,
+      "term": "Coming of Christ",
+      "definition": "refers either to his first advent or his promised second coming at the last day, and is used metaphorically of the spread of the gospel and the establishment of his kingdom."
+    },
+    {
+      "id": 589,
+      "term": "Commandments, the Ten",
+      "definition": "the Decalogue, given to Israel at Sinai and written by God on two tables of stone, summarizing the immutable moral law, divided differently among Jewish, Catholic, Lutheran, and Reformed traditions."
+    },
+    {
+      "id": 590,
+      "term": "Communion",
+      "definition": "fellowship with God and between believers, including the Lord's Supper, so named for the fellowship it signifies between Christ and his disciples (1 Cor. 10:16-17)."
+    },
+    {
+      "id": 591,
+      "term": "Conaniah",
+      "definition": "a Levite placed over temple tithes (2 Chr. 35:9)."
+    },
+    {
+      "id": 592,
+      "term": "Concision",
+      "definition": "Paul's contemptuous term (\"mutilation\") for those who pressed circumcision on Gentile converts (Phil. 3:2)."
+    },
+    {
+      "id": 593,
+      "term": "Concubine",
+      "definition": "a wife of secondary rank recognized and regulated but not fully protected under Mosaic law, a practice ended by Christian teaching restoring marriage to its original character."
+    },
+    {
+      "id": 594,
+      "term": "Concupiscence",
+      "definition": "evil desire or coveting (Rom. 7:8; Col. 3:5)."
+    },
+    {
+      "id": 595,
+      "term": "Conduit",
+      "definition": "a water channel; Hezekiah's conduit conveyed water from the upper pool into Jerusalem in preparation for siege (2 Kings 20:20)."
+    },
+    {
+      "id": 596,
+      "term": "Coney",
+      "definition": "the rock hyrax, a small, gregarious animal living in rock clefts, described in Scripture as \"exceeding wise\" though feeble (Prov. 30:24-26)."
+    },
+    {
+      "id": 597,
+      "term": "Confection",
+      "definition": "a perfume compound (Ex. 30:35)."
+    },
+    {
+      "id": 598,
+      "term": "Confectionaries",
+      "definition": "perfumers who compounded spices and perfumes (1 Sam. 8:13)."
+    },
+    {
+      "id": 599,
+      "term": "Confession",
+      "definition": "an open profession of faith, or an acknowledgment of sin to God and to a wronged neighbour (Luke 12:8; James 5:16)."
+    },
+    {
+      "id": 600,
+      "term": "Congregation",
+      "definition": "the Hebrew people collectively as a holy community, summoned by trumpet to the tabernacle door for religious assemblies (Num. 10:3); later represented by the Sanhedrim."
+    },
+    {
+      "id": 601,
+      "term": "Congregation, mount of the",
+      "definition": "(Isa. 14:13), likely the northern mountain the Babylonians regarded as the meeting-place of their gods, spoken from the perspective of the king of Babylon."
+    },
+    {
+      "id": 602,
+      "term": "Conscience",
+      "definition": "the inborn faculty for judging right and wrong, common to all people but perverted by the Fall, which believers are urged to keep \"void of offence\" (Acts 24:16)."
+    },
+    {
+      "id": 603,
+      "term": "Consecration",
+      "definition": "the setting apart of persons or things to God's service, as with the tribe of Levi and the firstborn under Mosaic law, and all Christians under the New Testament (1 Pet. 2:9)."
+    },
+    {
+      "id": 604,
+      "term": "Consolation of Israel",
+      "definition": "a common Jewish title for the Messiah, drawn from Isaiah's prophecies of comfort (Luke 2:25)."
+    },
+    {
+      "id": 605,
+      "term": "Constellation",
+      "definition": "a recognized cluster of stars; in Isa. 13:10 the Hebrew word denotes the constellation Orion, associated with Nimrod as a symbol of impiety."
+    },
+    {
+      "id": 606,
+      "term": "Contentment",
+      "definition": "a state of mind confined to one's lot, opposed to envy, avarice, ambition, and anxiety, rooted in humility and trust in providence (1 Tim. 6:6)."
+    },
+    {
+      "id": 607,
+      "term": "Conversation",
+      "definition": "one's manner of life or conduct, not verbal communication, in its biblical usage (Eph. 4:22)."
+    },
+    {
+      "id": 608,
+      "term": "Conversion",
+      "definition": "the turning of a sinner to God, whether in the general sense of abandoning false religion or the deeper sense of a life transformed by divine grace (Acts 15:3; 26:18)."
+    },
+    {
+      "id": 609,
+      "term": "Convocation",
+      "definition": "a religious assembly distinct from the more general congregation, as on the Sabbath and the annual feasts, called a \"holy convocation\" (Lev. 23)."
+    },
+    {
+      "id": 610,
+      "term": "Cook",
+      "definition": "in early times cooking was done by the mistress of the household; professional cooks appear later (1 Sam. 8:13)."
+    },
+    {
+      "id": 611,
+      "term": "Coos",
+      "definition": "a small Aegean island where Paul stopped after leaving Miletus (Acts 21:1)."
+    },
+    {
+      "id": 612,
+      "term": "Copper",
+      "definition": "the metal usually mistranslated \"brass\" in the Authorized Version, abundant in Palestine and used for tabernacle and temple vessels and weapons."
+    },
+    {
+      "id": 613,
+      "term": "Cor",
+      "definition": "a Hebrew measure equal to one homer, containing ten ephahs or ten baths (Ezek. 45:14)."
+    },
+    {
+      "id": 614,
+      "term": "Coral",
+      "definition": "a marine calcareous formation, valued especially in its red form for ornaments (Job 28:18)."
+    },
+    {
+      "id": 615,
+      "term": "Corban",
+      "definition": "a Hebrew word for anything irrevocably dedicated to God, which the Pharisees misused as a device to avoid supporting their parents, condemned by Christ (Mark 7:11)."
+    },
+    {
+      "id": 616,
+      "term": "Cord",
+      "definition": "used literally for fastening tents and binding prisoners, and figuratively of death, sorrow, sin's consequences, and union (\"a threefold cord,\" Eccl. 4:12)."
+    },
+    {
+      "id": 617,
+      "term": "Coriander",
+      "definition": "an umbelliferous plant whose seed, resembling a small ball, is likened to manna in form and colour (Ex. 16:31)."
+    },
+    {
+      "id": 618,
+      "term": "Corinth",
+      "definition": "a wealthy Grecian city on the isthmus joining the Peloponnesus to the mainland, rebuilt by the Romans and known for luxury and immorality; Paul resided there eighteen months, and it hosted a large mixed church of Jews and Gentiles (Acts 18:1-18)."
+    },
+    {
+      "id": 619,
+      "term": "Corinthians, First Epistle to the",
+      "definition": "written by Paul from Ephesus (about A.D. 57) after reports of factions, immorality, and doctrinal confusion in the Corinthian church, addressing divisions (chs. 1-4), moral abuses (5-6), doctrinal questions including the Lord's Supper (7-14), and the resurrection (15-16)."
+    },
+    {
+      "id": 620,
+      "term": "Corinthians, Second Epistle to the",
+      "definition": "written by Paul, probably from Macedonia (about A.D. 58), after Titus brought encouraging news from Corinth, discussing his ministry and affection for them (1-7), the collection for Judean believers (8-9), and a defense of his apostolic authority (10-13)."
+    },
+    {
+      "id": 621,
+      "term": "Cormorant",
+      "definition": "an unclean plunging seabird (Lev. 11:17), possibly the same word elsewhere rendered \"pelican.\""
+    },
+    {
+      "id": 622,
+      "term": "Corn",
+      "definition": "a general term for grain of various kinds, an important article of Hebrew diet and, from Solomon's time, an export commodity."
+    },
+    {
+      "id": 623,
+      "term": "Cornelius",
+      "definition": "a devout Roman centurion at Caesarea whose household became the first Gentile converts, baptized by Peter (Acts 10)."
+    },
+    {
+      "id": 624,
+      "term": "Corner",
+      "definition": "used of the angle of a building or street and figuratively of a whole territory (\"four corners of the earth\"); Christ is called \"the corner stone\" set in highest honour (Matt. 21:42)."
+    },
+    {
+      "id": 625,
+      "term": "Cornet",
+      "definition": "a musical horn, usually rendered \"trumpet,\" sounded at festivals including the preparation for the Day of Atonement (1 Chr. 15:28)."
+    },
+    {
+      "id": 626,
+      "term": "Cotes",
+      "definition": "pens or enclosures for flocks (2 Chr. 32:28)."
+    },
+    {
+      "id": 627,
+      "term": "Cottage",
+      "definition": "a temporary shed or booth used by watchmen in vineyards or gardens, removed when no longer needed (Isa. 1:8)."
+    },
+    {
+      "id": 628,
+      "term": "Couch",
+      "definition": "a seat for rest or repose (Job 7:13)."
+    },
+    {
+      "id": 629,
+      "term": "Coulter",
+      "definition": "a ploughshare or facing-piece of a plough (1 Sam. 13:20-21)."
+    },
+    {
+      "id": 630,
+      "term": "Council",
+      "definition": "the Jewish Sanhedrim, the supreme national tribunal, with subordinate local courts; in church history the word denotes assemblies of bishops or pastors, the first being that of Acts 15."
+    },
+    {
+      "id": 631,
+      "term": "Counsellor",
+      "definition": "an adviser, used of royal advisers and, once, of the Messiah (Isa. 9:6)."
+    },
+    {
+      "id": 632,
+      "term": "Courses",
+      "definition": "the twenty-four divisions David organized among priests, singers, and other Levites for rotating temple service (1 Chr. 24-26), reestablished after the Exile by Ezra."
+    },
+    {
+      "id": 633,
+      "term": "Court",
+      "definition": "the enclosure of the tabernacle, temple, a prison, or a private house or palace."
+    },
+    {
+      "id": 634,
+      "term": "Covenant",
+      "definition": "a solemn agreement, used of compacts between people and, especially, of God's gracious self-revealing promises to Noah, Abraham, and Israel at Sinai; theologians distinguish the \"covenant of works\" made with Adam and the \"covenant of grace,\" the eternal plan of redemption fulfilled through Christ."
+    },
+    {
+      "id": 635,
+      "term": "Covering of the eyes",
+      "definition": "occurs in Gen. 20:16, likely an implied instruction for Sarah to wear a veil as married women did."
+    },
+    {
+      "id": 636,
+      "term": "Covetousness",
+      "definition": "a strong desire for worldly possessions, condemned throughout Scripture (Col. 3:5; 1 Tim. 6:9-10)."
+    },
+    {
+      "id": 637,
+      "term": "Cow",
+      "definition": "a cow and her calf were not to be slaughtered on the same day (Lev. 22:28)."
+    },
+    {
+      "id": 638,
+      "term": "Crane",
+      "definition": "a migratory bird known for its loud, melancholy cry (Isa. 38:14)."
+    },
+    {
+      "id": 639,
+      "term": "Creation",
+      "definition": "God's free act of calling all things into being out of nothing \"in the beginning,\" attributed throughout Scripture to the Godhead, the Father, the Son, and the Spirit, with the chief end being the manifestation of God's glory."
+    },
+    {
+      "id": 640,
+      "term": "Creature",
+      "definition": "denotes the whole created order or the whole human race depending on context (Rom. 8:39; Mark 16:15)."
+    },
+    {
+      "id": 641,
+      "term": "Crescens",
+      "definition": "one of Paul's assistants, possibly a Christian of Rome (2 Tim. 4:10)."
+    },
+    {
+      "id": 642,
+      "term": "Crete",
+      "definition": "a large Mediterranean island whose people Paul described as characteristically deceitful (Titus 1:12); visited by Paul en route to Rome, where he later left Titus to organize the church."
+    },
+    {
+      "id": 643,
+      "term": "Crimson",
+      "definition": "see Colour."
+    },
+    {
+      "id": 644,
+      "term": "Crisping-pin",
+      "definition": "a female ornament, probably a reticule or pouch (Isa. 3:22)."
+    },
+    {
+      "id": 645,
+      "term": "Crispus",
+      "definition": "the chief of the synagogue at Corinth, converted and baptized by Paul (Acts 18:8)."
+    },
+    {
+      "id": 646,
+      "term": "Cross",
+      "definition": "the instrument of Roman crucifixion, and by extension a term for Christ's crucifixion itself and for any severe affliction; the Latin cross (crux immissa) was the form used for Christ."
+    },
+    {
+      "id": 647,
+      "term": "Crown",
+      "definition": "worn as a symbol of royal or priestly office, honour, victory, or festivity in the ancient Near East and in Greek and Roman games; believers are promised an \"incorruptible crown\" or \"crown of life\" (James 1:12)."
+    },
+    {
+      "id": 648,
+      "term": "Crown of thorns",
+      "definition": "placed on Christ in mockery by Roman soldiers, probably woven from the thorny nabk shrub common around Jerusalem (Matt. 27:29)."
+    },
+    {
+      "id": 649,
+      "term": "Crucifixion",
+      "definition": "a horrific form of capital punishment among heathen nations, likely not practised by ancient Jews, involving scourging and carrying one's own cross; Christ's unusually rapid death was attributed to his intense mental anguish rather than mere physical exhaustion."
+    },
+    {
+      "id": 650,
+      "term": "Cruse",
+      "definition": "a small vessel for water or oil (1 Sam. 26:11; 1 Kings 17:12)."
+    },
+    {
+      "id": 651,
+      "term": "Crystal",
+      "definition": "a clear quartz stone described as dazzling in Ezekiel's vision and Revelation (Ezek. 1:22; Rev. 4:6)."
+    },
+    {
+      "id": 652,
+      "term": "Cubit",
+      "definition": "a measure of length based on the forearm, commonly about 20.24 inches, with a \"sacred cubit\" slightly longer."
+    },
+    {
+      "id": 653,
+      "term": "Cuckoo",
+      "definition": "a bird mentioned among the unclean species, possibly a seagull or petrel rather than the true cuckoo (Lev. 11:16)."
+    },
+    {
+      "id": 654,
+      "term": "Cucumbers",
+      "definition": "a widely cultivated vegetable of the gourd family, longed for by the Israelites in the wilderness as a reminder of Egypt (Num. 11:5)."
+    },
+    {
+      "id": 655,
+      "term": "Cummin",
+      "definition": "an aromatic seed used as a spice and tithed scrupulously by the Pharisees while they neglected weightier matters (Matt. 23:23)."
+    },
+    {
+      "id": 656,
+      "term": "Cup",
+      "definition": "a wine-vessel, often of gold among the wealthy, used figuratively of one's lot in life (\"cup of salvation,\" \"cup of trembling\") and, at the Last Supper, of the sacramental \"cup of blessing.\""
+    },
+    {
+      "id": 657,
+      "term": "Cup-bearer",
+      "definition": "a high-ranking royal officer responsible for the king's wine, such as Pharaoh's cupbearer and Nehemiah under Artaxerxes."
+    },
+    {
+      "id": 658,
+      "term": "Curious arts",
+      "definition": "magical practices and charms sold by Ephesian sorcerers, whose books were publicly burned by new converts (Acts 19:19)."
+    },
+    {
+      "id": 659,
+      "term": "Curse",
+      "definition": "divine or prophetic maledictions pronounced against sin, distinct from personal cursing (which was forbidden and, against God, punishable by death), as in the curses on the serpent and Cain."
+    },
+    {
+      "id": 660,
+      "term": "Curtain",
+      "definition": "the linen and goat's-hair coverings of the tabernacle, and the veil (a different Hebrew word) separating the holy of holies; used figuratively of the heavens spread out like a tent-awning (Isa. 40:22)."
+    },
+    {
+      "id": 661,
+      "term": "Cush",
+      "definition": "black. (1.) A son of Ham and father of Nimrod, from whom the land of Cush (likely including regions in both Arabia and Africa/Ethiopia) took its name. (2.) A Benjamite mentioned in the title of Psalm 7."
+    },
+    {
+      "id": 662,
+      "term": "Cushan",
+      "definition": "likely a poetic name for the land of Cush, possibly linked to Chushan-rishathaim (Hab. 3:7)."
+    },
+    {
+      "id": 663,
+      "term": "Cushite",
+      "definition": "used of several individuals, including the messenger who told David of Absalom's death (2 Sam. 18:32), and of the foreign wife Moses married (Num. 12:1)."
+    },
+    {
+      "id": 664,
+      "term": "Custom",
+      "definition": "a Roman tax collected by publicans, who were widely hated for their extortion; a separate half-shekel temple tax was paid annually by Jewish men in Jewish coin, requiring money-changers."
+    },
+    {
+      "id": 665,
+      "term": "Cuthah",
+      "definition": "a Babylonian city or district from which colonists were transplanted to Samaria (2 Kings 17:24)."
+    },
+    {
+      "id": 666,
+      "term": "Cutting",
+      "definition": "self-laceration was an idolatrous mourning practice forbidden to the Israelites (Lev. 19:28), though grief-driven tearing of flesh was sometimes regarded as a mark of affection."
+    },
+    {
+      "id": 667,
+      "term": "Cymbals",
+      "definition": "percussion instruments of two brass plates clashed together to produce a loud sound, used in temple worship (1 Chr. 13:8)."
+    },
+    {
+      "id": 668,
+      "term": "Cypress",
+      "definition": "an evergreen tree with hard, fragrant, durable wood, associated with funerals and mourning (Isa. 44:14)."
+    },
+    {
+      "id": 669,
+      "term": "Cyprus",
+      "definition": "a large Mediterranean island, the Old Testament \"Chittim,\" birthplace of Barnabas and scene of Paul's first missionary labours with Barnabas and John Mark (Acts 13:4-13)."
+    },
+    {
+      "id": 670,
+      "term": "Cyrene",
+      "definition": "a North African city with a large Jewish population; Simon, who bore Christ's cross, was a native, and Cyrenian believers helped found the Gentile church at Antioch (Matt. 27:32; Acts 11:20)."
+    },
+    {
+      "id": 671,
+      "term": "Cyrenius",
+      "definition": "the Grecized form of Quirinus, governor of Syria (via Cilicia) at the time of the census associated with Christ's birth (Luke 2:2)."
+    },
+    {
+      "id": 672,
+      "term": "Cyrus",
+      "definition": "the Persian king who conquered Babylon (B.C. 538) and issued the decree permitting the Jews to return and rebuild Jerusalem, a major turning point in Jewish history (Ezra 1:1-4)."
     }
   ]
 }

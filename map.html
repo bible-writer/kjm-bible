@@ -1756,7 +1756,10 @@
   <div id="rawdict-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(720px,92vw);height:88vh;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
       <span style="font-weight:bold;font-size:1.1em">📜 원문사전 (영문)</span>
-      <button id="btn-close-rawdict" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button id="btn-export-rawdict" title="한글 설명 입력분 포함하여 easton_full.json / smith_full.json 내보내기 (평문, GitHub 업로드용)" style="font-size:11px;padding:4px 9px;background:#b45309;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:600">📥 내보내기</button>
+        <button id="btn-close-rawdict" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
+      </div>
     </div>
     <div style="padding:10px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
       <input type="text" id="rawdict-search-input" placeholder="영문 단어 검색 (예: Bread, Darkness)" autocomplete="off"
@@ -4944,9 +4947,20 @@
       slice.forEach(e => {
         const row = document.createElement('div');
         row.style.cssText = 'padding:10px 16px;border-bottom:1px solid #f1f5f9';
+        const safeId = `rawdict-ko-${rawdictSrc}-${e.id}`;
+        const koBlock = e.definition_ko
+          ? `<div style="display:flex;gap:4px;align-items:flex-start;margin-top:6px">
+               <div style="flex:1;font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${escHtml(e.definition_ko)}</div>
+               <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
+             </div>`
+          : `<div style="margin-top:6px">
+               <textarea id="${safeId}" placeholder="한글 설명을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:50px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
+               <button onclick="RawDict.saveKo('${rawdictSrc}',${e.id})" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>
+             </div>`;
         row.innerHTML = `
           <div style="font-weight:600;color:#1e293b;font-style:italic">${escHtml(e.term)}</div>
           <div style="font-size:0.85em;color:#64748b;margin-top:2px;line-height:1.5">${escHtml(e.definition)}</div>
+          ${koBlock}
         `;
         container.appendChild(row);
       });
@@ -4959,11 +4973,74 @@
       }
     }
 
+    // 원문사전 항목별 한글 설명 수동 입력(붙여넣기) — Easton/Smith 원문은 그대로 두고 한글 설명만 별도 필드(definition_ko)로 저장
+    const RawDict = {
+      saveKo: function(src, id) {
+        const input = document.getElementById(`rawdict-ko-${src}-${id}`);
+        if (!input) return;
+        const val = input.value.trim();
+        if (!val) { showToast('붙여넣을 한글 설명을 입력하세요.', 'warn'); return; }
+        const list = src === 'easton' ? eastonFullDict : smithFullDict;
+        const e = list.find(x => x.id === id);
+        if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
+        e.definition_ko = val;
+        setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
+        showToast(`'${e.term}' 한글 설명 저장됨`, 'success');
+        renderRawDictResults(true);
+      },
+      editKo: function(src, id) {
+        const list = src === 'easton' ? eastonFullDict : smithFullDict;
+        const e = list.find(x => x.id === id);
+        if (!e) return;
+        e._editingKo = true; // 렌더링 시 이 플래그가 있으면 입력창으로 전환
+        renderRawDictResultsEditMode(src, id);
+      }
+    };
+    // 특정 한 항목만 임시로 수정 모드로 다시 그림 (전체 목록 유지)
+    function renderRawDictResultsEditMode(src, id) {
+      const list = src === 'easton' ? eastonFullDict : smithFullDict;
+      const e = list.find(x => x.id === id);
+      if (!e) return;
+      const prevKo = e.definition_ko;
+      delete e.definition_ko; // 임시로 지워서 입력창이 뜨도록 함
+      renderRawDictResults(true);
+      // 값이 비어 보이지 않도록 기존 텍스트를 입력창에 채워둠
+      const input = document.getElementById(`rawdict-ko-${src}-${id}`);
+      if (input) input.value = prevKo || '';
+      e.definition_ko = prevKo; // 실제 데이터는 저장 누르기 전까지 원상 유지(취소 시 그대로 남음)
+      // 단, 화면상 입력창이 계속 보이도록 원본 배열엔 표시용 임시 플래그 없이 놔둠 — 저장을 눌러야 갱신됨
+    }
+    async function exportRawDictJson(src) {
+      const list = src === 'easton' ? eastonFullDict : smithFullDict;
+      if (!list || list.length === 0) {
+        showToast(`내보낼 ${src === 'easton' ? 'Easton' : 'Smith'} 데이터가 없습니다.`, 'warn'); return;
+      }
+      const pkg = {
+        version: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+        date: new Date().toISOString().slice(0, 10),
+        count: list.length,
+        source: src === 'easton'
+          ? "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain)"
+          : "Smith's Bible Dictionary (William Smith, 1863, Public Domain)",
+        note: '요약(축약) 영문 정의 + 수동 입력된 한글 설명(definition_ko) 포함. 공개 퍼블릭 도메인 텍스트이므로 평문(비암호화)으로 GitHub에 업로드.',
+        entries: list
+      };
+      const blob = new Blob([JSON.stringify(pkg, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = src === 'easton' ? 'easton_full.json' : 'smith_full.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast(`📥 ${a.download} 생성 완료 (${list.length}개) — GitHub에 업로드하세요`, 'success');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const btnOpen = document.getElementById('btn-open-rawdict');
       if (btnOpen) btnOpen.onclick = openRawDictModal;
       const btnClose = document.getElementById('btn-close-rawdict');
       if (btnClose) btnClose.onclick = closeRawDictModal;
+      const btnExportRawdict = document.getElementById('btn-export-rawdict');
+      if (btnExportRawdict) btnExportRawdict.onclick = () => exportRawDictJson(rawdictSrc);
       const backdrop = document.getElementById('rawdict-modal-backdrop');
       if (backdrop) backdrop.onclick = closeRawDictModal;
       const searchInput = document.getElementById('rawdict-search-input');
