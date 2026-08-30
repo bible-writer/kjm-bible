@@ -3,7 +3,7 @@
  "date": "2026-08-30",
  "count": 3964,
  "source": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축",
- "note": "A-H자 완료(번역+분류). I-Z 미착수.",
+ "note": "A-I자 완료(번역+분류). J-Z 미착수.",
  "entries": [
   {
    "id": 1,
@@ -13168,327 +13168,457 @@
   {
    "id": 1864,
    "term": "Ibhar",
-   "definition": "chosen, one of David’s sons (1 Chronicles 3:6; 2 Samuel 5:15)."
+   "definition": "chosen, one of David’s sons (1 Chronicles 3:6; 2 Samuel 5:15).",
+   "definition_ko": "'택함받은'이라는 뜻으로, 다윗의 아들 중 하나(역대상 3:6; 사무엘하 5:15).",
+   "category": "인명"
   },
   {
    "id": 1865,
    "term": "Ibleam",
-   "definition": "people-waster, a city assigned to Manasseh (Joshua 17:11), from which the Israelites, however, could not expel the Canaanites (Judges 1:27). It is also called Bileam (1 Chronicles 6:70). It was probably the modern Jelamah, a village 2 1/2 miles north of Jenin."
+   "definition": "people-waster, a city assigned to Manasseh (Joshua 17:11), from which the Israelites, however, could not expel the Canaanites (Judges 1:27). It is also called Bileam (1 Chronicles 6:70). It was probably the modern Jelamah, a village 2 1/2 miles north of Jenin.",
+   "definition_ko": "'백성을 낭비하는 자'라는 뜻으로, 므낫세에 배정된 성읍(여호수아 17:11)이나 이스라엘 백성은 그곳의 가나안 사람들을 쫓아내지 못했다(사사기 1:27). 빌르암이라고도 불린다(역대상 6:70).",
+   "category": "지명"
   },
   {
    "id": 1866,
    "term": "Ibzan",
-   "definition": "illustrious, the tenth judge of Israel (Judges 12:8-10). He ruled seven years."
+   "definition": "illustrious, the tenth judge of Israel (Judges 12:8-10). He ruled seven years.",
+   "definition_ko": "'유명한'이라는 뜻으로, 이스라엘의 열 번째 사사(사사기 12:8-10). 칠 년간 다스렸다.",
+   "category": "인명"
   },
   {
    "id": 1867,
    "term": "Ice",
-   "definition": "frequently mentioned (Job 6:16; 38:29; Psalm 147:17, etc.). (See CRYSTAL.)"
+   "definition": "frequently mentioned (Job 6:16; 38:29; Psalm 147:17, etc.). (See CRYSTAL.)",
+   "definition_ko": "자주 언급된다(욥기 6:16; 38:29; 시편 147:17 등; 수정 항목 참조).",
+   "category": "용어"
   },
   {
    "id": 1868,
    "term": "Ichabod",
-   "definition": "When the tidings of the disastrous defeat of the Israelites in the battle against the Philistines near to Mizpeh were carried to Shiloh, the wife of Phinehas “was near to be delivered. And when she heard the tidings that the ark of God was taken, and that her father-in-law and her husband were dead, she bowed herself and travailed” (1 Samuel 4:19-22). In her great distress she regarded not “the women that stood by her,” but named the child that was born “Ichabod” i.e., no glory, saying, “The glory is departed from Isreal;” and with that word on her lips she expired."
+   "definition": "When the tidings of the disastrous defeat of the Israelites in the battle against the Philistines near to Mizpeh were carried to Shiloh, the wife of Phinehas “was near to be delivered. And when she heard the tidings that the ark of God was taken, and that her father-in-law and her husband were dead, she bowed herself and travailed” (1 Samuel 4:19-22). In her great distress she regarded not “the women that stood by her,” but named the child that was born “Ichabod” i.e., no glory, saying, “The glory is departed from Isreal;” and with that word on her lips she expired.",
+   "definition_ko": "블레셋과의 전투에서 이스라엘이 미스바 근처에서 참패했다는 소식이 실로에 전해졌을 때, 비느하스의 아내는 해산이 임박한 상태였다. 하나님의 궤가 빼앗겼다는 소식을 듣고...",
+   "category": "인명"
   },
   {
    "id": 1869,
    "term": "Iconium",
-   "definition": "the capital of ancient Lycaonia. It was first visited by Paul and Barnabas from Antioch-in-Pisidia during the apostle’s first missionary journey (Acts 13:50, 51). Here they were persecuted by the Jews, and being driven from the city, they fled to Lystra. They afterwards returned to Iconium, and encouraged the church which had been founded there (14:21,22). It was probably again visited by Paul during his third missionary journey along with Silas (18:23). It is the modern Konieh, at the foot of Mount Taurus, about 120 miles inland from the Mediterranean."
+   "definition": "the capital of ancient Lycaonia. It was first visited by Paul and Barnabas from Antioch-in-Pisidia during the apostle’s first missionary journey (Acts 13:50, 51). Here they were persecuted by the Jews, and being driven from the city, they fled to Lystra. They afterwards returned to Iconium, and encouraged the church which had been founded there (14:21,22). It was probably again visited by Paul during his third missionary journey along with Silas (18:23). It is the modern Konieh, at the foot of Mount Taurus, about 120 miles inland from the Mediterranean.",
+   "definition_ko": "고대 루가오니아의 수도. 바울과 바나바가 첫 전도 여행 중 비시디아 안디옥에서 처음 방문했다(사도행전 13:50,51). 이곳에서 유대인들에게 박해받아 쫓겨나 루스드라로 도망쳤다.",
+   "category": "지명"
   },
   {
    "id": 1870,
    "term": "Idalah",
-   "definition": "snares(?), a city near the west border of Zebulun (Joshua 19:15). It has been identified with the modern Jeida, in the valley of Kishon."
+   "definition": "snares(?), a city near the west border of Zebulun (Joshua 19:15). It has been identified with the modern Jeida, in the valley of Kishon.",
+   "definition_ko": "'덫들(?)'이라는 뜻으로, 스불론 서쪽 경계 근처의 성읍(여호수아 19:15). 기손 골짜기의 오늘날 예이다와 동일시된다.",
+   "category": "지명"
   },
   {
    "id": 1871,
-   "term": "Iddo (1.)",
-   "definition": "Timely (1 Chronicles 6:21). A Gershonite Levite.  (2.) Lovely. The son of Zechariah (1 Chronicles 27:21), the ruler of Manasseh in David’s time. (3.) Timely. The father of Ahinadab, who was one of Solomon’s purveyors (1 Kings 4:14). (4.) Lovely. A prophet of Judah who wrote the history of Rehoboam and Abijah (2 Chronicles 12:15). He has been identified with Oded (2 Chronicles 15:1). (5.) Lovely. The father of Berachiah, and grandfather of the prophet Zechariah (Zechariah 1:1, 7). He returned from Babylon (Nehemiah 12:4)."
+   "term": "Iddo",
+   "definition": "Timely (1 Chronicles 6:21). A Gershonite Levite.  (2.) Lovely. The son of Zechariah (1 Chronicles 27:21), the ruler of Manasseh in David’s time. (3.) Timely. The father of Ahinadab, who was one of Solomon’s purveyors (1 Kings 4:14). (4.) Lovely. A prophet of Judah who wrote the history of Rehoboam and Abijah (2 Chronicles 12:15). He has been identified with Oded (2 Chronicles 15:1). (5.) Lovely. The father of Berachiah, and grandfather of the prophet Zechariah (Zechariah 1:1, 7). He returned from Babylon (Nehemiah 12:4).",
+   "definition_ko": "(1.) '때맞은'이라는 뜻(역대상 6:21). 게르손 계통 레위인. (2.) '사랑스러운'. 스가랴의 아들(역대상 27:21)로 다윗 시대 므낫세의 지도자. (3.) '때맞은'. 솔로몬의 물자 조달관 중 하나였던 아히나답의 아버지(열왕기상 4:14).",
+   "category": "인명"
   },
   {
    "id": 1872,
-   "term": "Idol (1.)",
-   "definition": "Hebrews aven, “nothingness;” “vanity” (Isaiah 66:3; 41:29; Deuteronomy 32:21; 1 Kings 16:13; Psalm 31:6; Jeremiah 8:19, etc.). (2.) ‘Elil, “a thing of naught” (Psalm 97:7; Isaiah 19:3); a word of contempt, used of the gods of Noph (Ezekiel 30:13). (3.) ‘Emah, “terror,” in allusion to the hideous form of idols (Jeremiah 50:38). (4.) Miphletzeth, “a fright;” “horror” (1 Kings 15:13; 2 Chronicles 15:16). (5.) Bosheth, “shame;” “shameful thing” (Jeremiah 11:13; Hos. 9:10); as characterizing the obscenity of the worship of Baal. (6.) Gillulim, also a word of contempt, “dung;” “refuse” (Ezekiel 16:36; 20:8; Deuteronomy 29:17, marg.). (7.) Shikkuts, “filth;” “impurity” (Ezekiel 37:23; Nah. 3:6). (8.) Semel, “likeness;” “a carved image” (Deuteronomy 4:16). (9.) Tselem, “a shadow” (Daniel 3:1; 1 Samuel 6:5), as distinguished from the “likeness,” or the exact counterpart. (10.) Temunah, “similitude” (Deuteronomy 4:12-19). Here Moses forbids the several forms of Gentile idolatry. (11.) ‘Atsab, “a figure;” from the root “to fashion,” “to labour;” denoting that idols are the result of man’s labour (Isaiah 48:5; Psalm 139:24, “wicked way;” literally, as some translate, “way of an idol”). (12.) Tsir, “a form;” “shape” (Isaiah 45:16).  (13.) Matztzebah, a “statue” set up (Jeremiah 43:13); a memorial stone like that erected by Jacob (Genesis 28:18; 31:45; 35:14, 20), by Joshua (4:9), and by Samuel (1 Samuel 7:12). It is the name given to the statues of Baal (2 Kings 3:2; 10:27). (14.) Hammanim, “sun-images.” Hamman is a synonym of Baal, the sun-God of the Phoenicians (2 Chronicles 34:4, 7; 14:3, 5; Isaiah 17:8). (15.) Maskith, “device” (Leviticus 26:1; Numbers 33:52). In Leviticus 26:1, the words “image of stone” (A.V.) denote “a stone or cippus with the image of an idol, as Baal, Astarte, etc.” In Ezekiel 8:12, “chambers of imagery” (maskith), are “chambers of which the walls are painted with the figures of idols;” comp. ver. 10, 11. (16.) Pesel, “a graven” or “carved image” (Isaiah 44:10-20). It denotes also a figure cast in metal (Deuteronomy 7:25; 27:15; Isaiah 40:19; 44:10). (17.) Massekah, “a molten image” (Deuteronomy 9:12; Judges 17:3, 4). (18.) Teraphim, pl., “images,” family gods (penates) worshipped by Abram’s kindred (Joshua 24:14). Put by Michal in David’s bed (Judges 17:5; 18:14, 17, 18, 20; 1 Samuel 19:13). “Nothing can be more instructive and significant than this multiplicity and variety of words designating the instruments and inventions of idolatry.”"
+   "term": "Idol",
+   "definition": "Hebrews aven, “nothingness;” “vanity” (Isaiah 66:3; 41:29; Deuteronomy 32:21; 1 Kings 16:13; Psalm 31:6; Jeremiah 8:19, etc.). (2.) ‘Elil, “a thing of naught” (Psalm 97:7; Isaiah 19:3); a word of contempt, used of the gods of Noph (Ezekiel 30:13). (3.) ‘Emah, “terror,” in allusion to the hideous form of idols (Jeremiah 50:38). (4.) Miphletzeth, “a fright;” “horror” (1 Kings 15:13; 2 Chronicles 15:16). (5.) Bosheth, “shame;” “shameful thing” (Jeremiah 11:13; Hos. 9:10); as characterizing the obscenity of the worship of Baal. (6.) Gillulim, also a word of contempt, “dung;” “refuse” (Ezekiel 16:36; 20:8; Deuteronomy 29:17, marg.). (7.) Shikkuts, “filth;” “impurity” (Ezekiel 37:23; Nah. 3:6). (8.) Semel, “likeness;” “a carved image” (Deuteronomy 4:16). (9.) Tselem, “a shadow” (Daniel 3:1; 1 Samuel 6:5), as distinguished from the “likeness,” or the exact counterpart. (10.) Temunah, “similitude” (Deuteronomy 4:12-19). Here Moses forbids the several forms of Gentile idolatry. (11.) ‘Atsab, “a figure;” from the root “to fashion,” “to labour;” denoting that idols are the result of man’s labour (Isaiah 48:5; Psalm 139:24, “wicked way;” literally, as some translate, “way of an idol”). (12.) Tsir, “a form;” “shape” (Isaiah 45:16).  (13.) Matztzebah, a “statue” set up (Jeremiah 43:13); a memorial stone like that erected by Jacob (Genesis 28:18; 31:45; 35:14, 20), by Joshua (4:9), and by Samuel (1 Samuel 7:12). It is the name given to the statues of Baal (2 Kings 3:2; 10:27). (14.) Hammanim, “sun-images.” Hamman is a synonym of Baal, the sun-God of the Phoenicians (2 Chronicles 34:4, 7; 14:3, 5; Isaiah 17:8). (15.) Maskith, “device” (Leviticus 26:1; Numbers 33:52). In Leviticus 26:1, the words “image of stone” (A.V.) denote “a stone or cippus with the image of an idol, as Baal, Astarte, etc.” In Ezekiel 8:12, “chambers of imagery” (maskith), are “chambers of which the walls are painted with the figures of idols;” comp. ver. 10, 11. (16.) Pesel, “a graven” or “carved image” (Isaiah 44:10-20). It denotes also a figure cast in metal (Deuteronomy 7:25; 27:15; Isaiah 40:19; 44:10). (17.) Massekah, “a molten image” (Deuteronomy 9:12; Judges 17:3, 4). (18.) Teraphim, pl., “images,” family gods (penates) worshipped by Abram’s kindred (Joshua 24:14). Put by Michal in David’s bed (Judges 17:5; 18:14, 17, 18, 20; 1 Samuel 19:13). “Nothing can be more instructive and significant than this multiplicity and variety of words designating the instruments and inventions of idolatry.”",
+   "definition_ko": "(1.) 히브리어 '아웬', '헛됨, 허무함'(이사야 66:3; 41:29; 신명기 32:21 등). (2.) '엘릴', '아무것도 아닌 것'(시편 97:7; 이사야 19:3); 놉의 신들을 가리키는 경멸의 단어(에스겔 30:13).",
+   "category": "용어"
   },
   {
    "id": 1873,
    "term": "Idolatry",
-   "definition": "image-worship or divine honour paid to any created object. Paul describes the origin of idolatry in Romans 1:21-25: men forsook God, and sank into ignorance and moral corruption (1:28). The forms of idolatry are, (1.) Fetishism, or the worship of trees, rivers, hills, stones, etc. (2.) Nature worship, the worship of the sun, moon, and stars, as the supposed powers of nature. (3.) Hero worship, the worship of deceased ancestors, or of heroes. In Scripture, idolatry is regarded as of heathen origin, and as being imported among the Hebrews through contact with heathen nations. The first allusion to idolatry is in the account of Rachel stealing her father’s teraphim (Genesis 31:19), which were the relics of the worship of other gods by Laban’s progenitors “on the other side of the river in old time” (Joshua 24:2). During their long residence in Egypt the Hebrews fell into  idolatry, and it was long before they were delivered from it (Joshua 24:14; Ezekiel 20:7). Many a token of God’s displeasure fell upon them because of this sin. The idolatry learned in Egypt was probably rooted out from among the people during the forty years’ wanderings; but when the Jews entered Palestine, they came into contact with the monuments and associations of the idolatry of the old Canaanitish races, and showed a constant tendency to depart from the living God and follow the idolatrous practices of those heathen nations. It was their great national sin, which was only effectually rebuked by the Babylonian exile. That exile finally purified the Jews of all idolatrous tendencies. The first and second commandments are directed against idolatry of every form. Individuals and communities were equally amenable to the rigorous code. The individual offender was devoted to destruction (Exodus 22:20). His nearest relatives were not only bound to denounce him and deliver him up to punishment (Deuteronomy 13:20-10), but their hands were to strike the first blow when, on the evidence of two witnesses at least, he was stoned (Deuteronomy 17:2-7). To attempt to seduce others to false worship was a crime of equal enormity (13:6-10). An idolatrous nation shared the same fate. No facts are more strongly declared in the Old Testament than that the extermination of the Canaanites was the punishment of their idolatry (Exodus 34:15, 16; Deuteronomy 7; 12:29-31; 20:17), and that the calamities of the Israelites were due to the same cause (Jeremiah 2:17). “A city guilty of idolatry was looked upon as a cancer in the state; it was considered to be in rebellion, and treated according to the laws of war. Its inhabitants and all their cattle were put to death.” Jehovah was the theocratic King of Israel, the civil Head of the commonwealth, and therefore to an Israelite idolatry was a state offence (1 Samuel 15:23), high treason. On taking possession of the land, the Jews were commanded to destroy all traces of every kind of the existing idolatry of the Canaanites (Exodus 23:24, 32; 34:13; Deuteronomy 7:5, 25; 12:1-3). In the New Testament the term idolatry is used to designate covetousness (Matthew 6:24; Luke 16:13; Colossians 3:5; Ephesians 5:5)."
+   "definition": "image-worship or divine honour paid to any created object. Paul describes the origin of idolatry in Romans 1:21-25: men forsook God, and sank into ignorance and moral corruption (1:28). The forms of idolatry are, (1.) Fetishism, or the worship of trees, rivers, hills, stones, etc. (2.) Nature worship, the worship of the sun, moon, and stars, as the supposed powers of nature. (3.) Hero worship, the worship of deceased ancestors, or of heroes. In Scripture, idolatry is regarded as of heathen origin, and as being imported among the Hebrews through contact with heathen nations. The first allusion to idolatry is in the account of Rachel stealing her father’s teraphim (Genesis 31:19), which were the relics of the worship of other gods by Laban’s progenitors “on the other side of the river in old time” (Joshua 24:2). During their long residence in Egypt the Hebrews fell into  idolatry, and it was long before they were delivered from it (Joshua 24:14; Ezekiel 20:7). Many a token of God’s displeasure fell upon them because of this sin. The idolatry learned in Egypt was probably rooted out from among the people during the forty years’ wanderings; but when the Jews entered Palestine, they came into contact with the monuments and associations of the idolatry of the old Canaanitish races, and showed a constant tendency to depart from the living God and follow the idolatrous practices of those heathen nations. It was their great national sin, which was only effectually rebuked by the Babylonian exile. That exile finally purified the Jews of all idolatrous tendencies. The first and second commandments are directed against idolatry of every form. Individuals and communities were equally amenable to the rigorous code. The individual offender was devoted to destruction (Exodus 22:20). His nearest relatives were not only bound to denounce him and deliver him up to punishment (Deuteronomy 13:20-10), but their hands were to strike the first blow when, on the evidence of two witnesses at least, he was stoned (Deuteronomy 17:2-7). To attempt to seduce others to false worship was a crime of equal enormity (13:6-10). An idolatrous nation shared the same fate. No facts are more strongly declared in the Old Testament than that the extermination of the Canaanites was the punishment of their idolatry (Exodus 34:15, 16; Deuteronomy 7; 12:29-31; 20:17), and that the calamities of the Israelites were due to the same cause (Jeremiah 2:17). “A city guilty of idolatry was looked upon as a cancer in the state; it was considered to be in rebellion, and treated according to the laws of war. Its inhabitants and all their cattle were put to death.” Jehovah was the theocratic King of Israel, the civil Head of the commonwealth, and therefore to an Israelite idolatry was a state offence (1 Samuel 15:23), high treason. On taking possession of the land, the Jews were commanded to destroy all traces of every kind of the existing idolatry of the Canaanites (Exodus 23:24, 32; 34:13; Deuteronomy 7:5, 25; 12:1-3). In the New Testament the term idolatry is used to designate covetousness (Matthew 6:24; Luke 16:13; Colossians 3:5; Ephesians 5:5).",
+   "definition_ko": "형상 숭배, 곧 창조된 어떤 대상에게 신적 영예를 돌리는 것. 바울은 로마서 1:21-25에서 우상숭배의 기원을 설명한다: 사람들이 하나님을 버리고 무지와 도덕적 타락에 빠졌다.",
+   "category": "용어"
   },
   {
    "id": 1874,
    "term": "Idumaea",
-   "definition": "the Greek form of Edom (Isaiah 34:5, 6; Ezekiel 35:15; 36:5, but in R.V. “Edom”). (See EDOM)."
+   "definition": "the Greek form of Edom (Isaiah 34:5, 6; Ezekiel 35:15; 36:5, but in R.V. “Edom”). (See EDOM).",
+   "definition_ko": "에돔의 그리스어 형태(이사야 34:5,6; 에스겔 35:15; 36:5, 개정역에서는 '에돔'; 에돔 항목 참조).",
+   "category": "지명"
   },
   {
    "id": 1875,
    "term": "Igal",
-   "definition": "avengers. (1.) Numbers 13:7, one of the spies of the tribe of Issachar. (2.) Son of Nathan of Zobah, and one of David’s warriors (2 Samuel 23:36). (3.) 1 Chronicles 3:22."
+   "definition": "avengers. (1.) Numbers 13:7, one of the spies of the tribe of Issachar. (2.) Son of Nathan of Zobah, and one of David’s warriors (2 Samuel 23:36). (3.) 1 Chronicles 3:22.",
+   "definition_ko": "'복수하는 자들'이라는 뜻. (1.) 민수기 13:7, 잇사갈 지파 정탐꾼 중 하나. (2.) 소바 사람 나단의 아들이며 다윗의 용사 중 하나(사무엘하 23:36). (3.) 역대상 3:22.",
+   "category": "인명"
   },
   {
    "id": 1876,
    "term": "Iim",
-   "definition": "ruins. (1.) A city in the south of Judah (Joshua 15:29). (2.) One of the stations of the Israelites in the wilderness (Numbers 33:45)."
+   "definition": "ruins. (1.) A city in the south of Judah (Joshua 15:29). (2.) One of the stations of the Israelites in the wilderness (Numbers 33:45).",
+   "definition_ko": "'폐허들'이라는 뜻. (1.) 유다 남쪽의 성읍(여호수아 15:29). (2.) 이스라엘 백성이 광야를 유랑하며 머문 진지 중 하나(민수기 33:45).",
+   "category": "지명"
   },
   {
    "id": 1877,
    "term": "I Je-Abarim",
-   "definition": "ruins of Abarim, the forty-seventh station of the Israelites in the wilderness, “in the border of Moab” (Numbers 33:44)."
+   "definition": "ruins of Abarim, the forty-seventh station of the Israelites in the wilderness, “in the border of Moab” (Numbers 33:44).",
+   "definition_ko": "'아바림의 폐허들'이라는 뜻으로, 이스라엘 백성이 광야를 유랑하며 머문 마흔일곱 번째 진지, '모압 경계에'(민수기 33:44).",
+   "category": "지명"
   },
   {
    "id": 1878,
    "term": "Ijon",
-   "definition": "a ruin, a city of Naphtali, captured by Ben-hadad of Syria at the instance of Asa (1 Kings 15:20), and afterwards by Tiglath-pileser of Assyria (2 Kings 15:29) in the reign of Pekah; now el-Khiam."
+   "definition": "a ruin, a city of Naphtali, captured by Ben-hadad of Syria at the instance of Asa (1 Kings 15:20), and afterwards by Tiglath-pileser of Assyria (2 Kings 15:29) in the reign of Pekah; now el-Khiam.",
+   "definition_ko": "'폐허'라는 뜻으로, 아사의 청으로 시리아 왕 벤하닷에게 점령당했다가(열왕기상 15:20) 이후 베가 시대에 앗수르 왕 디글랏빌레셀에게 점령당한 납달리의 성읍(열왕기하 15:29); 지금의 엘키암.",
+   "category": "지명"
   },
   {
    "id": 1879,
    "term": "Ilai",
-   "definition": "an Ahohite, one of David’s chief warriors (1 Chronicles 11:29); called also Zalmon (2 Samuel 23:28)."
+   "definition": "an Ahohite, one of David’s chief warriors (1 Chronicles 11:29); called also Zalmon (2 Samuel 23:28).",
+   "definition_ko": "아호아 사람으로, 다윗의 주요 용사 중 하나(역대상 11:29); 살몬이라고도 불린다(사무엘하 23:28).",
+   "category": "인명"
   },
   {
    "id": 1880,
    "term": "Illyricum",
-   "definition": "a country to the north-west of Macedonia, on the eastern shores of the Adriatic, now almost wholly comprehended in Dalmatia, a name formerly given to the southern part of Illyricum (2 Timothy 4:10). It was traversed by Paul in his third missionary journey (Romans 15:19). It was the farthest district he had reached in preaching the gospel of Christ. This reference to Illyricum is in harmony with Acts 20:2, inasmuch as the apostle’s journey over the parts of Macedonia would bring him to the borders of Illyricum."
+   "definition": "a country to the north-west of Macedonia, on the eastern shores of the Adriatic, now almost wholly comprehended in Dalmatia, a name formerly given to the southern part of Illyricum (2 Timothy 4:10). It was traversed by Paul in his third missionary journey (Romans 15:19). It was the farthest district he had reached in preaching the gospel of Christ. This reference to Illyricum is in harmony with Acts 20:2, inasmuch as the apostle’s journey over the parts of Macedonia would bring him to the borders of Illyricum.",
+   "definition_ko": "마케도니아 북서쪽, 아드리아해 동쪽 연안의 나라로, 지금은 거의 전부 달마디아(당시 일루리쿰 남부를 부르던 이름)에 속한다(디모데후서 4:10). 바울이 세 번째 전도 여행 중 이 지역을 지났다.",
+   "category": "지명"
   },
   {
    "id": 1881,
    "term": "Imagery",
-   "definition": "only in the phrase “chambers of his imagery” (Ezekiel 8:12). (See CHAMBER.)"
+   "definition": "only in the phrase “chambers of his imagery” (Ezekiel 8:12). (See CHAMBER.)",
+   "definition_ko": "'그의 형상의 방들'이라는 문구에만 쓰인다(에스겔 8:12; 방 항목 참조).",
+   "category": "용어"
   },
   {
    "id": 1882,
    "term": "Imla",
-   "definition": "replenisher, the father of Micaiah the prophet (2 Chronicles 18:7,8)."
+   "definition": "replenisher, the father of Micaiah the prophet (2 Chronicles 18:7,8).",
+   "definition_ko": "'채우는 자'라는 뜻으로, 선지자 미가야의 아버지(역대하 18:7,8).",
+   "category": "인명"
   },
   {
    "id": 1883,
    "term": "Immanuel",
-   "definition": "God with us. In the Old Testament it occurs only in Isaiah 7:14 and 8:8. Most Christian interpreters have regarded these words as directly and exclusively a prophecy of our Saviour, an interpretation borne out by the words of the evangelist Matthew (1:23)."
+   "definition": "God with us. In the Old Testament it occurs only in Isaiah 7:14 and 8:8. Most Christian interpreters have regarded these words as directly and exclusively a prophecy of our Saviour, an interpretation borne out by the words of the evangelist Matthew (1:23).",
+   "definition_ko": "'하나님이 우리와 함께 계시다'는 뜻. 구약에서는 이사야 7:14와 8:8에만 나온다. 대다수 그리스도교 주석가들은 이를 직접적이고 전적으로 우리 구주에 대한 예언으로 여긴다.",
+   "category": "용어"
   },
   {
    "id": 1884,
    "term": "Immer",
-   "definition": "talkative. (1.) The head of the sixteenth priestly order (1 Chronicles 24:14). (2.) Jeremiah 20:1. (3.) Ezra 2:37; Nehemiah 7:40. (4.) Ezra 2:59; Nehemiah 7:61. (5.) The father of Zadok (Nehemiah 3:29)."
+   "definition": "talkative. (1.) The head of the sixteenth priestly order (1 Chronicles 24:14). (2.) Jeremiah 20:1. (3.) Ezra 2:37; Nehemiah 7:40. (4.) Ezra 2:59; Nehemiah 7:61. (5.) The father of Zadok (Nehemiah 3:29).",
+   "definition_ko": "'말이 많은'이라는 뜻. (1.) 열여섯째 제사장 반열의 우두머리(역대상 24:14). (2.) 예레미야 20:1. (3.) 에스라 2:37; 느헤미야 7:40. (4.) 에스라 2:59. (5.) 사독의 아버지(느헤미야 3:29).",
+   "category": "인명"
   },
   {
    "id": 1885,
    "term": "Immortality",
-   "definition": "perpetuity of existence. The doctrine of immortality is taught in the Old Testament. It is plainly implied in the writings of Moses (Genesis 5:22, 24; 25:8; 37:35; 47:9; 49:29, comp. Hebrews 11:13-16; Exodus 3:6, comp. Matthew 22:23). It is more clearly and fully taught in the later books (Isaiah 14:9; Psalm 17:15; 49:15; 73:24). It was thus a doctrine obviously well known to the Jews.  With the full revelation of the gospel this doctrine was “brought to light” (2 Timothy 1:10; 1 Corinthians 15; 2 Corinthians 5:1-6; 1 Thessalonians 4:13-18)."
+   "definition": "perpetuity of existence. The doctrine of immortality is taught in the Old Testament. It is plainly implied in the writings of Moses (Genesis 5:22, 24; 25:8; 37:35; 47:9; 49:29, comp. Hebrews 11:13-16; Exodus 3:6, comp. Matthew 22:23). It is more clearly and fully taught in the later books (Isaiah 14:9; Psalm 17:15; 49:15; 73:24). It was thus a doctrine obviously well known to the Jews.  With the full revelation of the gospel this doctrine was “brought to light” (2 Timothy 1:10; 1 Corinthians 15; 2 Corinthians 5:1-6; 1 Thessalonians 4:13-18).",
+   "definition_ko": "존재의 영속성. 불멸의 교리는 구약에서도 가르쳐진다. 모세의 글에 명백히 암시되어 있다(창세기 5:22,24; 25:8; 37:35; 47:9; 49:29; 히브리서 11:13-16 참조).",
+   "category": "용어"
   },
   {
    "id": 1886,
    "term": "Imputation",
-   "definition": "is used to designate any action or word or thing as reckoned to a person. Thus in doctrinal language (1) the sin of Adam is imputed to all his descendants, i.e., it is reckoned as theirs, and they are dealt with therefore as guilty; (2) the righteousness of Christ is imputed to them that believe in him, or so attributed to them as to be considered their own; and (3) our sins are imputed to Christ, i.e., he assumed our “law-place,” undertook to answer the demands of justice for our sins. In all these cases the nature of imputation is the same (Romans 5:12-19; comp. Philemon 1:18, 19)."
+   "definition": "is used to designate any action or word or thing as reckoned to a person. Thus in doctrinal language (1) the sin of Adam is imputed to all his descendants, i.e., it is reckoned as theirs, and they are dealt with therefore as guilty; (2) the righteousness of Christ is imputed to them that believe in him, or so attributed to them as to be considered their own; and (3) our sins are imputed to Christ, i.e., he assumed our “law-place,” undertook to answer the demands of justice for our sins. In all these cases the nature of imputation is the same (Romans 5:12-19; comp. Philemon 1:18, 19).",
+   "definition_ko": "어떤 행동이나 말이나 사물을 한 사람에게 돌려 셈하는 것을 가리키는 데 쓰인다. 신학 용어로는 (1) 아담의 죄가 모든 후손에게 전가된다, 곧 그들의 것으로 셈해져 그들이 죄인으로 다루어진다; (2) 의로움이...",
+   "category": "용어"
   },
   {
    "id": 1887,
    "term": "Incarnation",
-   "definition": "that act of grace whereby Christ took our human nature into union with his Divine Person, became man. Christ is both God and man. Human attributes and actions are predicated of him, and he of whom they are predicated is God. A Divine Person was united to a human nature (Acts 20:28; Romans 8:32; 1 Corinthians 2:8; Hebrews 2:11-14; 1 Timothy 3:16; Galatians 4:4, etc.). The union is hypostatical, i.e., is personal; the two natures are not mixed or confounded, and it is perpetual."
+   "definition": "that act of grace whereby Christ took our human nature into union with his Divine Person, became man. Christ is both God and man. Human attributes and actions are predicated of him, and he of whom they are predicated is God. A Divine Person was united to a human nature (Acts 20:28; Romans 8:32; 1 Corinthians 2:8; Hebrews 2:11-14; 1 Timothy 3:16; Galatians 4:4, etc.). The union is hypostatical, i.e., is personal; the two natures are not mixed or confounded, and it is perpetual.",
+   "definition_ko": "그리스도께서 우리 인간 본성을 그분의 신적 인격과 연합시켜 사람이 되신 은혜의 행위. 그리스도는 하나님이시며 사람이시다. 인간적 속성과 행위가 그분께 돌려지며, 그것들이 돌려지는 그분은 하나님이시다.",
+   "category": "용어"
   },
   {
    "id": 1888,
    "term": "Incense",
-   "definition": "a fragrant composition prepared by the “art of the apothecary.” It consisted of four ingredients “beaten small” (Exodus 30:34-36). That which was not thus prepared was called “strange incense” (30:9). It was offered along with every meat-offering; and besides was daily offered on the golden altar in the holy place, and on the great day of atonement was burnt by the high priest in the holy of holies (30:7, 8). It was the symbol of prayer (Psalm 141:1,2; Revelation 5:8; 8:3, 4)."
+   "definition": "a fragrant composition prepared by the “art of the apothecary.” It consisted of four ingredients “beaten small” (Exodus 30:34-36). That which was not thus prepared was called “strange incense” (30:9). It was offered along with every meat-offering; and besides was daily offered on the golden altar in the holy place, and on the great day of atonement was burnt by the high priest in the holy of holies (30:7, 8). It was the symbol of prayer (Psalm 141:1,2; Revelation 5:8; 8:3, 4).",
+   "definition_ko": "'약제상의 기술'로 만들어진 향기로운 조합물. 네 가지 재료를 '곱게 찧어' 만들었다(출애굽기 30:34-36). 이렇게 준비되지 않은 것은 '다른 향'이라 불렸다(30:9). 모든 소제와 함께 드려졌다.",
+   "category": "용어"
   },
   {
    "id": 1889,
    "term": "India",
-   "definition": "occurs only in Esther 1:1 and 8:9, where the extent of the dominion of the Persian king is described. The country so designated here is not the peninsula of Hindustan, but the country surrounding the Indus, the Punjab. The people and the products of India were well known to the Jews, who seem to have carried on an active trade with that country (Ezekiel 27:15, 24)."
+   "definition": "occurs only in Esther 1:1 and 8:9, where the extent of the dominion of the Persian king is described. The country so designated here is not the peninsula of Hindustan, but the country surrounding the Indus, the Punjab. The people and the products of India were well known to the Jews, who seem to have carried on an active trade with that country (Ezekiel 27:15, 24).",
+   "definition_ko": "에스더 1:1과 8:9에만 나오며, 페르시아 왕의 영토 범위를 묘사하는 데 쓰인다. 여기서 가리키는 나라는 인도아대륙이 아니라 인더스강 주변, 곧 펀자브 지역이다.",
+   "category": "지명"
   },
   {
    "id": 1890,
    "term": "Inkhorn",
-   "definition": "The Hebrew word so rendered means simply a round vessel or cup for containing ink, which was generally worn by writers in the girdle (Ezekiel 9:2, 3,11). The word “inkhorn” was used by the translators, because in former times in this country horns were used for containing ink."
+   "definition": "The Hebrew word so rendered means simply a round vessel or cup for containing ink, which was generally worn by writers in the girdle (Ezekiel 9:2, 3,11). The word “inkhorn” was used by the translators, because in former times in this country horns were used for containing ink.",
+   "definition_ko": "이렇게 번역된 히브리어 단어는 단순히 잉크를 담는 둥근 그릇이나 잔을 뜻하며, 필경사들이 대개 허리띠에 차고 다녔다(에스겔 9:2,3,11). '잉크뿔(inkhorn)'이라는 번역어는 옛날에는 뿔로 이런 그릇을...",
+   "category": "용어"
   },
   {
    "id": 1891,
    "term": "Inn",
-   "definition": "in the modern sense, unknown in the East. The khans or caravanserais, which correspond to the European inn, are not alluded to in the Old Testament. The “inn” mentioned in Exodus 4:24 was just the  halting-place of the caravan. In later times khans were erected for the accommodation of travellers. In Luke 2:7 the word there so rendered denotes a place for loosing the beasts of their burdens. It is rendered “guest-chamber” in Mark 14:14 and Luke 22:11. In Luke 10:34 the word so rendered is different. That inn had an “inn-keeper,” who attended to the wants of travellers."
+   "definition": "in the modern sense, unknown in the East. The khans or caravanserais, which correspond to the European inn, are not alluded to in the Old Testament. The “inn” mentioned in Exodus 4:24 was just the  halting-place of the caravan. In later times khans were erected for the accommodation of travellers. In Luke 2:7 the word there so rendered denotes a place for loosing the beasts of their burdens. It is rendered “guest-chamber” in Mark 14:14 and Luke 22:11. In Luke 10:34 the word so rendered is different. That inn had an “inn-keeper,” who attended to the wants of travellers.",
+   "definition_ko": "오늘날의 의미로는 동방에 알려져 있지 않았다. 유럽의 여관에 해당하는 '한'이나 '대상 숙소'는 구약에 언급되지 않는다. 출애굽기 4:24의 '여관'은 그저 대상의 정거장이었다.",
+   "category": "용어"
   },
   {
    "id": 1892,
    "term": "Inspiration",
-   "definition": "that extraordinary or supernatural divine influence vouchsafed to those who wrote the Holy Scriptures, rendering their writings infallible. “All scripture is given by inspiration of God” (R.V., “Every scripture inspired of God”), 2 Timothy 3:16. This is true of all the “sacred writings,” not in the sense of their being works of genius or of supernatural insight, but as “theopneustic,” i.e., “breathed into by God” in such a sense that the writers were supernaturally guided to express exactly what God intended them to express as a revelation of his mind and will. The testimony of the sacred writers themselves abundantly demonstrates this truth; and if they are infallible as teachers of doctrine, then the doctrine of plenary inspiration must be accepted. There are no errors in the Bible as it came from God, none have been proved to exist. Difficulties and phenomena we cannot explain are not errors. All these books of the Old and New Testaments are inspired. We do not say that they contain, but that they are, the Word of God. The gift of inspiration rendered the writers the organs of God, for the infallible communication of his mind and will, in the very manner and words in which it was originally given. As to the nature of inspiration we have no information. This only we know, it rendered the writers infallible. They were all equally inspired, and are all equally infallible. The inspiration of the sacred writers did not change their characters. They retained all their individual peculiarities as thinkers or writers. (See BIBLE; WORD OF GOD.)"
+   "definition": "that extraordinary or supernatural divine influence vouchsafed to those who wrote the Holy Scriptures, rendering their writings infallible. “All scripture is given by inspiration of God” (R.V., “Every scripture inspired of God”), 2 Timothy 3:16. This is true of all the “sacred writings,” not in the sense of their being works of genius or of supernatural insight, but as “theopneustic,” i.e., “breathed into by God” in such a sense that the writers were supernaturally guided to express exactly what God intended them to express as a revelation of his mind and will. The testimony of the sacred writers themselves abundantly demonstrates this truth; and if they are infallible as teachers of doctrine, then the doctrine of plenary inspiration must be accepted. There are no errors in the Bible as it came from God, none have been proved to exist. Difficulties and phenomena we cannot explain are not errors. All these books of the Old and New Testaments are inspired. We do not say that they contain, but that they are, the Word of God. The gift of inspiration rendered the writers the organs of God, for the infallible communication of his mind and will, in the very manner and words in which it was originally given. As to the nature of inspiration we have no information. This only we know, it rendered the writers infallible. They were all equally inspired, and are all equally infallible. The inspiration of the sacred writers did not change their characters. They retained all their individual peculiarities as thinkers or writers. (See BIBLE; WORD OF GOD.)",
+   "definition_ko": "성경을 기록한 이들에게 주어진 그 특별하고 초자연적인 신적 영향으로, 그들의 글을 무오하게 만든다. '모든 성경은 하나님의 감동으로 된 것'(디모데후서 3:16).",
+   "category": "용어"
   },
   {
    "id": 1893,
    "term": "Intercession Of Christ",
-   "definition": "Christ’s priestly office consists of these two parts, (1) the offering up of himself as a sacrifice, and (2) making continual intercession for us. When on earth he made intercession for his people (Luke 23:34; John 17:20; Hebrews 5:7); but now he exercises this function of his priesthood in heaven, where he is said to appear in the presence of God for us (Hebrews 9:12,24).  His advocacy with the Father for his people rests on the basis of his own all-perfect sacrifice. Thus he pleads for and obtains the fulfilment of all the promises of the everlasting covenant (1 John 2:1; John 17:24; Hebrews 7:25). He can be “touched with the feeling of our infirmities,” and is both a merciful and a faithful high priest (Hebrews 2:17, 18; 4:15, 16). This intercession is an essential part of his mediatorial work. Through him we have “access” to the Father (John 14:6; Ephesians 2:18; 3:12). “The communion of his people with the Father will ever be sustained through him as mediatorial Priest” (Psalm 110:4; Revelation 7:17)."
+   "definition": "Christ’s priestly office consists of these two parts, (1) the offering up of himself as a sacrifice, and (2) making continual intercession for us. When on earth he made intercession for his people (Luke 23:34; John 17:20; Hebrews 5:7); but now he exercises this function of his priesthood in heaven, where he is said to appear in the presence of God for us (Hebrews 9:12,24).  His advocacy with the Father for his people rests on the basis of his own all-perfect sacrifice. Thus he pleads for and obtains the fulfilment of all the promises of the everlasting covenant (1 John 2:1; John 17:24; Hebrews 7:25). He can be “touched with the feeling of our infirmities,” and is both a merciful and a faithful high priest (Hebrews 2:17, 18; 4:15, 16). This intercession is an essential part of his mediatorial work. Through him we have “access” to the Father (John 14:6; Ephesians 2:18; 3:12). “The communion of his people with the Father will ever be sustained through him as mediatorial Priest” (Psalm 110:4; Revelation 7:17).",
+   "definition_ko": "그리스도의 제사장 직분은 (1) 자기 자신을 제물로 드리는 것과 (2) 우리를 위해 계속 중보하는 것, 두 부분으로 이루어진다. 땅에 계실 때 그분은 자기 백성을 위해 중보하셨다(누가복음 23:34).",
+   "category": "용어"
   },
   {
    "id": 1894,
    "term": "Intercession Of The Spirit",
-   "definition": "(Romans 8:26, 27; John 14:26). “Christ is a royal Priest (Zechariah 6:13). From the same throne, as King, he dispenses his Spirit to all the objects of his care, while as Priest he intercedes for them. The Spirit acts for him, taking only of his things. They both act with one consent, Christ as principal, the Spirit as his agent. Christ intercedes for us, without us, as our advocate in heaven, according to the provisions of the everlasting covenant. The Holy Spirit works upon our minds and hearts, enlightening and quickening, and thus determining our desires ‘according to the will of God,’ as our advocate within us. The work of the one is complementary to that of the other, and together they form a complete whole.”, Hodge’s Outlines of Theology."
+   "definition": "(Romans 8:26, 27; John 14:26). “Christ is a royal Priest (Zechariah 6:13). From the same throne, as King, he dispenses his Spirit to all the objects of his care, while as Priest he intercedes for them. The Spirit acts for him, taking only of his things. They both act with one consent, Christ as principal, the Spirit as his agent. Christ intercedes for us, without us, as our advocate in heaven, according to the provisions of the everlasting covenant. The Holy Spirit works upon our minds and hearts, enlightening and quickening, and thus determining our desires ‘according to the will of God,’ as our advocate within us. The work of the one is complementary to that of the other, and together they form a complete whole.”, Hodge’s Outlines of Theology.",
+   "definition_ko": "(로마서 8:26,27; 요한복음 14:26) '그리스도는 왕적 제사장이시다(스가랴 6:13). 같은 보좌에서 왕으로서 그분은 자기 돌보심의 모든 대상에게 성령을 나누어 주시며, 제사장으로서는 그들을 위해 중보하신다.'",
+   "category": "용어"
   },
   {
    "id": 1895,
    "term": "Iphedeiah",
-   "definition": "set free by Jehovah, a chief of the tribe of Benjamin (1 Chronicles 8:25)."
+   "definition": "set free by Jehovah, a chief of the tribe of Benjamin (1 Chronicles 8:25).",
+   "definition_ko": "'여호와께서 자유롭게 하신 이'라는 뜻으로, 베냐민 지파의 지도자(역대상 8:25).",
+   "category": "인명"
   },
   {
    "id": 1896,
    "term": "Ira",
-   "definition": "citizen; wakeful. (1.) A Tekoite, one of David’s thirty warriors (2 Samuel 23:26). (2.) An Ithrite, also one of David’s heroes (2 Samuel 23:38). (3.) A Jairite and priest, a royal chaplain (2 Samuel 20:26) or confidential adviser (comp. 2 Samuel 8:18; 1 Chronicles 18:17)."
+   "definition": "citizen; wakeful. (1.) A Tekoite, one of David’s thirty warriors (2 Samuel 23:26). (2.) An Ithrite, also one of David’s heroes (2 Samuel 23:38). (3.) A Jairite and priest, a royal chaplain (2 Samuel 20:26) or confidential adviser (comp. 2 Samuel 8:18; 1 Chronicles 18:17).",
+   "definition_ko": "'시민; 깨어 있는'이라는 뜻. (1.) 드고아 사람으로 다윗의 삼십 용사 중 하나(사무엘하 23:26). (2.) 이델 사람으로 역시 다윗의 용사(사무엘하 23:38). (3.) 야일 사람이며 제사장, 왕실 고문(사무엘하 20:26).",
+   "category": "인명"
   },
   {
    "id": 1897,
    "term": "Irad",
-   "definition": "runner; wild ass, one of the antediluvian patriarchs, the father of Mehujael (Genesis 4:18), and grandson of Cain."
+   "definition": "runner; wild ass, one of the antediluvian patriarchs, the father of Mehujael (Genesis 4:18), and grandson of Cain.",
+   "definition_ko": "'달리는 자; 들나귀'라는 뜻으로, 홍수 이전 족장 중 하나이며 므후야엘의 아버지(창세기 4:18)이자 가인의 손자.",
+   "category": "인명"
   },
   {
    "id": 1898,
    "term": "Iram",
-   "definition": "citizen, chief of an Edomite tribe in Mount Seir (Genesis 36:43)."
+   "definition": "citizen, chief of an Edomite tribe in Mount Seir (Genesis 36:43).",
+   "definition_ko": "'시민'이라는 뜻으로, 세일산 에돔 부족의 족장(창세기 36:43).",
+   "category": "인명"
   },
   {
    "id": 1899,
    "term": "Irha -Heres",
-   "definition": "according to some MSS., meaning “city of destruction.” Other MSS. read ’Irhahares; rendered “city of the sun”, Isaiah 19:18, where alone the word occurs. This name may probably refer to Heliopolis. The prophecy here points to a time when the Jews would so increase in  number there as that the city would fall under their influence. This might be in the time of the Ptolemies. (See ON.)"
+   "definition": "according to some MSS., meaning “city of destruction.” Other MSS. read ’Irhahares; rendered “city of the sun”, Isaiah 19:18, where alone the word occurs. This name may probably refer to Heliopolis. The prophecy here points to a time when the Jews would so increase in  number there as that the city would fall under their influence. This might be in the time of the Ptolemies. (See ON.)",
+   "definition_ko": "일부 사본에 따르면 '멸망의 성읍'이라는 뜻. 다른 사본은 '이르하하레스'로 읽어 '태양의 성읍'으로 번역한다(이사야 19:18, 이 단어가 나오는 유일한 곳). 이 이름은 아마도 헬리오폴리스를 가리킬 것이다.",
+   "category": "지명"
   },
   {
    "id": 1900,
    "term": "Iron",
-   "definition": "Tubal-Cain is the first-mentioned worker in iron (Genesis 4:22). The Egyptians wrought it at Sinai before the Exodus. David prepared it in great abundance for the temple (1 Chronicles 22:3: 29:7). The merchants of Dan and Javan brought it to the market of Tyre (Ezekiel 27:19). Various instruments are mentioned as made of iron (Deuteronomy 27:5; 19:5; Joshua 17:16, 18; 1 Samuel 17:7; 2 Samuel 12:31; 2 Kings 6:5, 6; 1 Chronicles 22:3; Isaiah 10:34). Figuratively, a yoke of iron (Deuteronomy 28:48) denotes hard service; a rod of iron (Psalm 2:9), a stern government; a pillar of iron (Jeremiah 1:18), a strong support; a furnace of iron (Deuteronomy 4:20), severe labour; a bar of iron (Job 40:18), strength; fetters of iron (Psalm 107:10), affliction; giving silver for iron (Isaiah 60:17), prosperity."
+   "definition": "Tubal-Cain is the first-mentioned worker in iron (Genesis 4:22). The Egyptians wrought it at Sinai before the Exodus. David prepared it in great abundance for the temple (1 Chronicles 22:3: 29:7). The merchants of Dan and Javan brought it to the market of Tyre (Ezekiel 27:19). Various instruments are mentioned as made of iron (Deuteronomy 27:5; 19:5; Joshua 17:16, 18; 1 Samuel 17:7; 2 Samuel 12:31; 2 Kings 6:5, 6; 1 Chronicles 22:3; Isaiah 10:34). Figuratively, a yoke of iron (Deuteronomy 28:48) denotes hard service; a rod of iron (Psalm 2:9), a stern government; a pillar of iron (Jeremiah 1:18), a strong support; a furnace of iron (Deuteronomy 4:20), severe labour; a bar of iron (Job 40:18), strength; fetters of iron (Psalm 107:10), affliction; giving silver for iron (Isaiah 60:17), prosperity.",
+   "definition_ko": "두발가인이 최초로 언급된 철 세공자다(창세기 4:22). 애굽인들은 출애굽 이전 시내산에서 이를 다루었다. 다윗은 성전을 위해 철을 대량으로 준비했다(역대상 22:3; 29:7).",
+   "category": "용어"
   },
   {
    "id": 1901,
    "term": "Irrigation",
-   "definition": "As streams were few in Palestine, water was generally stored up in winter in reservoirs, and distributed through gardens in numerous rills, which could easily be turned or diverted by the foot (Deuteronomy 11:10). For purposes of irrigation, water was raised from streams or pools by water-wheels, or by a shaduf, commonly used on the banks of the Nile to the present day."
+   "definition": "As streams were few in Palestine, water was generally stored up in winter in reservoirs, and distributed through gardens in numerous rills, which could easily be turned or diverted by the foot (Deuteronomy 11:10). For purposes of irrigation, water was raised from streams or pools by water-wheels, or by a shaduf, commonly used on the banks of the Nile to the present day.",
+   "definition_ko": "팔레스타인에는 시내가 적었으므로 물은 대개 겨울에 저수지에 저장되었다가 발로 쉽게 물길을 돌릴 수 있는 수많은 도랑을 통해 정원 곳곳에 분배되었다(신명기 11:10).",
+   "category": "용어"
   },
   {
    "id": 1902,
    "term": "Isaac",
-   "definition": "laughter. (1) Israel, or the kingdom of the ten tribes (Amos 7:9, 16). (2.) The only son of Abraham by Sarah. He was the longest lived of the three patriarchs (Genesis 21:1-3). He was circumcised when eight days old (4-7); and when he was probably two years old a great feast was held in connection with his being weaned. The next memorable event in his life is that connected with the command of God given to Abraham to offer him up as a sacrifice on a mountain in the land of Moriah (Genesis 22). (See ABRAHAM.) When he was forty years of age Rebekah was chosen for his wife (Genesis 24). After the death and burial of his father he took up his residence at Beer-lahai-roi (25:7-11), where his two sons, Esau and Jacob, were born (21-26), the former of whom seems to have been his favourite son (27,28).  In consequence of a famine (Genesis 26:1) Isaac went to Gerar, where he practised deception as to his relation to Rebekah, imitating the conduct of his father in Egypt (12:12-20) and in Gerar (20:2). The Philistine king rebuked him for his prevarication. After sojourning for some time in the land of the Philistines, he returned to Beersheba, where God gave him fresh assurance of covenant blessing, and where Abimelech entered into a covenant of peace with him. The next chief event in his life was the blessing of his sons (Genesis 27:1). He died at Mamre, “being old and full of days” (35:27-29), one hundred and eighty years old, and was buried in the cave of Machpelah. In the New Testament reference is made to his having been “offered up” by his father (Hebrews 11:17; James 2:21), and to his blessing his sons (Hebrews 11:20). As the child of promise, he is contrasted with Ishmael (Romans 9:7, 10; Galatians 4:28; Hebrews 11:18). Isaac is “at once a counterpart of his father in simple devoutness and purity of life, and a contrast in his passive weakness of character, which in part, at least, may have sprung from his relations to his mother and wife. After the expulsion of Ishmael and Hagar, Isaac had no competitor, and grew up in the shade of Sarah’s tent, moulded into feminine softness by habitual submission to her strong, loving will.” His life was so quiet and uneventful that it was spent “within the circle of a few miles; so guileless that he let Jacob overreach him rather than disbelieve his assurance; so tender that his mother’s death was the poignant sorrow of years; so patient and gentle that peace with his neighbours was dearer than even such a coveted possession as a well of living water dug by his own men; so grandly obedient that he put his life at his father’s disposal; so firm in his reliance on God that his greatest concern through life was to honour the divine promise given to his race.”, Geikie’s Hours, etc."
+   "definition": "laughter. (1) Israel, or the kingdom of the ten tribes (Amos 7:9, 16). (2.) The only son of Abraham by Sarah. He was the longest lived of the three patriarchs (Genesis 21:1-3). He was circumcised when eight days old (4-7); and when he was probably two years old a great feast was held in connection with his being weaned. The next memorable event in his life is that connected with the command of God given to Abraham to offer him up as a sacrifice on a mountain in the land of Moriah (Genesis 22). (See ABRAHAM.) When he was forty years of age Rebekah was chosen for his wife (Genesis 24). After the death and burial of his father he took up his residence at Beer-lahai-roi (25:7-11), where his two sons, Esau and Jacob, were born (21-26), the former of whom seems to have been his favourite son (27,28).  In consequence of a famine (Genesis 26:1) Isaac went to Gerar, where he practised deception as to his relation to Rebekah, imitating the conduct of his father in Egypt (12:12-20) and in Gerar (20:2). The Philistine king rebuked him for his prevarication. After sojourning for some time in the land of the Philistines, he returned to Beersheba, where God gave him fresh assurance of covenant blessing, and where Abimelech entered into a covenant of peace with him. The next chief event in his life was the blessing of his sons (Genesis 27:1). He died at Mamre, “being old and full of days” (35:27-29), one hundred and eighty years old, and was buried in the cave of Machpelah. In the New Testament reference is made to his having been “offered up” by his father (Hebrews 11:17; James 2:21), and to his blessing his sons (Hebrews 11:20). As the child of promise, he is contrasted with Ishmael (Romans 9:7, 10; Galatians 4:28; Hebrews 11:18). Isaac is “at once a counterpart of his father in simple devoutness and purity of life, and a contrast in his passive weakness of character, which in part, at least, may have sprung from his relations to his mother and wife. After the expulsion of Ishmael and Hagar, Isaac had no competitor, and grew up in the shade of Sarah’s tent, moulded into feminine softness by habitual submission to her strong, loving will.” His life was so quiet and uneventful that it was spent “within the circle of a few miles; so guileless that he let Jacob overreach him rather than disbelieve his assurance; so tender that his mother’s death was the poignant sorrow of years; so patient and gentle that peace with his neighbours was dearer than even such a coveted possession as a well of living water dug by his own men; so grandly obedient that he put his life at his father’s disposal; so firm in his reliance on God that his greatest concern through life was to honour the divine promise given to his race.”, Geikie’s Hours, etc.",
+   "definition_ko": "'웃음'이라는 뜻. (1) 이스라엘, 곧 열 지파 왕국(아모스 7:9,16). (2.) 아브라함이 사라에게서 얻은 외아들. 세 족장 중 가장 오래 살았다(창세기 21:1-3). 태어난 지 팔 일 만에 할례를 받았다.",
+   "category": "인명"
   },
   {
    "id": 1903,
    "term": "Isaiah",
-   "definition": "(Hebrews Yesh’yahu, i.e., “the salvation of Jehovah”). (1.) The son of Amoz (Isaiah 1:1; 2:1), who was apparently a man of humble rank. His wife was called “the prophetess” (8:3), either because she was endowed with the prophetic gift, like Deborah (Judges 4:4) and Huldah (2 Kings 22:14-20), or simply because she was the wife of “the prophet” (Isaiah 38:1). He had two sons, who bore symbolical names. He exercised the functions of his office during the reigns of Uzziah (or Azariah), Jotham, Ahaz, and Hezekiah (1:1). Uzziah reigned fifty-two years (B.C. 810-759), and Isaiah must have begun his career a few years before Uzziah’s death, probably B.C. 762. He lived till the fourteenth year of Hezekiah, and in all likelihood outlived that monarch (who died B.C. 698), and may have been contemporary for some years with Manasseh. Thus Isaiah may have prophesied for the long period of at least sixty-four years. His first call to the prophetical office is not recorded. A second call came to him “in the year that King Uzziah died” (Isaiah 6:1). He exercised his ministry in a spirit of uncompromising firmness and boldness in regard to all that bore on the interests of religion. He conceals nothing and keeps nothing back from fear of man. He was also noted for his spirituality and for his deep-toned reverence toward “the holy One of Israel.” In early youth Isaiah must have been moved by the invasion of Israel by the Assyrian monarch Pul (q.v.), 2 Kings 15:19; and again, twenty years later, when he had already entered on his office, by the invasion of Tiglath-pileser and his career of conquest. Ahaz, king of Judah, at this crisis refused to co-operate with the kings of Israel and Syria in opposition to the Assyrians, and was on that account attacked and defeated by Rezin of Damascus and Pekah of Samaria (2 Kings 16:5; 2 Chronicles 28:5, 6). Ahaz, thus humbled, sided with Assyria, and sought the aid of Tiglath-pileser against Israel and Syria. The consequence was that Rezin and Pekah were conquered and many of the people carried captive to Assyria (2 Kings 15:29; 16:9; 1 Chronicles 5:26). Soon after this Shalmaneser determined wholly to subdue the kingdom of Israel. Samaria was taken and destroyed (B.C. 722). So long as Ahaz reigned, the kingdom of Judah was unmolested by the Assyrian power; but on his accession to the throne, Hezekiah (B.C. 726), who “rebelled against the king of Assyria” (2 Kings 18:7), in which he was encouraged by Isaiah, who exhorted the people to place all their dependence on Jehovah (Isaiah 10:24;  37:6), entered into an alliance with the king of Egypt (Isaiah 30:2-4). This led the king of Assyria to threaten the king of Judah, and at length to invade the land. Sennacherib (B.C. 701) led a powerful army into Palestine. Hezekiah was reduced to despair, and submitted to the Assyrians (2 Kings 18:14-16). But after a brief interval war broke out again, and again Sennacherib (q.v.) led an army into Palestine, one detachment of which threatened Jerusalem (Isaiah 36:2-22; 37:8). Isaiah on that occasion encouraged Hezekiah to resist the Assyrians (37:1-7), whereupon Sennacherib sent a threatening letter to Hezekiah, which he “spread before the Lord” (37:14). The judgement of God now fell on the Assyrian host. “Like Xerxes in Greece, Sennacherib never recovered from the shock of the disaster in Judah. He made no more expeditions against either Southern Palestine or Egypt.” The remaining years of Hezekiah’s reign were peaceful (2 Chronicles 32:23, 27-29). Isaiah probably lived to its close, and possibly into the reign of Manasseh, but the time and manner of his death are unknown. There is a tradition that he suffered martyrdom in the heathen reaction in the time of Manasseh (q.v.). (2.) One of the heads of the singers in the time of David (1 Chronicles 25:3,15, “Jeshaiah”). (3.) A Levite (1 Chronicles 26:25). (4.) Ezra 8:7. (5.) Nehemiah 11:7."
+   "definition": "(Hebrews Yesh’yahu, i.e., “the salvation of Jehovah”). (1.) The son of Amoz (Isaiah 1:1; 2:1), who was apparently a man of humble rank. His wife was called “the prophetess” (8:3), either because she was endowed with the prophetic gift, like Deborah (Judges 4:4) and Huldah (2 Kings 22:14-20), or simply because she was the wife of “the prophet” (Isaiah 38:1). He had two sons, who bore symbolical names. He exercised the functions of his office during the reigns of Uzziah (or Azariah), Jotham, Ahaz, and Hezekiah (1:1). Uzziah reigned fifty-two years (B.C. 810-759), and Isaiah must have begun his career a few years before Uzziah’s death, probably B.C. 762. He lived till the fourteenth year of Hezekiah, and in all likelihood outlived that monarch (who died B.C. 698), and may have been contemporary for some years with Manasseh. Thus Isaiah may have prophesied for the long period of at least sixty-four years. His first call to the prophetical office is not recorded. A second call came to him “in the year that King Uzziah died” (Isaiah 6:1). He exercised his ministry in a spirit of uncompromising firmness and boldness in regard to all that bore on the interests of religion. He conceals nothing and keeps nothing back from fear of man. He was also noted for his spirituality and for his deep-toned reverence toward “the holy One of Israel.” In early youth Isaiah must have been moved by the invasion of Israel by the Assyrian monarch Pul (q.v.), 2 Kings 15:19; and again, twenty years later, when he had already entered on his office, by the invasion of Tiglath-pileser and his career of conquest. Ahaz, king of Judah, at this crisis refused to co-operate with the kings of Israel and Syria in opposition to the Assyrians, and was on that account attacked and defeated by Rezin of Damascus and Pekah of Samaria (2 Kings 16:5; 2 Chronicles 28:5, 6). Ahaz, thus humbled, sided with Assyria, and sought the aid of Tiglath-pileser against Israel and Syria. The consequence was that Rezin and Pekah were conquered and many of the people carried captive to Assyria (2 Kings 15:29; 16:9; 1 Chronicles 5:26). Soon after this Shalmaneser determined wholly to subdue the kingdom of Israel. Samaria was taken and destroyed (B.C. 722). So long as Ahaz reigned, the kingdom of Judah was unmolested by the Assyrian power; but on his accession to the throne, Hezekiah (B.C. 726), who “rebelled against the king of Assyria” (2 Kings 18:7), in which he was encouraged by Isaiah, who exhorted the people to place all their dependence on Jehovah (Isaiah 10:24;  37:6), entered into an alliance with the king of Egypt (Isaiah 30:2-4). This led the king of Assyria to threaten the king of Judah, and at length to invade the land. Sennacherib (B.C. 701) led a powerful army into Palestine. Hezekiah was reduced to despair, and submitted to the Assyrians (2 Kings 18:14-16). But after a brief interval war broke out again, and again Sennacherib (q.v.) led an army into Palestine, one detachment of which threatened Jerusalem (Isaiah 36:2-22; 37:8). Isaiah on that occasion encouraged Hezekiah to resist the Assyrians (37:1-7), whereupon Sennacherib sent a threatening letter to Hezekiah, which he “spread before the Lord” (37:14). The judgement of God now fell on the Assyrian host. “Like Xerxes in Greece, Sennacherib never recovered from the shock of the disaster in Judah. He made no more expeditions against either Southern Palestine or Egypt.” The remaining years of Hezekiah’s reign were peaceful (2 Chronicles 32:23, 27-29). Isaiah probably lived to its close, and possibly into the reign of Manasseh, but the time and manner of his death are unknown. There is a tradition that he suffered martyrdom in the heathen reaction in the time of Manasseh (q.v.). (2.) One of the heads of the singers in the time of David (1 Chronicles 25:3,15, “Jeshaiah”). (3.) A Levite (1 Chronicles 26:25). (4.) Ezra 8:7. (5.) Nehemiah 11:7.",
+   "definition_ko": "(히브리어 '예샤야후', 곧 '여호와의 구원'이라는 뜻) (1.) 아모스의 아들(이사야 1:1; 2:1)로 미천한 가문 출신으로 보인다. 그의 아내는 드보라처럼 예언의 은사를 지녔을 것이기에 '여선지자'라 불렸다.",
+   "category": "인명"
   },
   {
    "id": 1904,
-   "term": "I Saiah, The Book Of",
-   "definition": "consists of prophecies delivered (Isaiah 1) in the reign of Uzziah (1-5), (2) of Jotham (6), (3) Ahaz (7-14:28), (4) the first half of Hezekiah’s reign (14:28-35), (5) the second half of Hezekiah’s reign (36-66). Thus, counting from the fourth year before Uzziah’s death (B.C. 762) to the last year of Hezekiah (B.C. 698), Isaiah’s ministry extended over a period of sixty-four years. He may, however, have survived Hezekiah, and may have perished in the way indicated above. The book, as a whole, has been divided into three main parts: (1.) The first thirty-five chapters, almost wholly prophetic, Israel’s enemy Assyria, present the Messiah as a mighty Ruler and King. (2.) Four chapters are historical (36-39), relating to the times of Hezekiah. (3.) Prophetical (40-66), Israel’s enemy Babylon, describing the Messiah as a suffering victim, meek and lowly. The genuineness of the section Isaiah 40-66 has been keenly opposed by able critics. They assert that it must be the production of a deutero-Isaiah, who lived toward the close of the Babylonian captivity. This theory was  originated by Koppe, a German writer at the close of the last century. There are other portions of the book also (e.g., ch. 13; 24-27; and certain verses in ch. 14 and 21) which they attribute to some other prophet than Isaiah. Thus they say that some five or seven, or even more, unknown prophets had a hand in the production of this book. The considerations which have led to such a result are various: (1.) They cannot, as some say, conceive it possible that Isaiah, living in B.C. 700, could foretell the appearance and the exploits of a prince called Cyrus, who would set the Jews free from captivity one hundred and seventy years after. (2.) It is alleged that the prophet takes the time of the Captivity as his standpoint, and speaks of it as then present; and (3) that there is such a difference between the style and language of the closing section (40-66) and those of the preceding chapters as to necessitate a different authorship, and lead to the conclusion that there were at least two Isaiahs. But even granting the fact of a great diversity of style and language, this will not necessitate the conclusion attempted to be drawn from it. The diversity of subjects treated of and the peculiarities of the prophet’s position at the time the prophecies were uttered will sufficiently account for this. The arguments in favour of the unity of the book are quite conclusive. When the LXX. version was made (about B.C. 250) the entire contents of the book were ascribed to Isaiah, the son of Amoz. It is not called in question, moreover, that in the time of our Lord the book existed in the form in which we now have it. Many prophecies in the disputed portions are quoted in the New Testament as the words of Isaiah (Matthew 3:3; Luke 3:4-6; 4:16-41; John 12:38; Acts 8:28; Romans 10:16-21). Universal and persistent tradition has ascribed the whole book to one author. Besides this, the internal evidence, the similarity in the language and style, in the thoughts and images and rhetorical ornaments, all points to the same conclusion; and its local colouring and allusions show that it is obviously of Palestinian origin. The theory therefore of a double authorship of the book, much less of a manifold authorship, cannot be maintained. The book, with all the diversity of its contents, is one, and is, we believe, the production of the great prophet whose name it bears."
+   "term": "Isaiah, The Book Of",
+   "definition": "consists of prophecies delivered (Isaiah 1) in the reign of Uzziah (1-5), (2) of Jotham (6), (3) Ahaz (7-14:28), (4) the first half of Hezekiah’s reign (14:28-35), (5) the second half of Hezekiah’s reign (36-66). Thus, counting from the fourth year before Uzziah’s death (B.C. 762) to the last year of Hezekiah (B.C. 698), Isaiah’s ministry extended over a period of sixty-four years. He may, however, have survived Hezekiah, and may have perished in the way indicated above. The book, as a whole, has been divided into three main parts: (1.) The first thirty-five chapters, almost wholly prophetic, Israel’s enemy Assyria, present the Messiah as a mighty Ruler and King. (2.) Four chapters are historical (36-39), relating to the times of Hezekiah. (3.) Prophetical (40-66), Israel’s enemy Babylon, describing the Messiah as a suffering victim, meek and lowly. The genuineness of the section Isaiah 40-66 has been keenly opposed by able critics. They assert that it must be the production of a deutero-Isaiah, who lived toward the close of the Babylonian captivity. This theory was  originated by Koppe, a German writer at the close of the last century. There are other portions of the book also (e.g., ch. 13; 24-27; and certain verses in ch. 14 and 21) which they attribute to some other prophet than Isaiah. Thus they say that some five or seven, or even more, unknown prophets had a hand in the production of this book. The considerations which have led to such a result are various: (1.) They cannot, as some say, conceive it possible that Isaiah, living in B.C. 700, could foretell the appearance and the exploits of a prince called Cyrus, who would set the Jews free from captivity one hundred and seventy years after. (2.) It is alleged that the prophet takes the time of the Captivity as his standpoint, and speaks of it as then present; and (3) that there is such a difference between the style and language of the closing section (40-66) and those of the preceding chapters as to necessitate a different authorship, and lead to the conclusion that there were at least two Isaiahs. But even granting the fact of a great diversity of style and language, this will not necessitate the conclusion attempted to be drawn from it. The diversity of subjects treated of and the peculiarities of the prophet’s position at the time the prophecies were uttered will sufficiently account for this. The arguments in favour of the unity of the book are quite conclusive. When the LXX. version was made (about B.C. 250) the entire contents of the book were ascribed to Isaiah, the son of Amoz. It is not called in question, moreover, that in the time of our Lord the book existed in the form in which we now have it. Many prophecies in the disputed portions are quoted in the New Testament as the words of Isaiah (Matthew 3:3; Luke 3:4-6; 4:16-41; John 12:38; Acts 8:28; Romans 10:16-21). Universal and persistent tradition has ascribed the whole book to one author. Besides this, the internal evidence, the similarity in the language and style, in the thoughts and images and rhetorical ornaments, all points to the same conclusion; and its local colouring and allusions show that it is obviously of Palestinian origin. The theory therefore of a double authorship of the book, much less of a manifold authorship, cannot be maintained. The book, with all the diversity of its contents, is one, and is, we believe, the production of the great prophet whose name it bears.",
+   "definition_ko": "웃시야 시대(1-5장), 요담 시대(6장), 아하스 시대(7-14:28), 히스기야 통치 전반부(14:28-35), 히스기야 통치 후반부(36-66장)에 전해진 예언들로 이루어진다.",
+   "category": "용어"
   },
   {
    "id": 1905,
    "term": "Iscah",
-   "definition": "spy, the daughter of Haran and sister of Milcah and Lot (Genesis 11:29, 31)."
+   "definition": "spy, the daughter of Haran and sister of Milcah and Lot (Genesis 11:29, 31).",
+   "definition_ko": "'정탐꾼'이라는 뜻으로, 하란의 딸이며 밀가와 롯의 누이(창세기 11:29,31).",
+   "category": "인명"
   },
   {
    "id": 1906,
    "term": "Iscariot",
-   "definition": "(See JUDAS.)"
+   "definition": "(See JUDAS.)",
+   "definition_ko": "유다 항목 참조.",
+   "category": "인명"
   },
   {
    "id": 1907,
    "term": "Ishbak",
-   "definition": "leaving, one of Abraham’s sons by Keturah (Genesis 25:2)."
+   "definition": "leaving, one of Abraham’s sons by Keturah (Genesis 25:2).",
+   "definition_ko": "'떠남'이라는 뜻으로, 아브라함이 그두라에게서 얻은 아들 중 하나(창세기 25:2).",
+   "category": "인명"
   },
   {
    "id": 1908,
-   "term": "Ishbi -Benob",
-   "definition": "my seat at Nob, one of the Rephaim, whose spear was three hundred shekels in weight. He was slain by Abishai (2 Samuel 21:16, 17)."
+   "term": "Ishbi-Benob",
+   "definition": "my seat at Nob, one of the Rephaim, whose spear was three hundred shekels in weight. He was slain by Abishai (2 Samuel 21:16, 17).",
+   "definition_ko": "'놉에 있는 나의 자리'라는 뜻으로, 창이 삼백 세겔 무게였던 르바임 중 하나. 아비새에게 죽임을 당했다(사무엘하 21:16,17).",
+   "category": "인명"
   },
   {
    "id": 1909,
-   "term": "Ish -Bosheth",
-   "definition": "man of shame or humiliation, the youngest of Saul’s four sons, and the only one who survived him (2 Samuel 2-4). His name was originally Eshbaal (1 Chronicles 8:33; 9:39). He was about forty years of age when his father and three brothers fell at the battle of Gilboa. Through the influence of Abner, Saul’s cousin, he was acknowledged as successor to the throne of Saul, and ruled over all Israel, except the tribe of Judah (over whom David was king), for two years, having Mahanaim, on the east of Jordan, as his capital (2 Samuel 2:9). After a troubled and uncertain reign he was murdered by his guard, who stabbed him while he was asleep on his couch at mid-day (2 Samuel 4:5-7); and having cut off his head, presented it to David, who sternly rebuked them for this cold-blooded murder, and ordered them to be immediately executed (9-12)."
+   "term": "Ish-Bosheth",
+   "definition": "man of shame or humiliation, the youngest of Saul’s four sons, and the only one who survived him (2 Samuel 2-4). His name was originally Eshbaal (1 Chronicles 8:33; 9:39). He was about forty years of age when his father and three brothers fell at the battle of Gilboa. Through the influence of Abner, Saul’s cousin, he was acknowledged as successor to the throne of Saul, and ruled over all Israel, except the tribe of Judah (over whom David was king), for two years, having Mahanaim, on the east of Jordan, as his capital (2 Samuel 2:9). After a troubled and uncertain reign he was murdered by his guard, who stabbed him while he was asleep on his couch at mid-day (2 Samuel 4:5-7); and having cut off his head, presented it to David, who sternly rebuked them for this cold-blooded murder, and ordered them to be immediately executed (9-12).",
+   "definition_ko": "'수치 또는 굴욕의 사람'이라는 뜻으로, 사울의 네 아들 중 막내이며 유일하게 그보다 오래 산 자(사무엘하 2-4장). 본래 이름은 에스바알이었다(역대상 8:33; 9:39).",
+   "category": "인명"
   },
   {
    "id": 1910,
    "term": "Ishi",
-   "definition": "my husband, a symbolical name used in Hos. 2:16 (See BAALI.)"
+   "definition": "my husband, a symbolical name used in Hos. 2:16 (See BAALI.)",
+   "definition_ko": "'나의 남편'이라는 뜻으로, 호세아 2:16에 쓰인 상징적 이름(바알리 항목 참조).",
+   "category": "용어"
   },
   {
    "id": 1911,
    "term": "Ishmael",
-   "definition": "God hears. (1.) Abraham’s eldest son, by Hagar the concubine (Genesis 16:15; 17:23). He was born at Mamre, when Abraham was eighty-six years of age, eleven years after his arrival in Canaan (16:3; 21:5). At the age of thirteen he was circumcised (17:25). He grew up a true child of the desert, wild and wayward. On the occasion of the weaning of Isaac his rude and wayward spirit broke out in expressions of insult and mockery (21:9, 10); and Sarah, discovering this, said to Abraham, “Expel this slave and her son.” Influenced by a divine admonition, Abraham dismissed Hagar and her son with no more than a skin of water and some bread. The narrative describing this act is one of the most beautiful and touching incidents of patriarchal life (Genesis 21:14-16). (See HAGAR.) Ishmael settled in the land of Paran, a region lying between Canaan and the mountains of Sinai; and “God was with him, and he became a great archer” (Genesis 21:9-21). He became a great desert chief, but of his history little is recorded. He was about ninety years of age when his father Abraham  died, in connection with whose burial he once more for a moment reappears. On this occasion the two brothers met after being long separated. “Isaac with his hundreds of household slaves, Ishmael with his troops of wild retainers and half-savage allies, in all the state of a Bedouin prince, gathered before the cave of Machpelah, in the midst of the men of Heth, to pay the last duties to the ‘father of the faithful,’ would make a notable subject for an artist” (Genesis 25:9). Of the after events of his life but little is known. He died at the age of one hundred and thirty-seven years, but where and when are unknown (25:17). He had twelve sons, who became the founders of so many Arab tribes or colonies, the Ishmaelites, who spread over the wide desert spaces of Northern Arabia from the Red Sea to the Euphrates (Genesis 37:25, 27, 28; 39:1), “their hand against every man, and every man’s hand against them.” (2.) The son of Nethaniah, “of the seed royal” (Jeremiah 40:8, 15). He plotted against Gedaliah, and treacherously put him and others to death. He carried off many captives, “and departed to go over to the Ammonites.”"
+   "definition": "God hears. (1.) Abraham’s eldest son, by Hagar the concubine (Genesis 16:15; 17:23). He was born at Mamre, when Abraham was eighty-six years of age, eleven years after his arrival in Canaan (16:3; 21:5). At the age of thirteen he was circumcised (17:25). He grew up a true child of the desert, wild and wayward. On the occasion of the weaning of Isaac his rude and wayward spirit broke out in expressions of insult and mockery (21:9, 10); and Sarah, discovering this, said to Abraham, “Expel this slave and her son.” Influenced by a divine admonition, Abraham dismissed Hagar and her son with no more than a skin of water and some bread. The narrative describing this act is one of the most beautiful and touching incidents of patriarchal life (Genesis 21:14-16). (See HAGAR.) Ishmael settled in the land of Paran, a region lying between Canaan and the mountains of Sinai; and “God was with him, and he became a great archer” (Genesis 21:9-21). He became a great desert chief, but of his history little is recorded. He was about ninety years of age when his father Abraham  died, in connection with whose burial he once more for a moment reappears. On this occasion the two brothers met after being long separated. “Isaac with his hundreds of household slaves, Ishmael with his troops of wild retainers and half-savage allies, in all the state of a Bedouin prince, gathered before the cave of Machpelah, in the midst of the men of Heth, to pay the last duties to the ‘father of the faithful,’ would make a notable subject for an artist” (Genesis 25:9). Of the after events of his life but little is known. He died at the age of one hundred and thirty-seven years, but where and when are unknown (25:17). He had twelve sons, who became the founders of so many Arab tribes or colonies, the Ishmaelites, who spread over the wide desert spaces of Northern Arabia from the Red Sea to the Euphrates (Genesis 37:25, 27, 28; 39:1), “their hand against every man, and every man’s hand against them.” (2.) The son of Nethaniah, “of the seed royal” (Jeremiah 40:8, 15). He plotted against Gedaliah, and treacherously put him and others to death. He carried off many captives, “and departed to go over to the Ammonites.”",
+   "definition_ko": "'하나님이 들으신다'는 뜻. (1.) 아브라함이 첩 하갈에게서 얻은 맏아들(창세기 16:15; 17:23). 아브라함이 여든여섯 살 때, 가나안에 도착한 지 십일 년 뒤 마므레에서 태어났다.",
+   "category": "인명"
   },
   {
    "id": 1912,
    "term": "Ishmaiah",
-   "definition": "heard by Jehovah. (1.) A Gibeonite who joined David at Ziklag, “a hero among the thirty and over the thirty” (1 Chronicles 12:4). (2.) Son of Obadiah, and viceroy of Zebulun under David and Solomon (1 Chronicles 27:19)."
+   "definition": "heard by Jehovah. (1.) A Gibeonite who joined David at Ziklag, “a hero among the thirty and over the thirty” (1 Chronicles 12:4). (2.) Son of Obadiah, and viceroy of Zebulun under David and Solomon (1 Chronicles 27:19).",
+   "definition_ko": "'여호와께서 들으셨다'는 뜻. (1.) 시글락에서 다윗과 합류한 기브온 사람, '삼십 용사 가운데, 그리고 삼십 용사 위의 용사'(역대상 12:4). (2.) 오바댜의 아들이며 다윗과 솔로몬 시대 스불론의 부왕(역대상 27:19).",
+   "category": "인명"
   },
   {
    "id": 1913,
    "term": "Ishmeelites",
-   "definition": "(Genesis 37:28; 39:1, A.V.) should be “Ishmaelites,” as in the Revised Version."
+   "definition": "(Genesis 37:28; 39:1, A.V.) should be “Ishmaelites,” as in the Revised Version.",
+   "definition_ko": "(창세기 37:28; 39:1, 흠정역) 개정역처럼 '이스마엘 사람들'로 되어야 한다.",
+   "category": "용어"
   },
   {
    "id": 1914,
    "term": "Ishtob",
-   "definition": "man of Tob, one of the small Syrian kingdoms which together constituted Aram (2 Samuel 10:6,8)."
+   "definition": "man of Tob, one of the small Syrian kingdoms which together constituted Aram (2 Samuel 10:6,8).",
+   "definition_ko": "'돕의 사람'이라는 뜻으로, 아람을 이루던 여러 작은 시리아 왕국 중 하나(사무엘하 10:6,8).",
+   "category": "지명"
   },
   {
    "id": 1915,
    "term": "Island",
-   "definition": "(Hebrews ‘i, “dry land,” as opposed to water) occurs in its usual signification (Isaiah 42:4, 10, 12, 15, comp. Jeremiah 47:4), but more frequently simply denotes a maritime region or sea-coast (Isaiah 20:6, R.V.,” coastland;” 23:2, 6; Jeremiah 2:10; Ezekiel 27:6, 7). (See CHITTIM.) The shores of the Mediterranean are called the “islands of the sea” (Isaiah 11:11), or the “isles of the Gentiles” (Genesis 10:5), and sometimes simply “isles” (Psalm 72:10); Ezekiel 26:15, 18; 27:3, 35; Daniel 11:18)."
+   "definition": "(Hebrews ‘i, “dry land,” as opposed to water) occurs in its usual signification (Isaiah 42:4, 10, 12, 15, comp. Jeremiah 47:4), but more frequently simply denotes a maritime region or sea-coast (Isaiah 20:6, R.V.,” coastland;” 23:2, 6; Jeremiah 2:10; Ezekiel 27:6, 7). (See CHITTIM.) The shores of the Mediterranean are called the “islands of the sea” (Isaiah 11:11), or the “isles of the Gentiles” (Genesis 10:5), and sometimes simply “isles” (Psalm 72:10); Ezekiel 26:15, 18; 27:3, 35; Daniel 11:18).",
+   "definition_ko": "(히브리어 '이', 물과 대비되는 '마른 땅') 통상적 의미로도 쓰이지만(이사야 42:4,10,12,15), 더 흔하게는 단순히 해안 지역이나 바닷가를 가리킨다(이사야 20:6, 개정역 '해안'; 23:2,6).",
+   "category": "용어"
   },
   {
    "id": 1916,
    "term": "Israel",
-   "definition": "the name conferred on Jacob after the great prayer-struggle at Peniel (Genesis 32:28), because “as a prince he had power with God and  prevailed.” (See JACOB.) This is the common name given to Jacob’s descendants. The whole people of the twelve tribes are called “Israelites,” the “children of Israel” (Joshua 3:17; 7:25; Judges 8:27; Jeremiah 3:21), and the “house of Israel” (Exodus 16:31; 40:38). This name Israel is sometimes used emphatically for the true Israel (Psalm 73:1: Isaiah 45:17; 49:3; John 1:47; Romans 9:6; 11:26). After the death of Saul the ten tribes arrogated to themselves this name, as if they were the whole nation (2 Samuel 2:9, 10, 17, 28; 3:10, 17; 19:40-43), and the kings of the ten tribes were called “kings of Israel,” while the kings of the two tribes were called “kings of Judah.” After the Exile the name Israel was assumed as designating the entire nation."
+   "definition": "the name conferred on Jacob after the great prayer-struggle at Peniel (Genesis 32:28), because “as a prince he had power with God and  prevailed.” (See JACOB.) This is the common name given to Jacob’s descendants. The whole people of the twelve tribes are called “Israelites,” the “children of Israel” (Joshua 3:17; 7:25; Judges 8:27; Jeremiah 3:21), and the “house of Israel” (Exodus 16:31; 40:38). This name Israel is sometimes used emphatically for the true Israel (Psalm 73:1: Isaiah 45:17; 49:3; John 1:47; Romans 9:6; 11:26). After the death of Saul the ten tribes arrogated to themselves this name, as if they were the whole nation (2 Samuel 2:9, 10, 17, 28; 3:10, 17; 19:40-43), and the kings of the ten tribes were called “kings of Israel,” while the kings of the two tribes were called “kings of Judah.” After the Exile the name Israel was assumed as designating the entire nation.",
+   "definition_ko": "브니엘에서의 큰 기도 씨름 이후 야곱에게 주어진 이름(창세기 32:28)으로, '그가 왕자처럼 하나님과 겨루어 이겼다'는 뜻이다(야곱 항목 참조). 야곱의 후손 전체를 가리키는 통상적 이름이다.",
+   "category": "인명"
   },
   {
    "id": 1917,
-   "term": "I Srael, Kingdom Of (b.c. 975-B.c. 722).",
-   "definition": "Soon after the death of Solomon, Ahijah’s prophecy (1 Kings 11:31-35) was fulfilled, and the kingdom was rent in twain. Rehoboam, the son and successor of Solomon, was scarcely seated on his throne when the old jealousies between Judah and the other tribes broke out anew, and Jeroboam was sent for from Egypt by the malcontents (12:2,3). Rehoboam insolently refused to lighten the burdensome taxation and services which his father had imposed on his subjects (12:4), and the rebellion became complete. Ephraim and all Israel raised the old cry, “Every man to his tents, O Israel” (2 Samuel 20:1). Rehoboam fled to Jerusalem (1 Kings 12:1-18; 2 Chronicles 10), and Jeroboam was proclaimed king over all Israel at Shechem, Judah and Benjamin remaining faithful to Solomon’s son. War, with varying success, was carried on between the two kingdoms for about sixty years, till Jehoshaphat entered into an alliance with the house of Ahab. Extent of the kingdom. In the time of Solomon the area of Palestine, excluding the Phoenician territories on the shore of the Mediterranean, did not much exceed 13,000 square miles. The kingdom of Israel comprehended about 9,375 square miles. Shechem was the first capital of this kingdom (1 Kings 12:25), afterwards Tirza (14:17). Samaria was subsequently chosen as the capital (16:24), and continued to be so till the destruction of the kingdom by the Assyrians (2 Kings 17:5). During the siege of Samaria (which lasted for three years) by the Assyrians, Shalmaneser died and was succeeded by Sargon, who himself thus records the capture of that city: “Samaria I looked at, I captured; 27,280 men who  dwelt in it I carried away” (2 Kings 17:6) into Assyria. Thus after a duration of two hundred and fifty-three years the kingdom of the ten tribes came to an end. They were scattered throughout the East. (See CAPTIVITY.) “Judah held its ground against Assyria for yet one hundred and twenty-three years, and became the rallying-point of the dispersed of every tribe, and eventually gave its name to the whole race. Those of the people who in the last struggle escaped into the territories of Judah or other neighbouring countries naturally looked to Judah as the head and home of their race. And when Judah itself was carried off to Babylon, many of the exiled Israelites joined them from Assyria, and swelled that immense population which made Babylonia a second Palestine.” After the deportation of the ten tribes, the deserted land was colonized by various eastern tribes, whom the king of Assyria sent thither (Ezra 4:2, 10; 2 Kings 17:24-29). (See KINGS.) In contrast with the kingdom of Judah is that of Israel. (1.) “There was no fixed capital and no religious centre. (2.) The army was often insubordinate. (3.) The succession was constantly interrupted, so that out of nineteen kings there were no less than nine dynasties, each ushered in by a revolution. (4.) The authorized priests left the kingdom in a body, and the priesthood established by Jeroboam had no divine sanction and no promise; it was corrupt at its very source.” (Maclean’s O. T. Hist.)"
+   "term": "Israel, Kingdom Of",
+   "definition": "Soon after the death of Solomon, Ahijah’s prophecy (1 Kings 11:31-35) was fulfilled, and the kingdom was rent in twain. Rehoboam, the son and successor of Solomon, was scarcely seated on his throne when the old jealousies between Judah and the other tribes broke out anew, and Jeroboam was sent for from Egypt by the malcontents (12:2,3). Rehoboam insolently refused to lighten the burdensome taxation and services which his father had imposed on his subjects (12:4), and the rebellion became complete. Ephraim and all Israel raised the old cry, “Every man to his tents, O Israel” (2 Samuel 20:1). Rehoboam fled to Jerusalem (1 Kings 12:1-18; 2 Chronicles 10), and Jeroboam was proclaimed king over all Israel at Shechem, Judah and Benjamin remaining faithful to Solomon’s son. War, with varying success, was carried on between the two kingdoms for about sixty years, till Jehoshaphat entered into an alliance with the house of Ahab. Extent of the kingdom. In the time of Solomon the area of Palestine, excluding the Phoenician territories on the shore of the Mediterranean, did not much exceed 13,000 square miles. The kingdom of Israel comprehended about 9,375 square miles. Shechem was the first capital of this kingdom (1 Kings 12:25), afterwards Tirza (14:17). Samaria was subsequently chosen as the capital (16:24), and continued to be so till the destruction of the kingdom by the Assyrians (2 Kings 17:5). During the siege of Samaria (which lasted for three years) by the Assyrians, Shalmaneser died and was succeeded by Sargon, who himself thus records the capture of that city: “Samaria I looked at, I captured; 27,280 men who  dwelt in it I carried away” (2 Kings 17:6) into Assyria. Thus after a duration of two hundred and fifty-three years the kingdom of the ten tribes came to an end. They were scattered throughout the East. (See CAPTIVITY.) “Judah held its ground against Assyria for yet one hundred and twenty-three years, and became the rallying-point of the dispersed of every tribe, and eventually gave its name to the whole race. Those of the people who in the last struggle escaped into the territories of Judah or other neighbouring countries naturally looked to Judah as the head and home of their race. And when Judah itself was carried off to Babylon, many of the exiled Israelites joined them from Assyria, and swelled that immense population which made Babylonia a second Palestine.” After the deportation of the ten tribes, the deserted land was colonized by various eastern tribes, whom the king of Assyria sent thither (Ezra 4:2, 10; 2 Kings 17:24-29). (See KINGS.) In contrast with the kingdom of Judah is that of Israel. (1.) “There was no fixed capital and no religious centre. (2.) The army was often insubordinate. (3.) The succession was constantly interrupted, so that out of nineteen kings there were no less than nine dynasties, each ushered in by a revolution. (4.) The authorized priests left the kingdom in a body, and the priesthood established by Jeroboam had no divine sanction and no promise; it was corrupt at its very source.” (Maclean’s O. T. Hist.)",
+   "definition_ko": "(주전 975-722년) 솔로몬이 죽은 직후 아히야의 예언(열왕기상 11:31-35)이 이루어져 왕국이 둘로 찢어졌다. 솔로몬의 아들이자 후계자인 르호보암은 왕좌에 앉자마자...",
+   "category": "용어"
   },
   {
    "id": 1918,
    "term": "Issachar",
-   "definition": "hired (Genesis 30:18). “God hath given me,” said Leah, “my hire (Hebrews sekhari)...and she called his name Issachar.” He was Jacob’s ninth son, and was born in Padan-aram (comp. 28:2). He had four sons at the going down into Egypt (46:13; Numbers 26:23, 25). Issachar, Tribe of, during the journey through the wilderness, along with Judah and Zebulun (Numbers 2:5), marched on the east of the tabernacle. This tribe contained 54,400 fighting men when the census was taken at Sinai. After the entrance into the Promised Land, this tribe was one of the six which stood on Gerizim during the ceremony of the blessing and cursing (Deuteronomy 27:12). The allotment of Issachar is described in Joshua 19:17-23. It included the plain of Esdraelon (=Jezreel), which was and still is the richest portion of Palestine (Deuteronomy 33:18, 19; 1 Chronicles 12:40).  The prophetic blessing pronounced by Jacob on Issachar corresponds with that of Moses (Genesis 49:14, 15; comp. Deuteronomy 33:18, 19)."
+   "definition": "hired (Genesis 30:18). “God hath given me,” said Leah, “my hire (Hebrews sekhari)...and she called his name Issachar.” He was Jacob’s ninth son, and was born in Padan-aram (comp. 28:2). He had four sons at the going down into Egypt (46:13; Numbers 26:23, 25). Issachar, Tribe of, during the journey through the wilderness, along with Judah and Zebulun (Numbers 2:5), marched on the east of the tabernacle. This tribe contained 54,400 fighting men when the census was taken at Sinai. After the entrance into the Promised Land, this tribe was one of the six which stood on Gerizim during the ceremony of the blessing and cursing (Deuteronomy 27:12). The allotment of Issachar is described in Joshua 19:17-23. It included the plain of Esdraelon (=Jezreel), which was and still is the richest portion of Palestine (Deuteronomy 33:18, 19; 1 Chronicles 12:40).  The prophetic blessing pronounced by Jacob on Issachar corresponds with that of Moses (Genesis 49:14, 15; comp. Deuteronomy 33:18, 19).",
+   "definition_ko": "'삯 받은'이라는 뜻(창세기 30:18). '하나님이 내게 그 삯을 주셨다'고 레아가 말하며 '그 이름을 잇사갈이라 하였더라'. 야곱의 아홉째 아들로 밧단아람에서 태어났다.",
+   "category": "인명"
   },
   {
    "id": 1919,
    "term": "Italian Band",
-   "definition": "the name of the Roman cohort to which Cornelius belonged (Acts 10:1), so called probably because it consisted of men recruited in Italy."
+   "definition": "the name of the Roman cohort to which Cornelius belonged (Acts 10:1), so called probably because it consisted of men recruited in Italy.",
+   "definition_ko": "고넬료가 속했던 로마 보병대의 이름(사도행전 10:1)으로, 아마도 이탈리아에서 모집된 사람들로 이루어졌기에 이렇게 불렸을 것이다.",
+   "category": "용어"
   },
   {
    "id": 1920,
    "term": "Italy",
-   "definition": "Acts 18:2; 27:1, 6; Hebrews 13:24), like most geographical names, was differently used at different periods of history. As the power of Rome advanced, nations were successively conquered and added to it till it came to designate the whole country to the south of the Alps. There was constant intercourse between Palestine and Italy in the time of the Romans."
+   "definition": "Acts 18:2; 27:1, 6; Hebrews 13:24), like most geographical names, was differently used at different periods of history. As the power of Rome advanced, nations were successively conquered and added to it till it came to designate the whole country to the south of the Alps. There was constant intercourse between Palestine and Italy in the time of the Romans.",
+   "definition_ko": "(사도행전 18:2; 27:1,6; 히브리서 13:24) 대부분의 지리적 명칭처럼 역사의 시기마다 다르게 쓰였다. 로마의 세력이 커지면서 여러 민족이 차례로 정복되어 편입되었다.",
+   "category": "지명"
   },
   {
    "id": 1921,
    "term": "Ithamar",
-   "definition": "palm isle, the fourth and youngest son of Aaron (1 Chronicles 6:3). He was consecrated to the priesthood along with his brothers (Exodus 6:23); and after the death of Nadab and Abihu, he and Eleazar alone discharged the functions of that office (Leviticus 10:6, 12; Numbers 3:4). He and his family occupied the position of common priest till the high priesthood passed into his family in the person of Eli (1 Kings 2:27), the reasons for which are not recorded. (See ZADOK.)"
+   "definition": "palm isle, the fourth and youngest son of Aaron (1 Chronicles 6:3). He was consecrated to the priesthood along with his brothers (Exodus 6:23); and after the death of Nadab and Abihu, he and Eleazar alone discharged the functions of that office (Leviticus 10:6, 12; Numbers 3:4). He and his family occupied the position of common priest till the high priesthood passed into his family in the person of Eli (1 Kings 2:27), the reasons for which are not recorded. (See ZADOK.)",
+   "definition_ko": "'종려나무 섬'이라는 뜻으로, 아론의 넷째이자 막내아들(역대상 6:3). 형제들과 함께 제사장직에 구별되었고(출애굽기 6:23), 나답과 아비후가 죽은 뒤 엘르아살과 함께 그 직분을 수행했다.",
+   "category": "인명"
   },
   {
    "id": 1922,
    "term": "Ithrite",
-   "definition": "two of David’s warriors so designated (2 Samuel 23:38; 1 Chronicles 11:40)."
+   "definition": "two of David’s warriors so designated (2 Samuel 23:38; 1 Chronicles 11:40).",
+   "definition_ko": "다윗의 용사 두 사람에게 붙여진 이름(사무엘하 23:38; 역대상 11:40).",
+   "category": "용어"
   },
   {
    "id": 1923,
    "term": "Ittai",
-   "definition": "near; timely; or, with the Lord. (1.) A Benjamite, one of David’s thirty heroes (2 Samuel 23:29). (2.) A native of Gath, a Philistine, who had apparently the command of the six hundred heroes who formed David’s band during his wanderings (2 Samuel 15:19-22; comp. 1 Samuel 23:13; 27:2; 30:9, 10). He is afterwards with David at Mahanaim, holding in the army equal rank with Joab and Abishai (2 Samuel 18:2, 5, 12). He then passes from view."
+   "definition": "near; timely; or, with the Lord. (1.) A Benjamite, one of David’s thirty heroes (2 Samuel 23:29). (2.) A native of Gath, a Philistine, who had apparently the command of the six hundred heroes who formed David’s band during his wanderings (2 Samuel 15:19-22; comp. 1 Samuel 23:13; 27:2; 30:9, 10). He is afterwards with David at Mahanaim, holding in the army equal rank with Joab and Abishai (2 Samuel 18:2, 5, 12). He then passes from view.",
+   "definition_ko": "'가까운; 때맞은; 또는 주와 함께'라는 뜻. (1.) 베냐민 사람으로 다윗의 삼십 용사 중 하나(사무엘하 23:29). (2.) 가드 출신 블레셋 사람으로, 다윗이 유랑하던 시절 그의 무리 육백 용사를 지휘한 것으로 보인다(사무엘하 15장).",
+   "category": "인명"
   },
   {
    "id": 1924,
    "term": "Ituraea",
-   "definition": "a district in the north-east of Palestine, forming, along with the adjacent territory of Trachonitis, the tetrarchy of Philip (Luke 3:1). The present Jedur comprehends the chief part of Ituraea. It is bounded on the east by Trachonitis, on the south by Gaulanitis, on the west by Hermon, and on the north by the plain of Damascus."
+   "definition": "a district in the north-east of Palestine, forming, along with the adjacent territory of Trachonitis, the tetrarchy of Philip (Luke 3:1). The present Jedur comprehends the chief part of Ituraea. It is bounded on the east by Trachonitis, on the south by Gaulanitis, on the west by Hermon, and on the north by the plain of Damascus.",
+   "definition_ko": "팔레스타인 북동쪽 지역으로, 인접한 트라코니티스와 함께 빌립의 분봉국을 이루었다(누가복음 3:1). 오늘날의 제두르가 이두래의 주요 부분을 차지한다.",
+   "category": "지명"
   },
   {
    "id": 1925,
    "term": "Ivah",
-   "definition": "overturning, a city of the Assyrians, whence colonists were brought to Samaria (2 Kings 18:34; 19:13). It lay on the Euphrates,  between Sepharvaim and Henah, and is supposed by some to have been the Ahava of Ezra (8:15)."
+   "definition": "overturning, a city of the Assyrians, whence colonists were brought to Samaria (2 Kings 18:34; 19:13). It lay on the Euphrates,  between Sepharvaim and Henah, and is supposed by some to have been the Ahava of Ezra (8:15).",
+   "definition_ko": "'뒤집음'이라는 뜻으로, 사마리아로 이주민을 보낸 앗수르의 성읍(열왕기하 18:34; 19:13). 스발와임과 헤나 사이 유프라테스강 변에 있었으며 일부는 에스라 8:15의 아하와와 같은 곳으로 본다.",
+   "category": "지명"
   },
   {
    "id": 1926,
    "term": "Ivory",
-   "definition": "(Hebrews pl. shenhabbim, the “tusks of elephants”) was early used in decorations by the Egyptians, and a great trade in it was carried on by the Assyrians (Ezekiel 27:6; Revelation 18:12). It was used by the Phoenicians to ornament the box-wood rowing-benches of their galleys, and Hiram’s skilled workmen made Solomon’s throne of ivory (1 Kings 10:18). It was brought by the caravans of Dedan (Isaiah 21:13), and from the East Indies by the navy of Tarshish (1 Kings 10:22). Many specimens of ancient Egyptian and Assyrian ivory-work have been preserved. The word habbim is derived from the Sanscrit ibhas, meaning “elephant,” preceded by the Hebrew article (ha); and hence it is argued that Ophir, from which it and the other articles mentioned in 1 Kings 10:22 were brought, was in India."
+   "definition": "(Hebrews pl. shenhabbim, the “tusks of elephants”) was early used in decorations by the Egyptians, and a great trade in it was carried on by the Assyrians (Ezekiel 27:6; Revelation 18:12). It was used by the Phoenicians to ornament the box-wood rowing-benches of their galleys, and Hiram’s skilled workmen made Solomon’s throne of ivory (1 Kings 10:18). It was brought by the caravans of Dedan (Isaiah 21:13), and from the East Indies by the navy of Tarshish (1 Kings 10:22). Many specimens of ancient Egyptian and Assyrian ivory-work have been preserved. The word habbim is derived from the Sanscrit ibhas, meaning “elephant,” preceded by the Hebrew article (ha); and hence it is argued that Ophir, from which it and the other articles mentioned in 1 Kings 10:22 were brought, was in India.",
+   "definition_ko": "(히브리어 복수형 '셴합빔', '코끼리의 엄니') 애굽인들이 일찍부터 장식에 사용했고 앗수르인들이 대규모로 교역했다(에스겔 27:6; 요한계시록 18:12). 페니키아인들은 이를 노 젓는 배의 목재 장식에 사용했다.",
+   "category": "용어"
   },
   {
    "id": 1927,
    "term": "Izhar",
-   "definition": "oil, one of the sons of Kohath, and grandson of Levi (Exodus 6:18, 21; Numbers 16:1)."
+   "definition": "oil, one of the sons of Kohath, and grandson of Levi (Exodus 6:18, 21; Numbers 16:1).",
+   "definition_ko": "'기름'이라는 뜻으로, 고핫의 아들 중 하나이며 레위의 손자(출애굽기 6:18,21; 민수기 16:1).",
+   "category": "인명"
   },
   {
    "id": 1928,
    "term": "Izrahite",
-   "definition": "the designation of one of David’s officers (1 Chronicles 27:8).  J"
+   "definition": "the designation of one of David’s officers (1 Chronicles 27:8).  J",
+   "definition_ko": "다윗의 관리 중 한 사람에게 붙여진 이름(역대상 27:8).",
+   "category": "용어"
   },
   {
    "id": 1929,
