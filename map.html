@@ -4982,9 +4982,10 @@
                <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
              </div>`
           : `<div style="margin-top:6px">
-               <textarea id="${safeId}" placeholder="한글 설명을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:60px;font-size:0.85em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical">${escHtml(e.definition_ko || '')}</textarea>
+               <textarea id="${safeId}" placeholder="한글 설명을 붙여넣으세요 (또는 자동번역 버튼 클릭)" style="width:100%;box-sizing:border-box;height:60px;font-size:0.85em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical">${escHtml(e.definition_ko || '')}</textarea>
                <div style="display:flex;gap:6px;margin-top:4px">
                  <button onclick="RawDict.saveKo('${rawdictSrc}',${e.id})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>
+                 <button id="rawdict-tr-btn-${rawdictSrc}-${e.id}" onclick="RawDict.autoTranslate('${rawdictSrc}',${e.id})" style="font-size:0.8em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">🌐 자동번역(초안)</button>
                  ${e.definition_ko ? `<button onclick="RawDict.cancelEdit('${rawdictSrc}',${e.id})" style="font-size:0.8em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 10px;cursor:pointer">취소</button>` : ''}
                </div>
              </div>`;
@@ -5004,9 +5005,39 @@
       }
     }
 
+    // 구글 비공식 무료 번역 엔드포인트 호출 (API 키 불필요, 개인/소량 사용 목적).
+    // 주의: 비공식 엔드포인트이므로 구글 정책 변경 시 언제든 중단될 수 있음. 어디까지나 "초안" 용도이며
+    // 결과를 그대로 신뢰하지 말고 반드시 사람이 검토 후 저장해야 함.
+    async function fetchGoogleTranslateDraft(text, sl = 'en', tl = 'ko') {
+      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data) || !Array.isArray(data[0])) throw new Error('응답 형식 오류');
+      return data[0].map(chunk => chunk[0]).join('');
+    }
+
     // 원문사전 항목별 한글 설명 수동 입력(붙여넣기) — Easton/Smith 원문은 그대로 두고 한글 설명만 별도 필드(definition_ko)로 저장
     const rawdictEditingSet = new Set(); // "src:id" 형태로 현재 편집 중인 항목 추적
     const RawDict = {
+      autoTranslate: async function(src, id) {
+        const list = src === 'easton' ? eastonFullDict : smithFullDict;
+        const e = list.find(x => x.id === id);
+        if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
+        const textarea = document.getElementById(`rawdict-ko-${src}-${id}`);
+        const btn = document.getElementById(`rawdict-tr-btn-${src}-${id}`);
+        if (!textarea) return;
+        if (btn) { btn.disabled = true; btn.textContent = '번역 중...'; }
+        try {
+          const draft = await fetchGoogleTranslateDraft(e.definition);
+          textarea.value = draft;
+          showToast('구글 번역 초안을 불러왔습니다. 확인·수정 후 저장하세요.', 'success');
+        } catch (err) {
+          showToast('자동번역 실패 (' + err.message + '). 무료 엔드포인트라 일시적으로 막혔을 수 있습니다.', 'error');
+        } finally {
+          if (btn) { btn.disabled = false; btn.textContent = '🌐 자동번역(초안)'; }
+        }
+      },
       saveKo: function(src, id) {
         const input = document.getElementById(`rawdict-ko-${src}-${id}`);
         if (!input) return;
