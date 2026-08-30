@@ -4972,11 +4972,19 @@
         // 단순히 로컬 캐시와 네트워크 값이 다르다는 이유만으로는 더 이상 로컬을 우선하지 않는다 —
         // 그렇게 하면 GitHub의 신규 일괄 갱신(예: 음역 추가, 번역 보완)이 옛 캐시에 가려 화면에 반영되지 않는 버그가 생긴다.
         const fieldEdits = editsMap[netE.id] || {};
-        if (fieldEdits.definition_ko && localE.definition_ko && localE.definition_ko !== netE.definition_ko) { result.definition_ko = localE.definition_ko; changed = true; }
-        if (fieldEdits.hebrew_greek && localE.hebrew_greek && localE.hebrew_greek !== netE.hebrew_greek) { result.hebrew_greek = localE.hebrew_greek; changed = true; }
-        if (fieldEdits.term && localE.term && localE.term !== netE.term) { result.term = localE.term; changed = true; }
-        if (fieldEdits.category && localE.category && localE.category !== netE.category) { result.category = localE.category; changed = true; }
-        if (netE.definition !== localE.definition) { changed = true; }
+        if (fieldEdits.definition_ko && localE.definition_ko && localE.definition_ko !== netE.definition_ko) { result.definition_ko = localE.definition_ko; }
+        if (fieldEdits.hebrew_greek && localE.hebrew_greek && localE.hebrew_greek !== netE.hebrew_greek) { result.hebrew_greek = localE.hebrew_greek; }
+        if (fieldEdits.term && localE.term && localE.term !== netE.term) { result.term = localE.term; }
+        if (fieldEdits.category && localE.category && localE.category !== netE.category) { result.category = localE.category; }
+        // 최종 결과값이 로컬 캐시와 단 한 필드라도 다르면 반드시 갱신된 결과를 반영해야 한다.
+        // (표제어에 음역 괄호만 추가되는 등, definition 자체는 그대로인 갱신도 반드시 감지해야 함)
+        if (result.definition !== localE.definition ||
+            result.definition_ko !== localE.definition_ko ||
+            result.hebrew_greek !== localE.hebrew_greek ||
+            result.term !== localE.term ||
+            result.category !== localE.category) {
+          changed = true;
+        }
         return result;
       });
       return changed ? merged : localList;
