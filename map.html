@@ -4974,14 +4974,19 @@
         const row = document.createElement('div');
         row.style.cssText = 'padding:10px 16px;border-bottom:1px solid #f1f5f9';
         const safeId = `rawdict-ko-${rawdictSrc}-${e.id}`;
-        const koBlock = e.definition_ko
+        const editKey = `${rawdictSrc}:${e.id}`;
+        const isEditing = rawdictEditingSet.has(editKey);
+        const koBlock = (e.definition_ko && !isEditing)
           ? `<div style="display:flex;gap:4px;align-items:flex-start;margin-top:6px">
                <div style="flex:1;font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${escHtml(e.definition_ko)}</div>
                <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
              </div>`
           : `<div style="margin-top:6px">
-               <textarea id="${safeId}" placeholder="한글 설명을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:50px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
-               <button onclick="RawDict.saveKo('${rawdictSrc}',${e.id})" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>
+               <textarea id="${safeId}" placeholder="한글 설명을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:60px;font-size:0.85em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical">${escHtml(e.definition_ko || '')}</textarea>
+               <div style="display:flex;gap:6px;margin-top:4px">
+                 <button onclick="RawDict.saveKo('${rawdictSrc}',${e.id})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>
+                 ${e.definition_ko ? `<button onclick="RawDict.cancelEdit('${rawdictSrc}',${e.id})" style="font-size:0.8em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 10px;cursor:pointer">취소</button>` : ''}
+               </div>
              </div>`;
         row.innerHTML = `
           <div style="font-weight:600;color:#1e293b;font-style:italic">${escHtml(e.term)}</div>
@@ -5000,42 +5005,31 @@
     }
 
     // 원문사전 항목별 한글 설명 수동 입력(붙여넣기) — Easton/Smith 원문은 그대로 두고 한글 설명만 별도 필드(definition_ko)로 저장
+    const rawdictEditingSet = new Set(); // "src:id" 형태로 현재 편집 중인 항목 추적
     const RawDict = {
       saveKo: function(src, id) {
         const input = document.getElementById(`rawdict-ko-${src}-${id}`);
         if (!input) return;
         const val = input.value.trim();
-        if (!val) { showToast('붙여넣을 한글 설명을 입력하세요.', 'warn'); return; }
         const list = src === 'easton' ? eastonFullDict : smithFullDict;
         const e = list.find(x => x.id === id);
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
+        if (!val) { showToast('붙여넣을 한글 설명을 입력하세요.', 'warn'); return; }
         e.definition_ko = val;
+        rawdictEditingSet.delete(`${src}:${id}`);
         setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
         showToast(`'${e.term}' 한글 설명 저장됨`, 'success');
         renderRawDictResults(true);
       },
       editKo: function(src, id) {
-        const list = src === 'easton' ? eastonFullDict : smithFullDict;
-        const e = list.find(x => x.id === id);
-        if (!e) return;
-        e._editingKo = true; // 렌더링 시 이 플래그가 있으면 입력창으로 전환
-        renderRawDictResultsEditMode(src, id);
+        rawdictEditingSet.add(`${src}:${id}`);
+        renderRawDictResults(true);
+      },
+      cancelEdit: function(src, id) {
+        rawdictEditingSet.delete(`${src}:${id}`);
+        renderRawDictResults(true);
       }
     };
-    // 특정 한 항목만 임시로 수정 모드로 다시 그림 (전체 목록 유지)
-    function renderRawDictResultsEditMode(src, id) {
-      const list = src === 'easton' ? eastonFullDict : smithFullDict;
-      const e = list.find(x => x.id === id);
-      if (!e) return;
-      const prevKo = e.definition_ko;
-      delete e.definition_ko; // 임시로 지워서 입력창이 뜨도록 함
-      renderRawDictResults(true);
-      // 값이 비어 보이지 않도록 기존 텍스트를 입력창에 채워둠
-      const input = document.getElementById(`rawdict-ko-${src}-${id}`);
-      if (input) input.value = prevKo || '';
-      e.definition_ko = prevKo; // 실제 데이터는 저장 누르기 전까지 원상 유지(취소 시 그대로 남음)
-      // 단, 화면상 입력창이 계속 보이도록 원본 배열엔 표시용 임시 플래그 없이 놔둠 — 저장을 눌러야 갱신됨
-    }
     async function exportRawDictJson(src) {
       const list = src === 'easton' ? eastonFullDict : smithFullDict;
       if (!list || list.length === 0) {
