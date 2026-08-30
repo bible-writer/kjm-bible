@@ -4944,6 +4944,8 @@
     // ── 원문사전(Easton/Smith 영문 원문 전체) 뷰어 ──
     let eastonFullDict = [];
     let smithFullDict = [];
+    let eastonLocalEdits = {}; // { [id]: {term:true, category:true, definition_ko:true, hebrew_greek:true} } - 앱에서 실제 '저장' 버튼으로 수정한 필드만 추적
+    let smithLocalEdits = {};
     let rawdictSrc = 'easton';
     let rawdictShownCount = 0;
     const RAWDICT_PAGE_SIZE = 100;
@@ -4955,21 +4957,25 @@
     // - 항목 수가 같으면 id 단위로 비교해 definition이 다르면 네트워크 값으로 덮어씀
     // - 반드시 id로 매칭한다: term(표제어) 자체를 편집(예: "Aaron"→"Aaron(아론)")하면 term이 바뀌므로
     //   term을 키로 쓰면 로컬 항목을 못 찾아 편집 내용이 통째로 사라진다.
-    function mergeRawDictEntries(localList, networkList) {
+    function mergeRawDictEntries(localList, networkList, editsMap) {
       if (!Array.isArray(networkList) || networkList.length === 0) return localList;
       if (!Array.isArray(localList) || localList.length === 0) return networkList;
       const localById = {};
       localList.forEach(e => { localById[e.id] = e; });
+      editsMap = editsMap || {};
       let changed = (networkList.length !== localList.length);
       const merged = networkList.map(netE => {
         const localE = localById[netE.id];
         if (!localE) { changed = true; return netE; }
         const result = Object.assign({}, netE);
-        // 로컬에서 방금 편집했지만 아직 GitHub에 올리지 않은 값(한글 설명/스트롱코드/표제어/분류)은 보존한다.
-        if (localE.definition_ko && localE.definition_ko !== netE.definition_ko) { result.definition_ko = localE.definition_ko; changed = true; }
-        if (localE.hebrew_greek && localE.hebrew_greek !== netE.hebrew_greek) { result.hebrew_greek = localE.hebrew_greek; changed = true; }
-        if (localE.term && localE.term !== netE.term) { result.term = localE.term; changed = true; }
-        if (localE.category && localE.category !== netE.category) { result.category = localE.category; changed = true; }
+        // 앱에서 실제로 '저장' 버튼을 눌러 편집한 필드만 로컬 값을 보존한다(editsMap에 명시적으로 기록된 경우만).
+        // 단순히 로컬 캐시와 네트워크 값이 다르다는 이유만으로는 더 이상 로컬을 우선하지 않는다 —
+        // 그렇게 하면 GitHub의 신규 일괄 갱신(예: 음역 추가, 번역 보완)이 옛 캐시에 가려 화면에 반영되지 않는 버그가 생긴다.
+        const fieldEdits = editsMap[netE.id] || {};
+        if (fieldEdits.definition_ko && localE.definition_ko && localE.definition_ko !== netE.definition_ko) { result.definition_ko = localE.definition_ko; changed = true; }
+        if (fieldEdits.hebrew_greek && localE.hebrew_greek && localE.hebrew_greek !== netE.hebrew_greek) { result.hebrew_greek = localE.hebrew_greek; changed = true; }
+        if (fieldEdits.term && localE.term && localE.term !== netE.term) { result.term = localE.term; changed = true; }
+        if (fieldEdits.category && localE.category && localE.category !== netE.category) { result.category = localE.category; changed = true; }
         if (netE.definition !== localE.definition) { changed = true; }
         return result;
       });
@@ -4982,13 +4988,18 @@
       if (savedEaston && savedEaston.length > 0) eastonFullDict = savedEaston;
       const savedSmith = await getLocalItem('smith_full_dict');
       if (savedSmith && savedSmith.length > 0) smithFullDict = savedSmith;
+      // 앱에서 실제로 저장한 편집 내역(표제어/분류/한글설명/스트롱코드)만 별도로 불러온다.
+      const savedEastonEdits = await getLocalItem('easton_local_edits');
+      if (savedEastonEdits) eastonLocalEdits = savedEastonEdits;
+      const savedSmithEdits = await getLocalItem('smith_local_edits');
+      if (savedSmithEdits) smithLocalEdits = savedSmithEdits;
       // 네트워크 최신본 확인 (공개 퍼블릭 도메인 텍스트라 암호화 없이 평문)
       try {
         const res = await fetch('./easton_full.json', { cache: 'no-store' });
         if (res && res.ok) {
           const pkg = await res.json();
           if (pkg && Array.isArray(pkg.entries) && pkg.entries.length > 0) {
-            const merged = mergeRawDictEntries(eastonFullDict, pkg.entries);
+            const merged = mergeRawDictEntries(eastonFullDict, pkg.entries, eastonLocalEdits);
             if (merged !== eastonFullDict) {
               eastonFullDict = merged;
               await setLocalItem('easton_full_dict', eastonFullDict);
@@ -5001,7 +5012,7 @@
         if (res2 && res2.ok) {
           const pkg2 = await res2.json();
           if (pkg2 && Array.isArray(pkg2.entries) && pkg2.entries.length > 0) {
-            const merged2 = mergeRawDictEntries(smithFullDict, pkg2.entries);
+            const merged2 = mergeRawDictEntries(smithFullDict, pkg2.entries, smithLocalEdits);
             if (merged2 !== smithFullDict) {
               smithFullDict = merged2;
               await setLocalItem('smith_full_dict', smithFullDict);
@@ -5247,6 +5258,9 @@
         if (!val) { showToast('붙여넣을 한글 설명을 입력하세요.', 'warn'); return; }
         e.definition_ko = val;
         rawdictEditingSet.delete(`${src}:${id}`);
+        const edits = src === 'easton' ? eastonLocalEdits : smithLocalEdits;
+        edits[id] = Object.assign({}, edits[id], { definition_ko: true });
+        setLocalItem(src === 'easton' ? 'easton_local_edits' : 'smith_local_edits', edits);
         setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
         showToast(`'${e.term}' 한글 설명 저장됨`, 'success');
         renderRawDictResults(true);
@@ -5294,6 +5308,9 @@
         const val = input ? input.value.trim() : '';
         if (val) { e.hebrew_greek = val; } else { delete e.hebrew_greek; }
         rawdictStrongEditingSet.delete(`${src}:${id}`);
+        const edits = src === 'easton' ? eastonLocalEdits : smithLocalEdits;
+        edits[id] = Object.assign({}, edits[id], { hebrew_greek: true });
+        setLocalItem(src === 'easton' ? 'easton_local_edits' : 'smith_local_edits', edits);
         setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
         showToast(`'${e.term}' 스트롱코드 저장됨`, 'success');
         renderRawDictResults(true);
@@ -5310,6 +5327,9 @@
         e.term = newTerm;
         if (newCat) { e.category = newCat; } else { delete e.category; }
         rawdictMetaEditingSet.delete(`${src}:${id}`);
+        const edits = src === 'easton' ? eastonLocalEdits : smithLocalEdits;
+        edits[id] = Object.assign({}, edits[id], { term: true, category: true });
+        setLocalItem(src === 'easton' ? 'easton_local_edits' : 'smith_local_edits', edits);
         setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
         showToast(`'${e.term}' 분류/표제어 저장됨`, 'success');
         renderRawDictResults(true);
