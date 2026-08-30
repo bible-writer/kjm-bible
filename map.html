@@ -5006,15 +5006,33 @@
                </div>
              </div>`;
         const catBadgeColors = { '인명': '#7c3aed', '지명': '#059669', '용어': '#2563eb' };
+        const isMetaEditing = rawdictMetaEditingSet.has(editKey);
         const catBadge = e.category
           ? `<span style="display:inline-block;font-size:0.7em;font-weight:700;color:#fff;background:${catBadgeColors[e.category] || '#64748b'};border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:middle">${escHtml(e.category)}</span>`
           : '';
+        const termInputId = `rawdict-term-${rawdictSrc}-${e.id}`;
+        const catSelectId = `rawdict-cat-${rawdictSrc}-${e.id}`;
+        const headerBlock = isMetaEditing
+          ? `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+               <select id="${catSelectId}" style="font-size:0.8em;padding:2px 4px;border:1px solid #cbd5e1;border-radius:4px">
+                 <option value="">(미분류)</option>
+                 <option value="인명" ${e.category === '인명' ? 'selected' : ''}>인명</option>
+                 <option value="지명" ${e.category === '지명' ? 'selected' : ''}>지명</option>
+                 <option value="용어" ${e.category === '용어' ? 'selected' : ''}>용어</option>
+               </select>
+               <input id="${termInputId}" type="text" value="${escHtml(e.term)}" style="flex:1;min-width:120px;font-size:0.95em;font-style:italic;padding:2px 6px;border:1px solid #cbd5e1;border-radius:4px">
+               <button onclick="RawDict.saveMeta('${rawdictSrc}',${e.id})" style="font-size:0.78em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>
+               <button onclick="RawDict.cancelMetaEdit('${rawdictSrc}',${e.id})" style="font-size:0.78em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 10px;cursor:pointer">취소</button>
+             </div>`
+          : `<div style="font-weight:600;color:#1e293b">${catBadge}<span style="font-style:italic">${escHtml(e.term)}</span>
+               <button onclick="RawDict.editMeta('${rawdictSrc}',${e.id})" style="margin-left:6px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">✏️ 분류/표제어 수정</button>
+             </div>`;
         const strongTargetId = `rawdict-strong-${rawdictSrc}-${e.id}`;
         const strongDisplay = e.hebrew_greek
           ? `<div style="font-size:0.8em;color:#b45309;margin-top:4px">📜 ${StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), strongTargetId)}</div><div id="${strongTargetId}"></div>`
           : '';
         row.innerHTML = `
-          <div style="font-weight:600;color:#1e293b">${catBadge}<span style="font-style:italic">${escHtml(e.term)}</span></div>
+          ${headerBlock}
           ${strongDisplay}
           <div style="font-size:0.85em;color:#64748b;margin-top:2px;line-height:1.5">${escHtml(e.definition)}</div>
           ${koBlock}
@@ -5076,6 +5094,7 @@
 
     // 원문사전 항목별 한글 설명 수동 입력(붙여넣기) — Easton/Smith 원문은 그대로 두고 한글 설명만 별도 필드(definition_ko)로 저장
     const rawdictEditingSet = new Set(); // "src:id" 형태로 현재 편집 중인 항목 추적
+    const rawdictMetaEditingSet = new Set(); // 표제어(term)/분류(category) 편집 중인 항목 추적 ("src:id")
     const RawDict = {
       autoTranslate: async function(src, id) {
         const list = src === 'easton' ? eastonFullDict : smithFullDict;
@@ -5115,6 +5134,30 @@
       },
       cancelEdit: function(src, id) {
         rawdictEditingSet.delete(`${src}:${id}`);
+        renderRawDictResults(true);
+      },
+      editMeta: function(src, id) {
+        rawdictMetaEditingSet.add(`${src}:${id}`);
+        renderRawDictResults(true);
+      },
+      cancelMetaEdit: function(src, id) {
+        rawdictMetaEditingSet.delete(`${src}:${id}`);
+        renderRawDictResults(true);
+      },
+      saveMeta: function(src, id) {
+        const list = src === 'easton' ? eastonFullDict : smithFullDict;
+        const e = list.find(x => x.id === id);
+        if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
+        const termInput = document.getElementById(`rawdict-term-${src}-${id}`);
+        const catSelect = document.getElementById(`rawdict-cat-${src}-${id}`);
+        const newTerm = termInput ? termInput.value.trim() : e.term;
+        const newCat = catSelect ? catSelect.value : e.category;
+        if (!newTerm) { showToast('표제어는 비워둘 수 없습니다.', 'warn'); return; }
+        e.term = newTerm;
+        if (newCat) { e.category = newCat; } else { delete e.category; }
+        rawdictMetaEditingSet.delete(`${src}:${id}`);
+        setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
+        showToast(`'${e.term}' 분류/표제어 저장됨`, 'success');
         renderRawDictResults(true);
       }
     };
