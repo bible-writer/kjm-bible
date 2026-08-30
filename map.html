@@ -5028,13 +5028,24 @@
                <button onclick="RawDict.editMeta('${rawdictSrc}',${e.id})" style="margin-left:6px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">✏️ 분류/표제어 수정</button>
              </div>`;
         const strongTargetId = `rawdict-strong-${rawdictSrc}-${e.id}`;
-        const strongDisplay = e.hebrew_greek
-          ? `<div style="font-size:0.8em;color:#b45309;margin-top:4px">📜 ${StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), strongTargetId)}</div><div id="${strongTargetId}"></div>`
-          : '';
+        const isStrongEditing = rawdictStrongEditingSet.has(editKey);
+        const strongInputId = `rawdict-strong-input-${rawdictSrc}-${e.id}`;
+        const strongDisplay = isStrongEditing
+          ? `<div style="display:flex;gap:6px;align-items:center;margin-top:4px">
+               <input id="${strongInputId}" type="text" value="${escHtml(e.hebrew_greek || '')}" placeholder="예: H175 또는 G2,H175" style="flex:1;min-width:100px;font-size:0.8em;padding:2px 6px;border:1px solid #fcd34d;border-radius:4px">
+               <button onclick="RawDict.saveStrong('${rawdictSrc}',${e.id})" style="font-size:0.75em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:2px 8px;cursor:pointer">저장</button>
+               <button onclick="RawDict.cancelStrongEdit('${rawdictSrc}',${e.id})" style="font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;cursor:pointer">취소</button>
+             </div>`
+          : (e.hebrew_greek
+              ? `<div style="font-size:0.8em;color:#b45309;margin-top:4px">📜 ${StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), strongTargetId)} <button onclick="RawDict.editStrong('${rawdictSrc}',${e.id})" style="margin-left:4px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:0px 5px;cursor:pointer">✏️</button></div><div id="${strongTargetId}"></div>`
+              : `<div style="margin-top:4px"><button onclick="RawDict.editStrong('${rawdictSrc}',${e.id})" style="font-size:0.72em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 7px;cursor:pointer">📜 + 스트롱코드 추가</button></div>`);
         row.innerHTML = `
           ${headerBlock}
           ${strongDisplay}
-          <div style="font-size:0.85em;color:#64748b;margin-top:2px;line-height:1.5">${escHtml(e.definition)}</div>
+          <div style="display:flex;gap:6px;align-items:flex-start;margin-top:2px">
+            <div style="flex:1;font-size:0.85em;color:#64748b;line-height:1.5">${escHtml(e.definition)}</div>
+            <button onclick="RawDict.copyDefinition('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">📋 복사</button>
+          </div>
           ${koBlock}
         `;
         container.appendChild(row);
@@ -5095,6 +5106,7 @@
     // 원문사전 항목별 한글 설명 수동 입력(붙여넣기) — Easton/Smith 원문은 그대로 두고 한글 설명만 별도 필드(definition_ko)로 저장
     const rawdictEditingSet = new Set(); // "src:id" 형태로 현재 편집 중인 항목 추적
     const rawdictMetaEditingSet = new Set(); // 표제어(term)/분류(category) 편집 중인 항목 추적 ("src:id")
+    const rawdictStrongEditingSet = new Set(); // 스트롱코드(hebrew_greek) 편집 중인 항목 추적 ("src:id")
     const RawDict = {
       autoTranslate: async function(src, id) {
         const list = src === 'easton' ? eastonFullDict : smithFullDict;
@@ -5136,12 +5148,43 @@
         rawdictEditingSet.delete(`${src}:${id}`);
         renderRawDictResults(true);
       },
+      copyDefinition: async function(src, id) {
+        const list = src === 'easton' ? eastonFullDict : smithFullDict;
+        const e = list.find(x => x.id === id);
+        if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
+        try {
+          await navigator.clipboard.writeText(e.definition);
+          showToast('영문 원문이 복사되었습니다. 길게 눌러 "번역"을 사용하거나 원하는 곳에 붙여넣으세요.', 'success');
+        } catch (err) {
+          showToast('복사 실패: ' + err.message, 'error');
+        }
+      },
       editMeta: function(src, id) {
         rawdictMetaEditingSet.add(`${src}:${id}`);
         renderRawDictResults(true);
       },
       cancelMetaEdit: function(src, id) {
         rawdictMetaEditingSet.delete(`${src}:${id}`);
+        renderRawDictResults(true);
+      },
+      editStrong: function(src, id) {
+        rawdictStrongEditingSet.add(`${src}:${id}`);
+        renderRawDictResults(true);
+      },
+      cancelStrongEdit: function(src, id) {
+        rawdictStrongEditingSet.delete(`${src}:${id}`);
+        renderRawDictResults(true);
+      },
+      saveStrong: function(src, id) {
+        const list = src === 'easton' ? eastonFullDict : smithFullDict;
+        const e = list.find(x => x.id === id);
+        if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
+        const input = document.getElementById(`rawdict-strong-input-${src}-${id}`);
+        const val = input ? input.value.trim() : '';
+        if (val) { e.hebrew_greek = val; } else { delete e.hebrew_greek; }
+        rawdictStrongEditingSet.delete(`${src}:${id}`);
+        setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
+        showToast(`'${e.term}' 스트롱코드 저장됨`, 'success');
         renderRawDictResults(true);
       },
       saveMeta: function(src, id) {
