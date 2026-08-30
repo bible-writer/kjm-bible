@@ -1768,6 +1768,12 @@
         <button class="dict-filter-btn active" data-src="easton">Easton</button>
         <button class="dict-filter-btn" data-src="smith">Smith</button>
       </div>
+      <div style="display:flex;gap:6px;margin-top:8px" id="rawdict-category-tabs">
+        <button class="dict-filter-btn active" data-cat="">전체</button>
+        <button class="dict-filter-btn" data-cat="인명">👤 인명</button>
+        <button class="dict-filter-btn" data-cat="지명">📍 지명</button>
+        <button class="dict-filter-btn" data-cat="용어">📖 용어</button>
+      </div>
     </div>
     <div id="rawdict-results" style="flex:1;overflow-y:auto;padding:6px 0"></div>
     <div style="padding:8px 16px;border-top:1px solid var(--border,#e2e8f0);text-align:center" id="rawdict-load-more-wrap"></div>
@@ -4933,6 +4939,8 @@
       } catch (e) { /* smith_full.json 아직 없을 수 있음 */ }
     }
 
+    let rawdictCatFilter = ''; // '', '인명', '지명', '용어'
+
     function openRawDictModal() {
       const total = eastonFullDict.length + smithFullDict.length;
       if (total === 0) {
@@ -4960,6 +4968,9 @@
       const source = rawdictSrc === 'easton' ? eastonFullDict : smithFullDict;
       const q = (document.getElementById('rawdict-search-input').value || '').trim().toLowerCase();
       let filtered = source;
+      if (rawdictCatFilter) {
+        filtered = filtered.filter(e => e.category === rawdictCatFilter);
+      }
       if (q) {
         filtered = filtered.filter(e => e.term.toLowerCase().includes(q) || e.definition.toLowerCase().includes(q));
       }
@@ -4990,8 +5001,12 @@
                  ${e.definition_ko ? `<button onclick="RawDict.cancelEdit('${rawdictSrc}',${e.id})" style="font-size:0.8em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 10px;cursor:pointer">취소</button>` : ''}
                </div>
              </div>`;
+        const catBadgeColors = { '인명': '#7c3aed', '지명': '#059669', '용어': '#2563eb' };
+        const catBadge = e.category
+          ? `<span style="display:inline-block;font-size:0.7em;font-weight:700;color:#fff;background:${catBadgeColors[e.category] || '#64748b'};border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:middle">${escHtml(e.category)}</span>`
+          : '';
         row.innerHTML = `
-          <div style="font-weight:600;color:#1e293b;font-style:italic">${escHtml(e.term)}</div>
+          <div style="font-weight:600;color:#1e293b">${catBadge}<span style="font-style:italic">${escHtml(e.term)}</span></div>
           <div style="font-size:0.85em;color:#64748b;margin-top:2px;line-height:1.5">${escHtml(e.definition)}</div>
           ${koBlock}
         `;
@@ -5134,6 +5149,14 @@
           document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           rawdictSrc = btn.dataset.src;
+          renderRawDictResults(true);
+        });
+      });
+      document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          rawdictCatFilter = btn.dataset.cat;
           renderRawDictResults(true);
         });
       });
