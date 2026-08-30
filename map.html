@@ -4972,7 +4972,7 @@
         filtered = filtered.filter(e => e.category === rawdictCatFilter);
       }
       if (q) {
-        filtered = filtered.filter(e => e.term.toLowerCase().includes(q) || e.definition.toLowerCase().includes(q));
+        filtered = filtered.filter(e => e.term.toLowerCase().includes(q));
       }
 
       if (filtered.length === 0) {
