@@ -28,6 +28,12 @@
 
   <!-- SQLite WASM 엔진 (sql.js) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (window['pdfjsLib']) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", helvetica, sans-serif; }
@@ -104,11 +110,27 @@
 
     .panel-header {
       padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
       background-color: #1e293b;
       color: #ffffff;
     }
     .panel-header h1 { font-size: 15px; font-weight: 700; }
     .panel-header p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+    .btn-header-map-toggle {
+      flex-shrink: 0;
+      background: #334155;
+      color: #fff;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
 
     /* DB 연결 및 백업/복원 제어 바 */
     #db-status-bar {
@@ -667,6 +689,18 @@
     }
     #map {
       flex: 1; width: 100%; z-index: 1; }
+
+    /* 지도 패널 열기/닫기 */
+    body.map-panel-hidden #map-pane,
+    body.map-panel-hidden #commentary-pane,
+    body.map-panel-hidden #panel-resizer {
+      display: none !important;
+    }
+    body.map-panel-hidden #left-pane {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    #btn-toggle-map.active { background: #2563eb; }
 
     .map-header-bar {
       display: flex !important;
@@ -1426,6 +1460,12 @@
         position: absolute; top: 0; left: 0;
         z-index: 1999;
       }
+      #commentary-pane {
+        width: 100% !important;
+        height: 100vh !important;
+        position: absolute; top: 0; left: 0;
+        z-index: 1999;
+      }
       #left-pane.mob-hidden { display: none !important; }
       #map-pane.mob-hidden { display: none !important; }
       #mobile-tab-bar { display: flex; }
@@ -1510,8 +1550,11 @@
   <!-- 좌측 성경 독서 패널 -->
   <div id="left-pane">
     <div class="panel-header">
-      <h1 id="app-title">성경 66권 인터랙티브 독서 지도</h1>
-      <p id="app-subtitle">개역개정 본문 및 지명 전수 연동 완결판</p>
+      <div>
+        <h1 id="app-title">성경 66권 인터랙티브 독서 지도</h1>
+        <p id="app-subtitle">개역개정 본문 및 지명 전수 연동 완결판</p>
+      </div>
+      <button id="btn-toggle-map" class="btn-header-map-toggle" title="지도 패널 표시/숨김">🗺 지도</button>
     </div>
     <div id="header-toggle-bar" onclick="toggleHeaderCollapse()">▲ 접기</div>
 
@@ -1576,7 +1619,7 @@
           <span class="upload-badge json"     data-type="json" title="백업 JSON 파일 복원 (.json)">💾 백업 (.json)</span>
           <span class="upload-badge bdb-extra" data-type="extra" title="추가 번역 bdb 파일 등록">🌐 추가번역 (.bdb)</span>
           <span class="upload-badge" id="interlinear-badge" data-type="interlinear" title="스트롱코드 DB 등록 (.sdb) — 본문 단어 클릭 시 원어 뜻 표시" style="background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;">🔤 스트롱코드 (.sdb)</span>
-          <input type="file" id="interlinear-file-input" style="display:none">
+          <input type="file" id="interlinear-file-input" accept=".sdb,.db,.bdb,.sqlite,.sqlite3,application/octet-stream,application/x-sqlite3" style="display:none">
         </div>
       </div>
 
@@ -1730,6 +1773,7 @@
       </select>
 <button id="btn-regions" onclick="toggleRegionPanel()" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="성경 지역 영역 표시">🗺 지역</button>
 <button id="btn-routes" onclick="toggleRoutePanel()" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="출애굽·바울선교 경로">🛤 경로</button>
+<button id="btn-toggle-commentary" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="이 책에 등록된 주석 PDF 보기">📖 주석</button>
     </div>
     <div id="map-wrapper" style="position:relative;flex:1;display:flex;flex-direction:column;">
       <div id="map" style="flex:1;"></div>
@@ -1744,7 +1788,79 @@
     </div>
   </div>
 
+  <!-- 주석 PDF 뷰어 패널 (지도 패널과 동일한 자리, 토글로 전환) -->
+  <div id="commentary-pane" style="display:none;flex:1;height:100%;flex-direction:column;overflow:hidden;background:#525659;">
+    <div class="map-header-bar" style="background:rgba(30,41,59,0.96)">
+      <select id="commentary-select" style="padding:5px 8px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;font-weight:600;cursor:pointer;outline:none;max-width:220px" title="현재 책에 등록된 주석 선택"></select>
+      <select id="commentary-chapter-jump" style="padding:5px 8px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;font-weight:600;cursor:pointer;outline:none" title="장으로 바로 이동"></select>
+      <button class="btn-catalog-trigger" id="btn-commentary-prev-page" style="background:#334155">◀</button>
+      <span id="commentary-page-indicator" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap">- / -</span>
+      <button class="btn-catalog-trigger" id="btn-commentary-next-page" style="background:#334155">▶</button>
+      <input type="number" id="commentary-page-jump" min="1" style="width:56px;padding:5px 6px;border-radius:5px;border:1px solid #475569;font-size:12px" title="페이지로 바로 이동" />
+      <button class="btn-catalog-trigger" id="btn-commentary-goto" style="background:#334155">이동</button>
+      <button class="btn-catalog-trigger" id="btn-commentary-zoom-out" style="background:#334155" title="축소">➖</button>
+      <span id="commentary-zoom-level" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap;min-width:38px;text-align:center">100%</span>
+      <button class="btn-catalog-trigger" id="btn-commentary-zoom-in" style="background:#334155" title="확대">➕</button>
+      <span style="flex:1"></span>
+      <button class="btn-catalog-trigger" id="btn-commentary-download" style="background:#059669" title="현재 PDF 파일 다운로드">⬇ 다운로드</button>
+      <button class="btn-catalog-trigger" id="btn-open-chapter-map" style="background:#7c4a26" title="장별 페이지 한번에 연결">📑 장 연결</button>
+      <button class="btn-catalog-trigger" id="btn-open-commentary-manage" style="background:#b45309" title="주석 등록/관리">⚙ 관리</button>
+      <button class="btn-catalog-trigger" id="btn-commentary-back-to-map" style="background:#2563eb" title="지도로 돌아가기">🗺 지도로</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#0f172a;flex-wrap:nowrap;overflow-x:auto">
+      <span style="color:#94a3b8;font-size:11.5px;white-space:nowrap">✏️ 수동 매핑:</span>
+      <input type="number" id="manual-map-chapter" min="1" placeholder="장" style="width:48px;padding:4px 6px;border-radius:5px;border:1px solid #475569;font-size:12px" />
+      <span style="color:#94a3b8">:</span>
+      <input type="text" id="manual-map-verse" placeholder="절 (예: 1 또는 1-5)" style="width:110px;padding:4px 6px;border-radius:5px;border:1px solid #475569;font-size:12px" />
+      <button class="btn-catalog-trigger" id="btn-manual-map-save" style="background:#7c3aed;white-space:nowrap">📌 현재 페이지(<span id="manual-map-current-page">-</span>)에 연결</button>
+      <span style="color:#64748b;font-size:10.5px;white-space:nowrap">※ 위 장:절 범위를 지금 보고 있는 페이지에 직접 연결합니다</span>
+    </div>
+    <div id="commentary-pdf-wrap" style="flex:1;overflow-y:scroll;overflow-x:hidden;display:flex;justify-content:center;padding:14px;background:#525659">
+      <canvas id="commentary-pdf-canvas" style="background:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.4)"></canvas>
+    </div>
+    <div id="commentary-empty-state" style="display:none;flex:1;align-items:center;justify-content:center;color:#cbd5e1;font-size:13px;text-align:center;padding:30px">
+      이 책(<span id="commentary-empty-bookname"></span>)에 등록된 주석이 없습니다.<br>
+      <button class="btn-catalog-trigger" id="btn-commentary-empty-add" style="margin-top:10px;background:#b45309">⚙ 주석 등록하기</button>
+    </div>
+  </div>
+
+  <!-- 주석 등록/관리 모달 -->
+  <div id="commentary-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20000"></div>
+  <div id="commentary-modal" style="display:none;position:fixed;top:6%;left:50%;transform:translateX(-50%);width:min(560px,92vw);max-height:88vh;background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #e2e8f0">
+      <span style="font-weight:bold;font-size:1.1em">⚙ 주석(PDF 커멘터리) 관리</span>
+      <button id="btn-close-commentary-modal" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
+    </div>
+    <div style="padding:14px 16px;border-bottom:1px solid #e2e8f0;background:#f8fafc">
+      <div style="font-weight:600;font-size:0.9em;margin-bottom:8px;color:#334155">➕ 새 주석 추가</div>
+      <input type="text" id="commentary-new-name" placeholder="주석 이름 (예: 콘스터블 주석, 매튜헨리)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.9em;margin-bottom:6px">
+      <select id="commentary-new-book" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.9em;margin-bottom:6px"></select>
+      <input type="file" id="commentary-new-file" accept="application/pdf" style="width:100%;font-size:0.85em;margin-bottom:8px">
+      <div id="commentary-add-progress" style="font-size:0.8em;color:#b45309;margin-bottom:6px;display:none"></div>
+      <button id="btn-commentary-add" style="width:100%;padding:8px;background:#b45309;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:0.9em">PDF 분석 후 추가 (절 번호 자동 매핑)</button>
+      <div style="font-size:0.72em;color:#94a3b8;margin-top:6px">※ PDF 안에 "1:1", "3:16" 처럼 장:절 번호가 단독으로 적힌 줄이 있어야 절별로 자동 이동됩니다. 없으면 페이지 이동만 수동으로 가능합니다.</div>
+    </div>
+    <div id="commentary-list" style="flex:1;overflow-y:auto;padding:6px 0"></div>
+  </div>
+
+  <!-- 장 연결(챕터별 페이지 매핑) 모달 -->
+  <div id="chapter-map-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20002"></div>
+  <div id="chapter-map-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(440px,92vw);max-height:88vh;background:#fdf6f0;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.35);z-index:20003;flex-direction:column;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #e7d9c9;background:#fff">
+      <span style="font-weight:bold;font-size:1.05em;color:#78350f" id="chapter-map-title">장 연결</span>
+      <button id="btn-close-chapter-map" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
+    </div>
+    <div style="padding:12px 16px;background:#fdf1e7;border-bottom:1px solid #e7d9c9">
+      <div id="chapter-map-progress-text" style="font-size:0.85em;color:#78350f;font-weight:700">0 / 0장 연결됨</div>
+      <div style="height:6px;background:#f3e3d3;border-radius:3px;margin-top:6px;overflow:hidden">
+        <div id="chapter-map-progress-bar" style="height:100%;width:0%;background:#b45309;transition:width 0.2s"></div>
+      </div>
+    </div>
+    <div id="chapter-map-list" style="flex:1;overflow-y:auto;padding:8px 16px"></div>
+  </div>
+
   <!-- 스마트 동명이지 분기 모달 -->
+  <!-- (원래 있던 아래 모달 마커는 그대로 유지) -->
   <div id="disambig-modal">
     <div class="disambig-header" id="disambig-title">'지명' 선택</div>
     <div class="disambig-guide">현재 읽으시는 성경 본문과 일치하는 장소를 선택해 주십시오.</div>
@@ -1753,9 +1869,9 @@
 
   <!-- 통합 사전(인물·지명·용어) 모달 -->
   <div id="dict-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20000"></div>
-  <div id="dict-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(720px,92vw);height:88vh;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
-      <span style="font-weight:bold;font-size:1.1em" id="dict-modal-title">📚 통합 사전</span>
+  <div id="dict-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(720px,92vw);height:88vh;min-width:340px;min-height:300px;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden;resize:both">
+    <div id="dict-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0);cursor:move;user-select:none">
+      <span style="font-weight:bold;font-size:1.1em" id="dict-modal-title">📚 통합 사전 <span style="font-size:0.65em;font-weight:400;color:#94a3b8">(드래그하여 이동)</span></span>
       <button id="btn-close-dict" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
     </div>
     <div style="padding:10px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
@@ -1774,7 +1890,7 @@
 
   <!-- 원문사전(Easton/Smith 영문 원문 전체) 뷰어 모달 -->
   <div id="rawdict-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20000"></div>
-  <div id="rawdict-modal" style="display:none;position:fixed;top:4%;left:50%;transform:translateX(-50%);width:min(1100px,95vw);height:92vh;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden;font-size:clamp(14px, 0.85vw + 8px, 20px)">
+  <div id="rawdict-modal" style="display:none;position:fixed;top:4%;left:50%;transform:translateX(-50%);width:min(1100px,95vw);height:92vh;min-width:360px;min-height:340px;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden;font-size:clamp(14px, 0.85vw + 8px, 20px);resize:both">
     <div id="rawdict-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0);cursor:move;user-select:none">
       <span style="font-weight:bold;font-size:1.1em">📜 원문사전 (영문) <span style="font-size:0.7em;font-weight:400;color:#94a3b8">(드래그하여 이동)</span></span>
       <div style="display:flex;align-items:center;gap:8px">
@@ -2412,7 +2528,25 @@
             // 추가번역은 드롭다운에서 번역 선택
             toggleAddTransDropdown();
           }
-          if (type === 'interlinear') document.getElementById('interlinear-file-input').click();
+          if (type === 'interlinear') {
+            if (window.showOpenFilePicker) {
+              window.showOpenFilePicker({
+                types: [{ description: 'Strong 코드 DB', accept: { 'application/octet-stream': ['.sdb'] } }],
+                excludeAcceptAllOption: false,
+                multiple: false
+              }).then(async ([handle]) => {
+                const file = await handle.getFile();
+                await routeFile(file, 'bdb');
+              }).catch(err => {
+                if (err && err.name !== 'AbortError') {
+                  console.error('[스트롱코드 DB 선택 오류]', err);
+                  document.getElementById('interlinear-file-input').click();
+                }
+              });
+            } else {
+              document.getElementById('interlinear-file-input').click();
+            }
+          }
         });
       });
 
@@ -3091,6 +3225,9 @@
       if (!handle) return;
       function onDown(clientX, clientY) {
         const rect = panelEl.getBoundingClientRect();
+        // 가운데 정렬용 transform(translateX(-50%) 등)이 남아있으면 절대좌표와 겹쳐서
+        // 드래그 시작 시 위치가 튀므로, 드래그 시작 시점에 transform을 제거하고 절대좌표로 전환한다
+        panelEl.style.transform = 'none';
         panelEl.style.left = rect.left + 'px';
         panelEl.style.top = rect.top + 'px';
         panelEl.style.right = 'auto';
@@ -3116,10 +3253,14 @@
       // 스크롤바가 나타나거나 사라질 때 콘텐츠 폭이 미세하게 바뀌면서
       // 글자 크기 ↔ 스크롤바 유무가 서로를 계속 건드려 팝업이 떨리는(진동) 현상을 방지
       panelEl.style.scrollbarGutter = 'stable';
-      // 사용자가 이전에 모서리를 드래그해서 늘려놓은 크기가 남아있지 않도록,
-      // 새 항목을 열 때마다(팝업을 호출할 때마다) 항상 기본 크기로 되돌린다
-      panelEl.style.width = baseWidth + 'px';
-      panelEl.style.height = 'auto';
+      // 사용자가 이전에 이 팝업을 크기 조절해뒀다면 그 크기를 기억해서 다시 사용
+      // (localStorage에 저장된 값이 없으면 기본 크기 사용)
+      let savedSize = null;
+      if (panelEl.id) {
+        try { savedSize = JSON.parse(localStorage.getItem('panel_size_' + panelEl.id) || 'null'); } catch (e) { savedSize = null; }
+      }
+      panelEl.style.width = (savedSize && savedSize.w) ? savedSize.w : (baseWidth + 'px');
+      panelEl.style.height = (savedSize && savedSize.h) ? savedSize.h : 'auto';
       panelEl._lastFontSize = baseFontPx; // 옵저버가 참조하는 기준값도 매번 초기화
 
       if (panelEl._autoFontObserver) return; // 옵저버는 한 번만 등록(중복 방지), 크기 자체는 위에서 이미 초기화됨
@@ -3143,16 +3284,36 @@
     // panel.innerHTML을 새로 채울 때마다 자식 노드가 통째로 사라지므로,
     // 반드시 innerHTML을 설정한 "이후"에 호출해서 다시 붙여야 한다.
     function ensureTouchResizeGrip(panelEl) {
-      if (panelEl._touchResizeGrip) {
-        panelEl.appendChild(panelEl._touchResizeGrip); // 이미 만들어 둔 손잡이를 다시 붙이기만 함(리스너 유지)
+      function positionGrip() {
+        if (panelEl.style.display === 'none') { grip.style.display = 'none'; return; }
+        const rect = panelEl.getBoundingClientRect();
+        grip.style.display = 'flex';
+        grip.style.left = Math.max(0, rect.right - 32) + 'px';
+        grip.style.top = Math.max(0, rect.bottom - 32) + 'px';
+      }
+      let grip = panelEl._touchResizeGrip;
+      if (grip) {
+        if (!document.body.contains(grip)) document.body.appendChild(grip);
+        positionGrip();
         return;
       }
-      panelEl.style.position = panelEl.style.position || 'fixed';
-      const grip = document.createElement('div');
+      grip = document.createElement('div');
       grip.textContent = '⤡';
-      grip.style.cssText = 'position:absolute;right:0;bottom:0;width:34px;height:34px;line-height:34px;text-align:center;font-size:18px;color:#94a3b8;cursor:se-resize;user-select:none;touch-action:none;z-index:3;';
-      panelEl.appendChild(grip);
+      // 패널 안이 아니라 body에 바로 붙여서, 패널 내부 스크롤과 완전히 무관하게
+      // 화면상 패널의 실제 오른쪽 아래 모서리 위치를 매 프레임 따라가도록 한다.
+      grip.style.cssText = 'position:fixed;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;background:rgba(51,65,85,0.92);border:1px solid rgba(255,255,255,0.4);border-radius:6px;cursor:se-resize;user-select:none;touch-action:none;z-index:10060;box-shadow:0 1px 5px rgba(0,0,0,0.35)';
+      document.body.appendChild(grip);
       panelEl._touchResizeGrip = grip;
+      positionGrip();
+
+      // 패널이 드래그로 움직이거나 스크롤되거나 창 크기가 바뀌어도 손잡이가 항상 같은 자리에 있도록
+      // 화면에 보이는 동안 매 프레임 위치를 다시 계산한다(가벼운 연산이라 부담 없음)
+      (function syncLoop() {
+        if (document.body.contains(grip)) {
+          positionGrip();
+          requestAnimationFrame(syncLoop);
+        }
+      })();
 
       // 마우스/터치/펜을 하나의 방식(Pointer Events)으로 통일해서 처리한다.
       // 기기·브라우저마다 마우스/터치 이벤트 처리 방식이 제각각이라(특히 안드로이드 태블릿),
@@ -3175,7 +3336,15 @@
         panelEl.style.height = newH + 'px';
         e.preventDefault();
       });
-      const endDrag = e => { dragState = null; try { grip.releasePointerCapture(e.pointerId); } catch (err) {} };
+      const endDrag = e => {
+        dragState = null;
+        try { grip.releasePointerCapture(e.pointerId); } catch (err) {}
+        if (panelEl.id) {
+          try {
+            localStorage.setItem('panel_size_' + panelEl.id, JSON.stringify({ w: panelEl.style.width, h: panelEl.style.height }));
+          } catch (err) {}
+        }
+      };
       grip.addEventListener('pointerup', endDrag);
       grip.addEventListener('pointercancel', endDrag);
     }
@@ -5095,6 +5264,27 @@
       document.addEventListener('touchmove', onPointerMove, { passive: false });
       document.addEventListener('touchend', onPointerUp);
     }
+    function restorePanelSize(panelEl, defaultWidth, defaultHeight) {
+      let saved = null;
+      if (panelEl.id) {
+        try { saved = JSON.parse(localStorage.getItem('panel_size_' + panelEl.id) || 'null'); } catch (e) { saved = null; }
+      }
+      panelEl.style.width = (saved && saved.w) ? saved.w : defaultWidth;
+      panelEl.style.height = (saved && saved.h) ? saved.h : defaultHeight;
+    }
+    // 브라우저 기본 크기조절(테두리 드래그, CSS resize:both)로 바뀐 크기를 저장해뒀다가
+    // 다음에 창을 열 때 restorePanelSize()가 그대로 복원해준다
+    function persistSizeOnResize(panelEl) {
+      if (panelEl._sizePersistObserver || !panelEl.id) return;
+      const observer = new ResizeObserver(() => {
+        if (panelEl.style.display === 'none') return;
+        try {
+          localStorage.setItem('panel_size_' + panelEl.id, JSON.stringify({ w: panelEl.style.width, h: panelEl.style.height }));
+        } catch (e) {}
+      });
+      observer.observe(panelEl);
+      panelEl._sizePersistObserver = observer;
+    }
     function openRawDictModal() {
       const total = eastonFullDict.length + smithFullDict.length;
       if (total === 0) {
@@ -5102,6 +5292,8 @@
       }
       document.getElementById('rawdict-modal').style.display = 'flex';
       document.getElementById('rawdict-modal-backdrop').style.display = 'block';
+      restorePanelSize(document.getElementById('rawdict-modal'), 'min(1100px,95vw)', '92vh');
+      persistSizeOnResize(document.getElementById('rawdict-modal'));
       initRawDictModalDrag();
       document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(btn => {
         const label = btn.dataset.src === 'easton' ? 'Easton' : 'Smith';
@@ -5466,6 +5658,9 @@
       }
       document.getElementById('dict-modal').style.display = 'flex';
       document.getElementById('dict-modal-backdrop').style.display = 'block';
+      makeDraggable(document.getElementById('dict-modal'), '#dict-modal-header');
+      restorePanelSize(document.getElementById('dict-modal'), 'min(720px,92vw)', '88vh');
+      persistSizeOnResize(document.getElementById('dict-modal'));
       dictCombinedCache = buildDictCombined();
       updateDictFilterCounts();
       dictShownCount = 0;
@@ -6169,6 +6364,33 @@
       btn.style.background = gdriveAccessToken ? "#0f9d58" : "#4285F4";
     }
 
+    function gdriveSaveToken(token, expiresInSec) {
+      gdriveAccessToken = token;
+      try {
+        localStorage.setItem("gdrive_token_cache", JSON.stringify({
+          token,
+          expiresAt: Date.now() + Math.max(0, (expiresInSec || 3600) - 60) * 1000 // 여유 60초 두고 만료 처리
+        }));
+      } catch (e) {}
+    }
+    function gdriveClearToken() {
+      gdriveAccessToken = null;
+      try { localStorage.removeItem("gdrive_token_cache"); } catch (e) {}
+    }
+    // 페이지를 새로 열 때마다 매번 연동을 다시 할 필요 없도록, 저장해둔 토큰이 아직
+    // 유효하면(구글 액세스 토큰은 보통 1시간 유지) 그대로 복원해서 이어서 사용한다.
+    function gdriveRestoreTokenFromCache() {
+      try {
+        const cached = JSON.parse(localStorage.getItem("gdrive_token_cache") || "null");
+        if (cached && cached.token && cached.expiresAt > Date.now()) {
+          gdriveAccessToken = cached.token;
+          gdriveUpdateButtonUI();
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+
     function gdriveEnsureTokenClient() {
       if (gdriveTokenClient || typeof google === "undefined" || !google.accounts) return;
       gdriveTokenClient = google.accounts.oauth2.initTokenClient({
@@ -6176,11 +6398,12 @@
         scope: GDRIVE_SCOPE,
         callback: (resp) => {
           if (resp && resp.access_token) {
-            gdriveAccessToken = resp.access_token;
+            gdriveSaveToken(resp.access_token, resp.expires_in);
             gdriveUpdateButtonUI();
             showToast("Google Drive에 연결되었습니다.", "success");
           }
-        }
+        },
+        error_callback: () => { /* 조용한 자동 갱신 시도 실패는 무시(사용자가 직접 누르면 그때 안내) */ }
       });
     }
 
@@ -6230,13 +6453,612 @@
       } catch (err) {
         console.error("Drive 업로드 오류:", err);
         // 토큰 만료 등의 이유로 실패했을 수 있으므로 재인증 유도
-        gdriveAccessToken = null;
+        gdriveClearToken();
         gdriveUpdateButtonUI();
         return false;
       }
     }
 
     document.getElementById("btn-drive-connect").onclick = gdriveSignIn;
+    // 페이지 로드 시: 1) 저장된 토큰이 살아있으면 그대로 복원, 2) 만료됐다면 팝업 없이 조용히
+    // 갱신을 시도한다(이전에 동의한 적이 있고 구글 로그인 세션이 살아있으면 팝업 없이 성공할 수 있음)
+    (function gdriveAutoRestore() {
+      if (gdriveRestoreTokenFromCache()) return;
+      const tryQuiet = () => {
+        gdriveEnsureTokenClient();
+        if (!gdriveTokenClient) { setTimeout(tryQuiet, 500); return; }
+        gdriveTokenClient.requestAccessToken({ prompt: "none" });
+      };
+      // Google Identity Services 스크립트가 늦게 로드될 수 있으므로 약간의 지연 후 시도
+      setTimeout(tryQuiet, 800);
+    })();
+
+    // ── 우측 패널 모드 전환 (지도 / 주석 PDF / 숨김) ──
+    let rightPanelMode = 'map';
+    function setRightPanelMode(mode) {
+      rightPanelMode = mode;
+      const body = document.body;
+      const mapPaneEl = document.getElementById('map-pane');
+      const commPaneEl = document.getElementById('commentary-pane');
+      const btnMap = document.getElementById('btn-toggle-map');
+      const isMobile = window.innerWidth <= 768;
+      if (mode === 'hidden') {
+        body.classList.add('map-panel-hidden');
+        mapPaneEl.style.display = 'none';
+        commPaneEl.style.display = 'none';
+      } else if (mode === 'commentary') {
+        body.classList.remove('map-panel-hidden');
+        mapPaneEl.style.display = 'none';
+        commPaneEl.style.display = 'flex';
+        if (isMobile) {
+          document.getElementById('left-pane').classList.add('mob-hidden');
+          document.querySelectorAll('#mobile-tab-bar .mob-tab').forEach(t => t.classList.toggle('active', t.dataset.target !== 'bible'));
+        }
+      } else {
+        body.classList.remove('map-panel-hidden');
+        mapPaneEl.style.display = 'flex';
+        commPaneEl.style.display = 'none';
+        if (isMobile) {
+          document.getElementById('left-pane').classList.add('mob-hidden');
+          document.querySelectorAll('#mobile-tab-bar .mob-tab').forEach(t => t.classList.toggle('active', t.dataset.target !== 'bible'));
+        }
+        if (typeof map !== 'undefined' && map && map.invalidateSize) {
+          setTimeout(() => map.invalidateSize(), 50);
+        }
+      }
+      if (btnMap) {
+        btnMap.classList.toggle('active', mode === 'map');
+        btnMap.title = mode === 'map' ? '지도 패널 표시/숨김' : '지도로 전환';
+      }
+      localStorage.setItem('map_panel_hidden', mode === 'hidden' ? '1' : '0');
+    }
+    (function() {
+      const savedHidden = localStorage.getItem('map_panel_hidden') === '1';
+      setRightPanelMode(savedHidden ? 'hidden' : 'map');
+      document.getElementById('btn-toggle-map').onclick = function() {
+        setRightPanelMode(rightPanelMode === 'map' ? 'hidden' : 'map');
+      };
+    })();
+
+    // ── 주석(PDF 커멘터리) 관리 및 뷰어 엔진 ──
+    let commentaryIndexByBook = {};
+    let commentaryDbInstance = null;
+    function openCommentaryDB() {
+      return new Promise((resolve, reject) => {
+        if (commentaryDbInstance) return resolve(commentaryDbInstance);
+        const req = indexedDB.open('CommentaryDB', 1);
+        req.onupgradeneeded = function(e) {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('items')) {
+            db.createObjectStore('items', { keyPath: 'id', autoIncrement: true });
+          }
+        };
+        req.onsuccess = function(e) { commentaryDbInstance = e.target.result; resolve(commentaryDbInstance); };
+        req.onerror = function(e) { reject(e); };
+      });
+    }
+    async function refreshCommentaryIndex() {
+      const db = await openCommentaryDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('items', 'readonly');
+        const req = tx.objectStore('items').getAll();
+        req.onsuccess = function() {
+          const idx = {};
+          (req.result || []).forEach(it => {
+            (idx[it.bookId] = idx[it.bookId] || []).push({
+              id: it.id, name: it.name, bookId: it.bookId,
+              pageCount: it.pageCount, verseCount: Object.keys(it.verseMap || {}).length
+            });
+          });
+          commentaryIndexByBook = idx;
+          resolve(idx);
+        };
+        req.onerror = reject;
+      });
+    }
+    async function getCommentaryItem(id) {
+      const db = await openCommentaryDB();
+      return new Promise((resolve, reject) => {
+        const req = db.transaction('items', 'readonly').objectStore('items').get(id);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+      });
+    }
+    async function deleteCommentaryItem(id) {
+      const db = await openCommentaryDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('items', 'readwrite');
+        tx.objectStore('items').delete(id);
+        tx.oncomplete = resolve;
+        tx.onerror = reject;
+      });
+    }
+    // PDF 텍스트에서 "1:1", "3:16" 처럼 단독으로 적힌 장:절 줄을 찾아 페이지 매핑을 만든다
+    async function extractVerseMapFromPdf(pdfDoc, bookObj, onProgress) {
+      const verseMap = {};
+      const maxChapter = bookObj.chapters;
+      const verseRe = /^(\d{1,3}):(\d{1,3})(?:-(\d{1,3}))?$/;
+      let sampleLinesLogged = false;
+      const addMatch = (line, p) => {
+        const cleaned = line.replace(/\s+/g, '');
+        const m = verseRe.exec(cleaned);
+        if (!m) return false;
+        const ch = parseInt(m[1]), vs = parseInt(m[2]), ve = m[3] ? parseInt(m[3]) : vs;
+        if (ch < 1 || ch > maxChapter) return false;
+        for (let v = vs; v <= ve; v++) {
+          const key = `${ch}:${v}`;
+          if (!(key in verseMap)) verseMap[key] = p;
+        }
+        return true;
+      };
+      for (let p = 1; p <= pdfDoc.numPages; p++) {
+        const page = await pdfDoc.getPage(p);
+        const content = await page.getTextContent();
+
+        // 전략 1: pdf.js가 알려주는 실제 줄바꿈(hasEOL)을 기준으로 줄을 복원
+        let cur = '';
+        content.items.forEach(item => {
+          cur += item.str;
+          if (item.hasEOL) {
+            addMatch(cur, p);
+            cur = '';
+          }
+        });
+        if (cur) addMatch(cur, p);
+
+        // 전략 2: Y좌표가 비슷한 조각들을 묶고 X좌표 순으로 이어붙임 (조각이 여러 개로 쪼개진 경우 대비)
+        // 두 전략 모두 줄 전체를 대상으로 하므로, "...시작(1:1, 14)부터..."처럼 문장 속에 섞인
+        // 인용구는 줄 전체가 패턴과 일치하지 않아 자동으로 걸러진다.
+        const groups = [];
+        content.items.forEach(item => {
+          const y = item.transform[5];
+          let group = groups.find(g => Math.abs(g.y - y) <= 3);
+          if (!group) { group = { y, items: [] }; groups.push(group); }
+          group.items.push(item);
+        });
+        groups.forEach(g => {
+          const line = g.items.sort((a, b) => a.transform[4] - b.transform[4]).map(it => it.str).join('');
+          addMatch(line, p);
+        });
+
+        if (!sampleLinesLogged && p === Math.min(3, pdfDoc.numPages)) {
+          sampleLinesLogged = true;
+          console.log(`[주석 매핑 진단] ${p}페이지 텍스트 조각 샘플:`, content.items.slice(0, 15).map(it => it.str));
+        }
+        if (onProgress) onProgress(p, pdfDoc.numPages);
+      }
+      console.log(`[주석 매핑 진단] 총 매핑된 절 수: ${Object.keys(verseMap).length}`);
+      return verseMap;
+    }
+    async function addCommentaryItem(name, bookId, file, onProgress) {
+      const bookObj = BIBLE_BOOKS.find(b => b.id === bookId);
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const verseMap = await extractVerseMapFromPdf(pdfDoc, bookObj, onProgress);
+      const db = await openCommentaryDB();
+      const record = { name, bookId, pdfBlob: file, verseMap, pageCount: pdfDoc.numPages, createdAt: Date.now() };
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('items', 'readwrite');
+        const req = tx.objectStore('items').add(record);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+      });
+    }
+    function findPageForVerse(item, chapter, vNum) {
+      const verseMap = item.verseMap || {};
+      const key = `${chapter}:${vNum}`;
+      if (verseMap[key]) return verseMap[key];
+      let best = null, firstInChapter = null;
+      Object.keys(verseMap).forEach(k => {
+        const [c, v] = k.split(':').map(Number);
+        if (c !== chapter) return;
+        if (v <= vNum && (best === null || v > best.v)) best = { v, page: verseMap[k] };
+        if (firstInChapter === null || v < firstInChapter.v) firstInChapter = { v, page: verseMap[k] };
+      });
+      if (best) return best.page;
+      if (firstInChapter) return firstInChapter.page;
+      // 절 단위 매핑이 전혀 없으면 장 단위 수동 매핑으로 대체
+      if (item.chapterMap && item.chapterMap[chapter]) return item.chapterMap[chapter];
+      return 1;
+    }
+    function populateCommentarySelectForBook(bookId) {
+      const items = commentaryIndexByBook[bookId] || [];
+      document.getElementById('commentary-select').innerHTML =
+        items.map(it => `<option value="${it.id}">${escHtml(it.name)}</option>`).join('');
+    }
+    function findPageForChapter(item, chapter) {
+      if (item.chapterMap && item.chapterMap[chapter]) return item.chapterMap[chapter];
+      const verseMap = item.verseMap || {};
+      let first = null;
+      Object.keys(verseMap).forEach(k => {
+        const [c, v] = k.split(':').map(Number);
+        if (c !== chapter) return;
+        if (first === null || v < first.v) first = { v, page: verseMap[k] };
+      });
+      return first ? first.page : null;
+    }
+    function populateChapterJumpForItem(item) {
+      const sel = document.getElementById('commentary-chapter-jump');
+      if (!sel) return;
+      const bookObj = BIBLE_BOOKS.find(b => b.id === item.bookId);
+      if (!bookObj) { sel.innerHTML = ''; return; }
+      let html = '<option value="">장 이동</option>';
+      if (item.chapterMap && item.chapterMap['intro']) {
+        html += `<option value="intro">서론 (${item.chapterMap['intro']}p)</option>`;
+      }
+      for (let n = 1; n <= bookObj.chapters; n++) {
+        const page = findPageForChapter(item, n);
+        html += `<option value="${n}">${n}장${page ? ` (${page}p)` : ''}</option>`;
+      }
+      sel.innerHTML = html;
+    }
+    async function updateCommentaryItemInDb(item) {
+      const db = await openCommentaryDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('items', 'readwrite');
+        tx.objectStore('items').put(item);
+        tx.oncomplete = resolve;
+        tx.onerror = reject;
+      });
+    }
+    async function saveManualVerseMapping() {
+      const item = Commentary.currentItem;
+      if (!item) { showToast('먼저 주석 PDF를 열어주세요.', 'warn'); return; }
+      const chapter = parseInt(document.getElementById('manual-map-chapter').value);
+      const verseRaw = document.getElementById('manual-map-verse').value.trim();
+      const m = /^(\d+)(?:-(\d+))?$/.exec(verseRaw);
+      if (!chapter || !m) { showToast('장 번호와 절(예: 5 또는 5-8)을 올바르게 입력해주세요.', 'warn'); return; }
+      const vs = parseInt(m[1]), ve = m[2] ? parseInt(m[2]) : vs;
+      const page = Commentary.currentPage;
+      item.verseMap = item.verseMap || {};
+      for (let v = vs; v <= ve; v++) {
+        item.verseMap[`${chapter}:${v}`] = page;
+      }
+      try {
+        await updateCommentaryItemInDb(item);
+        await refreshCommentaryIndex();
+        showToast(`${chapter}:${verseRaw} → ${page}페이지로 수동 연결 저장 완료`, 'success');
+        // 다음 절로 자동 이동: 마우스 휠로 PDF만 넘기면서 연속으로 이어서 매핑할 수 있도록
+        document.getElementById('manual-map-verse').value = String(ve + 1);
+      } catch (err) {
+        console.error('[수동 매핑 저장 오류]', err);
+        showToast('저장 중 오류: ' + (err.message || err), 'error');
+      }
+    }
+    // ── 장 연결(챕터별 페이지 매핑) 모달 ──
+    function openChapterMapModal() {
+      const item = Commentary.currentItem;
+      if (!item) { showToast('먼저 주석 PDF를 열어주세요.', 'warn'); return; }
+      const bookObj = BIBLE_BOOKS.find(b => b.id === item.bookId);
+      if (!bookObj) return;
+      item.chapterMap = item.chapterMap || {};
+      document.getElementById('chapter-map-title').textContent = `${bookObj.name} 장 연결`;
+      renderChapterMapList(item, bookObj.chapters);
+      document.getElementById('chapter-map-modal').style.display = 'flex';
+      document.getElementById('chapter-map-modal-backdrop').style.display = 'block';
+    }
+    function updateChapterMapProgress(item, total) {
+      const filled = Object.keys(item.chapterMap || {}).filter(k => k !== 'intro' && item.chapterMap[k]).length;
+      document.getElementById('chapter-map-progress-text').textContent = `${filled} / ${total}장 연결됨`;
+      document.getElementById('chapter-map-progress-bar').style.width = `${total ? Math.round(filled / total * 100) : 0}%`;
+    }
+    function renderChapterMapList(item, total) {
+      const listEl = document.getElementById('chapter-map-list');
+      const introVal = item.chapterMap['intro'] || '';
+      let html = `
+        <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px dashed #e2c9a8;margin-bottom:6px">
+          <span style="background:#a8a29e;color:#fff;font-size:0.78em;font-weight:700;border-radius:14px;padding:4px 10px;min-width:44px;text-align:center;flex-shrink:0">서론</span>
+          <input type="number" min="1" class="chapter-map-input" data-chapter="intro" placeholder="페이지" value="${introVal}" style="flex:1;padding:6px 8px;border:1px solid #e2c9a8;border-radius:6px;font-size:0.9em">
+        </div>`;
+      for (let n = 1; n <= total; n++) {
+        const val = item.chapterMap[n] || '';
+        html += `
+          <div style="display:flex;align-items:center;gap:10px;padding:7px 0">
+            <span style="background:#7c4a26;color:#fff;font-size:0.78em;font-weight:700;border-radius:14px;padding:4px 10px;min-width:44px;text-align:center;flex-shrink:0">${n}장</span>
+            <input type="number" min="1" class="chapter-map-input" data-chapter="${n}" placeholder="페이지" value="${val}" style="flex:1;padding:6px 8px;border:1px solid #e2c9a8;border-radius:6px;font-size:0.9em">
+            <span class="chapter-map-check" data-chapter="${n}" style="width:16px;text-align:center;color:#16a34a;font-size:1em;flex-shrink:0">${val ? '●' : '○'}</span>
+          </div>`;
+      }
+      listEl.innerHTML = html;
+      updateChapterMapProgress(item, total);
+      listEl.querySelectorAll('.chapter-map-input').forEach(inp => {
+        inp.addEventListener('change', async () => {
+          const ch = inp.dataset.chapter;
+          const val = parseInt(inp.value);
+          item.chapterMap = item.chapterMap || {};
+          if (val) { item.chapterMap[ch] = val; } else { delete item.chapterMap[ch]; }
+          const checkEl = listEl.querySelector(`.chapter-map-check[data-chapter="${ch}"]`);
+          if (checkEl) checkEl.textContent = val ? '●' : '○';
+          updateChapterMapProgress(item, total);
+          try {
+            await updateCommentaryItemInDb(item);
+          } catch (err) {
+            console.error('[장 매핑 저장 오류]', err);
+            showToast('저장 실패: ' + (err.message || err), 'error');
+          }
+        });
+      });
+    }
+    function closeChapterMapModal() {
+      document.getElementById('chapter-map-modal').style.display = 'none';
+      document.getElementById('chapter-map-modal-backdrop').style.display = 'none';
+      refreshCommentaryIndex();
+    }
+    const Commentary = {
+      currentPdfDoc: null,
+      currentItem: null,
+      currentPage: 1,
+      baseScale: null,
+      zoomFactor: 1,
+      async openViewer(itemId, pageNum) {
+        try {
+          if (typeof pdfjsLib === 'undefined' || !pdfjsLib) {
+            showToast('PDF 엔진(pdf.js)이 로드되지 않았습니다. 네트워크/방화벽 문제일 수 있습니다.', 'error');
+            console.error('[Commentary] pdfjsLib이 정의되지 않음 — pdf.min.js 로드 실패 가능성');
+            return;
+          }
+          const item = await getCommentaryItem(itemId);
+          if (!item) { showToast('주석을 찾을 수 없습니다.', 'error'); return; }
+          this.currentItem = item;
+          document.getElementById('commentary-empty-state').style.display = 'none';
+          document.getElementById('commentary-pdf-wrap').style.display = 'flex';
+          const arrayBuffer = await item.pdfBlob.arrayBuffer();
+          this.currentPdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          this.baseScale = null;
+          this.zoomFactor = 1;
+          document.getElementById('commentary-zoom-level').textContent = '100%';
+          document.getElementById('commentary-page-jump').max = this.currentPdfDoc.numPages;
+          await this.renderPage(pageNum || 1);
+          const sel = document.getElementById('commentary-select');
+          if (sel) sel.value = String(itemId);
+          populateChapterJumpForItem(item);
+          localStorage.setItem(`commentary_last_item_book_${item.bookId}`, String(itemId));
+        } catch (err) {
+          console.error('[Commentary.openViewer 오류]', err);
+          showToast('주석 PDF를 여는 중 오류: ' + (err.message || err), 'error');
+        }
+      },
+      async renderPage(pageNum) {
+        try {
+          if (!this.currentPdfDoc) return;
+          pageNum = Math.max(1, Math.min(pageNum, this.currentPdfDoc.numPages));
+          this.currentPage = pageNum;
+          const page = await this.currentPdfDoc.getPage(pageNum);
+          const canvas = document.getElementById('commentary-pdf-canvas');
+          const wrap = document.getElementById('commentary-pdf-wrap');
+          const unscaled = page.getViewport({ scale: 1 });
+          // 기준 배율(화면 폭에 맞춤)은 이 PDF를 열 때 한 번만 계산해 고정한다
+          // (페이지마다 다시 계산하면 스크롤바 유무 등으로 폭이 미세하게 달라져
+          //  화면이 계속 확대/축소되는 것처럼 보임). 사용자 확대/축소는 별도 배수로 곱해서 적용.
+          if (this.baseScale === null) {
+            const targetWidth = Math.max(280, Math.min(wrap.clientWidth - 28, 900));
+            this.baseScale = targetWidth / unscaled.width;
+          }
+          const viewport = page.getViewport({ scale: this.baseScale * this.zoomFactor });
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          const ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          document.getElementById('commentary-page-indicator').textContent = `${pageNum} / ${this.currentPdfDoc.numPages}`;
+          document.getElementById('commentary-page-jump').value = pageNum;
+          const manualPageSpan = document.getElementById('manual-map-current-page');
+          if (manualPageSpan) manualPageSpan.textContent = pageNum;
+        } catch (err) {
+          console.error('[Commentary.renderPage 오류]', err);
+          showToast('페이지 렌더링 오류: ' + (err.message || err), 'error');
+        }
+      },
+      async setZoom(factor) {
+        this.zoomFactor = Math.max(0.5, Math.min(2.5, factor));
+        document.getElementById('commentary-zoom-level').textContent = `${Math.round(this.zoomFactor * 100)}%`;
+        await this.renderPage(this.currentPage);
+      },
+      async jumpToVerse(bookId, chapter, vNum) {
+        try {
+          const items = commentaryIndexByBook[bookId] || [];
+          if (items.length === 0) { openCommentaryModal(bookId); return; }
+          const lastId = parseInt(localStorage.getItem(`commentary_last_item_book_${bookId}`) || '0');
+          const item = items.find(it => it.id === lastId) || items[0];
+          setRightPanelMode('commentary');
+          populateCommentarySelectForBook(bookId);
+          const fullItem = await getCommentaryItem(item.id);
+          if (!fullItem) { showToast('저장된 주석 데이터를 찾을 수 없습니다. 다시 등록해주세요.', 'error'); return; }
+          const page = findPageForVerse(fullItem, chapter, vNum);
+          console.log(`[Commentary.jumpToVerse] ${chapter}:${vNum} -> page ${page} (item: ${fullItem.name}, 매핑된 절 수: ${Object.keys(fullItem.verseMap || {}).length})`);
+          await this.openViewer(item.id, page);
+          const chEl = document.getElementById('manual-map-chapter');
+          const vEl = document.getElementById('manual-map-verse');
+          if (chEl) chEl.value = chapter;
+          if (vEl) vEl.value = vNum;
+          showToast(`${chapter}:${vNum} 절 → ${page}페이지로 이동`, 'success');
+        } catch (err) {
+          console.error('[Commentary.jumpToVerse 오류]', err);
+          showToast('주석 이동 중 오류: ' + (err.message || err), 'error');
+        }
+      }
+    };
+    function renderCommentaryList() {
+      const listEl = document.getElementById('commentary-list');
+      const allItems = Object.values(commentaryIndexByBook).flat();
+      if (allItems.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center;padding:24px;color:#94a3b8;font-size:0.85em">등록된 주석이 없습니다.</div>`;
+        return;
+      }
+      listEl.innerHTML = allItems.map(it => {
+        const bookObj = BIBLE_BOOKS.find(b => b.id === it.bookId);
+        return `
+          <div style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #f1f5f9">
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:0.9em;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(it.name)}</div>
+              <div style="font-size:0.75em;color:#64748b">${bookObj ? escHtml(bookObj.name) : '?'} · ${it.pageCount}페이지 · 절 매핑 ${it.verseCount}개</div>
+            </div>
+            <button onclick="jumpToBookAndShowCommentary(${it.bookId},${it.id})" style="font-size:0.78em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:4px 10px;cursor:pointer;white-space:nowrap">보기</button>
+            <button onclick="deleteCommentaryAndRefresh(${it.id})" style="font-size:0.78em;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:4px;padding:4px 8px;cursor:pointer">삭제</button>
+          </div>`;
+      }).join('');
+    }
+    async function jumpToBookAndShowCommentary(bookId, itemId) {
+      closeCommentaryModal();
+      const curBookId = parseInt(document.getElementById('book-select').value);
+      if (curBookId !== bookId) {
+        navigateToBibleVerse(bookId, 1, 1);
+      }
+      setRightPanelMode('commentary');
+      populateCommentarySelectForBook(bookId);
+      await Commentary.openViewer(itemId, 1);
+    }
+    async function deleteCommentaryAndRefresh(id) {
+      if (!confirm('이 주석을 삭제할까요? (PDF 파일도 함께 삭제됩니다)')) return;
+      await deleteCommentaryItem(id);
+      await refreshCommentaryIndex();
+      renderCommentaryList();
+      showToast('주석을 삭제했습니다.', 'success');
+    }
+    function openCommentaryModal(preselectBookId) {
+      const bookSel = document.getElementById('commentary-new-book');
+      if (bookSel.options.length === 0) {
+        bookSel.innerHTML = BIBLE_BOOKS.map(b => `<option value="${b.id}">${escHtml(b.name)}</option>`).join('');
+      }
+      if (preselectBookId) bookSel.value = String(preselectBookId);
+      renderCommentaryList();
+      document.getElementById('commentary-modal').style.display = 'flex';
+      document.getElementById('commentary-modal-backdrop').style.display = 'block';
+    }
+    function closeCommentaryModal() {
+      document.getElementById('commentary-modal').style.display = 'none';
+      document.getElementById('commentary-modal-backdrop').style.display = 'none';
+    }
+    (function() {
+      refreshCommentaryIndex();
+      document.getElementById('btn-toggle-commentary').onclick = function() {
+        const bookId = parseInt(document.getElementById('book-select').value);
+        const items = commentaryIndexByBook[bookId] || [];
+        if (items.length === 0) { openCommentaryModal(bookId); return; }
+        setRightPanelMode('commentary');
+        populateCommentarySelectForBook(bookId);
+        const lastId = parseInt(localStorage.getItem(`commentary_last_item_book_${bookId}`) || '0');
+        const item = items.find(it => it.id === lastId) || items[0];
+        getCommentaryItem(item.id).then(full => {
+          const chapter = parseInt(document.getElementById('chapter-select').value) || 1;
+          const page = findPageForVerse(full, chapter, 1);
+          Commentary.openViewer(item.id, page);
+        });
+      };
+      document.getElementById('btn-open-commentary-manage').onclick = () => openCommentaryModal(parseInt(document.getElementById('book-select').value));
+      document.getElementById('btn-commentary-download').onclick = function() {
+        const item = Commentary.currentItem;
+        if (!item || !item.pdfBlob) { showToast('먼저 주석을 열어주세요.', 'warn'); return; }
+        const filename = (item.pdfBlob.name && item.pdfBlob.name.trim()) ? item.pdfBlob.name : `${item.name}.pdf`;
+        const url = URL.createObjectURL(item.pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      };
+      document.getElementById('btn-commentary-empty-add').onclick = () => openCommentaryModal(parseInt(document.getElementById('book-select').value));
+      document.getElementById('btn-close-commentary-modal').onclick = closeCommentaryModal;
+      document.getElementById('commentary-modal-backdrop').onclick = closeCommentaryModal;
+      document.getElementById('btn-commentary-back-to-map').onclick = () => setRightPanelMode('map');
+      document.getElementById('commentary-select').onchange = function() {
+        Commentary.openViewer(parseInt(this.value), 1);
+      };
+      document.getElementById('commentary-chapter-jump').onchange = function() {
+        const val = this.value;
+        this.value = '';
+        if (!val || !Commentary.currentItem) return;
+        const page = val === 'intro'
+          ? (Commentary.currentItem.chapterMap && Commentary.currentItem.chapterMap['intro'])
+          : findPageForChapter(Commentary.currentItem, parseInt(val));
+        if (page) {
+          Commentary.renderPage(page);
+        } else {
+          showToast(`${val === 'intro' ? '서론' : val + '장'}에 연결된 페이지가 없습니다. 📑 장 연결에서 설정해주세요.`, 'warn');
+        }
+      };
+      document.getElementById('btn-commentary-prev-page').onclick = () => Commentary.renderPage(Commentary.currentPage - 1);
+      document.getElementById('btn-commentary-next-page').onclick = () => Commentary.renderPage(Commentary.currentPage + 1);
+      document.getElementById('btn-commentary-zoom-in').onclick = () => Commentary.setZoom(Commentary.zoomFactor + 0.1);
+      document.getElementById('btn-commentary-zoom-out').onclick = () => Commentary.setZoom(Commentary.zoomFactor - 0.1);
+      // 마우스 휠: Ctrl(또는 Cmd)을 누른 채 휠을 돌리면 확대/축소, 그냥 휠은 페이지 넘김
+      // (페이지 안에서 스크롤하다가 맨 위/아래에 닿으면 이전/다음 페이지로 자연스럽게 넘어감)
+      (function() {
+        const wrap = document.getElementById('commentary-pdf-wrap');
+        let lastPageChangeAt = 0;
+        wrap.addEventListener('wheel', function(e) {
+          if (!Commentary.currentPdfDoc) return;
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            Commentary.setZoom(Commentary.zoomFactor + (e.deltaY < 0 ? 0.1 : -0.1));
+            return;
+          }
+          const atTop = wrap.scrollTop <= 2;
+          const atBottom = wrap.scrollTop + wrap.clientHeight >= wrap.scrollHeight - 2;
+          const now = Date.now();
+          if (e.deltaY > 0 && atBottom && Commentary.currentPage < Commentary.currentPdfDoc.numPages) {
+            if (now - lastPageChangeAt < 500) return; // 연속 휠 입력으로 여러 페이지 건너뛰는 것 방지
+            lastPageChangeAt = now;
+            e.preventDefault();
+            Commentary.renderPage(Commentary.currentPage + 1).then(() => { wrap.scrollTop = 0; });
+          } else if (e.deltaY < 0 && atTop && Commentary.currentPage > 1) {
+            if (now - lastPageChangeAt < 500) return;
+            lastPageChangeAt = now;
+            e.preventDefault();
+            Commentary.renderPage(Commentary.currentPage - 1).then(() => { wrap.scrollTop = wrap.scrollHeight; });
+          }
+        }, { passive: false });
+      })();
+      document.getElementById('btn-commentary-goto').onclick = function() {
+        const v = parseInt(document.getElementById('commentary-page-jump').value);
+        if (v) Commentary.renderPage(v);
+      };
+      document.getElementById('btn-manual-map-save').onclick = saveManualVerseMapping;
+      document.getElementById('manual-map-verse').addEventListener('keydown', e => {
+        if (e.key === 'Enter') saveManualVerseMapping();
+      });
+      document.getElementById('manual-map-chapter').addEventListener('keydown', e => {
+        if (e.key === 'Enter') saveManualVerseMapping();
+      });
+      document.getElementById('btn-open-chapter-map').onclick = openChapterMapModal;
+      document.getElementById('btn-close-chapter-map').onclick = closeChapterMapModal;
+      document.getElementById('chapter-map-modal-backdrop').onclick = closeChapterMapModal;
+      document.getElementById('btn-commentary-add').onclick = async function() {
+        const name = document.getElementById('commentary-new-name').value.trim();
+        const bookId = parseInt(document.getElementById('commentary-new-book').value);
+        const fileInput = document.getElementById('commentary-new-file');
+        const file = fileInput.files[0];
+        if (!name) { showToast('주석 이름을 입력하세요.', 'warn'); return; }
+        if (!file) { showToast('PDF 파일을 선택하세요.', 'warn'); return; }
+        const progressEl = document.getElementById('commentary-add-progress');
+        progressEl.style.display = 'block';
+        progressEl.textContent = 'PDF 분석 준비 중...';
+        this.disabled = true;
+        try {
+          const newId = await addCommentaryItem(name, bookId, file, (p, total) => {
+            progressEl.textContent = `PDF 분석 중... (${p} / ${total} 페이지)`;
+          });
+          await refreshCommentaryIndex();
+          renderCommentaryList();
+          document.getElementById('commentary-new-name').value = '';
+          fileInput.value = '';
+          progressEl.style.display = 'none';
+          const verseCount = Object.keys((await getCommentaryItem(newId)).verseMap).length;
+          if (verseCount === 0) {
+            showToast('절 매핑 0개 — 이 PDF에서 장:절 패턴을 못 찾았습니다. F12 콘솔의 [주석 매핑 진단] 로그를 확인해주세요.', 'error');
+          } else {
+            showToast(`주석 추가 완료 (절 매핑 ${verseCount}개)`, 'success');
+          }
+        } catch (err) {
+          console.error('[주석 추가 실패]', err);
+          progressEl.textContent = '분석 실패: ' + (err.message || err);
+          showToast('주석 추가에 실패했습니다.', 'error');
+        } finally {
+          this.disabled = false;
+        }
+      };
+    })();
 
     const chkAutoBackup = document.getElementById("chk-drive-autobackup");
     chkAutoBackup.checked = localStorage.getItem("gdrive_autobackup_on") === "1";
@@ -8518,7 +9340,7 @@
       if (!panel) {
         panel = document.createElement('div');
         panel.id = 'interlinear-panel';
-        panel.style.cssText = 'position:fixed;top:60px;right:30px;z-index:10001;background:var(--card,#fff);border:1px solid #a7f3d0;border-radius:8px;padding:14px;width:320px;max-height:70vh;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.25);font-family:sans-serif';
+        panel.style.cssText = 'position:fixed;top:60px;right:30px;z-index:10001;background:var(--card,#fff);border:1px solid #a7f3d0;border-radius:8px;padding:10px;width:280px;max-height:50vh;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,0.25);font-family:sans-serif';
         document.body.appendChild(panel);
       }
       panel.dataset.vnum = String(vNum);
@@ -8533,23 +9355,27 @@
         : words.map(w => {
             const safe = w.code.replace(/'/g, "\\'");
             return `
-              <div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px dashed #e2e8f0;">
-                <span style="font-size:1.15em;font-weight:600;color:#1e293b;direction:rtl;unicode-bidi:isolate">${escHtml(w.surface)}</span>
-                <span style="font-size:0.85em;color:#64748b;"> (기본 <span class="strong-tag" onclick="StrongEngine.handleClick('${safe}','interlinear-panel-strong-inline'); document.getElementById('interlinear-panel').scrollTop=0;">${escHtml(w.code)}</span> <span style="direction:rtl;unicode-bidi:isolate">${escHtml(w.root)}</span> ${escHtml(w.xlit)})</span>
-                <div style="font-size:0.85em;color:#94a3b8;margin-top:2px;">→ ${escHtml(w.morph)} : <span style="color:#334155;font-weight:500">${escHtml(w.gloss)}</span></div>
+              <div style="margin-bottom:4px;padding-bottom:4px;border-bottom:1px dashed #e2e8f0;">
+                <span style="font-size:1.05em;font-weight:600;color:#1e293b;direction:rtl;unicode-bidi:isolate">${escHtml(w.surface)}</span>
+                <span style="font-size:0.8em;color:#64748b;"> (기본 <span class="strong-tag" onclick="StrongEngine.handleClick('${safe}','interlinear-panel-strong-inline'); document.getElementById('interlinear-panel').scrollTop=0;">${escHtml(w.code)}</span> <span style="direction:rtl;unicode-bidi:isolate">${escHtml(w.root)}</span> ${escHtml(w.xlit)})</span>
+                <div style="font-size:0.8em;color:#94a3b8;margin-top:1px;">→ ${escHtml(w.morph)} : <span style="color:#334155;font-weight:500">${escHtml(w.gloss)}</span></div>
               </div>
             `;
           }).join('');
       panel.innerHTML = `
         <div id="interlinear-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
           <span style="font-weight:bold;font-size:1.05em;color:#047857">🔤 ${refLabel}${vNum}절 원어분해</span>
-          <button onclick="document.getElementById('interlinear-panel').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
+          <span>
+            <button onclick="localStorage.removeItem('panel_size_interlinear-panel'); toggleInterlinearRow(${vNum}); toggleInterlinearRow(${vNum});" title="창 크기 기본값으로" style="border:none;background:none;font-size:0.9em;cursor:pointer;color:#94a3b8;margin-right:6px">⤾</button>
+            <button onclick="document.getElementById('interlinear-panel').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
+          </span>
         </div>
         <div id="interlinear-panel-strong-inline"></div>
         ${body}
       `;
       panel.style.display = 'block';
-      makeResizableWithAutoFont(panel, 320, 13);
+      makeResizableWithAutoFont(panel, 280, 12);
+      panel.style.maxHeight = '50vh';
       ensureTouchResizeGrip(panel);
       makeDraggable(panel, '#interlinear-drag-handle');
     }
@@ -9377,10 +10203,13 @@
         const interlinearRow = interlinearDbInstance
           ? `<div id="interlinear-row-${vNum}" data-ref="${bookId}-${chapter}" style="display:none;margin:6px 0 4px 20px;padding:8px 10px;background:#f8fafc;border-left:2px solid #a7f3d0;border-radius:4px;"></div>`
           : '';
+        const commentaryToggle = (commentaryIndexByBook[bookId] && commentaryIndexByBook[bookId].length > 0)
+          ? `<button onclick="Commentary.jumpToVerse(${bookId},${chapter},${vNum})" style="margin-left:6px;font-size:0.7em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle;" title="이 절 주석 보기">📖 주석</button>`
+          : '';
         html += `
           <div class="verse-row" id="verse-row-${vNum}">
             <span class="verse-num">${vNum}</span>
-            <span class="verse-text">${highlightedText}</span>${interlinearToggle}
+            <span class="verse-text">${highlightedText}</span>${interlinearToggle}${commentaryToggle}
             ${interlinearRow}
           </div>
         `;
@@ -10151,9 +10980,16 @@
     function switchMobileTab(target) {
       const leftPane = document.getElementById('left-pane');
       const mapPane = document.getElementById('map-pane');
+      const commPane = document.getElementById('commentary-pane');
       const tabs = document.querySelectorAll('#mobile-tab-bar .mob-tab');
 
       tabs.forEach(t => t.classList.toggle('active', t.dataset.target === target));
+
+      // 주석 패널에 남아있을 수 있는 인라인 표시 상태를 초기화해
+      // 하단 탭 전환이 항상 우선하도록 한다 (지도가 숨겨진 채로 고정되는 문제 방지)
+      mapPane.style.display = '';
+      if (commPane) commPane.style.display = 'none';
+      if (typeof rightPanelMode !== 'undefined') rightPanelMode = 'map';
 
       if (target === 'bible') {
         leftPane.classList.remove('mob-hidden');
