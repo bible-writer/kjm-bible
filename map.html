@@ -167,25 +167,29 @@
     }
     .status-btn-group > * { flex-shrink: 0; }
     .hscroll-arrow-btn {
-      position: sticky;
-      z-index: 5;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
       flex-shrink: 0;
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      border: none;
-      background: rgba(51,65,85,0.88);
+      border: 1px solid rgba(255,255,255,0.6);
+      background: #1e293b;
       color: #fff;
-      font-size: 11px;
+      font-size: 12px;
+      font-weight: bold;
       line-height: 1;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
     }
-    .hscroll-arrow-btn.left { left: 0; margin-right: 2px; }
-    .hscroll-arrow-btn.right { right: 0; margin-left: 2px; }
+    .hscroll-arrow-btn.left { left: 2px; }
+    .hscroll-arrow-btn.right { right: 2px; }
+    .hscroll-wrap { position: relative; display: flex; align-items: center; min-width: 0; }
     .btn-status-action {
       background: #475569;
       color: white;
@@ -3313,10 +3317,23 @@
     // panel.innerHTML을 새로 채울 때마다 자식 노드가 통째로 사라지므로,
     // 반드시 innerHTML을 설정한 "이후"에 호출해서 다시 붙여야 한다.
     // 스와이프 인식이 애매한 브라우저/웹뷰 환경에서도 확실히 작동하도록,
-    // 버튼줄 양 끝에 눌러서 스크롤되는 화살표를 붙인다(스크롤 위치에 따라 sticky로 항상 양 끝에 붙어있음)
+    // 버튼줄을 감싸는 wrapper를 만들고 그 위에 눌러서 스크롤되는 화살표를 절대좌표로 덧씌운다
+    // (sticky 방식은 실제 기기별로 안 보일 위험이 있어 더 확실한 오버레이 방식을 사용)
     function addHorizontalScrollArrows(container) {
       if (!container || container.dataset.hscrollArrows) return;
       container.dataset.hscrollArrows = '1';
+      const cs = window.getComputedStyle(container);
+      const wrap = document.createElement('div');
+      wrap.className = 'hscroll-wrap';
+      wrap.style.flex = cs.flex;
+      wrap.style.flexShrink = cs.flexShrink;
+      wrap.style.minWidth = '0';
+      container.parentNode.insertBefore(wrap, container);
+      wrap.appendChild(container);
+      container.style.flex = '1';
+      container.style.minWidth = '0';
+      container.style.paddingLeft = '22px';
+      container.style.paddingRight = '22px';
       const mkBtn = dir => {
         const b = document.createElement('button');
         b.textContent = dir === 'left' ? '◀' : '▶';
@@ -3328,8 +3345,8 @@
         };
         return b;
       };
-      container.insertBefore(mkBtn('left'), container.firstChild);
-      container.appendChild(mkBtn('right'));
+      wrap.appendChild(mkBtn('left'));
+      wrap.appendChild(mkBtn('right'));
     }
     function ensureTouchResizeGrip(panelEl) {
       function positionGrip() {
