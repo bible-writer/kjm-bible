@@ -166,6 +166,26 @@
       -webkit-overflow-scrolling: touch;
     }
     .status-btn-group > * { flex-shrink: 0; }
+    .hscroll-arrow-btn {
+      position: sticky;
+      z-index: 5;
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(51,65,85,0.88);
+      color: #fff;
+      font-size: 11px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    .hscroll-arrow-btn.left { left: 0; margin-right: 2px; }
+    .hscroll-arrow-btn.right { right: 0; margin-left: 2px; }
     .btn-status-action {
       background: #475569;
       color: white;
@@ -3292,6 +3312,25 @@
     // 손가락으로도 크기를 조절할 수 있도록 별도의 크기조절 손잡이를 만들어 붙인다.
     // panel.innerHTML을 새로 채울 때마다 자식 노드가 통째로 사라지므로,
     // 반드시 innerHTML을 설정한 "이후"에 호출해서 다시 붙여야 한다.
+    // 스와이프 인식이 애매한 브라우저/웹뷰 환경에서도 확실히 작동하도록,
+    // 버튼줄 양 끝에 눌러서 스크롤되는 화살표를 붙인다(스크롤 위치에 따라 sticky로 항상 양 끝에 붙어있음)
+    function addHorizontalScrollArrows(container) {
+      if (!container || container.dataset.hscrollArrows) return;
+      container.dataset.hscrollArrows = '1';
+      const mkBtn = dir => {
+        const b = document.createElement('button');
+        b.textContent = dir === 'left' ? '◀' : '▶';
+        b.type = 'button';
+        b.className = 'hscroll-arrow-btn ' + dir;
+        b.onclick = e => {
+          e.stopPropagation();
+          container.scrollBy({ left: dir === 'left' ? -140 : 140, behavior: 'smooth' });
+        };
+        return b;
+      };
+      container.insertBefore(mkBtn('left'), container.firstChild);
+      container.appendChild(mkBtn('right'));
+    }
     function ensureTouchResizeGrip(panelEl) {
       function positionGrip() {
         if (panelEl.style.display === 'none') { grip.style.display = 'none'; return; }
@@ -5626,6 +5665,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      addHorizontalScrollArrows(document.querySelector('.status-btn-group'));
+      addHorizontalScrollArrows(document.getElementById('map-header-bar-el'));
       const btnOpen = document.getElementById('btn-open-rawdict');
       if (btnOpen) btnOpen.onclick = openRawDictModal;
       const btnClose = document.getElementById('btn-close-rawdict');
