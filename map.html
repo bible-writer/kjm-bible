@@ -162,6 +162,8 @@
       overflow-y: hidden;
       flex-wrap: nowrap;
       justify-content: flex-end;
+      touch-action: pan-x;
+      -webkit-overflow-scrolling: touch;
     }
     .status-btn-group > * { flex-shrink: 0; }
     .btn-status-action {
@@ -708,6 +710,8 @@
       flex-wrap: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
+      touch-action: pan-x;
+      -webkit-overflow-scrolling: touch;
       gap: 6px;
       background: rgba(255, 255, 255, 0.96);
       padding: 6px 10px;
