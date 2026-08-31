@@ -121,9 +121,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 4px;
+      flex-wrap: nowrap;
+      gap: 6px;
     }
+    #db-status-text { flex-shrink: 0; white-space: nowrap; }
     #db-status-bar.connected {
       background-color: #dcfce7;
       color: #166534;
@@ -133,7 +134,14 @@
       display: flex;
       gap: 4px;
       align-items: center;
+      flex: 1;
+      min-width: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
     }
+    .status-btn-group > * { flex-shrink: 0; }
     .btn-status-action {
       background: #475569;
       color: white;
@@ -143,6 +151,7 @@
       font-size: 10.5px;
       cursor: pointer;
       font-weight: 600;
+      white-space: nowrap;
     }
     .btn-status-action:hover { background: #334155; }
     .btn-status-action.primary { background: #2563eb; }
@@ -665,9 +674,9 @@
       flex-wrap: nowrap;
       overflow-x: auto;
       overflow-y: hidden;
-      gap: 5px;
+      gap: 6px;
       background: rgba(255, 255, 255, 0.96);
-      padding: 4px 8px;
+      padding: 6px 10px;
       align-items: center;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
@@ -680,20 +689,20 @@
       flex-shrink: 0;
     }
     #searchBox {
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 5px;
       border: 1px solid #cbd5e1;
-      font-size: 11px;
-      width: 170px;
+      font-size: 12px;
+      width: 180px;
       outline: none;
     }
     .btn-search-icon {
-      padding: 4px 8px;
+      padding: 6px 11px;
       background: #2563eb;
       color: white;
       border: none;
       border-radius: 5px;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
@@ -732,12 +741,12 @@
     .ac-sub { font-size: 10.5px; color: #64748b; margin-top: 1px; }
 
     .btn-catalog-trigger {
-      padding: 4px 8px;
+      padding: 6px 10px;
       background: #0f172a;
       color: #ffffff;
       border: none;
       border-radius: 5px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
@@ -764,8 +773,8 @@
     .label-toggle-group {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
+      gap: 5px;
+      font-size: 12px;
       font-weight: 700;
       color: #334155;
       cursor: pointer;
@@ -777,8 +786,8 @@
     }
     .label-toggle-group input[type="checkbox"] {
       cursor: pointer;
-      width: 13px;
-      height: 13px;
+      width: 14px;
+      height: 14px;
     }
 
     .map-toggle-btn {
@@ -1513,20 +1522,20 @@
       <div class="status-btn-group">
         <button class="btn-status-action success" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
         <button class="btn-status-action success" id="btn-import-backup-trigger" title="백업 파일 가져와서 복원하기">복원</button>
-        <button class="btn-status-action" id="btn-drive-connect" title="Google 계정 연결/해제" style="background:#4285F4;">🔗 Drive 연동안됨</button>
+        <button class="btn-status-action" id="btn-drive-connect" title="Google 계정 연결/해제 (Drive)" style="background:#4285F4;">🔗 연동안됨</button>
         <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#475569;margin-left:6px;" title="체크 시 10분마다 자동으로 Google Drive에 백업합니다">
           <input type="checkbox" id="chk-drive-autobackup" style="cursor:pointer;"> 자동백업
         </label>
         <button class="btn-status-action" id="btn-export-xlsx" title="현재 지명 DB를 XLSX로 내보내기" style="background:#2563eb;" onclick="exportPlaceDatabaseToXlsx()">📊 XLSX</button>
         <button class="btn-status-action" id="btn-update-db" title="GitHub에서 최신 지명 DB 다운로드" style="background:#7c3aed;" onclick="updateFromGitHub()">🔄 업데이트</button>
-        <button class="btn-status-action" id="btn-sync-openbible" title="OpenBible.info 학술 좌표와 동기화" style="background:#d97706;" onclick="syncWithOpenBible()">📡 OpenBible</button>
+        <button class="btn-status-action" id="btn-sync-openbible" title="OpenBible.info 학술 좌표와 동기화" style="background:#d97706;" onclick="syncWithOpenBible()">📡 OB</button>
         <button class="btn-status-action" id="btn-export-json" title="placeDatabase.json 생성 (GitHub 업로드용)" style="background:#059669;" onclick="exportPlaceDatabaseJson()">📦 JSON</button>
         <button class="btn-status-action" id="btn-export-term-json" title="termDatabase.json 생성 (스트롱코드 수정분 포함, GitHub 업로드용)" style="background:#b45309;" onclick="exportTermDatabaseJson()">📦 용어DB</button>
         <button class="btn-status-action" id="btn-coord-overrides" title="좌표 보정 이력 보기 / 제외행 확인" style="background:#0891b2;" onclick="openCoordOverrideManager()">📍 보정</button>
         <button class="btn-status-action" id="btn-name-overrides" title="한글 지명 수정 이력 보기" style="background:#7c3aed;" onclick="openNameOverrideManager()">✏️ 지명</button>
         <input type="file" id="backup-file-input" accept=".json" style="display:none;" />
-        <button class="btn-status-action primary" id="btn-open-add-link" title="수동 링크 추가">링크 추가</button>
-        <button class="btn-status-action" id="btn-open-blacklist" title="제외 단어 관리">제외 관리</button>
+        <button class="btn-status-action primary" id="btn-open-add-link" title="수동 링크 추가">+링크</button>
+        <button class="btn-status-action" id="btn-open-blacklist" title="제외 단어 관리">제외</button>
         <button class="btn-status-action danger" id="btn-clear-db" title="저장소 초기화">초기화</button>
         <label class="label-toggle-group" style="margin-left:6px;">
           <input type="checkbox" id="chk-term-highlight">
@@ -1702,25 +1711,25 @@
     <div class="map-header-bar" id="map-header-bar-el">
       <div class="search-box-wrapper">
         <input type="text" id="searchBox" placeholder="지명, 영문명, 번호, 구절 검색 (예: Jerusalem)" autocomplete="off" />
-        <button class="btn-search-icon" id="btn-search">검색</button>
+        <button class="btn-search-icon" id="btn-search" title="검색">🔍</button>
         <ul id="search-autocomplete-list"></ul>
       </div>
-      <button class="btn-catalog-trigger" id="btn-open-catalog">지명 도감</button>
-      <button class="btn-catalog-trigger" id="btn-open-dict" style="margin-left:4px">📚 사전</button>
-      <button class="btn-catalog-trigger" id="btn-open-rawdict" style="margin-left:4px;background:#475569">📜 원문사전</button>
-      <label class="label-toggle-group">
+      <button class="btn-catalog-trigger" id="btn-open-catalog" title="지명 도감">📖 도감</button>
+      <button class="btn-catalog-trigger" id="btn-open-dict" style="margin-left:4px" title="통합 사전 (인물·지명·용어)">📚 사전</button>
+      <button class="btn-catalog-trigger" id="btn-open-rawdict" style="margin-left:4px;background:#475569" title="원문사전 (영문)">📜 원문</button>
+      <label class="label-toggle-group" title="지명 표시">
         <input type="checkbox" id="chk-permanent-labels">
-        <span>지명 표시</span>
+        <span>📍 표시</span>
       </label>
-      <select id="map-layer-select" onchange="switchMapLayer(this.value)" style="padding:2px 6px;border-radius:6px;border:1px solid #3388ff;background:#3388ff;color:#fff;font-size:11px;font-weight:bold;cursor:pointer;outline:none;flex-shrink:0">
+      <select id="map-layer-select" onchange="switchMapLayer(this.value)" style="padding:4px 8px;border-radius:6px;border:1px solid #3388ff;background:#3388ff;color:#fff;font-size:12px;font-weight:bold;cursor:pointer;outline:none;flex-shrink:0">
         <option value="osm" style="background:#fff;color:#333">🗺 일반</option>
         <option value="sat" style="background:#fff;color:#333">🛰 위성</option>
         <option value="hybrid" style="background:#fff;color:#333">🌍 위성+라벨</option>
         <option value="terrain" style="background:#fff;color:#333">⛰ 지형도</option>
         <option value="topo" style="background:#fff;color:#333">🏔 지형+등고선</option>
       </select>
-<button id="btn-regions" onclick="toggleRegionPanel()" style="margin-left:3px;padding:2px 7px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="성경 지역 영역 표시">지역</button>
-<button id="btn-routes" onclick="toggleRoutePanel()" style="margin-left:3px;padding:2px 7px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="출애굽·바울선교 경로">경로</button>
+<button id="btn-regions" onclick="toggleRegionPanel()" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="성경 지역 영역 표시">🗺 지역</button>
+<button id="btn-routes" onclick="toggleRoutePanel()" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="출애굽·바울선교 경로">🛤 경로</button>
     </div>
     <div id="map-wrapper" style="position:relative;flex:1;display:flex;flex-direction:column;">
       <div id="map" style="flex:1;"></div>
@@ -6156,7 +6165,7 @@
     function gdriveUpdateButtonUI() {
       const btn = document.getElementById("btn-drive-connect");
       if (!btn) return;
-      btn.textContent = gdriveAccessToken ? "🔗 Drive 연동됨" : "🔗 Drive 연동안됨";
+      btn.textContent = gdriveAccessToken ? "🔗 연동됨" : "🔗 연동안됨";
       btn.style.background = gdriveAccessToken ? "#0f9d58" : "#4285F4";
     }
 
