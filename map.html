@@ -1481,6 +1481,16 @@
         position: absolute; top: 0; left: 0;
         z-index: 2000;
       }
+      /* 스크롤/화살표 클릭 방식이 기기별로 불안정해서, 모바일에서는 아예 버튼이
+         화면 폭에 안 맞으면 다음 줄로 자동으로 넘어가게 해서 항상 다 보이게 한다 */
+      .status-btn-group, .map-header-bar {
+        flex-wrap: wrap !important;
+        overflow: visible !important;
+        height: auto !important;
+      }
+      .hscroll-arrow-btn { display: none !important; }
+      .hscroll-wrap { display: block !important; }
+      .status-btn-group, .map-header-bar { padding-left: 4px !important; padding-right: 4px !important; }
       #panel-resizer { display: none !important; }
       #map-pane {
         width: 100% !important;
