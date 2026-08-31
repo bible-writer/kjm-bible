@@ -1488,6 +1488,7 @@
   .tribe-center-label { background:#d32f2f; color:#fff; border:none; border-radius:4px; padding:2px 8px; font-weight:bold; font-size:13px; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
   .tribe-center-label::before { border-top-color:#d32f2f; }
   </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <!-- 좌측 성경 독서 패널 -->
@@ -1503,8 +1504,12 @@
     <div id="db-status-bar">
       <span id="db-status-text">SQLite 엔진 준비 중...</span>
       <div class="status-btn-group">
-        <button class="btn-status-action success" id="btn-export-backup" title="현재 모든 데이터 백업 파일로 내보내기">백업</button>
+        <button class="btn-status-action success" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
         <button class="btn-status-action success" id="btn-import-backup-trigger" title="백업 파일 가져와서 복원하기">복원</button>
+        <button class="btn-status-action" id="btn-drive-connect" title="Google 계정 연결/해제" style="background:#4285F4;">🔗 Drive 연동안됨</button>
+        <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#475569;margin-left:6px;" title="체크 시 10분마다 자동으로 Google Drive에 백업합니다">
+          <input type="checkbox" id="chk-drive-autobackup" style="cursor:pointer;"> 자동백업
+        </label>
         <button class="btn-status-action" id="btn-export-xlsx" title="현재 지명 DB를 XLSX로 내보내기" style="background:#2563eb;" onclick="exportPlaceDatabaseToXlsx()">📊 XLSX</button>
         <button class="btn-status-action" id="btn-update-db" title="GitHub에서 최신 지명 DB 다운로드" style="background:#7c3aed;" onclick="updateFromGitHub()">🔄 업데이트</button>
         <button class="btn-status-action" id="btn-sync-openbible" title="OpenBible.info 학술 좌표와 동기화" style="background:#d97706;" onclick="syncWithOpenBible()">📡 OpenBible</button>
@@ -6128,33 +6133,155 @@
       return bytes.buffer;
     }
 
-    document.getElementById("btn-export-backup").onclick = async function() {
-      if (placeDatabase.length === 0 && !sqliteDbInstance) {
-        showToast("백업할 데이터가 존재하지 않습니다.", 'info')
+    /*
+     * 11-b. Google Drive 자동 백업 모듈
+     */
+    const GDRIVE_CLIENT_ID = "683154240894-jgs7gel2r7jc0qla6f7bj0gmpca94ot1.apps.googleusercontent.com";
+    const GDRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
+    const GDRIVE_FILE_NAME = "성경지도_자동백업.json";
+    let gdriveAccessToken = null;
+    let gdriveTokenClient = null;
+    let gdriveAutoTimer = null;
+
+    function gdriveUpdateButtonUI() {
+      const btn = document.getElementById("btn-drive-connect");
+      if (!btn) return;
+      btn.textContent = gdriveAccessToken ? "🔗 Drive 연동됨" : "🔗 Drive 연동안됨";
+      btn.style.background = gdriveAccessToken ? "#0f9d58" : "#4285F4";
+    }
+
+    function gdriveEnsureTokenClient() {
+      if (gdriveTokenClient || typeof google === "undefined" || !google.accounts) return;
+      gdriveTokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: GDRIVE_CLIENT_ID,
+        scope: GDRIVE_SCOPE,
+        callback: (resp) => {
+          if (resp && resp.access_token) {
+            gdriveAccessToken = resp.access_token;
+            gdriveUpdateButtonUI();
+            showToast("Google Drive에 연결되었습니다.", "success");
+          }
+        }
+      });
+    }
+
+    function gdriveSignIn() {
+      gdriveEnsureTokenClient();
+      if (!gdriveTokenClient) {
+        showToast("Google 인증 스크립트를 아직 불러오는 중입니다. 잠시 후 다시 시도해 주세요.", "warn");
         return;
       }
+      gdriveTokenClient.requestAccessToken({ prompt: gdriveAccessToken ? "" : "consent" });
+    }
 
-      const savedBdbBuffer = await getLocalItem("saved_bdb_binary");
-      let bdbBase64 = null;
-      if (savedBdbBuffer) {
-        bdbBase64 = arrayBufferToBase64(savedBdbBuffer);
+    async function gdriveUploadJson(jsonStr) {
+      if (!gdriveAccessToken) return false;
+      try {
+        let fileId = localStorage.getItem("gdrive_backup_file_id") || "";
+        // 기존 파일 존재 확인 (없어졌으면 새로 생성)
+        if (fileId) {
+          const check = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?fields=id`, {
+            headers: { Authorization: "Bearer " + gdriveAccessToken }
+          });
+          if (!check.ok) fileId = "";
+        }
+        const blob = new Blob([jsonStr], { type: "application/json" });
+        if (fileId) {
+          const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+            method: "PATCH",
+            headers: { Authorization: "Bearer " + gdriveAccessToken, "Content-Type": "application/json" },
+            body: blob
+          });
+          if (!res.ok) throw new Error("update failed: " + res.status);
+        } else {
+          const metadata = { name: GDRIVE_FILE_NAME };
+          const form = new FormData();
+          form.append("metadata", new Blob([JSON.stringify(metadata)], { type: "application/json" }));
+          form.append("file", blob);
+          const res = await fetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id", {
+            method: "POST",
+            headers: { Authorization: "Bearer " + gdriveAccessToken },
+            body: form
+          });
+          if (!res.ok) throw new Error("create failed: " + res.status);
+          const data = await res.json();
+          localStorage.setItem("gdrive_backup_file_id", data.id);
+        }
+        return true;
+      } catch (err) {
+        console.error("Drive 업로드 오류:", err);
+        // 토큰 만료 등의 이유로 실패했을 수 있으므로 재인증 유도
+        gdriveAccessToken = null;
+        gdriveUpdateButtonUI();
+        return false;
       }
+    }
 
+    document.getElementById("btn-drive-connect").onclick = gdriveSignIn;
+
+    const chkAutoBackup = document.getElementById("chk-drive-autobackup");
+    chkAutoBackup.checked = localStorage.getItem("gdrive_autobackup_on") === "1";
+    function gdriveSetupAutoTimer() {
+      if (gdriveAutoTimer) { clearInterval(gdriveAutoTimer); gdriveAutoTimer = null; }
+      if (chkAutoBackup.checked) {
+        gdriveAutoTimer = setInterval(() => { buildAndUploadBackup(true); }, 10 * 60 * 1000);
+      }
+    }
+    chkAutoBackup.addEventListener("change", function() {
+      localStorage.setItem("gdrive_autobackup_on", this.checked ? "1" : "0");
+      if (this.checked && !gdriveAccessToken) {
+        showToast("자동 백업을 켜려면 먼저 Drive 연동을 해주세요.", "info");
+        this.checked = false;
+        localStorage.setItem("gdrive_autobackup_on", "0");
+        return;
+      }
+      gdriveSetupAutoTimer();
+    });
+    gdriveSetupAutoTimer();
+
+    async function buildAndUploadBackup(silent) {
+      // [2026-08 변경] 성경 원문(.bdb)과 원전분해(.sdb)는 용량이 커서 백업 대상에서 제외.
+      // 대신 용어DB/인명DB/스트롱사전/이스턴·스미스 사전 편집분을 포함해 실질 작업물을 보존.
       const backupPackage = {
         app: "BibleInteractiveMap3D",
-        version: "2.9",
+        version: "3.0",
         exportDate: new Date().toISOString(),
         userBlacklist: Array.from(userBlacklist),
         userCustomKeywordMap: userCustomKeywordMap,
         placeDatabase: placeDatabase,
         savedPaneWidth: leftPane.style.width,
         savedFontSize: currentFontSize,
-        coordOverrides: coordOverrides,   // [보정A] 좌표 보정 이력도 함께 백업
-        nameOverrides: nameOverrides,     // [지명수정] 한글 지명 수정 이력도 함께 백업
-        bdbBinaryBase64: bdbBase64
+        coordOverrides: coordOverrides,
+        nameOverrides: nameOverrides,
+        termDatabase: termDatabase,
+        termDatabaseMeta: termDatabaseMeta,
+        personDatabase: personDatabase,
+        strongDict: strongDict,
+        eastonFullDict: eastonFullDict,
+        eastonLocalEdits: eastonLocalEdits,
+        smithFullDict: smithFullDict,
+        smithLocalEdits: smithLocalEdits
+        // bdbBinaryBase64, interlinearBinaryBase64: 의도적으로 제외 (성경DB·원어분해DB는 별도 파일로 관리)
       };
-
       const jsonStr = JSON.stringify(backupPackage);
+
+      if (gdriveAccessToken) {
+        const ok = await gdriveUploadJson(jsonStr);
+        if (ok && !silent) showToast("Google Drive에도 백업이 저장되었습니다.", "success");
+        else if (!ok) showToast("Drive 업로드 실패 — 연동을 다시 확인해 주세요.", "warn");
+      } else if (silent) {
+        // 자동백업인데 토큰이 없으면 조용히 스킵
+      }
+      return jsonStr;
+    }
+
+    document.getElementById("btn-export-backup").onclick = async function() {
+      if (placeDatabase.length === 0 && !sqliteDbInstance) {
+        showToast("백업할 데이터가 존재하지 않습니다.", 'info')
+        return;
+      }
+
+      const jsonStr = await buildAndUploadBackup(false);
       const blob = new Blob([jsonStr], { type: "application/json" });
       const url = URL.createObjectURL(blob);
 
@@ -6213,6 +6340,41 @@
           buildKeywordIndex(placeDatabase);
           renderMapMarkers();
 
+          // [2026-08 추가] 용어DB / 인명DB / 스트롱사전 / 이스턴·스미스 사전 편집분 복원
+          if (pkg.termDatabase) {
+            termDatabase = pkg.termDatabase;
+            await setLocalItem('saved_term_database', termDatabase);
+            if (pkg.termDatabaseMeta) {
+              termDatabaseMeta = pkg.termDatabaseMeta;
+              await setLocalItem('saved_term_database_meta', termDatabaseMeta);
+            }
+          }
+          if (pkg.personDatabase) {
+            personDatabase = pkg.personDatabase;
+            await setLocalItem('saved_person_database', personDatabase);
+          }
+          if (pkg.strongDict) {
+            strongDict = pkg.strongDict;
+            await setLocalItem('saved_strong_dict', strongDict);
+          }
+          if (pkg.eastonFullDict) {
+            eastonFullDict = pkg.eastonFullDict;
+            await setLocalItem('easton_full_dict', eastonFullDict);
+          }
+          if (pkg.eastonLocalEdits) {
+            eastonLocalEdits = pkg.eastonLocalEdits;
+            await setLocalItem('easton_local_edits', eastonLocalEdits);
+          }
+          if (pkg.smithFullDict) {
+            smithFullDict = pkg.smithFullDict;
+            await setLocalItem('smith_full_dict', smithFullDict);
+          }
+          if (pkg.smithLocalEdits) {
+            smithLocalEdits = pkg.smithLocalEdits;
+            await setLocalItem('smith_local_edits', smithLocalEdits);
+          }
+
+          // 구버전 백업 호환용 — 성경DB(.bdb)가 포함된 옛 백업 파일을 열었을 때만 복원
           if (pkg.bdbBinaryBase64 && window.SQL) {
             const arrayBuffer = base64ToArrayBuffer(pkg.bdbBinaryBase64);
             const uInt8Array = new Uint8Array(arrayBuffer);
