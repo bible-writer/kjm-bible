@@ -1469,6 +1469,9 @@
       #left-pane.mob-hidden { display: none !important; }
       #map-pane.mob-hidden { display: none !important; }
       #mobile-tab-bar { display: flex; }
+      /* 모바일에서는 주석(PDF 커멘터리) 기능 전체를 숨긴다 — 버튼도, 패널 자체도 */
+      .commentary-feature-btn { display: none !important; }
+      #commentary-pane { display: none !important; }
       #bible-content { padding-bottom: 180px !important; }
       #compare-content { padding-bottom: 180px !important; }
       .map-header-bar { padding-right: 4px !important; }
@@ -1773,7 +1776,7 @@
       </select>
 <button id="btn-regions" onclick="toggleRegionPanel()" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="성경 지역 영역 표시">🗺 지역</button>
 <button id="btn-routes" onclick="toggleRoutePanel()" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="출애굽·바울선교 경로">🛤 경로</button>
-<button id="btn-toggle-commentary" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="이 책에 등록된 주석 PDF 보기">📖 주석</button>
+<button id="btn-toggle-commentary" class="commentary-feature-btn" style="margin-left:4px;padding:4px 9px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="이 책에 등록된 주석 PDF 보기">📖 주석</button>
     </div>
     <div id="map-wrapper" style="position:relative;flex:1;display:flex;flex-direction:column;">
       <div id="map" style="flex:1;"></div>
@@ -5294,6 +5297,7 @@
       document.getElementById('rawdict-modal-backdrop').style.display = 'block';
       restorePanelSize(document.getElementById('rawdict-modal'), 'min(1100px,95vw)', '92vh');
       persistSizeOnResize(document.getElementById('rawdict-modal'));
+      ensureTouchResizeGrip(document.getElementById('rawdict-modal')); // 모바일(터치)에서는 브라우저 기본 resize가 안 먹히므로 보조 손잡이 추가
       initRawDictModalDrag();
       document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(btn => {
         const label = btn.dataset.src === 'easton' ? 'Easton' : 'Smith';
@@ -5661,6 +5665,7 @@
       makeDraggable(document.getElementById('dict-modal'), '#dict-modal-header');
       restorePanelSize(document.getElementById('dict-modal'), 'min(720px,92vw)', '88vh');
       persistSizeOnResize(document.getElementById('dict-modal'));
+      ensureTouchResizeGrip(document.getElementById('dict-modal')); // 모바일(터치)에서는 브라우저 기본 resize가 안 먹히므로 보조 손잡이 추가
       dictCombinedCache = buildDictCombined();
       updateDictFilterCounts();
       dictShownCount = 0;
@@ -6460,18 +6465,11 @@
     }
 
     document.getElementById("btn-drive-connect").onclick = gdriveSignIn;
-    // 페이지 로드 시: 1) 저장된 토큰이 살아있으면 그대로 복원, 2) 만료됐다면 팝업 없이 조용히
-    // 갱신을 시도한다(이전에 동의한 적이 있고 구글 로그인 세션이 살아있으면 팝업 없이 성공할 수 있음)
-    (function gdriveAutoRestore() {
-      if (gdriveRestoreTokenFromCache()) return;
-      const tryQuiet = () => {
-        gdriveEnsureTokenClient();
-        if (!gdriveTokenClient) { setTimeout(tryQuiet, 500); return; }
-        gdriveTokenClient.requestAccessToken({ prompt: "none" });
-      };
-      // Google Identity Services 스크립트가 늦게 로드될 수 있으므로 약간의 지연 후 시도
-      setTimeout(tryQuiet, 800);
-    })();
+    // 페이지 로드 시 저장된 토큰이 아직 살아있으면(보통 1시간 이내) 그대로 복원한다.
+    // 예전에는 만료됐을 때 팝업 없이 자동 갱신을 시도했으나, 이 시도 자체가 모바일 브라우저에서
+    // "팝업이 차단되었습니다" 알림을 계속 띄우는 부작용이 있어 제거했다 — 만료 후에는 사용자가
+    // "🔗 연동" 버튼을 직접 눌러야 하며, 그때는 정상적으로 로그인 화면이 뜬다.
+    gdriveRestoreTokenFromCache();
 
     // ── 우측 패널 모드 전환 (지도 / 주석 PDF / 숨김) ──
     let rightPanelMode = 'map';
@@ -9686,20 +9684,25 @@
       }
 
       // [자동 업데이트] 네트워크로 최신 termDatabase.json 확인 (file:// 로컬 실행 시에는 자동 실패 후 무시됨)
+      // 비밀번호가 이미 이번 세션에 입력되어 있을 때만 시도한다 — 그렇지 않으면 앱을 열 때마다
+      // 예고 없이 비밀번호 창이 화면을 덮는 문제가 있어, 저장된 캐시만 쓰고 조용히 건너뛴다.
+      // 최신 버전 확인은 좌측 "🔄 업데이트" 버튼으로 사용자가 직접 할 수 있다.
       try {
-        const netTermRes = await fetch('./termDatabase.json', { cache: 'no-store' });
-        if (netTermRes && netTermRes.ok) {
-          const netTermPkg = await EncryptedDB.decrypt(await netTermRes.json());
-          if (netTermPkg && Array.isArray(netTermPkg.terms) && netTermPkg.terms.length > 0) {
-            const isNewer = !savedTerms || netTermPkg.terms.length !== savedTerms.length || netTermPkg.version !== await getLocalItem('saved_term_database_version');
-            if (isNewer) {
-              termDatabase = netTermPkg.terms;
-              termDatabaseMeta = { note: netTermPkg.note || '' };
-              buildTermIndex(termDatabase);
-              await setLocalItem('saved_term_database', termDatabase);
-              await setLocalItem('saved_term_database_meta', termDatabaseMeta);
-              await setLocalItem('saved_term_database_version', netTermPkg.version || '');
-              showToast(`용어 DB 자동 업데이트: ${termDatabase.length}개 (v${netTermPkg.version || '?'})`, 'success');
+        if (EncryptedDB._password) {
+          const netTermRes = await fetch('./termDatabase.json', { cache: 'no-store' });
+          if (netTermRes && netTermRes.ok) {
+            const netTermPkg = await EncryptedDB.decrypt(await netTermRes.json());
+            if (netTermPkg && Array.isArray(netTermPkg.terms) && netTermPkg.terms.length > 0) {
+              const isNewer = !savedTerms || netTermPkg.terms.length !== savedTerms.length || netTermPkg.version !== await getLocalItem('saved_term_database_version');
+              if (isNewer) {
+                termDatabase = netTermPkg.terms;
+                termDatabaseMeta = { note: netTermPkg.note || '' };
+                buildTermIndex(termDatabase);
+                await setLocalItem('saved_term_database', termDatabase);
+                await setLocalItem('saved_term_database_meta', termDatabaseMeta);
+                await setLocalItem('saved_term_database_version', netTermPkg.version || '');
+                showToast(`용어 DB 자동 업데이트: ${termDatabase.length}개 (v${netTermPkg.version || '?'})`, 'success');
+              }
             }
           }
         }
@@ -9707,19 +9710,21 @@
         console.log('[자동 업데이트] termDatabase.json 네트워크 로드 생략:', e.message);
       }
 
-      // [자동 업데이트] 네트워크로 최신 personDatabase.json 확인 (file:// 로컬 실행 시에는 자동 실패 후 무시됨)
+      // [자동 업데이트] 네트워크로 최신 personDatabase.json 확인 (동일한 이유로 비밀번호 캐시가 있을 때만 시도)
       try {
-        const netRes = await fetch('./personDatabase.json', { cache: 'no-store' });
-        if (netRes && netRes.ok) {
-          const netPkg = await EncryptedDB.decrypt(await netRes.json());
-          if (netPkg && Array.isArray(netPkg.persons) && netPkg.persons.length > 0) {
-            const isNewer = !savedPersons || netPkg.persons.length !== savedPersons.length || netPkg.version !== await getLocalItem('saved_person_database_version');
-            if (isNewer) {
-              personDatabase = netPkg.persons;
-              buildPersonVerseIndex(personDatabase);
-              await setLocalItem('saved_person_database', personDatabase);
-              await setLocalItem('saved_person_database_version', netPkg.version || '');
-              showToast(`인명 DB 자동 업데이트: ${personDatabase.length}명 (v${netPkg.version || '?'})`, 'success');
+        if (EncryptedDB._password) {
+          const netRes = await fetch('./personDatabase.json', { cache: 'no-store' });
+          if (netRes && netRes.ok) {
+            const netPkg = await EncryptedDB.decrypt(await netRes.json());
+            if (netPkg && Array.isArray(netPkg.persons) && netPkg.persons.length > 0) {
+              const isNewer = !savedPersons || netPkg.persons.length !== savedPersons.length || netPkg.version !== await getLocalItem('saved_person_database_version');
+              if (isNewer) {
+                personDatabase = netPkg.persons;
+                buildPersonVerseIndex(personDatabase);
+                await setLocalItem('saved_person_database', personDatabase);
+                await setLocalItem('saved_person_database_version', netPkg.version || '');
+                showToast(`인명 DB 자동 업데이트: ${personDatabase.length}명 (v${netPkg.version || '?'})`, 'success');
+              }
             }
           }
         }
@@ -10204,7 +10209,7 @@
           ? `<div id="interlinear-row-${vNum}" data-ref="${bookId}-${chapter}" style="display:none;margin:6px 0 4px 20px;padding:8px 10px;background:#f8fafc;border-left:2px solid #a7f3d0;border-radius:4px;"></div>`
           : '';
         const commentaryToggle = (commentaryIndexByBook[bookId] && commentaryIndexByBook[bookId].length > 0)
-          ? `<button onclick="Commentary.jumpToVerse(${bookId},${chapter},${vNum})" style="margin-left:6px;font-size:0.7em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle;" title="이 절 주석 보기">📖 주석</button>`
+          ? `<button class="commentary-feature-btn" onclick="Commentary.jumpToVerse(${bookId},${chapter},${vNum})" style="margin-left:6px;font-size:0.7em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle;" title="이 절 주석 보기">📖 주석</button>`
           : '';
         html += `
           <div class="verse-row" id="verse-row-${vNum}">
