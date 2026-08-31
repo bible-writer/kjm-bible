@@ -158,38 +158,11 @@
       align-items: center;
       flex: 1;
       min-width: 0;
-      overflow-x: auto;
-      overflow-y: hidden;
-      flex-wrap: nowrap;
+      overflow: visible;
+      flex-wrap: wrap;
       justify-content: flex-end;
-      touch-action: pan-x;
-      -webkit-overflow-scrolling: touch;
     }
     .status-btn-group > * { flex-shrink: 0; }
-    .hscroll-arrow-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 50;
-      flex-shrink: 0;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.6);
-      background: #1e293b;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      line-height: 1;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-    }
-    .hscroll-arrow-btn.left { left: 2px; }
-    .hscroll-arrow-btn.right { right: 2px; }
-    .hscroll-wrap { position: relative; display: flex; align-items: center; min-width: 0; }
     .btn-status-action {
       background: #475569;
       color: white;
@@ -731,11 +704,8 @@
     .map-header-bar {
       display: flex !important;
       flex-shrink: 0;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      overflow-y: hidden;
-      touch-action: pan-x;
-      -webkit-overflow-scrolling: touch;
+      flex-wrap: wrap;
+      overflow: visible;
       gap: 6px;
       background: rgba(255, 255, 255, 0.96);
       padding: 6px 10px;
@@ -1484,13 +1454,10 @@
       /* 스크롤/화살표 클릭 방식이 기기별로 불안정해서, 모바일에서는 아예 버튼이
          화면 폭에 안 맞으면 다음 줄로 자동으로 넘어가게 해서 항상 다 보이게 한다 */
       .status-btn-group, .map-header-bar {
-        flex-wrap: wrap !important;
-        overflow: visible !important;
         height: auto !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
       }
-      .hscroll-arrow-btn { display: none !important; }
-      .hscroll-wrap { display: block !important; }
-      .status-btn-group, .map-header-bar { padding-left: 4px !important; padding-right: 4px !important; }
       #panel-resizer { display: none !important; }
       #map-pane {
         width: 100% !important;
@@ -3326,49 +3293,6 @@
     // 손가락으로도 크기를 조절할 수 있도록 별도의 크기조절 손잡이를 만들어 붙인다.
     // panel.innerHTML을 새로 채울 때마다 자식 노드가 통째로 사라지므로,
     // 반드시 innerHTML을 설정한 "이후"에 호출해서 다시 붙여야 한다.
-    // 스와이프 인식이 애매한 브라우저/웹뷰 환경에서도 확실히 작동하도록,
-    // 버튼줄을 감싸는 wrapper를 만들고 그 위에 눌러서 스크롤되는 화살표를 절대좌표로 덧씌운다
-    // (sticky 방식은 실제 기기별로 안 보일 위험이 있어 더 확실한 오버레이 방식을 사용)
-    function addHorizontalScrollArrows(container) {
-      if (!container || container.dataset.hscrollArrows) return;
-      container.dataset.hscrollArrows = '1';
-      const cs = window.getComputedStyle(container);
-      const wrap = document.createElement('div');
-      wrap.className = 'hscroll-wrap';
-      wrap.style.flex = cs.flex;
-      wrap.style.flexShrink = cs.flexShrink;
-      wrap.style.minWidth = '0';
-      container.parentNode.insertBefore(wrap, container);
-      wrap.appendChild(container);
-      container.style.flex = '1';
-      container.style.minWidth = '0';
-      container.style.paddingLeft = '22px';
-      container.style.paddingRight = '22px';
-      const mkBtn = dir => {
-        const b = document.createElement('button');
-        b.textContent = dir === 'left' ? '◀' : '▶';
-        b.type = 'button';
-        b.className = 'hscroll-arrow-btn ' + dir;
-        b.onclick = e => {
-          e.stopPropagation();
-          console.log('[hscroll]', container.id || container.className, 'scrollWidth:', container.scrollWidth, 'clientWidth:', container.clientWidth, 'scrollLeft(before):', container.scrollLeft);
-          const delta = dir === 'left' ? -140 : 140;
-          const start = container.scrollLeft;
-          const target = start + delta;
-          const startTime = performance.now();
-          const duration = 220;
-          function step(now) {
-            const t = Math.min(1, (now - startTime) / duration);
-            container.scrollLeft = start + (target - start) * t;
-            if (t < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
-        };
-        return b;
-      };
-      wrap.appendChild(mkBtn('left'));
-      wrap.appendChild(mkBtn('right'));
-    }
     function ensureTouchResizeGrip(panelEl) {
       function positionGrip() {
         if (panelEl.style.display === 'none') { grip.style.display = 'none'; return; }
@@ -5703,8 +5627,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      addHorizontalScrollArrows(document.querySelector('.status-btn-group'));
-      addHorizontalScrollArrows(document.getElementById('map-header-bar-el'));
+      // [제거됨] 스크롤 화살표 방식은 flex-wrap 자동 줄바꿈으로 대체함
       const btnOpen = document.getElementById('btn-open-rawdict');
       if (btnOpen) btnOpen.onclick = openRawDictModal;
       const btnClose = document.getElementById('btn-close-rawdict');
