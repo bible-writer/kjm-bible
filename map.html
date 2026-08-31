@@ -662,9 +662,12 @@
     .map-header-bar {
       display: flex !important;
       flex-shrink: 0;
-      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      gap: 5px;
       background: rgba(255, 255, 255, 0.96);
-      padding: 6px 12px;
+      padding: 4px 8px;
       align-items: center;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
@@ -674,24 +677,26 @@
       display: flex;
       gap: 4px;
       align-items: center;
+      flex-shrink: 0;
     }
     #searchBox {
-      padding: 6px 10px;
+      padding: 4px 8px;
       border-radius: 5px;
       border: 1px solid #cbd5e1;
-      font-size: 12px;
-      width: 200px;
+      font-size: 11px;
+      width: 170px;
       outline: none;
     }
     .btn-search-icon {
-      padding: 6px 10px;
+      padding: 4px 8px;
       background: #2563eb;
       color: white;
       border: none;
       border-radius: 5px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       cursor: pointer;
+      white-space: nowrap;
     }
     .btn-search-icon:hover { background: #1d4ed8; }
 
@@ -727,14 +732,15 @@
     .ac-sub { font-size: 10.5px; color: #64748b; margin-top: 1px; }
 
     .btn-catalog-trigger {
-      padding: 6px 10px;
+      padding: 4px 8px;
       background: #0f172a;
       color: #ffffff;
       border: none;
       border-radius: 5px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
     }
     .btn-catalog-trigger:hover { background: #1e293b; }
 
@@ -758,20 +764,21 @@
     .label-toggle-group {
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: 12px;
+      gap: 4px;
+      font-size: 11px;
       font-weight: 700;
       color: #334155;
       cursor: pointer;
       user-select: none;
-      margin: 0 4px;
+      margin: 0 2px;
       padding-left: 4px;
       border-left: 1px solid #cbd5e1;
+      white-space: nowrap;
     }
     .label-toggle-group input[type="checkbox"] {
       cursor: pointer;
-      width: 15px;
-      height: 15px;
+      width: 13px;
+      height: 13px;
     }
 
     .map-toggle-btn {
@@ -1705,15 +1712,15 @@
         <input type="checkbox" id="chk-permanent-labels">
         <span>지명 표시</span>
       </label>
-      <select id="map-layer-select" onchange="switchMapLayer(this.value)" style="padding:3px 8px;border-radius:6px;border:1px solid #3388ff;background:#3388ff;color:#fff;font-size:12px;font-weight:bold;cursor:pointer;outline:none">
+      <select id="map-layer-select" onchange="switchMapLayer(this.value)" style="padding:2px 6px;border-radius:6px;border:1px solid #3388ff;background:#3388ff;color:#fff;font-size:11px;font-weight:bold;cursor:pointer;outline:none;flex-shrink:0">
         <option value="osm" style="background:#fff;color:#333">🗺 일반</option>
         <option value="sat" style="background:#fff;color:#333">🛰 위성</option>
         <option value="hybrid" style="background:#fff;color:#333">🌍 위성+라벨</option>
         <option value="terrain" style="background:#fff;color:#333">⛰ 지형도</option>
         <option value="topo" style="background:#fff;color:#333">🏔 지형+등고선</option>
       </select>
-<button id="btn-regions" onclick="toggleRegionPanel()" style="margin-left:4px;padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer" title="성경 지역 영역 표시">지역</button>
-<button id="btn-routes" onclick="toggleRoutePanel()" style="margin-left:4px;padding:2px 8px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;cursor:pointer" title="출애굽·바울선교 경로">경로</button>
+<button id="btn-regions" onclick="toggleRegionPanel()" style="margin-left:3px;padding:2px 7px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="성경 지역 영역 표시">지역</button>
+<button id="btn-routes" onclick="toggleRoutePanel()" style="margin-left:3px;padding:2px 7px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="출애굽·바울선교 경로">경로</button>
     </div>
     <div id="map-wrapper" style="position:relative;flex:1;display:flex;flex-direction:column;">
       <div id="map" style="flex:1;"></div>
@@ -1758,7 +1765,7 @@
 
   <!-- 원문사전(Easton/Smith 영문 원문 전체) 뷰어 모달 -->
   <div id="rawdict-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20000"></div>
-  <div id="rawdict-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(720px,92vw);height:88vh;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden">
+  <div id="rawdict-modal" style="display:none;position:fixed;top:4%;left:50%;transform:translateX(-50%);width:min(1100px,95vw);height:92vh;background:var(--card,#fff);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.3);z-index:20001;flex-direction:column;overflow:hidden;font-size:clamp(14px, 0.85vw + 8px, 20px)">
     <div id="rawdict-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0);cursor:move;user-select:none">
       <span style="font-weight:bold;font-size:1.1em">📜 원문사전 (영문) <span style="font-size:0.7em;font-weight:400;color:#94a3b8">(드래그하여 이동)</span></span>
       <div style="display:flex;align-items:center;gap:8px">
@@ -1767,7 +1774,7 @@
       </div>
     </div>
     <div style="padding:10px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
-      <input type="text" id="rawdict-search-input" placeholder="영문 단어 검색 (예: Bread, Darkness)" autocomplete="off"
+      <input type="text" id="rawdict-search-input" placeholder="단어 검색 (영문/한글, 예: Bread, 어둠)" autocomplete="off"
         style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.95em">
       <div style="display:flex;gap:6px;margin-top:8px" id="rawdict-filter-tabs">
         <button class="dict-filter-btn active" data-src="easton">Easton</button>
@@ -5111,7 +5118,10 @@
         filtered = filtered.filter(e => e.category === rawdictCatFilter);
       }
       if (q) {
-        filtered = filtered.filter(e => e.term.toLowerCase().includes(q));
+        filtered = filtered.filter(e =>
+          e.term.toLowerCase().includes(q) ||
+          (e.definition_ko && e.definition_ko.toLowerCase().includes(q))
+        );
       }
 
       if (filtered.length === 0) {
