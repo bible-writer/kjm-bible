@@ -6893,16 +6893,30 @@
         }
       },
       async setZoom(factor) {
-        this.zoomFactor = Math.max(0.5, Math.min(2.5, factor));
-        document.getElementById('commentary-zoom-level').textContent = `${Math.round(this.zoomFactor * 100)}%`;
-        await this.renderPage(this.currentPage);
+        try {
+          if (!this.currentPdfDoc) { showToast('먼저 주석 PDF를 열어주세요.', 'warn'); return; }
+          this.zoomFactor = Math.max(0.5, Math.min(2.5, factor));
+          const lvl = document.getElementById('commentary-zoom-level');
+          if (lvl) lvl.textContent = `${Math.round(this.zoomFactor * 100)}%`;
+          await this.renderPage(this.currentPage);
+        } catch (err) {
+          console.error('[Commentary.setZoom 오류]', err);
+          showToast('확대/축소 오류: ' + (err.message || err), 'error');
+        }
       },
       async fitToWidth() {
-        // 화면 폭 기준 배율을 다시 계산해서(창 크기가 바뀌었을 수 있으므로) 100%로 리셋
-        this.baseScale = null;
-        this.zoomFactor = 1;
-        document.getElementById('commentary-zoom-level').textContent = '100%';
-        await this.renderPage(this.currentPage);
+        try {
+          if (!this.currentPdfDoc) { showToast('먼저 주석 PDF를 열어주세요.', 'warn'); return; }
+          // 화면 폭 기준 배율을 다시 계산해서(창 크기가 바뀌었을 수 있으므로) 100%로 리셋
+          this.baseScale = null;
+          this.zoomFactor = 1;
+          const lvl = document.getElementById('commentary-zoom-level');
+          if (lvl) lvl.textContent = '100%';
+          await this.renderPage(this.currentPage);
+        } catch (err) {
+          console.error('[Commentary.fitToWidth 오류]', err);
+          showToast('맞춤 오류: ' + (err.message || err), 'error');
+        }
       },
       async jumpToVerse(bookId, chapter, vNum) {
         try {
