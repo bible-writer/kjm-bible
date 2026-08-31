@@ -3341,7 +3341,18 @@
         b.className = 'hscroll-arrow-btn ' + dir;
         b.onclick = e => {
           e.stopPropagation();
-          container.scrollBy({ left: dir === 'left' ? -140 : 140, behavior: 'smooth' });
+          console.log('[hscroll]', container.id || container.className, 'scrollWidth:', container.scrollWidth, 'clientWidth:', container.clientWidth, 'scrollLeft(before):', container.scrollLeft);
+          const delta = dir === 'left' ? -140 : 140;
+          const start = container.scrollLeft;
+          const target = start + delta;
+          const startTime = performance.now();
+          const duration = 220;
+          function step(now) {
+            const t = Math.min(1, (now - startTime) / duration);
+            container.scrollLeft = start + (target - start) * t;
+            if (t < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
         };
         return b;
       };
