@@ -3226,7 +3226,8 @@
     function makeDraggable(panelEl, handleSelector) {
       const handle = handleSelector ? panelEl.querySelector(handleSelector) : panelEl;
       if (!handle) return;
-      function onDown(clientX, clientY) {
+      function onDown(clientX, clientY, target) {
+        if (target && target.closest && target.closest('button, input, select, a')) return; // 버튼 등 위에서는 드래그 시작하지 않음(클릭 씹힘 방지)
         const rect = panelEl.getBoundingClientRect();
         // 가운데 정렬용 transform(translateX(-50%) 등)이 남아있으면 절대좌표와 겹쳐서
         // 드래그 시작 시 위치가 튀므로, 드래그 시작 시점에 transform을 제거하고 절대좌표로 전환한다
@@ -3237,8 +3238,8 @@
         panelEl.style.bottom = 'auto';
         _dragState = { panelEl, startX: clientX, startY: clientY, startLeft: rect.left, startTop: rect.top };
       }
-      handle.onmousedown = e => { onDown(e.clientX, e.clientY); e.preventDefault(); };
-      handle.ontouchstart = e => { const t = e.touches[0]; onDown(t.clientX, t.clientY); };
+      handle.onmousedown = e => { onDown(e.clientX, e.clientY, e.target); e.preventDefault(); };
+      handle.ontouchstart = e => { const t = e.touches[0]; onDown(t.clientX, t.clientY, e.target); };
     }
 
     /* 팝업창을 마우스로 드래그해서 크기 확대/축소 가능하게 만들고,
@@ -5233,6 +5234,7 @@
       const header = document.getElementById('rawdict-modal-header');
       let dragging = false, startX, startY, startLeft, startTop;
       function onPointerDown(e) {
+        if (e.target.closest('#btn-close-rawdict')) return; // 닫기 버튼 위에서는 드래그를 시작하지 않는다(터치 시 클릭이 씹히는 문제 방지)
         dragging = true;
         const rect = modal.getBoundingClientRect();
         // 드래그 시작 시 중앙정렬용 transform을 절대좌표로 전환해야 이후 위치 계산이 정확해진다
@@ -5267,13 +5269,44 @@
       document.addEventListener('touchmove', onPointerMove, { passive: false });
       document.addEventListener('touchend', onPointerUp);
     }
+    function isValidPanelSizeValue(v) {
+      if (typeof v !== 'string') return false;
+      // 이전 버전들이 저장했을 수 있는 값 형식: "480px", "60vh", "min(1100px,95vw)" 등을 폭넓게 허용하되,
+      // 숫자가 비정상적으로 작은 값("0px", "NaNpx" 등)은 걸러내 창이 안 보이게 되는 것을 방지한다
+      if (!/^[\d.a-z%(),\s-]+$/i.test(v)) return false;
+      if (/nan|undefined|null/i.test(v)) return false;
+      const m = v.match(/^(-?[\d.]+)(px|vh|vw)$/);
+      if (m) {
+        const num = parseFloat(m[1]);
+        if (isNaN(num)) return false;
+        if (m[2] === 'px' && num < 100) return false; // 100px 미만은 사실상 안 보이는 크기이므로 무효 처리
+      }
+      return true;
+    }
     function restorePanelSize(panelEl, defaultWidth, defaultHeight) {
       let saved = null;
       if (panelEl.id) {
         try { saved = JSON.parse(localStorage.getItem('panel_size_' + panelEl.id) || 'null'); } catch (e) { saved = null; }
       }
-      panelEl.style.width = (saved && saved.w) ? saved.w : defaultWidth;
-      panelEl.style.height = (saved && saved.h) ? saved.h : defaultHeight;
+      const validW = saved && isValidPanelSizeValue(saved.w);
+      const validH = saved && isValidPanelSizeValue(saved.h);
+      panelEl.style.width = validW ? saved.w : defaultWidth;
+      panelEl.style.height = validH ? saved.h : defaultHeight;
+      if (saved && (!validW || !validH)) {
+        // 손상된 캐시 값은 다음에 또 문제 일으키지 않도록 정리
+        try { localStorage.removeItem('panel_size_' + panelEl.id); } catch (e) {}
+      }
+      // 최종 안전장치: 그래도 실제 렌더링 크기가 비정상적으로 작으면(화면에 사실상 안 보이는 수준)
+      // 강제로 기본값으로 되돌린다 — 어떤 경로로 값이 깨졌든 창이 안 보이는 사고를 막기 위함
+      requestAnimationFrame(() => {
+        const rect = panelEl.getBoundingClientRect();
+        if (panelEl.style.display !== 'none' && (rect.width < 100 || rect.height < 100)) {
+          console.warn('[restorePanelSize] 비정상적으로 작은 크기 감지, 기본값으로 복구:', panelEl.id, rect);
+          panelEl.style.width = defaultWidth;
+          panelEl.style.height = defaultHeight;
+          try { localStorage.removeItem('panel_size_' + panelEl.id); } catch (e) {}
+        }
+      });
     }
     // 브라우저 기본 크기조절(테두리 드래그, CSS resize:both)로 바뀐 크기를 저장해뒀다가
     // 다음에 창을 열 때 restorePanelSize()가 그대로 복원해준다
@@ -6511,8 +6544,13 @@
       localStorage.setItem('map_panel_hidden', mode === 'hidden' ? '1' : '0');
     }
     (function() {
-      const savedHidden = localStorage.getItem('map_panel_hidden') === '1';
-      setRightPanelMode(savedHidden ? 'hidden' : 'map');
+      // 이 초기화는 데스크탑 전용 "지도 패널 표시/숨김" 기억 기능이다.
+      // 모바일(하단 탭 방식)에서 그대로 실행하면 페이지를 열 때마다 본문 패널이
+      // 숨겨지고 지도 탭이 강제로 활성화되는 문제가 있어, 모바일 폭에서는 건너뛴다.
+      if (window.innerWidth > 768) {
+        const savedHidden = localStorage.getItem('map_panel_hidden') === '1';
+        setRightPanelMode(savedHidden ? 'hidden' : 'map');
+      }
       document.getElementById('btn-toggle-map').onclick = function() {
         setRightPanelMode(rightPanelMode === 'map' ? 'hidden' : 'map');
       };
