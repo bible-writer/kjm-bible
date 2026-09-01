@@ -5657,8 +5657,11 @@
     // 결과를 그대로 신뢰하지 말고 반드시 사람이 검토 후 저장해야 함.
     // 긴 텍스트를 통째로 GET 쿼리에 실으면 URL 길이 제한에 걸려 응답이 잘리거나 뒤섞일 수 있으므로,
     // 문장 단위로 나눠 각각 번역한 뒤 다시 합친다.
+    // 구글이 translate.googleapis.com의 CORS를 차단해서(2026-09),
+    // Google Apps Script 프록시를 거쳐 우회한다 (구글→구글이라 CORS 제한 없음).
+    const TRANSLATE_PROXY = 'https://script.google.com/macros/s/AKfycbwlsGWduNASksYXhvSXICG3w7fxz9pp1tb9IEG3INsNntLPXjT10eDtMoWWMt7SweEAFw/exec';
     async function fetchGoogleTranslateChunk(text, sl, tl) {
-      const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+      const url = `${TRANSLATE_PROXY}?sl=${sl}&tl=${tl}&q=${encodeURIComponent(text)}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -8033,7 +8036,7 @@
             showToast(`${label} 번역 완료 (구글 번역 초안이므로 참고용으로만 보세요)`, 'success');
           } catch (err) {
             console.error('[주석 번역 실패]', err);
-            showToast('번역 실패: 인터넷 연결이나 네트워크 차단을 확인해주세요. (' + (err.message || err) + ')', 'error');
+            showToast('번역 실패: 번역 서버(구글) 접속이 막혀있는 것 같습니다 — 회사망/방화벽에서 이 사이트를 차단했을 수 있습니다. 모바일 데이터나 다른 네트워크에서 시도해보세요. (' + (err.message || err) + ')', 'error');
           } finally {
             btn.disabled = false;
             btn.textContent = orig;
