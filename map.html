@@ -1637,7 +1637,9 @@
         <div class="menu-group">
           <button class="btn-status-action menu-trigger" style="background:#7c3aed">🔄 동기화 ▾</button>
           <div class="menu-panel">
-            <button id="btn-update-db" onclick="updateFromGitHub()">🔄 GitHub에서 최신 DB 받기</button>
+            <button id="btn-update-db" onclick="updateFromGitHub()">🔄 지명 DB 받기 (GitHub)</button>
+            <button id="btn-update-person" onclick="updatePersonFromGitHub()">👤 인명 DB 받기 (GitHub)</button>
+            <button id="btn-update-term" onclick="updateTermFromGitHub()">📚 용어 DB 받기 (GitHub)</button>
             <button id="btn-sync-openbible" onclick="syncWithOpenBible()">📡 OpenBible 좌표 동기화</button>
           </div>
         </div>
@@ -10034,6 +10036,68 @@
         btn.disabled = false;
       }
     }
+
+
+    async function updatePersonFromGitHub() {
+      const btn = document.getElementById('btn-update-person');
+      const origText = btn.textContent;
+      btn.textContent = '⏳ 다운로드 중...';
+      btn.disabled = true;
+      try {
+        if (!EncryptedDB._password) {
+          await EncryptedDB.askPassword();
+        }
+        const resp = await fetch('https://bible-writer.github.io/kjm-bible/personDatabase.json?t=' + Date.now());
+        if (!resp.ok) throw new Error('서버 응답 오류: ' + resp.status);
+        const pkg = await EncryptedDB.decrypt(await resp.json());
+        if (!pkg.persons || !Array.isArray(pkg.persons) || pkg.persons.length === 0) {
+          throw new Error('유효한 인명 데이터가 없습니다.');
+        }
+        personDatabase = pkg.persons;
+        buildPersonVerseIndex(personDatabase);
+        await setLocalItem('saved_person_database', personDatabase);
+        await setLocalItem('saved_person_database_version', pkg.version || '');
+        showToast(`✅ 인명 DB 업데이트 완료: ${personDatabase.length}명`, 'success');
+      } catch (err) {
+        console.error('인명 DB 업데이트 오류:', err);
+        showToast('인명 DB 업데이트 실패: ' + err.message, 'warn');
+      } finally {
+        btn.textContent = origText;
+        btn.disabled = false;
+      }
+    }
+
+    async function updateTermFromGitHub() {
+      const btn = document.getElementById('btn-update-term');
+      const origText = btn.textContent;
+      btn.textContent = '⏳ 다운로드 중...';
+      btn.disabled = true;
+      try {
+        if (!EncryptedDB._password) {
+          await EncryptedDB.askPassword();
+        }
+        const resp = await fetch('https://bible-writer.github.io/kjm-bible/termDatabase.json?t=' + Date.now());
+        if (!resp.ok) throw new Error('서버 응답 오류: ' + resp.status);
+        const pkg = await EncryptedDB.decrypt(await resp.json());
+        if (!pkg.terms || !Array.isArray(pkg.terms) || pkg.terms.length === 0) {
+          throw new Error('유효한 용어 데이터가 없습니다.');
+        }
+        termDatabase = pkg.terms;
+        termDatabaseMeta = { note: pkg.note || '' };
+        buildTermIndex(termDatabase);
+        await setLocalItem('saved_term_database', termDatabase);
+        await setLocalItem('saved_term_database_meta', termDatabaseMeta);
+        await setLocalItem('saved_term_database_version', pkg.version || '');
+        showToast(`✅ 용어 DB 업데이트 완료: ${termDatabase.length}개`, 'success');
+      } catch (err) {
+        console.error('용어 DB 업데이트 오류:', err);
+        showToast('용어 DB 업데이트 실패: ' + err.message, 'warn');
+      } finally {
+        btn.textContent = origText;
+        btn.disabled = false;
+      }
+    }
+
 
     async function exportPlaceDatabaseJson() {
       if (placeDatabase.length === 0) {
