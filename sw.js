@@ -2,7 +2,7 @@
 // [변경] 네트워크 우선 요청에 cache:'no-store'를 명시해, 서비스워커의 "네트워크 우선" 의도와
 // 달리 브라우저 자체 HTTP 캐시에서 오래된 사본을 받아오던 문제를 해결함.
 // (fetch()만 쓰면 서비스워커 Cache API는 우회해도 브라우저 HTTP 캐시는 그대로 거칠 수 있음)
-const CACHE_NAME = 'bible-map-v4.4.0';
+const CACHE_NAME = 'bible-map-v4.5.0';
 
 // 핵심 캐시 대상
 const CORE_ASSETS = [
@@ -55,6 +55,17 @@ self.addEventListener('activate', event => {
 // 요청 처리: 네트워크 우선, 실패 시 캐시
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
+
+  // 외부 API 요청(번역 프록시, 구글 번역 등)은 서비스워커가 건드리지 않는다
+  // — 리다이렉트/CORS 응답을 SW가 잘못 처리하면 "Failed to fetch"가 남
+  if (url.hostname.includes('script.google.com') ||
+      url.hostname.includes('translate.googleapis.com') ||
+      url.hostname.includes('translate.google.com') ||
+      url.hostname.includes('clients5.google.com') ||
+      url.hostname.includes('googleapis.com/drive') ||
+      url.hostname.includes('www.googleapis.com')) {
+    return; // 브라우저가 직접 처리
+  }
 
   // placeDatabase.json, personDatabase.json은 항상 네트워크 우선 (업데이트 반영), 브라우저 캐시도 우회
   if (url.pathname.endsWith('placeDatabase.json') || url.pathname.endsWith('personDatabase.json')) {
