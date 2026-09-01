@@ -8045,16 +8045,9 @@
         if (sel && sel.length > 1) {
           // 번역 시작 전에 선택 위치를 미리 기억해둔다 (비동기 번역이 끝나기 전에 선택이 풀릴 수 있으므로)
           const selection = window.getSelection();
-          let insertAfterNode = null;
+          let savedRange = null;
           if (selection && selection.rangeCount > 0) {
-            const range = selection.getRangeAt(0);
-            insertAfterNode = range.endContainer;
-            if (insertAfterNode.nodeType === 3) insertAfterNode = insertAfterNode.parentNode; // 텍스트 노드면 부모 요소로
-            // contentEl의 직계 자식까지 거슬러 올라간다 (그래야 바로 뒤에 형제로 끼워 넣을 수 있음)
-            while (insertAfterNode && insertAfterNode.parentNode !== contentEl && insertAfterNode !== contentEl) {
-              insertAfterNode = insertAfterNode.parentNode;
-            }
-            if (insertAfterNode === contentEl || !contentEl.contains(insertAfterNode)) insertAfterNode = null;
+            savedRange = selection.getRangeAt(0).cloneRange();
           }
           await run(sel, '선택 부분', ko => {
             // 선택한 곳 바로 아래에 번역문을 끼워 넣는다 (원문은 그대로 두고 비교하며 볼 수 있게)
@@ -8067,12 +8060,23 @@
             del.style.cssText = 'position:absolute;top:4px;right:6px;border:none;background:none;color:#93c5fd;cursor:pointer;font-size:0.9em';
             del.onclick = () => box.remove();
             box.appendChild(del);
-            // 선택했던 위치 바로 다음에 끼워 넣는다 (위치를 찾지 못하면 예전처럼 맨 밑에 추가)
-            if (insertAfterNode && insertAfterNode.parentNode === contentEl) {
-              insertAfterNode.after(box);
-            } else {
+            // Range API로 선택 끝 지점 바로 뒤에 삽입한다
+            let inserted = false;
+            if (savedRange && contentEl.contains(savedRange.endContainer)) {
+              try {
+                const insertRange = savedRange.cloneRange();
+                insertRange.collapse(false); // 끝 지점으로 접기
+                // 텍스트 노드 중간이면 그 지점에서 줄바꿈을 넣고 그 뒤에 박스를 삽입
+                insertRange.insertNode(box);
+                inserted = true;
+              } catch (e) {
+                console.warn('[번역 삽입] Range 삽입 실패, 맨 밑에 추가:', e);
+              }
+            }
+            if (!inserted) {
               contentEl.appendChild(box);
             }
+            // 번역 박스가 보이도록 부드럽게 스크롤 (전체 화면이 아니라 주석 영역 안에서만)
             box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           });
           return;
