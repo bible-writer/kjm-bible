@@ -152,6 +152,21 @@
       color: #166534;
       border-bottom: 1px solid #bbf7d0;
     }
+    /* 상단 버튼이 너무 많아 평평하게 나열되던 것을 성격별 묶음 메뉴로 정리 */
+    .menu-group { position: relative; display: inline-block; }
+    .menu-group .menu-panel {
+      display: none; position: absolute; top: calc(100% + 4px); left: 0;
+      background: #fff; border: 1px solid #cbd5e1; border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.16); z-index: 5000;
+      min-width: 210px; padding: 5px; white-space: nowrap;
+    }
+    .menu-group.open .menu-panel { display: block; }
+    .menu-group .menu-panel button {
+      display: block; width: 100%; text-align: left;
+      padding: 8px 11px; border: none; background: none; cursor: pointer;
+      font-size: 12.5px; color: #1e293b; border-radius: 5px;
+    }
+    .menu-group .menu-panel button:hover { background: #f1f5f9; }
     .status-btn-group {
       display: flex;
       gap: 4px;
@@ -772,6 +787,21 @@
     .ac-title { font-weight: 700; color: #0f172a; }
     .ac-sub { font-size: 10.5px; color: #64748b; margin-top: 1px; }
 
+    .commentary-type-tab.active { background: #b45309 !important; color: #fff !important; }
+    .ink-tool-btn.active { background: #2563eb !important; box-shadow: 0 0 0 2px rgba(37,99,235,0.4); }
+    .ink-note {
+      position: absolute; pointer-events: auto; max-width: 220px; min-width: 90px;
+      background: #fef9c3; border: 1px solid #ca8a04; border-radius: 6px;
+      padding: 6px 8px; font-size: 12px; line-height: 1.45; color: #422006;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25); cursor: move; white-space: pre-wrap; word-break: break-word;
+    }
+    .ink-note .ink-note-del {
+      position: absolute; top: -8px; right: -8px; width: 18px; height: 18px;
+      border-radius: 50%; border: none; background: #dc2626; color: #fff;
+      font-size: 11px; line-height: 1; cursor: pointer; display: none;
+    }
+    .ink-note:hover .ink-note-del { display: block; }
+    .commentary-type-tab:not(.active) { background: #fff !important; color: #334155 !important; }
     .btn-catalog-trigger {
       padding: 6px 10px;
       background: #0f172a;
@@ -1478,6 +1508,9 @@
       .commentary-feature-btn { display: none !important; }
       .btn-header-map-toggle { display: none !important; } /* 모바일에서는 하단 탭(본문/지도)이 이미 있어 중복이자 혼란의 원인이므로 숨김 */
       #commentary-pane { display: none !important; }
+      /* 폰에서는 화면이 좁아 필기가 실용적이지 않으므로 필기 도구도 확실히 숨긴다
+         (주석 패널 자체가 숨겨져 있지만, 명시적으로 한 번 더 차단) */
+      #commentary-ink-toolbar { display: none !important; }
       #bible-content { padding-bottom: 180px !important; }
       #compare-content { padding-bottom: 180px !important; }
       .map-header-bar { padding-right: 4px !important; }
@@ -1516,12 +1549,24 @@
   white-space: nowrap; pointer-events: none;
 }
 
+/* 파일 열기 영역을 한 줄로 압축 — 파일은 가끔만 올리므로 자리를 적게 차지하게 한다 */
+.upload-compact-row {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 7px 10px;
+}
+.upload-icon-inline { font-size: 15px; flex-shrink: 0; }
+.upload-title-inline {
+  font-size: 12px; font-weight: 600; color: #475569;
+  white-space: nowrap; flex-shrink: 0;
+}
+.upload-badges-inline { display: flex; gap: 5px; flex-wrap: wrap; }
+.upload-badges-inline .upload-badge { font-size: 11px; padding: 3px 8px; }
+
 /* 헤더 접기 모드 */
 #left-pane.header-collapsed .panel-header { display: none; }
 #left-pane.header-collapsed #upload-zone { display: none !important; }
-#left-pane.header-collapsed .upload-sub { display: none !important; }
-#left-pane.header-collapsed .upload-title { display: none !important; }
-#left-pane.header-collapsed .upload-icon { display: none !important; }
+#left-pane.header-collapsed .upload-title-inline { display: none !important; }
+#left-pane.header-collapsed .upload-icon-inline { display: none !important; }
 #left-pane.header-collapsed #uploaded-files-list, #left-pane.header-collapsed .uploaded-files-list { display: none !important; }
 #left-pane.header-collapsed .file-btn-group { display: none !important; }
 #left-pane.header-collapsed #db-status-bar { display: none !important; }
@@ -1570,29 +1615,53 @@
 
     <!-- DB 연결 및 백업/복원 제어 바 -->
     <div id="db-status-bar">
-      <span id="db-status-text">SQLite 엔진 준비 중...</span>
+      <span id="db-status-text" style="white-space:nowrap;flex-shrink:0">준비 중...</span>
       <div class="status-btn-group">
+        <!-- 자주 쓰는 것만 밖으로, 나머지는 성격별 묶음 메뉴 안으로 정리 -->
         <button class="btn-status-action success" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
         <button class="btn-status-action success" id="btn-import-backup-trigger" title="백업 파일 가져와서 복원하기">복원</button>
         <button class="btn-status-action" id="btn-drive-connect" title="Google 계정 연결/해제 (Drive)" style="background:#4285F4;">🔗 연동안됨</button>
         <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#475569;margin-left:6px;" title="체크 시 10분마다 자동으로 Google Drive에 백업합니다">
           <input type="checkbox" id="chk-drive-autobackup" style="cursor:pointer;"> 자동백업
         </label>
-        <button class="btn-status-action" id="btn-export-xlsx" title="현재 지명 DB를 XLSX로 내보내기" style="background:#2563eb;" onclick="exportPlaceDatabaseToXlsx()">📊 XLSX</button>
-        <button class="btn-status-action" id="btn-update-db" title="GitHub에서 최신 지명 DB 다운로드" style="background:#7c3aed;" onclick="updateFromGitHub()">🔄 업데이트</button>
-        <button class="btn-status-action" id="btn-sync-openbible" title="OpenBible.info 학술 좌표와 동기화" style="background:#d97706;" onclick="syncWithOpenBible()">📡 OB</button>
-        <button class="btn-status-action" id="btn-export-json" title="placeDatabase.json 생성 (GitHub 업로드용)" style="background:#059669;" onclick="exportPlaceDatabaseJson()">📦 JSON</button>
-        <button class="btn-status-action" id="btn-export-term-json" title="termDatabase.json 생성 (스트롱코드 수정분 포함, GitHub 업로드용)" style="background:#b45309;" onclick="exportTermDatabaseJson()">📦 용어DB</button>
-        <button class="btn-status-action" id="btn-coord-overrides" title="좌표 보정 이력 보기 / 제외행 확인" style="background:#0891b2;" onclick="openCoordOverrideManager()">📍 보정</button>
-        <button class="btn-status-action" id="btn-name-overrides" title="한글 지명 수정 이력 보기" style="background:#7c3aed;" onclick="openNameOverrideManager()">✏️ 지명</button>
+
+        <div class="menu-group">
+          <button class="btn-status-action menu-trigger" style="background:#2563eb">📤 내보내기 ▾</button>
+          <div class="menu-panel">
+            <button id="btn-export-xlsx" onclick="exportPlaceDatabaseToXlsx()">📊 지명 DB → XLSX</button>
+            <button id="btn-export-json" onclick="exportPlaceDatabaseJson()">📦 placeDatabase.json</button>
+            <button id="btn-export-term-json" onclick="exportTermDatabaseJson()">📦 termDatabase.json</button>
+          </div>
+        </div>
+
+        <div class="menu-group">
+          <button class="btn-status-action menu-trigger" style="background:#7c3aed">🔄 동기화 ▾</button>
+          <div class="menu-panel">
+            <button id="btn-update-db" onclick="updateFromGitHub()">🔄 GitHub에서 최신 DB 받기</button>
+            <button id="btn-sync-openbible" onclick="syncWithOpenBible()">📡 OpenBible 좌표 동기화</button>
+          </div>
+        </div>
+
+        <div class="menu-group">
+          <button class="btn-status-action menu-trigger" style="background:#0891b2">✏️ 편집이력 ▾</button>
+          <div class="menu-panel">
+            <button id="btn-coord-overrides" onclick="openCoordOverrideManager()">📍 좌표 보정 이력</button>
+            <button id="btn-name-overrides" onclick="openNameOverrideManager()">✏️ 지명 수정 이력</button>
+            <button id="menu-open-add-link">🔗 수동 링크 추가</button>
+            <button id="menu-open-blacklist">🚫 제외 단어 관리</button>
+          </div>
+        </div>
+
         <input type="file" id="backup-file-input" accept=".json" style="display:none;" />
-        <button class="btn-status-action primary" id="btn-open-add-link" title="수동 링크 추가">+링크</button>
-        <button class="btn-status-action" id="btn-open-blacklist" title="제외 단어 관리">제외</button>
-        <button class="btn-status-action danger" id="btn-clear-db" title="저장소 초기화">초기화</button>
+        <!-- JS 호환용 숨김 버튼 (기존 코드가 이 id로 이벤트를 연결함) -->
+        <button class="btn-status-action primary" id="btn-open-add-link" style="display:none">+링크</button>
+        <button class="btn-status-action" id="btn-open-blacklist" style="display:none">제외</button>
+
         <label class="label-toggle-group" style="margin-left:6px;">
           <input type="checkbox" id="chk-term-highlight">
           <span>용어 표시</span>
         </label>
+        <button class="btn-status-action danger" id="btn-clear-db" title="저장소 초기화" style="margin-left:auto">초기화</button>
       </div>
     </div>
 
@@ -1617,17 +1686,16 @@
 
       <!-- ══ 통합 드래그앤드롭 업로드 존 ══ -->
       <div id="upload-zone" title="클릭하거나 파일을 여기에 끌어다 놓으세요">
-        <div class="upload-icon">📂</div>
-        <div class="upload-title">파일을 여기에 끌어다 놓거나 클릭하세요</div>
-        <div class="upload-sub">
-          <b>.bdb</b> 성경DB &nbsp;·&nbsp; <b>.xlsx/.csv</b> 지명시트 &nbsp;·&nbsp; <b>.json</b> 백업파일
-        </div>
-        <div class="upload-badges">
-          <span class="upload-badge bdb"      data-type="bdb"  title="성경 DB 파일 선택 (.bdb/.db/.sqlite)">📖 성경DB (.bdb)</span>
-          <span class="upload-badge xlsx"     data-type="xlsx" title="지명 데이터 시트 선택 (.xlsx/.csv)">📊 지명시트 (.xlsx)</span>
-          <span class="upload-badge json"     data-type="json" title="백업 JSON 파일 복원 (.json)">💾 백업 (.json)</span>
-          <span class="upload-badge bdb-extra" data-type="extra" title="추가 번역 bdb 파일 등록">🌐 추가번역 (.bdb)</span>
-          <span class="upload-badge" id="interlinear-badge" data-type="interlinear" title="스트롱코드 DB 등록 (.sdb) — 본문 단어 클릭 시 원어 뜻 표시" style="background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;">🔤 스트롱코드 (.sdb)</span>
+        <div class="upload-compact-row">
+          <span class="upload-icon-inline">📂</span>
+          <span class="upload-title-inline">파일 열기 / 끌어다 놓기</span>
+          <span class="upload-badges-inline">
+            <span class="upload-badge bdb"      data-type="bdb"  title="성경 DB 파일 선택 (.bdb/.db/.sqlite)">📖 성경DB</span>
+            <span class="upload-badge xlsx"     data-type="xlsx" title="지명 데이터 시트 선택 (.xlsx/.csv)">📊 지명시트</span>
+            <span class="upload-badge json"     data-type="json" title="백업 JSON 파일 복원 (.json)">💾 백업</span>
+            <span class="upload-badge bdb-extra" data-type="extra" title="추가 번역 bdb 파일 등록">🌐 추가번역</span>
+            <span class="upload-badge" id="interlinear-badge" data-type="interlinear" title="스트롱코드 DB 등록 (.sdb) — 본문 단어 클릭 시 원어 뜻 표시" style="background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;">🔤 스트롱코드</span>
+          </span>
           <input type="file" id="interlinear-file-input" accept=".sdb,.db,.bdb,.sqlite,.sqlite3,application/octet-stream,application/x-sqlite3" style="display:none">
         </div>
       </div>
@@ -1802,22 +1870,44 @@
     <div class="map-header-bar" style="background:rgba(30,41,59,0.96)">
       <select id="commentary-select" style="padding:5px 8px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;font-weight:600;cursor:pointer;outline:none;max-width:220px" title="현재 책에 등록된 주석 선택"></select>
       <select id="commentary-chapter-jump" style="padding:5px 8px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;font-weight:600;cursor:pointer;outline:none" title="장으로 바로 이동"></select>
-      <button class="btn-catalog-trigger" id="btn-commentary-prev-page" style="background:#334155">◀</button>
-      <span id="commentary-page-indicator" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap">- / -</span>
-      <button class="btn-catalog-trigger" id="btn-commentary-next-page" style="background:#334155">▶</button>
-      <input type="number" id="commentary-page-jump" min="1" style="width:56px;padding:5px 6px;border-radius:5px;border:1px solid #475569;font-size:12px" title="페이지로 바로 이동" />
-      <button class="btn-catalog-trigger" id="btn-commentary-goto" style="background:#334155">이동</button>
-      <button class="btn-catalog-trigger" id="btn-commentary-zoom-out" style="background:#334155" title="축소">➖</button>
-      <span id="commentary-zoom-level" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap;min-width:38px;text-align:center">100%</span>
-      <button class="btn-catalog-trigger" id="btn-commentary-zoom-in" style="background:#334155" title="확대">➕</button>
-      <button class="btn-catalog-trigger" id="btn-commentary-zoom-fit" style="background:#475569" title="화면 폭에 맞추기">⛶ 맞춤</button>
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-commentary-prev-page" style="background:#334155">◀</button>
+      <span id="commentary-page-indicator" class="pdf-only-control" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap">- / -</span>
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-commentary-next-page" style="background:#334155">▶</button>
+      <input type="number" id="commentary-page-jump" min="1" class="pdf-only-control" style="width:56px;padding:5px 6px;border-radius:5px;border:1px solid #475569;font-size:12px" title="페이지로 바로 이동" />
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-commentary-goto" style="background:#334155">이동</button>
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-commentary-zoom-out" style="background:#334155" title="축소">➖</button>
+      <span id="commentary-zoom-level" class="pdf-only-control" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap;min-width:38px;text-align:center">100%</span>
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-commentary-zoom-in" style="background:#334155" title="확대">➕</button>
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-commentary-zoom-fit" style="background:#475569" title="화면 폭에 맞추기">⛶ 맞춤</button>
       <span style="flex:1"></span>
-      <button class="btn-catalog-trigger" id="btn-commentary-download" style="background:#059669" title="현재 PDF 파일 다운로드">⬇ 다운로드</button>
-      <button class="btn-catalog-trigger" id="btn-open-chapter-map" style="background:#7c4a26" title="장별 페이지 한번에 연결">📑 장 연결</button>
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-commentary-download" style="background:#059669" title="현재 PDF 파일 다운로드">⬇ 다운로드</button>
+      <button class="btn-catalog-trigger pdf-only-control" id="btn-open-chapter-map" style="background:#7c4a26" title="장별 페이지 한번에 연결">📑 장 연결</button>
+      <button class="btn-catalog-trigger text-only-control" id="btn-commentary-eng-kor" style="background:#0f766e" title="영문 주석의 성경책 이름을 한글로 바꿔 보여줍니다">🇰🇷 한글책명</button>
+      <button class="btn-catalog-trigger text-only-control" id="btn-commentary-translate" style="background:#2563eb" title="지금 보고 있는 주석을 한글로 번역 (구글 번역 초안)">🌐 번역</button>
+      <button class="btn-catalog-trigger text-only-control" id="btn-commentary-dict-first" style="background:#7c3aed" title="번역 전에 내 사전(인명·지명·용어)으로 성경 용어를 먼저 한글로 고정합니다">📖 사전우선</button>
       <button class="btn-catalog-trigger" id="btn-open-commentary-manage" style="background:#b45309" title="주석 등록/관리">⚙ 관리</button>
       <button class="btn-catalog-trigger" id="btn-commentary-back-to-map" style="background:#2563eb" title="지도로 돌아가기">🗺 지도로</button>
     </div>
-    <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#0f172a;flex-wrap:nowrap;overflow-x:auto">
+    <div id="commentary-ink-toolbar" class="pdf-only-control" style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#1e293b;flex-wrap:wrap">
+      <button class="btn-catalog-trigger ink-tool-btn active" id="btn-ink-off" data-tool="off" style="background:#475569" title="필기 끄기 (스크롤·확대 사용)">✋ 보기</button>
+      <button class="btn-catalog-trigger ink-tool-btn" id="btn-ink-pen" data-tool="pen" style="background:#334155" title="펜으로 그리기">✏️ 펜</button>
+      <button class="btn-catalog-trigger ink-tool-btn" id="btn-ink-highlight" data-tool="highlight" style="background:#334155" title="형광펜">🖍 형광펜</button>
+      <button class="btn-catalog-trigger ink-tool-btn" id="btn-ink-eraser" data-tool="eraser" style="background:#334155" title="지우개 — 획을 터치하면 지워집니다">🧽 지우개</button>
+      <button class="btn-catalog-trigger ink-tool-btn" id="btn-ink-note" data-tool="note" style="background:#334155" title="메모 붙이기 — 원하는 위치를 터치">📝 메모</button>
+      <span style="width:1px;height:18px;background:#475569;margin:0 2px"></span>
+      <input type="color" id="ink-color" value="#e11d48" style="width:30px;height:26px;padding:0;border:1px solid #475569;border-radius:5px;background:none;cursor:pointer" title="색상">
+      <select id="ink-width" style="padding:4px 6px;border-radius:5px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:12px;cursor:pointer" title="굵기">
+        <option value="2">가늘게</option>
+        <option value="4" selected>보통</option>
+        <option value="8">굵게</option>
+        <option value="14">아주 굵게</option>
+      </select>
+      <button class="btn-catalog-trigger" id="btn-ink-undo" style="background:#334155" title="마지막 획 되돌리기">↩ 실행취소</button>
+      <button class="btn-catalog-trigger" id="btn-ink-clear-page" style="background:#7f1d1d" title="이 페이지 필기 전체 지우기">🗑 페이지 지우기</button>
+      <button class="btn-catalog-trigger" id="btn-ink-allow-finger" style="background:#334155;display:none" title="펜 없이 손가락으로도 그리기">👆 손가락 허용</button>
+      <span id="ink-status" style="color:#94a3b8;font-size:11px;white-space:nowrap"></span>
+    </div>
+    <div id="commentary-manual-map-row" class="pdf-only-control" style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#0f172a;flex-wrap:nowrap;overflow-x:auto">
       <span style="color:#94a3b8;font-size:11.5px;white-space:nowrap">✏️ 수동 매핑:</span>
       <input type="number" id="manual-map-chapter" min="1" placeholder="장" style="width:48px;padding:4px 6px;border-radius:5px;border:1px solid #475569;font-size:12px" />
       <span style="color:#94a3b8">:</span>
@@ -1826,7 +1916,17 @@
       <span style="color:#64748b;font-size:10.5px;white-space:nowrap">※ 위 장:절 범위를 지금 보고 있는 페이지에 직접 연결합니다</span>
     </div>
     <div id="commentary-pdf-wrap" style="flex:1;overflow-y:scroll;overflow-x:auto;display:flex;justify-content:flex-start;padding:14px;background:#525659">
-      <canvas id="commentary-pdf-canvas" style="background:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.4);margin:0 auto"></canvas>
+      <div id="commentary-canvas-stack" style="position:relative;margin:0 auto;flex-shrink:0">
+        <canvas id="commentary-pdf-canvas" style="background:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.4);display:block"></canvas>
+        <canvas id="commentary-ink-canvas" style="position:absolute;left:0;top:0;pointer-events:none;touch-action:none"></canvas>
+        <div id="commentary-notes-layer" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none"></div>
+      </div>
+    </div>
+    <div id="commentary-text-view" style="display:none;flex:1;overflow-y:auto;padding:24px;background:#fdfaf5">
+      <div style="max-width:720px;margin:0 auto;background:#fff;padding:24px 28px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,0.1)">
+        <div id="commentary-text-ref" style="font-weight:700;color:#b45309;font-size:1.05em;margin-bottom:10px"></div>
+        <div id="commentary-text-content" style="line-height:1.7;color:#1e293b;font-size:0.95em;white-space:pre-wrap"></div>
+      </div>
     </div>
     <div id="commentary-empty-state" style="display:none;flex:1;align-items:center;justify-content:center;color:#cbd5e1;font-size:13px;text-align:center;padding:30px">
       이 책(<span id="commentary-empty-bookname"></span>)에 등록된 주석이 없습니다.<br>
@@ -1845,17 +1945,38 @@
       <div style="font-weight:600;font-size:0.9em;margin-bottom:8px;color:#334155">➕ 새 주석 추가</div>
       <input type="text" id="commentary-new-name" placeholder="주석 이름 (예: 콘스터블 주석, 매튜헨리)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.9em;margin-bottom:6px">
       <select id="commentary-new-book" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.9em;margin-bottom:6px"></select>
+      <div style="display:flex;gap:6px;margin-bottom:6px">
+        <button type="button" id="btn-commentary-type-pdf" class="commentary-type-tab active" style="flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:6px;background:#b45309;color:#fff;font-size:0.82em;font-weight:700;cursor:pointer">📄 PDF (자동 페이지 인식)</button>
+        <button type="button" id="btn-commentary-type-json" class="commentary-type-tab" style="flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#334155;font-size:0.82em;font-weight:700;cursor:pointer">📋 JSON (절별 텍스트)</button>
+        <button type="button" id="btn-commentary-type-cdb" class="commentary-type-tab" style="flex:1;padding:6px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#334155;font-size:0.82em;font-weight:700;cursor:pointer">📚 CDB/AAB</button>
+      </div>
       <input type="file" id="commentary-new-file" accept="application/pdf" style="width:100%;font-size:0.85em;margin-bottom:8px">
+      <div id="commentary-json-help" style="display:none;font-size:0.72em;color:#64748b;background:#fff;border:1px dashed #cbd5e1;border-radius:6px;padding:8px;margin-bottom:8px">
+        JSON 형식 예시:<br>
+        <code style="white-space:pre-wrap">{"entries":[{"chapter":1,"verse":1,"content":"주석 내용..."},{"chapter":1,"verse":"2-3","content":"2~3절 통합 주석..."}]}</code>
+      </div>
+      <div id="commentary-cdb-help" style="display:none;font-size:0.72em;color:#64748b;background:#fff;border:1px dashed #cbd5e1;border-radius:6px;padding:8px;margin-bottom:8px">
+        기존 성경 프로그램의 .cdb / .aab 주석 파일을 그대로 올리면 됩니다. 파일 안에 있는 66권 전체를 자동으로 인식해서, 책마다 별도의 주석 항목으로 나눠 등록합니다.
+      </div>
       <div id="commentary-add-progress" style="font-size:0.8em;color:#b45309;margin-bottom:6px;display:none"></div>
       <button id="btn-commentary-add" style="width:100%;padding:8px;background:#b45309;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:0.9em">PDF 분석 후 추가 (절 번호 자동 매핑)</button>
-      <div style="font-size:0.72em;color:#94a3b8;margin-top:6px">※ PDF 안에 "1:1", "3:16" 처럼 장:절 번호가 단독으로 적힌 줄이 있어야 절별로 자동 이동됩니다. 없으면 페이지 이동만 수동으로 가능합니다.</div>
+      <div id="commentary-pdf-help-text" style="font-size:0.72em;color:#94a3b8;margin-top:6px">※ PDF 안에 "1:1", "3:16" 처럼 장:절 번호가 단독으로 적힌 줄이 있어야 절별로 자동 이동됩니다. 없으면 페이지 이동만 수동으로 가능합니다.</div>
+    </div>
+    <div style="padding:8px 16px;border-bottom:1px solid #e2e8f0">
+      <input type="text" id="commentary-list-search" placeholder="🔍 이름이나 책으로 찾기 (예: 요한복음, 매튜헨리)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.85em">
+      <div style="display:flex;gap:6px;margin-top:6px;align-items:center">
+        <button id="btn-commentary-export" style="flex:1;padding:5px;background:#0f766e;color:#fff;border:none;border-radius:5px;font-size:0.75em;font-weight:600;cursor:pointer" title="텍스트 주석(JSON·CDB)을 파일로 저장">💾 주석 백업</button>
+        <button id="btn-commentary-import" style="flex:1;padding:5px;background:#475569;color:#fff;border:none;border-radius:5px;font-size:0.75em;font-weight:600;cursor:pointer" title="백업해둔 주석 파일 복원">📥 백업 복원</button>
+        <input type="file" id="commentary-import-file" accept="application/json,.json" style="display:none">
+      </div>
+      <div style="font-size:0.68em;color:#94a3b8;margin-top:4px">※ 주석은 브라우저에만 저장되어 캐시를 지우면 사라집니다. 가끔 백업해두세요. (PDF는 원본 파일을 따로 보관)</div>
     </div>
     <div id="commentary-list" style="flex:1;overflow-y:auto;padding:6px 0"></div>
   </div>
 
   <!-- 장 연결(챕터별 페이지 매핑) 모달 -->
-  <div id="chapter-map-modal-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:20002"></div>
-  <div id="chapter-map-modal" style="display:none;position:fixed;top:5%;left:50%;transform:translateX(-50%);width:min(440px,92vw);max-height:88vh;background:#fdf6f0;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.35);z-index:20003;flex-direction:column;overflow:hidden">
+  <div id="chapter-map-modal-backdrop" style="display:none"></div>
+  <div id="chapter-map-modal" style="display:none;position:fixed;top:0;right:0;width:min(320px,85vw);height:100%;background:#fdf6f0;box-shadow:-4px 0 20px rgba(0,0,0,0.25);z-index:20003;flex-direction:column;overflow:hidden;border-left:1px solid #e7d9c9">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #e7d9c9;background:#fff">
       <span style="font-weight:bold;font-size:1.05em;color:#78350f" id="chapter-map-title">장 연결</span>
       <button id="btn-close-chapter-map" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
@@ -1911,10 +2032,7 @@
     <div style="padding:10px 16px;border-bottom:1px solid var(--border,#e2e8f0)">
       <input type="text" id="rawdict-search-input" placeholder="단어 검색 (영문/한글, 예: Bread, 어둠)" autocomplete="off"
         style="width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.95em">
-      <div style="display:flex;gap:6px;margin-top:8px" id="rawdict-filter-tabs">
-        <button class="dict-filter-btn active" data-src="easton">Easton</button>
-        <button class="dict-filter-btn" data-src="smith">Smith</button>
-      </div>
+      <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap" id="rawdict-filter-tabs"></div>
       <div style="display:flex;gap:6px;margin-top:8px" id="rawdict-category-tabs">
         <button class="dict-filter-btn active" data-cat="">전체</button>
         <button class="dict-filter-btn" data-cat="인명">👤 인명</button>
@@ -2237,7 +2355,7 @@
               const bar = document.getElementById('db-status-bar');
               bar.classList.add('connected');
               document.getElementById('db-status-text').innerText =
-                `DB 연결 완료 ✓ ${detectedSchema.table} 테이블 | 지명: ${placeDatabase.length}개`;
+                `✓ 지명 ${placeDatabase.length}개`;
             }
             showProgress(80);
             loadBibleText();
@@ -2458,7 +2576,7 @@
               await setLocalItem('saved_bdb_binary', buf);
               if (detectedSchema) {
                 document.getElementById('db-status-bar').classList.add('connected');
-                document.getElementById('db-status-text').innerText = `자동 복원 완료 ✓ DB: ${detectedSchema.table} 테이블 | 지명: ${placeDatabase.length}개`;
+                document.getElementById('db-status-text').innerText = `✓ 지명 ${placeDatabase.length}개`;
               }
             }
             loadBibleText();
@@ -3061,6 +3179,35 @@
     Object.keys(FULL_ENGLISH_BOOK_NAMES).forEach(idStr => {
       registerBookRefName(FULL_ENGLISH_BOOK_NAMES[idStr], parseInt(idStr, 10));
     });
+    // 영문 주석(10Pulpit 등)에 나오는 성경책 이름을 한글로 바꿔준다.
+    // 예: "Gen 1:1" → "창세기 1:1",  "1 Cor 13:4" → "고린도전서 13:4"
+    // 긴 이름부터 바꿔야 "John"이 "1 John"의 일부를 잘못 건드리지 않는다.
+    let _engToKorPairs = null;
+    function englishBookNamesToKorean(text) {
+      if (!text) return text;
+      if (!_engToKorPairs) {
+        const map = {};
+        Object.keys(FULL_ENGLISH_BOOK_NAMES).forEach(idStr => {
+          map[FULL_ENGLISH_BOOK_NAMES[idStr]] = parseInt(idStr, 10);
+        });
+        Object.keys(ENGLISH_BOOK_ALIASES).forEach(idStr => {
+          ENGLISH_BOOK_ALIASES[idStr].forEach(a => { map[a] = parseInt(idStr, 10); });
+        });
+        _engToKorPairs = Object.keys(map)
+          .sort((a, b) => b.length - a.length)
+          .map(eng => {
+            const bookObj = BIBLE_BOOKS.find(b => b.id === map[eng]);
+            if (!bookObj) return null;
+            // 뒤에 장:절 숫자가 따라오는 경우에만 바꾼다 (본문 속 일반 단어를 건드리지 않도록)
+            const esc = eng.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+            return { re: new RegExp(`\\b${esc}\\.?(?=\\s*\\d+\\s*[:;])`, 'g'), ko: bookObj.name };
+          })
+          .filter(Boolean);
+      }
+      let out = text;
+      _engToKorPairs.forEach(p => { out = out.replace(p.re, p.ko); });
+      return out;
+    }
     const ENGLISH_BOOK_ALIASES = {
       1: ['Gen'], 2: ['Ex', 'Exod'], 3: ['Lev'], 4: ['Num', 'Nu'], 5: ['Deut', 'Dt'],
       6: ['Josh'], 7: ['Judg', 'Jdg'], 8: ['Ruth'], 9: ['1 Sam', '1Sa'], 10: ['2 Sam', '2Sa'],
@@ -5142,7 +5289,32 @@
       });
     }
 
-    // ── 원문사전(Easton/Smith 영문 원문 전체) 뷰어 ──
+    // ── 원문사전(공개 사전 영문 원문 전체) 뷰어 ──
+    // [구조] 사전을 늘릴 때마다 코드를 고치지 않도록, 아래 목록에만 추가하면 되게 만들었다.
+    //   file        : 같은 폴더에 두는 JSON 파일 이름
+    //   storeKey    : 브라우저 저장소 키
+    //   editsKey    : 사용자가 직접 고친 항목 추적용 키
+    const RAWDICT_SOURCES = [
+      { key: 'easton',    label: 'Easton',    file: './easton_full.json',    storeKey: 'easton_full_dict',    editsKey: 'easton_local_edits' },
+      { key: 'smith',     label: 'Smith',     file: './smith_full.json',     storeKey: 'smith_full_dict',     editsKey: 'smith_local_edits' },
+      { key: 'hastings',  label: 'Hastings',  file: './hastings_full.json',  storeKey: 'hastings_full_dict',  editsKey: 'hastings_local_edits' },
+      { key: 'schaff',    label: 'Schaff',    file: './schaff_full.json',    storeKey: 'schaff_full_dict',    editsKey: 'schaff_local_edits' },
+      { key: 'hitchcock', label: 'Hitchcock', file: './hitchcock_full.json', storeKey: 'hitchcock_full_dict', editsKey: 'hitchcock_local_edits' }
+    ];
+    // 사전별 데이터와 편집내역을 한곳에 모아둔다 (rawDictData['easton'] 형태로 접근)
+    const rawDictData = {};
+    const rawDictEdits = {};
+    RAWDICT_SOURCES.forEach(s => { rawDictData[s.key] = []; rawDictEdits[s.key] = {}; });
+    function getRawDictList(srcKey) { return rawDictData[srcKey] || []; }
+    function getRawDictEdits(srcKey) { return rawDictEdits[srcKey] || (rawDictEdits[srcKey] = {}); }
+    function getRawDictLabel(srcKey) {
+      const s = RAWDICT_SOURCES.find(x => x.key === srcKey);
+      return s ? s.label : srcKey;
+    }
+    function rawDictStoreKeys(srcKey) {
+      const s = RAWDICT_SOURCES.find(x => x.key === srcKey);
+      return s ? s : { storeKey: srcKey + '_full_dict', editsKey: srcKey + '_local_edits' };
+    }
     let eastonFullDict = [];
     let smithFullDict = [];
     let eastonLocalEdits = {}; // { [id]: {term:true, category:true, definition_ko:true, hebrew_greek:true} } - 앱에서 실제 '저장' 버튼으로 수정한 필드만 추적
@@ -5192,43 +5364,36 @@
     }
 
     async function loadRawDictionaries() {
-      // 로컬 캐시 먼저
-      const savedEaston = await getLocalItem('easton_full_dict');
-      if (savedEaston && savedEaston.length > 0) eastonFullDict = savedEaston;
-      const savedSmith = await getLocalItem('smith_full_dict');
-      if (savedSmith && savedSmith.length > 0) smithFullDict = savedSmith;
-      // 앱에서 실제로 저장한 편집 내역(표제어/분류/한글설명/스트롱코드)만 별도로 불러온다.
-      const savedEastonEdits = await getLocalItem('easton_local_edits');
-      if (savedEastonEdits) eastonLocalEdits = savedEastonEdits;
-      const savedSmithEdits = await getLocalItem('smith_local_edits');
-      if (savedSmithEdits) smithLocalEdits = savedSmithEdits;
-      // 네트워크 최신본 확인 (공개 퍼블릭 도메인 텍스트라 암호화 없이 평문)
-      try {
-        const res = await fetch('./easton_full.json', { cache: 'no-store' });
-        if (res && res.ok) {
-          const pkg = await res.json();
-          if (pkg && Array.isArray(pkg.entries) && pkg.entries.length > 0) {
-            const merged = mergeRawDictEntries(eastonFullDict, pkg.entries, eastonLocalEdits);
-            if (merged !== eastonFullDict) {
-              eastonFullDict = merged;
-              await setLocalItem('easton_full_dict', eastonFullDict);
+      // 등록된 사전을 하나씩 같은 방식으로 불러온다 (사전을 늘려도 이 함수는 그대로)
+      for (const s of RAWDICT_SOURCES) {
+        try {
+          // 1) 브라우저에 저장해둔 것 먼저 (오프라인에서도 바로 보이도록)
+          const saved = await getLocalItem(s.storeKey);
+          if (saved && saved.length > 0) rawDictData[s.key] = saved;
+          const savedEdits = await getLocalItem(s.editsKey);
+          if (savedEdits) rawDictEdits[s.key] = savedEdits;
+          // 2) 최신본이 있으면 받아서 합친다 (내가 고친 내용은 보존됨)
+          //    공개 퍼블릭 도메인 텍스트라 암호화 없이 평문으로 둔다
+          const res = await fetch(s.file, { cache: 'no-store' });
+          if (res && res.ok) {
+            const pkg = await res.json();
+            if (pkg && Array.isArray(pkg.entries) && pkg.entries.length > 0) {
+              const merged = mergeRawDictEntries(rawDictData[s.key], pkg.entries, rawDictEdits[s.key]);
+              if (merged !== rawDictData[s.key]) {
+                rawDictData[s.key] = merged;
+                await setLocalItem(s.storeKey, merged);
+              }
             }
           }
+        } catch (e) {
+          // 해당 사전 파일이 아직 없거나 로컬 실행 중일 수 있음 — 나머지 사전은 계속 불러온다
         }
-      } catch (e) { /* 로컬 실행 등에서는 무시 */ }
-      try {
-        const res2 = await fetch('./smith_full.json', { cache: 'no-store' });
-        if (res2 && res2.ok) {
-          const pkg2 = await res2.json();
-          if (pkg2 && Array.isArray(pkg2.entries) && pkg2.entries.length > 0) {
-            const merged2 = mergeRawDictEntries(smithFullDict, pkg2.entries, smithLocalEdits);
-            if (merged2 !== smithFullDict) {
-              smithFullDict = merged2;
-              await setLocalItem('smith_full_dict', smithFullDict);
-            }
-          }
-        }
-      } catch (e) { /* smith_full.json 아직 없을 수 있음 */ }
+      }
+      // 기존 코드(백업 등)가 참조하는 변수와 계속 맞춰둔다
+      eastonFullDict = rawDictData.easton;
+      smithFullDict = rawDictData.smith;
+      eastonLocalEdits = rawDictEdits.easton;
+      smithLocalEdits = rawDictEdits.smith;
     }
 
     let rawdictCatFilter = ''; // '', '인명', '지명', '용어'
@@ -5328,8 +5493,18 @@
       observer.observe(panelEl);
       panelEl._sizePersistObserver = observer;
     }
+    function bindRawDictSrcTabs() {
+      document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          rawdictSrc = btn.dataset.src;
+          renderRawDictResults(true);
+        };
+      });
+    }
     function openRawDictModal() {
-      const total = eastonFullDict.length + smithFullDict.length;
+      const total = RAWDICT_SOURCES.reduce((s, d) => s + getRawDictList(d.key).length, 0);
       if (total === 0) {
         showToast('원문사전 데이터가 아직 없습니다.', 'warn'); return;
       }
@@ -5339,11 +5514,16 @@
       persistSizeOnResize(document.getElementById('rawdict-modal'));
       ensureTouchResizeGrip(document.getElementById('rawdict-modal')); // 모바일(터치)에서는 브라우저 기본 resize가 안 먹히므로 보조 손잡이 추가
       initRawDictModalDrag();
-      document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(btn => {
-        const label = btn.dataset.src === 'easton' ? 'Easton' : 'Smith';
-        const count = btn.dataset.src === 'easton' ? eastonFullDict.length : smithFullDict.length;
-        btn.textContent = `${label} (${count})`;
-      });
+      // 사전 탭을 목록에서 자동으로 만든다 — 아직 파일이 없는 사전은 탭도 만들지 않는다
+      const tabWrap = document.getElementById('rawdict-filter-tabs');
+      const available = RAWDICT_SOURCES.filter(s => getRawDictList(s.key).length > 0);
+      if (!available.some(s => s.key === rawdictSrc) && available.length > 0) {
+        rawdictSrc = available[0].key; // 현재 선택한 사전이 없으면 첫 번째로
+      }
+      tabWrap.innerHTML = available.map(s =>
+        `<button class="dict-filter-btn${s.key === rawdictSrc ? ' active' : ''}" data-src="${s.key}">${escHtml(s.label)} (${getRawDictList(s.key).length})</button>`
+      ).join('');
+      bindRawDictSrcTabs();
       renderRawDictResults(true);
       document.getElementById('rawdict-search-input').focus();
     }
@@ -5356,7 +5536,7 @@
       const loadMoreWrap = document.getElementById('rawdict-load-more-wrap');
       if (reset) { container.innerHTML = ''; rawdictShownCount = 0; }
 
-      const source = rawdictSrc === 'easton' ? eastonFullDict : smithFullDict;
+      const source = getRawDictList(rawdictSrc);
       const q = (document.getElementById('rawdict-search-input').value || '').trim().toLowerCase();
       let filtered = source;
       if (rawdictCatFilter) {
@@ -5484,6 +5664,51 @@
       return chunks;
     }
 
+    // ── 사전 우선 번역 ────────────────────────────────────────────────
+    // 기계번역은 성경 문맥을 몰라서 Ark를 "아크", Hosts를 "호스트"처럼 직역해 버린다.
+    // 그래서 번역기에 넘기기 "전에" 내가 만든 사전(인명·지명·용어·힛치콕)으로
+    // 고유명사와 신학 용어를 먼저 한글로 확정해 둔다. 그러면 번역기가 그 단어를 건드리지 못한다.
+    let _bibleTermPairs = null;
+    function buildBibleTermPairs() {
+      if (_bibleTermPairs) return _bibleTermPairs;
+      const map = {};   // 영문(소문자) -> 한글
+      const add = (en, ko) => {
+        if (!en || !ko) return;
+        en = String(en).trim();
+        ko = String(ko).trim();
+        // 너무 짧은 단어는 문장 속 일반 단어를 잘못 건드릴 수 있어 제외
+        if (en.length < 3 || !ko) return;
+        const k = en.toLowerCase();
+        if (!map[k]) map[k] = ko;
+      };
+      // 1) 인명 (name_en -> name_ko)
+      (personDatabase || []).forEach(p => {
+        if (p.pending_review) return;
+        add(p.name_en, p.name_ko);
+      });
+      // 2) 지명 (영문명 -> 한글명)
+      (placeDatabase || []).forEach(p => {
+        const ko = (p.name || '').split(/[(\[]/)[0].trim();
+        add(p.name_en || p.english_name, ko);
+      });
+      // 3) 용어 (term_en -> term_ko) — "언약궤", "만군의 여호와" 같은 신학 용어
+      (termDatabase || []).forEach(t => add(t.term_en, t.term_ko));
+      // 4) 성경 66권 이름
+      (BIBLE_BOOKS || []).forEach(b => { add(b.osis, b.name); });
+      // 긴 표현부터 바꿔야 "John"이 "1 John"을 잘못 자르지 않는다
+      _bibleTermPairs = Object.keys(map)
+        .sort((a, b) => b.length - a.length)
+        .map(en => ({
+          re: new RegExp('\\b' + en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+') + '\\b', 'gi'),
+          ko: map[en]
+        }));
+      return _bibleTermPairs;
+    }
+    function applyBibleTermsBeforeTranslate(text) {
+      let out = text;
+      buildBibleTermPairs().forEach(p => { out = out.replace(p.re, p.ko); });
+      return out;
+    }
     async function fetchGoogleTranslateDraft(text, sl = 'en', tl = 'ko') {
       const chunks = splitForTranslate(text);
       const results = [];
@@ -5499,8 +5724,8 @@
     const rawdictStrongEditingSet = new Set(); // 스트롱코드(hebrew_greek) 편집 중인 항목 추적 ("src:id")
     const RawDict = {
       autoTranslate: async function(src, id) {
-        const list = src === 'easton' ? eastonFullDict : smithFullDict;
-        const e = list.find(x => x.id === id);
+        const list = getRawDictList(src);
+        const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
         const textarea = document.getElementById(`rawdict-ko-${src}-${id}`);
         const btn = document.getElementById(`rawdict-tr-btn-${src}-${id}`);
@@ -5520,16 +5745,16 @@
         const input = document.getElementById(`rawdict-ko-${src}-${id}`);
         if (!input) return;
         const val = input.value.trim();
-        const list = src === 'easton' ? eastonFullDict : smithFullDict;
-        const e = list.find(x => x.id === id);
+        const list = getRawDictList(src);
+        const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
         if (!val) { showToast('붙여넣을 한글 설명을 입력하세요.', 'warn'); return; }
         e.definition_ko = val;
         rawdictEditingSet.delete(`${src}:${id}`);
-        const edits = src === 'easton' ? eastonLocalEdits : smithLocalEdits;
+        const edits = getRawDictEdits(src);
         edits[id] = Object.assign({}, edits[id], { definition_ko: true });
-        setLocalItem(src === 'easton' ? 'easton_local_edits' : 'smith_local_edits', edits);
-        setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
+        setLocalItem(rawDictStoreKeys(src).editsKey, edits);
+        setLocalItem(rawDictStoreKeys(src).storeKey, list);
         showToast(`'${e.term}' 한글 설명 저장됨`, 'success');
         renderRawDictResults(true);
       },
@@ -5542,8 +5767,8 @@
         renderRawDictResults(true);
       },
       copyDefinition: async function(src, id) {
-        const list = src === 'easton' ? eastonFullDict : smithFullDict;
-        const e = list.find(x => x.id === id);
+        const list = getRawDictList(src);
+        const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
         try {
           await navigator.clipboard.writeText(e.definition);
@@ -5569,23 +5794,23 @@
         renderRawDictResults(true);
       },
       saveStrong: function(src, id) {
-        const list = src === 'easton' ? eastonFullDict : smithFullDict;
-        const e = list.find(x => x.id === id);
+        const list = getRawDictList(src);
+        const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
         const input = document.getElementById(`rawdict-strong-input-${src}-${id}`);
         const val = input ? input.value.trim() : '';
         if (val) { e.hebrew_greek = val; } else { delete e.hebrew_greek; }
         rawdictStrongEditingSet.delete(`${src}:${id}`);
-        const edits = src === 'easton' ? eastonLocalEdits : smithLocalEdits;
+        const edits = getRawDictEdits(src);
         edits[id] = Object.assign({}, edits[id], { hebrew_greek: true });
-        setLocalItem(src === 'easton' ? 'easton_local_edits' : 'smith_local_edits', edits);
-        setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
+        setLocalItem(rawDictStoreKeys(src).editsKey, edits);
+        setLocalItem(rawDictStoreKeys(src).storeKey, list);
         showToast(`'${e.term}' 스트롱코드 저장됨`, 'success');
         renderRawDictResults(true);
       },
       saveMeta: function(src, id) {
-        const list = src === 'easton' ? eastonFullDict : smithFullDict;
-        const e = list.find(x => x.id === id);
+        const list = getRawDictList(src);
+        const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
         const termInput = document.getElementById(`rawdict-term-${src}-${id}`);
         const catSelect = document.getElementById(`rawdict-cat-${src}-${id}`);
@@ -5595,33 +5820,39 @@
         e.term = newTerm;
         if (newCat) { e.category = newCat; } else { delete e.category; }
         rawdictMetaEditingSet.delete(`${src}:${id}`);
-        const edits = src === 'easton' ? eastonLocalEdits : smithLocalEdits;
+        const edits = getRawDictEdits(src);
         edits[id] = Object.assign({}, edits[id], { term: true, category: true });
-        setLocalItem(src === 'easton' ? 'easton_local_edits' : 'smith_local_edits', edits);
-        setLocalItem(src === 'easton' ? 'easton_full_dict' : 'smith_full_dict', list);
+        setLocalItem(rawDictStoreKeys(src).editsKey, edits);
+        setLocalItem(rawDictStoreKeys(src).storeKey, list);
         showToast(`'${e.term}' 분류/표제어 저장됨`, 'success');
         renderRawDictResults(true);
       }
     };
+    // 사전별 출처 표기 (내보내기 파일에 기록)
+    const RAWDICT_SOURCE_TEXT = {
+      easton:    "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain)",
+      smith:     "Smith's Bible Dictionary (William Smith, 1863, Public Domain)",
+      hastings:  "Hastings Dictionary of the Bible (James Hastings, 1898, Public Domain)",
+      schaff:    "Schaff's Bible Dictionary (Philip Schaff, Public Domain)",
+      hitchcock: "Hitchcock's Bible Names Dictionary (Roswell D. Hitchcock, 1869, Public Domain)"
+    };
     async function exportRawDictJson(src) {
-      const list = src === 'easton' ? eastonFullDict : smithFullDict;
+      const list = getRawDictList(src);
       if (!list || list.length === 0) {
-        showToast(`내보낼 ${src === 'easton' ? 'Easton' : 'Smith'} 데이터가 없습니다.`, 'warn'); return;
+        showToast(`내보낼 ${getRawDictLabel(src)} 데이터가 없습니다.`, 'warn'); return;
       }
       const pkg = {
         version: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
         date: new Date().toISOString().slice(0, 10),
         count: list.length,
-        source: src === 'easton'
-          ? "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain)"
-          : "Smith's Bible Dictionary (William Smith, 1863, Public Domain)",
+        source: RAWDICT_SOURCE_TEXT[src] || getRawDictLabel(src),
         note: '요약(축약) 영문 정의 + 수동 입력된 한글 설명(definition_ko) 포함. 공개 퍼블릭 도메인 텍스트이므로 평문(비암호화)으로 GitHub에 업로드.',
         entries: list
       };
       const blob = new Blob([JSON.stringify(pkg, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = src === 'easton' ? 'easton_full.json' : 'smith_full.json';
+      a.download = `${src}_full.json`;
       a.click();
       URL.revokeObjectURL(a.href);
       showToast(`📥 ${a.download} 생성 완료 (${list.length}개) — GitHub에 업로드하세요`, 'success');
@@ -5639,14 +5870,8 @@
       if (backdrop) backdrop.onclick = closeRawDictModal;
       const searchInput = document.getElementById('rawdict-search-input');
       if (searchInput) searchInput.addEventListener('input', () => renderRawDictResults(true));
-      document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          rawdictSrc = btn.dataset.src;
-          renderRawDictResults(true);
-        });
-      });
+      // 사전 탭은 창을 열 때마다 새로 만들어지므로, 그때마다 다시 연결한다 (bindRawDictSrcTabs)
+      bindRawDictSrcTabs();
       document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(b => b.classList.remove('active'));
@@ -6590,8 +6815,9 @@
           const idx = {};
           (req.result || []).forEach(it => {
             (idx[it.bookId] = idx[it.bookId] || []).push({
-              id: it.id, name: it.name, bookId: it.bookId,
-              pageCount: it.pageCount, verseCount: Object.keys(it.verseMap || {}).length
+              id: it.id, name: it.name, bookId: it.bookId, type: it.type || 'pdf',
+              sourceType: it.sourceType || it.type || 'pdf',
+              pageCount: it.pageCount, verseCount: Object.keys(it.verseMap || it.versesText || {}).length
             });
           });
           commentaryIndexByBook = idx;
@@ -6680,13 +6906,129 @@
       const pdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       const verseMap = await extractVerseMapFromPdf(pdfDoc, bookObj, onProgress);
       const db = await openCommentaryDB();
-      const record = { name, bookId, pdfBlob: file, verseMap, pageCount: pdfDoc.numPages, createdAt: Date.now() };
+      const record = { name, bookId, type: 'pdf', sourceType: 'pdf', pdfBlob: file, verseMap, pageCount: pdfDoc.numPages, createdAt: Date.now() };
       return new Promise((resolve, reject) => {
         const tx = db.transaction('items', 'readwrite');
         const req = tx.objectStore('items').add(record);
         req.onsuccess = () => resolve(req.result);
         req.onerror = reject;
       });
+    }
+    // JSON 형식 주석 등록: entries의 각 항목 { chapter, verse, content }에서
+    // verse는 숫자(1) / 범위문자열("2-3") / 배열([1,2,3]) 형태를 모두 허용하며,
+    // 내부적으로는 절 단위로 펼쳐서 {"장:절": "내용"} 형태로 저장한다.
+    async function addJsonCommentaryItem(name, bookId, entries) {
+      const versesText = {};
+      entries.forEach(e => {
+        const ch = parseInt(e.chapter);
+        if (!ch) return;
+        const content = e.content || e.text || '';
+        let verses = [];
+        const v = e.verse;
+        if (Array.isArray(v)) {
+          verses = v.map(x => parseInt(x)).filter(Boolean);
+        } else if (typeof v === 'string' && v.includes('-')) {
+          const [a, b] = v.split('-').map(x => parseInt(x.trim()));
+          if (a && b) for (let i = a; i <= b; i++) verses.push(i);
+        } else if (v !== undefined && v !== null) {
+          const n = parseInt(v);
+          if (n) verses.push(n);
+        }
+        verses.forEach(vn => { versesText[`${ch}:${vn}`] = content; });
+      });
+      const db = await openCommentaryDB();
+      const record = { name, bookId, type: 'json', sourceType: 'json', versesText, createdAt: Date.now() };
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction('items', 'readwrite');
+        const req = tx.objectStore('items').add(record);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+      });
+    }
+    // 기존 성경 프로그램의 .cdb/.aab 주석 모듈을 읽어서 책별로 자동으로 나눠 등록한다.
+    // .cdb는 순수 SQLite 파일이고, .aab는 앞에 8바이트짜리 "AABB" 헤더가 붙은 SQLite 파일이다.
+    // 두 형식 모두 내부에는 Bible(book, chapter, verse, btext) 테이블로 저장되어 있다.
+    async function addCdbAabCommentary(name, arrayBuffer, onProgress) {
+      let bytes = new Uint8Array(arrayBuffer);
+      if (bytes.length >= 4 && bytes[0] === 0x41 && bytes[1] === 0x41 && bytes[2] === 0x42 && bytes[3] === 0x42) {
+        // "AABB" 매직 헤더 + 4바이트(버전/타입) = 총 8바이트를 건너뛴다
+        bytes = bytes.slice(8);
+      }
+      if (typeof window.SQL === 'undefined' || !window.SQL) {
+        throw new Error('SQLite 엔진이 아직 준비되지 않았습니다. 잠시 후 다시 시도해주세요.');
+      }
+      const sqldb = new window.SQL.Database(bytes);
+      let rows;
+      try {
+        const res = sqldb.exec('SELECT book, chapter, verse, btext FROM Bible ORDER BY book, chapter, verse');
+        rows = res[0] ? res[0].values : [];
+      } catch (err) {
+        sqldb.close();
+        throw new Error('Bible 테이블을 찾을 수 없습니다. 지원하지 않는 파일 형식일 수 있습니다: ' + err.message);
+      }
+      sqldb.close();
+      if (rows.length === 0) throw new Error('파일 안에서 주석 데이터를 찾지 못했습니다.');
+
+      // 책 번호별로 절 텍스트를 그룹핑
+      const byBook = {};
+      rows.forEach(([book, chapter, verse, btext]) => {
+        if (!byBook[book]) byBook[book] = {};
+        byBook[book][`${chapter}:${verse}`] = btext;
+      });
+
+      const db = await openCommentaryDB();
+      // 같은 이름으로 이미 등록된 주석이 있으면 중복 등록을 막는다
+      // (실수로 같은 파일을 두 번 올려서 목록이 두 배로 늘어나는 것을 방지)
+      const existing = await new Promise((resolve, reject) => {
+        const req = db.transaction('items', 'readonly').objectStore('items').getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = reject;
+      });
+      const alreadyCount = existing.filter(it => it.name && it.name.startsWith(name + ' ')).length;
+      if (alreadyCount > 0) {
+        const ok = confirm(`"${name}" 이름으로 이미 ${alreadyCount}권이 등록되어 있습니다.\n그래도 또 추가할까요? (중복으로 쌓입니다)`);
+        if (!ok) return 0;
+      }
+      const bookIds = Object.keys(byBook).map(Number).sort((a, b) => a - b);
+      let created = 0;
+      for (const bId of bookIds) {
+        const bookObj = BIBLE_BOOKS.find(b => b.id === bId);
+        const bookName = bookObj ? bookObj.name : `책${bId}`;
+        const record = {
+          name: `${name} ${bookName}`,
+          bookId: bId,
+          type: 'json',
+          sourceType: 'cdb',
+          versesText: byBook[bId],
+          createdAt: Date.now()
+        };
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction('items', 'readwrite');
+          const req = tx.objectStore('items').add(record);
+          req.onsuccess = resolve;
+          req.onerror = reject;
+        });
+        created++;
+        if (onProgress) onProgress(created, bookIds.length, bookName);
+      }
+      return created;
+    }
+    // JSON 주석에서 특정 절의 텍스트를 찾는다 (정확히 일치하는 절이 없으면
+    // 같은 장에서 그 절 이전 가장 가까운 절의 내용으로 대체)
+    function findTextForVerse(item, chapter, vNum) {
+      const vt = item.versesText || {};
+      const key = `${chapter}:${vNum}`;
+      if (vt[key]) return vt[key];
+      let best = null, firstInChapter = null;
+      Object.keys(vt).forEach(k => {
+        const [c, v] = k.split(':').map(Number);
+        if (c !== chapter) return;
+        if (v <= vNum && (best === null || v > best.v)) best = { v, text: vt[k] };
+        if (firstInChapter === null || v < firstInChapter.v) firstInChapter = { v, text: vt[k] };
+      });
+      if (best) return best.text;
+      if (firstInChapter) return firstInChapter.text;
+      return null;
     }
     function findPageForVerse(item, chapter, vNum) {
       const verseMap = item.verseMap || {};
@@ -6810,12 +7152,25 @@
           const ch = inp.dataset.chapter;
           const val = parseInt(inp.value);
           item.chapterMap = item.chapterMap || {};
-          if (val) { item.chapterMap[ch] = val; } else { delete item.chapterMap[ch]; }
+          if (val) {
+            item.chapterMap[ch] = val;
+            // 수동으로 장 페이지를 입력하면, 자동 스캔이 그 장에 남겨둔 절 단위 매핑을 지워서
+            // 수동 입력이 실제로 우선 적용되게 한다(절 매핑이 남아있으면 그게 먼저 쓰여서 무시되는 문제 방지)
+            if (ch !== 'intro' && item.verseMap) {
+              const chNum = parseInt(ch);
+              Object.keys(item.verseMap).forEach(k => {
+                if (parseInt(k.split(':')[0]) === chNum) delete item.verseMap[k];
+              });
+            }
+          } else {
+            delete item.chapterMap[ch];
+          }
           const checkEl = listEl.querySelector(`.chapter-map-check[data-chapter="${ch}"]`);
           if (checkEl) checkEl.textContent = val ? '●' : '○';
           updateChapterMapProgress(item, total);
           try {
             await updateCommentaryItemInDb(item);
+            showToast(val ? `${ch === 'intro' ? '서론' : ch + '장'} → ${val}페이지로 저장됨 (자동 매핑 있었다면 덮어씀)` : '삭제됨', 'success');
           } catch (err) {
             console.error('[장 매핑 저장 오류]', err);
             showToast('저장 실패: ' + (err.message || err), 'error');
@@ -6828,28 +7183,356 @@
       document.getElementById('chapter-map-modal-backdrop').style.display = 'none';
       refreshCommentaryIndex();
     }
+    function setPdfControlsVisible(visible) {
+      document.querySelectorAll('.pdf-only-control').forEach(el => {
+        el.style.display = visible ? '' : 'none';
+      });
+      // 번역·한글책명은 텍스트 주석에서만 쓸 수 있으므로 PDF일 때는 반대로 숨긴다
+      document.querySelectorAll('.text-only-control').forEach(el => {
+        el.style.display = visible ? 'none' : '';
+      });
+    }
+    // ── PDF 필기(주석 위에 펜/형광펜/메모) 엔진 ───────────────────────────────
+    // 좌표는 화면 픽셀이 아니라 "PDF 원본 기준 비율(0~1)"로 저장한다.
+    // 그래야 확대/축소하거나 다른 기기(아이패드 등)에서 열어도 필기가 같은 자리에 찍힌다.
+    const InkEngine = {
+      tool: 'off',
+      color: '#e11d48',
+      width: 4,
+      strokes: [],          // 현재 페이지 획들
+      notes: [],            // 현재 페이지 메모들
+      drawing: false,
+      penSeen: false,       // S펜·애플펜슬이 한 번이라도 쓰였는지 (이후 손가락은 스크롤 전용)
+      drawPointerId: null,  // 지금 그리는 중인 포인터 (다른 손가락이 끼어들지 못하게)
+      current: null,
+      _saveTimer: null,
+
+      key(itemId, page) { return `ink_${itemId}_${page}`; },
+
+      async load(itemId, page) {
+        this.strokes = [];
+        this.notes = [];
+        try {
+          const item = await getCommentaryItem(itemId);
+          const all = (item && item.inkData) || {};
+          const data = all[page] || {};
+          this.strokes = data.strokes || [];
+          this.notes = data.notes || [];
+        } catch (err) {
+          console.error('[InkEngine.load 오류]', err);
+        }
+        this.redraw();
+        this.renderNotes();
+      },
+
+      // 저장은 연타로 호출돼도 부담 없도록 잠깐 모아서 한 번만 기록한다
+      scheduleSave() {
+        clearTimeout(this._saveTimer);
+        this._saveTimer = setTimeout(() => this.save(), 400);
+      },
+
+      async save() {
+        const item = Commentary.currentItem;
+        if (!item) return;
+        const page = Commentary.currentPage;
+        try {
+          const full = await getCommentaryItem(item.id);
+          if (!full) return;
+          full.inkData = full.inkData || {};
+          if (this.strokes.length === 0 && this.notes.length === 0) {
+            delete full.inkData[page];
+          } else {
+            full.inkData[page] = { strokes: this.strokes, notes: this.notes };
+          }
+          await updateCommentaryItemInDb(full);
+          Commentary.currentItem = full;
+          this.updateStatus();
+        } catch (err) {
+          console.error('[InkEngine.save 오류]', err);
+        }
+      },
+
+      resizeToCanvas() {
+        const pdf = document.getElementById('commentary-pdf-canvas');
+        const ink = document.getElementById('commentary-ink-canvas');
+        if (!pdf || !ink) return;
+        ink.width = pdf.width;
+        ink.height = pdf.height;
+        ink.style.width = pdf.style.width;
+        ink.style.height = pdf.style.height;
+      },
+
+      redraw() {
+        const ink = document.getElementById('commentary-ink-canvas');
+        if (!ink) return;
+        const ctx = ink.getContext('2d');
+        ctx.clearRect(0, 0, ink.width, ink.height);
+        this.strokes.forEach(s => this.drawStroke(ctx, s, ink.width, ink.height));
+        if (this.current) this.drawStroke(ctx, this.current, ink.width, ink.height);
+      },
+
+      drawStroke(ctx, stroke, w, h) {
+        if (!stroke.points || stroke.points.length === 0) return;
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (stroke.type === 'highlight') {
+          ctx.globalAlpha = 0.35;
+          ctx.lineWidth = stroke.width * 3;
+        } else {
+          ctx.globalAlpha = 1;
+          ctx.lineWidth = stroke.width;
+        }
+        ctx.strokeStyle = stroke.color;
+        ctx.beginPath();
+        stroke.points.forEach((p, i) => {
+          const x = p[0] * w, y = p[1] * h;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        ctx.restore();
+      },
+
+      // 화면 좌표 → 0~1 비율 좌표
+      toRel(e, canvas) {
+        const r = canvas.getBoundingClientRect();
+        return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height];
+      },
+
+      setTool(tool) {
+        this.tool = tool;
+        document.querySelectorAll('.ink-tool-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.tool === tool);
+        });
+        const ink = document.getElementById('commentary-ink-canvas');
+        if (ink) {
+          // '보기' 모드일 때는 필기 레이어가 터치를 가로채지 않게 해서 스크롤·확대가 정상 동작하게 한다
+          ink.style.pointerEvents = tool === 'off' ? 'none' : 'auto';
+          ink.style.cursor = tool === 'eraser' ? 'cell' : tool === 'note' ? 'copy' : 'crosshair';
+        }
+        this.updateStatus();
+      },
+
+      updateStatus() {
+        const el = document.getElementById('ink-status');
+        if (!el) return;
+        const n = this.strokes.length, m = this.notes.length;
+        const counts = (n || m) ? `획 ${n}개${m ? ` · 메모 ${m}개` : ''}` : '';
+        // 펜이 감지되면 손가락은 스크롤 전용이 되므로, 왜 손으로 안 그려지는지 알 수 있게 표시한다
+        const penNote = this.penSeen ? '🖊 펜 전용 (손가락=스크롤)' : '';
+        el.textContent = [counts, penNote].filter(Boolean).join('  ·  ');
+      },
+
+      undo() {
+        if (this.strokes.length === 0) { showToast('되돌릴 필기가 없습니다.', 'info'); return; }
+        this.strokes.pop();
+        this.redraw();
+        this.scheduleSave();
+      },
+
+      clearPage() {
+        if (this.strokes.length === 0 && this.notes.length === 0) { showToast('이 페이지에는 필기가 없습니다.', 'info'); return; }
+        if (!confirm('이 페이지의 필기와 메모를 모두 지울까요?')) return;
+        this.strokes = [];
+        this.notes = [];
+        this.redraw();
+        this.renderNotes();
+        this.scheduleSave();
+        showToast('이 페이지의 필기를 지웠습니다.', 'success');
+      },
+
+      // 지우개: 터치한 지점 근처를 지나는 획을 통째로 지운다
+      eraseAt(rel) {
+        const ink = document.getElementById('commentary-ink-canvas');
+        const tolX = 10 / ink.width, tolY = 10 / ink.height;
+        const before = this.strokes.length;
+        this.strokes = this.strokes.filter(s =>
+          !s.points.some(p => Math.abs(p[0] - rel[0]) < tolX && Math.abs(p[1] - rel[1]) < tolY)
+        );
+        if (this.strokes.length !== before) {
+          this.redraw();
+          this.scheduleSave();
+        }
+      },
+
+      renderNotes() {
+        const layer = document.getElementById('commentary-notes-layer');
+        if (!layer) return;
+        layer.innerHTML = '';
+        this.notes.forEach((note, idx) => {
+          const el = document.createElement('div');
+          el.className = 'ink-note';
+          el.style.left = (note.x * 100) + '%';
+          el.style.top = (note.y * 100) + '%';
+          el.textContent = note.text;
+          const del = document.createElement('button');
+          del.className = 'ink-note-del';
+          del.textContent = '✕';
+          del.title = '메모 삭제';
+          del.onclick = (ev) => {
+            ev.stopPropagation();
+            this.notes.splice(idx, 1);
+            this.renderNotes();
+            this.scheduleSave();
+          };
+          el.appendChild(del);
+          el.ondblclick = (ev) => {
+            ev.stopPropagation();
+            const t = prompt('메모 내용', note.text);
+            if (t !== null) {
+              note.text = t.trim();
+              if (!note.text) this.notes.splice(idx, 1);
+              this.renderNotes();
+              this.scheduleSave();
+            }
+          };
+          // 메모 끌어서 위치 옮기기
+          el.onpointerdown = (ev) => {
+            if (ev.target === del) return;
+            ev.stopPropagation();
+            const layerRect = layer.getBoundingClientRect();
+            const move = (mv) => {
+              note.x = Math.max(0, Math.min(1, (mv.clientX - layerRect.left) / layerRect.width));
+              note.y = Math.max(0, Math.min(1, (mv.clientY - layerRect.top) / layerRect.height));
+              el.style.left = (note.x * 100) + '%';
+              el.style.top = (note.y * 100) + '%';
+            };
+            const up = () => {
+              window.removeEventListener('pointermove', move);
+              window.removeEventListener('pointerup', up);
+              this.scheduleSave();
+            };
+            window.addEventListener('pointermove', move);
+            window.addEventListener('pointerup', up);
+          };
+          layer.appendChild(el);
+        });
+        this.updateStatus();
+      },
+
+      attach() {
+        const ink = document.getElementById('commentary-ink-canvas');
+        if (!ink || ink.dataset.wired) return;
+        ink.dataset.wired = '1';
+
+        ink.addEventListener('pointerdown', (e) => {
+          if (this.tool === 'off') return;
+
+          // [스타일러스 우선 + 손바닥 무시]
+          // 갤럭시탭 S펜과 아이패드 애플펜슬은 pointerType이 'pen'으로 들어온다.
+          // 한 번이라도 펜이 감지되면 그 뒤로는 손가락 입력을 필기로 받지 않는다.
+          // → 필기 중 손바닥이 화면에 닿아도 선이 그어지지 않고, 손가락으로는 스크롤이 그대로 된다.
+          if (e.pointerType === 'pen') {
+            if (!this.penSeen) {
+              this.penSeen = true;
+              this.updateStatus();
+              const fb = document.getElementById('btn-ink-allow-finger');
+              if (fb) fb.style.display = '';
+            }
+          } else if (this.penSeen && e.pointerType === 'touch') {
+            return; // 펜 사용자가 손가락/손바닥으로 건드린 것 → 필기하지 않음
+          }
+          // 마우스 오른쪽·가운데 버튼으로는 그리지 않는다
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+          e.preventDefault();
+          const rel = this.toRel(e, ink);
+
+          if (this.tool === 'note') {
+            const t = prompt('메모 내용을 입력하세요');
+            if (t && t.trim()) {
+              this.notes.push({ x: rel[0], y: rel[1], text: t.trim() });
+              this.renderNotes();
+              this.scheduleSave();
+            }
+            return;
+          }
+          if (this.tool === 'eraser') {
+            this.drawing = true;
+            this.drawPointerId = e.pointerId;
+            this.eraseAt(rel);
+            ink.setPointerCapture(e.pointerId);
+            return;
+          }
+          this.drawing = true;
+          this.drawPointerId = e.pointerId;
+          this.current = {
+            type: this.tool,
+            color: this.tool === 'highlight' ? (document.getElementById('ink-color').value) : this.color,
+            width: this.width,
+            points: [rel]
+          };
+          ink.setPointerCapture(e.pointerId);
+        });
+
+        ink.addEventListener('pointermove', (e) => {
+          if (!this.drawing) return;
+          // 그리기 시작한 그 포인터의 움직임만 반영한다
+          // (갤럭시탭에서 펜으로 그리는 동안 손바닥이 닿아 생기는 엉뚱한 선을 막음)
+          if (this.drawPointerId !== null && e.pointerId !== this.drawPointerId) return;
+          e.preventDefault();
+          const rel = this.toRel(e, ink);
+          if (this.tool === 'eraser') { this.eraseAt(rel); return; }
+          if (!this.current) return;
+          this.current.points.push(rel);
+          this.redraw();
+        });
+
+        const finish = (e) => {
+          if (!this.drawing) return;
+          if (e && this.drawPointerId !== null && e.pointerId !== this.drawPointerId) return;
+          this.drawing = false;
+          this.drawPointerId = null;
+          if (this.current && this.current.points.length > 1) {
+            this.strokes.push(this.current);
+            this.scheduleSave();
+          }
+          this.current = null;
+          this.redraw();
+        };
+        ink.addEventListener('pointerup', finish);
+        ink.addEventListener('pointercancel', finish);
+        ink.addEventListener('pointerleave', finish);
+      }
+    };
+
     const Commentary = {
       currentPdfDoc: null,
+      _renderTask: null,   // 진행 중인 PDF 그리기 작업 (새 요청 시 취소용)
+      _renderToken: 0,     // 요청 순번 — 더 새로운 요청이 오면 이전 요청은 스스로 중단
       currentItem: null,
       currentPage: 1,
       baseScale: null,
       zoomFactor: 1,
       async openViewer(itemId, pageNum) {
         try {
+          const item = await getCommentaryItem(itemId);
+          if (!item) { showToast('주석을 찾을 수 없습니다.', 'error'); return; }
+          if (item.type === 'json') {
+            // JSON/CDB 주석은 텍스트 뷰로 보여준다.
+            // 장·절은 왼쪽 성경 본문에서 지금 보고 있는 위치를 기준으로 한다.
+            // (수동 매핑 입력칸은 PDF 전용이라 JSON일 때는 숨겨져 있어 값이 비어 있음)
+            const chSel = document.getElementById('chapter-select');
+            const ch = (chSel && parseInt(chSel.value)) || 1;
+            const v = parseInt(document.getElementById('manual-map-verse').value) || 1;
+            await this.showTextViewer(itemId, item, ch, v);
+            return;
+          }
           if (typeof pdfjsLib === 'undefined' || !pdfjsLib) {
             showToast('PDF 엔진(pdf.js)이 로드되지 않았습니다. 네트워크/방화벽 문제일 수 있습니다.', 'error');
             console.error('[Commentary] pdfjsLib이 정의되지 않음 — pdf.min.js 로드 실패 가능성');
             return;
           }
-          const item = await getCommentaryItem(itemId);
-          if (!item) { showToast('주석을 찾을 수 없습니다.', 'error'); return; }
           this.currentItem = item;
+          setPdfControlsVisible(true);
           document.getElementById('commentary-empty-state').style.display = 'none';
+          document.getElementById('commentary-text-view').style.display = 'none';
           document.getElementById('commentary-pdf-wrap').style.display = 'flex';
           const arrayBuffer = await item.pdfBlob.arrayBuffer();
           this.currentPdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
           this.baseScale = null;
           this.zoomFactor = 1;
+          InkEngine.setTool('off'); // 새 PDF를 열면 항상 '보기' 모드로 시작 (스크롤이 먼저 되도록)
           document.getElementById('commentary-zoom-level').textContent = '100%';
           document.getElementById('commentary-page-jump').max = this.currentPdfDoc.numPages;
           await this.renderPage(pageNum || 1);
@@ -6862,12 +7545,64 @@
           showToast('주석 PDF를 여는 중 오류: ' + (err.message || err), 'error');
         }
       },
+      async showTextViewer(itemId, item, chapter, vNum) {
+        try {
+          this.currentItem = item;
+          this.currentPdfDoc = null;
+          setPdfControlsVisible(false);
+          document.getElementById('commentary-empty-state').style.display = 'none';
+          document.getElementById('commentary-pdf-wrap').style.display = 'none';
+          document.getElementById('commentary-text-view').style.display = 'block';
+          const bookObj = BIBLE_BOOKS.find(b => b.id === item.bookId);
+          const text = findTextForVerse(item, chapter, vNum);
+          document.getElementById('commentary-text-ref').textContent = `${bookObj ? bookObj.name : ''} ${chapter}:${vNum}`;
+          const contentEl = document.getElementById('commentary-text-content');
+          if (text) {
+            // 1) HTML 서식(굵게·색상)은 걷어내고 순수 텍스트 + 실제 줄바꿈으로 만든다
+            //    (<br>만으로는 문단 구분이 화면에 안 나타나는 문제가 있어 줄바꿈 문자를 쓴다)
+            let plain = text.replace(/<br\s*\/?>/gi, '\n\n');
+            plain = plain.replace(/<[^>]+>/g, '');
+            plain = plain.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+            plain = plain.replace(/\n{3,}/g, '\n\n').trim();
+            // 2) 영문 주석이면 성경책 이름을 한글로 바꿔준다 (설정에 따라, 기본 켜짐)
+            if (localStorage.getItem('commentary_eng_to_kor') !== 'off') {
+              plain = englishBookNamesToKorean(plain);
+            }
+            // 3) 본문에 나오는 성경구절(눅 12:6 등)을 눌러서 이동할 수 있게 링크로 바꾼다.
+            //    escHtml로 먼저 안전하게 처리한 뒤 링크를 다는 순서라 태그 주입 위험이 없다.
+            contentEl.style.whiteSpace = 'pre-wrap';
+            contentEl.innerHTML = linkifyVerseRefs(escHtml(plain));
+          } else {
+            contentEl.textContent = '(이 절에 해당하는 주석 내용을 찾지 못했습니다.)';
+          }
+          const sel = document.getElementById('commentary-select');
+          if (sel) sel.value = String(itemId);
+          populateChapterJumpForItem(item);
+          localStorage.setItem(`commentary_last_item_book_${item.bookId}`, String(itemId));
+        } catch (err) {
+          console.error('[Commentary.showTextViewer 오류]', err);
+          showToast('주석 텍스트 표시 중 오류: ' + (err.message || err), 'error');
+        }
+      },
       async renderPage(pageNum) {
         try {
           if (!this.currentPdfDoc) return;
           pageNum = Math.max(1, Math.min(pageNum, this.currentPdfDoc.numPages));
           this.currentPage = pageNum;
+          // 이 요청의 순번을 기록해 둔다. 도중에 더 새로운 요청이 들어오면 이 요청은 스스로 물러난다.
+          const myToken = (this._renderToken || 0) + 1;
+          this._renderToken = myToken;
+          // 이전 그리기가 아직 진행 중이면 취소하고, "완전히 끝날 때까지" 기다린다.
+          // (cancel()은 즉시 끝나지 않으므로 기다리지 않으면 같은 캔버스에 두 번 그리려다 오류가 났음)
+          if (this._renderTask) {
+            const prev = this._renderTask;
+            this._renderTask = null;
+            try { prev.cancel(); } catch (e) {}
+            try { await prev.promise; } catch (e) {} // 취소로 인한 오류는 정상이므로 무시
+          }
+          if (this._renderToken !== myToken) return; // 기다리는 사이 더 새 요청이 들어옴
           const page = await this.currentPdfDoc.getPage(pageNum);
+          if (this._renderToken !== myToken) return;
           const canvas = document.getElementById('commentary-pdf-canvas');
           const wrap = document.getElementById('commentary-pdf-wrap');
           const unscaled = page.getViewport({ scale: 1 });
@@ -6878,15 +7613,33 @@
             const targetWidth = Math.max(280, Math.min(wrap.clientWidth - 28, 900));
             this.baseScale = targetWidth / unscaled.width;
           }
-          const viewport = page.getViewport({ scale: this.baseScale * this.zoomFactor });
+          const finalScale = this.baseScale * this.zoomFactor;
+          const viewport = page.getViewport({ scale: finalScale });
           canvas.width = viewport.width;
           canvas.height = viewport.height;
+          canvas.style.width = viewport.width + 'px';
+          canvas.style.height = viewport.height + 'px';
           const ctx = canvas.getContext('2d');
-          await page.render({ canvasContext: ctx, viewport }).promise;
+          const task = page.render({ canvasContext: ctx, viewport });
+          this._renderTask = task;
+          try {
+            await task.promise;
+          } catch (e) {
+            // 새 페이지 요청으로 취소된 경우는 정상 동작이므로 조용히 무시한다
+            if (e && e.name === 'RenderingCancelledException') return;
+            throw e;
+          } finally {
+            if (this._renderTask === task) this._renderTask = null;
+          }
+          if (this._renderToken !== myToken) return;
           document.getElementById('commentary-page-indicator').textContent = `${pageNum} / ${this.currentPdfDoc.numPages}`;
           document.getElementById('commentary-page-jump').value = pageNum;
           const manualPageSpan = document.getElementById('manual-map-current-page');
           if (manualPageSpan) manualPageSpan.textContent = pageNum;
+          // 페이지가 그려진 뒤 필기 레이어 크기를 맞추고 이 페이지의 필기를 불러온다
+          InkEngine.resizeToCanvas();
+          InkEngine.attach();
+          if (this.currentItem) await InkEngine.load(this.currentItem.id, pageNum);
         } catch (err) {
           console.error('[Commentary.renderPage 오류]', err);
           showToast('페이지 렌더링 오류: ' + (err.message || err), 'error');
@@ -6918,49 +7671,126 @@
           showToast('맞춤 오류: ' + (err.message || err), 'error');
         }
       },
-      async jumpToVerse(bookId, chapter, vNum) {
+      async jumpToVerse(bookId, chapter, vNum, silent) {
         try {
           const items = commentaryIndexByBook[bookId] || [];
-          if (items.length === 0) { openCommentaryModal(bookId); return; }
+          if (items.length === 0) { if (!silent) openCommentaryModal(bookId); return; }
           const lastId = parseInt(localStorage.getItem(`commentary_last_item_book_${bookId}`) || '0');
           const item = items.find(it => it.id === lastId) || items[0];
           setRightPanelMode('commentary');
           populateCommentarySelectForBook(bookId);
           const fullItem = await getCommentaryItem(item.id);
-          if (!fullItem) { showToast('저장된 주석 데이터를 찾을 수 없습니다. 다시 등록해주세요.', 'error'); return; }
-          const page = findPageForVerse(fullItem, chapter, vNum);
-          console.log(`[Commentary.jumpToVerse] ${chapter}:${vNum} -> page ${page} (item: ${fullItem.name}, 매핑된 절 수: ${Object.keys(fullItem.verseMap || {}).length})`);
-          await this.openViewer(item.id, page);
+          if (!fullItem) { if (!silent) showToast('저장된 주석 데이터를 찾을 수 없습니다. 다시 등록해주세요.', 'error'); return; }
           const chEl = document.getElementById('manual-map-chapter');
           const vEl = document.getElementById('manual-map-verse');
           if (chEl) chEl.value = chapter;
           if (vEl) vEl.value = vNum;
-          showToast(`${chapter}:${vNum} 절 → ${page}페이지로 이동`, 'success');
+          if (fullItem.type === 'json') {
+            this.showTextViewer(item.id, fullItem, chapter, vNum);
+            if (!silent) showToast(`${chapter}:${vNum} 절 주석 표시`, 'success');
+          } else {
+            const page = findPageForVerse(fullItem, chapter, vNum);
+            await this.openViewer(item.id, page);
+            if (!silent) showToast(`${chapter}:${vNum} 절 → ${page}페이지로 이동`, 'success');
+          }
         } catch (err) {
           console.error('[Commentary.jumpToVerse 오류]', err);
-          showToast('주석 이동 중 오류: ' + (err.message || err), 'error');
+          if (!silent) showToast('주석 이동 중 오류: ' + (err.message || err), 'error');
         }
       }
     };
+    // 어떤 항목이 어떤 주석에 속하는지 판단할 때 쓰는 이름
+    // (CDB/AAB는 "매튜헨리 창세기"처럼 "주석이름 + 책이름"으로 저장되므로 책이름을 떼어낸다)
+    function commentaryGroupName(it) {
+      const bookObj = BIBLE_BOOKS.find(b => b.id === it.bookId);
+      if (bookObj && it.name.endsWith(' ' + bookObj.name)) {
+        return it.name.slice(0, -(bookObj.name.length + 1));
+      }
+      return it.name;
+    }
+    const commentaryTreeOpen = {}; // 어떤 그룹이 펼쳐져 있는지 기억
+    function toggleCommentaryGroup(key) {
+      commentaryTreeOpen[key] = !commentaryTreeOpen[key];
+      renderCommentaryList();
+    }
+    async function deleteCommentaryGroup(key) {
+      const parts = key.split('|');
+      const sourceType = parts[0], groupName = parts.slice(1).join('|');
+      const items = Object.values(commentaryIndexByBook).flat()
+        .filter(it => (it.sourceType || 'pdf') === sourceType && commentaryGroupName(it) === groupName);
+      if (items.length === 0) return;
+      if (!confirm(`"${groupName}" 주석 ${items.length}개를 모두 삭제할까요?\n(되돌릴 수 없습니다)`)) return;
+      for (const it of items) await deleteCommentaryItem(it.id);
+      await refreshCommentaryIndex();
+      renderCommentaryList();
+      showToast(`"${groupName}" ${items.length}개를 삭제했습니다.`, 'success');
+    }
     function renderCommentaryList() {
       const listEl = document.getElementById('commentary-list');
-      const allItems = Object.values(commentaryIndexByBook).flat();
+      const searchInput = document.getElementById('commentary-list-search');
+      const query = (searchInput && searchInput.value || '').trim().toLowerCase();
+      let allItems = Object.values(commentaryIndexByBook).flat();
+      if (query) {
+        allItems = allItems.filter(it => {
+          const bookObj = BIBLE_BOOKS.find(b => b.id === it.bookId);
+          const haystack = `${it.name} ${bookObj ? bookObj.name : ''}`.toLowerCase();
+          return haystack.includes(query);
+        });
+      }
       if (allItems.length === 0) {
-        listEl.innerHTML = `<div style="text-align:center;padding:24px;color:#94a3b8;font-size:0.85em">등록된 주석이 없습니다.</div>`;
+        listEl.innerHTML = `<div style="text-align:center;padding:24px;color:#94a3b8;font-size:0.85em">${query ? '검색 결과가 없습니다.' : '등록된 주석이 없습니다.'}</div>`;
         return;
       }
-      listEl.innerHTML = allItems.map(it => {
+      // 한 권짜리 항목(펼쳤을 때 보이는 자식 줄)
+      const renderChild = it => {
         const bookObj = BIBLE_BOOKS.find(b => b.id === it.bookId);
+        const extra = it.sourceType === 'pdf' ? `${it.pageCount}페이지 · ` : '';
         return `
-          <div style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #f1f5f9">
+          <div style="display:flex;align-items:center;gap:8px;padding:7px 16px 7px 38px;border-bottom:1px solid #f8fafc;background:#fff">
             <div style="flex:1;min-width:0">
-              <div style="font-weight:600;font-size:0.9em;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(it.name)}</div>
-              <div style="font-size:0.75em;color:#64748b">${bookObj ? escHtml(bookObj.name) : '?'} · ${it.pageCount}페이지 · 절 매핑 ${it.verseCount}개</div>
+              <div style="font-size:0.85em;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${bookObj ? escHtml(bookObj.name) : escHtml(it.name)}</div>
+              <div style="font-size:0.72em;color:#94a3b8">${extra}절 ${it.verseCount}개</div>
             </div>
-            <button onclick="jumpToBookAndShowCommentary(${it.bookId},${it.id})" style="font-size:0.78em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:4px 10px;cursor:pointer;white-space:nowrap">보기</button>
-            <button onclick="deleteCommentaryAndRefresh(${it.id})" style="font-size:0.78em;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:4px;padding:4px 8px;cursor:pointer">삭제</button>
+            <button onclick="jumpToBookAndShowCommentary(${it.bookId},${it.id})" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer;white-space:nowrap">보기</button>
+            <button onclick="deleteCommentaryAndRefresh(${it.id})" style="font-size:0.75em;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:4px;padding:3px 7px;cursor:pointer">삭제</button>
           </div>`;
-      }).join('');
+      };
+      const typeMeta = {
+        pdf:  { label: '📄 PDF', color: '#1d4ed8' },
+        json: { label: '📋 JSON', color: '#0f766e' },
+        cdb:  { label: '📚 CDB/AAB', color: '#b45309' }
+      };
+      let html = '';
+      ['pdf', 'json', 'cdb'].forEach(type => {
+        const typed = allItems.filter(it => (it.sourceType || 'pdf') === type);
+        if (typed.length === 0) return;
+        const meta = typeMeta[type];
+        html += `<div style="padding:8px 16px 5px;font-size:0.76em;font-weight:700;color:${meta.color};background:#f8fafc;border-bottom:1px solid #e2e8f0">${meta.label} · ${typed.length}개</div>`;
+        // 같은 주석 이름끼리 묶는다
+        const groups = {};
+        typed.forEach(it => {
+          const g = commentaryGroupName(it);
+          (groups[g] = groups[g] || []).push(it);
+        });
+        Object.keys(groups).sort().forEach(gName => {
+          const items = groups[gName].sort((a, b) => a.bookId - b.bookId);
+          const key = `${type}|${gName}`;
+          // 검색 중에는 결과를 바로 볼 수 있게 자동으로 펼친다
+          const open = query ? true : !!commentaryTreeOpen[key];
+          const totalVerses = items.reduce((s, it) => s + (it.verseCount || 0), 0);
+          html += `
+            <div style="display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #f1f5f9;background:#fff;cursor:pointer" onclick="toggleCommentaryGroup('${escHtml(key).replace(/'/g, "\\'")}')">
+              <span style="width:14px;color:#94a3b8;font-size:0.8em;flex-shrink:0">${open ? '▼' : '▶'}</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:600;font-size:0.9em;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(gName)}</div>
+                <div style="font-size:0.74em;color:#64748b">${items.length}권 · 절 ${totalVerses.toLocaleString()}개</div>
+              </div>
+              <button onclick="event.stopPropagation();deleteCommentaryGroup('${escHtml(key).replace(/'/g, "\\'")}')" style="font-size:0.75em;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:4px;padding:3px 7px;cursor:pointer;white-space:nowrap" title="이 주석 전체 삭제">전체삭제</button>
+            </div>`;
+          if (open) html += items.map(renderChild).join('');
+        });
+      });
+      listEl.innerHTML = html;
     }
     async function jumpToBookAndShowCommentary(bookId, itemId) {
       closeCommentaryModal();
@@ -6979,12 +7809,107 @@
       renderCommentaryList();
       showToast('주석을 삭제했습니다.', 'success');
     }
+    // [백업 대비] 브라우저 저장소(IndexedDB)에만 있는 주석은 캐시를 지우면 사라지므로,
+    // 텍스트 주석(JSON·CDB)을 파일로 내보내고 다시 불러올 수 있게 한다.
+    // PDF는 용량이 커서 제외 — PDF는 원본 파일을 따로 보관하는 것을 권장.
+    async function exportTextCommentaries() {
+      const db = await openCommentaryDB();
+      const all = await new Promise((resolve, reject) => {
+        const req = db.transaction('items', 'readonly').objectStore('items').getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = reject;
+      });
+      const textItems = all.filter(it => it.type === 'json').map(it => ({
+        name: it.name, bookId: it.bookId, type: 'json',
+        sourceType: it.sourceType || 'json', versesText: it.versesText, createdAt: it.createdAt
+      }));
+      // PDF 본체는 용량이 커서 못 담지만, PDF 위에 한 필기·메모는 반드시 백업한다
+      // (필기는 직접 손으로 남긴 소중한 작업물이므로 유실되면 복구가 불가능)
+      const pdfInk = all.filter(it => it.type !== 'json' && it.inkData && Object.keys(it.inkData).length > 0)
+        .map(it => ({ name: it.name, bookId: it.bookId, inkData: it.inkData }));
+      if (textItems.length === 0 && pdfInk.length === 0) { showToast('내보낼 주석이 없습니다.', 'warn'); return; }
+      const pdfCount = all.length - textItems.length;
+      const blob = new Blob([JSON.stringify({ app: 'BibleCommentaryBackup', version: 2, items: textItems, pdfInk })], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `주석백업_${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast(`텍스트 주석 ${textItems.length}개` + (pdfInk.length ? ` + PDF 필기 ${pdfInk.length}개` : '') + '를 내보냈습니다.'
+        + (pdfCount ? ` (PDF 원본 ${pdfCount}개는 따로 보관하세요)` : ''), 'success');
+    }
+    async function importTextCommentaries(file) {
+      const parsed = JSON.parse(await file.text());
+      const items = parsed.items || parsed;
+      if (!Array.isArray(items)) throw new Error('올바른 주석 백업 파일이 아닙니다.');
+      const db = await openCommentaryDB();
+      let n = 0;
+      for (const it of items) {
+        if (!it || !it.versesText) continue;
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction('items', 'readwrite');
+          const req = tx.objectStore('items').add({
+            name: it.name, bookId: it.bookId, type: 'json',
+            sourceType: it.sourceType || 'json', versesText: it.versesText,
+            createdAt: it.createdAt || Date.now()
+          });
+          req.onsuccess = resolve;
+          req.onerror = reject;
+        });
+        n++;
+      }
+      // PDF 필기 복원: PDF 본체는 백업에 없으므로, 같은 이름으로 다시 등록해둔 PDF를 찾아 필기만 붙여준다
+      let inkRestored = 0, inkSkipped = 0;
+      if (Array.isArray(parsed.pdfInk) && parsed.pdfInk.length > 0) {
+        const current = await new Promise((resolve, reject) => {
+          const req = db.transaction('items', 'readonly').objectStore('items').getAll();
+          req.onsuccess = () => resolve(req.result || []);
+          req.onerror = reject;
+        });
+        for (const rec of parsed.pdfInk) {
+          const target = current.find(it => it.type !== 'json' && it.name === rec.name && it.bookId === rec.bookId);
+          if (!target) { inkSkipped++; continue; }
+          target.inkData = Object.assign({}, target.inkData || {}, rec.inkData);
+          await updateCommentaryItemInDb(target);
+          inkRestored++;
+        }
+      }
+      await refreshCommentaryIndex();
+      renderCommentaryList();
+      let msg = `주석 ${n}개를 복원했습니다.`;
+      if (inkRestored) msg += ` PDF 필기 ${inkRestored}개도 복원됨.`;
+      if (inkSkipped) msg += ` (PDF ${inkSkipped}개는 같은 이름의 PDF를 먼저 등록한 뒤 다시 복원하세요)`;
+      showToast(msg, 'success');
+    }
     function openCommentaryModal(preselectBookId) {
       const bookSel = document.getElementById('commentary-new-book');
       if (bookSel.options.length === 0) {
         bookSel.innerHTML = BIBLE_BOOKS.map(b => `<option value="${b.id}">${escHtml(b.name)}</option>`).join('');
       }
       if (preselectBookId) bookSel.value = String(preselectBookId);
+      const searchInput = document.getElementById('commentary-list-search');
+      if (searchInput && !searchInput.dataset.wired) {
+        searchInput.dataset.wired = '1';
+        searchInput.addEventListener('input', () => renderCommentaryList());
+        document.getElementById('btn-commentary-export').onclick = () => {
+          exportTextCommentaries().catch(err => {
+            console.error('[주석 백업 실패]', err);
+            showToast('백업 실패: ' + (err.message || err), 'error');
+          });
+        };
+        const importFile = document.getElementById('commentary-import-file');
+        document.getElementById('btn-commentary-import').onclick = () => importFile.click();
+        importFile.onchange = function() {
+          if (!this.files[0]) return;
+          const f = this.files[0];
+          this.value = '';
+          importTextCommentaries(f).catch(err => {
+            console.error('[주석 복원 실패]', err);
+            showToast('복원 실패: ' + (err.message || err), 'error');
+          });
+        };
+      }
       renderCommentaryList();
       document.getElementById('commentary-modal').style.display = 'flex';
       document.getElementById('commentary-modal-backdrop').style.display = 'block';
@@ -7010,6 +7935,130 @@
         });
       };
       document.getElementById('btn-open-commentary-manage').onclick = () => openCommentaryModal(parseInt(document.getElementById('book-select').value));
+      // 영문 책이름 → 한글 변환 켜기/끄기
+      (function initEngKorToggle() {
+        const btn = document.getElementById('btn-commentary-eng-kor');
+        const paint = () => {
+          const on = localStorage.getItem('commentary_eng_to_kor') !== 'off';
+          btn.style.background = on ? '#0f766e' : '#475569';
+          btn.style.opacity = on ? '1' : '0.65';
+          btn.textContent = on ? '🇰🇷 한글책명' : '🇺🇸 원문책명';
+        };
+        paint();
+        btn.onclick = function() {
+          const on = localStorage.getItem('commentary_eng_to_kor') !== 'off';
+          localStorage.setItem('commentary_eng_to_kor', on ? 'off' : 'on');
+          paint();
+          // 지금 보고 있는 주석을 바로 다시 그려서 변경을 즉시 반영
+          const item = Commentary.currentItem;
+          if (item && item.type === 'json') {
+            const ch = parseInt(document.getElementById('chapter-select').value) || 1;
+            const v = parseInt(document.getElementById('manual-map-verse').value) || 1;
+            Commentary.showTextViewer(item.id, item, ch, v);
+          }
+        };
+      })();
+      // ── 사전 우선 번역 켜기/끄기 ──
+      (function initDictFirstToggle() {
+        const btn = document.getElementById('btn-commentary-dict-first');
+        const paint = () => {
+          const on = localStorage.getItem('commentary_dict_first') !== 'off';
+          btn.style.background = on ? '#7c3aed' : '#475569';
+          btn.style.opacity = on ? '1' : '0.65';
+          btn.textContent = on ? '📖 사전우선' : '📖 사전끔';
+          btn.title = on
+            ? '번역 전에 내 사전으로 성경 용어를 한글로 고정합니다 (권장). 눌러서 끌 수 있습니다.'
+            : '지금은 사전 없이 기계번역만 씁니다. 눌러서 켜면 번역 품질이 좋아집니다.';
+        };
+        paint();
+        btn.onclick = function() {
+          const on = localStorage.getItem('commentary_dict_first') !== 'off';
+          localStorage.setItem('commentary_dict_first', on ? 'off' : 'on');
+          paint();
+          showToast(on ? '사전 우선 적용을 껐습니다 (기계번역만 사용)' : '사전 우선 적용을 켰습니다 — 성경 용어가 정확해집니다', 'info');
+        };
+      })();
+      // ── 주석 번역 (선택 영역 / 이 절 / 이 장 전체) ──
+      document.getElementById('btn-commentary-translate').onclick = async function() {
+        const item = Commentary.currentItem;
+        if (!item || item.type !== 'json') {
+          showToast('텍스트 주석(JSON·CDB)에서만 번역할 수 있습니다.', 'warn');
+          return;
+        }
+        // 사용자가 화면에서 드래그해 선택한 부분이 있으면 그 부분만 번역한다
+        const sel = String(window.getSelection() || '').trim();
+        const contentEl = document.getElementById('commentary-text-content');
+        const btn = this;
+        const run = async (text, label, onDone) => {
+          btn.disabled = true;
+          const orig = btn.textContent;
+          btn.textContent = '번역 중...';
+          try {
+            // 사전을 먼저 적용해 성경 고유명사·신학 용어를 한글로 확정한 뒤 번역기에 넘긴다
+            const prepared = localStorage.getItem('commentary_dict_first') === 'off'
+              ? text
+              : applyBibleTermsBeforeTranslate(text);
+            const ko = await fetchGoogleTranslateDraft(prepared);
+            onDone(ko);
+            showToast(`${label} 번역 완료 (구글 번역 초안이므로 참고용으로만 보세요)`, 'success');
+          } catch (err) {
+            console.error('[주석 번역 실패]', err);
+            showToast('번역 실패: 인터넷 연결이나 네트워크 차단을 확인해주세요. (' + (err.message || err) + ')', 'error');
+          } finally {
+            btn.disabled = false;
+            btn.textContent = orig;
+          }
+        };
+        if (sel && sel.length > 1) {
+          await run(sel, '선택 부분', ko => {
+            // 선택한 곳 바로 아래에 번역문을 끼워 넣는다 (원문은 그대로 두고 비교하며 볼 수 있게)
+            const box = document.createElement('div');
+            box.style.cssText = 'margin:8px 0;padding:10px 12px;background:#eff6ff;border-left:3px solid #2563eb;border-radius:4px;color:#1e3a8a;font-size:0.93em;white-space:pre-wrap;position:relative';
+            box.textContent = ko;
+            const del = document.createElement('button');
+            del.textContent = '✕';
+            del.title = '번역 지우기';
+            del.style.cssText = 'position:absolute;top:4px;right:6px;border:none;background:none;color:#93c5fd;cursor:pointer;font-size:0.9em';
+            del.onclick = () => box.remove();
+            box.appendChild(del);
+            contentEl.appendChild(box);
+            box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          });
+          return;
+        }
+        // 선택이 없으면 "이 절" 또는 "이 장 전체" 중에서 고르게 한다
+        const chapter = parseInt(document.getElementById('chapter-select').value) || 1;
+        const whole = confirm(
+          `번역할 범위를 골라주세요.\n\n` +
+          `[확인] ${chapter}장 전체 번역 (분량이 많으면 시간이 걸립니다)\n` +
+          `[취소] 지금 보고 있는 절만 번역\n\n` +
+          `※ 특정 부분만 번역하려면, 창을 닫고 그 부분을 마우스로 드래그해 선택한 뒤 다시 누르세요.`
+        );
+        if (whole) {
+          const vt = item.versesText || {};
+          const keys = Object.keys(vt)
+            .filter(k => parseInt(k.split(':')[0]) === chapter)
+            .sort((a, b) => parseInt(a.split(':')[1]) - parseInt(b.split(':')[1]));
+          if (keys.length === 0) { showToast(`${chapter}장에 주석 내용이 없습니다.`, 'warn'); return; }
+          const stripped = keys.map(k => {
+            const t = vt[k].replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').trim();
+            return `[${k}]\n${t}`;
+          }).join('\n\n');
+          await run(stripped, `${chapter}장 전체(${keys.length}절)`, ko => {
+            contentEl.style.whiteSpace = 'pre-wrap';
+            contentEl.innerHTML = linkifyVerseRefs(escHtml(ko));
+            document.getElementById('commentary-text-ref').textContent += ' — 🌐 번역본';
+          });
+        } else {
+          const plain = contentEl.innerText.trim();
+          if (!plain) { showToast('번역할 내용이 없습니다.', 'warn'); return; }
+          await run(plain, '이 절', ko => {
+            contentEl.style.whiteSpace = 'pre-wrap';
+            contentEl.innerHTML = linkifyVerseRefs(escHtml(ko));
+            document.getElementById('commentary-text-ref').textContent += ' — 🌐 번역본';
+          });
+        }
+      };
       document.getElementById('btn-commentary-download').onclick = function() {
         const item = Commentary.currentItem;
         if (!item || !item.pdfBlob) { showToast('먼저 주석을 열어주세요.', 'warn'); return; }
@@ -7034,9 +8083,30 @@
         const val = this.value;
         this.value = '';
         if (!val || !Commentary.currentItem) return;
+        const targetCh = val === 'intro' ? 1 : parseInt(val);
+        // 주석에서 장을 옮기면 왼쪽 성경 본문도 같은 장으로 함께 이동시킨다
+        // (주석 3장을 보는데 본문은 1장에 머물러 있어 헷갈리던 문제 해결)
+        const curBookId = parseInt(document.getElementById('book-select').value);
+        if (curBookId === Commentary.currentItem.bookId) {
+          const chSel = document.getElementById('chapter-select');
+          if (chSel && parseInt(chSel.value) !== targetCh) {
+            chSel.value = String(targetCh);
+            window._syncingFromCommentary = true;
+            try {
+              loadBibleText(Commentary.currentItem.bookId, targetCh);
+            } finally {
+              window._syncingFromCommentary = false;
+            }
+          }
+        }
+        // JSON/CDB 주석은 페이지가 없으므로, 해당 장의 첫 절 텍스트를 바로 보여준다
+        if (Commentary.currentItem.type === 'json') {
+          Commentary.showTextViewer(Commentary.currentItem.id, Commentary.currentItem, targetCh, 1);
+          return;
+        }
         const page = val === 'intro'
           ? (Commentary.currentItem.chapterMap && Commentary.currentItem.chapterMap['intro'])
-          : findPageForChapter(Commentary.currentItem, parseInt(val));
+          : findPageForChapter(Commentary.currentItem, targetCh);
         if (page) {
           Commentary.renderPage(page);
         } else {
@@ -7047,6 +8117,21 @@
       document.getElementById('btn-commentary-next-page').onclick = () => Commentary.renderPage(Commentary.currentPage + 1);
       document.getElementById('btn-commentary-zoom-in').onclick = () => Commentary.setZoom(Commentary.zoomFactor + 0.1);
       document.getElementById('btn-commentary-zoom-fit').onclick = () => Commentary.fitToWidth();
+      // ── 필기 도구 버튼 연결 ──
+      document.querySelectorAll('.ink-tool-btn').forEach(btn => {
+        btn.onclick = () => InkEngine.setTool(btn.dataset.tool);
+      });
+      document.getElementById('ink-color').onchange = function() { InkEngine.color = this.value; };
+      document.getElementById('ink-width').onchange = function() { InkEngine.width = parseInt(this.value); };
+      document.getElementById('btn-ink-undo').onclick = () => InkEngine.undo();
+      document.getElementById('btn-ink-clear-page').onclick = () => InkEngine.clearPage();
+      document.getElementById('btn-ink-allow-finger').onclick = function() {
+        // 펜을 쓰다가 잠깐 손가락으로 그리고 싶을 때 (펜 전용 모드 해제)
+        InkEngine.penSeen = false;
+        InkEngine.updateStatus();
+        this.style.display = 'none';
+        showToast('손가락으로도 그릴 수 있습니다. (펜을 쓰면 다시 펜 전용으로 바뀝니다)', 'info');
+      };
       document.getElementById('btn-commentary-zoom-out').onclick = () => Commentary.setZoom(Commentary.zoomFactor - 0.1);
       // 마우스 휠: Ctrl(또는 Cmd)을 누른 채 휠을 돌리면 확대/축소, 그냥 휠은 페이지 넘김
       // (페이지 안에서 스크롤하다가 맨 위/아래에 닿으면 이전/다음 페이지로 자연스럽게 넘어감)
@@ -7090,36 +8175,93 @@
       document.getElementById('btn-open-chapter-map').onclick = openChapterMapModal;
       document.getElementById('btn-close-chapter-map').onclick = closeChapterMapModal;
       document.getElementById('chapter-map-modal-backdrop').onclick = closeChapterMapModal;
+      let commentaryAddType = 'pdf';
+      function setCommentaryAddType(type) {
+        commentaryAddType = type;
+        document.getElementById('btn-commentary-type-pdf').classList.toggle('active', type === 'pdf');
+        document.getElementById('btn-commentary-type-json').classList.toggle('active', type === 'json');
+        document.getElementById('btn-commentary-type-cdb').classList.toggle('active', type === 'cdb');
+        const fileInput = document.getElementById('commentary-new-file');
+        fileInput.accept = type === 'pdf' ? 'application/pdf' : type === 'json' ? 'application/json,.json' : '.cdb,.aab';
+        fileInput.value = '';
+        document.getElementById('commentary-json-help').style.display = type === 'json' ? 'block' : 'none';
+        document.getElementById('commentary-pdf-help-text').style.display = type === 'pdf' ? 'block' : 'none';
+        document.getElementById('commentary-cdb-help').style.display = type === 'cdb' ? 'block' : 'none';
+        // .cdb/.aab 파일은 성경 66권 전체 주석을 한 파일에 담고 있으므로, 책 선택 없이 파일 안의 책들을
+        // 자동으로 각각 하나씩 주석 항목으로 만든다 (수동으로 책을 고를 필요 없음)
+        document.getElementById('commentary-new-book').style.display = type === 'cdb' ? 'none' : '';
+        document.getElementById('btn-commentary-add').textContent = type === 'pdf'
+          ? 'PDF 분석 후 추가 (절 번호 자동 매핑)'
+          : type === 'json' ? 'JSON 주석 추가 (절별 텍스트)'
+          : 'CDB/AAB 불러오기 (책별로 자동 생성)';
+      }
+      document.getElementById('btn-commentary-type-pdf').onclick = () => setCommentaryAddType('pdf');
+      document.getElementById('btn-commentary-type-json').onclick = () => setCommentaryAddType('json');
+      document.getElementById('btn-commentary-type-cdb').onclick = () => setCommentaryAddType('cdb');
+
       document.getElementById('btn-commentary-add').onclick = async function() {
         const name = document.getElementById('commentary-new-name').value.trim();
         const bookId = parseInt(document.getElementById('commentary-new-book').value);
         const fileInput = document.getElementById('commentary-new-file');
         const file = fileInput.files[0];
         if (!name) { showToast('주석 이름을 입력하세요.', 'warn'); return; }
-        if (!file) { showToast('PDF 파일을 선택하세요.', 'warn'); return; }
+        if (!file) { showToast(commentaryAddType === 'pdf' ? 'PDF 파일을 선택하세요.' : commentaryAddType === 'json' ? 'JSON 파일을 선택하세요.' : '.cdb 또는 .aab 파일을 선택하세요.', 'warn'); return; }
         const progressEl = document.getElementById('commentary-add-progress');
         progressEl.style.display = 'block';
-        progressEl.textContent = 'PDF 분석 준비 중...';
         this.disabled = true;
         try {
-          const newId = await addCommentaryItem(name, bookId, file, (p, total) => {
-            progressEl.textContent = `PDF 분석 중... (${p} / ${total} 페이지)`;
-          });
-          await refreshCommentaryIndex();
-          renderCommentaryList();
-          document.getElementById('commentary-new-name').value = '';
-          fileInput.value = '';
-          progressEl.style.display = 'none';
-          const verseCount = Object.keys((await getCommentaryItem(newId)).verseMap).length;
-          if (verseCount === 0) {
-            showToast('절 매핑 0개 — 이 PDF에서 장:절 패턴을 못 찾았습니다. F12 콘솔의 [주석 매핑 진단] 로그를 확인해주세요.', 'error');
+          if (commentaryAddType === 'cdb') {
+            progressEl.textContent = '파일 읽는 중...';
+            const arrayBuffer = await file.arrayBuffer();
+            const created = await addCdbAabCommentary(name, arrayBuffer, (p, total, bookName) => {
+              progressEl.textContent = `등록 중... (${p} / ${total}권: ${bookName})`;
+            });
+            await refreshCommentaryIndex();
+            renderCommentaryList();
+            document.getElementById('commentary-new-name').value = '';
+            fileInput.value = '';
+            progressEl.style.display = 'none';
+            if (created > 0) {
+              showToast(`CDB/AAB 주석 추가 완료 — ${created}권 등록됨`, 'success');
+            } else {
+              showToast('추가하지 않았습니다.', 'info');
+            }
+          } else if (commentaryAddType === 'json') {
+            progressEl.textContent = 'JSON 파일 읽는 중...';
+            const text = await file.text();
+            let parsed;
+            try { parsed = JSON.parse(text); } catch (e) { throw new Error('JSON 형식이 올바르지 않습니다: ' + e.message); }
+            const entries = parsed.entries || parsed;
+            if (!Array.isArray(entries)) throw new Error('entries 배열을 찾을 수 없습니다.');
+            const newId = await addJsonCommentaryItem(name, bookId, entries);
+            await refreshCommentaryIndex();
+            renderCommentaryList();
+            document.getElementById('commentary-new-name').value = '';
+            fileInput.value = '';
+            progressEl.style.display = 'none';
+            const verseCount = Object.keys((await getCommentaryItem(newId)).versesText || {}).length;
+            showToast(`JSON 주석 추가 완료 (절 ${verseCount}개)`, 'success');
           } else {
-            showToast(`주석 추가 완료 (절 매핑 ${verseCount}개)`, 'success');
+            progressEl.textContent = 'PDF 분석 준비 중...';
+            const newId = await addCommentaryItem(name, bookId, file, (p, total) => {
+              progressEl.textContent = `PDF 분석 중... (${p} / ${total} 페이지)`;
+            });
+            await refreshCommentaryIndex();
+            renderCommentaryList();
+            document.getElementById('commentary-new-name').value = '';
+            fileInput.value = '';
+            progressEl.style.display = 'none';
+            const verseCount = Object.keys((await getCommentaryItem(newId)).verseMap).length;
+            if (verseCount === 0) {
+              showToast('절 매핑 0개 — 이 PDF에서 장:절 패턴을 못 찾았습니다. F12 콘솔의 [주석 매핑 진단] 로그를 확인해주세요.', 'error');
+            } else {
+              showToast(`주석 추가 완료 (절 매핑 ${verseCount}개)`, 'success');
+            }
           }
         } catch (err) {
           console.error('[주석 추가 실패]', err);
-          progressEl.textContent = '분석 실패: ' + (err.message || err);
-          showToast('주석 추가에 실패했습니다.', 'error');
+          progressEl.textContent = '추가 실패: ' + (err.message || err);
+          showToast('주석 추가에 실패했습니다: ' + (err.message || err), 'error');
         } finally {
           this.disabled = false;
         }
@@ -7167,7 +8309,24 @@
         eastonFullDict: eastonFullDict,
         eastonLocalEdits: eastonLocalEdits,
         smithFullDict: smithFullDict,
-        smithLocalEdits: smithLocalEdits
+        smithLocalEdits: smithLocalEdits,
+        // 새로 추가한 사전들(Hastings·Schaff·Hitchcock 등)은 원문이 공개 자료라 다시 받을 수 있으므로,
+        // 백업 용량을 아끼기 위해 "내가 직접 고친 항목"만 담는다.
+        rawDictUserEdits: (function() {
+          const out = {};
+          RAWDICT_SOURCES.forEach(s => {
+            if (s.key === 'easton' || s.key === 'smith') return; // 위에서 이미 통째로 저장됨
+            const edits = getRawDictEdits(s.key);
+            const ids = Object.keys(edits || {});
+            if (ids.length === 0) return;
+            const list = getRawDictList(s.key);
+            out[s.key] = {
+              edits: edits,
+              entries: list.filter(e => edits[e.id]) // 고친 항목만
+            };
+          });
+          return out;
+        })()
         // bdbBinaryBase64, interlinearBinaryBase64: 의도적으로 제외 (성경DB·원어분해DB는 별도 파일로 관리)
       };
       const jsonStr = JSON.stringify(backupPackage);
@@ -7280,6 +8439,25 @@
             smithLocalEdits = pkg.smithLocalEdits;
             await setLocalItem('smith_local_edits', smithLocalEdits);
           }
+          // 이스턴/스미스는 위에서 통째로 복원되므로 레지스트리에도 반영해준다
+          rawDictData.easton = eastonFullDict;
+          rawDictData.smith = smithFullDict;
+          rawDictEdits.easton = eastonLocalEdits;
+          rawDictEdits.smith = smithLocalEdits;
+          // 새로 추가한 사전들: 내가 고친 항목만 백업되어 있으므로, 공개 원문 위에 덮어씌운다
+          if (pkg.rawDictUserEdits) {
+            for (const s of RAWDICT_SOURCES) {
+              const saved = pkg.rawDictUserEdits[s.key];
+              if (!saved || !saved.entries) continue;
+              rawDictEdits[s.key] = saved.edits || {};
+              const list = rawDictData[s.key] || [];
+              const byId = {};
+              saved.entries.forEach(e => { byId[e.id] = e; });
+              rawDictData[s.key] = list.map(e => byId[e.id] || e);
+              await setLocalItem(s.storeKey, rawDictData[s.key]);
+              await setLocalItem(s.editsKey, rawDictEdits[s.key]);
+            }
+          }
 
           // 구버전 백업 호환용 — 성경DB(.bdb)가 포함된 옛 백업 파일을 열었을 때만 복원
           if (pkg.bdbBinaryBase64 && window.SQL) {
@@ -7292,7 +8470,7 @@
             if (detectedSchema) {
               const statusBar = document.getElementById('db-status-bar');
               statusBar.classList.add('connected');
-              document.getElementById('db-status-text').innerText = `자동 복원 완료 ✓ DB: ${detectedSchema.table} 테이블 | 지명: ${placeDatabase.length}개`;
+              document.getElementById('db-status-text').innerText = `✓ 지명 ${placeDatabase.length}개`;
             }
           }
 
@@ -7613,7 +8791,7 @@
       const btn = document.getElementById('btn-coord-overrides');
       if (!btn) return;
       const n = Object.keys(coordOverrides).length;
-      btn.textContent = n > 0 ? `📍 보정 ${n}` : '📍 보정';
+      btn.textContent = n > 0 ? `📍 좌표 보정 이력 (${n})` : '📍 좌표 보정 이력';
     }
 
     // 좌표 수정 1건 기록 (baseLat/baseLng = 수정 직전의 원본 좌표)
@@ -7731,7 +8909,7 @@
       const btn = document.getElementById('btn-name-overrides');
       if (!btn) return;
       const n = nameOverrideCount();
-      btn.textContent = n > 0 ? `✏️ 지명 ${n}` : '✏️ 지명';
+      btn.textContent = n > 0 ? `✏️ 지명 수정 이력 (${n})` : '✏️ 지명 수정 이력';
     }
 
     // 수정 1건 기록 (baseName = 최초 원본 이름을 계속 유지)
@@ -9681,7 +10859,7 @@
         var bounds = L.latLngBounds(parsedList.map(p => [p.lat, p.lng]));
         map.fitBounds(bounds, { padding: [50, 50] });
         
-        document.getElementById('db-status-text').innerText = `DB 연결 완료 (총 ${parsedList.length}개 지명 탑재)` + (skippedRows.length ? ` / 제외 ${skippedRows.length}개` : '');
+        document.getElementById('db-status-text').innerText = `✓ 지명 ${parsedList.length}개` + (skippedRows.length ? ` (제외 ${skippedRows.length})` : '');
         showToast(`총 ${parsedList.length}개의 지명 데이터와 원본 사진 및 다중 관련 구절이 성공적으로 등록되었습니다.`, 'success')
         loadBibleText();
       } else if (rawList && rawList.length > 0) {
@@ -9811,7 +10989,7 @@
           if (detectedSchema) {
             const statusBar = document.getElementById('db-status-bar');
             statusBar.classList.add('connected');
-            document.getElementById('db-status-text').innerText = `자동 복원 완료 ✓ DB: ${detectedSchema.table} 테이블 | 지명: ${placeDatabase.length}개`;
+            document.getElementById('db-status-text').innerText = `✓ 지명 ${placeDatabase.length}개`;
           }
         } catch (err) {
           console.error("성경 DB 자동 복원 오류:", err);
@@ -10301,6 +11479,13 @@
         localStorage.setItem('lastReadPosition', JSON.stringify({ bookId, chapter, savedAt: Date.now() }));
       } catch (e) {
         console.warn('마지막 읽던 위치 저장 실패:', e);
+      }
+
+      // 주석(PDF) 창이 이미 열려있으면, 장을 바꿀 때 주석도 그 장으로 조용히 따라간다.
+      // 단, 주석 쪽에서 먼저 장을 바꿔서 본문이 따라온 경우에는 다시 주석을 건드리지 않는다
+      // (서로 따라가다 무한히 반복되는 것을 막기 위함)
+      if (typeof rightPanelMode !== 'undefined' && rightPanelMode === 'commentary' && !window._syncingFromCommentary) {
+        Commentary.jumpToVerse(bookId, chapter, 1, true);
       }
     }
 
@@ -11011,7 +12196,7 @@
       locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
     }).then(async SQL => {
       window.SQL = SQL;
-      document.getElementById('db-status-text').innerText = "SQLite 엔진 로드 완료 (저장소 확인 중)";
+      document.getElementById('db-status-text').innerText = "불러오는 중...";
       initUI();
       // [순서 중요] restorePersistentData 먼저 → SQL DB 및 지명 복원
       await restorePersistentData();
@@ -11514,6 +12699,40 @@ setTimeout(function() {
 
 
 // 헤더 접기/펼치기
+// ── 상단 묶음 메뉴(내보내기·동기화·편집이력) 열고 닫기 ──
+(function initMenuGroups() {
+  document.querySelectorAll('.menu-group .menu-trigger').forEach(function(trigger) {
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var group = trigger.closest('.menu-group');
+      var wasOpen = group.classList.contains('open');
+      document.querySelectorAll('.menu-group.open').forEach(function(g) { g.classList.remove('open'); });
+      if (!wasOpen) group.classList.add('open');
+    });
+  });
+  // 메뉴 항목을 고르면 메뉴를 닫는다
+  document.querySelectorAll('.menu-group .menu-panel button').forEach(function(item) {
+    item.addEventListener('click', function() {
+      var g = item.closest('.menu-group');
+      if (g) g.classList.remove('open');
+    });
+  });
+  // 바깥을 클릭하면 열린 메뉴를 모두 닫는다
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.menu-group.open').forEach(function(g) { g.classList.remove('open'); });
+  });
+  // 메뉴 안으로 옮긴 항목들을, 기존 이벤트가 걸려 있는 원래 버튼으로 연결해준다
+  var relink = [
+    ['menu-open-add-link', 'btn-open-add-link'],
+    ['menu-open-blacklist', 'btn-open-blacklist']
+  ];
+  relink.forEach(function(pair) {
+    var menuItem = document.getElementById(pair[0]);
+    var realBtn = document.getElementById(pair[1]);
+    if (menuItem && realBtn) menuItem.addEventListener('click', function() { realBtn.click(); });
+  });
+})();
+
 function toggleHeaderCollapse() {
   var pane = document.getElementById('left-pane');
   var bar = document.getElementById('header-toggle-bar');
