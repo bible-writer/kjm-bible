@@ -10045,7 +10045,7 @@
       btn.disabled = true;
       try {
         if (!EncryptedDB._password) {
-          await EncryptedDB.askPassword();
+          await EncryptedDB.getPassword();
         }
         const resp = await fetch('https://bible-writer.github.io/kjm-bible/personDatabase.json?t=' + Date.now());
         if (!resp.ok) throw new Error('서버 응답 오류: ' + resp.status);
@@ -10074,7 +10074,7 @@
       btn.disabled = true;
       try {
         if (!EncryptedDB._password) {
-          await EncryptedDB.askPassword();
+          await EncryptedDB.getPassword();
         }
         const resp = await fetch('https://bible-writer.github.io/kjm-bible/termDatabase.json?t=' + Date.now());
         if (!resp.ok) throw new Error('서버 응답 오류: ' + resp.status);
