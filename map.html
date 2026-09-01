@@ -1887,6 +1887,9 @@
       <button class="btn-catalog-trigger text-only-control" id="btn-commentary-eng-kor" style="background:#0f766e" title="영문 주석의 성경책 이름을 한글로 바꿔 보여줍니다">🇰🇷 한글책명</button>
       <button class="btn-catalog-trigger text-only-control" id="btn-commentary-translate" style="background:#2563eb" title="지금 보고 있는 주석을 한글로 번역 (구글 번역 초안)">🌐 번역</button>
       <button class="btn-catalog-trigger text-only-control" id="btn-commentary-dict-first" style="background:#7c3aed" title="번역 전에 내 사전(인명·지명·용어)으로 성경 용어를 먼저 한글로 고정합니다">📖 사전우선</button>
+      <button class="btn-catalog-trigger text-only-control" id="btn-commentary-font-dec" style="background:#334155" title="주석 글자 축소">A -</button>
+      <span id="commentary-font-size-display" class="text-only-control" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap;min-width:36px;text-align:center">16px</span>
+      <button class="btn-catalog-trigger text-only-control" id="btn-commentary-font-inc" style="background:#334155" title="주석 글자 확대">A +</button>
       <button class="btn-catalog-trigger" id="btn-open-commentary-manage" style="background:#b45309" title="주석 등록/관리">⚙ 관리</button>
       <button class="btn-catalog-trigger" id="btn-commentary-back-to-map" style="background:#2563eb" title="지도로 돌아가기">🗺 지도로</button>
     </div>
@@ -1898,12 +1901,10 @@
       <button class="btn-catalog-trigger ink-tool-btn" id="btn-ink-note" data-tool="note" style="background:#334155" title="메모 붙이기 — 원하는 위치를 터치">📝 메모</button>
       <span style="width:1px;height:18px;background:#475569;margin:0 2px"></span>
       <input type="color" id="ink-color" value="#e11d48" style="width:30px;height:26px;padding:0;border:1px solid #475569;border-radius:5px;background:none;cursor:pointer" title="색상">
-      <select id="ink-width" style="padding:4px 6px;border-radius:5px;border:1px solid #475569;background:#0f172a;color:#fff;font-size:12px;cursor:pointer" title="굵기">
-        <option value="2">가늘게</option>
-        <option value="4" selected>보통</option>
-        <option value="8">굵게</option>
-        <option value="14">아주 굵게</option>
-      </select>
+      <span style="display:flex;align-items:center;gap:5px" title="굵기 (드래그해서 미세하게 조정)">
+        <input type="range" id="ink-width" min="1" max="24" step="1" value="4" style="width:90px;cursor:pointer;accent-color:#2563eb;vertical-align:middle">
+        <span id="ink-width-display" style="color:#e2e8f0;font-size:11px;font-weight:600;min-width:28px;text-align:center;white-space:nowrap">4px</span>
+      </span>
       <button class="btn-catalog-trigger" id="btn-ink-undo" style="background:#334155" title="마지막 획 되돌리기">↩ 실행취소</button>
       <button class="btn-catalog-trigger" id="btn-ink-clear-page" style="background:#7f1d1d" title="이 페이지 필기 전체 지우기">🗑 페이지 지우기</button>
       <button class="btn-catalog-trigger" id="btn-ink-allow-finger" style="background:#334155;display:none" title="펜 없이 손가락으로도 그리기">👆 손가락 허용</button>
@@ -5250,6 +5251,26 @@
       setLocalItem("saved_font_size", currentFontSize);
     }
 
+    let commentaryFontSize = parseInt(localStorage.getItem('commentary_text_font_size')) || 16;
+
+    function applyCommentaryFontSize(size) {
+      commentaryFontSize = Math.max(12, Math.min(32, size));
+      const disp = document.getElementById('commentary-font-size-display');
+      if (disp) disp.innerText = commentaryFontSize + 'px';
+      const contentEl = document.getElementById('commentary-text-content');
+      const refEl = document.getElementById('commentary-text-ref');
+      if (contentEl) {
+        contentEl.style.fontSize = commentaryFontSize + 'px';
+        contentEl.style.lineHeight = (commentaryFontSize * 1.7) + 'px';
+      }
+      if (refEl) refEl.style.fontSize = (commentaryFontSize * 1.1) + 'px';
+      localStorage.setItem('commentary_text_font_size', commentaryFontSize);
+    }
+    const btnCommFontDec = document.getElementById('btn-commentary-font-dec');
+    const btnCommFontInc = document.getElementById('btn-commentary-font-inc');
+    if (btnCommFontDec) btnCommFontDec.onclick = () => applyCommentaryFontSize(commentaryFontSize - 1);
+    if (btnCommFontInc) btnCommFontInc.onclick = () => applyCommentaryFontSize(commentaryFontSize + 1);
+
     document.getElementById('btn-font-dec').onclick = () => applyFontSize(currentFontSize - 1);
     document.getElementById('btn-font-inc').onclick = () => applyFontSize(currentFontSize + 1);
 
@@ -7581,6 +7602,7 @@
           if (sel) sel.value = String(itemId);
           populateChapterJumpForItem(item);
           localStorage.setItem(`commentary_last_item_book_${item.bookId}`, String(itemId));
+          if (typeof applyCommentaryFontSize === 'function') applyCommentaryFontSize(commentaryFontSize);
         } catch (err) {
           console.error('[Commentary.showTextViewer 오류]', err);
           showToast('주석 텍스트 표시 중 오류: ' + (err.message || err), 'error');
@@ -7678,7 +7700,13 @@
           const items = commentaryIndexByBook[bookId] || [];
           if (items.length === 0) { if (!silent) openCommentaryModal(bookId); return; }
           const lastId = parseInt(localStorage.getItem(`commentary_last_item_book_${bookId}`) || '0');
-          const item = items.find(it => it.id === lastId) || items[0];
+          let item = items.find(it => it.id === lastId);
+          if (!item && this.currentItem && this.currentItem.name) {
+            // 이 책에서 처음 여는 것이면, 방금까지 보던 것과 같은 이름의 주석 시리즈가 있으면 그걸 우선한다
+            // (없으면 아무거나(첫번째)로 바뀌어 버려 다른 주석을 읽게 되는 문제 방지)
+            item = items.find(it => it.name === this.currentItem.name);
+          }
+          if (!item) item = items[0];
           setRightPanelMode('commentary');
           populateCommentarySelectForBook(bookId);
           const fullItem = await getCommentaryItem(item.id);
@@ -8012,6 +8040,19 @@
           }
         };
         if (sel && sel.length > 1) {
+          // 번역 시작 전에 선택 위치를 미리 기억해둔다 (비동기 번역이 끝나기 전에 선택이 풀릴 수 있으므로)
+          const selection = window.getSelection();
+          let insertAfterNode = null;
+          if (selection && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            insertAfterNode = range.endContainer;
+            if (insertAfterNode.nodeType === 3) insertAfterNode = insertAfterNode.parentNode; // 텍스트 노드면 부모 요소로
+            // contentEl의 직계 자식까지 거슬러 올라간다 (그래야 바로 뒤에 형제로 끼워 넣을 수 있음)
+            while (insertAfterNode && insertAfterNode.parentNode !== contentEl && insertAfterNode !== contentEl) {
+              insertAfterNode = insertAfterNode.parentNode;
+            }
+            if (insertAfterNode === contentEl || !contentEl.contains(insertAfterNode)) insertAfterNode = null;
+          }
           await run(sel, '선택 부분', ko => {
             // 선택한 곳 바로 아래에 번역문을 끼워 넣는다 (원문은 그대로 두고 비교하며 볼 수 있게)
             const box = document.createElement('div');
@@ -8023,7 +8064,12 @@
             del.style.cssText = 'position:absolute;top:4px;right:6px;border:none;background:none;color:#93c5fd;cursor:pointer;font-size:0.9em';
             del.onclick = () => box.remove();
             box.appendChild(del);
-            contentEl.appendChild(box);
+            // 선택했던 위치 바로 다음에 끼워 넣는다 (위치를 찾지 못하면 예전처럼 맨 밑에 추가)
+            if (insertAfterNode && insertAfterNode.parentNode === contentEl) {
+              insertAfterNode.after(box);
+            } else {
+              contentEl.appendChild(box);
+            }
             box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           });
           return;
@@ -8124,7 +8170,18 @@
         btn.onclick = () => InkEngine.setTool(btn.dataset.tool);
       });
       document.getElementById('ink-color').onchange = function() { InkEngine.color = this.value; };
-      document.getElementById('ink-width').onchange = function() { InkEngine.width = parseInt(this.value); };
+      (function() {
+        const inkWidthInput = document.getElementById('ink-width');
+        const inkWidthDisplay = document.getElementById('ink-width-display');
+        function updateInkWidth(val) {
+          InkEngine.width = parseFloat(val) || 4;
+          if (inkWidthDisplay) inkWidthDisplay.textContent = InkEngine.width + 'px';
+        }
+        if (inkWidthInput) {
+          inkWidthInput.oninput = function() { updateInkWidth(this.value); };
+          updateInkWidth(inkWidthInput.value);
+        }
+      })();
       document.getElementById('btn-ink-undo').onclick = () => InkEngine.undo();
       document.getElementById('btn-ink-clear-page').onclick = () => InkEngine.clearPage();
       document.getElementById('btn-ink-allow-finger').onclick = function() {
@@ -8694,6 +8751,10 @@
 
       const targetBook = BIBLE_BOOKS.find(b => b.id === bookId);
       if (!targetBook) return;
+
+      // 주석 안에서 성구를 클릭해 여기로 온 경우, 아래 loadBibleText가 주석 패널을
+      // 따라오게 할 때 이 실제 클릭한 절 번호를 쓰도록 남겨둔다 (1절로 초기화되는 버그 방지)
+      window._pendingCommentaryVerse = targetVerse;
 
       window._suppressLoadEvent = true;
       const testamentSelect = document.getElementById('testament-select');
@@ -11549,7 +11610,9 @@
       // 단, 주석 쪽에서 먼저 장을 바꿔서 본문이 따라온 경우에는 다시 주석을 건드리지 않는다
       // (서로 따라가다 무한히 반복되는 것을 막기 위함)
       if (typeof rightPanelMode !== 'undefined' && rightPanelMode === 'commentary' && !window._syncingFromCommentary) {
-        Commentary.jumpToVerse(bookId, chapter, 1, true);
+        const _syncVerse = window._pendingCommentaryVerse || 1;
+        window._pendingCommentaryVerse = null;
+        Commentary.jumpToVerse(bookId, chapter, _syncVerse, true);
       }
     }
 
