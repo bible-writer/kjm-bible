@@ -5902,11 +5902,11 @@
         });
       });
       personDatabase.forEach(p => {
-        const def = p.briefest_ko || p.short_ko || p.brief_ko || '';
+        const def = p.short_ko || p.description_ko || p.briefest_ko || p.brief_ko || '';
         list.push({
           type: 'PERSON', sortKey: p.name_ko || '',
           nameKo: p.name_ko || '', nameEn: p.name_en || p.name || '',
-          def, strong: p.ustrong || '',
+          def, strong: p.strong || p.ustrong || '',
           ref: p
         });
       });
