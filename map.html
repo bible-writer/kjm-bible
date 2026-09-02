@@ -1868,7 +1868,7 @@
   </div>
 
   <!-- 주석 PDF 뷰어 패널 (지도 패널과 동일한 자리, 토글로 전환) -->
-  <div id="commentary-pane" style="display:none;flex:1;height:100%;flex-direction:column;overflow:hidden;background:#525659;">
+  <div id="commentary-pane" style="display:none;position:relative;flex:1;height:100%;flex-direction:column;overflow:hidden;background:#525659;">
     <div class="map-header-bar" style="background:rgba(30,41,59,0.96)">
       <select id="commentary-select" style="padding:5px 8px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;font-weight:600;cursor:pointer;outline:none;max-width:220px" title="현재 책에 등록된 주석 선택"></select>
       <select id="commentary-chapter-jump" style="padding:5px 8px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;font-weight:600;cursor:pointer;outline:none" title="장으로 바로 이동"></select>
@@ -8937,7 +8937,7 @@
           btn = document.createElement('button');
           btn.id = 'btn-bible-back';
           btn.title = '이전 위치로 되돌리기';
-          btn.style.cssText = 'position:fixed;bottom:16px;left:16px;z-index:9999;padding:6px 12px;border:none;border-radius:20px;background:rgba(30,41,59,0.9);color:#60a5fa;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;gap:4px';
+          btn.style.cssText = 'position:fixed;bottom:16px;left:16px;z-index:9999;padding:6px 12px;border:none;border-radius:20px;background:rgba(30,41,59,0.9);color:#60a5fa;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:none;align-items:center;gap:4px';
           btn.innerHTML = '← 되돌리기';
           btn.onclick = bibleGoBack;
           document.body.appendChild(btn);
@@ -8945,7 +8945,7 @@
         const prev = _bibleNavHistory[_bibleNavHistory.length - 1];
         const bookObj = BIBLE_BOOKS.find(b => b.id === prev.bookId);
         btn.innerHTML = '← ' + (bookObj ? bookObj.name + ' ' + prev.chapter + '장' : '되돌리기');
-        btn.style.display = '';
+        btn.style.display = 'flex';
       } else if (btn) {
         btn.style.display = 'none';
       }
