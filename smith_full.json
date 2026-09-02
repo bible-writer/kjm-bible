@@ -1,9 +1,9 @@
 {
- "version": "1.0",
- "date": "2026-09-02",
+ "version": "1.1.1",
+ "date": "2026-09-03",
  "count": 4561,
  "source": "Smith's Bible Dictionary (William Smith, 1884, CCEL edition)",
- "note": "Public domain. Parsed from CCEL PDF via coordinate-based layout analysis (pdftohtml -xml). | 2026-09-02: TIPNR(STEPBible, CC BY 4.0) 대조로 스트롱 코드 130건 보강.",
+ "note": "Public domain. Parsed from CCEL PDF via coordinate-based layout analysis (pdftohtml -xml). | 2026-09-02: TIPNR(STEPBible, CC BY 4.0) 대조로 스트롱 코드 130건 보강. | 2026-09-03: 원문 PDF 대조로 누락 3건 복원(269/802/3796), 절단 2건 복원(730/3243), 추출 잔재 3건 정리(568/2990/4561), 영문 상호참조 4건 한글화, id 269 분류 정정(용어->지명). | 2026-09-03: 중복 표제어 해소(id 750 -> 'Bezer In The Wilderness', 인명->지명), 한자 3건 제거, id 1035 Concubine 인명->용어. | 2026-09-03: 정의문 대조로 분류 오분류 77건 정정(용어->지명 23, 용어->인명 54).",
  "entries": [
   {
    "id": 1,
@@ -811,7 +811,7 @@
    "id": 102,
    "term": "Adida(아디다)",
    "definition": "a fortified town near Jerusalem, probably the Hadidof (Ezra 2:33) and referred to in 1Ma 12:38",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "예루살렘 근처의 요새화된 도시로 하딧(에스라 2:33)과 동일시된다."
   },
   {
@@ -994,7 +994,7 @@
    "id": 125,
    "term": "Adria(아드리아)",
    "definition": "more properly A’drias, the Adriatic Sea. (Acts 27:27) The word seems to have been derived from the town of Adria, near the Po. In Paul’s time it included the whole sea between Greece and Italy, reaching south from Crete to Sicily. [Melita]",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'아드리아 해'를 가리키며(사도행전 27:27) 포강 근처 아드리아 마을에서 이름이 유래했다. 바울 시대에는 그리스와 이탈리아 사이, 크레타에서 시칠리아까지 이르는 바다 전체를 포함했다.",
    "hebrew_greek": "G0099"
   },
@@ -1917,7 +1917,7 @@
    "id": 241,
    "term": "Amalekites(아말렉 족속)",
    "definition": "a nomadic tribe of uncertain origin, which occupied the peninsula of Sinai and the wilderness intervening between the southern hill-ranges of Palestine and the border of Egypt. (Numbers 13:29; 1 Samuel 15:7; 27:8) Their wealth consisted in flocks and herds. Mention is made of a “town” (1 Samuel 15:5) but their towns could have been little more than stations or nomadic enclosures. The Amalekites first came in contact with the Israelites at Rephidim, but were signally defeated. (Exodus 17:8-16) In union with the Canaanites they again attacked the Israelites on the borders of Palestine, and defeated them near Hormah. (Numbers 14:45) Saul undertook an expedition against them. (1 Samuel 14:48) Their power was thenceforth broken, and they degenerated into a horde of banditti. Their destruction was completed by David. (1 Samuel 30:1-17)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "출처 불확실한 유목 민족으로 시내 반도와 팔레스타인 남쪽 산지와 이집트 국경 사이 광야에 거주했다(민수기 13:29). 양떼와 가축이 주된 재산이었다. 르비딤에서 이스라엘과 처음 충돌해 크게 패했고(출애굽기 17:8-16), 이후에도 여러 차례 충돌했으나 사울의 원정으로 세력이 크게 꺾였고 다윗에 의해 완전히 진멸되었다(사무엘상 30:1-17).",
    "hebrew_greek": "H6003"
   },
@@ -1942,7 +1942,7 @@
    "term": "Aman(아만)",
    "definition": "[Haman] (Esther 10:7; 12:6; 13:3,12; 14:17; 16:10,17)",
    "category": "인명",
-   "definition_ko": "하만(HAMAN) 참조(에스더 10:7 등).",
+   "definition_ko": "하만(하만) 참조(에스더 10:7 등).",
    "hebrew_greek": "H0526"
   },
   {
@@ -1998,7 +1998,7 @@
    "term": "Amath(아맛)",
    "definition": "[Hamath]",
    "category": "지명",
-   "definition_ko": "하맛(HAMATH) 참조.",
+   "definition_ko": "하맛(하맛) 참조.",
    "hebrew_greek": "H0935,H2574,H6678"
   },
   {
@@ -2139,10 +2139,10 @@
   },
   {
    "id": 269,
-   "term": "Ammonno",
-   "definition": "",
-   "category": "용어",
-   "definition_ko": "본문 추출 과정에서 발생한 표기 오류로 보이는 항목이며 암몬(AMMON) 참조."
+   "term": "Ammonno(암몬노)",
+   "definition": "See No-Amon.",
+   "category": "지명",
+   "definition_ko": "노아몬(No-Amon) 참조."
   },
   {
    "id": 270,
@@ -2549,7 +2549,7 @@
    "term": "Antipas(안디바)",
    "definition": "[Herod] (like the father), martyr at Pergamos, (Revelation 2:13) and according to tradition the bishop of that place. (A.D. before 100.)",
    "category": "인명",
-   "definition_ko": "헤롯(HEROD) 참조. '아버지와 같은'이라는 뜻으로 버가모에서 순교했으며(계시록 2:13) 전승에 따르면 그곳의 감독이었다.",
+   "definition_ko": "헤롯(헤롯) 참조. '아버지와 같은'이라는 뜻으로 버가모에서 순교했으며(계시록 2:13) 전승에 따르면 그곳의 감독이었다.",
    "hebrew_greek": "G0493"
   },
   {
@@ -2581,7 +2581,7 @@
    "term": "Antothite(아나돗 사람)",
    "definition": "a dweller at Anathoth. (1 Chronicles 11:28; 12:3) [Anathoth]",
    "category": "인명",
-   "definition_ko": "아나돗 거주민을 가리킨다(역대상 11:28). 아나돗(ANATHOTH) 참조.",
+   "definition_ko": "아나돗 거주민을 가리킨다(역대상 11:28). 아나돗(아나돗) 참조.",
    "hebrew_greek": "H6068,H6069"
   },
   {
@@ -2660,7 +2660,7 @@
    "id": 334,
    "term": "Aphses(압세스)",
    "definition": "(the dispersion), chief of the 15th of the 24 courses in the service of the temple. (1 Chronicles 24:15)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'흩어짐'이라는 뜻으로 성전 봉사 24반차 중 열다섯째 반차의 우두머리이다(역대상 24:15).",
    "hebrew_greek": "H6483"
   },
@@ -2738,7 +2738,7 @@
    "id": 344,
    "term": "Appii Forum(압비오 광장)",
    "definition": "(market-place of Appius), a well-known station on the Appian Way, the great road which led from Rome to the neighborhood of the Bay of Naples. (Acts 28:15) There is no difficulty in identifying the site with some ruins near Treponti . [Three Taverns Taverns, The Three]",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'압비우스의 시장'이라는 뜻으로 로마에서 나폴리만 방향으로 뻗은 아피아 가도상의 잘 알려진 역참이다(사도행전 28:15).",
    "hebrew_greek": "G0058,G0675,G5410"
   },
@@ -2944,7 +2944,7 @@
    "id": 370,
    "term": "Archi(아기)",
    "definition": "(Joshua 16:2) A place in the neighborhood of Bethel, on the boundary between Ephraim and Benjamin. It designates a clan perhaps originally from Erech in Babylonia, of which Hushai was one. [Archite, The]",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "벧엘 근처, 에브라임과 베냐민 경계에 위치한 곳으로(여호수아 16:2) 바벨로니아 에렉 출신 씨족을 가리키며 후새가 이 씨족 출신이었다.",
    "hebrew_greek": "H0757"
   },
@@ -2960,7 +2960,7 @@
    "id": 372,
    "term": "Archite(아기 사람)",
    "definition": "(as if from a place named Erech, on the frontiers of Ephraim), the usual designation of David’s friend Hushai. (2 Samuel 15:32; 17:5,14; 1 Chronicles 27:33)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "에브라임 경계 에렉이라는 지명에서 유래한 것으로 추정되는 명칭으로 다윗의 친구 후새를 가리킨다(사무엘하 15:32).",
    "hebrew_greek": "H0757"
   },
@@ -4065,7 +4065,7 @@
    "id": 511,
    "term": "Aziel(아시엘)",
    "definition": "(whom God comforts), a Levite. (1 Chronicles 15:20) The name is a shortened form of Jaaziel in ver. 18.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'하나님이 위로하시는 자'라는 뜻의 레위인으로(역대상 15:20) 18절의 야아시엘의 축약형이다.",
    "hebrew_greek": "H3268,H5815"
   },
@@ -4312,7 +4312,7 @@
    "id": 542,
    "term": "Bachrites(베겔 자손)",
    "definition": "the family of Becher, son of Ephraim. (Numbers 26:35)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "에브라임의 아들 베겔의 가문을 가리킨다(민수기 26:35).",
    "hebrew_greek": "H1076"
   },
@@ -4518,7 +4518,7 @@
   {
    "id": 568,
    "term": "Barabbas(바라바)",
-   "definition": "(son of Abba), a robber, (John 18:40) who had committed murder in an insurrection, (Mark 15:7; Luke 28:18) in Jerusalem and was lying in prison the time of the trial of Jesus before Pilate.p",
+   "definition": "(son of Abba), a robber, (John 18:40) who had committed murder in an insurrection, (Mark 15:7; Luke 28:18) in Jerusalem and was lying in prison the time of the trial of Jesus before Pilate.",
    "category": "인명",
    "definition_ko": "'아바의 아들'이라는 뜻으로 예루살렘의 반란 중 살인을 저지른 강도이며(마가복음 15:7) 예수님의 재판 당시 옥에 갇혀 있었다.",
    "hebrew_greek": "G0912,G2424"
@@ -4796,7 +4796,7 @@
    "id": 603,
    "term": "Bavai(바왜)",
    "definition": "son of Henadad, ruler of the district of Keilah in the time of Nehemiah. (Nehemiah 3:18) (B.C. 446.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "느헤미야 시대 그일라 지역 관리인 헤나닷의 아들이다(느헤미야 3:18).",
    "hebrew_greek": "H0942"
   },
@@ -5403,7 +5403,7 @@
    "id": 680,
    "term": "Beriites(베리 자손)",
    "definition": "A tribe of people who are named with Abel and Beth-maachah, and who were therefore doubtless situated in the north of Palestine. (2 Samuel 20:14)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "아벨, 벧마아가와 함께 언급되는 부족으로 팔레스타인 북부에 위치했던 것으로 추정된다(사무엘하 20:14).",
    "hebrew_greek": "H1284"
   },
@@ -5797,7 +5797,7 @@
   {
    "id": 730,
    "term": "Bethpeor(벧브올)",
-   "definition": "(house of Peor), a place on the east of Jordan, opposite Jericho and six miles above",
+   "definition": "(house of Peor), a place on the east of Jordan, opposite Jericho and six miles above Libias or Beth-haran. (Joshua 13:20; 3:29; 4:46)",
    "category": "지명",
    "definition_ko": "'브올의 집'이라는 뜻으로 요단강 동쪽, 여리고 맞은편에서 6마일 위쪽에 위치한 곳이다.",
    "hebrew_greek": "H1047"
@@ -5955,9 +5955,9 @@
   },
   {
    "id": 750,
-   "term": "Bezer(베셀)",
+   "term": "Bezer In The Wilderness(광야의 베셀)",
    "definition": "a city of refuge in the downs on the east of the Jordan. (4:43; Joshua 20:8; 21:36; 1 Chronicles 6:78)",
-   "category": "인명",
+   "category": "지명",
    "definition_ko": "요단강 동쪽 언덕 지대의 도피성이다(신명기 4:43).",
    "hebrew_greek": "H1221"
   },
@@ -6370,7 +6370,7 @@
   {
    "id": 802,
    "term": "Bosor(보솔)",
-   "definition": "",
+   "definition": "same as Beor. (2 Peter 2:15)",
    "category": "인명",
    "definition_ko": "브올(BEOR)의 신약 헬라어 표기이다(베드로후서 2:15).",
    "hebrew_greek": "G1007,H1160"
@@ -8007,7 +8007,7 @@
    "id": 1009,
    "term": "Cleopas(글로바)",
    "definition": "(of a renowned father), one of the two disciples who were going to Emmaus on the day of the resurrection. (Luke 24:18) Some think the same as Cleophas in (John 19:25) But they are probably two different persons. Cleopas is a Greek name, contracted from Cleopater, while Cleophas, or Clopas as in the Revised Version, is an Aramaic name, the same as Alphaeus.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'유명한 아버지의'라는 뜻으로 부활의 날 엠마오로 가던 두 제자 중 하나이다(누가복음 24:18). 요한복음 19:25의 글로바와 동일 인물로 보는 이도 있으나 실제로는 다른 두 사람으로 보인다. 글로바는 헬라식 이름인 반면 글로바(알패오)는 아람어 이름이다.",
    "hebrew_greek": "G0256,G2810,G2832"
   },
@@ -8211,7 +8211,7 @@
    "id": 1035,
    "term": "Concubine",
    "definition": "The difference between wife and concubine was less marked among the Hebrews than among us, owing to the absence of moral stigma. The difference probably lay in the absence of the right of the bill of divorce, without which the wife could not be repudiated. With regard to the children of wife and of concubine, there was no such difference as our illegitimacy implies. The latter were a supplementary family to the former; their names occur in the patriarchal genealogies, (Genesis 22:24; 1 Chronicles 1:22) and their position and provision would depend on the father’s will. (Genesis 25:6) The state of concubinage is assumed and provided for by the law of Moses. A concubine would generally be either (1) a Hebrew girl bought of her father; (2) a Gentile captive taken in war; (3) a foreign slave bought; or (4) a Canaanitish woman, bond or free. The rights of the first two were protected by the law, (Exodus 21:7; 21:10-14) but the third was unrecognized and the fourth prohibited. Free Hebrew women also might become concubines. To seize on royal concubines for his use was probably the intent of Abner’s act, (2 Samuel 3:7) and similarly the request on behalf of Adonijah was construed. (1 Kings 2:21-24)",
-   "category": "인명",
+   "category": "용어",
    "definition_ko": "히브리인들 사이에서 아내와 첩의 구분은 오늘날보다 도덕적 낙인이 덜했다. 그 차이는 아마도 이혼 증서를 받을 권리의 유무에 있었을 것이며, 아내와 첩의 자녀 사이에는 오늘날 사생아 개념에 해당하는 차별이 없었다. 첩은 대개 (1) 아버지에게서 사들인 히브리 소녀, (2) 전쟁에서 사로잡은 이방 포로, (3) 사들인 외국인 노예, (4) 가나안 여인(노예 또는 자유인) 중 하나였다.",
    "hebrew_greek": "G0028,H0049,H3904,H6370"
   },
@@ -11335,7 +11335,7 @@
    "id": 1428,
    "term": "Etam, The Rock(에담 바위)",
    "definition": "a cliff or lofty rock, into a cleft or chasm of which Samson retired after his slaughter of the Philistines. (Judges 15:8,11) This natural stronghold was in the tribe of Judah; and near it, probably at its foot, were Lehi and Ramath-lehi and Enhakkore. (Judges 15:9,14,17,19) The name Etam was held by a city in the neighborhood of Bethlehem, (2 Chronicles 11:6) which is known to have been situated in the extremely uneven and broken country round the modern Urtas.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "삼손이 블레셋 사람들을 죽인 후 은신한 절벽 또는 높은 바위이며 유다 지파 안에 위치했다. 근처에는 레히, 라맛레히, 엔학고레가 있었다(사사기 15:8)."
   },
   {
@@ -11674,7 +11674,7 @@
    "id": 1471,
    "term": "Ezrahite(에스라 사람)",
    "definition": "(son of Zerah), a title attached to two persons—Ethan, (1 Kings 4:31; Psalms 89:1) title, and Heman, Psal 88:1title.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'세라의 아들'이라는 뜻으로 에단과 헤만 두 인물에게 붙는 칭호이다(열왕기상 4:31; 시편 89편, 88편 표제).",
    "hebrew_greek": "H0250"
   },
@@ -12660,7 +12660,7 @@
    "id": 1595,
    "term": "Gederathite(그데라 사람)",
    "definition": "the native of a place called Gederah, apparently in Benjamin. (1 Chronicles 12:4)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "그데라라 불리는 베냐민 지역의 한 장소 출신을 가리킨다(역대상 12:4).",
    "hebrew_greek": "H1449,H1451,H1452"
   },
@@ -12897,7 +12897,7 @@
    "id": 1625,
    "term": "Gerzites(그르시 족속)",
    "definition": "(dwellers in the desert), The, a tribe who with the Geshurites and the Amalekites occupied the land between the south of Palestine and Egypt in the time of Saul. (1 Samuel 27:8) In the name of Mount Gerizim we have the only remaining trace of the presence of this old tribe of Bedouins in central Palestine.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'광야에 거하는 자들'이라는 뜻으로 사울 시대 그술 족속, 아말렉 족속과 함께 팔레스타인 남쪽과 이집트 사이 땅을 차지한 부족이다(사무엘상 27:8). 그리심산이라는 이름에 이 고대 베두인 부족이 팔레스타인 중부에 존재했던 유일한 흔적이 남아 있다."
   },
   {
@@ -14055,7 +14055,7 @@
    "id": 1771,
    "term": "Hammoleketh(함몰레겟)",
    "definition": "(the queen), a daughter of Machir and sister of Gilead. (1 Chronicles 7:17,18) (B.C. between 1706 and 1491.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'여왕'이라는 뜻으로 마길의 딸이자 길르앗의 누이이다(역대상 7:17).",
    "hebrew_greek": "H4447"
   },
@@ -14103,7 +14103,7 @@
    "id": 1777,
    "term": "Hamuel(하무엘)",
    "definition": "(heat, i.e. wrath, of God), a man of Simeon, of the family of Shaul. (1 Chronicles 4:26)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'하나님의 열정(진노)'이라는 뜻으로 시므온 지파 사울 가문 사람이다(역대상 4:26).",
    "hebrew_greek": "H2536"
   },
@@ -14770,7 +14770,7 @@
    "id": 1861,
    "term": "Hazerim(하세림)",
    "definition": "(villages). The Avim, or more accurately the Avvim, are said to have lived “in the villages (Authorized Version ’Hazerim’) as far as Gaza,” (2:23) before their expulsion by the Caphtorim.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'마을들'이라는 뜻으로 아윔(아빔)이 가사까지 '마을들'(흠정역 '하세림')에 거주했다고 언급된다(신명기 2:23).",
    "hebrew_greek": "H2699"
   },
@@ -15350,7 +15350,7 @@
    "id": 1934,
    "term": "Hezeki(헤스기)",
    "definition": "(strong), a Benjamite, one of the Bene-Elpaal, a descendant of Shaaraim. (1 Chronicles 8:17) (B.C. 598.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'강한'이라는 뜻으로 벨라임 가문 사아라임 후손인 베냐민 사람이다(역대상 8:17).",
    "hebrew_greek": "H2395"
   },
@@ -16793,7 +16793,7 @@
    "id": 2115,
    "term": "Israelite(이스라엘 사람)",
    "definition": "(descendant of Israel). In (2 Samuel 17:25) Ithra, the father of Amasa, is called “an Israelite,” while in (1 Chronicles 2:17) he appears as “Jether the Ishmaelite.” The latter is undoubtedly the true reading.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'이스라엘의 후손'이라는 뜻이다. 사무엘하 17:25에서는 아마사의 아버지 이드라를 '이스라엘 사람'이라 부르나 역대상 2:17에서는 '이스마엘 사람 예델'로 나오는데 후자가 옳은 표기로 여겨진다.",
    "hebrew_greek": "G2475,H3481"
   },
@@ -16896,7 +16896,7 @@
    "id": 2128,
    "term": "Ithra(이드라)",
    "definition": "(excellence), an Israelite, (2 Samuel 17:25) or Ishmaelite, (1 Chronicles 2:17) the father of Amasa by Abigail, David’s sister. (B.C. before 1023.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'탁월함'이라는 뜻으로 다윗의 누이 아비가일을 통해 아마사를 낳은 이스라엘 사람(또는 이스마엘 사람)이다(사무엘하 17:25).",
    "hebrew_greek": "H3501"
   },
@@ -17000,7 +17000,7 @@
    "id": 2141,
    "term": "Izrahite(이스라 사람)",
    "definition": "(descendant of Zerah), The, the designation of Shamhuth (1 Chronicles 27:8) Its real force probably Zerahite, that is, from the great Judaic family of Zerah.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'세라의 후손'이라는 뜻으로 삼훗에게 붙은 명칭이며(역대상 27:8) 실제로는 '세라 사람', 곧 유다의 큰 가문 세라 출신을 뜻하는 것으로 보인다.",
    "hebrew_greek": "H3155"
   },
@@ -17208,7 +17208,7 @@
    "id": 2167,
    "term": "Jacobs Well(야곱의 우물)",
    "definition": "a deep spring in the vicinity of Shechem (called Sychar in Christ’s time and Nablus at the present day). It was probably dug by Jacob whose name it bears. On the curb of the well Jesus sat and discoursed with the Samaritan woman. (John 4:5-26) It is situated about half a mile southeast of Nablus, at the foot of Mount Gerizim. It is about nine feet in diameter and 75 feet deep. At some seasons it is dry; at others it contains a few feet of water.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "세겜(그리스도 시대에는 수가, 오늘날 나블루스) 근처의 깊은 샘으로 야곱이 판 것으로 추정되어 그의 이름을 지녔다. 예수님이 우물 턱에 앉아 사마리아 여인과 대화하신 곳이다(요한복음 4:5). 나블루스에서 남동쪽으로 약 반 마일, 그리심산 기슭에 위치하며 지름 약 9피트, 깊이 75피트이다."
   },
   {
@@ -18352,7 +18352,7 @@
    "id": 2311,
    "term": "Jeremias(예레미아)",
    "definition": "the Greek form of the name of Jeremiah the prophet. (Matthew 16:14)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "선지자 예레미야 이름의 그리스식 표기이다(마태복음 16:14)."
   },
   {
@@ -18367,7 +18367,7 @@
    "id": 2313,
    "term": "Jeremy(예레미)",
    "definition": "the prophet Jeremiah. (Matthew 2:17; 27:9)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "선지자 예레미야를 가리키는 다른 표기이다(마태복음 2:17)."
   },
   {
@@ -18518,7 +18518,7 @@
    "id": 2332,
    "term": "Jesharelah(여사렐라)",
    "definition": "(right before God), son of Asaph, and head of the seventh of the twenty-four wards into which the musicians of the Levites were divided. (1 Chronicles 25:14) [Asarelah] (B.C. 1014).",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'하나님 앞에 올바른'이라는 뜻으로 아삽의 아들, 레위인 음악가 스물넷 반차 중 일곱째 우두머리이다(역대상 25:14).",
    "hebrew_greek": "H0841,H3480"
   },
@@ -18717,7 +18717,7 @@
    "term": "Jeuz(여우스)",
    "definition": "(counsellor), head of a Benjamite house. (1 Chronicles 8:10)",
    "category": "인명",
-   "definition_ko": "'모사(謀士)'라는 뜻으로 베냐민 지파 한 가문의 우두머리다(역대상 8:10).",
+   "definition_ko": "'모사'라는 뜻으로 베냐민 지파 한 가문의 우두머리다(역대상 8:10).",
    "hebrew_greek": "H3263"
   },
   {
@@ -18788,7 +18788,7 @@
    "id": 2366,
    "term": "Jeziah(잇시야)",
    "definition": "(whom Jehovah expiates), a descendant of Parosh, who had married a foreign wife. (Ezra 10:25)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "바로스의 후손으로 이방 여인과 결혼했던 자다(에스라 10:25).",
    "hebrew_greek": "H3150"
   },
@@ -18804,7 +18804,7 @@
    "id": 2368,
    "term": "Jezliah(이슬리아)",
    "definition": "(whom God will preserve), a Benjamite of the sons of Elpaal. (1 Chronicles 8:18) (B.C. 588.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "엘바알 자손에 속한 베냐민 사람이다(역대상 8:18).",
    "hebrew_greek": "H3152"
   },
@@ -18812,7 +18812,7 @@
    "id": 2369,
    "term": "Jezoar(여소알)",
    "definition": "(whiteness), the son of Helah, one of the wives of Asher. (1 Chronicles 4:7)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'흰빛'이라는 뜻으로 아셀의 아내 헬라의 아들이다(역대상 4:7)."
   },
   {
@@ -18835,7 +18835,7 @@
    "id": 2372,
    "term": "Jezreelitess(이스르엘 여인)",
    "definition": "a woman of Jezreel. (1 Samuel 27:3; 30:5; 2 Samuel 2:2; 3:2; 1 Chronicles 3:1)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "이스르엘 출신 여인을 가리키는 표현이다(사무엘상 27:3, 30:5; 사무엘하 2:2, 3:2; 역대상 3:1).",
    "hebrew_greek": "H3159"
   },
@@ -18967,7 +18967,7 @@
    "id": 2389,
    "term": "Joatham(요담)",
    "definition": "= Jothamthe son of Uzziah. (Matthew 1:9)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "웃시야의 아들 요담(Jotham)과 동일 인물이다(마태복음 1:9).",
    "hebrew_greek": "G2488"
   },
@@ -19324,7 +19324,7 @@
    "id": 2434,
    "term": "Josaphat(요사밧)",
    "definition": "= Jehoshaphat king of Judah. (Matthew 1:8)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "유다 왕 여호사밧(Jehoshaphat)과 동일 인물이다(마태복음 1:8).",
    "hebrew_greek": "G2498"
   },
@@ -19332,7 +19332,7 @@
    "id": 2435,
    "term": "Jose(요세)",
    "definition": "(another form of Joses), son of Eliezer, in the genealogy of Jesus Christ. (Luke 3:29)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "요세(Joses)의 변형으로 그리스도의 족보에 나오는 엘리에셀의 아들이다(누가복음 3:29).",
    "hebrew_greek": "G2499"
   },
@@ -19428,7 +19428,7 @@
    "id": 2447,
    "term": "Josias(요시야)",
    "definition": "Josiah, king of Judah. (Matthew 1:10,11)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "유다 왕 요시야(Josiah)를 가리킨다(마태복음 1:10,11).",
    "hebrew_greek": "G2502"
   },
@@ -19436,7 +19436,7 @@
    "id": 2448,
    "term": "Josibiah(요시비야)",
    "definition": "(to whom God gives a dwelling), the father of Jehu, a Simeonite. (1 Chronicles 4:35)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "시므온 사람 여후의 아버지다(역대상 4:35).",
    "hebrew_greek": "H3143"
   },
@@ -19524,7 +19524,7 @@
    "id": 2459,
    "term": "Jucal(유갈)",
    "definition": "(powerful), son of Shelemiah. (Jeremiah 38:1)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'강한'이라는 뜻으로 셀레먀의 아들이다(예레미야 38:1).",
    "hebrew_greek": "H3116"
   },
@@ -19705,7 +19705,7 @@
    "id": 2482,
    "term": "Jushabhesed(여수합헤셋)",
    "definition": "(whose love is returned), son of Zerubbabel. (1 Chronicles 3:20)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'그 사랑이 돌아온'이라는 뜻으로 스룹바벨의 아들이다(역대상 3:20)."
   },
   {
@@ -19942,7 +19942,7 @@
    "id": 2512,
    "term": "Kenezite(그나스 족속)",
    "definition": "or Ken’izzite (descendant of Kenaz), (Genesis 15:19) an Edomitish tribe. (Numbers 32:12; Joshua 14:6,14)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "그나스의 후손으로 에돔 계열 부족이다(민수기 32:12; 여호수아 14:6,14).",
    "hebrew_greek": "H7074"
   },
@@ -20100,7 +20100,7 @@
    "id": 2532,
    "term": "Kir Of Moab(모압 길)",
    "definition": "(fortress of Moab), one of the two chief strongholds of Moab, the other being Ar of Moab. The name occurs only in (Isaiah 15:1) though the place is probably referred to under the names of Kir-heres, Kir-harseth, etc. It is almost identical with the name Kerak, by which the site of an important city in a high and very strong position at the southeast of the Dead Sea is known at this day. Its situation is truly remarkable. It is built upon the top of a steep hill, surrounded by a deep and narrow valley, which again is completely enclosed by mountains rising higher than the town and overlooking it on all sides.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'모압의 요새'라는 뜻으로 아르 모압과 더불어 모압의 두 주요 요새 중 하나였다. 사해 동남쪽 높은 지대에 위치한 현재의 케라크와 거의 동일시된다(이사야 15:1).",
    "hebrew_greek": "H0803"
   },
@@ -20108,7 +20108,7 @@
    "id": 2533,
    "term": "Kirharaseth(길하레셋)",
    "definition": "(brick fortress), (2 Kings 3:25) Kir-ha’resh, (Isaiah 16:11) Kir-har’es, (Jeremiah 48:31,36) These four names are all applied to one place, probably Kir Of MoabOF MOAB, which see.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'벽돌 요새'라는 뜻으로 모압의 길(Kir Of Moab)과 같은 곳을 가리키는 여러 표기 중 하나다(열왕기하 3:25; 이사야 16:11; 예레미야 48:31,36).",
    "hebrew_greek": "H0803"
   },
@@ -20633,7 +20633,7 @@
    "term": "Law Of Moses(모세 율법)",
    "definition": "It will be the object of this article to give a brief analysis of the substance of this law, to point out its main principles, and to explain the position which it occupies in the progress of divine revelation. In order to do this the more clearly, it seems best to speak of the law, 1st. In relation to the past; 2d. In its own intrinsic character. • (a) In reference to the past, it is all-important, for the proper understanding of the law, to remember its entire dependence on the Abrahamic covenant. See (Galatians 3:17-24) That covenant had a twofold character. It contained the “spiritual promise” of the Messiah; but it contained also the temporal promises subsidiary to the former. (b) The nature of this relation of the law to the promise is clearly pointed out. The belief in God as the Redeemer of man, and the hope of his manifestation as such int he person of the Messiah, involved the belief that the Spiritual Power must be superior to all carnal obstructions, and that there was in man spiritual element which could rule his life by communion with a spirit from above. But it involved also the idea of an antagonistic power of evil, from which man was to be redeemed, existing in each individual, and existing also in the world at large. (c) Nor is it less essential to remark the period of the history at which it was given. It marked and determined the transition of Israel from the condition of a tribe to that of a nation, and its definite assumption of a distinct position and office in the history of the world. (d) Yet, though new in its general conception, it was probably not wholly new in its materials. There must necessarily have been, before the law, commandments and revelations of a fragmentary character, under which Israel had hitherto grown up. So far therefore as they were consistent with the objects of the Jewish law, the customs of Palestine and the laws of Egypt would doubtless be traceable in the Mosaic system. (e) In close connection with, and almost in consequence of, this reference to antiquity, we find an accommodation of the law to the temper and circumstances of the Israelites, to which our Lord refers int he case of divorce, (Matthew 19:7,8) as necessarily interfering with its absolute perfection. In many cases it rather should be said to guide and modify existing usages than actually to sanction them; and the ignorance of their existence may lead to a conception of its ordinances not only erroneous, but actually the reverse of the truth. (f) In close connection with this subject we observe also the gradual process by which the law was revealed to the Israelites. In Ex 20-23, in direct connection with the revelation from Mount Sinai, that which may be called the rough outline of the Mosaic law is given by God, solemnly recorded by Moses, and accepted by the people. In Ex 25-31, there is a similar outline of the Mosaic ceremonial. On the basis of these it may be conceived that the fabric of the Mosaic system gradually grew up under the requirements of the time. The first revelation of the law in anything like a perfect form is found in the book of Deuteronomy. yet even then the revelation was not final; it was the duty of the prophets to amend and explain it in special points, (Ezekiel 18:1) ... and to bring out more clearly its great principles. • In giving an analysis of the substance of the law, it will probably be better to treat it, as any other system of laws is usually treated, by dividing it into— I. Laws Civil; II. Laws Criminal: III. Laws Judicial and Constitutional; IV. Laws Ecclesiastical and Ceremonial. I. LAWS CIVIL. • LAW OF PERSonS. (a) FatherAND Son.—the power of a father to be held sacred; cursing or smiting, (Exodus 21:15,17; Leviticus 20:9) and stubborn and willful disobedience, to be considered capital crimes. But uncontrolled power of life and death was apparently refused to the father, and vested only in the congregation. (21:1821) Right of the first-born to a double portion of the inheritance not to be set aside by partiality. (21:15-17) Inheritance by daughters to be allowed in default of sons, provided, (Numbers 27:6-8) comp. Numb 36:1... that heiresses married in their own tribe. Daughters unmarried to be entirely dependent on their father. (Numbers 30:3-5) (b) HusbandAND Wife.—the power of a husband to be so great that a wife could never be sui juris, or enter independently into any engagement, even before God. (Numbers 30:6-15) A widow or a divorced wife became independent, and did not against fall under her father’s power. ver. (Numbers 30:9) Divorce (for uncleanness) allowed, but to be formal and irrevocable. (24:1-4) Marriage within certain degrees forbidden. (Leviticus 18:1) ... etc. A slave wife, whether bought or captive, not to be actual property, nor to be sold; if illtreated, to be ipso facto free. (Exodus 21:7-9; 21:10-14) Slander against a wife’s virginity to be punished by fine, and by deprived of power of divorce; on the other hand, ante-connubial uncleanness in her to be punished by death. (22:13-21) the raising up of seed (Levirate law) a formal right to be claimed by the widow, under pain of infamy, with a view to preservation of families. (25:5-10) (c) MASTER AND Slave.—Power of master so far limited that death under actual chastisement was punishable, (Exodus 21:20) and maiming was to give liberty ipso facto . vs. (Exodus 21:26,27) The Hebrew slave to be freed at the sabbatical year, and provided with necessaries (his wife and children to go with only if they came to his master with him), unless by his own formal act he consented to be a perpetual slave. (Exodus 21:1-6; 15:12-18) In any case, it would seem, to be freed at the jubilee, (Leviticus 25:10) with his children. If sold to a resident alien, to be always redeemable, at a price proportioned to the distance of the jubilee. (Leviticus 25:47-54) Foreign slaves to be held and inherited as property forever, (Leviticus 25:45,46) and fugitive slaves from foreign nations not to be given up. (23:15) (d) STRANGERS.—These seem never to have been sui juris, or able to protect themselves, and accordingly protection and kindness toward them are enjoined as a sacred duty. (Exodus 22:21; Leviticus 19:33,34) • LAW OF THINGS. (a) LAWS OF LAND (AND PROPERTY).— (1) All land to be the property of God alone, and its holders to be deemed his tenants. (Leviticus 25:23) (2) All sold land therefore to return to its original owners at the jubilee, and the price of sale to be calculated accordingly; and redemption on equitable terms to be allowed at all times. (Leviticus 25:25-27) A house sold to be redeemable within a year; and if not redeemed, to pass away altogether, ch. (Leviticus 25:29,30) But the houses of the Levites, or those in unwalled villages, to be redeemable at all times, in the same way as land; and the Levitical suburbs to be inalienable. ch. (Leviticus 25:31-34) (3) Land or houses sanctified, or tithes, or unclean firstlings, to be capable of being redeemed, at six-fifths value (calculated according to the distance from the jubilee year by the priest); if devoted by the owner and unredeemed, to be hallowed at the jubilee forever, and given to the priests; if only by a possessor, to return to the owner at the jubilee. (Leviticus 27:14-34) (4) Inheritance . (b) LAWS OF DEBT.— (1) All debts (to an Israelite) to be released at the seventh (sabbatical year; a blessing promised to obedience, and a curse on refusal to lend. (15:1-11) (2) Usury (from Israelites) not to be taken. (Exodus 22:25-27; 23:19,20) (3) Pledges not to be insolently or ruinously exacted. (24:6,10-13,17,18) (c) TAXATION.— (1) Census-money, a poll-tax (of a half shekel), to be paid for the service of the tabernacle. (Exodus 30:12-16) All spoil in war to be halved; of the combatants’ half, one five-hundreth, of the people’s, one fiftieth, to be paid for a “heave offering” to Jehovah. (2) Tithes .— (a) Tithes of all produce to be given for maintenance of the Levites. (Numbers 18:20-24) (Of this one tenth to be paid as a heave offering for maintenance of the priests. vs. (Numbers 18:24-32)) (b) Second tithe to be bestowed in religious feasting and charity, either at the holy place or (every third year) at home. (14:22-28) (c) First-fruits of corn, wine and oil (at least one sixtieth, generally one fortieth, for the priests) to be offered at Jerusalem, with a solemn declaration of dependence on God the King of Israel. (Numbers 18:12,13; 26:1-15) Firstlings of clean beasts; the redemption money (five shekels) of man and (half shekel, or one shekel) of unclean beasts to be given to the priests after sacrifice. (Numbers 18:15-18) (3) Poor laws.— (a) Gleanings (in field or vineyard) to be a legal right of the poor. (Leviticus 19:9,10; 24:19-22) (b) Slight trespass (eating on the spot) to be allowed as legal. (23:24,25) (c) Wages to be paid day by day. (24:15) (4) Maintenance of priests. (Numbers 18:8-32) (a) Tenth of Levites’ tithe . (See 2a.) (b) The heave and wave offerings (breast and right shoulder of all peace offerings). (c) The meat and sin offerings, to be eaten solemnly and only in the holy place. (c) First-fruits and redemption money. (See 2c.) (e) Price of all devoted things, unless specially given for a sacred service. A man’s service, or that of his household, to be redeemed at 50 shekels for man, 30 for woman, 20 for boy and 10 for girl. II. LAWS CRIMINAL. • OFFENCES AGAINST God(of the nature of treason.) 1St Command. Acknowledgment of false gods, (Exodus 22:20) as e.g. Molech, (Leviticus 20:1-5) and generally all idolatry . (13; 17:2-5) 2Nd Command. Witchcraft and false prophecy. (Exodus 22:18; 18:9-22; Leviticus 19:31) 3Rd Command. Blasphemy . (Leviticus 24:15,16) 4Th Command. Sabbath-breaking . (Numbers 15:32,36) Punishment in all cases, death by stoning . Idolatrous cities to be utterly destroyed. • OFFENCES AGAINST Man. 5Th Command. Disobedience to or cursing or smiting of parents, (Exodus 21:15,17; Leviticus 20:9; 21:18-21) to be punished by death by stoning, publicly adjudged and inflicted; so also of disobedience to the priests (as judges) or the Supreme Judge. Comp. (1 Kings 21:10-14) (Naboth); (2 Chronicles 24:21) (Zechariah). 6Th Command. (1) Murder to be punished by death without sanctuary or reprieve, or satisfaction. (Exodus 21:12,14; 19:11-13) Death of a slave, actually under the rod, to be punished. (Exodus 21:20,21) (2) Death by negligence to be punished by death. (Exodus 21:28-30) (3) Accidental homicide : the avenger of blood to seek safety by flight to a city of refuge, there to remain till the death of the high priest. (Numbers 35:9-28; 4:41-43; 19:4-10) (4) Uncertain murder to be expiated by formal disavowal and sacrifice by the elders of the nearest city. (21:1-9) (5) Assault to be punished by lex talionis, or damages. (Exodus 21:18,19,22-25; Leviticus 24:19,20) 7Th Command. (1) Adultery to be punished by death of both offenders; the rape of a married or betrothed woman, by death of the offender. (22:13-27) (2) Rape or seduction of an unbetrothed virgin to be compensated by marriage, with dowry (50 shekels), and without power of divorce; or, if she be refused, by payment of full dowry. (Exodus 22:16,17; 22:28,29) (3) Unlawful marriages (incestuous, etc.) to be punished, some by death, some by childlessness. (Leviticus 20:1) ... 8Th command. (1) Theft to be punished by fourfold or double restitution; or nocturnal robber might be slain as an outlaw. (Exodus 22:1-4) (2) Trespass and injury of things lent to be compensated. (Exodus 23:5-15) (3) Perversion of justice (by bribes, threats, etc.), and especially oppression of strangers, strictly forbidden. (Exodus 22:9) etc. (4) Kidnapping to be punished by death. (24:7) 9Th Command. False witness to be punished by lex talionis . (Exodus 23:1-3; 19:16-21) Slander of a wife’s chastity, by fine and loss of power of divorce. (22:18,19) A fuller consideration of the tables of the Ten Commandments is given elsewhere. [Ten Commandments COMMANDMENTS] III. LAWS JUDICIAL AND CONSTITUTIONAL. • JURISDICTION. (a) Local judges (generally Levites as more skilled in the law) appointed, for ordinary matters, probably by the people with approbation of the supreme authority (as of Moses in the wilderness), (Exodus 18:25; 1:15-18) through all the land. (16:18) (b) Appeal to the priests (at the holy place), or to the judge ; their sentence final, and to be accepted under pain of death. See (17:8-13) comp. appeal to Moses, (Exodus 18:26) (c) Two witnesses (at least) required in capital matters. (Numbers 35:30; 17:6,7) (d) Punishment, except by special command, to be personal, and not to extend to the family. (24:16) Stripes allowed and limited, (25:1-3) so as to avoid outrage on the human frame. All this would be to a great extent set aside—1st. By the summary jurisdiction of the king, see (1 Samuel 22:11-19) (Saul); (2 Samuel 12:1-5; 14:4-11; 1 Kings 3:16-28) which extended even to the deposition of the high priest. (1 Samuel 22:17,18; 1 Kings 2:26,27) The practical difficulty of its being carried out is seen in (2 Samuel 15:2-6) and would lead of course to a certain delegation of his power. 2Nd. By the appointment of the Seventy, (Numbers 11:24-30) with a solemn religious sanction. In later times there was a local sanhedrin of twenty-three in each city, and two such in Jerusalem, as well as the Great Sanhedrin, consisting of seventy members, besides the president, who was to be the high priest if duly qualified, and controlling even the king and high priest. The members were priest, scribes (Levites), and elders (of other tribes). A court of exactly this nature is noticed as appointed to supreme power by Jehoshaphat. See (2 Chronicles 19:8-11) • ROYAL POWER. The king’s power limited by the law, as written and formally accepted by the king; and directly forbidden to be despotic. (Military conquest discouraged by the prohibition of the use of horses. See (Joshua 11:6) For an example of obedience to this law see (2 Samuel 8:4) and of disobedience to it see (1 Kings 10:26-29) (17:14-20) comp. 1Sam 10:25Yet he had power of taxation (to one tenth) and of compulsory service, (1 Samuel 8:10-18) the declaration of war, (1 Samuel 11:1) ... etc. There are distinct traces of a “mutual contract,” (2 Samuel 5:3) a “league,” (2 Kings 11:17) the remonstrance with Rehoboam being clearly not extraordinary. (1 Kings 13:1-6) The princes of the congregation .—The heads of the tribes, see (Joshua 9:15) seem to have had authority under Joshua to act for the people, comp. (1 Chronicles 27:16-22) and in the later times “the princes of Judah” seem to have had power to control both the king and the priests. See (Jeremiah 26:10-24; 38:4,5) etc. • ROYAL REVENUE. (1) Tenth of produce. (2) Domain land. (1 Chronicles 27:26-29) Note confiscation of criminal’s land. (1 Kings 21:15) (3) Bond service, (1 Kings 5:17,18) chiefly on foreigners. (1 Kings 9:20-22; 2 Chronicles 2:16,17) (4) Flocks and herds. (1 Chronicles 27:29-31) (5) Tributes (gifts) from foreign kings. (6) Commerce ; especially in Solomon’s time. (1 Kings 10:22,29) etc. IV. ECCLESIASTICAL AND CEREMONIAL LAW. • LAW OF Sacrifice(considered as the sign and the appointed means of the union with God, on which the holiness of the people depended). A. ORDINARY SACRIFICES. (a) The whole burnt offering, (Leviticus 1:1) ... of the herd or the flock; to be offered continually, (Exodus 29:38-42) and the fire on the altar never to be extinguished. (Leviticus 6:8-13) (b) The meat offering, (Leviticus 2; 6:14-23) of flour, oil and frankincense, unleavened and seasoned with salt. (c) The peace offering, (Leviticus 3:1; Leviticus 7:11-21) of the herd or the flock; either a thank offering or a vow or free-will offering. (d) The sin offering or trespass offering . Le 4,5,6(A) For sins committed in ignorance. Le 4(B) For vows unwittingly made and broken, or uncleanness unwittingly contracted. Levi 5 (C) For sins wittingly committed. (Leviticus 6:1-7) b. EXTRAORDINARY SACRIFICES. (a) At the consecration of priests. Le 8,9(b) At the purification of women. Le 12(c) At the cleansing of lepers. Le 13,14(d) On the great day of atonement. Le 16(e) On the great festivals. Le 23 • LAW OF HOLINESS (arising from the union with God through sacrifice). a. HOLINESS OF PERSONS. (1) Holiness of the whole people as “children of God,” (Exodus 19:5,6; Leviticus 11-15,17,18; 14:1-21) shown in (a) The dedication of the first-born, (Exodus 13:2,12,13; 22:29,30) etc.; and the offering of all firstlings and first-fruits. Deuteronomy 26, etc. (b) Distinction of clean and unclean food. Levi 11; Deuteronomy 14. (c) Provision for purification. Levi 12,13,14,15; (23:1-4) (d) Laws against disfigurement. (Leviticus 19:27; 14:1) comp. (25:3) against excessive scourging. (e) Laws against unnatural marriages and lusts. Le 18,20(2) Holiness of the priests (and Levites) . (a) Their consecration. Le 8,9; Ex 29(b) Their special (18:1-6; Numbers 18:1) ... and authority. (17:8-13) b. HOLINESS OF PLACES AND THINGS. (a) The tabernacle with the ark, the vail, the altars, the laver, the priestly robes, etc. Ex 25-28,30. (b) The holy place chosen for the permanent erection of the tabernacle, (12:1; 14:22-29) where only all sacrifices were to be offered and all tithes, firstfruits, vows, etc., to be given or eaten. c. HOLINESS OF TIMES. (a) The Sabbath. (Exodus 20:9-11; 23:12) etc. (b) The sabbatical year. (Exodus 23:10,11; Leviticus 25:1-7) etc. (c) The year of jubilee. (Leviticus 25:8-16) etc. (d) The passover. (Exodus 12:3-27; Leviticus 23:4,5) (e) The feast of weeks (pentecost). (Leviticus 23:15) etc. (f) The feast of tabernacles . (Leviticus 23:33-43) (g) The feast of trumpets. (Leviticus 23:23-25) (h) The day of atonement . (Leviticus 23:26-32) etc. Such is the substance of the Mosaic law. The leading principle of the whole is its THEOCRATIC CHARACTER, its reference, that is, of all action and thoughts of men directly and immediately to the will of God. It follows from this that it is to be regarded not merely as a law, that is, a rule of conduct based on known truth and acknowledged authority, but also as a revelation of God’s nature and his dispensations. But this theocratic character of the law depends necessarily on the belief in God, as not only the creator and sustainer of the world, but as, by special covenant, the head of the Jewish nation. This immediate reference to God as their king is clearly seen as the groundwork of their whole polity. From this theocratic nature of the law follow important deductions with regard to (a) the view which it takes of political society; (b) the extent of the scope of the law; (c) the penalties by which it is enforced; and (d) the character which it seeks to impress on the people. (a) The Mosaic law seeks the basis of its polity, first, in the absolute sovereignty of God; next, in the relationship of each individual to God, and through God to his countrymen. It is clear that such a doctrine, while it contradicts none of the common theories, yet lies beneath them all. (b) The law, as proceeding directly from God and referring directly to him, is necessarily absolute in its supremacy and unlimited in its scope. It is supreme over the governors, as being only the delegates of the Lord, and therefore it is incompatible with any despotic authority in them. On the other hand, it is supreme over the governed, recognizing no inherent rights in the individual as prevailing against or limiting the law. It regulated the whole life of an Israelite. His actions were rewarded and punished with great minuteness and strictness—and that according to the standard, not of their consequences but of their intrinsic morality. (c) The penalties and rewards by which the law is enforced are such as depend on the direct theocracy. With regard to individual actions, it may be noticed that, as generally some penalties are inflicted by the subordinate and some only the supreme authority, so among the Israelites some penalties came from the hand of man, some directly from the providence of God. (d) But perhaps the most important consequence of the theocratic nature of the law was the peculiar character of goodness which it sought to impress on the people. The Mosaic law, beginning with piety as its first object, enforces most emphatically the purity essential to those who, by their union with God, have recovered the hope of intrinsic goodness, while it views righteousness and love rather as deductions from these than as independent objects. The appeal is not to any dignity of human nature, but to the obligations of communion with a holy God. The subordination, therefore, of this idea also to the religious idea is enforced; and so long as the due supremacy of the latter was preserved, all other duties would find their places in proper harmony.",
    "category": "용어",
-   "definition_ko": "아브라함 언약에 뿌리를 두며 이스라엘이 부족에서 민족으로 전환되는 시점에 주어졌다. 크게 민법, 형법, 사법·헌법, 종교·의식법으로 나뉘며 부모 공경, 살인·간음·도둑질 금지, 안식일 준수, 제사와 정결법, 왕권 제한 등을 포괄한다. 신정 체제를 근본 원리로 하여 모든 행동을 하나님의 뜻에 직접 결부시키는 것이 특징이다(출애굽기 20-23장; 레위기; 신명기).",
+   "definition_ko": "이 법의 실체를 간추리고 그 주요 원리를 밝히며, 신적 계시의 진행 안에서 차지하는 자리를 설명한다. (1) 과거와의 관계에서 볼 때, 율법을 바로 이해하려면 그것이 아브라함 언약에 전적으로 의존함을 기억해야 한다(갈라디아서 3:17-24). 그 언약은 메시아에 관한 '영적 약속'과 그에 딸린 현세적 약속이라는 이중 성격을 지녔다. 율법이 주어진 시점도 중요하니, 이스라엘이 한 부족에서 한 민족으로 넘어가 세계 역사에서 뚜렷한 자리와 직임을 맡게 되는 전환점을 표시하였다. 그 구상은 새로웠으나 재료가 온전히 새롭지는 않아서, 율법 이전에도 단편적인 계명과 계시가 있었고 가나안의 관습과 애굽의 법이 모세 제도에 흔적을 남겼다. 또 이혼 문제에서 주님이 말씀하신 대로(마태복음 19:7,8) 이스라엘의 성정과 형편에 맞춘 부분이 있어, 기존 관행을 승인하기보다 이끌고 다듬는 성격이 강하였다. 계시는 점진적이어서 출애굽기 20-23장에 개요가, 25-31장에 의식법의 개요가 주어졌고, 신명기에 이르러 비로소 온전한 형태를 갖추었으며, 이후 선지자들이 그 큰 원리를 밝히는 일을 맡았다.\n율법의 내용은 넷으로 나누어 볼 수 있다. I. 민법. (1) 사람에 관한 법. 아버지의 권위는 거룩히 여겨져 부모를 저주하거나 치는 것과 완악한 불순종은 사형에 해당하였으나(출애굽기 21:15,17; 레위기 20:9), 생사의 권한은 아버지가 아니라 회중에게 있었다. 맏아들의 두 몫 상속권은 편애로 무를 수 없었고, 아들이 없으면 딸이 상속하되 같은 지파 안에서 혼인하여야 하였다(민수기 27:6-8; 36장). 남편의 권한이 커서 아내는 독자적으로 서원할 수 없었으나(민수기 30:6-15) 과부와 이혼한 여자는 독립하였다. 이혼은 허용되되 정식이라야 하고 되돌릴 수 없었으며(신명기 24:1-4), 일정 촌수 안의 혼인은 금지되었다(레위기 18장). 종으로 얻은 아내는 재산이 아니어서 팔 수 없었고 학대받으면 그 자리에서 자유를 얻었다(출애굽기 21:7-14). 수혼법은 과부가 요구할 수 있는 정식 권리였다(신명기 25:5-10). 주인의 권한도 제한되어, 매를 맞다 죽으면 벌하였고 불구가 되면 곧 자유를 주었으며(출애굽기 21:20,26,27), 히브리 종은 안식년에 놓이고 희년에는 반드시 자유를 얻었다(출애굽기 21:1-6; 레위기 25:10). 나그네는 스스로를 지킬 수 없으므로 그를 보호하고 선대하는 것이 거룩한 본분으로 명령되었다(출애굽기 22:21; 레위기 19:33,34).\n(2) 물건에 관한 법. 모든 땅은 하나님의 것이며 소유자는 그 소작인으로 여겨졌다(레위기 25:23). 팔린 땅은 희년에 본래 임자에게 돌아가야 하였고 값도 그에 맞추어 셈하였으며 언제든 무를 수 있었다(레위기 25:25-27). 집은 한 해 안에 무를 수 있었으나 레위 사람의 집과 성벽 없는 마을의 집은 언제나 무를 수 있었다. 빚은 일곱째 해에 면제되었고(신명기 15:1-11), 동족에게 이자를 받는 것과 전당물을 무자비하게 잡는 것이 금지되었다. 세금으로는 성막을 위한 반 세겔 인구세, 전쟁 노략물의 일정 몫, 레위 사람을 위한 십일조와 그 십일조의 십분의 일인 제사장 몫, 절기와 구제를 위한 둘째 십일조, 첫 열매와 처음 난 것이 있었다. 가난한 자를 위해서는 이삭 줍기의 권리, 지나가며 따 먹는 것의 허용, 품삯의 당일 지급이 정해졌다.\nII. 형법. 하나님을 거스르는 죄, 곧 다른 신을 인정함과 우상 숭배, 술법과 거짓 예언, 신성모독, 안식일 어김은 모두 돌로 쳐 죽이는 벌을 받았다. 사람을 거스르는 죄로는 부모에 대한 불순종과 저주, 고살, 태만으로 인한 죽음, 폭행, 간음과 강간, 도둑질과 남의 물건을 상하게 함, 재판을 굽게 함, 사람을 후려 팖, 거짓 증언이 규정되었다. 고의 없는 살인자는 도피성으로 피하여 대제사장이 죽기까지 거기 머물렀다(민수기 35:9-28).\nIII. 사법과 헌법. 지방 재판관을 온 땅에 세우고(신명기 16:18), 어려운 일은 성소의 제사장이나 재판장에게 상소하되 그 판결은 최종이었다(신명기 17:8-13). 사형에는 두 사람 이상의 증인이 필요하였고, 형벌은 본인에게만 미쳐 가족에게 미치지 않았으며 매질에도 한도를 두었다. 왕의 권한은 기록된 법으로 제한되어 전제가 될 수 없었고 말을 많이 두는 것도 금지되었으나, 십분의 일의 세금과 부역과 선전의 권한은 있었다. 후대에는 각 성읍에 스물세 명의 지방 산헤드린이, 예루살렘에 대산헤드린이 있어 왕과 대제사장까지 통제하였다.\nIV. 교회법과 의식법. 제사는 하나님과 연합하는 표요 정하신 방편이니, 상번제와 소제와 화목제와 속죄제·속건제가 통상의 제사이고, 제사장 위임과 여인의 정결과 나병 환자의 정결과 속죄일과 큰 절기의 제사가 특별한 제사이다. 거룩함의 법은 사람과 장소와 때에 미쳐, 온 백성이 '하나님의 자녀'로 거룩하고, 처음 난 것을 구별하며, 정한 것과 부정한 것을 나누고, 정결례를 두며, 제사장과 레위 사람을 거룩히 구별하고, 성막과 그 기구와 성소를 거룩히 하며, 안식일과 안식년과 희년과 유월절과 오순절과 초막절과 나팔절과 속죄일을 거룩히 지키게 하였다.\n이 모든 것을 꿰뚫는 으뜸 원리는 신정적 성격이니, 곧 사람의 모든 행위와 생각을 곧바로 하나님의 뜻에 결부시키는 것이다. 그러므로 이 법은 단순한 행위 규범이 아니라 하나님의 본성과 경륜의 계시이기도 하다. 여기서 몇 가지가 따라 나온다. 정치 사회의 기초를 하나님의 절대 주권과, 각 사람이 하나님께 대하여, 또 하나님을 통하여 동족에게 대하여 지니는 관계에 둔다. 하나님에게서 직접 나왔으므로 그 권위는 최고이며 미치는 범위에 제한이 없어, 다스리는 자에게 전제의 권한을 허락하지 않고 다스림을 받는 자에게도 법에 맞서는 고유 권리를 인정하지 않는다. 상벌은 사람의 손으로 내리는 것과 하나님의 섭리로 곧바로 내리는 것이 함께 있다. 무엇보다 이 법이 백성에게 새기려 한 선함의 성격이 독특하니, 경건을 첫째 목표로 삼아 하나님과 연합한 자에게 마땅한 정결을 힘주어 명하고, 의와 사랑은 그것에서 흘러나오는 것으로 본다. 그 호소는 사람의 존엄이 아니라 거룩하신 하나님과 사귀는 데서 오는 의무에 있다.",
    "hebrew_greek": "H4873"
   },
   {
@@ -21212,7 +21212,7 @@
    "id": 2672,
    "term": "Lubim(루빔)",
    "definition": "(dwellers in a thirsty land), a nation mentioned as contributing, together with Cushites and Sukkiim, to Shishak’s army, (2 Chronicles 12:3) and apparently as forming with Cushites the bulk of Zerah’s army, (2 Chronicles 16:8) spoken of by Nahum, (Nahum 3:9) with Put or Phut, as helping No-amon (Thebes), of which Cush and Egypt were the strength. Upon the Egyptian monuments we find representations of a people called Rebu or Lebu, who correspond to the Lubim, and who may be placed on the African coast to the westward of Egypt, perhaps extending far beyond the Cyrenaica.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "구스 족속, 숙기 족속과 함께 시삭과 스라의 군대를 구성한 민족으로 애굽 서쪽 아프리카 해안에 거주한 리비아계 민족으로 추정된다(역대하 12:3, 16:8; 나훔 3:9).",
    "hebrew_greek": "H3864"
   },
@@ -21355,7 +21355,7 @@
    "id": 2690,
    "term": "Lysimachus(리시마쿠스)",
    "definition": "“a son of Ptolemaeus of Jerusalem,” the Greek translator of the book of Esther. Comp. (Esther 9:20)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "예루살렘의 프톨레마이오스의 아들로 에스더서의 헬라어 번역자다(에스더 9:20 칠십인역 부기)."
   },
   {
@@ -21819,7 +21819,7 @@
    "id": 2749,
    "term": "Malchishua(말기수아)",
    "definition": "(king of help), one of the sons of King Saul. (1 Samuel 14:49; 31:2; 1 Chronicles 8:33; 9:39)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'왕은 도움'이라는 뜻으로 사울 왕의 아들 중 하나다(사무엘상 14:49, 31:2).",
    "hebrew_greek": "H4444"
   },
@@ -21937,7 +21937,7 @@
    "id": 2764,
    "term": "Manassites, The(므낫세 사람들)",
    "definition": "that is, the members of the tribe of Manasseh. (4:43; Judges 12:4; 2 Kings 10:33)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "므낫세 지파 사람들을 가리킨다(신명기 4:43; 사사기 12:4; 열왕기하 10:33)."
   },
   {
@@ -22134,7 +22134,7 @@
    "id": 2789,
    "term": "Mars Hill(아레오바고 언덕)",
    "definition": "the hill of Mars or Ares, better known by the name of Areopagus, of which hill of Mars or Ares is a translation. The Areopagus was a rocky height in Athens, opposite the western end of the Acropolis. It rises gradually from the northern end, and terminates abruptly on the south, over against the Acropolis, at which point it is about fifty or sixty feet above the valley. The spot is memorable as the place of meeting of the Council of Areopagus. This body existed as a criminal tribunal before the time of Solon, and was the most ancient and venerable of all the Athenian courts. It consisted of all persons who had held the office of archon, and who were members of the council for life unless expelled for misconduct. Before the time of Solon the court tried only cases of willful murder, wounding, poison, and arson: but he gave it extensive powers of a censorial and political nature. The council continued to exist even under the Roman emperors. Its meetings were held on the southeastern summit of the rock. The Areopagus possesses peculiar interest to the Christian as the spot from which St. Paul delivered his memorable address to the men of Athens. (Acts 17:22-31) St. Paul “disputed daily” in the “market” or agora, (Acts 17:17) which was situated south of the Areopagus in the valley lying between this and the hills of the Acropolis, the Pnyx and the Museum. Attracting more and more attention, “certain philosophers of the Epicureans and Stoics” brought him up from the valley, probably by the stone steps, to the Areopagus above, that they might listen to him more conveniently.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "아테네의 아크로폴리스 서쪽에 위치한 바위 언덕으로 고대 아레오바고 회의가 열리던 곳이다. 바울이 아덴 사람들에게 유명한 설교를 전한 곳으로 유명하다(사도행전 17:22-31)."
   },
   {
@@ -22242,7 +22242,7 @@
    "id": 2803,
    "term": "Mathusala(마두살라)",
    "definition": "= Methuselah, the son of Enoch. (Luke 3:37)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "에녹의 아들 므두셀라(Methuselah)를 가리킨다(누가복음 3:37).",
    "hebrew_greek": "G3103"
   },
@@ -22622,7 +22622,7 @@
    "id": 2851,
    "term": "Melchiah(멜기야)",
    "definition": "(Jehovah’s king), a priest, the father of Pashur. (Jeremiah 21:1)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "제사장으로 바스훌의 아버지다(예레미야 21:1).",
    "hebrew_greek": "G1700"
   },
@@ -22638,7 +22638,7 @@
    "id": 2853,
    "term": "Melchishua(멜기수아)",
    "definition": "A son of Saul. (1 Samuel 14:49; 31:2) Elsewhere correctly given Malchishua.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "사울의 아들로 다른 곳에서는 말기수아로 정확히 표기된다(사무엘상 14:49, 31:2).",
    "hebrew_greek": "H0317"
   },
@@ -22755,7 +22755,7 @@
    "id": 2868,
    "term": "Meonenim(므오느님)",
    "definition": "(enchanters), The plain of, an oak or terebinth. or other great tree. (Judges 9:37) The meaning of Meonenim if interpreted as a Hebrew word, is enchanters or “observers of times,” as it is elsewhere rendered (18:10,14) in (Micah 5:12) it is soothsayers.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'점쟁이들'이라는 뜻으로 세겜 근처의 상수리나무(또는 큰 나무)를 가리킨다(사사기 9:37)."
   },
   {
@@ -23244,7 +23244,7 @@
    "id": 2930,
    "term": "Migdalgad(믹달갓)",
    "definition": "(tower of Gad), a city of Judah, (Joshua 15:37) in the district of the Shefelah, or maritime lowland.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'갓의 망대'라는 뜻으로 유다 지파 저지대(쉐펠라) 성읍이다(여호수아 15:37)."
   },
   {
@@ -23427,7 +23427,7 @@
    "id": 2953,
    "term": "Miphkad(믹박)",
    "definition": "(appointed place), The gate, one of the gates of Jerusalem. (Nehemiah 3:31) It was probably not in the wall of Jerusalem proper, but in that of the city of David, or Zion, and somewhere near to the junction of the two on the north side.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'지정된 장소'라는 뜻으로 예루살렘 성문 중 하나로 다윗 성(시온) 북쪽 부근에 위치했던 것으로 추정된다(느헤미야 3:31).",
    "hebrew_greek": "H4663"
   },
@@ -23451,7 +23451,7 @@
    "id": 2956,
    "term": "Mirma(미르마)",
    "definition": "(fraud), a Benjamite, born in the land of Moab. (1 Chronicles 8:10)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "모압 땅에서 태어난 베냐민 사람이다(역대상 8:10).",
    "hebrew_greek": "H4821"
   },
@@ -23593,7 +23593,7 @@
    "id": 2974,
    "term": "Mizar(미살)",
    "definition": "(small), The hill, a mountain apparently in the northern part of transjordanic Palestine, from which the author of Psalm 42utters his pathetic appeal. ver. 6. (It is probably a summit of the eastern ridge of Lebanon, not far from Mahanaim, where David lay after escaping from the rebellion of Absalom.—McClintock and Strong.)",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "요단 동편 팔레스타인 북부의 작은 산으로 시편 42편 저자가 그곳에서 하나님께 호소했다(시편 42:6).",
    "hebrew_greek": "H4706"
   },
@@ -23717,7 +23717,7 @@
   {
    "id": 2990,
    "term": "Moloch(몰록)",
-   "definition": "The same as Molech. Molech",
+   "definition": "The same as Molech.",
    "category": "용어",
    "definition_ko": "몰렉(Molech)과 동일하다.",
    "hebrew_greek": "G3434"
@@ -23821,7 +23821,7 @@
    "term": "Moses(모세)",
    "definition": "(Heb. Mosheh, “drawn,” i.e. from the water; in the Coptic it means “saved from the water”), the legislator of the Jewish people, and in a certain sense the founder of the Jewish religion. The immediate pedigree of Moses is as follows: Levi was the father of: Gershon— Kohath— Merari Kohath was the father of: Amram = Jochebed Amram = Jochebed was the father of: Hur = Miriam— Aaron = Elisheba— Moses = Zipporah Aaron = Elisheba was the father of: Nadab— Abihu— Eleazar— Ithamar Eleazar was the father of: Phineas Moses = Zipporah was the father of: Gershom— Eliezer Gershom was the father of: Jonathan The history of Moses naturally divides itself into three periods of 40 years each. Moses was born at Goshen, In Egypt, B.C. 1571. The story of his birth is thoroughly Egyptian in its scene. His mother made extraordinary efforts for his preservation from the general destruction of the male children of Israel. For three months the child was concealed in the house. Then his mother placed him in a small boat or basket of papyrus, closed against the water by bitumen. This was placed among the aquatic vegetation by the side of one of the canals of the Nile. The sister lingered to watch her brother’s fate. The Egyptian princess, who, tradition says, was a childless wife, came down to bathe in the sacred river. Her attendant slaves followed her. She saw the basket in the flags, and despatched divers, who brought it. It was opened, and the cry of the child moved the princess to compassion. She determined to rear it as her own. The sister was at hand to recommend a Hebrew nurse, the child’s own mother. here was the first part of Moses’ training,—a training at home in the true religion, in faith in God, in the promises to his nation, in the life of a saint,—a training which he never forgot, even amid the splendors and gilded sin of Pharaoh’s court. The child was adopted by the princess. From this time for many years Moses must be considered as an Egyptian. In the Pentateuch this period is a blank, but in the New Testament he is represented as “learned in all the wisdom of the Egyptians,” and as “mighty in words and deeds.” (Acts 7:22) this was the second part of Moses’ training. The second period of Moses’ life began when he was forty years old. Seeing the sufferings of his people, Moses determined to go to them as their helper, and made his great life-choice, “choosing rather to suffer affliction with the people of God than to enjoy the pleasures of sin for a season; esteeming the reproach of Christ greater riches than the treasures in Egypt.” (Hebrews 11:25,26) Seeing an Israelite suffering the bastinado from an Egyptian, and thinking that they were alone, he slew the Egyptian, and buried the corpse in the sand. But the people soon showed themselves unfitted as yet to obtain their freedom, nor was Moses yet fitted to be their leader. He was compelled to leave Egypt when the slaying of the Egyptian became known, and he fled to the land of Midian, in the southern and southeastern part of the Sinai peninsula. There was a famous well (“the well,”) (Exodus 2:15) surrounded by tanks for the watering of the flocks of the Bedouin herdsmen. By this well the fugitive seated himself and watched the gathering of the sheep. There were the Arabian shepherds, and there were also seven maidens, whom the shepherds rudely drove away from the water. The chivalrous spirit which had already broken forth in behalf of his oppressed countrymen broke forth again in behalf of the distressed maidens. They returned unusually soon to their father, Jethro, and told him of their adventure. Moses, who up to this time had been “an Egyptian,” (Exodus 2:19) now became for a time an Arabian. He married Zipporah, daughter of his host, to whom he also became the slave and shepherd. (Exodus 2:21; 3:1) Here for forty years Moses communed with God and with nature, escaping from the false ideas taught him in Egypt, and sifting out the truths that were there. This was the third process of his training for his work; and from this training he learned infinitely more than from Egypt. Stanely well says, after enumerating what the Israelites derived from Egypt, that the contrast was always greater than the likeness. This process was completed when God met him on Horeb, appearing in a burning bush, and, communicating with him, appointed him to be the leader and deliverer of his people. Now begins the third period of forty years in Moses’ life. He meets Aaron, his next younger brother, whom God permitted to be the spokesman, and together they return to Goshen in Egypt. From this time the history of Moses is the history of Israel for the next forty years. Aaron spoke and acted for Moses, and was the permanent inheritor of the sacred staff of power. But Moses was the inspiring soul behind. he is incontestably the chief personage of the history, in a sense in which no one else is described before or since. He was led into a closer communion with the invisible world than was vouchsafed to any other in the Old Testament. There are two main characters in which he appears—as a leader and as a prophet. (1) As a leader, his life divides itself into the three epochs—the march to Sinai; the march from Sinai to Kadesh; and the conquest of the transjordanic kingdoms. On approaching Palestine the office of the leader becomes blended with that of the general or the conqueror. By Moses the spies were sent to explore the country. Against his advice took place the first disastrous battle at hormah. To his guidance is ascribed the circuitous route by which the nation approached Palestine from the east, and to his generalship the two successful campaigns in which Sihon and Og were defeated. The narrative is told so briefly that we are in danger of forgetting that at this last stage of his life Moses must have been as much a conqueror and victorious soldier as was Joshua. (2) His character as a prophet is, from the nature of the case, more distinctly brought out. He is the first as he is the greatest example of a prophet in the Old Testament. His brother and sister were both endowed with prophetic gifts. The seventy elders, and Eldad and Medad also, all “prophesied.” (Numbers 11:25-27) But Moses rose high above all these. With him the divine revelations were made “mouth to mouth.” (Numbers 12:8) Of the special modes of this more direct communication, four great examples are given, corresponding to four critical epochs in his historical career. (a) The appearance of the divine presence in the flaming acacia tree. (Exodus 3:2-6) (b) In the giving of the law from Mount Sinai, the outward form of the revelation was a thick darkness as of a thunder-cloud, out of which proceeded a voice. (Exodus 19:19; 20:21) on two occasions he is described as having penetrated within the darkness. (Exodus 24:18; 34:28) (c) It was nearly at the close of these communications in the mountains of Sinai that an especial revelation of God was made to him personally. (Exodus 33:21,22; 34:5,6,7) God passed before him. (d) The fourth mode of divine manifestation was that which is described as beginning at this juncture, and which was maintained with more or less continuity through the rest of his career. (Exodus 33:7) It was the communication with God in the tabernacle from out the pillar of cloud and fire. There is another form of Moses’ prophetic gift, viz., the poetical form of composition which characterizes the Jewish prophecy generally. These poetical utterances are— • “The song which Moses and the children of Israel sung” (after the passage of the Red Sea). (Exodus 15:1-19) • A fragment of the war-song against Amalek. (Exodus 17:16) • A fragment of lyrical burst of indignation. (Exodus 32:18) • The fragments of war-songs, probably from either him or his immediate prophetic followers, in (Numbers 21:14,15,27-30) preserved in the “book of the wars of Jehovah,” (Numbers 21:14) and the address to the well. ch. (Numbers 21:14) and the address to the well. ch. (Numbers 21:16,17,18) • The song of Moses, (32:1-43) setting forth the greatness and the failings of Israel. • The blessing of Moses on the tribes, (33:1-29) • The 90th Psalm, “A prayer of Moses, the man of God.” The title, like all the titles of the psalms, is of doubtful authority, and the psalm has often been referred to a later author. Character .—The prophetic office of Moses can only be fully considered in connection with his whole character and appearance. (Hosea 12:13) He was in a sense peculiar to himself the founder and representative of his people; and in accordance with this complete identification of himself with his nation is the only strong personal trait which we are able to gather from his history. (Numbers 12:3) The word “meek” is hardly an adequate reading of the Hebrew term, which should be rather “much enduring.” It represents what we should now designate by the word “disinterested.” All that is told of him indicates a withdrawal of himself, a preference of the cause of his nation to his own interests, which makes him the most complete example of Jewish patriotism. (He was especially a man of prayer and of faith, of wisdom, courage and patience.) In exact conformity with his life is the account of his end. The book of Deuteronomy describes, and is, the long last farewell of the prophet to his people. This takes place on the first day of the eleventh month of the fortieth year of the wanderings, in the plains of Moab. (1:3,5) Moses is described as 120 years of age, but with his sight and his freshness of strength unabated. (34:7) Joshua is appointed his successor. The law is written out and ordered to be deposited in the ark. ch. 31. The song and the blessing of the tribes conclude the farewell. chs. 32,33. And then comes the mysterious close. He is told that he is to see the good land beyond the Jordan, but not to possess it himself. He ascends the mount of Pisgah and stands on Nebo, one of its summits, and surveys the four great masses of Palestine west of the Jordan, so far as it can be discerned from that height. The view has passes into a proverb for all nations. “So Moses the servant of Jehovah died there in the land of Moab, according to the word of Jehovah. And he buried him in a ’ravine’ in the land of Moab, ’before’ Beth-peor: but no man knoweth of his sepulchre unto this day... And the children of Israel wept for Moses in the plains of Moab thirty days.” (34:5,6,8) This is all that is said in the sacred record. (This burial was thus hidden probably— (1) To preserve his grave from idolatrous worship or superstitious reverence; and (2) Because it may be that God did not intend to leave his body to corruption, but to prepare it, as he did the body of Elijah, so that Moses could in his spiritual body meet Christ, together with Elijah, on the mount of transfiguration.) Moses is spoken of as a likeness of Christ; and as this is a point of view which has been almost lost in the Church, compared with the more familiar comparisons of Christ to Adam, David, Joshua, and yet has as firm a basis in fact as any of them, it may be well to draw it out in detail. (1) Moses is, as it would seem, the only character of the Old Testament to whom Christ expressly likens himself: “Moses wrote of me.” (John 5:46) It suggests three main points of likeness: (a) Christ was, like Moses, the great prophet of the people—the last, as Moses was the first. (b) Christ, like Moses, is a lawgiver: “Him shall ye hear.” (c) Christ, like Moses, was a prophet out of the midst of the nation, “from their brethren.” As Moses was the entire representative of his people, feeling for them more than for himself, absorbed in their interests, hopes and fears, so, with reverence be it said, was Christ. (2) In (Hebrews 3:1-19; 12:24-29; Acts 7:37) Christ is described, though more obscurely, as the Moses of the new dispensation—as the apostle or messenger or mediator of God to the people—as the controller and leader of the flock or household of God. (3) The details of their lives are sometimes, though not often, compared. (Acts 7:24-28; 35) In (Jude 1:9) is an allusion to an altercation between Michael and Satan over the body of Moses. It probably refers to a lost apocryphal book, mentioned by Origen, called the “Ascension” or “Assumption of Moses.” Respecting the books of Moses, see Pentateuch, The.",
    "category": "인명",
-   "definition_ko": "히브리어로 '건짐을 받은 자'라는 뜻으로 유대 민족의 입법자이자 신앙의 창시자다. 레위 지파 고핫 가문 암람과 요게벳의 아들로 애굽 고센에서 태어나 나일강에 버려졌다가 바로의 딸에게 발견되어 애굽 궁정에서 자랐다. 40세에 애굽인을 죽이고 미디안으로 도피해 목자로 40년을 지내다 호렙산 떨기나무에서 하나님의 부르심을 받아 이스라엘을 이끌고 출애굽했다. 시내산에서 율법을 받았고 광야 40년을 인도했으며 느보산에서 가나안 땅을 바라본 후 모압 땅에서 죽었다. 위대한 지도자이자 선지자로서 그리스도의 예표로 여겨진다(출애굽기 2-34장; 신명기 34장).",
+   "definition_ko": "(히브리어 '모셰'는 '건져 냄' 곧 물에서 건져 냄을 뜻하며, 콥트 말로는 '물에서 구원받은 자'를 뜻한다) 유대 민족의 입법자요 어떤 뜻에서 유대 종교의 창시자이다. 그 계보는 레위—고핫—아므람과 요게벳으로 이어지며, 그 자녀는 미리암과 아론과 모세이고 모세와 십보라 사이에서 게르솜과 엘리에셀이 났다.\n모세의 생애는 사십 년씩 세 시기로 나뉜다. 그는 주전 1571년 애굽 고센에서 났다. 그 어머니는 히브리 사내아이를 다 죽이는 가운데서 그를 지키려고 석 달을 집에 숨겼다가, 역청을 발라 물이 새지 않게 한 갈대 상자에 뉘어 나일 수로 가의 물풀 사이에 두었다. 누이가 지켜보는 가운데 애굽 공주가 목욕하러 내려왔다가 상자를 보고 건져 내니 아이의 울음에 마음이 움직여 자기 아들로 기르기로 하였고, 누이가 곁에 있다가 히브리 유모 곧 아이의 친어머니를 천거하였다. 여기서 모세의 첫 훈련이 이루어졌으니, 곧 집에서 참 종교와 하나님을 믿는 믿음과 민족에게 주신 약속을 배운 훈련이며, 바로의 궁정의 화려함과 죄 가운데서도 그가 결코 잊지 않은 훈련이었다. 그 뒤 오랜 세월 그는 애굽 사람으로 여겨져야 하니, 오경에서는 이 기간이 비어 있으나 신약은 그를 '애굽 사람의 모든 지혜를 배워 그의 말과 하는 일들이 능하더라'고 전한다(사도행전 7:22). 이것이 둘째 훈련이었다.\n둘째 시기는 그가 사십 세 되었을 때 시작된다. 자기 백성의 고난을 보고 그들을 도우러 가기로 하여 '도리어 하나님의 백성과 함께 고난받기를 잠시 죄악의 낙을 누리는 것보다 더 좋아하고 그리스도를 위하여 받는 수모를 애굽의 모든 보화보다 더 큰 재물로 여긴' 큰 결단을 내렸다(히브리서 11:25,26). 애굽 사람이 이스라엘 사람을 치는 것을 보고 아무도 없는 줄 알고 그를 쳐 죽여 모래에 묻었으나, 백성은 아직 자유를 얻기에 합당하지 않았고 모세도 아직 그 지도자가 되기에 합당하지 않았다. 그 일이 알려지자 그는 애굽을 떠나 시내 반도 남동쪽 미디안 땅으로 도망하였다. 거기 우물가에서 목자들이 일곱 처녀를 물에서 내쫓는 것을 보고 전에 동족을 위하여 나섰던 그 의로운 기개로 그들을 도왔다. 그리하여 그는 그 아버지 이드로의 손님이 되었고, 그의 딸 십보라와 혼인하여 사십 년 동안 종이요 목자로 지냈다(출애굽기 2:21; 3:1). 여기서 그는 하나님과 자연과 사귀며 애굽에서 배운 그릇된 관념을 벗고 그 안의 참된 것을 가려내었으니, 이것이 셋째 훈련이었고 애굽에서 배운 것보다 헤아릴 수 없이 많은 것을 여기서 배웠다. 이 과정은 하나님께서 호렙에서 불붙은 떨기나무 가운데 나타나 그를 자기 백성의 지도자요 구원자로 세우심으로 마무리되었다.\n셋째 사십 년이 시작된다. 그는 아우 아론을 만나 함께 애굽 고센으로 돌아갔고, 하나님은 아론을 대변자로 삼으셨다. 이때부터 사십 년 동안 모세의 역사가 곧 이스라엘의 역사이다. 아론이 말하고 행하였으나 그 뒤에서 불어넣은 혼은 모세였으니, 그는 전에도 후에도 다른 누구에게 허락된 적 없는 방식으로 보이지 않는 세계와 가까이 사귀었다. 그는 두 가지 성격으로 나타난다. (1) 지도자로서 그의 생애는 시내 산으로 가는 행군, 시내 산에서 가데스까지의 행군, 요단 동편 왕국들의 정복이라는 세 마디로 나뉜다. 그가 정탐꾼을 보내었고, 그의 만류를 거스르고 호르마의 첫 참패가 있었으며, 동쪽에서 팔레스타인에 다가가는 우회로와 시혼과 옥을 무찌른 두 차례의 성공한 전쟁이 그의 지휘에 돌려진다. 기록이 짧아 잊기 쉬우나, 생애의 이 마지막 단계에서 그는 여호수아 못지않은 정복자요 승리한 군인이었다. (2) 선지자로서의 성격은 더 뚜렷이 드러난다. 그는 구약에서 첫째가는 동시에 가장 큰 선지자의 본보기이니, 그와의 계시는 '대면하여' 이루어졌다(민수기 12:8). 그 직접적 교통의 네 가지 큰 사례가 그의 생애의 네 고비에 맞물린다. 곧 (가) 불붙은 떨기나무에 나타나신 임재(출애굽기 3:2-6), (나) 시내 산에서 율법을 주실 때 우레 구름 같은 짙은 어둠 가운데서 나온 음성(출애굽기 19:19; 20:21), (다) 그 산의 교통이 끝날 무렵 그에게 특별히 주어진 계시로 하나님께서 그 앞으로 지나가신 일(출애굽기 33:21,22; 34:5-7), (라) 그 뒤 생애 내내 이어진, 구름 기둥과 불기둥에서 성막 안에서 이루어진 교통이다(출애굽기 33:7). 또 하나의 선지자적 은사는 시의 형식이니, 홍해를 건넌 뒤 부른 노래(출애굽기 15:1-19), 아말렉을 치는 전쟁 노래의 조각(출애굽기 17:16), 분노의 서정적 조각(출애굽기 32:18), '여호와의 전쟁기'에 보존된 전쟁 노래와 우물의 노래(민수기 21:14-18), 이스라엘의 위대함과 실패를 그린 모세의 노래(신명기 32:1-43), 지파들을 향한 축복(신명기 33:1-29), 그리고 '하나님의 사람 모세의 기도'라는 표제를 지닌 시편 90편이 있다.\n인품. 그는 자기 백성의 창시자요 대표자라는 독특한 자리를 지녔고, 자기를 민족과 온전히 하나로 여긴 데서 그의 유일하게 뚜렷한 개인적 특징이 나온다(민수기 12:3). '온유하다'로 옮긴 히브리어 낱말은 오히려 '오래 참는다'는 뜻이며, 오늘날 말로 하면 '사심 없음'에 해당한다. 그에 관하여 전해지는 모든 것이 자기를 물리고 자기 이익보다 민족의 대의를 앞세운 모습을 보여 주니, 그는 유대 애국심의 가장 온전한 본보기이다. 그는 특히 기도와 믿음의 사람이었고 지혜와 용기와 참을성의 사람이었다. 그 마지막도 생애와 꼭 들어맞는다. 신명기는 이 선지자가 백성에게 남긴 긴 마지막 고별이니, 사십 년째 열한째 달 첫날 모압 평지에서 있었다(신명기 1:3,5). 그는 백이십 세였으나 눈이 흐리지 않고 기력이 쇠하지 않았다(34:7). 여호수아가 후계자로 세워지고 율법이 기록되어 궤에 두어졌으며, 노래와 지파들의 축복으로 고별을 마쳤다. 그리고 신비한 마지막이 온다. 요단 저편 좋은 땅을 보되 차지하지는 못하리라는 말씀을 듣고 비스가 산에 올라 그 봉우리 느보에 서서 요단 서편 팔레스타인의 네 큰 지역을 바라보았으니, 그 광경은 모든 민족에게 속담이 되었다. '이에 여호와의 종 모세가 여호와의 말씀대로 모압 땅에서 죽어 벧브올 맞은편 모압 땅에 있는 골짜기에 장사되었고 오늘까지 그의 묻힌 곳을 아는 자가 없느니라… 이스라엘 자손이 모압 평지에서 모세를 위하여 삼십 일을 애곡하니라'(34:5,6,8). 무덤을 이렇게 감추신 것은 아마도 그 무덤이 우상 숭배나 미신적 숭배의 대상이 되지 않게 하시려는 것이요, 또 그 몸을 썩게 두지 않으시고 엘리야의 몸처럼 예비하시어 변화산에서 엘리야와 함께 그리스도를 만나게 하시려는 것이었을 수 있다.\n모세는 그리스도의 모형으로 말해진다. 이는 아담이나 다윗이나 여호수아에 견주는 더 익숙한 비교에 밀려 교회에서 거의 잊혔으나 그것들 못지않게 확고한 근거가 있다. (1) 그리스도께서 스스로 자기를 견주신 구약의 인물은 모세뿐인 듯하니 '모세가 내게 대하여 기록하였음이라' 하셨다(요한복음 5:46). 여기에 세 가지 닮음이 있다. 그리스도는 모세처럼 백성의 큰 선지자이시되 모세가 첫째였다면 그는 마지막이시고, 모세처럼 입법자이시며('너희는 그의 말을 들으라'), 모세처럼 '그 형제 중에서' 곧 민족 가운데서 난 선지자이시다. 모세가 자기보다 백성을 더 생각하며 그들의 이해와 소망과 두려움에 온전히 잠겼듯, 삼가 말하건대 그리스도께서도 그러하셨다. (2) 히브리서 3:1-19; 12:24-29과 사도행전 7:37에서 그리스도는 덜 뚜렷하나마 새 경륜의 모세로, 곧 하나님께서 백성에게 보내신 사도요 사자요 중보자로, 하나님의 양 떼와 집을 다스리고 이끄시는 이로 그려진다. (3) 두 사람의 생애가 낱낱이 견주어지는 일은 드물다(사도행전 7:24-28,35). 유다서 1:9에는 미가엘과 사탄이 모세의 시체를 두고 다툰 일이 암시되는데, 이는 오리게네스가 언급한 '모세의 승천' 또는 '모세의 들림'이라 하는 지금은 없어진 외경을 가리킬 것이다. 모세의 책들에 관하여는 오경 항목을 보라.",
    "hebrew_greek": "G3475,H4519,H4872,H4873"
   },
   {
@@ -24381,7 +24381,7 @@
    "id": 3074,
    "term": "Naum(나훔)",
    "definition": "(consolation), son of Esli, and father of Amos, in the genealogy of Christ, (Luke 3:25) about contemporary with the high priesthood of Jason all the reign of Antiochus Epiphanes. (B.C.175.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "에슬리의 아들이며 그리스도의 족보에서 아모스의 아버지다(누가복음 3:25).",
    "hebrew_greek": "G3486"
   },
@@ -24788,7 +24788,7 @@
    "term": "New Testament(신약성경)",
    "definition": "It is proposed in this article to consider the text of the New Testament. The subject naturally divides itself into— I. The history of the written text; II. The history of the printed text. I. THE HISTORY OF THE WRITTEN TEXT.— • The early history of the apostolic writings externally, as far as it can be traced, is the same as that of other contemporary books. St. Paul, like Cicero or Pliny often employed the services of an amanuensis, to whom he dictated his letters, affixing the salutation “with his own hand.” (1 Corinthians 16:21; 2 Thessalonians 3:17; Colossians 4:18) The original copies seem to have soon perished. • In the natural course of things the apostolic autographs would be likely to perish soon. The material which was commonly used for letters the papyrus paper, to which St. John incidentally alludes. (2 John 1:12) comp. 3Joh 1:13 Was singularly fragile, and even the stouter kinds, likely to be used for the historical books, were not fitted to bear constant use. The papyrus fragments which have come down to the present time have been preserved under peculiar circumstances as at Herculaneum or in the Egyptian tombs. • In the time of the Diocletian persecution, A.D. 303, copies of the Christian Scriptures were sufficiently numerous to furnish a special object for persecutors. Partly, perhaps, owing to the destruction thus caused, but still more from the natural effects of time. no MS. of the New Testament of the first three centuries remains but though no fragment of the New Testament of the first century still remains, the Italian and Egyptian papyri, which are of that date give a clear notion of the caligraphy of the period. In these the text is written in columns, rudely divided, in somewhat awkward capital letters (uncials), without any punctuation or division of words; and there is no trace of accents or breathings. • In addition to the later MSS. the earliest versions and patristic quotations give very important testimony to the character and history of the ante-Nicene text; but till the last quarter of the second century this source of information fails us. Only are the remains of Christian literature up to that time extremely scanty, but the practice of verbal quotation from the New Testament was not yet prevalent. As soon as definite controversies arose among Christians, the text of the New Testament assumed its true importance. • Several very important conclusions follow from this earliest appearance of textual criticism. It is in the first place evident that various readings existed in the books of the New Testament at a time prior to all extant authorities. History affords a trace of the pure apostolic originals. Again, from the preservation of the first variations noticed, which are often extremely minute, in one or more of the primary documents still left, we may be certain that no important changes have been made in the sacred text which we cannot now detect. • Passing from these isolated quotations, we find the first great witnesses to the apostolic text in the early Syriac and Latin versions and in the rich quotations of Clement of Alexandria (cir. A.D. 220) and Origen (A.D. 1842-4). From the extant works of Origen alone no inconsiderable portion of the whole New Testament might be transcribed; and his writings are an almost inexhaustible store house for the history of the text. There can be no doubt that in Origen’s time the variations in the New Testament MSS. were beginning to lead to the formation of specific groups of copies. • The most ancient MSS. and versions now extant exhibit the characteristic differences which have been found to exist in different parts of the works of Origen. These cannot have had their source later than the beginning of the third century, and probably were much earlier. Bengel was the first (1734) who pointed out the affinity of certain groups of MSS., which as he remarks, must have arisen before the first versions were made. The honor of carefully determining the relations of critical authorities for the New Testament text belongs to Griesbach. According to him two distinct recensions of the Gospels existed at the beginning of the third century-the Alexandrine and the Western . • From the consideration of the earliest history of the New Testament text we now pass to the era of MSS. The quotations of Dionsius Alex. (A.D. 264), Petrus Alex. (cir. A.D. 312), Methodius (A.D. 311) and Eusebius (A.D. 340) confirm the prevalence of the ancient type of tent; but the public establishment of Christianity in the Roman empire necessarily led to important changes. The nominal or real adherence of the higher ranks to the Christian faith must have largely increased the demand for costly MSS. As a natural consequence the rude Hellenistic forms gave way before the current Greek, and at the same time it is reasonable to believe that smoother and fuller constructions were substituted for the rougher turns of the apostolic language. In this way the foundation of the Byzantine text was laid. Meanwhile the multiplication of copies in Africa and Syria was checked by Mohammedan conquests. • The appearance of the oldest MSS. have been already described. The MSS. of the fourth century, of which Codex Vaticanus may be taken as a type present a close resemblance to these. The writing is in elegant continuous uncials (capitals), in three columns, without initial letters or iota subscript or adscript . A small interval serves as a simple punctuation; and there are no accents or breathings by the hand of the first writer, though these have been added subsequently. Uncial writing continued in general use till the middle of the tenth century. From the eleventh century downward cursive writing prevailed. The earliest cursive biblical MS, is dated 964 A.D. The MSS. of the fourteenth and fifteenth centuries abound in the contractions which afterward passed into the early printed books. The oldest MSS. are written on the thinnest and finest vellum; in later copies the parchment is thick and coarse. Papprus was very rarely used after the ninth century. In the tenth century cotton paper was generally employed in Europe; and one example at least occurs of its use in the ninth century. In the twelfth century the common linen or rag paper came into use. One other kind of material requires notice—re-dressed parchment, called palimpsests. Even at a very early period the original text of a parchment MS. was often erased, that the material might be used afresh. In lapse of time the original writing frequently reappeared in faint lines below the later text, and in this way many precious fragments of biblical MSS. which had been once obliterated for the transcription of other works, have been recovered. • The division of the Gospels into “chapters” must have come into general use some time before the fifth century. The division of the Acts and Epistles into chapters came into use at a later time. It is commonly referred to Euthalius, who, however, says that he borrowed the divisions of the Pauline Epistles from an earlier father and there is reason to believe that the division of the Acts and Catholic Epistles which he published was originally the work of Pamphilus the martyr. The Apocalypse was divided into sections by Andreas of Caesarea about A.D. 500. The titles of the sacred books are from their nature additions to the original text. The distinct names of the Gospels imply a collection, and the titles of the Epistles are notes by the possessors, and not addresses by the writers. • Very few MSS. certain the whole New Testament—twenty-seven in all out of the vast mass of extant documents. Besides the MSS. of the New Testament, or of parts of it, there are also lectionaries, which contain extracts arranged for the church services. • The number of uncial MSS. remaining. though great when compared with the ancient MSS. extent of other writings, is inconsiderable. Tischendorf reckons forty in the Tischendorf, which is nearly entire; and Cod. Zacynth., Which contains considerable fragments of St. Luke. In the Acts there are nine: in the Catholic Epistles five; in the Pauline Epistles fourteen; in the Apocalypse three. • A complete description these MSS. is given In the great critical editions of the New Testament. Here those only can be briefly noticed which are of primary importance, the first place being given to the latest-discovered and most complete Codex Sinaiticus—the Cod. Frid. Aug. of LXX. at St. Petersburg, obtained by Tischendorf from the convent of St. Catherine, Mount Sinai, in 1859. The New Testament is entire, and the Epistle of Bamabas and parts of the Shepherd of Hermas are added. It is probably the oldest of the MSS. of the New Testament and of the fourth century. Codex Alexandrinus (Brit. Mus.), a MS. of the entire Greek Bible, with the Epistles of Clement added. It was given-by Cyril Lucar, patriarch of Constantinople, to Charles I. in 1628, and is now in the British Museum. It contains the whole of the New Testament, with some chasms. It was probably written in the first half of the fifth century. Codex Vaticanus (1209) a MS. of the entire Greek Bible which seems to have been in the Vatican Library almost from its commencement (cir. A.D. 1450). It contains the New Testament entire to (Hebrews 9:14) katha : the rest of the Epistle to the Hebrews, the Pastoral Epistles and the Apocalypse were added in the fifteenth century. The MS. is assigned to the fourth century. Codex Ephraemi rescriptus (Paris, Bibl, Imp. 9), a palimpsest MS. which contains fragments of the LXX. and of every part of the New Testament. In the twelfth century the original writing was effaced and some Greek writings of Ephraem Syrus were written over it. The MS was brought to Florence from the East at the beginning of the sixteenth century, and came thence to Paris with Catherine Deuteronomy Medici. The only entire books which have perished are 2 Thess. and 2 John. • The number of the cursive MSS. (minuscules) in existence cannot be accurately calculated. Tischendorf catalogues about 500 of the Gospels, 200 of the Acts and Catholic Epistles, 250 of the Pauline Epistles, and a little less than 100 of the Apocalypse (exclusive of lectionaries); but this enumeration can only be accepted as a rough approximation, • Having surveyed in outline the history of the transmission of the written text and the chief characteristics of the MSS. in which it is preserved, we are in a position to consider the extent and nature of the variations which exist in different copies. It is impossible to estimate the number of these exactly, but they cannot be less than 120,000 in all, though of these a very large proportion consists of differences of spelling and isolated aberrations of scribes and of the remainder comparatively few judgment. Probably there are not more than 1600-2000 places in which the true reading is a matter of uncertainty. • Various causes: readings are due to some arose from accidental, others from intentional alterations of the original text. • Other variations are due to errors of sight. Others may be described as errors of impression or memory . The copyist, after reading a sentence from the text before him, often failed to reproduce it exactly. Variations of order are the most frequent and very commonly the most puzzling questions of textual criticism. Examples occur in every page, almost in every verse, of the New Testament. • Of intentional changes some affect the expression, others the substance of the passage. • The number of readings which seem to have been altered for distinctly dogmatic reasons is extremely small. In spite of the great revolutions in thought, feeling and practice through which the Christian Church passed In fifteen centuries, the copyists of the New Testament faithfully preserved, according to their ability, the sacred trust committed to them. There is not any trace of intentional revision designed to give support to current opinions. (Matthew 17:21; Mark 9:29; 1 Corinthians 7:5) need scarcely be noticed. • The great mass of various readings are simply variations in form. There are, however, one or two greater variations of a different character. The most important of these are (Mark 16:9) and John 7:53... 8:12; Roma 16:25-27 The first stands quite by itself and there seems to be little doubt that it contains an authentic narrative but not by the hand of St. John. The two others taken in connection with the last chapter of St. John’s Gospel, suggest the possibility that the apostolic writings may have undergone in some cases authoritative revision. • Manuscripts, it must be remembered, are but one of the three sources of textual criticism. The versions and patristic quotations are scarcely less important in doubtful cases. II. THE HISTORY OF THE PRINTED TEXT.—The history of the printed text of the New Testament may be these divided into three periods. The extends from the labors of the Complutensian errors to those of Mill; the second from Mill to Scholz; the third from Lachmann to the present time. The criticism of the first period was necessarily tentative and partial: the materials available for the construction of the text were few and imperfectly known. The second period made a great progress: the evidence of MSS. of versions, of the fathers, was collected with the greatest diligence and success; authorities were compared and classified; principles of observation and judgment were laid down. But the influence of the former period still lingered. The third period was introduced by the declaration of a new and sounder law. It was laid down that no right of possession could be pleaded against evidence, The “received” text, as such, was allowed no weight whatever. Its authority, on this view, must depend solely on critical worth. From first to last, in minute details of order and orthography, as well as in graver questions of substantial alteration, the text must be formed by a free and unfettered judgment. The following are the earliest editions: • The Complutensian Polyglot .-The glory of printing the first Greek Testament is due to the princely Cardinal Ximenes. This great prelate as early as 1502 engaged the services of a number of scholars to superintend an edition of the whole Bible in the original Hebrew and Greek, with the addition of the Chaldee Targum of Onkelos, the LXX. version and the Vulgate. The volume containing the New Testament was Printed first, and was completed on January 10, 1524. The whole work was not finished till July 10, 1517. (It was called Complutensian because it was printed at Complutum, in Spain.—ED.) • The edition of Erasmus .—The edition of Erasmus was the first published edition of the New Testament. Erasmus had paid considerable attention to the study of the New Testament, when he received an application from Froben, a Printer of Basle with whom he was acquainted, to prepare a Greek text for the press. The request was made on April 17, 1515 and the whole work was finished in February, 1516. • The edition of Stephens .—The scene of our history now changes from Basle to Paris. In 1543, Simon Deuteronomy Colines: (Colinaeus) published a Greek text of the New Testament, corrected in about 150 places on fresh MS. authority. Not long after it appeared, R. Estienne (Stephanus) published his first edition (1546), which was based on a collation of MSS, in the Royal Library with the Complutensian text. • The editions of Beta and Elzevir .—The Greek text of Beta (dedicated to Queen Elizabeth) was printed by H. Stephens in 1565 and a second edition in 1576; but the chief edition was the third, printed in 1582, which contained readings from Codez Bezae and Codex Clarontontanus . The literal sense of the apostolic, writings must be gained in the same way as the literal sense of any other writings-by the fullest use of every appliance of scholarship, and the most complete confidence in the necessary and absolute connection of words and thoughts. No variation of phrase, no peculiarity of idiom, no change of tense, no change of order, can be neglected. The truth lies in the whole expression, and no one can presume to set aside any part as trivial or indifferent. The importance of investigating most patiently and most faithfully the literal meaning of the sacred text must be felt with tenfold force when it is remembered that the literal sense is the outward embodiment of a spiritual sense, which lies beneath and quickens every part of Holy Scripture, Bible]",
    "category": "용어",
-   "definition_ko": "신약 본문의 역사는 크게 필사본 시대와 인쇄본 시대로 나뉜다. 사도들의 원본은 파피루스의 취약성으로 일찍 소실되었고, 초기 대문자(언셜) 사본에서 후대 소문자(미누스큘) 사본으로 발전했다. 시내산 사본, 알렉산드리아 사본, 바티칸 사본, 에브라임 재기록 사본 등이 대표적인 고대 사본이며, 이문(異文)은 12만 개에 달하지만 대부분 철자 차이에 불과하고 실제 의미에 영향을 주는 곳은 1,600-2,000곳 정도로 추정된다. 인쇄본 시대는 콤플루텐세 대역성경, 에라스무스판, 스테파누스판, 베자판 등을 거쳐 발전했다."
+   "definition_ko": "이 항목은 신약 본문을 다루며 크게 필사 본문의 역사와 인쇄 본문의 역사로 나뉜다.\nI. 필사 본문의 역사. 사도들의 글이 밖으로 전해진 초기 과정은 같은 시대의 다른 책들과 다르지 않다. 바울은 키케로나 플리니우스처럼 대필자를 자주 써서 받아쓰게 하고 '내 손으로' 문안을 적었다(고린도전서 16:21; 데살로니가후서 3:17; 골로새서 4:18). 원본은 곧 사라진 것으로 보이니, 편지에 흔히 쓰던 파피루스가 몹시 약하였고(요한이서 1:12) 두꺼운 것도 잦은 사용을 견디지 못하였기 때문이다. 주후 303년 디오클레티아누스 박해 때에는 그리스도인의 성경 사본이 박해자의 표적이 될 만큼 많았으나, 그 파괴와 세월의 자연스러운 결과로 처음 세 세기의 신약 사본은 하나도 남아 있지 않다. 다만 같은 시대의 이탈리아와 애굽 파피루스로 그 서체를 알 수 있으니, 본문을 여러 단으로 나누어 다소 서툰 대문자(언셜)로 적었고 구두점도 낱말 사이 띄움도 없으며 악센트나 기식 부호의 자취도 없다.\n후대 사본 외에 가장 이른 역본과 교부의 인용이 니케아 이전 본문의 성격과 역사에 매우 중요한 증거를 준다. 그리스도인 사이에 뚜렷한 논쟁이 일어나자 신약 본문이 참된 중요성을 지니게 되었다. 여기서 중요한 결론이 따라 나온다. 첫째, 지금 남아 있는 모든 자료보다 앞선 때에 이미 이문이 있었다. 둘째, 처음 지적된 아주 미세한 차이들까지 지금 남은 주요 문서에 보존되어 있으므로, 우리가 찾아낼 수 없는 중대한 변개는 없었다고 확신할 수 있다. 사도적 본문의 첫 큰 증인은 초기 수리아어·라틴어 역본과 알렉산드리아의 클레멘스(주후 220년경)와 오리게네스의 풍부한 인용이며, 오리게네스의 저작만으로도 신약의 상당 부분을 옮겨 적을 수 있을 만큼 본문사의 보고이다. 그의 시대에 이미 사본들이 특정한 무리로 갈리기 시작하였다. 벵겔이 1734년에 처음으로 사본 무리의 친연성을 지적하였고, 비평 자료의 관계를 세심히 규정한 공은 그리스바흐에게 돌아가니 그는 삼세기 초에 알렉산드리아 계통과 서방 계통이라는 두 교정본이 있었다고 보았다.\n로마 제국에서 그리스도교가 공인되면서 값진 사본의 수요가 크게 늘었고, 투박한 헬라어 형태가 당대의 헬라어에 자리를 내주면서 사도의 거친 표현이 매끄럽고 충실한 구문으로 바뀌어 비잔틴 본문의 기초가 놓였다. 사세기 사본은 바티칸 사본이 그 본보기이니, 우아한 언셜을 세 단으로 이어 쓰고 머리글자나 이오타도 없으며 작은 사이 띄움이 구두점 구실을 한다. 언셜 서체는 십세기 중엽까지 쓰였고 십일세기부터 소문자(미누스큘) 서체가 널리 쓰였으니, 가장 오래된 소문자 성경 사본은 주후 964년의 것이다. 오래된 사본일수록 얇고 고운 양피지를 썼고 후대일수록 두껍고 거칠다. 구세기 이후로는 파피루스가 거의 쓰이지 않고 십세기에는 면지가, 십이세기에는 넝마로 만든 종이가 쓰였다. 또 하나 눈여겨볼 재료가 다시 쓴 양피지 곧 팔림프세스트이니, 먼저 쓴 글을 지우고 다시 썼다가 세월이 흘러 아래의 흐릿한 글씨가 되살아나 지워졌던 귀한 성경 조각을 되찾은 경우가 많다.\n복음서를 '장'으로 나눈 것은 오세기 이전에 널리 쓰였고, 사도행전과 서신의 장 구분은 더 나중에 이루어져 대개 유탈리우스에게 돌린다. 요한계시록은 주후 500년경 가이사랴의 안드레아스가 나누었다. 책 이름은 본래 본문에 없던 덧붙임이며, 복음서 이름은 모음집을 전제하고 서신의 표제는 소유자의 기록이지 기록자의 수신 표기가 아니다. 신약 전체를 담은 사본은 방대한 문서 가운데 스물일곱뿐이며, 이 밖에 예배용 발췌를 담은 성구집이 있다. 가장 중요한 사본으로는 1859년 티셴도르프가 시내 산 성 카타리나 수도원에서 얻은 시내 사본(신약 전체가 온전하며 사세기, 아마도 가장 오래된 것), 1628년 콘스탄티노플 총대주교 키릴 루카르가 찰스 일세에게 준 알렉산드리아 사본(오세기 전반), 1450년경부터 바티칸 도서관에 있던 바티칸 사본(사세기), 그리고 십이세기에 원문을 지우고 에프라임 시루스의 글을 덧쓴 에브라임 재기록 사본이 있다. 소문자 사본의 수는 정확히 헤아릴 수 없으나 티셴도르프는 복음서 약 500, 사도행전과 공동 서신 200, 바울 서신 250, 요한계시록 100 남짓으로 잡는다.\n이문의 수는 어림잡아 십이만을 밑돌지 않으나 그 가운데 아주 많은 몫이 철자 차이와 필사자의 개별적 실수이고, 참된 읽기가 불확실한 곳은 1,600에서 2,000곳을 넘지 않을 것이다. 이문은 우연한 변개와 의도적인 변개에서 생기며, 눈의 착오, 인상이나 기억의 착오, 특히 어순의 뒤바뀜이 흔하다. 교리적 이유로 고쳐진 것으로 보이는 읽기는 매우 적으니, 십오 세기에 걸친 사상과 감정과 관행의 큰 변혁에도 불구하고 필사자들은 자기에게 맡겨진 거룩한 위탁을 힘껏 신실하게 지켰고 당대의 견해를 뒷받침하려고 권위 있게 손댄 자취가 없다. 다만 더 큰 이문 몇 가지가 있으니 마가복음 16:9 이하와 요한복음 7:53-8:12과 로마서 16:25-27이다. 사본은 본문 비평의 세 자료 가운데 하나일 뿐이며, 의심스러운 곳에서는 역본과 교부 인용도 그에 못지않게 중요하다.\nII. 인쇄 본문의 역사. 세 시기로 나뉜다. 첫째는 콤플루툼 판에서 밀에 이르는 시기로, 자료가 적고 잘 알려지지 않아 시험적이고 부분적이었다. 둘째는 밀에서 숄츠에 이르는 시기로, 사본과 역본과 교부의 증거를 부지런히 모아 견주고 분류하며 관찰과 판단의 원리를 세웠으나 앞 시기의 영향이 남아 있었다. 셋째는 라흐만 이후로, 증거에 맞서는 어떤 기득의 권리도 인정하지 않고 이른바 '공인 본문'에도 아무 무게를 두지 않으며, 어순과 철자의 세부에서 큰 이문에 이르기까지 자유롭고 매인 데 없는 판단으로 본문을 세워야 한다는 새롭고 건전한 원칙이 선포되었다. 초기 판본으로는 히메네스 추기경이 1502년에 학자들을 모아 착수하여 신약을 1514년에, 전체를 1517년에 마친 콤플루툼 대조 성경, 프로벤의 청으로 에라스무스가 1515년에 시작하여 1516년에 마친 최초의 출간 헬라어 신약, 1546년에 나온 스테파누스 판, 그리고 1565년과 1576년과 특히 베자 사본과 클라로몬타누스 사본의 읽기를 담은 1582년의 베자 판이 있다. 사도의 글이 지닌 문자적 뜻은 다른 글과 마찬가지로 온갖 학문의 도구를 다 써서, 또 낱말과 생각 사이의 필연적이고 절대적인 연결을 온전히 신뢰함으로 얻어야 한다. 어구의 차이도, 관용의 특이함도, 시제나 어순의 변화도 소홀히 할 수 없다. 문자적 뜻이 성경 곳곳에 스며들어 살아 있게 하는 영적 뜻의 겉모양임을 기억할 때, 그 뜻을 더없이 참을성 있게 신실히 탐구하는 일의 중요함은 열 배로 다가온다."
   },
   {
    "id": 3126,
@@ -25724,7 +25724,7 @@
   {
    "id": 3243,
    "term": "Pallu(발루)",
-   "definition": "(distinguished), the second son of Reuben, father of Eliab, (Isaiah 6:14; Numbers",
+   "definition": "(distinguished), the second son of Reuben, father of Eliab, (Isaiah 6:14; Numbers 26:5,8; 1 Chronicles 5:3) and founder of the family of Palluites.",
    "category": "인명",
    "definition_ko": "르우벤의 둘째 아들이며 엘리압의 아버지다(민수기 26:5,8).",
    "hebrew_greek": "H6384,H6396"
@@ -26827,7 +26827,7 @@
    "id": 3382,
    "term": "Pihahiroth(비하히롯)",
    "definition": "a place before or at which the Israelites encamped, at the close of the third march from Rameses (the last place before they crossed the Red Sea), when they went out of Egypt. (Exodus 14:2,9; Numbers 35:7,8) It is an Egyptian word, signifying “the place where sedge grows.”",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "이스라엘이 애굽을 떠나 홍해를 건너기 전 마지막으로 진 친 곳으로 '갈대가 자라는 곳'을 뜻하는 애굽어에서 유래했다(출애굽기 14:2,9)."
   },
   {
@@ -27787,7 +27787,7 @@
    "id": 3504,
    "term": "Ragau(라구)",
    "definition": "one of the ancestors of our Lord, son of Peleg. (Luke 3:35) He is the same person with Reu, son of Peleg.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "벨렉의 아들로 그리스도의 족보에 나오는 조상이며 르우(Reu)와 동일 인물이다(누가복음 3:35).",
    "hebrew_greek": "G4466"
   },
@@ -27914,7 +27914,7 @@
    "id": 3520,
    "term": "Ramath Of The South(남방 라마)",
    "definition": "one of the towns at the extreme south limit of Simeon. (Joshua 19:8) It is in all probability the same place as south Ramoth. (1 Samuel 30:27)",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "시므온 지파 최남단 성읍 중 하나로 남방 라못(사무엘상 30:27)과 동일한 곳으로 추정된다(여호수아 19:8).",
    "hebrew_greek": "G1444"
   },
@@ -28152,7 +28152,7 @@
    "id": 3550,
    "term": "Regemmelech(레겜멜렉)",
    "definition": "(friend of the king). The names of Sherezer and Regem-melech occur in an obscure passage of Zechariah. (Zechariah 7:2) They were sent on behalf of some of the captivity to make inquiries at the temple concerning fasting (B.C. 617.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "스가랴서의 모호한 구절에 등장하는 인물로 사레셀과 함께 성전에 금식 문의차 파견되었다(스가랴 7:2)."
   },
   {
@@ -28983,7 +28983,7 @@
    "id": 3655,
    "term": "Samaritans(사마리아인)",
    "definition": "Strictly speaking, a Samaritan would be an inhabitant of the city of Samaria, but the term was applied to all the people of the kingdom of Israel. After the captivity of Israel, B.C. 721, and in our Lord’s time, the name was applied to a peculiar people whose origin was in this wise. At the final captivity of Israel by Shalmaneser, we may conclude that the cities of Samaria were not merely partially but wholly depopulated of their inhabitants in B.C. 721, and that they remained in this desolated state until, in the words of (2 Kings 17:24) “the king of Assyria brought men from Babylon and front Cuthah, and from Av. (Ivah,) (2 Kings 18:34) and from Hamath, and front Sepharvaim, and placed them in the cities of Samaria instead of the children of Israel and they possessed Samaria, and dwelt in the cities thereof.” Thus the new Samaritans were Assyrians by birth or subjugation. These strangers, whom we will now assume to hare been placed in “the cities of Samaria” by Esar-haddon, were of course idolaters, and worshipped a strange medley of divinities. God’s displeasure was kindled, and they were annoyed by beasts of prey, which had probably increased to a great extent before their entrance upon the land. On their explaining their miserable condition to the king of Assyria, he despatched one of the captive priests to teach them “how they should fear the Lord.” The priest came accordingly, and henceforth, in the language of the sacred historian, they “Feared the Lord, and served their graven images, both their children and their children’s children: as did their fathers, so do the unto this day.” (2 Kings 17:41) A gap occurs in their history until Judah has returned from captivity. They then desire to be allowed to participate in the rebuilding of the temple at Jerusalem; but on being refused, the Samaritans throw off the mask, and become open enemies, frustrate the operations of the Jews through the reigns of two Persian kings, and are only effectually silenced in the reign of Darius Hystaspes, B.C. 519. The feud thus unhappily begun grew year by year more inveterate. Matters at length came to a climax. About B.C. 409, a certain Manasseh, a man of priestly lineage, on being expelled from Jerusalem by nehemiah for an unlawful marriage, obtained permission from the Persian king of his day, Darius Nothus, to build a temple on Mount Gerizim for the Samaritans, with whom he had found refuge. The animosity of the Samaritans became more intense than ever. They are sid to have done everything in their power to annoy the Jews. Their own temple on Gerizim they considered to be much superior to that at Jerusalem. There they sacrificed a passover. Toward the mountain, even after the temple on it had fallen, wherever they were they directed their worship. To their copy of the law they arrogated an antiquity and authority greater than attached to any copy in the possession of the Jews. The law (i.e. the five books of Moses) was their sole code; for they rejected every other book in the Jewish canon. The Jews, on the other hand, were not more conciliatory in their treatment of the Samaritans. Certain other Jewish renegades had from time to time taken refuge with the Samaritans; hence by degrees the Samaritans claimed to partake of jewish blood, especially if doing so happened to suit their interest. Very far were the Jews from admitting this claim to consanguinity on the part of these people. The traditional hatred in which the jew held the Samaritan is expressed in Ecclus. 50:25,26. Such were the Samaritans of our Lord’s day; a people distinct from the jews, though lying in the very midst of the Jews; a people preserving their identity, though seven centuries had rolled away since they had been brought from Assyria by Esar-haddon, and though they had abandoned their polytheism for a sort of ultra Mosaicism; a people who, though their limits had gradually contracted and the rallying-place of their religion on Mount Gerizim had been destroyed one hundred and sixty years before by John Hyrcanus (B.C. 130), and though Samaria (the city) had been again and again destroyed, still preserved their nationality still worshipped from Shechem and their impoverished settlements toward their sacred hill, still retained their peculiar religion, and could not coalesce with the Jews.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "본래 사마리아 성읍 주민을 가리켰으나 이스라엘 왕국 백성 전체를 뜻하게 되었다. 주전 721년 앗수르가 이스라엘을 사로잡은 후 바벨론, 굿바, 아와, 하맛, 스발와임에서 온 이주민들이 사마리아 성읍들에 정착해 혼합 종교를 형성했다(열왕기하 17:24-41). 이후 유대인의 성전 재건을 방해했고 므낫세가 그리심산에 별도 성전을 세우면서 반목이 깊어졌다. 예수 시대에는 유대인과 뚜렷이 구별되는 독자적 정체성과 종교를 지닌 민족이었다.",
    "hebrew_greek": "H8118"
   },
@@ -29023,7 +29023,7 @@
    "id": 3660,
    "term": "Samothracia(사모드라게)",
    "definition": "Mention is made of this island in the account of St. Paul’s first voyage to Europe. (Acts 16:11; 20:6) Being very lofty and conspicuous, it is an excellent landmark for sailors, and must have been full in view, if the weather was clear throughout that voyage from Troas to Neapolis.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "바울의 첫 유럽 항해 경로에 언급되는 섬으로 높고 눈에 띄어 항해자들에게 좋은 이정표가 되었다(사도행전 16:11)."
   },
   {
@@ -29206,7 +29206,7 @@
    "id": 3683,
    "term": "Saron(사론)",
    "definition": "the district in which Lydda stood, (Acts 9:35) only; the Sharon of the Old Testament. [Sharon]",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "룻다가 위치한 지역으로 구약의 사론(샤론)과 동일하다(사도행전 9:35).",
    "hebrew_greek": "G4565"
   },
@@ -29419,7 +29419,7 @@
    "id": 3710,
    "term": "Sechu(세구)",
    "definition": "(the watch-tower), a place mentioned once only— (1 Samuel 19:22)—apparently as lying on the route between Saul’s residence, Gibeah, and Ramah (Ramathaim-zophim), that of Samuel. It was notorious for “the great well” (or rather cistern) which it contained. Assuming that Saul started from Gibeah (Tuleil el-Ful), and that Neby Samwil is Ramah, then Bir Nebolla (the well of Neballa) just south of Beeroth, alleged by modern traveller to contain a large pit would be in a suitable position for the great well of Sechu.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "사울의 거처 기브아와 사무엘의 거처 라마 사이 경로에 위치했던 곳으로 큰 우물(웅덩이)로 유명했다(사무엘상 19:22).",
    "hebrew_greek": "H7906"
   },
@@ -29679,7 +29679,7 @@
    "id": 3743,
    "term": "Sergius Paulus(서기오 바울)",
    "definition": "was the proconsul of Cyprus when the apostle Paul visited that island with Barnabas on his first missionary tour. (Acts 13:7) seq. (A.D. 44.) He is described as an intelligent man, truth-seeking, eager for information from all sources within his reach. Though at first admitting to his society Elymas the magician, he afterward, on becoming acquainted with the claims of the gospel, yielded his mind to the evidence of its truth.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "바울과 바나바의 1차 전도여행 당시 구브로의 총독으로 진리를 추구하는 지적인 인물이었으며 처음에는 마술사 엘루마를 곁에 두었으나 복음의 증거를 접하고 믿게 되었다(사도행전 13:7).",
    "hebrew_greek": "G3972,G4588"
   },
@@ -29782,7 +29782,7 @@
    "id": 3756,
    "term": "Shachia(사갸)",
    "definition": "(announcemant) a son of Shaharaim by his wife Hodesh. (1 Chronicles 8:10)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "사하라임과 그 아내 호데스의 아들이다(역대상 8:10).",
    "hebrew_greek": "H7634"
   },
@@ -29838,7 +29838,7 @@
    "id": 3763,
    "term": "Shalim, The Land Of(사알림 땅)",
    "definition": "(the land of foxes), a district through which Saul passed on his journey in quest of his father’s asses. (1 Samuel 9:4) only. It probably was east of Shalisha.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "사울이 아버지의 나귀를 찾아 지나간 지역으로 살리사 동쪽에 위치했던 것으로 추정된다(사무엘상 9:4)."
   },
   {
@@ -29868,7 +29868,7 @@
    "id": 3767,
    "term": "Shallun(살룬)",
    "definition": "(retribution), the son of Cohozeh, and ruler of a district of the Mizpah. (Nehemiah 3:15)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "고호세의 아들로 미스바 구역의 관원이다(느헤미야 3:15).",
    "hebrew_greek": "H7968"
   },
@@ -30099,7 +30099,7 @@
   {
    "id": 3796,
    "term": "Shashai(사새)",
-   "definition": "",
+   "definition": "(noble), one of the sons of Bani in the time of Ezra. (Ezra 10:40) (B.C. 457.)",
    "category": "인명",
    "definition_ko": "에스라 시대 이방 여인과 결혼했던 바니의 아들 중 하나다(에스라 10:40).",
    "hebrew_greek": "H8343"
@@ -30518,7 +30518,7 @@
    "id": 3849,
    "term": "Shenazar(스나살)",
    "definition": "(splendid leader), son of Salathiel or Shealtiel. (1 Chronicles 3:18) (B.C. after 606.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "스알디엘(살라디엘)의 아들이다(역대상 3:18)."
   },
   {
@@ -31646,7 +31646,7 @@
    "id": 3992,
    "term": "Sinite(신 사람)",
    "definition": "a tribe of Canaanites, (Genesis 10:17; 1 Chronicles 1:15) whose position is to be sought for in the northern part of the Lebanon district.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "가나안 족속의 한 지파로 레바논 북부 지역에 거주했던 것으로 추정된다(창세기 10:17).",
    "hebrew_greek": "H5513"
   },
@@ -31955,7 +31955,7 @@
    "id": 4031,
    "term": "Sosipater(소시바더)",
    "definition": "(saviour of his father), kinsman or fellow tribesman of St. Paul, (Romans 16:21) is probably the same person as Sopater of Berea. (A.D. 54.)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "바울의 친척으로 베뢰아 사람 소바더와 동일 인물로 보인다(로마서 16:21).",
    "hebrew_greek": "G4986,G4989"
   },
@@ -32621,7 +32621,7 @@
    "id": 4115,
    "term": "Tachmonite(다그몬 사람)",
    "definition": "“The Tachmonite that sat in the seat,” chief among David’s captains, (2 Samuel 23:8) Isa in 1Chr 11:11Called “Jashobeam an Hachmonite,” or, as the margin gives it, “son of Hachmoni.” Kennicott has shown that the words translated “he that sat in the seat” are a corruption of Jashobeam, and that “the Tachmonite” is a corruption of the “son of Hachmoni,” which was the family or local name of Jashobeam. Therefore he concludes “Jashobeam the Hachmonite” to have been the true reading.",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "'자리에 앉은 다크몬 사람'으로 다윗의 대장 중 으뜸이며(사무엘하 23:8) 역대상 11:11에서는 '학모니 사람 야소브암'으로 불린다. 케니콧은 '자리에 앉은 자'가 야소브암의 와전이며 '다크몬 사람'도 '학모니의 아들'의 와전이라고 밝혔다.",
    "hebrew_greek": "H2453,H8461"
   },
@@ -32899,7 +32899,7 @@
    "term": "Taxing",
    "definition": "The English word now conveys to us more distinctly the notion of a tax or tribute actually levied; but it appears to have been used in the sixteenth century for the simple assessment of a subsidy upon the property of a given county, or the registration of the people for the purpose of a poll-tax. Two distinct registrations, or taxings, are mentioned in the New Testament, both of them by St. Luke. The first is said to have been the result of an edict of the emperor Augustus, that “all the world (i.e. the Roman empire) should be taxed,” (Luke 2:1) and is connected by the evangelist with the name of Cyrenius Quirinus. [Cyrenius] The second and more important, (Acts 6:37) is distinctly associated, in point of time, with the revolt of Judas of Galilee.",
    "category": "용어",
-   "definition_ko": "오늘날 이 영어 단어는 실제 부과된 세금을 뜻하지만 16세기에는 단순히 재산 사정(査定)이나 인두세를 위한 인구 등록을 뜻하기도 했다. 신약에는 누가만 언급하는 두 차례의 호적(등록)이 나오는데, 첫째는 아우구스투스 황제의 칙령에 따른 것(누가복음 2:1)이고, 둘째는 갈릴리 사람 유다의 반란과 관련된 것이다(사도행전 5:37).",
+   "definition_ko": "오늘날 이 영어 단어는 실제 부과된 세금을 뜻하지만 16세기에는 단순히 재산 사정이나 인두세를 위한 인구 등록을 뜻하기도 했다. 신약에는 누가만 언급하는 두 차례의 호적(등록)이 나오는데, 첫째는 아우구스투스 황제의 칙령에 따른 것(누가복음 2:1)이고, 둘째는 갈릴리 사람 유다의 반란과 관련된 것이다(사도행전 5:37).",
    "hebrew_greek": "H1538"
   },
   {
@@ -32978,7 +32978,7 @@
    "id": 4160,
    "term": "Telaim(들라임)",
    "definition": "(lambs), the place at which Saul collected and numbered his forces before his attack on Amalek, (1 Samuel 16:4) may be identical with Telem, which see.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "'어린 양들'이라는 뜻으로 사울이 아말렉 공격 전 군대를 소집·계수한 장소이며(사무엘상 15:4) 델렘과 동일한 곳일 가능성이 있다.",
    "hebrew_greek": "H2923"
   },
@@ -33174,7 +33174,7 @@
    "id": 4185,
    "term": "Thara(데라)",
    "definition": "Terah the father of Abraham. (Luke 3:34)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "아브라함의 아버지 데라이다(누가복음 3:34).",
    "hebrew_greek": "G2291"
   },
@@ -33808,7 +33808,7 @@
    "id": 4265,
    "term": "Tolaites(돌라 자손)",
    "definition": "the descendants of Tola the son of Issachar. (Numbers 26:23)",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "잇사갈의 아들 돌라의 후손이다(민수기 26:23).",
    "hebrew_greek": "H8440"
   },
@@ -34518,7 +34518,7 @@
    "id": 4355,
    "term": "Vineyards, Plain Of The(포도원 평지)",
    "definition": "This place, mentioned only in (Judges 11:33) lay east of the Jordan, beyond Aroer.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "요단 동편 아로엘 너머에 위치한 곳이다(사사기 11:33).",
    "hebrew_greek": "H3755,H4934"
   },
@@ -34945,7 +34945,7 @@
    "term": "Year(해)",
    "definition": "the highest ordinary division of time. Two years were known to, and apparently used by, the Hebrews. • A year of 360 days appears to have been in use in Noah’s time. • The year used by the Hebrews from the time of the exodus may: be said to have been then instituted, since a current month, Abib, on the 14th day of which the first Passover was kept, was then made the first month of the year. The essential characteristics of this year can be clearly determined, though we cannot fix those of any single year. It was essentially solar for the offering of productions of the earth, firstfruits, harvest produce and ingathered fruits, was fixed to certain days of the year, two of which were in the periods of great feasts, the third itself a feast reckoned from one of the former days. But it is certain that the months were lunar, each commencing with a new moon. There must therefore have been some method of adjustment. The first point to be decided is how the commencement of each gear was fixed. Probably the Hebrews determined their new year’s day by the observation of heliacal or other star-risings or settings known to mark the right time of the solar year. It follows, from the determination of the proper new moon of the first month, whether by observation of a stellar phenomenon or of the forwardness of the crops, that the method of intercalation can only have been that in use after the captivity,—the addition of a thirteenth month whenever the twelfth ended too long before the equinox for the offering of the first-fruits to be made at the time fixed. The later Jews had two commencements of the year, whence it is commonly but inaccurately said that they had two years, the sacred year and the civil. We prefer to speak of the sacred and civil reckonings. The sacred reckoning was that instituted at the exodus, according to which the first month was Abib; by the civil reckoning the first month was the seventh. The interval between the two commencements was thus exactly half a year. It has been supposed that the institution at the time of the exodus was a change of commencement, not the introduction of a new year, and that thenceforward the year had two beginnings, respectively at about the vernal and the autumnal equinox. The year was divided into— • Seasons . Two seasons are mentioned in the Bible, “summer” and “winter.” The they are therefore originally rather summer and autumn than summer and winter. But that they signify ordinarily the two grand divisions of the year, the warm and cold seasons, is evident from their use for the whole year in the expression “summer and winter.” (Psalms 74:17; Zechariah 14:18) • Months . [MONTHS] • Weeks . [WEEKS]",
    "category": "용어",
-   "definition_ko": "히브리인들은 두 가지 해를 사용한 것으로 보인다: 노아 시대의 360일 해와, 출애굽 이후 아빕월을 정월로 삼은 해다. 후자는 본질적으로 태양력이었으나 달(月)은 삭에서 시작하는 태음월이었기에 윤달(13번째 달)을 두어 조정했다. 후대 유대인들은 종교력(아빕월 시작)과 민간력(일곱째 달 시작) 두 가지 기산법을 사용했으며 그 사이 간격은 정확히 반 년이었다.",
+   "definition_ko": "히브리인들은 두 가지 해를 사용한 것으로 보인다: 노아 시대의 360일 해와, 출애굽 이후 아빕월을 정월로 삼은 해다. 후자는 본질적으로 태양력이었으나 달은 삭에서 시작하는 태음월이었기에 윤달(13번째 달)을 두어 조정했다. 후대 유대인들은 종교력(아빕월 시작)과 민간력(일곱째 달 시작) 두 가지 기산법을 사용했으며 그 사이 간격은 정확히 반 년이었다.",
    "hebrew_greek": "G1763,G2094,H5732,H8140,H8141"
   },
   {
@@ -35470,7 +35470,7 @@
    "id": 4476,
    "term": "Zelotes(셀롯인)",
    "definition": "the epithet given to the apostle Simon to distinguish him from Simon Peter. (Luke 6:15) [Canaanite, The; Simon, 5]",
-   "category": "용어",
+   "category": "인명",
    "definition_ko": "사도 시몬을 시몬 베드로와 구별하기 위해 붙인 별칭이다(누가복음 6:15).",
    "hebrew_greek": "G2208,G4613"
   },
@@ -35541,7 +35541,7 @@
    "id": 4485,
    "term": "Zephathah(스바다)",
    "definition": "(watch-tower), The valley of, the spot in which Asa joined battle with Zerah the Ethiopian. (2 Chronicles 14:10) only.",
-   "category": "용어",
+   "category": "지명",
    "definition_ko": "아사가 구스 사람 세라와 전투를 벌인 골짜기다(역대하 14:10).",
    "hebrew_greek": "H6859"
   },
@@ -36142,7 +36142,7 @@
   {
    "id": 4561,
    "term": "Zuzim, The(수시 족속)",
-   "definition": "An ancient people who, lying in the path of Chedorlaomer and his allies, were attacked and overthrown by them. (Genesis 14:5) The Zuzim perhaps inhabited the country of the Ammonites, who were identical with the Zamzummim, who are known to have ben exterminated and succeeded in their land by the Ammonites [Zamzummim]. Indexes",
+   "definition": "An ancient people who, lying in the path of Chedorlaomer and his allies, were attacked and overthrown by them. (Genesis 14:5) The Zuzim perhaps inhabited the country of the Ammonites, who were identical with the Zamzummim, who are known to have ben exterminated and succeeded in their land by the Ammonites [Zamzummim].",
    "category": "인명",
    "definition_ko": "그돌라오멜과 그 동맹군의 진로에 있다가 공격받아 무너진 고대 민족으로 암몬 족속의 땅에 거주했으며 삼숨밈(암몬 족속에게 멸망당하고 대체된 민족)과 동일시된다(창세기 14:5)."
   }
