@@ -8913,6 +8913,69 @@
       `;
     }
 
+    // 본문 이동 히스토리 스택 (되돌리기 기능)
+    const _bibleNavHistory = [];
+    function _saveCurrentPosition() {
+      const bookSelect = document.getElementById('book-select');
+      const chapterSelect = document.getElementById('chapter-select');
+      if (!bookSelect || !chapterSelect) return;
+      const bookId = parseInt(bookSelect.value);
+      const chapter = parseInt(chapterSelect.value);
+      if (!bookId || !chapter) return;
+      // 현재 스크롤 위치도 저장
+      const biblePane = document.getElementById('bible-text');
+      const scrollTop = biblePane ? biblePane.scrollTop : 0;
+      _bibleNavHistory.push({ bookId, chapter, scrollTop });
+      // 최대 20개까지만 유지
+      if (_bibleNavHistory.length > 20) _bibleNavHistory.shift();
+      _updateBackButton();
+    }
+    function _updateBackButton() {
+      let btn = document.getElementById('btn-bible-back');
+      if (_bibleNavHistory.length > 0) {
+        if (!btn) {
+          btn = document.createElement('button');
+          btn.id = 'btn-bible-back';
+          btn.title = '이전 위치로 되돌리기';
+          btn.style.cssText = 'position:fixed;bottom:16px;left:16px;z-index:9999;padding:6px 12px;border:none;border-radius:20px;background:rgba(30,41,59,0.9);color:#60a5fa;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;gap:4px';
+          btn.innerHTML = '← 되돌리기';
+          btn.onclick = bibleGoBack;
+          document.body.appendChild(btn);
+        }
+        const prev = _bibleNavHistory[_bibleNavHistory.length - 1];
+        const bookObj = BIBLE_BOOKS.find(b => b.id === prev.bookId);
+        btn.innerHTML = '← ' + (bookObj ? bookObj.name + ' ' + prev.chapter + '장' : '되돌리기');
+        btn.style.display = '';
+      } else if (btn) {
+        btn.style.display = 'none';
+      }
+    }
+    function bibleGoBack() {
+      if (_bibleNavHistory.length === 0) return;
+      const prev = _bibleNavHistory.pop();
+      _updateBackButton();
+      window._suppressLoadEvent = true;
+      const testamentSelect = document.getElementById('testament-select');
+      const bookSelect = document.getElementById('book-select');
+      const chapterSelect = document.getElementById('chapter-select');
+      const targetBook = BIBLE_BOOKS.find(b => b.id === prev.bookId);
+      if (!targetBook) return;
+      if (testamentSelect.value !== targetBook.testament) {
+        testamentSelect.value = targetBook.testament;
+        updateBookSelect();
+      }
+      bookSelect.value = prev.bookId;
+      updateChapters();
+      chapterSelect.value = prev.chapter;
+      loadBibleText(prev.bookId, prev.chapter);
+      setTimeout(() => { window._suppressLoadEvent = false; }, 500);
+      // 이전 스크롤 위치 복원
+      setTimeout(() => {
+        const biblePane = document.getElementById('bible-text');
+        if (biblePane && prev.scrollTop) biblePane.scrollTop = prev.scrollTop;
+      }, 300);
+    }
+
     function navigateToBibleVerse(bookId, chapter, targetVerse) {
       if (window.innerWidth <= 768) {
         switchMobileTab('bible');
@@ -8921,11 +8984,12 @@
       const targetBook = BIBLE_BOOKS.find(b => b.id === bookId);
       if (!targetBook) return;
 
+      // 현재 위치를 히스토리에 저장 (되돌리기용)
+      _saveCurrentPosition();
+
       // 주석 안에서 성구를 클릭해 여기로 온 경우, 아래 loadBibleText가 주석 패널을
       // 따라오게 할 때 이 실제 클릭한 절 번호를 쓰도록 남겨둔다 (1절로 초기화되는 버그 방지)
       window._pendingCommentaryVerse = targetVerse;
-      // 현재 보고 있는 주석 시리즈 이름도 미리 저장 (책 변경 시 드롭다운 onchange가
-      // currentItem을 덮어쓰기 전에 기록해둬야 jumpToVerse에서 같은 시리즈를 찾을 수 있음)
       if (typeof Commentary !== 'undefined' && Commentary.currentItem && Commentary.currentItem.name) {
         window._pendingCommentaryName = Commentary.currentItem.name;
         window._pendingCommentaryType = Commentary.currentItem.sourceType || Commentary.currentItem.type || null;
