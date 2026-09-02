@@ -3264,13 +3264,12 @@
           const bookId = BOOK_REF_MAP[groups.book];
           if (!bookId) return whole;
           const chapter = parseInt(groups.bchap, 10);
-          // 실제 존재하지 않는 장(예: 5장짜리 책인데 39장)을 가리키게 되는 오작동을 한 번 더 방지
           const maxChapters = BOOK_ID_TO_CHAPTERS[bookId];
           if (maxChapters && chapter > maxChapters) return whole;
           lastBookId = bookId;
           const firstVerseMatch = groups.bverse && groups.bverse.match(/\d+/);
           const verse = firstVerseMatch ? parseInt(firstVerseMatch[0], 10) : 1;
-          return `<span class="term-verse-ref" onclick="showVersePopup(event,${bookId},${chapter},${verse})">${whole}</span>`;
+          return `<span class="term-verse-ref" data-bid="${bookId}" data-ch="${chapter}" data-v="${verse}" onclick="navigateToBibleVerse(${bookId},${chapter},${verse})">${whole}</span>`;
         }
         if (groups.cchap && lastBookId) {
           const chapter = parseInt(groups.cchap, 10);
@@ -3279,7 +3278,7 @@
           const firstVerseMatch = groups.cverse.match(/\d+/);
           const verse = firstVerseMatch ? parseInt(firstVerseMatch[0], 10) : 1;
           const refPart = whole.slice(groups.sep.length);
-          return `${groups.sep}<span class="term-verse-ref" onclick="showVersePopup(event,${lastBookId},${chapter},${verse})">${refPart}</span>`;
+          return `${groups.sep}<span class="term-verse-ref" data-bid="${lastBookId}" data-ch="${chapter}" data-v="${verse}" onclick="navigateToBibleVerse(${lastBookId},${chapter},${verse})">${refPart}</span>`;
         }
         return whole;
       });
@@ -3292,17 +3291,14 @@
       document.querySelectorAll('.verse-inline-popup').forEach(el => el.remove());
       const bookObj = BIBLE_BOOKS.find(b => b.id === bookId);
       if (!bookObj) { navigateToBibleVerse(bookId, chapter, verse); return; }
-      // 성경 DB에서 해당 절 조회
+      // 성경 DB에서 해당 절 조회 (sqliteDbInstance와 detectedSchema는 글로벌)
       let verses = [];
-      if (typeof queryVerseText === 'function') {
-        verses = queryVerseText(bookId, chapter, verse) || [];
-      }
-      if (!verses.length && typeof sqliteDbInstance !== 'undefined' && sqliteDbInstance && typeof detectedSchema !== 'undefined' && detectedSchema) {
+      if (typeof sqliteDbInstance !== 'undefined' && sqliteDbInstance && typeof detectedSchema !== 'undefined' && detectedSchema) {
         try {
           const sql = 'SELECT "' + detectedSchema.verse + '", "' + detectedSchema.content + '" FROM "' + detectedSchema.table + '" WHERE "' + detectedSchema.book + '" = ' + bookId + ' AND "' + detectedSchema.chapter + '" = ' + chapter + ' AND "' + detectedSchema.verse + '" = ' + verse;
           const res = sqliteDbInstance.exec(sql);
           if (res.length && res[0].values.length) verses = res[0].values.map(r => ({ v: r[0], text: String(r[1] || '') }));
-        } catch(e) {}
+        } catch(e) { console.warn('showVersePopup query error:', e); }
       }
       const title = bookObj.name + ' ' + chapter + ':' + verse;
       const content = verses.length ? verses.map(v => v.text).join(' ') : '(성경 DB를 먼저 열어주세요)';
@@ -8258,6 +8254,22 @@
 
       // 주석 패널 스크롤 네비게이션 (플로팅 버튼 + 키보드)
       window.commentaryNavScroll = function(action) {
+
+      // 주석(commentary) 영역 안에서 성구 링크 클릭 시 본문 이동 대신 팝업 표시
+      // (원문사전/인명/용어 팝업에서는 원래대로 navigateToBibleVerse가 동작)
+      ['commentary-text-content', 'commentary-text-ref'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('click', function(e) {
+          const ref = e.target.closest('.term-verse-ref');
+          if (!ref) return;
+          e.stopPropagation();
+          e.preventDefault();
+          const bid = parseInt(ref.dataset.bid);
+          const ch = parseInt(ref.dataset.ch);
+          const v = parseInt(ref.dataset.v);
+          if (bid && ch) showVersePopup(e, bid, ch, v || 1);
+        }, true);
+      });
         const el = Commentary._getScrollEl();
         if (!el) return;
         const pageH = el.clientHeight * 0.85; // 한 화면의 85% 만큼 이동
