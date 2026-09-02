@@ -1,9 +1,9 @@
 {
- "version": "0.5.1",
+ "version": "0.5.3",
  "date": "2026-09-03",
  "count": 3964,
  "source": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축",
- "note": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축. 번역/분류 100%, 스트롱 99.29%. | 2026-09-03: 배치79~80 번역 보강 39건 추가(누계 792건). 350~449자 구간 진행 중.",
+ "note": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축. 번역/분류 100%, 스트롱 99.29%. | 2026-09-03: 배치79~86 번역 보강 139건 추가(누계 892건). 350~449자 구간 잔여 127건.",
  "entries": [
   {
    "id": 1,
@@ -233,7 +233,7 @@
    "id": 29,
    "term": "Abieezer(아비에셀)",
    "definition": "father of help; i.e., “helpful.” (1.) The second of the three sons of Hammoleketh, the sister of Gilead. He was the grandson of Manasseh (1 Chronicles 7:18). From his family Gideon sprang (Joshua 17:2; comp. Judges 6:34; 8:2). He was also called Jeezer (Numbers 26:30). (2.) One of David’s thirty warriors (2 Samuel 23:27; comp. 1 Chronicles 27:12). (3.) The prince of the tribe of Dan at the Exodus (Numbers 1:12).",
-   "definition_ko": "\"도움의 아버지,\" 곧 \"돕는 자.\" (1.) 길르앗의 누이 함몰레겟의 세 아들 중 둘째.",
+   "definition_ko": "'도움의 아버지' 곧 '돕는 자'라는 뜻. (1.) 길르앗의 누이 함몰레겟의 세 아들 가운데 둘째이다. 므낫세의 손자였다(역대상 7:18). 그의 집안에서 기드온이 났다(여호수아 17:2; 사사기 6:34; 8:2 비교). 이에셀이라고도 불렸다(민수기 26:30). (2.) 다윗의 삼십 용사 가운데 하나(사무엘하 23:27; 역대상 27:12 비교). (3.) 출애굽 때 단 지파의 지휘관(민수기 1:12).",
    "category": "인명",
    "hebrew_greek": "H0002"
   },
@@ -553,7 +553,7 @@
    "id": 73,
    "term": "Achmetha(악메다)",
    "definition": "(Ezra 6:2), called Ecbatana by classical writers, the capital of northern Media. Here was the palace which was the residence of the old Median monarchs, and of Cyrus and Cambyses. In the time of Ezra, the Persian kings resided usually at Susa of Babylon. But Cyrus held his court at Achmetha; and Ezra, writing a century after, correctly mentions the place where the decree of Cyrus was found.",
-   "definition_ko": "(에스라 6:2), 고전 저술가들에 의해 엑바타나라 불렸으며, 북부 메대의 수도였다.",
+   "definition_ko": "(에스라 6:2) 고전 저술가들이 엑바타나라 부른 곳이며 북부 메디아의 수도이다. 여기에 옛 메디아 군주들과 고레스와 캄비세스가 머물던 왕궁이 있었다. 에스라 때에 바사 왕들은 대개 바벨론의 수산에 머물렀다. 그러나 고레스는 악메다에서 궁정을 열었으니, 한 세기 뒤에 글을 쓴 에스라가 고레스의 조서가 발견된 곳을 정확히 언급한 것이다.",
    "category": "지명",
    "hebrew_greek": "H0307"
   },
@@ -761,7 +761,7 @@
    "id": 99,
    "term": "Adonibezek(아도니베섹)",
    "definition": "Lord of Bezek, a Canaanitish king who, having subdued seventy of the chiefs that were around him, made an attack against the armies of Judah and Simeon, but was defeated and brought as a captive to Jerusalem, where his thumbs and great toes were cut off. He confessed that God had requited him for his like cruelty to the seventy kings whom he had subdued (Judges 1:4-7; comp. 1 Samuel 15:33).",
-   "definition_ko": "\"베섹의 주,\" 자기 주위의 일흔 왕을 굴복시킨 후 유다와 시므온의 군대를 공격한 가나안 왕.",
+   "definition_ko": "'베섹의 주'라는 뜻으로 가나안 왕이다. 그는 자기 둘레의 우두머리 일흔 명을 굴복시킨 뒤 유다와 시므온의 군대를 쳤으나, 패하여 사로잡혀 예루살렘으로 끌려갔고 거기서 엄지손가락과 엄지발가락이 잘렸다. 그는 자기가 굴복시킨 일흔 왕에게 똑같은 잔혹한 일을 하였으므로 하나님께서 자기에게 갚으셨다고 자백하였다(사사기 1:4-7; 사무엘상 15:33 비교).",
    "category": "인명",
    "hebrew_greek": "H0137"
   },
@@ -2495,7 +2495,7 @@
    "id": 316,
    "term": "Armageddon(아마겟돈)",
    "definition": "occurs only in Revelation 16:16 (R.V., “Har-Magedon”), as symbolically designating the place where the “battle of that great day of God Almighty” (ver. 14) shall be fought. The word properly means the “mount of Megiddo.” It is the scene of the final conflict between Christ and Antichrist. The idea of such a scene was suggested by the Old Testament great battle-field, the plain of Esdraelon (q.v.).",
-   "definition_ko": "요한계시록 16:16(개정역, '하르마게돈')에만 나오며, '전능하신 하나님의 그 큰 날의 전쟁'(14절)이 벌어질 곳을 상징적으로 가리킨다. 이 단어는 본래 '므깃도 산'을 뜻한다. 그리스도와 적그리스도 사이의 마지막 전투의 무대다.",
+   "definition_ko": "요한계시록 16:16에만 나오며(개정역 '하르마게돈'), '전능하신 하나님의 큰 날에 있을 전쟁'(16:14)이 벌어질 곳을 상징으로 가리킨다. 이 말은 본래 '므깃도 산'을 뜻한다. 그리스도와 적그리스도 사이의 마지막 싸움이 벌어지는 자리이다. 이런 장면에 대한 생각은 구약의 큰 싸움터인 에스드라엘론(참조) 평야에서 비롯되었다.",
    "category": "지명",
    "hebrew_greek": "G0717,H4023"
   },
@@ -2679,7 +2679,7 @@
    "id": 339,
    "term": "Ashdoth-Pisgah(아스돗비스가)",
    "definition": "(Deuteronomy 3:17; Joshua 12:3; 13:20) in Authorized Version, but in Revised Version translated “slopes of Pisgah.” In Deuteronomy 4:49 it is translated in the Authorized Version “springs of Pisgah.” The name Ashdoth is translated “springs” in the Authorized Version, but “slopes” in the Revised Version, of Joshua 10:40 and 12:8. It has been identified with the springs under Mount Nebo, now called ‘Ayun Musa.",
-   "definition_ko": "(신명기 3:17; 여호수아 12:3; 13:20) 흠정역의 표기이나 개정역에서는 '비스가의 비탈'로 번역된다. 신명기 4:49에서는 흠정역이 '비스가의 샘'으로 옮긴다.",
+   "definition_ko": "(신명기 3:17; 여호수아 12:3; 13:20) 흠정역의 표기이나 개정역은 '비스가 비탈'로 옮긴다. 신명기 4:49에서 흠정역은 '비스가의 샘들'로 옮긴다. 아스돗이라는 이름은 여호수아 10:40과 12:8에서 흠정역이 '샘들'로, 개정역이 '비탈'로 옮긴다. 느보 산 아래에 있는 샘들과 같은 곳으로 보는데, 지금은 아윤 무사라 불린다.",
    "category": "지명",
    "hebrew_greek": "H0798"
   },
@@ -3062,7 +3062,7 @@
    "id": 387,
    "term": "Baalah(바알라)",
    "definition": "mistress; city. (1.) A city in the south of Judah (Joshua 15:29), elsewhere called Balah (Joshua 19:3) and Bilhah (1 Chronicles 4:29). Now Khurbet Zebalah. (2.) A city on the northern border of the tribe of Judah (Joshua 15:10), called also Kirjath-jearim, q.v. (15:9; 1 Chronicles 13:6), now Kuriet-el-Enab, or as some think, ‘Erma. (3.) A mountain on the north-western boundary of Judah and Dan (Joshua 15:11).",
-   "definition_ko": "여주인, 성읍. 유다 남부의 한 성읍(여호수아 15:29)으로, 다른 곳에서는 발라(여호수아 19:3), 빌하(역대상 4:29)로도 불린다. 지금의 쿠르벳 제발라.",
+   "definition_ko": "'여주인', '성읍'이라는 뜻. (1.) 유다 남쪽의 성읍(여호수아 15:29)으로 다른 곳에서는 발라(여호수아 19:3), 빌하(역대상 4:29)라 불린다. 지금은 후르베트 제발라이다. (2.) 유다 지파 북쪽 경계의 성읍(여호수아 15:10)으로 기럇여아림(참조)이라고도 불린다(15:9; 역대상 13:6). 지금은 쿠리엣엘에납이며, 어떤 이들은 에르마로 본다. (3.) 유다와 단의 북서쪽 경계에 있는 산(여호수아 15:11).",
    "category": "지명",
    "hebrew_greek": "H1173"
   },
@@ -3678,7 +3678,7 @@
    "id": 464,
    "term": "Barzillai(바르실래)",
    "definition": "of iron. (1.) A Meholathite, the father of Adriel (2 Samuel 21:8). (2.) A Gileadite of Rogelim who was distinguished for his loyalty to David. He liberally provided for the king’s followers (2 Samuel 17:27). David on his death-bed, remembering his kindness, commended Barzillai’s children to the care of Solomon (1 Kings 2:7). (3.) A priest who married a daughter of the preceding (Ezra 2:61).",
-   "definition_ko": "철의. 로글림 출신 길르앗 사람으로 다윗에 대한 충성으로 이름났으며, 압살롬의 반역 때 다윗을 따르는 이들에게 물자를 공급했다. 다윗은 그의 자손들을 솔로몬에게 부탁했다(사무엘하 17:27; 열왕기상 2:7).",
+   "definition_ko": "'쇠의'라는 뜻. (1.) 므홀랏 사람으로 아드리엘의 아버지(사무엘하 21:8). (2.) 로글림의 길르앗 사람으로 다윗을 향한 충성으로 두드러졌다. 그는 왕을 따르는 자들에게 넉넉히 대어 주었다(사무엘하 17:27). 다윗은 죽음의 자리에서 그의 친절을 기억하여 바르실래의 자손을 솔로몬에게 부탁하였다(열왕기상 2:7). (3.) 앞사람의 딸과 혼인한 제사장(에스라 2:61).",
    "category": "인명",
    "hebrew_greek": "H1271"
   },
@@ -3846,7 +3846,7 @@
    "id": 485,
    "term": "Bdellium",
    "definition": "occurs only in Genesis 2:12, where it designates a product of the land of Havilah; and in Numbers 11:7, where the manna is likened to it in colour. It was probably an aromatic gum like balsam which exuded from a particular tree (Borassus flabelliformis) still found in Arabia, Media, and India. It bears a resemblance in colour to myrrh. Others think the word denotes “pearls,” or some precious stone.",
-   "definition_ko": "하윌라 땅의 산물(창세기 2:12)로, 아마도 몰약과 비슷한 향기로운 수지이며 만나의 색이 이것에 비유되었다(민수기 11:7).",
+   "definition_ko": "창세기 2:12에만 나오는데 거기서는 하윌라 땅의 소산을 가리키고, 민수기 11:7에서는 만나를 그 빛깔에 견준다. 이는 아마도 어떤 특정한 나무(보라수스 플라벨리포르미스)에서 흘러나오는 발삼 같은 향기로운 진이었을 터인데, 그 나무는 지금도 아라비아와 메디아와 인도에서 볼 수 있다. 빛깔이 몰약과 비슷하다. 다른 이들은 이 낱말이 '진주'나 어떤 보석을 뜻한다고 본다.",
    "category": "용어",
    "hebrew_greek": "H0916"
   },
@@ -4270,7 +4270,7 @@
    "id": 538,
    "term": "Bernice(버니게)",
    "definition": "bearer of victory, the eldest daughter of Agrippa I., the Herod Agrippa of Acts 12:20. After the early death of her first husband she was married to her uncle Herod, king of Chalcis. After his death (A.D. 40) she lived in incestuous connection with her brother Agrippa II. (Acts 25:13, 23; 26:30). They joined the Romans at the outbreak of the final war between them and the Jews, and lived afterwards at Rome.",
-   "definition_ko": "승리를 가져오는 자. 아그립바 1세의 맏딸로 형제 아그립바 2세와 근친상간 관계로 지냈으며 행 25-26장에 함께 등장한다.",
+   "definition_ko": "'승리를 가져오는 자'라는 뜻으로 아그립바 일세의 맏딸이며, 그는 사도행전 12:20의 헤롯 아그립바이다. 첫 남편이 일찍 죽은 뒤 그는 삼촌인 칼키스 왕 헤롯과 혼인하였다. 그가 죽은 뒤(주후 40년) 버니게는 오라비 아그립바 이세와 근친의 관계로 살았다(사도행전 25:13,23; 26:30). 그들은 로마와 유대인 사이에 마지막 전쟁이 터지자 로마 편에 붙었고 그 뒤로는 로마에서 살았다.",
    "category": "인명",
    "hebrew_greek": "G0959"
   },
@@ -4582,7 +4582,7 @@
    "id": 577,
    "term": "Betroth",
    "definition": "to promise “by one’s truth.” Men and women were betrothed when they were engaged to be married. This usually took place a year or more before marriage. From the time of betrothal the woman was regarded as the lawful wife of the man to whom she was betrothed (Deuteronomy 28:30; Judges 14:2, 8; Matthew 1:18-21). The term is figuratively employed of the spiritual connection between God and his people (Hos. 2:19, 20).",
-   "definition_ko": "'자기의 진실됨으로' 약속하는 것. 약혼을 통해 여자는 약혼한 남자의 합법적인 아내로 여겨졌다(신명기 28:30; 마태복음 1:18-21).",
+   "definition_ko": "'자기 신실함을 걸고' 약속하는 것이다. 남녀가 혼인하기로 언약하면 정혼한 것이 되었다. 이는 대개 혼인보다 한 해 남짓 앞서 이루어졌다. 정혼한 때부터 여자는 정혼한 남자의 법적인 아내로 여겨졌다(신명기 28:30; 사사기 14:2,8; 마태복음 1:18-21). 이 말은 하나님과 그 백성 사이의 영적인 관계를 나타내는 비유로도 쓰인다(호세아 2:19,20).",
    "category": "용어",
    "hebrew_greek": "G0718,G3423,H0781,H3259"
   },
@@ -4622,7 +4622,7 @@
    "id": 582,
    "term": "Bezek(베섹)",
    "definition": "lightning. (1.) The residence of Adoni-bezek, in the lot of Judah (Judges 1:5). It was in the mountains, not far from Jerusalem. Probably the modern Bezkah, 6 miles south-east of Lydda.  (2.) The place where Saul numbered the forces of Israel and Judah (1 Samuel 11:8); somewhere in the centre of the country, near the Jordan valley. Probably the modern Ibzik, 13 miles north-east of Shechem.",
-   "definition_ko": "번개. (1) 유다에 있던 아도니베섹의 거주지(사사기 1:5). (2) 사울이 이스라엘과 유다의 군대를 계수한 곳(사무엘상 11:8).",
+   "definition_ko": "'번개'라는 뜻. (1.) 아도니베섹이 살던 곳으로 유다의 몫 안에 있었다(사사기 1:5). 산지에 있었고 예루살렘에서 멀지 않았다. 아마도 룻다 남동쪽 6마일에 있는 오늘날의 베즈카일 것이다. (2.) 사울이 이스라엘과 유다의 군대를 계수한 곳(사무엘상 11:8). 나라 한가운데 요단 골짜기 가까이 어딘가이다. 아마도 세겜 북동쪽 13마일에 있는 오늘날의 입직일 것이다.",
    "category": "지명",
    "hebrew_greek": "H0966"
   },
@@ -4902,7 +4902,7 @@
    "id": 617,
    "term": "Boar",
    "definition": "occurs only in Psalm 80:13. The same Hebrew word is elsewhere rendered “swine” (Leviticus 11:7; Deuteronomy 14:8; Proverbs 11:22; Isaiah 65:4; 66:3, 17). The Hebrews abhorred swine’s flesh, and accordingly none of these animals were reared, except in the district beyond the Sea of Galilee. In the psalm quoted above the powers that destroyed the Jewish nation are compared to wild boars and wild beasts of the field.",
-   "definition_ko": "시편 80:13에만 나오며, 같은 히브리어 단어가 다른 곳에서는 '돼지'로 번역된다. 히브리인들이 먹기를 몹시 꺼린 동물이다.",
+   "definition_ko": "시편 80:13에만 나온다. 같은 히브리어 낱말이 다른 곳에서는 '돼지'로 옮겨진다(레위기 11:7; 신명기 14:8; 잠언 11:22; 이사야 65:4; 66:3,17). 히브리 사람은 돼지고기를 몹시 싫어하였으므로 갈릴리 바다 저편 지역 말고는 이 짐승을 기르지 않았다. 위에 인용한 시편에서는 유대 민족을 무너뜨린 세력을 멧돼지와 들짐승에 견준다.",
    "category": "용어",
    "hebrew_greek": "H2386"
   },
@@ -5062,7 +5062,7 @@
    "id": 637,
    "term": "Bowing",
    "definition": "a mode of showing respect. Abraham “bowed himself to the people of the land” (Genesis 23:7); so Jacob to Esau (Genesis 33:3); and  the brethren of Joseph before him as the governor of the land (Genesis 43:28). Bowing is also frequently mentioned as an act of adoration to idols (Joshua 23:7; 2 Kings 5:18; Judges 2:19; Isaiah 44:15), and to God (Joshua 5:14; Psalm 22:29; 72:9; Micah 6:6; Psalm 95:6; Ephesians 3:14).",
-   "definition_ko": "사람, 우상, 또는 하나님께 대한 존경이나 경배의 흔한 몸짓(창세기 23:7; 여호수아 5:14).",
+   "definition_ko": "존경을 나타내는 방식이다. 아브라함은 '그 땅 백성을 향하여 몸을 굽혔고'(창세기 23:7), 야곱도 에서에게 그리하였으며(창세기 33:3), 요셉의 형제들도 그 땅의 통치자인 그 앞에서 그리하였다(창세기 43:28). 몸을 굽히는 것은 우상에게 경배하는 행위로도 자주 언급되고(여호수아 23:7; 열왕기하 5:18; 사사기 2:19; 이사야 44:15), 하나님께 경배하는 행위로도 언급된다(여호수아 5:14; 시편 22:29; 72:9; 미가 6:6; 시편 95:6; 에베소서 3:14).",
    "category": "용어",
    "hebrew_greek": "H6739"
   },
@@ -5230,7 +5230,7 @@
    "id": 658,
    "term": "Brook",
    "definition": "a torrent. (1.) Applied to small streams, as the Arnon, Jabbok, etc. Isaiah (15:7) speaks of the “book of the willows,” probably the Wady-el-Asha. (2.) It is also applied to winter torrents (Job 6:15; Numbers 34:5; Joshua 15:4, 47), and to the torrent-bed or wady as well as to the torrent itself (Numbers 13:23; 1 Kings 17:3). (3.) In Isaiah 19:7 the river Nile is meant, as rendered in the Revised Version.",
-   "definition_ko": "급류를 뜻하며 작은 시내나 겨울철 급류, 또는 그 하상을 가리키며 이사야 19:7에서는 나일강을 가리킨다.",
+   "definition_ko": "급류이다. (1.) 아르논과 얍복 같은 작은 시내에 쓰인다. 이사야는(15:7) '버드나무 시내'를 말하는데 아마도 와디 엘아사일 것이다. (2.) 겨울 급류에도 쓰이고(욥기 6:15; 민수기 34:5; 여호수아 15:4,47), 급류 자체뿐 아니라 급류가 흐르는 골짜기 곧 와디에도 쓰인다(민수기 13:23; 열왕기상 17:3). (3.) 이사야 19:7에서는 개정역이 옮긴 대로 나일 강을 뜻한다.",
    "category": "용어",
    "hebrew_greek": "H2975,H5158"
   },
@@ -5485,7 +5485,7 @@
    "id": 690,
    "term": "Cainan(가이난)",
    "definition": "possession; smith. (1.) The fourth antediluvian patriarch, the eldest son of Enos. He was 70 years old at the birth of his eldest son Mahalaleel, after which he lived 840 years (Genesis 5:9-14), and was 910 years old when he died. He is also called Kenan (1 Chronicles 1:2). (2.) The son of Arphaxad (Luke 3:36). He is nowhere named in the Old Testament. He is usually called the “second Cainan.”",
-   "definition_ko": "(1) 에노스의 아들로 네 번째 홍수 전 족장이며 910년을 살았다(창세기 5:9-14). (2) 아르박삿의 아들로 누가복음 3:36에는 언급되나 구약에는 없다.",
+   "definition_ko": "'소유', '대장장이'라는 뜻. (1.) 홍수 이전의 넷째 족장이며 에노스의 맏아들이다. 맏아들 마할랄렐이 났을 때 칠십 세였고 그 뒤로 팔백사십 년을 살았으며(창세기 5:9-14) 구백십 세에 죽었다. 게난이라고도 불린다(역대상 1:2). (2.) 아르박삿의 아들(누가복음 3:36). 구약에는 어디에도 그 이름이 나오지 않는다. 대개 '둘째 가이난'이라 불린다.",
    "category": "인명",
    "hebrew_greek": "G2536"
   },
@@ -5629,7 +5629,7 @@
    "id": 708,
    "term": "Canaanite(가나안 사람)",
    "definition": "a name given to the apostle Simon (Matthew 10:4; Mark 3:18). The word here does not, however, mean a descendant of Canaan, but is a translation, or rather almost a transliteration, of the Syriac word Kanenyeh (R.V. rendered “Cananaen”), which designates the Jewish sect of the Zealots. Hence he is called elsewhere (Luke 6:15) “Simon Zelotes;” i.e., Simon of the sect of the Zealots. (See SIMON.)",
-   "definition_ko": "사도 시몬에게 붙여진 이름(마태복음 10:4)으로 열심당을 뜻하는 아람어 단어를 음역한 것이며 가나안 혈통을 뜻하지 않는다.",
+   "definition_ko": "사도 시몬에게 주어진 이름이다(마태복음 10:4; 마가복음 3:18). 그러나 여기서 이 말은 가나안의 자손을 뜻하지 않고, 수리아 말 '카네네예'를 옮긴 말 곧 오히려 거의 그대로 음역한 말이다(개정역 '가나나인'). 이는 유대인의 열심당 분파를 가리킨다. 그리하여 그는 다른 곳에서 '셀롯이라는 시몬' 곧 열심당 분파의 시몬이라 불린다(누가복음 6:15). (시몬 참조.)",
    "category": "인명",
    "hebrew_greek": "G2581,G5477,G5478,H3667,H3669"
   },
@@ -5661,7 +5661,7 @@
    "id": 712,
    "term": "Candle",
    "definition": "Hebrews ner, Job 18:6; 29:3; Psalm 18:28; Proverbs 24:20, in all which places the Revised Version and margin of Authorized Version  have “lamp,” by which the word is elsewhere frequently rendered. The Hebrew word denotes properly any kind of candle or lamp or torch. It is used as a figure of conscience (Proverbs 20:27), of a Christian example (Matthew 5:14, 15), and of prosperity (Job 21:17; Proverbs 13:9).",
-   "definition_ko": "히브리어 네르, 본래 '등불'을 뜻하며 양심, 그리스도인의 본, 번영을 비유적으로 나타낸다(잠언 20:27; 마태복음 5:14-15).",
+   "definition_ko": "히브리어 '네르'이며 욥기 18:6; 29:3, 시편 18:28, 잠언 24:20에 나오는데, 이 모든 곳에서 개정역과 흠정역 난외주는 '등불'이라 하며 이 낱말은 다른 곳에서도 자주 그렇게 옮겨진다. 이 히브리어 낱말은 본래 온갖 종류의 초나 등불이나 횃불을 뜻한다. 양심을 나타내는 비유로(잠언 20:27), 그리스도인의 본을 나타내는 비유로(마태복음 5:14,15), 또 형통을 나타내는 비유로 쓰인다(욥기 21:17; 잠언 13:9).",
    "category": "용어",
    "hebrew_greek": "G3088,H5216"
   },
@@ -5837,7 +5837,7 @@
    "id": 734,
    "term": "Carve",
    "definition": "The arts of engraving and carving were much practised among the Jews. They were practised in connection with the construction of the tabernacle and the temple (Exodus 31:2, 5; 35:33; 1 Kings 6:18, 35; Psalm 74:6), as well as in the ornamentation of the priestly dresses (Exodus 28:9-36; Zechariah 3:9; 2 Chronicles 2:7, 14). Isaiah (44:13-17) gives a minute description of the process of carving idols of wood.",
-   "definition_ko": "성막과 성전 건축, 제사장 복식 장식에 조각과 세공이 쓰였다. 이사야는 나무 우상을 조각하는 과정을 묘사한다(이사야 44:13-17).",
+   "definition_ko": "새기고 조각하는 기술은 유대인 가운데 많이 행하여졌다. 성막과 성전을 짓는 일과 관련하여 행하여졌고(출애굽기 31:2,5; 35:33; 열왕기상 6:18,35; 시편 74:6), 제사장의 옷을 꾸미는 데도 그러하였다(출애굽기 28:9-36; 스가랴 3:9; 역대하 2:7,14). 이사야는(44:13-17) 나무로 우상을 조각하는 과정을 세밀하게 그린다.",
    "category": "용어",
    "hebrew_greek": "H7049"
   },
@@ -6275,7 +6275,7 @@
    "id": 789,
    "term": "Chemosh",
    "definition": "the destroyer, subduer, or fish-God, the God of the Moabites (Numbers 21:29; Jeremiah 48:7, 13, 46). The worship of this God, “the abomination of Moab,” was introduced at Jerusalem by Solomon (1 Kings 11:7), but was abolished by Josiah (2 Kings 23:13). On the “Moabite Stone” (q.v.), Mesha (2 Kings 3:5) ascribes his victories over the king of Israel to this God, “And Chemosh drove him before my sight.”",
-   "definition_ko": "모압의 민족신으로 솔로몬이 예루살렘에 그 숭배를 들여왔으나 요시야가 폐지했다(열왕기상 11:7; 열왕기하 23:13).",
+   "definition_ko": "'멸하는 자', '굴복시키는 자' 또는 '물고기 신'이라는 뜻으로 모압 사람의 신이다(민수기 21:29; 예레미야 48:7,13,46). '모압의 가증한 것'인 이 신에 대한 숭배를 솔로몬이 예루살렘에 들여왔으나(열왕기상 11:7) 요시야가 없앴다(열왕기하 23:13). '모압 비석'(참조)에서 메사는(열왕기하 3:5) 이스라엘 왕을 이긴 자기 승리를 이 신에게 돌리며 '그모스가 내 눈앞에서 그를 몰아내었다'고 한다.",
    "category": "용어",
    "hebrew_greek": "H3645"
   },
@@ -6307,7 +6307,7 @@
    "id": 793,
    "term": "Cherethim(그렛 사람)",
    "definition": "(Ezekiel 25:16), more frequently Cherethites, the inhabitants of Southern Philistia, the Philistines (Zephaniah 2:5). The Cherethites and the Pelethites were David’s life-guards (1 Samuel 30:14; 2 Samuel 8:18; 20:7, 23; 23:23). This name is by some interpreted as meaning “Cretans,” and by others “executioners,” who were ready to execute the king’s sentence of death (Genesis 37:36, marg.; 1 Kings 2:25).",
-   "definition_ko": "그렛 사람(그레딤)이라고도 하며 남부 블레셋 지역 주민으로 블렛 사람들과 함께 다윗의 호위대를 이루었다(사무엘상 30:14; 사무엘하 8:18).",
+   "definition_ko": "(에스겔 25:16) 더 자주는 그렛 사람이라 하며, 블레셋 남부의 주민 곧 블레셋 사람이다(스바냐 2:5). 그렛 사람과 블렛 사람은 다윗의 호위대였다(사무엘상 30:14; 사무엘하 8:18; 20:7,23; 23:23). 어떤 이들은 이 이름을 '그레데 사람'을 뜻하는 것으로 풀이하고, 다른 이들은 왕의 사형 선고를 집행할 채비를 갖춘 '처형하는 자'를 뜻한다고 풀이한다(창세기 37:36 난외주; 열왕기상 2:25).",
    "category": "인명",
    "hebrew_greek": "H3774"
   },
@@ -6523,7 +6523,7 @@
    "id": 820,
    "term": "Chosen",
    "definition": "spoken of warriors (Exodus 15:4; Judges 20:16), of the Hebrew nation (Psalm 105:43; Deuteronomy 7:7), of Jerusalem as the seat of the temple (1 Kings 11:13). Christ is the “chosen” of God (Isaiah 42:1); and the apostles are “chosen” for their work (Acts 10:41). It is said with  regard to those who do not profit by their opportunities that “many are called, but few are chosen” (Matthew 20:16). (See ELECTION.)",
-   "definition_ko": "용사들, 히브리 민족, 예루살렘, 그리스도, 사도들에게 쓰인다. '부름받은 자는 많되 택함받은 자는 적다'는 자신의 기회를 유익하게 쓰지 못한 자들을 가리킨다(마태복음 20:16).",
+   "definition_ko": "용사들을 두고 쓰이고(출애굽기 15:4; 사사기 20:16), 히브리 민족을 두고 쓰이며(시편 105:43; 신명기 7:7), 성전이 있는 자리로서 예루살렘을 두고 쓰인다(열왕기상 11:13). 그리스도는 하나님의 '택하신' 자이시며(이사야 42:1), 사도들은 자기 일을 위하여 '택하심'을 받았다(사도행전 10:41). 주어진 기회를 유익하게 쓰지 못하는 자들을 두고 '청함을 받은 자는 많되 택함을 입은 자는 적으니라' 하신다(마태복음 20:16). (선택 참조.)",
    "category": "용어",
    "hebrew_greek": "G1589,H0970,H1305,H4005"
   },
@@ -6762,7 +6762,7 @@
    "id": 850,
    "term": "Cleophas(글로바)",
    "definition": "(in the spelling of this word h is inserted by mistake from Latin MSS.), rather Cleopas, which is the Greek form of the word, while Clopas is the Aramaic form. In John 19:25 the Authorized Version reads, “Mary, the wife of Clopas.” The word “wife” is conjecturally inserted here. If “wife” is rightly inserted, then Mary was the mother of James the Less, and Clopas is the same as Alphaeus (Matthew 10:3; 27:56).",
-   "definition_ko": "아람어 형태 글로바로, 아마도 알패오와 같은 인물이며 요한복음 19:25에 언급된 마리아의 남편일 가능성이 있다.",
+   "definition_ko": "(이 낱말의 표기에서 h는 라틴어 사본에서 잘못 끼어든 것이다) 오히려 글로바이며 이것이 헬라어 형태이고, 클로파스는 아람어 형태이다. 요한복음 19:25에서 흠정역은 '글로바의 아내 마리아'라 읽는다. 여기서 '아내'라는 말은 추정으로 넣은 것이다. '아내'를 넣는 것이 옳다면 이 마리아는 작은 야고보의 어머니였고, 글로바는 알패오와 같은 사람이 된다(마태복음 10:3; 27:56).",
    "category": "인명",
    "hebrew_greek": "G0256,G2810,G2832"
   },
@@ -6914,7 +6914,7 @@
    "id": 869,
    "term": "Colony",
    "definition": "The city of Philippi was a Roman colony (Acts 16:12), i.e., a military settlement of Roman soldiers and citizens, planted there to keep in subjection a newly-conquered district. A colony was Rome in miniature, under Roman municipal law, but governed by military officers (praetors  and lictors), not by proconsuls. It had an independent internal government, the jus Italicum; i.e., the privileges of Italian citizens.",
-   "definition_ko": "빌립보는 로마 시민들의 군사 정착지로 로마 시정법에 따라 다스려진 로마의 식민지였다(사도행전 16:12).",
+   "definition_ko": "빌립보 성읍은 로마의 식민시였다(사도행전 16:12). 곧 새로 정복한 지역을 복종시켜 두려고 로마 군인과 시민을 그곳에 정착시킨 군사 이주지이다. 식민시는 축소된 로마여서 로마의 자치법 아래 있었으나, 총독이 아니라 군사 관리(법무관과 형리)가 다스렸다. 독자적인 내부 정치 제도인 '유스 이탈리쿰' 곧 이탈리아 시민의 특권을 지녔다.",
    "category": "용어",
    "hebrew_greek": "G2862"
   },
@@ -7106,7 +7106,7 @@
    "id": 893,
    "term": "Conversation",
    "definition": "generally the goings out and in of social intercourse (Ephesians 2:3; 4:22; R.V., “manner of life”); one’s deportment or course of life. This word is never used in Scripture in the sense of verbal communication from one to another (Psalm 50:23; Hebrews 13:5). In Phil. 1:27 and 3:20, a different Greek word is used. It there means one’s relations to a community as a citizen, i.e., citizenship.",
-   "definition_ko": "성경적 용법에서는 말이 아니라 사람의 생활 방식이나 행실을 뜻한다(에베소서 4:22).",
+   "definition_ko": "대체로 사람들과 오가며 사귀는 일을 뜻하며(에베소서 2:3; 4:22, 개정역 '행실'), 사람의 처신이나 삶의 길을 뜻한다. 이 말은 성경에서 한 사람이 다른 사람에게 말로 전하는 뜻으로는 결코 쓰이지 않는다(시편 50:23; 히브리서 13:5). 빌립보서 1:27과 3:20에서는 다른 헬라어 낱말이 쓰이는데, 거기서는 한 사람이 시민으로서 공동체에 대하여 지니는 관계 곧 시민권을 뜻한다.",
    "category": "용어",
    "hebrew_greek": "G4175,H1870"
   },
@@ -7154,7 +7154,7 @@
    "id": 899,
    "term": "Cor",
    "definition": "This Hebrew word, untranslated, denotes a round vessel used as a measure both for liquids and solids. It was equal to one homer, and contained ten ephahs in dry and ten baths in liquid measure (Ezekiel 45:14). The Rabbins estimated the cor at forty-five gallons, while Josephus estimated it at about eighty-seven. In 1 Kings 4:22; 5:11; 2 Chronicles 2:10; 27:5, the original word is rendered “measure.”",
-   "definition_ko": "한 호멜에 해당하는 히브리 도량 단위로 열 에바 또는 열 밧에 해당한다(에스겔 45:14).",
+   "definition_ko": "옮기지 않고 그대로 둔 이 히브리어 낱말은 액체와 고체 모두의 되로 쓰인 둥근 그릇을 가리킨다. 한 호멜과 같았고, 마른 것을 되면 열 에바, 액체를 되면 열 밧이 들었다(에스겔 45:14). 랍비들은 고르를 마흔다섯 갤런으로 헤아렸고 요세푸스는 여든일곱 갤런쯤으로 헤아렸다. 열왕기상 4:22; 5:11과 역대하 2:10; 27:5에서 원어 낱말은 '되'로 옮겨진다.",
    "category": "용어",
    "hebrew_greek": "G2588,G2884,H3734"
   },
@@ -7354,7 +7354,7 @@
    "id": 924,
    "term": "Crane",
    "definition": "(Isaiah 38:14; Jeremiah 8:7). In both of these passages the Authorized Version has reversed the Hebrew order of the words. “Crane or swallow” should be “swallow or crane,” as in the Revised Version. The rendering is there correct. The Hebrew for crane is’agur, the Grus cincerea, a bird well known in Palestine. It is migratory, and is distinguished by its loud voice, its cry being hoarse and melancholy.",
-   "definition_ko": "크고 구슬픈 울음소리로 알려진 철새(이사야 38:14).",
+   "definition_ko": "(이사야 38:14; 예레미야 8:7) 이 두 구절에서 흠정역은 히브리 말의 낱말 순서를 뒤집었다. '두루미나 제비'는 개정역대로 '제비나 두루미'라야 한다. 거기서의 번역이 옳다. 두루미에 해당하는 히브리 말은 '아구르'이며 그루스 키네레아로, 팔레스타인에 잘 알려진 새이다. 철새이며 큰 울음소리로 두드러지는데 그 소리가 쉬고 구슬프다.",
    "category": "용어",
    "hebrew_greek": "H5483"
   },
@@ -7506,7 +7506,7 @@
    "id": 943,
    "term": "Cup-Bearer",
    "definition": "an officer of high rank with Egyptian, Persian, Assyrian, and Jewish monarchs. The cup-bearer of the king of Egypt is mentioned in connection with Joseph’s history (Genesis 40:1-21; 41:9). Rabshakeh (q.v.) was cup-bearer in the Assyrian court (2 Kings 18:17). Nehemiah filled this office to the king of Persia (Nehemiah 1:11). We read also of Solomon’s cup-bearers (1 Kings 10:5; 2 Chronicles 9:4).",
-   "definition_ko": "왕의 포도주를 책임지는 고위 관직으로, 바로의 술 관원이나 아닥사스다 치하 느헤미야가 그 예이다.",
+   "definition_ko": "애굽과 바사와 앗수르와 유대 군주들에게 딸린 높은 지위의 관리이다. 애굽 왕의 술 맡은 관원장이 요셉의 역사와 관련하여 언급된다(창세기 40:1-21; 41:9). 랍사게(참조)는 앗수르 궁정의 술 맡은 관원장이었다(열왕기하 18:17). 느헤미야가 바사 왕에게 이 직임을 맡았다(느헤미야 1:11). 솔로몬의 술 맡은 신하들에 대해서도 읽는다(열왕기상 10:5; 역대하 9:4).",
    "category": "용어",
    "hebrew_greek": "H4945"
   },
@@ -7514,7 +7514,7 @@
    "id": 944,
    "term": "Curious Arts",
    "definition": "(Acts 19:19), magical arts; jugglery practised by the Ephesian conjurers. Ephesus was noted for its wizard and the “Ephesian spells;” i.e., charms or scraps of parchment written over with certain formula, which were worn as a safeguard against all manner of evils. The more important and powerful of these charms were written out in books which circulated among the exorcists, and were sold at a great price.",
-   "definition_ko": "에베소의 마술사들이 팔던 마법 관행과 부적으로, 새로 개종한 자들이 그 책들을 공개적으로 불태웠다(사도행전 19:19).",
+   "definition_ko": "(사도행전 19:19) 마술이며 에베소의 술객들이 부리던 요술이다. 에베소는 술객과 '에베소 주문'으로 이름났으니, 이는 어떤 문구를 적어 넣은 부적이나 양피지 조각으로서 온갖 재앙을 막는 방편으로 몸에 지녔다. 이런 주문 가운데 더 중요하고 힘 있는 것은 책으로 적혀 나와 축귀사들 사이에 돌았고 매우 비싼 값에 팔렸다.",
    "category": "용어",
    "hebrew_greek": "G4021"
   },
@@ -7586,7 +7586,7 @@
    "id": 953,
    "term": "Cymbals",
    "definition": "(Hebrews tzeltzelim, from a root meaning to “tinkle”), musical instruments, consisting of two convex pieces of brass one held in each hand, which were clashed together to produce a loud clanging sound; castanets; “loud cymbals.” “Highsounding cymbals” consisted of two larger plates, one held also in each hand (2 Samuel 6:5; Psalm 150:5; 1 Chronicles 13:8; 15:16, 19, 28; 1 Corinthians 13:1).",
-   "definition_ko": "두 개의 놋쇠 판을 부딪쳐 큰 소리를 내는 타악기로 성전 예배에 쓰였다(역대상 13:8).",
+   "definition_ko": "(히브리어 '첼첼림'이며 '쟁그랑거리다'를 뜻하는 어근에서 왔다) 악기이며, 볼록한 놋 두 조각을 양손에 하나씩 들고 맞부딪쳐 크게 울리는 소리를 냈다. 캐스터네츠 곧 '큰 소리 나는 제금'이다. '높은 소리 나는 제금'은 더 큰 판 둘로 이루어졌고 역시 양손에 하나씩 들었다(사무엘하 6:5; 시편 150:5; 역대상 13:8; 15:16,19,28; 고린도전서 13:1).",
    "category": "용어",
    "hebrew_greek": "H4700"
   },
@@ -8329,7 +8329,7 @@
    "id": 1050,
    "term": "Dish",
    "definition": "for eating from (2 Kings 21:13). Judas dipped his hand with a “sop” or piece of bread in the same dish with our Lord, thereby indicating friendly intimacy (Matthew 26:23). The “lordly dish” in Judges 5:25 was probably the shallow drinking cup, usually of brass. In Judges 6:38 the same Hebrew word is rendered “bowl.” The dishes of the tabernacle were made of pure gold (Exodus 25:29; 37:16).",
-   "definition_ko": "먹는 데 쓰는 그릇(열왕기하 21:13). 유다는 우리 주님과 같은 그릇에 빵 조각을 찍었는데, 이는 친밀한 우정을 나타내는 것이었다(마태복음 26:23). 사사기 5:25의 '귀한 그릇'은 아마도 대개 놋으로 만든 얕은 마시는 잔이었을 것이다.",
+   "definition_ko": "먹을 때 쓰는 그릇이다(열왕기하 21:13). 유다가 우리 주님과 같은 그릇에 '떡 조각'을 들고 손을 넣었으니, 이로써 가까운 사귐을 나타내었다(마태복음 26:23). 사사기 5:25의 '귀한 그릇'은 아마도 대개 놋으로 만든 얕은 사발이었을 것이다. 사사기 6:38에서는 같은 히브리어 낱말이 '그릇'으로 옮겨진다. 성막의 접시는 순금으로 만들었다(출애굽기 25:29; 37:16).",
    "category": "용어",
    "hebrew_greek": "H5602,H6747,H7086"
   },
@@ -8705,7 +8705,7 @@
    "id": 1097,
    "term": "Dumah(두마)",
    "definition": "silence, (comp. Psalm 94:17), the fourth son of Ishmael; also the tribe descended from him; and hence also the region in Arabia which they inhabited (Genesis 25:14; 1 Chronicles 1:30). There was also a town of this name in Judah (Joshua 15:52), which has been identified with ed-Domeh, about 10 miles southwest of Hebron. The place mentioned in the “burden” of the prophet Isaiah (21:11) is Edom or Idumea.",
-   "definition_ko": "'침묵'이라는 뜻(시편 94:17 참조)으로, 이스마엘의 넷째 아들; 또한 그에게서 난 부족, 그리고 그들이 거주한 아라비아의 지역을 가리킨다(창세기 25:14; 역대상 1:30). 유다에도 이 이름의 성읍이 있었다(여호수아 15:52).",
+   "definition_ko": "'잠잠함'이라는 뜻으로(시편 94:17 비교) 이스마엘의 넷째 아들이며, 그에게서 난 족속의 이름이기도 하고, 따라서 그들이 살던 아라비아의 지역 이름이기도 하다(창세기 25:14; 역대상 1:30). 유다에도 이 이름을 가진 성읍이 있었는데(여호수아 15:52) 헤브론 남서쪽 10마일쯤에 있는 에드도메와 같은 곳으로 본다. 선지자 이사야의 '경고'에 언급된 곳(21:11)은 에돔 곧 이두매이다.",
    "category": "인명",
    "hebrew_greek": "H1746,H7316"
   },
@@ -9392,7 +9392,7 @@
    "id": 1183,
    "term": "Eliphelet(엘리벨렛)",
    "definition": "God his deliverance. (1.) One of David’s distinguished warriors (2 Samuel 23:34); called also Eliphal in 1 Chronicles 11:35. (2.) One of the sons of David born at Jerusalem (1 Chronicles 3:6; 14:5); called Elpalet in 1 Chronicles 14:5. Also another of David’s sons (1 Chronicles 3:8); called Eliphalet in 2 Samuel 5:16; 1 Chronicles 14:7. (3.) A descendant of king Saul through Jonathan (1 Chronicles 8:39).",
-   "definition_ko": "'하나님은 그의 구원'이라는 뜻. (1.) 다윗의 뛰어난 용사 중 하나(사무엘하 23:34); 역대상 11:35에서는 엘리발이라 불린다. (2.) 예루살렘에서 태어난 다윗의 아들 중 하나(역대상 3:6; 14:5); 역대상 14:5에서는 엘발렛이라 불린다.",
+   "definition_ko": "'하나님은 그의 구원'이라는 뜻. (1.) 다윗의 이름난 용사 가운데 하나(사무엘하 23:34)로 역대상 11:35에서는 엘리발이라고도 불린다. (2.) 예루살렘에서 난 다윗의 아들 가운데 하나(역대상 3:6; 14:5)로 역대상 14:5에서는 엘발렛이라 불린다. 또 다윗의 다른 아들도 있다(역대상 3:8). 그는 사무엘하 5:16과 역대상 14:7에서 엘리벨렛이라 불린다. (3.) 요나단을 통한 사울 왕의 자손(역대상 8:39).",
    "category": "인명",
    "hebrew_greek": "H0467"
   },
@@ -9680,7 +9680,7 @@
    "id": 1219,
    "term": "Enmity",
    "definition": "deep-rooted hatred. “I will put enmity between thee and the woman, between thy seed and her seed” (Genesis 3:15). The friendship of the world is “enmity with God” (James 4:4; 1 John 2:15, 16). The “carnal mind” is “enmity against God” (Romans 8:7). By the abrogation of the Mosaic institutes the “enmity” between Jew and Gentile is removed. They are reconciled, are “made one” (Ephesians 2:15, 16).",
-   "definition_ko": "뿌리 깊은 미움. '내가 너로 여자와 원수가 되게 하고 네 후손도 여자의 후손과 원수가 되게 하리니'(창세기 3:15). 세상과 벗됨은 '하나님과 원수 됨'이다(야고보서 4:4; 요한일서 2:15,16). '육신의 생각'은 '하나님과 원수가 됨'이다(로마서 8:7).",
+   "definition_ko": "뿌리 깊은 미움이다. '내가 너로 여자와 원수가 되게 하고 네 후손도 여자의 후손과 원수가 되게 하리니'(창세기 3:15). 세상과 벗 되는 것은 '하나님과 원수 되는 것'이다(야고보서 4:4; 요한일서 2:15,16). '육신의 생각'은 '하나님과 원수'가 된다(로마서 8:7). 모세의 제도가 폐하여짐으로 유대인과 이방인 사이의 '원수 된 것'이 없어졌다. 그들은 화목하게 되어 '하나가 되었다'(에베소서 2:15,16).",
    "category": "용어",
    "hebrew_greek": "G2189,H0342,H4895,H7855,H8569"
   },
@@ -9776,7 +9776,7 @@
    "id": 1231,
    "term": "Ephes-Dammim(에베스담밈)",
    "definition": "boundary of blood, a place in the tribe of Judah where the Philistines encamped when David fought with Goliath (1 Samuel 17:1). It was probably so called as having been the scene of frequent sanguinary conflicts between Israel and the Philistines. It is called Pas-dammim (1 Chronicles 11:13). It has been identified with the modern Beit Fased, i.e., “house of bleeding”, near Shochoh (q.v.).",
-   "definition_ko": "'피의 경계'라는 뜻으로, 다윗이 골리앗과 싸울 때 블레셋 사람들이 진 친 유다 지파 안의 장소(사무엘상 17:1). 아마도 이스라엘과 블레셋 사이 잦은 유혈 충돌의 무대였기에 이런 이름이 붙었을 것이다. 역대상 11:13에서는 바스담밈이라 불린다.",
+   "definition_ko": "'피의 경계'라는 뜻으로, 다윗이 골리앗과 싸울 때 블레셋 사람이 진 친 유다 지파의 한 곳이다(사무엘상 17:1). 아마도 이스라엘과 블레셋 사이에 피 흘리는 싸움이 자주 벌어진 자리였으므로 그렇게 불렸을 것이다. 바스담밈이라고도 불린다(역대상 11:13). 소고(참조) 가까이에 있는 오늘날의 베이트 파세드 곧 '피 흘림의 집'과 같은 곳으로 본다.",
    "category": "지명",
    "hebrew_greek": "H0658,H6450"
   },
@@ -10008,7 +10008,7 @@
    "id": 1260,
    "term": "Espouse",
    "definition": "Samuel 3:14), to betroth. The espousal was a ceremony of betrothing, a formal agreement between the parties then coming under obligation for the purpose of marriage. Espousals are in the East frequently contracted years before the marriage is celebrated. It is referred to as figuratively illustrating the relations between God and his people (Jeremiah 2:2; Matthew 1:18; 2 Corinthians 11:2). (See BETROTH.)",
-   "definition_ko": "(사무엘하 3:14) 약혼하다. 약혼은 결혼을 목적으로 당사자 간에 정식으로 맺어지는 언약이었다. 동방에서는 흔히 결혼식이 열리기 몇 년 전에 약혼이 맺어졌다. 하나님과 그 백성 사이의 관계를 비유적으로 나타내는 데 쓰인다.",
+   "definition_ko": "(사무엘하 3:14) 정혼하는 것이다. 약혼은 정혼하는 예식으로, 혼인을 목적으로 그때부터 의무를 지게 되는 두 편 사이의 정식 합의였다. 동방에서는 혼인을 치르기 여러 해 전에 약혼하는 일이 잦다. 하나님과 그 백성 사이의 관계를 비유로 보여 주는 데 쓰인다(예레미야 2:2; 마태복음 1:18; 고린도후서 11:2). (정혼 참조.)",
    "category": "용어",
    "hebrew_greek": "G0718,H0781"
   },
@@ -10231,7 +10231,7 @@
    "id": 1288,
    "term": "Executioner",
    "definition": "(Mark 6:27). Instead of the Greek word, Mark here uses a Latin word, speculator, which literally means “a scout,” “a spy,” and at length came to denote one of the armed bodyguard of the emperor. Herod Antipas, in imitation of the emperor, had in attendance on him a company of speculatores. They were sometimes employed as executioners, but this was a mere accident of their office. (See MARK, GOSPEL OF.)",
-   "definition_ko": "(마가복음 6:27) 마가는 여기서 그리스어 대신 라틴어 '스페쿨라토르'를 쓰는데, 문자적으로는 '정찰병, 첩자'를 뜻하다가 결국 황제의 무장 근위대원을 가리키게 된 말이다. 헤롯 안티파스는 황제를 흉내 내어 스페쿨라토레스 무리를 곁에 두었다.",
+   "definition_ko": "(마가복음 6:27) 마가는 여기서 헬라어 낱말 대신 라틴어 낱말 '스페쿨라토르'를 쓰는데, 이는 글자 그대로 '정찰병', '염탐꾼'을 뜻하다가 마침내 황제의 무장 호위병 가운데 하나를 가리키게 되었다. 헤롯 안디바는 황제를 본떠 스페쿨라토르 무리를 곁에 두었다. 그들은 때로 사형을 집행하는 일에 쓰였으나, 이는 그 직임에 딸린 우연한 일에 지나지 않았다. (마가복음 참조.)",
    "category": "용어",
    "hebrew_greek": "G4688"
   },
@@ -10558,7 +10558,7 @@
    "id": 1329,
    "term": "Fence",
    "definition": "(Hebrews gader), Numbers 22:24 (R.V.). Fences were constructions of unmortared stones, to protect gardens, vineyards, sheepfolds, etc. From various causes they were apt to bulge out and fall (Psalm 62:3). In Psalm 80:12, R.V. (see Isaiah 5:5), the psalmist says, “Why hast thou broken down her fences?” Serpents delight to lurk in the crevices of such fences (Ecclesiastes 10:8; comp. Amos 5:19).",
-   "definition_ko": "(히브리어 '가데르') 민수기 22:24(개정역). 울타리는 텃밭, 포도원, 양 우리 등을 보호하기 위해 회반죽 없이 돌을 쌓아 만든 구조물이었다. 여러 원인으로 부풀어 무너지기 쉬웠다(시편 62:3).",
+   "definition_ko": "(히브리어 '가데르') 민수기 22:24(개정역). 담은 회를 바르지 않고 돌을 쌓아 만든 것으로 뜰과 포도원과 양의 우리 따위를 지켰다. 여러 까닭으로 배가 불러 무너지기 쉬웠다(시편 62:3). 시편 80:12 개정역에서(이사야 5:5 참조) 시인은 '어찌하여 주께서 그 담을 허시사'라고 말한다. 뱀은 그런 담의 틈에 숨기를 즐긴다(전도서 10:8; 아모스 5:19 비교).",
    "category": "용어",
    "hebrew_greek": "G3727,G5418,G5420,H1219,H1444"
   },
@@ -10910,7 +10910,7 @@
    "id": 1373,
    "term": "Fold",
    "definition": "an enclosure for flocks to rest together (Isaiah 13:20). Sheep-folds are mentioned Numbers 32:16, 24, 36; 2 Samuel 7:8; Zephaniah 2:6; John 10:1, etc. It was prophesied of the cities of Ammon (Ezekiel 25:5), Aroer (Isaiah 17:2), and Judaea, that they would be folds or couching-places for flocks. “Among the pots,” of the Authorized Version (Psalm 68:13), is rightly in the Revised Version, “among the sheepfolds.”",
-   "definition_ko": "양 떼가 함께 쉬는 우리(이사야 13:20). 양우리는 민수기 32:16,24,36; 사무엘하 7:8; 스바냐 2:6; 요한복음 10:1 등에 언급된다. 암몬(에스겔 25:5), 아로엘(이사야 17:2), 유대의 성읍들이 양 떼의 우리, 곧 쉬는 곳이 되리라 예언되었다.",
+   "definition_ko": "가축 떼가 함께 쉬도록 만든 우리이다(이사야 13:20). 양의 우리가 민수기 32:16,24,36, 사무엘하 7:8, 스바냐 2:6, 요한복음 10:1 등에 언급된다. 암몬의 성읍들(에스겔 25:5)과 아로엘(이사야 17:2)과 유대가 양 떼의 우리나 눕는 곳이 되리라는 예언이 있었다. 흠정역 시편 68:13의 '솥 사이에'는 개정역대로 '양의 우리 사이에'가 옳다.",
    "category": "용어",
    "hebrew_greek": "G4167,H2263,H2264,H5116"
   },
@@ -11030,7 +11030,7 @@
    "id": 1388,
    "term": "Fowler",
    "definition": "the arts of, referred to Psalm 91:3; 124:7; Proverbs 6:5; Jeremiah 5:26; Hos. 9:8; Ezekiel 17:20; Ecclesiastes 9:12. Birds of all kinds abound in Palestine, and the capture of these for the table and for other uses formed the employment of many persons. The traps and snares used for this purpose are mentioned Hos. 5:1; Proverbs 7:23; 22:5; Amos 3:5; Psalm 69:22; comp. Deuteronomy 22:6, 7.",
-   "definition_ko": "시편 91:3; 124:7; 잠언 6:5; 예레미야 5:26; 호세아 9:8; 에스겔 17:20; 전도서 9:12에 언급된 기술. 팔레스타인에는 온갖 새들이 풍부했고 이를 식용이나 다른 용도로 잡는 일이 많은 사람들의 생업이었다.",
+   "definition_ko": "새 잡는 기술이 시편 91:3; 124:7, 잠언 6:5, 예레미야 5:26, 호세아 9:8, 에스겔 17:20, 전도서 9:12에 언급된다. 팔레스타인에는 온갖 새가 많았고, 이를 잡아 상에 올리거나 다른 데 쓰는 일이 많은 이들의 생업이 되었다. 이 일에 쓰던 덫과 올무가 호세아 5:1, 잠언 7:23; 22:5, 아모스 3:5, 시편 69:22에 언급된다(신명기 22:6,7 비교).",
    "category": "용어",
    "hebrew_greek": "H3352,H3353"
   },
@@ -11054,7 +11054,7 @@
    "id": 1391,
    "term": "Freedom",
    "definition": "The law of Moses pointed out the cases in which the servants of the Hebrews were to receive their freedom (Exodus 21:2-4, 7, 8; Leviticus 25:39-42, 47-55; Deuteronomy 15:12-18). Under the Roman law the “freeman” (ingenuus) was one born free; the “freedman” (libertinus) was a manumitted slave, and had not equal rights with the freeman (Acts 22:28; comp. Acts 16:37-39; 21:39; 22:25; 25:11, 12).",
-   "definition_ko": "모세 율법은 히브리인 종이 자유를 얻는 경우를 명시했다(출애굽기 21:2-4,7,8; 레위기 25:39-42,47-55; 신명기 15:12-18). 로마법에서 '자유인'(인제누우스)은 태어날 때부터 자유로운 자였고, '해방인'(리베르티누스)은 해방된 노예였다.",
+   "definition_ko": "모세의 율법은 히브리 사람의 종이 자유를 얻어야 할 경우를 밝혀 두었다(출애굽기 21:2-4,7,8; 레위기 25:39-42,47-55; 신명기 15:12-18). 로마 법 아래에서 '자유인'(잉게누우스)은 나면서부터 자유로운 자였고, '해방된 자'(리베르티누스)는 놓임을 받은 종으로서 자유인과 같은 권리를 지니지 못하였다(사도행전 22:28; 사도행전 16:37-39; 21:39; 22:25; 25:11,12 비교).",
    "category": "용어",
    "hebrew_greek": "G0859,G1657,H2668"
   },
@@ -11222,7 +11222,7 @@
    "id": 1412,
    "term": "Gabriel(가브리엘)",
    "definition": "champion of God, used as a proper name to designate the angel who was sent to Daniel (8:16) to explain the vision of the ram and the he-goat, and to communicate the prediction of the seventy weeks (Daniel 9:21-27). He announced also the birth of John the Baptist (Luke 1:11), and of the Messiah (26). He describes himself in the words, “I am Gabriel, who stand in the presence of God” (1:19).",
-   "definition_ko": "'하나님의 용사'라는 뜻으로, 다니엘에게 보내져(8:16) 숫양과 숫염소 환상을 설명하고 칠십 이레의 예언을 전한 천사를 가리키는 고유명사로 쓰인다(다니엘 9:21-27). 그는 또한 세례 요한의 출생(누가복음 1:11)과 메시아의 출생(26절)을 알렸다.",
+   "definition_ko": "'하나님의 용사'라는 뜻으로, 다니엘에게 보냄을 받아(8:16) 숫양과 숫염소의 환상을 풀어 주고 칠십 이레의 예언을 전한 천사를 가리키는 고유명사로 쓰인다(다니엘 9:21-27). 그는 또한 세례 요한이 날 것과(누가복음 1:11) 메시아가 나실 것을 알렸다(1:26). 그는 자기를 두고 '나는 하나님 앞에 서 있는 가브리엘이라'고 말한다(1:19).",
    "category": "인명",
    "hebrew_greek": "G1043,H1403"
   },
@@ -11662,7 +11662,7 @@
    "id": 1467,
    "term": "Gentiles",
    "definition": "(Hebrews , usually in plural, goyim), meaning in general all nations except the Jews. In course of time, as the Jews began more and more to pride themselves on their peculiar privileges, it acquired unpleasant associations, and was used as a term of contempt. In the New Testament the Greek word Hellenes, meaning literally Greek (as in Acts 16:1, 3; 18:17; Romans 1:14), generally denotes any non-Jewish nation.",
-   "definition_ko": "(히브리어, 대개 복수형 '고임') 일반적으로 유대인을 제외한 모든 민족을 뜻한다. 시간이 지나며 유대인들이 자기들의 특권을 점점 더 자랑스러워하면서 이 단어는 불쾌한 함의를 지니게 되어 경멸적 용어로 쓰이게 되었다.",
+   "definition_ko": "(히브리어이며 대개 복수형 '고임') 두루 유대인을 뺀 모든 민족을 뜻한다. 세월이 흐르면서 유대인이 자기들의 특별한 특권을 점점 더 자랑하게 되자, 이 말에 좋지 않은 뜻이 붙어 업신여기는 말로 쓰이게 되었다. 신약에서는 글자 그대로 헬라 사람을 뜻하는 헬라어 낱말 '헬레네스'(사도행전 16:1,3; 18:17; 로마서 1:14에서처럼)가 대체로 유대인이 아닌 모든 민족을 가리킨다.",
    "category": "용어",
    "hebrew_greek": "G0246,G1482,G1483,G1484,H1471"
   },
@@ -11942,7 +11942,7 @@
    "id": 1502,
    "term": "Girgashite(기르가스 족속)",
    "definition": "dwelling in clayey soil, the descendants of the fifth son of Canaan (Genesis 10:16), one of the original tribes inhabiting the land of Canaan before the time of the Israelites (Genesis 15:21; Deuteronomy 7:1). They were a branch of the great family of the Hivites. Of their geographical position nothing is certainly known. Probably they lived somewhere in the central part of Western Palestine.",
-   "definition_ko": "'진흙땅에 거주하는'이라는 뜻으로, 가나안의 다섯째 아들의 후손(창세기 10:16), 이스라엘 이전 가나안 땅에 거주하던 원주민 부족 중 하나(창세기 15:21; 신명기 7:1). 히위 족속의 한 갈래였다.",
+   "definition_ko": "'진흙땅에 사는 자'라는 뜻으로 가나안의 다섯째 아들의 자손이며(창세기 10:16), 이스라엘 이전에 가나안 땅에 살던 본래 족속 가운데 하나이다(창세기 15:21; 신명기 7:1). 그들은 큰 히위 족속의 한 갈래였다. 그 지리적 자리에 대해서는 확실히 알려진 바가 없다. 아마도 서부 팔레스타인 중부 어딘가에 살았을 것이다.",
    "category": "인명",
    "hebrew_greek": "G1086,H1622"
   },
@@ -12030,7 +12030,7 @@
    "id": 1513,
    "term": "Glutton",
    "definition": "(Deuteronomy 21:20), Hebrews zolel, from a word meaning “to shake out,” “to squander;” and hence one who is prodigal, who wastes his means by indulgence. In Proverbs 23:21, the word means debauchees or  wasters of their own body. In Proverbs 28:7, the word (pl.) is rendered Authorized Version “riotous men;” Revised Version, “gluttonous.” Matthew 11:19, Luke 7:34, Greek phagos, given to eating, gluttonous.",
-   "definition_ko": "(신명기 21:20) 히브리어 '졸렐', '흔들어 털다, 낭비하다'를 뜻하는 단어에서 유래, 곧 방탕하여 자기 재산을 방종으로 낭비하는 자. 잠언 23:21에서는 방탕하여 자기 몸을 소모하는 자를 뜻한다.",
+   "definition_ko": "(신명기 21:20) 히브리어 '졸렐'이며 '흔들어 쏟다', '탕진하다'를 뜻하는 말에서 왔다. 따라서 방탕한 자 곧 방종으로 재물을 낭비하는 자를 뜻한다. 잠언 23:21에서 이 낱말은 방탕한 자 곧 제 몸을 망치는 자를 뜻한다. 잠언 28:7에서는 복수형이 흠정역에서 '방탕한 자'로, 개정역에서 '탐식하는 자'로 옮겨진다. 마태복음 11:19와 누가복음 7:34의 헬라어 '파고스'는 먹기를 탐하는 자 곧 탐식하는 자이다.",
    "category": "용어",
    "hebrew_greek": "G5314,H2151"
   },
@@ -12286,7 +12286,7 @@
    "id": 1545,
    "term": "Gozan(고산)",
    "definition": "a region in Central Asia to which the Israelites were carried away captive (2 Kings 17:6; 1 Chronicles 5:26; 2 Kings 19:12; Isaiah 37:12). It was situated in Mesopotamia, on the river Habor (2 Kings 17:6; 18:11), the Khabur, a tributary of the Euphrates. The “river of Gozan” (1 Chronicles 5:26) is probably the upper part of the river flowing through the province of Gozan, now Kizzel-Ozan.",
-   "definition_ko": "이스라엘 백성이 포로로 끌려간 중앙아시아의 한 지역(열왕기하 17:6; 역대상 5:26). 메소포타미아, 하볼강(열왕기하 17:6), 곧 유프라테스강의 지류인 카부르강 변에 위치했다.",
+   "definition_ko": "이스라엘 사람이 사로잡혀 간 중앙아시아의 한 지역이다(열왕기하 17:6; 역대상 5:26; 열왕기하 19:12; 이사야 37:12). 메소포타미아의 하볼 강가에 있었으니(열왕기하 17:6; 18:11) 이는 유브라데의 지류인 카부르이다. '고산 강'(역대상 5:26)은 아마도 고산 지방을 지나 흐르는 그 강의 윗부분일 터인데, 지금은 키젤오잔이라 불린다.",
    "category": "지명",
    "hebrew_greek": "H1470"
   },
@@ -14061,7 +14061,7 @@
    "id": 1767,
    "term": "Herod Agrippa II(헤롯 아그립바 2세)",
    "definition": "the son of Herod Agrippa I. and Cypros. The emperor Claudius made him tetrarch of the provinces of Philip and Lysanias, with the title of king (Acts 25:13; 26:2, 7). He enlarged the city of Caesarea Philippi, and called it Neronias, in honour of Nero. It was before him and his sister that Paul made his defence at Caesarea (Acts 25:12-27). He died at Rome A.D. 100, in the third year of the emperor Trajan.",
-   "definition_ko": "헤롯 아그립바 1세와 키프로스의 아들. 황제 글라우디오는 그를 빌립과 리사니아스의 속주 분봉왕으로 세우며 왕의 칭호를 주었다(사도행전 25:13; 26:2,7). 그는 가이사랴 빌립보 성을 확장하여 네로를 기려 네로니아스라 불렀다.",
+   "definition_ko": "헤롯 아그립바 일세와 키프로스 사이의 아들이다. 글라우디오 황제가 그를 빌립과 루사니아의 지방을 다스리는 분봉 왕으로 삼고 왕이라는 칭호를 주었다(사도행전 25:13; 26:2,7). 그는 가이사랴 빌립보 성읍을 넓히고 네로를 기려 네로니아스라 불렀다. 바울이 가이사랴에서 변론한 것은 그와 그 누이 앞에서였다(사도행전 25:12-27). 그는 트라야누스 황제 삼년인 주후 100년에 로마에서 죽었다.",
    "category": "인명",
    "hebrew_greek": "G0067,G2264"
   },
@@ -14117,7 +14117,7 @@
    "id": 1774,
    "term": "Heron",
    "definition": "(Leviticus 11:19; Deuteronomy 14:18), ranked among the unclean birds. The Hebrew name is ’anaphah, and indicates that the bird so named is remarkable for its angry disposition. “The herons are wading-birds, peculiarly irritable, remarkable for their voracity, frequenting marshes and oozy rivers, and spread over the regions of the East.” The Ardea russeta, or little golden egret, is the commonest species in Asia.",
-   "definition_ko": "(레위기 11:19; 신명기 14:18) 부정한 새로 분류된다. 히브리어 이름 '아나파'는 이 새가 성마른 기질로 두드러짐을 나타낸다. 왜가리류는 습지에서 먹이를 구하는 새로 유난히 예민하다.",
+   "definition_ko": "(레위기 11:19; 신명기 14:18) 부정한 새 가운데 든다. 히브리 이름은 '아나파'이며, 그렇게 불린 새가 성내는 성질로 두드러짐을 나타낸다. '왜가리는 물가에서 걷는 새로 유난히 성을 잘 내고 게걸스럽기로 이름났으며, 늪과 진흙 강가를 즐겨 찾고 동방 지역 전역에 퍼져 있다.' 아르데아 루세타 곧 작은 황로가 아시아에서 가장 흔한 종류이다.",
    "category": "용어",
    "hebrew_greek": "H0601"
   },
@@ -14205,7 +14205,7 @@
    "id": 1785,
    "term": "Hiddekel(힛데겔)",
    "definition": "called by the Accadians id Idikla; i.e., “the river of Idikla”, the third of the four rivers of Paradise (Genesis 2:14). Gesenius interprets the word as meaning “the rapid Tigris.” The Tigris rises in the mountains of Armenia, 15 miles south of the source of the Euphrates, which, after pursuing a south-east course, it joins at Kurnah, about 50 miles above Bassorah. Its whole length is about 1,150 miles.",
-   "definition_ko": "아카드인들은 '이드 이디클라', 곧 '이디클라 강'이라 불렀으며, 낙원의 네 강 중 셋째다(창세기 2:14). 게제니우스는 이를 '빠른 티그리스강'으로 해석한다. 티그리스강은 아르메니아 산지에서 발원한다.",
+   "definition_ko": "아카드 사람들이 '이드 이디클라' 곧 '이디클라 강'이라 부른 곳이며, 낙원의 네 강 가운데 셋째이다(창세기 2:14). 게제니우스는 이 낱말을 '빠른 티그리스'를 뜻하는 것으로 풀이한다. 티그리스는 유브라데의 수원에서 남쪽으로 15마일 되는 아르메니아 산지에서 발원하여 남동쪽으로 흐른 뒤, 바소라에서 50마일쯤 위에 있는 쿠르나에서 유브라데와 합류한다. 그 전체 길이는 1,150마일쯤 된다.",
    "category": "지명",
    "hebrew_greek": "H2313"
   },
@@ -15757,7 +15757,7 @@
    "id": 1979,
    "term": "Japhia(야비아)",
    "definition": "splendid. (1.) The king of Lachish, who joined in the confederacy against Joshua (Joshua 10:3), and was defeated and slain. In one of the Amarna tablets he speaks of himself as king of Gezer. Called also Horam (Joshua 10:33). (2.) One of the sons of David (2 Samuel 5:15), born in Jerusalem. (3.) A town in the southern boundary of Zebulum (Joshua 19:12); now Yafa, 2 miles south-west of Nazareth.",
-   "definition_ko": "'찬란한'이라는 뜻. (1.) 여호수아를 대적하는 동맹에 가담한 라기스 왕(여호수아 10:3)으로 패하여 죽었다. 아마르나 서판 중 하나에서 그는 자신을 게셀 왕이라 칭한다. 호람이라고도 불린다(10:33).",
+   "definition_ko": "'빛나는 자'라는 뜻. (1.) 라기스 왕으로 여호수아를 대적하는 동맹에 가담하였다가(여호수아 10:3) 패하여 죽임을 당하였다. 아마르나 서판 가운데 하나에서 그는 자기를 게셀 왕이라 말한다. 호람이라고도 불린다(여호수아 10:33). (2.) 다윗의 아들 가운데 하나로 예루살렘에서 났다(사무엘하 5:15). (3.) 스불론 남쪽 경계의 성읍(여호수아 19:12). 지금은 나사렛 남서쪽 2마일에 있는 야파이다.",
    "category": "인명",
    "hebrew_greek": "H3309"
   },
@@ -16301,7 +16301,7 @@
    "id": 2047,
    "term": "Jeroham(여로함)",
    "definition": "cherished; who finds mercy. (1.) Father of Elkanah, and grandfather of the prophet Samuel (1 Samuel 1:1). (2.) The father of Azareel, the “captain” of the tribe of Dan (1 Chronicles 27:22). (3.) 1 Chronicles 12:7; a Benjamite. (4.) 2 Chronicles 23:1; one whose son assisted in placing Joash on the throne. (5.) 1 Chronicles 9:8; a Benjamite. (6.) 1 Chronicles 9:12; a priest, perhaps the same as in Nehemiah 11:12.",
-   "definition_ko": "'소중히 여겨지는; 자비를 얻는 자'라는 뜻. (1.) 엘가나의 아버지이며 선지자 사무엘의 조부(사무엘상 1:1). (2.) 단 지파 '지휘관' 아사렐의 아버지(역대상 27:22). (3.) 역대상 12:7, 베냐민 사람. (4.) 역대하 23:1.",
+   "definition_ko": "'사랑받는 자', '긍휼을 얻은 자'라는 뜻. (1.) 엘가나의 아버지이며 선지자 사무엘의 조부(사무엘상 1:1). (2.) 단 지파의 '지휘관' 아사렐의 아버지(역대상 27:22). (3.) 역대상 12:7의 베냐민 사람. (4.) 역대하 23:1. 그 아들이 요아스를 왕위에 앉히는 일을 도왔다. (5.) 역대상 9:8의 베냐민 사람. (6.) 역대상 9:12의 제사장이며 아마도 느헤미야 11:12의 사람과 같을 것이다.",
    "category": "인명",
    "hebrew_greek": "H3395"
   },
@@ -16589,7 +16589,7 @@
    "id": 2083,
    "term": "Joah(요아)",
    "definition": "Jehovah his brother; i.e., helper. (1.) One of the sons of Obed-edom (1 Chronicles 26:4), a Korhite porter. (2.) A Levite of the family of Gershom (1 Chronicles 6:21), probably the same as Ethan (42). (3.) The son of Asaph, and “recorder” (q.v.) or chronicler to King Hezekiah (2 Kings 18:18, 26, 37). (4.) Son of Joahaz, and “recorder” (q.v.) or keeper of the state archives under King Josiah (2 Chronicles 34:8).",
-   "definition_ko": "'여호와는 그의 형제, 곧 돕는 이'라는 뜻. (1.) 오벧에돔의 아들 중 하나(역대상 26:4)로 고라 사람 문지기. (2.) 게르솜 계통 레위인(역대상 6:21)으로 아마도 에단(42절)과 같은 인물. (3.) 아삽의 아들이며 '사관'.",
+   "definition_ko": "'여호와는 그의 형제' 곧 돕는 이라는 뜻. (1.) 오벧에돔의 아들 가운데 하나(역대상 26:4)로 고라 자손 문지기이다. (2.) 게르손 가문의 레위 사람(역대상 6:21)으로 아마도 에단(6:42)과 같은 사람일 것이다. (3.) 아삽의 아들로 히스기야 왕의 '사관'(참조) 곧 기록하는 자(열왕기하 18:18,26,37). (4.) 요아하스의 아들로 요시야 왕 아래에서 '사관'(참조) 곧 나라 문서를 맡은 자(역대하 34:8).",
    "category": "인명",
    "hebrew_greek": "H3098"
   },
@@ -17029,7 +17029,7 @@
    "id": 2138,
    "term": "Jude(유다)",
    "definition": "Judas. Among the apostles there were two who bore this name, (1) Judas (Jude 1:1; Matthew 13:55; John 14:22; Acts 1:13), called also Lebbaeus or Thaddaeus (Matthew 10:3; Mark 3:18); and (2) Judas Iscariot (Matthew 10:4; Mark 3:19). He who is called “the brother of James” (Luke 6:16), may be the same with the Judas surnamed Lebbaeus. The only thing recorded regarding him is in John 14:22.",
-   "definition_ko": "유다와 같음. 사도 중 이 이름을 지닌 이는 둘이었다. (1) 유다(유다서 1:1; 마태복음 13:55; 요한복음 14:22), 레배오 또는 다대오라고도 불림(마태복음 10:3); (2) 가룟 유다(마태복음 10:4; 마가복음 3:19).",
+   "definition_ko": "유다스이다. 사도 가운데 이 이름을 지닌 이가 둘 있었으니, (1) 유다(유다서 1:1; 마태복음 13:55; 요한복음 14:22; 사도행전 1:13)로 렙베오 또는 다대오라고도 불리며(마태복음 10:3; 마가복음 3:18), (2) 가룟 유다이다(마태복음 10:4; 마가복음 3:19). '야고보의 아들'이라 불리는 이(누가복음 6:16)는 렙베오라 하는 유다와 같은 사람일 수 있다. 그에 관하여 기록된 것은 요한복음 14:22뿐이다.",
    "category": "인명",
    "hebrew_greek": "G2455"
   },
@@ -17180,7 +17180,7 @@
    "id": 2157,
    "term": "Juttah(윳다)",
    "definition": "extended, a Levitical city in the mountains or hill-country of Judah (Joshua 15:55; 21:16). Its modern name is Yutta, a place about 5 1/2 miles south of Hebron. It is supposed to have been the residence of Zacharias and Elisabeth, and the birthplace of John the Baptist, and on this account is annually visited by thousands of pilgrims belonging to the Greek Church (Luke 1:39). (See MARY.)  K",
-   "definition_ko": "'뻗은'이라는 뜻으로, 유다 산지의 레위인 성읍(여호수아 15:55; 21:16). 오늘날 이름은 유타로, 헤브론 남쪽 약 5와 1/2마일에 있다. 사가랴와 엘리사벳의 거주지이자 세례 요한의 출생지로 추정된다.",
+   "definition_ko": "'넓다'는 뜻으로 유다 산지에 있던 레위 사람의 성읍이다(여호수아 15:55; 21:16). 오늘날의 이름은 유타이며 헤브론 남쪽 5마일 반쯤 되는 곳이다. 사가랴와 엘리사벳이 살던 곳이자 세례 요한이 난 곳으로 여겨지며, 이 때문에 해마다 헬라 교회에 속한 수천 명의 순례자가 찾는다(누가복음 1:39). (마리아 참조.)",
    "category": "지명",
    "hebrew_greek": "G2448,H3194"
   },
@@ -17316,7 +17316,7 @@
    "id": 2174,
    "term": "Kedron(기드론)",
    "definition": "the valley, now quite narrow, between the Mount of Olives and Mount Moriah. The upper part of it is called the Valley of Jehoshaphat. The LXX., in 1 Kings 15:13, translate “of the cedar.” The word means “black,” and may refer to the colour of the water or the gloom of the ravine, or the black green of the cedars which grew there. John 18:1, “Cedron,” only here in New Testament. (See KIDRON.)",
-   "definition_ko": "감람산과 모리아산 사이, 지금은 매우 좁은 골짜기. 그 위쪽 부분은 여호사밧 골짜기라 불린다. 칠십인역은 열왕기상 15:13에서 '백향목의'로 옮긴다. 이 단어는 '검은'을 뜻하며 물의 색깔을 가리키는 것일 수 있다.",
+   "definition_ko": "감람산과 모리아 산 사이에 있는 골짜기로 지금은 아주 좁다. 그 위쪽 부분은 여호사밧 골짜기라 불린다. 칠십인역은 열왕기상 15:13에서 '백향목의'로 옮긴다. 이 말은 '검다'는 뜻이며, 그 물빛이나 골짜기의 어둠, 또는 거기 자라던 백향목의 검푸른 빛을 가리킬 수 있다. 요한복음 18:1의 '기드론'은 신약에서 여기에만 나온다. (기드론 참조.)",
    "category": "지명",
    "hebrew_greek": "H0317"
   },
@@ -17364,7 +17364,7 @@
    "id": 2180,
    "term": "Kenaz(그나스)",
    "definition": "hunter. (1.) One of the sons of Eliphaz, the son of Esau. He became the chief of an Edomitish tribe (Genesis 36:11, 15, 42). (2.) Caleb’s younger brother, and father of Othniel (Joshua 15:17), whose family was of importance in Israel down to the time of David (1 Chronicles 27:15). Some think that Othniel (Judges 1:13), and not Kenaz, was Caleb’s brother. (3.) Caleb’s grandson (1 Chronicles 4:15).",
-   "definition_ko": "'사냥꾼'이라는 뜻. (1.) 에서의 아들 엘리바스의 아들 중 하나로 에돔 부족의 족장이 되었다(창세기 36:11,15,42). (2.) 갈렙의 동생이며 옷니엘의 아버지(여호수아 15:17)로, 그 가문은 이스라엘에서 중요한 위치를 지켰다.",
+   "definition_ko": "'사냥꾼'이라는 뜻. (1.) 에서의 아들 엘리바스의 아들 가운데 하나이다. 그는 한 에돔 족속의 우두머리가 되었다(창세기 36:11,15,42). (2.) 갈렙의 아우이며 옷니엘의 아버지이다(여호수아 15:17). 그 집안은 다윗 때까지 이스라엘에서 중요한 자리를 차지하였다(역대상 27:15). 어떤 이들은 그나스가 아니라 옷니엘이 갈렙의 아우였다고 본다(사사기 1:13). (3.) 갈렙의 손자(역대상 4:15).",
    "category": "인명",
    "hebrew_greek": "H7073"
   },
@@ -17620,7 +17620,7 @@
    "id": 2212,
    "term": "Kirjath-Sepher(기럇세벨)",
    "definition": "city of books, Joshua 15:15; same as Kirjath-sannah (q.v.), now represented by the valley of ed-Dhaberiyeh, south-west of Hebron. The name of this town is an evidence that the Canaanites were acquainted with writing and books. “The town probably contained a noted school, or was the site of an oracle and the residence of some learned priest.” The “books” were probably engraved stones or bricks.",
-   "definition_ko": "'책들의 성읍'이라는 뜻(여호수아 15:15)으로, 기럇산나(참조)와 같은 곳이며 지금은 헤브론 남서쪽 에드다베리예 골짜기가 그 자리를 대신한다. 이 성읍의 이름은 가나안 사람들이 문자와 책을 알았음을 보여 준다.",
+   "definition_ko": "'책의 성읍'이라는 뜻으로(여호수아 15:15) 기럇산나(참조)와 같은 곳이며, 지금은 헤브론 남서쪽의 에드다베리예 골짜기로 남아 있다. 이 성읍의 이름은 가나안 사람이 글과 책을 알고 있었다는 증거이다. '이 성읍에는 아마도 이름난 학교가 있었거나, 신탁의 자리이자 어떤 학식 있는 제사장이 사는 곳이었을 것이다.' 그 '책'은 아마도 글을 새긴 돌이나 벽돌이었을 터이다.",
    "category": "지명",
    "hebrew_greek": "H1688"
   },
@@ -18028,7 +18028,7 @@
    "id": 2263,
    "term": "Leah(레아)",
    "definition": "weary, the eldest daughter of Laban, and sister of Rachel (Genesis 29:16). Jacob took her to wife through a deceit of her father (Genesis 29:23). She was “tender-eyed” (17). She bore to Jacob six sons (32-35), also one daughter, Dinah (30:21). She accompanied Jacob into Canaan, and died there before the time of the going down into Egypt (Genesis 31), and was buried in the cave of Machpelah (49:31).",
-   "definition_ko": "'지친'이라는 뜻으로, 라반의 맏딸이며 라헬의 언니(창세기 29:16). 야곱은 아버지의 속임수로 그녀를 아내로 맞았다(창세기 29:23). 그녀는 '시력이 약했다'(17절). 야곱에게서 여섯 아들을 낳았고 딸 디나도 낳았다.",
+   "definition_ko": "'지친 자'라는 뜻으로 라반의 맏딸이며 라헬의 언니이다(창세기 29:16). 야곱은 그 아버지의 속임으로 그를 아내로 맞았다(창세기 29:23). 그는 '안력이 부족하였다'(29:17). 야곱에게 여섯 아들을 낳았고(29:32-35) 딸 디나도 낳았다(30:21). 야곱과 함께 가나안으로 갔고 애굽으로 내려가기 전에 거기서 죽어(창세기 31장) 막벨라 굴에 장사되었다(49:31).",
    "category": "인명",
    "hebrew_greek": "H3812"
   },
@@ -18156,7 +18156,7 @@
    "id": 2279,
    "term": "Leopard",
    "definition": "(Hebrews namer, so called because spotted, Cant. 4:8), was that great spotted feline which anciently infested the mountains of Syria, more appropriately called a panther (Felis pardus). Its fierceness (Isaiah 11:6), its watching for its prey (Jeremiah 5:6), its swiftness (Habakkuk 1:8), and the spots of its skin (Jeremiah 13:23), are noticed. This word is used symbolically (Daniel 7:6; Revelation 13:2).",
-   "definition_ko": "(히브리어 '나메르', 얼룩무늬 때문에 이렇게 불림, 아가 4:8) 고대 시리아 산지에 서식하던 그 커다란 얼룩무늬 고양잇과 동물로, 더 정확히는 표범(펠리스 파르두스)이라 불린다. 그 사나움(이사야 11:6)과...",
+   "definition_ko": "(히브리어 '나메르'이며 얼룩졌다 하여 그렇게 불린다. 아가 4:8) 옛적에 수리아 산지를 들끓게 하던 큰 얼룩 고양잇과 짐승으로, 더 정확히는 표범(펠리스 파르두스)이라 불린다. 그 사나움(이사야 11:6), 먹이를 노려 지키는 것(예레미야 5:6), 빠르기(하박국 1:8), 가죽의 얼룩(예레미야 13:23)이 언급된다. 이 낱말은 상징으로도 쓰인다(다니엘 7:6; 요한계시록 13:2).",
    "category": "용어",
    "hebrew_greek": "G3917,H5245,H5246"
   },
@@ -18204,7 +18204,7 @@
    "id": 2285,
    "term": "Levirate Law",
    "definition": "from Latin levir, “a husband’s brother,” the name of an ancient custom ordained by Moses, by which, when an Israelite died without issue, his surviving brother was required to marry the widow, so as to continue his brother’s family through the son that might be born of that marriage (Genesis 38:8; Deuteronomy 25:5-10; comp. Ruth 3; 4:10). Its object was “to raise up seed to the departed brother.”",
-   "definition_ko": "라틴어 '레비르'('남편의 형제')에서 유래한 이름으로, 모세가 정한 고대 관습을 가리킨다. 이스라엘 사람이 자식 없이 죽으면 살아남은 형제가 그 과부와 결혼하여 죽은 형제의 가문을 이어가야 했다.",
+   "definition_ko": "'남편의 형제'를 뜻하는 라틴어 '레비르'에서 온 말로, 모세가 정한 옛 관습의 이름이다. 이스라엘 사람이 자식 없이 죽으면 살아 있는 그 형제가 과부를 아내로 맞아, 그 혼인에서 날 아들을 통하여 형제의 집안을 잇게 하여야 하였다(창세기 38:8; 신명기 25:5-10; 룻기 3장과 4:10 비교). 그 목적은 '죽은 형제를 위하여 씨를 일으키는' 데 있었다.",
    "category": "용어",
    "hebrew_greek": "G1918"
   },
@@ -18348,7 +18348,7 @@
    "id": 2303,
    "term": "Lime",
    "definition": "The Hebrew word so rendered means “boiling” or “effervescing.” From Isaiah 33:12 it appears that lime was made in a kiln lighted by thorn-bushes. In Amos 2:1 it is recorded that the king of Moab “burned the bones of the king of Edom into lime.” The same Hebrew word is used in Deuteronomy 27:2-4, and is there rendered “plaster.” Limestone is the chief constituent of the mountains of Syria.",
-   "definition_ko": "이렇게 번역된 히브리어 단어는 '끓는' 또는 '거품 이는'을 뜻한다. 이사야 33:12로 미루어 보면 석회는 가시덤불로 불을 지핀 가마에서 만들어졌다. 아모스 2:1은 모압 왕이 '에돔 왕의 뼈를 불살라 회를 만들었다'고 기록한다.",
+   "definition_ko": "그렇게 옮겨진 히브리어 낱말은 '끓음' 또는 '부글거림'을 뜻한다. 이사야 33:12로 보아 석회는 가시나무로 불을 지핀 가마에서 구웠던 것으로 보인다. 아모스 2:1에는 모압 왕이 '에돔 왕의 뼈를 불살라 회를 만들었다'고 기록되어 있다. 같은 히브리어 낱말이 신명기 27:2-4에 쓰여 거기서는 '석회'로 옮겨진다. 석회암은 수리아 산지를 이루는 주된 성분이다.",
    "category": "용어",
    "hebrew_greek": "G2867,H1528,H1615,H2902,H7875"
   },
@@ -18668,7 +18668,7 @@
    "id": 2343,
    "term": "Luz(루스)",
    "definition": "a nut-bearing tree, the almond. (1.) The ancient name of a royal Canaanitish city near the site of Bethel (Genesis 28:19; 35:6), on the border of Benjamin (Joshua 18:13). Here Jacob halted, and had a prophetic vision. (See BETHEL.) (2.) A place in the land of the Hittites, founded (Judges 1:26) by “a man who came forth out of the city of Luz.” It is identified with Luweiziyeh, 4 miles north-west of Banias.",
-   "definition_ko": "견과가 열리는 나무, 곧 편도나무. (1.) 벧엘 근처 가나안 왕도의 옛 이름(창세기 28:19; 35:6), 베냐민 경계에 있었다(여호수아 18:13). 이곳에서 야곱은 멈추어 예언적 환상을 보았다(벧엘 항목 참조).",
+   "definition_ko": "'열매 맺는 나무' 곧 살구나무라는 뜻. (1.) 벧엘 자리 가까이에 있던 가나안 왕도의 옛 이름이며(창세기 28:19; 35:6) 베냐민 경계에 있었다(여호수아 18:13). 여기서 야곱이 머물며 예언의 환상을 보았다. (벧엘 참조.) (2.) 헷 사람의 땅에 있던 곳으로 '루스 성읍에서 나온 사람'이 세웠다(사사기 1:26). 바니아스 북서쪽 4마일에 있는 루웨이지예와 같은 곳으로 본다.",
    "category": "지명",
    "hebrew_greek": "H3870"
   },
@@ -18676,7 +18676,7 @@
    "id": 2344,
    "term": "Lycaonia(루가오니아)",
    "definition": "an inland province of Asia Minor, on the west of Cappadocia and the south of Galatia. It was a Roman province, and its chief towns were Iconium, Lystra, and Derbe. The “speech of Lycaonia” (Acts 14:11) was probably the ancient Assyrian language, or perhaps, as  others think, a corrupt Greek intermingled with Syriac words. Paul preached in this region, and revisited it (Acts 16:1-6; 18:23; 19:1).",
-   "definition_ko": "갑바도기아 서쪽, 갈라디아 남쪽의 소아시아 내륙 속주. 로마 속주였으며 주요 도시는 이고니온, 루스드라, 더베였다. '루가오니아 방언'(사도행전 14:11)은 아마도 고대 앗수르어였을 것이다.",
+   "definition_ko": "소아시아 내륙의 한 지방으로 갑바도기아 서쪽, 갈라디아 남쪽에 있다. 로마의 속주였고 그 으뜸 성읍은 이고니온과 루스드라와 더베였다. '루가오니아 방언'(사도행전 14:11)은 아마도 옛 앗수르 말이었거나, 다른 이들이 생각하듯 수리아 말이 섞인 변질된 헬라 말이었을 것이다. 바울이 이 지역에서 전도하였고 다시 찾기도 하였다(사도행전 16:1-6; 18:23; 19:1).",
    "category": "지명",
    "hebrew_greek": "G3071,G3072"
   },
@@ -19491,7 +19491,7 @@
    "id": 2446,
    "term": "Mattaniah(맛다냐)",
    "definition": "gift of Jehovah. (1.) A Levite, son of Heman, the chief of the ninth class of temple singers (1 Chronicles 25:4, 16). (2.) A Levite who assisted in purifying the temple at the reformation under Hezekiah (2 Chronicles 29:13). (3.) The original name of Zedekiah (q.v.), the last of the kings of Judah (2 Kings 24:17). He was the third son of Josiah, who fell at Megiddo. He succeeded his nephew Jehoiakin.",
-   "definition_ko": "'여호와의 선물'이라는 뜻. (1.) 레위인으로 헤만의 아들이며 성전 성가대 아홉째 반열의 우두머리(역대상 25:4,16). (2.) 히스기야 시대 종교개혁 때 성전을 정결케 하는 것을 도운 레위인(역대하 29:13).",
+   "definition_ko": "'여호와의 선물'이라는 뜻. (1.) 레위 사람으로 헤만의 아들이며 성전에서 노래하는 자 아홉째 반열의 우두머리(역대상 25:4,16). (2.) 히스기야의 개혁 때 성전을 정결하게 하는 일을 도운 레위 사람(역대하 29:13). (3.) 유다 왕들 가운데 마지막인 시드기야(참조)의 본래 이름(열왕기하 24:17). 그는 므깃도에서 죽은 요시야의 셋째 아들이었다. 그는 조카 여호야긴의 뒤를 이었다.",
    "category": "인명",
    "hebrew_greek": "H4983"
   },
@@ -19555,7 +19555,7 @@
    "id": 2454,
    "term": "Mattock",
    "definition": "Hebrews ma’eder, an instrument for dressing or pruning a vineyard (Isaiah 7:25); a weeding-hoe. (2.) Hebrews mahareshah (1 Samuel 13:1), perhaps the ploughshare or coulter. (3.) Hebrews herebh, marg. of text (2 Chronicles 34:6). Authorized Version, “with their mattocks,” marg. “mauls.” The Revised Version renders “in their ruins,” marg. “with their axes.” The Hebrew text is probably corrupt.",
-   "definition_ko": "(1.) 히브리어 '마에데르', 포도원을 다듬거나 가지치기하는 도구(이사야 7:25); 김매는 괭이. (2.) 히브리어 '마하레샤'(사무엘상 13:1), 아마도 쟁기날이나 보습. (3.) 히브리어 '헤레브'.",
+   "definition_ko": "(1.) 히브리어 '마에데르'는 포도원을 손질하거나 가지 치는 데 쓰는 기구이며(이사야 7:25) 김매는 괭이이다. (2.) 히브리어 '마하레샤'(사무엘상 13:20)는 아마도 보습이나 쟁기 날일 것이다. (3.) 히브리어 '헤레브'는 본문 난외주에 있다(역대하 34:6). 흠정역은 '그들의 괭이로', 난외주는 '망치로'라 한다. 개정역은 '그 폐허에서'로, 난외주는 '그들의 도끼로'라 옮긴다. 히브리어 본문이 아마도 손상되었을 것이다.",
    "category": "용어",
    "hebrew_greek": "H2719,H4281,H4576"
   },
@@ -19827,7 +19827,7 @@
    "id": 2488,
    "term": "Menahem(므나헴)",
    "definition": "conforting, the son of Gadi, and successor of Shallum, king of Israel, whom he slew. After a reign of about ten years (B.C. 771-760) he died, leaving the throne to his son Pekahiah. His reign was one of cruelty and oppression (2 Kings 15:14-22). During his reign, Pul (q.v.), king of Assyria, came with a powerful force against Israel, but was induced to retire by a gift from Menahem of 1,000 talents of silver.",
-   "definition_ko": "'위로하는'이라는 뜻으로, 가디의 아들이며 이스라엘 왕 살룸을 죽이고 그 뒤를 이었다. 약 십 년간(주전 771-760년) 통치한 뒤 죽어 아들 브가히야에게 왕위를 넘겼다. 그의 통치는 잔혹함과 압제로 점철되었다(열왕기하 15:14-22).",
+   "definition_ko": "'위로하는 자'라는 뜻으로 가디의 아들이며, 이스라엘 왕 살룸을 죽이고 그 뒤를 이었다. 열 해쯤 다스린 뒤(주전 771-760년) 죽어 왕위를 그 아들 브가히야에게 남겼다. 그의 치세는 잔혹과 압제로 얼룩졌다(열왕기하 15:14-22). 그가 다스릴 때 앗수르 왕 불(참조)이 강한 군대를 이끌고 이스라엘을 치러 왔으나, 므나헴이 은 천 달란트를 바치매 물러갔다.",
    "category": "인명",
    "hebrew_greek": "H4505"
   },
@@ -20019,7 +20019,7 @@
    "id": 2512,
    "term": "Meroz(메로스)",
    "definition": "a plain in the north of Palestine, the inhabitants of which were severely condemned because they came not to help Barak against Sisera (Judges 5:23: comp. 21:8-10; 1 Samuel 11:7). It has been identified with Marassus, on a knoll to the north of Wady Jalud, but nothing certainly is known of it. Like Chorazin, it is only mentioned in Scripture in connection with the curse pronounced upon it.",
-   "definition_ko": "팔레스타인 북부의 평지로, 그 주민들은 시스라를 대적하는 바락을 도우러 오지 않았다 하여 심하게 정죄받았다(사사기 5:23). 와디 북쪽 언덕의 마라수스와 동일시된다.",
+   "definition_ko": "팔레스타인 북쪽의 한 평지이며, 그 주민들은 바락을 도와 시스라를 치러 오지 않았으므로 호되게 정죄를 받았다(사사기 5:23; 사사기 21:8-10과 사무엘상 11:7 비교). 와디 잘루드 북쪽 언덕에 있는 마라수스와 같은 곳으로 보나 확실히 알려진 바는 없다. 고라신처럼 이곳도 그에게 선포된 저주와 관련해서만 성경에 언급된다.",
    "category": "지명",
    "hebrew_greek": "H4789"
   },
@@ -20403,7 +20403,7 @@
    "id": 2560,
    "term": "Millet",
    "definition": "(Hebrews dohan; only in Ezekiel 4:9), a small grain, the produce of the Panicum miliaceum of botanists. It is universally cultivated in the East as one of the smaller corn-grasses. This seed is the cenchros of the Greeks. It is called in India warree, and by the Arabs dukhan, and is extensively used for food, being often mixed with other grain. In this country it is only used for feeding birds.",
-   "definition_ko": "(히브리어 '도한', 에스겔 4:9에만 나옴) 식물학자들이 파니쿰 밀리아케움이라 부르는 작은 곡식 낟알. 동방에서는 작은 곡식류 풀 중 하나로 널리 재배된다. 이 씨앗은 그리스인들의 '켄크로스'다.",
+   "definition_ko": "(히브리어 '도한'이며 에스겔 4:9에만 나온다) 작은 곡식으로 식물학자들이 이르는 파니쿰 밀리아케움의 소산이다. 동방에서는 작은 곡물 가운데 하나로 어디서나 재배된다. 이 씨가 헬라 사람의 '켄크로스'이다. 인도에서는 와리라 하고 아랍 사람은 두칸이라 하며, 다른 곡식과 섞어 먹는 일이 많아 널리 먹을거리로 쓰인다. 영국에서는 새 모이로만 쓴다.",
    "category": "용어",
    "hebrew_greek": "G2747,H1764"
   },
@@ -20603,7 +20603,7 @@
    "id": 2585,
    "term": "Mixed Multitude",
    "definition": "(Exodus 12:38), a class who accompanied the Israelites as they journeyed from Rameses to Succoth, the first stage of the Exodus. These were probably miscellaneous hangers-on to the Hebrews, whether Egyptians of the lower orders, or the remains of the Hyksos (see EGYPT; MOSES), as some think. The same thing happened on the return of the Jews from Babylon (Nehemiah 13:3), a “mixed multitude” accompanied them so far.",
-   "definition_ko": "(출애굽기 12:38) 이스라엘 백성이 출애굽 첫 단계로 라암셋에서 숙곳으로 이동할 때 동행한 무리. 아마도 하층 애굽인이나 이전 유목민의 잔존자 등 히브리인들에게 붙어살던 잡다한 무리였을 것이다.",
+   "definition_ko": "(출애굽기 12:38) 이스라엘 사람이 출애굽의 첫 여정으로 라암셋에서 숙곳으로 나아갈 때 그들을 따라간 무리이다. 이들은 아마도 히브리 사람에게 붙어 온 잡다한 자들이었을 터인데, 낮은 계층의 애굽 사람이거나 어떤 이들이 생각하듯 힉소스의 남은 자들이었을 것이다(애굽, 모세 참조). 유대인이 바벨론에서 돌아올 때에도 같은 일이 있어(느헤미야 13:3) '섞인 무리'가 거기까지 그들과 함께 왔다.",
    "category": "용어",
    "hebrew_greek": "H1098,H4469"
   },
@@ -20826,7 +20826,7 @@
    "id": 2613,
    "term": "Mouldy",
    "definition": "Of the Gibeonites it is said that “all the bread of their provision was dry and mouldy” (Joshua 9:5, 12). The Hebrew word here rendered “mouldy” (nikuddim) is rendered “cracknels” in 1 Kings 14:3, and denotes a kind of crisp cake. The meaning is that the bread of the Gibeonites had become dry and hard, hard as biscuits, and thus was an evidence of the length of the journey they had travelled.",
-   "definition_ko": "기브온 사람들에 대해 '그들의 예비한 모든 떡이 말라 곰팡이가 났더라'고 한다(여호수아 9:5,12). 여기서 '곰팡이 난'으로 번역된 히브리어 단어('니쿠딤')는 열왕기상 14:3에서는 '과자'로 번역되며 바삭한 케이크의 일종을 뜻한다.",
+   "definition_ko": "기브온 사람들을 두고 '그들이 준비한 떡은 다 마르고 곰팡이가 났다'고 한다(여호수아 9:5,12). 여기서 '곰팡이가 난'으로 옮겨진 히브리어 낱말('니쿠딤')은 열왕기상 14:3에서 '과자'로 옮겨지며, 바삭한 과자의 한 가지를 뜻한다. 그 뜻은 기브온 사람의 떡이 말라 굳어 비스킷처럼 되었다는 것이니, 그것이 그들이 지나온 길이 멀었다는 증거가 되었다.",
    "category": "용어",
    "hebrew_greek": "H5350"
   },
@@ -20873,7 +20873,7 @@
    "id": 2619,
    "term": "Mount Of The Congregation",
    "definition": "only in Isaiah 14:13, a mythic mountain of the Babylonians, regarded by them as the seat of the gods. It  was situated in the far north, and in Babylonian inscriptions is described as a mountain called Im-Kharasak, “the mighty mountain of Bel, whose head reaches heaven, whose root is the holy deep.” In their geography they are said to have identified it with mount El-wend, near Ecbatana.",
-   "definition_ko": "이사야 14:13에만 나오는, 바벨론 사람들이 신들의 자리로 여긴 신화적 산. 먼 북쪽에 위치했으며 바벨론 비문에는 '벨의 강력한 산'이라 불리는 임카라사크라는 산으로 묘사된다.",
+   "definition_ko": "이사야 14:13에만 나오며 바벨론 사람들의 신화 속 산으로, 그들은 이를 신들이 자리 잡은 곳으로 여겼다. 그것은 멀리 북쪽에 있었고 바벨론 비문에서는 임카라삭이라 하는 산으로 그려지는데, '벨의 웅장한 산이니 그 머리는 하늘에 닿고 그 뿌리는 거룩한 깊음에 닿는다'고 한다. 그들의 지리에서는 이를 엑바타나 가까이에 있는 엘웬드 산과 같은 곳으로 여겼다고 한다.",
    "category": "용어",
    "hebrew_greek": "H2022,H4150"
   },
@@ -21361,7 +21361,7 @@
    "id": 2680,
    "term": "Nathanael(나다나엘)",
    "definition": "given or gift of God, one of our Lord’s disciples, “of Cana in Galilee” (John 21:2). He was “an Israelite indeed, in whom was no guile” (1:47, 48). His name occurs only in the Gospel of John, who in his list of the disciples never mentions Bartholomew, with whom he has consequently been identified. He was one of those to whom the Lord showed himself alive after his resurrection, at the Sea of Tiberias.",
-   "definition_ko": "'주어진, 또는 하나님의 선물'이라는 뜻으로, 우리 주님의 제자 중 하나, '갈릴리 가나 사람'(요한복음 21:2). '참으로 이스라엘 사람이라 그 속에 간사한 것이 없도다'(1:47,48).",
+   "definition_ko": "'하나님께서 주셨다' 곧 하나님의 선물이라는 뜻으로 우리 주님의 제자 가운데 하나이며 '갈릴리 가나 사람'이었다(요한복음 21:2). 그는 '참으로 이스라엘 사람이라 그 속에 간사한 것이 없는' 자였다(1:47,48). 그 이름은 요한복음에만 나오는데, 요한은 제자 명단에서 바돌로매를 한 번도 언급하지 않으므로 그와 같은 사람으로 여겨져 왔다. 그는 주님께서 부활하신 뒤 디베랴 바닷가에서 살아 계심을 보이신 이들 가운데 하나였다.",
    "category": "인명",
    "hebrew_greek": "G3482"
   },
@@ -22921,7 +22921,7 @@
    "id": 2875,
    "term": "Patmos(밧모섬)",
    "definition": "a small rocky and barren island, one of the group called the “Sporades,” in the AEgean Sea. It is mentioned in Scripture only in Revelation 1:9. It was on this island, to which John was banished by the emperor Domitian (A.D. 95), that he received from God the wondrous revelation recorded in his book. This has naturally invested it with the deepest interest for all time. It is now called Patmo. (See JOHN.)",
-   "definition_ko": "에게해 '스포라데스'라 불리는 군도 중 하나인 작고 바위투성이 척박한 섬. 성경에서는 요한계시록 1:9에만 언급된다. 황제 도미티아누스(주후 95년)에게 추방당한 요한이 이 섬에서 계시를 받았다.",
+   "definition_ko": "에게 해에 있는 '스포라데스'라 불리는 무리에 속한 작고 바위투성이며 메마른 섬이다. 성경에서는 요한계시록 1:9에만 언급된다. 요한이 도미티아누스 황제에게 유배된(주후 95년) 이 섬에서 그는 자기 책에 기록된 저 놀라운 계시를 하나님께 받았다. 그리하여 이 섬은 자연히 모든 시대에 걸쳐 더없이 깊은 관심의 자리가 되었다. 지금은 파트모라 불린다. (요한 참조.)",
    "category": "지명",
    "hebrew_greek": "G3963"
   },
@@ -22985,7 +22985,7 @@
    "id": 2883,
    "term": "Peacock",
    "definition": "(Hebrews tuk, apparently borrowed from the Tamil tokei). This bird is indigenous to India. It was brought to Solomon by his ships from Tarshish (1 Kings 10:22; 2 Chronicles 9:21), which in this case was probably a district on the Malabar coast of India, or in Ceylon. The word so rendered in Job 39:13 literally means wild, tumultuous crying, and properly denotes the female ostrich (q.v.).",
-   "definition_ko": "(히브리어 '투크', 타밀어 '토케이'에서 차용된 것으로 보임) 이 새는 인도 토착종이다. 솔로몬이 다시스에서 온 배를 통해 들여왔다(열왕기상 10:22; 역대하 9:21), 이 경우 다시스는 아마도 인도 말라바르 해안 지역이었을 것이다.",
+   "definition_ko": "(히브리어 '투크'이며 타밀 말 '토케이'에서 빌려 온 것으로 보인다) 이 새는 인도가 원산이다. 솔로몬에게 그의 다시스 배들이 실어 왔는데(열왕기상 10:22; 역대하 9:21), 이 경우 다시스는 아마도 인도 말라바르 해안이나 실론의 한 지역이었을 것이다. 욥기 39:13에서 그렇게 옮겨진 낱말은 글자대로는 거칠고 요란하게 우는 것을 뜻하며, 본래 암타조(참조)를 가리킨다.",
    "category": "용어",
    "hebrew_greek": "H8500"
   },
@@ -23569,7 +23569,7 @@
    "id": 2956,
    "term": "Physician",
    "definition": "Asa, afflicted with some bodily malady, “sought not to the Lord but to the physicians” (2 Chronicles 16:12). The “physicians” were those who “practised heathen arts of magic, disavowing recognized methods of cure, and dissociating the healing art from dependence on the  God of Israel. The sin of Asa was not, therefore, in seeking medical advice, as we understand the phrase, but in forgetting Jehovah.”",
-   "definition_ko": "아사는 어떤 병에 걸렸을 때 '여호와께 구하지 아니하고 의원들에게 구하였더라'(역대하 16:12). '의원들'은 '이방의 마법 기술을 행하며 공인된 치료법을 부인하고 치유술을 하나님과 분리시킨 자들'이었다.",
+   "definition_ko": "아사는 몸에 병이 들었을 때 '여호와께 구하지 아니하고 의원들에게 구하였다'(역대하 16:12). 여기서 '의원들'이란 '이방의 마술을 행하며 인정된 치료 방법을 저버리고, 고치는 기술을 이스라엘의 하나님께 의지하는 데서 떼어 놓던 자들'이었다. 그러므로 아사의 죄는 오늘날 우리가 말하는 뜻의 의술을 구한 데 있지 않고 여호와를 잊은 데 있었다.",
    "category": "용어",
    "hebrew_greek": "G2395,H7495"
   },
@@ -23864,7 +23864,7 @@
    "id": 2993,
    "term": "Poplar",
    "definition": "Hebrews libneh, “white”, (Genesis 30:37; Hos. 4:13), in all probability the storax tree (Styrax officinalis) or white poplar, distinguished by its white blossoms and pale leaves. It is common in the Anti-Libanus. Other species of the poplar are found in Palestine, such as the white poplar (P. alba) of our own country, the black poplar (P. nigra), and the aspen (P. tremula). (See WILLOW.)",
-   "definition_ko": "히브리어 '리브네', '흰'(창세기 30:37; 호세아 4:13), 아마도 흰 꽃과 창백한 잎으로 구별되는 스티락스 나무 또는 백양나무일 것이다. 안티레바논에 흔하다.",
+   "definition_ko": "히브리어 '리브네' 곧 '흰'이라는 뜻이며(창세기 30:37; 호세아 4:13), 거의 틀림없이 때죽나무(스티락스 오피키날리스)나 백양나무로 흰 꽃과 옅은 잎으로 두드러진다. 안티레바논에 흔하다. 팔레스타인에는 백양나무의 다른 종류도 있으니, 영국에도 있는 은백양(P. alba)과 흑양(P. nigra)과 사시나무(P. tremula)가 그러하다. (버드나무 참조.)",
    "category": "용어",
    "hebrew_greek": "H3839"
   },
@@ -24128,7 +24128,7 @@
    "id": 3026,
    "term": "Publius(보블리오)",
    "definition": "“the chief man of the island” of Malta (Acts 28:7), who courteously entertained Paul and his shipwrecked companions for three days, till they found a more permanent place of residence; for they remained on the island for three months, till the stormy season had passed. The word here rendered “chief man” (protos) is supposed by some to be properly a Maltese term, the official title of the governor.",
-   "definition_ko": "몰타 '섬의 우두머리'(사도행전 28:7)로, 바울과 조난당한 일행을 사흘간 정중히 대접해 더 오래 머물 곳을 찾을 때까지 도왔다. 그들은 폭풍 계절이 지날 때까지 석 달간 섬에 머물렀다.",
+   "definition_ko": "멜리데 '섬에서 가장 높은 사람'이며(사도행전 28:7), 바울과 함께 파선한 이들을 사흘 동안 정중히 대접하여 그들이 더 오래 머물 곳을 찾을 때까지 돌보아 주었다. 그들은 사나운 철이 지나기까지 석 달을 그 섬에 머물렀다. 여기서 '높은 사람'으로 옮겨진 낱말('프로토스')은 어떤 이들이 보기에 본래 멜리데 말이며 총독의 공식 칭호였다.",
    "category": "인명",
    "hebrew_greek": "G4196"
   },
@@ -24216,7 +24216,7 @@
    "id": 3037,
    "term": "Pygarg",
    "definition": "Hebrews dishon, “springing”, (Deuteronomy 14:5), one of the animals permitted for food. It is supposed to be the Antelope addax. It is described as “a large animal, over 3 1/2 feet high at the shoulder, and, with its gently-twisted horns, 2 1/2 feet long. Its colour is pure white, with the exception of a short black mane, and a tinge of tawny on the shoulders and back.”, Tristram’s Natural History.  Q",
-   "definition_ko": "히브리어 '디숀', '뛰어오르는'이라는 뜻(신명기 14:5), 식용이 허락된 짐승 중 하나. 아닥스영양으로 추정된다. '어깨 높이 3과 1/2피트가 넘는 큰 동물로, 부드럽게 휘어진 뿔은 2와 1/2피트에 이른다.'",
+   "definition_ko": "히브리어 '디숀'은 '뛰어오름'을 뜻하며(신명기 14:5) 먹도록 허락된 짐승 가운데 하나이다. 아닥스 영양으로 여겨진다. '어깨 높이가 세 자 반이 넘는 큰 짐승이며, 부드럽게 비틀린 뿔은 길이가 두 자 반이다. 빛깔은 짧은 검은 갈기와 어깨와 등의 누런 기운을 빼면 순백이다'라고 그려진다(트리스트람, 박물지).",
    "category": "용어",
    "hebrew_greek": "H1788"
   },
@@ -24966,7 +24966,7 @@
    "id": 3131,
    "term": "Rezin(르신)",
    "definition": "firm; a prince, a king of Syria, who joined Pekah (q.v.) in an invasion of the kingdom of Judah (2 Kings 15:37; 16:5-9; Isaiah 7:1-8). Ahaz induced Tiglath-pileser III. to attack Damascus, and this caused Rezin to withdraw for the purpose of defending his own kingdom. Damascus was taken, and Rezin was slain in battle by the Assyrian king, and his people carried into captivity, B.C. 732 (2 Kings 16:9).",
-   "definition_ko": "'견고한; 군주'라는 뜻으로, 시리아 왕이며 베가(참조)와 함께 유다 왕국을 침공했다(열왕기하 15:37; 16:5-9). 아하스는 디글랏빌레셀 3세를 부추겨 다메섹을 공격하게 했고, 이 때문에 르신은 물러났다.",
+   "definition_ko": "'굳건함'이라는 뜻으로 한 방백이요 아람 왕이며, 베가(참조)와 함께 유다 나라를 침공하였다(열왕기하 15:37; 16:5-9; 이사야 7:1-8). 아하스가 디글랏빌레셀 삼세를 부추겨 다메섹을 치게 하매, 이 때문에 르신은 자기 나라를 지키려고 물러갔다. 다메섹이 함락되었고 르신은 앗수르 왕에게 싸움에서 죽임을 당하였으며 그 백성은 주전 732년에 사로잡혀 갔다(열왕기하 16:9).",
    "category": "인명",
    "hebrew_greek": "H7526"
   },
@@ -25054,7 +25054,7 @@
    "id": 3142,
    "term": "Ring",
    "definition": "Used as an ornament to decorate the fingers, arms, wrists, and also the ears and the nose. Rings were used as a signet (Genesis 38:18). They were given as a token of investment with authority (Genesis 41:42; Esther 3:8-10; 8:2), and of favour and dignity (Luke 15:22). They were generally worn by rich men (James 2:2). They are mentioned by Isiah (3:21) among the adornments of Hebrew women.",
-   "definition_ko": "손가락, 팔, 손목, 또한 귀와 코를 장식하는 데 쓰였다. 인장으로도 쓰였다(창세기 38:18). 권위를 부여하는 표시로 주어졌고(창세기 41:42; 에스더 3:8-10), 은총과 존귀의 표시이기도 했다.",
+   "definition_ko": "손가락과 팔과 손목을 꾸미는 장식으로 쓰였고 귀와 코에도 쓰였다. 반지는 인장으로 쓰였다(창세기 38:18). 권세를 맡기는 표로(창세기 41:42; 에스더 3:8-10; 8:2), 또 은총과 위엄의 표로 주어졌다(누가복음 15:22). 대개 부유한 사람이 꼈다(야고보서 2:2). 이사야는(3:21) 히브리 여인의 장식 가운데 이를 언급한다.",
    "category": "용어",
    "hebrew_greek": "G1146,H1354,H1550,H2885"
   },
@@ -25270,7 +25270,7 @@
    "id": 3169,
    "term": "Rufus(루포)",
    "definition": "red, the son of Simon the Cyrenian (Mark 15:21), whom the Roman soldiers compelled to carry the cross on which our Lord was crucified. Probably it is the same person who is again mentioned in Romans 16:13 as a disciple at Rome, whose mother also was a Christian held in esteem by the apostle. Mark mentions him along with his brother Alexander as persons well known to his readers (Mark 15:21).",
-   "definition_ko": "'붉은'이라는 뜻으로, 구레네 사람 시몬의 아들(마가복음 15:21), 로마 군인들이 그에게 우리 주님이 못 박히실 십자가를 지도록 강요했다. 로마서 16:13에 언급된, 로마에 있던 제자와 같은 인물로 추정된다.",
+   "definition_ko": "'붉은'이라는 뜻으로 구레네 사람 시몬의 아들이며(마가복음 15:21), 시몬은 로마 군인들에게 억지로 우리 주님이 못 박히실 십자가를 지고 갔다. 아마도 로마서 16:13에 로마의 제자로 다시 언급되는 사람과 같은 이일 터인데, 그의 어머니도 사도가 존경하는 그리스도인이었다. 마가는 그를 그 형제 알렉산더와 함께 자기 독자들이 잘 아는 이들로 언급한다(마가복음 15:21).",
    "category": "인명",
    "hebrew_greek": "G4504"
   },
@@ -25903,7 +25903,7 @@
    "term": "Scourging",
    "definition": "(1 Kings 12:11). Variously administered. In no case were the stripes to exceed forty (Deuteronomy 25:3; comp. 2 Corinthians  11:24). In the time of the apostles, in consequence of the passing of what was called the Porcian law, no Roman citizen could be scourged in any case (Acts 16:22-37). (See BASTINADO.) In the scourging of our Lord (Matthew 27:26; Mark 15:15) the words of prophecy (Isaiah 53:5) were fulfilled.",
    "category": "용어",
-   "definition_ko": "매질의 횟수는 마흔 대를 넘지 않도록 규정되었다(신명기 25:3). 사도 시대에는 포르키우스 법에 따라 로마 시민은 어떤 경우에도 매질을 당할 수 없었으며(사도행전 16:22-37), 주님의 채찍질(마태복음 27:26)은 이사야 53:5의 예언을 성취한 것이었다.",
+   "definition_ko": "(열왕기상 12:11) 여러 방식으로 행하여졌다. 어떤 경우에도 매는 사십을 넘겨서는 안 되었다(신명기 25:3; 고린도후서 11:24 비교). 사도들 때에는 이른바 포르키우스 법이 통과된 결과로 로마 시민은 어떤 경우에도 매를 맞을 수 없었다(사도행전 16:22-37). (태형 참조.) 우리 주님께서 채찍질당하실 때(마태복음 27:26; 마가복음 15:15) 예언의 말씀이 이루어졌다(이사야 53:5).",
    "hebrew_greek": "H7848"
   },
   {
@@ -25919,7 +25919,7 @@
    "term": "Scrip",
    "definition": "a small bag or wallet usually fastened to the girdle (1 Samuel 17:40); “a shepherd’s bag.” In the New Testament it is the rendering of Gr. pera, which was a bag carried by travellers and shepherds, generally made of skin (Matthew 10:10; Mark 6:8; Luke 9:3; 10:4). The name “scrip” is meant to denote that the bag was intended to hold scraps, fragments, as if scraped off from larger articles, trifles.",
    "category": "용어",
-   "definition_ko": "허리띠에 매던 작은 자루나 가방으로(사무엘상 17:40) 목자의 주머니를 가리킨다. 신약에서는 헬라어 pera로 여행자와 목자가 가죽으로 만들어 메던 자루를 뜻한다(마태복음 10:10).",
+   "definition_ko": "대개 띠에 매어 차던 작은 주머니나 자루이며(사무엘상 17:40) '목자의 배낭'이다. 신약에서는 헬라어 '페라'를 옮긴 말인데, 이는 나그네와 목자가 지니고 다니던 자루로 대개 가죽으로 만들었다(마태복음 10:10; 마가복음 6:8; 누가복음 9:3; 10:4). '배낭'이라는 이름은 그 자루가 큰 물건에서 긁어낸 듯한 부스러기와 조각과 자질구레한 것을 담으려는 것이었음을 나타내려는 말이다.",
    "hebrew_greek": "G4082,H3219"
   },
   {
@@ -25959,7 +25959,7 @@
    "term": "Sea Of Glass",
    "definition": "a figurative expression used in Revelation 4:6 and 15:2. According to the interpretation of some, “this calm, glass-like sea, which is never in storm, but only interfused with flame, represents the counsels of God, those purposes of righteousness and love which are often fathomless but never obscure, always the same, though sometimes glowing with holy anger.” (Comp. Psalm 36:6; 77:19; Romans 11:33-36.)",
    "category": "용어",
-   "definition_ko": "계시록 4:6과 15:2에 나오는 상징적 표현으로, 고요하지만 불이 섞인 유리 바다는 하나님의 헤아릴 수 없이 깊지만 결코 모호하지 않은 의와 사랑의 뜻을 나타낸다고 해석된다.",
+   "definition_ko": "요한계시록 4:6과 15:2에 쓰인 비유의 표현이다. 어떤 이들의 풀이에 따르면 '결코 요동하지 않고 다만 불이 섞여 비칠 뿐인 이 잔잔하고 유리 같은 바다는 하나님의 계획, 곧 헤아릴 수 없이 깊으나 결코 어둡지 않고 언제나 한결같으며 때로 거룩한 진노로 타오르는 그 의와 사랑의 뜻을 나타낸다.' (시편 36:6; 77:19; 로마서 11:33-36 비교.)",
    "hebrew_greek": "G5194,H2137"
   },
   {
@@ -27156,7 +27156,7 @@
    "term": "Shoa(소아)",
    "definition": "opulent, the mountain district lying to the north-east of Babylonia, anciently the land of the Guti, or Kuti, the modern Kurdistan. The plain lying between these mountains and the Tigris was called  su-Edina, i.e., “the border of the plain.” This name was sometimes shortened into Suti and Su, and has been regarded as = Shoa (Ezekiel 23:23). Some think it denotes a place in Babylon. (See PEKOD.)",
    "category": "지명",
-   "definition_ko": "바벨로니아 북동쪽의 산악 지대로 오늘날의 쿠르디스탄에 해당하며(에스겔 23:23) 고대 구디/쿠티 땅으로 불렸다.",
+   "definition_ko": "'부유한'이라는 뜻으로 바벨로니아 북동쪽에 놓인 산지이며, 옛적에는 구티 또는 쿠티의 땅이었고 오늘날의 쿠르디스탄이다. 이 산지와 티그리스 사이에 놓인 평지는 수에디나 곧 '평지의 경계'라 불렸다. 이 이름이 때로 수티, 수로 줄어들었고, 이것이 소아와 같은 것으로 여겨져 왔다(에스겔 23:23). 어떤 이들은 이것이 바벨론 안의 한 곳을 가리킨다고 본다. (브곳 참조.)",
    "hebrew_greek": "H7772"
   },
   {
@@ -27212,7 +27212,7 @@
    "term": "Shoe",
    "definition": "Of various forms, from the mere sandal (q.v.) to the complete covering of the foot. The word so rendered (A.V.) in Deuteronomy 33:25, min’al, “a bar,” is derived from a root meaning “to bolt” or “shut fast,” and hence a fastness or fortress. The verse has accordingly been rendered “iron and brass shall be thy fortress,” or, as in the Revised Version, “thy bars [marg., “shoes”] shall be iron and brass.”",
    "category": "용어",
-   "definition_ko": "단순한 샌들부터 발 전체를 감싸는 형태까지 다양했다. 신명기 33:25의 히브리어 원어는 본래 '빗장'을 뜻해 '네 빗장(요새)이 철과 놋이 되리라'로도 번역된다.",
+   "definition_ko": "그저 신발(참조)에서 발 전체를 덮는 것까지 여러 모양이 있었다. 신명기 33:25에서 흠정역이 그렇게 옮긴 낱말 '민알'은 '빗장'을 뜻하며, '빗장을 지르다', '단단히 닫다'를 뜻하는 어근에서 왔고 따라서 견고한 곳이나 요새를 뜻한다. 그리하여 이 절은 '쇠와 놋이 네 요새가 되리라'로, 또는 개정역대로 '네 문빗장[난외주 '신']은 쇠와 놋이 되리라'로 옮겨졌다.",
    "hebrew_greek": "G5266,H5431"
   },
   {
@@ -27348,7 +27348,7 @@
    "term": "Sibmah(시브마)",
    "definition": "coolness; fragrance, a town in Reuben, in the territory of Moab, on the east of Jordan (Joshua 13:19); called also Shebam and Shibmah (Numbers 32:3, 38). It was famous for its vines (Isaiah 16:9; Jeremiah 48:32). It has been identified with the ruin of Sumieh, where there are rock-cut wine-presses. This fact explains the words of the prophets referred to above. It was about 5 miles east of Heshbon.",
    "category": "지명",
-   "definition_ko": "'서늘함', '향기'라는 뜻으로 요단강 동쪽 모압 땅 르우벤 지파에 속한 성읍이며 세밤, 십마라고도 불린다. 포도나무로 유명했다(이사야 16:9).",
+   "definition_ko": "'서늘함', '향기'라는 뜻으로 요단 동편 모압 지경 안 르우벤의 성읍이다(여호수아 13:19). 스밤, 십마라고도 불린다(민수기 32:3,38). 포도나무로 이름났다(이사야 16:9; 예레미야 48:32). 바위를 깎아 만든 포도주 틀이 있는 수미에 폐허와 같은 곳으로 본다. 이 사실이 앞서 든 선지자들의 말을 설명해 준다. 헤스본 동쪽 5마일쯤에 있었다.",
    "hebrew_greek": "H7643"
   },
   {
@@ -27892,7 +27892,7 @@
    "term": "Sparrow",
    "definition": "Mentioned among the offerings made by the very poor. Two sparrows were sold for a farthing (Matthew 10:29), and five for two farthings (Luke 12:6). The Hebrew word thus rendered is tsippor, which properly denotes the whole family of small birds which feed on grain (Leviticus 14:4; Psalm 84:3; 102:7). The Greek word of the New Testament is strouthion (Matthew 10:29-31), which is thus correctly rendered.",
    "category": "용어",
-   "definition_ko": "가난한 자들이 드리는 제물로 언급되며 참새 두 마리가 한 앗사리온에 팔렸다(마태복음 10:29). 히브리어 원어는 곡식을 먹는 작은 새 전체를 가리킨다.",
+   "definition_ko": "아주 가난한 이들이 드리던 제물 가운데 언급된다. 참새 두 마리가 한 앗사리온에(마태복음 10:29), 다섯 마리가 두 앗사리온에 팔렸다(누가복음 12:6). 이렇게 옮겨진 히브리어 낱말은 '치포르'인데, 이는 본래 곡식을 먹는 작은 새 전체를 가리킨다(레위기 14:4; 시편 84:3; 102:7). 신약의 헬라어 낱말은 '스트루티온'이며(마태복음 10:29-31) 이렇게 옮기는 것이 옳다.",
    "hebrew_greek": "G4765"
   },
   {
@@ -28467,7 +28467,7 @@
    "term": "Tabitha(다비다)",
    "definition": "(in Greek called Dorcas), gazelle, a disciple at Joppa. She was distinguished for her alms-deeds and good works. Peter, who was sent for from Lydda on the occasion of her death, prayed over the dead body, and said, “Tabitha, arise.” And she opened her eyes and sat up; and Peter “gave her his hand, and raised her up; and calling the saints and widows, he presented her alive” (Acts 9:36-43).",
    "category": "인명",
-   "definition_ko": "헬라어로 도르가라 불린 욥바의 여제자로 자선과 선행으로 유명했으며, 베드로가 그 죽음을 기도로 되살렸다(사도행전 9:36-43).",
+   "definition_ko": "(헬라어로는 도르가라 불린다) '노루'라는 뜻으로 욥바의 여제자이다. 구제와 선한 일로 두드러졌다. 그가 죽었을 때 룻다에서 청함을 받아 온 베드로가 그 주검 앞에서 기도하고 '다비다야 일어나라' 하니, 그가 눈을 떠 일어나 앉았다. 베드로가 '손을 내밀어 일으키고 성도들과 과부들을 불러 그가 살아난 것을 보였다'(사도행전 9:36-43).",
    "hebrew_greek": "G1393,G5000"
   },
   {
@@ -28651,7 +28651,7 @@
    "term": "Tappuah(답부아)",
    "definition": "apple-region. (1.) A town in the valley or lowland of Judah; formerly a royal city of the Canaanites (Joshua 12:17; 15:34). It is now called Tuffuh, about 12 miles west of Jerusalem. (2.) A town on the border of Ephraim (Joshua 16:8). The “land” of Tappuah fell to Manasseh, but the “city” to Ephraim (17:8). (3.) En-tappuah, the well of the apple, probably one of the springs near Yassuf (Joshua 17:7).",
    "category": "지명",
-   "definition_ko": "'사과 지역'이라는 뜻. (1) 유다 저지대의 옛 가나안 왕도(여호수아 12:17). (2) 에브라임 경계의 성읍으로 '땅'은 므낫세에, '성읍'은 에브라임에 속했다(여호수아 17:8).",
+   "definition_ko": "'사과의 땅'이라는 뜻. (1.) 유다의 골짜기 곧 저지대에 있던 성읍으로 전에는 가나안 사람의 왕도였다(여호수아 12:17; 15:34). 지금은 투푸흐라 불리며 예루살렘 서쪽 12마일쯤에 있다. (2.) 에브라임 경계의 성읍(여호수아 16:8). 답부아의 '땅'은 므낫세에게, '성읍'은 에브라임에게 돌아갔다(17:8). (3.) 엔답부아 곧 '사과의 샘'이며, 아마도 야수프 가까이에 있는 샘 가운데 하나일 것이다(여호수아 17:7).",
    "hebrew_greek": "H8599"
   },
   {
@@ -28963,7 +28963,7 @@
    "term": "Testament",
    "definition": "occurs twelve times in the New Testament (Hebrews 9:15, etc.) as the rendering of the Gr. diatheke, which is twenty times rendered “covenant” in the Authorized Version, and always so in the Revised Version. The Vulgate translates incorrectly by testamentum, whence the names “Old” and “New Testament,” by which we now designate the two sections into which the Bible is divided. (See BIBLE.)",
    "category": "용어",
-   "definition_ko": "신약에서 12회 나오는 헬라어 디아테케의 번역어로, 흠정역 외 대부분은 '언약'으로 번역하며, 라틴어 불가타의 오역 '테스타멘툼'에서 '구약', '신약'이라는 이름이 유래했다.",
+   "definition_ko": "신약에 열두 번 나오며(히브리서 9:15 등) 헬라어 '디아데케'를 옮긴 말인데, 이 낱말은 흠정역에서 스무 번 '언약'으로 옮겨지고 개정역에서는 언제나 그렇게 옮겨진다. 불가타역이 이를 '테스타멘툼'으로 잘못 옮겼고, 여기서 오늘날 우리가 성경을 나누는 두 부분을 가리키는 '구약'과 '신약'이라는 이름이 왔다. (성경 참조.)",
    "hebrew_greek": "G1242"
   },
   {
@@ -29050,7 +29050,7 @@
    "term": "Theophilus(데오빌로)",
    "definition": "lover of God, a Christian, probably a Roman, to whom Luke dedicated both his Gospel (Luke 1:3) and the Acts of the Apostles (1:1). Nothing beyond this is known of him. From the fact that Luke applies to him the title “most excellent”, the same title Paul uses in addressing Felix (Acts 23:26; 24:3) and Festus (26:25), it has been concluded that Theophilus was a person of rank, perhaps a Roman officer.",
    "category": "인명",
-   "definition_ko": "누가가 자신의 복음서와 사도행전을 헌정한 그리스도인으로 아마도 로마인이었을 것이다(누가복음 1:3). '각하'라는 칭호로 미루어 지위 높은 인물, 아마도 로마 관리로 추정된다.",
+   "definition_ko": "'하나님을 사랑하는 자'라는 뜻으로 한 그리스도인이며 아마도 로마 사람이었을 터인데, 누가가 자기 복음서(누가복음 1:3)와 사도행전(1:1)을 다 그에게 바쳤다. 이 밖에 그에 대하여 알려진 바는 없다. 누가가 그에게 '각하'라는 칭호를 붙였는데, 이는 바울이 벨릭스(사도행전 23:26; 24:3)와 베스도(26:25)를 부를 때 쓴 것과 같은 칭호이므로, 데오빌로가 신분이 높은 사람 아마도 로마 관리였으리라고 여겨져 왔다.",
    "hebrew_greek": "G2321"
   },
   {
@@ -29666,7 +29666,7 @@
    "term": "Tradition",
    "definition": "any kind of teaching, written or spoken, handed down from generation to generation. In Mark 7:3, 9, 13, Colossians 2:8, this word refers to the arbitrary interpretations of the Jews. In 2 Thessalonians 2:15; 3:6, it is used in a good sense. Peter (1 Peter 1:18) uses this word with reference to the degenerate Judaism of the “strangers scattered” whom he addresses (comp. Acts 15:10; Matthew 15:2-6; Galatians 1:14).",
    "category": "용어",
-   "definition_ko": "세대를 거쳐 전해 내려온 가르침(문서나 구전)을 뜻하며, 마가복음 7장 등에서는 유대인들의 자의적 해석을 가리키는 부정적 의미로, 데살로니가후서에서는 긍정적 의미로 쓰인다.",
+   "definition_ko": "글로든 말로든 대를 이어 전해 내려온 온갖 가르침이다. 마가복음 7:3,9,13과 골로새서 2:8에서 이 말은 유대인의 제멋대로 된 해석을 가리킨다. 데살로니가후서 2:15; 3:6에서는 좋은 뜻으로 쓰인다. 베드로는(베드로전서 1:18) 자기가 편지하는 '흩어진 나그네'의 타락한 유대교와 관련하여 이 말을 쓴다(사도행전 15:10; 마태복음 15:2-6; 갈라디아서 1:14 비교).",
    "hebrew_greek": "G3862"
   },
   {
@@ -29674,7 +29674,7 @@
    "term": "Trance",
    "definition": "(Gr. ekstasis, from which the word “ecstasy” is derived) denotes the state of one who is “out of himself.” Such were the trances of Peter and Paul, Acts 10:10; 11:5; 22:17, ecstasies, “a preternatural, absorbed state of mind preparing for the reception of the vision”, (comp. 2 Corinthians 12:1-4). In Mark 5:42 and Luke 5:26 the Greek word is rendered “astonishment,” “amazement” (comp. Mark 16:8; Acts 3:10).",
    "category": "용어",
-   "definition_ko": "헬라어 엑스타시스에서 온 말로 '자기 밖에 있는' 상태를 뜻하며 베드로와 바울이 환상 계시를 받기 전 경험한 상태이다(사도행전 10:10).",
+   "definition_ko": "(헬라어 '엑스타시스'이며 여기서 '황홀'이라는 말이 왔다) '자기 밖에 나가 있는' 상태를 뜻한다. 베드로와 바울의 비몽사몽이 그러하였으니(사도행전 10:10; 11:5; 22:17), 이는 '환상을 받아들이도록 준비된, 본성을 넘어선 몰입 상태'였다(고린도후서 12:1-4 비교). 마가복음 5:42과 누가복음 5:26에서 이 헬라어 낱말은 '놀람', '놀라움'으로 옮겨진다(마가복음 16:8; 사도행전 3:10 비교).",
    "hebrew_greek": "H8639"
   },
   {
@@ -29849,7 +29849,7 @@
    "term": "Tychicus(두기고)",
    "definition": "chance, an Asiatic Christian, a “faithful minister in the Lord” (Ephesians 6:21, 22), who, with Trophimus, accompanied Paul on a part of his journey from Macedonia to Jerusalem (Acts 20:4). He is alluded to also in Colossians 4:7, Titus 3:12, and 2 Timothy 4:12 as having been with Paul at Rome, whence he sent him to Ephesus, probably for the purpose of building up and encouraging the church there.",
    "category": "인명",
-   "definition_ko": "아시아 출신 그리스도인으로 '주 안에서 신실한 일꾼'이라 불리며(에베소서 6:21) 드로비모와 함께 바울의 마케도니아-예루살렘 여정에 동행했다.",
+   "definition_ko": "'우연'이라는 뜻으로 아시아의 그리스도인이며 '주 안에서 신실한 일꾼'이었고(에베소서 6:21,22), 드로비모와 함께 바울이 마게도냐에서 예루살렘으로 가는 여정의 얼마 동안 그와 함께하였다(사도행전 20:4). 골로새서 4:7, 디도서 3:12, 디모데후서 4:12에도 그가 로마에서 바울과 함께 있었던 것으로 언급되며, 바울이 그를 에베소로 보냈으니 아마도 거기 교회를 세우고 격려하려는 것이었을 터이다.",
    "hebrew_greek": "G5190"
   },
   {
@@ -29993,7 +29993,7 @@
    "term": "Usury",
    "definition": "the sum paid for the use of money, hence interest; not, as in the modern sense, exorbitant interest. The Jews were forbidden to exact usury (Leviticus 25:36, 37), only, however, in their dealings with each other (Deuteronomy 23:19, 20). The violation of this law was viewed as a great crime (Psalm 15:5; Proverbs 28:8; Jeremiah 15:10). After the Return, and later, this law was much neglected (Nehemiah 5:7, 10).",
    "category": "용어",
-   "definition_ko": "돈을 빌려준 대가로 받는 이자를 뜻하며 오늘날의 고리대금과는 다르다. 유대인들은 동족 간의 거래에서 이자를 받는 것이 금지되었다(레위기 25:36).",
+   "definition_ko": "돈을 쓴 값으로 치르는 것 곧 이자이며, 오늘날의 뜻처럼 지나친 이자를 말하는 것은 아니다. 유대인은 이자 받는 것이 금지되었으나(레위기 25:36,37) 이는 오직 자기들끼리 거래할 때에 한하였다(신명기 23:19,20). 이 법을 어기는 것은 큰 죄로 여겨졌다(시편 15:5; 잠언 28:8; 예레미야 15:10). 포로에서 돌아온 뒤와 그 후로는 이 법이 크게 소홀히 여겨졌다(느헤미야 5:7,10).",
    "hebrew_greek": "G5110,H4855,H5392"
   },
   {
@@ -30374,7 +30374,7 @@
    "term": "Week",
    "definition": "From the beginning, time was divided into weeks, each consisting of six days of working and one of rest (Genesis 2:2, 3; 7:10; 8:10, 12; 29:28). The references to this division of days becomes afterwards more frequent (Exodus 34:22; Leviticus 12:5; Numbers 28:26; Deuteronomy 16:16; 2 Chronicles 8:13; Jeremiah 5:24; Daniel 9:24-27; 10:2, 3). It has been found to exist among almost all nations.",
    "category": "용어",
-   "definition_ko": "태초부터 6일의 노동과 하루의 안식으로 이루어진 주간으로 시간이 나뉘었으며(창세기 2:2) 거의 모든 민족에게서 발견되는 관습이다.",
+   "definition_ko": "태초부터 시간은 주로 나뉘어 엿새는 일하고 하루는 쉬었다(창세기 2:2,3; 7:10; 8:10,12; 29:28). 이렇게 날을 나눈 것에 대한 언급이 뒤로 갈수록 잦아진다(출애굽기 34:22; 레위기 12:5; 민수기 28:26; 신명기 16:16; 역대하 8:13; 예레미야 5:24; 다니엘 9:24-27; 10:2,3). 이 구분은 거의 모든 민족에게 있는 것으로 밝혀졌다.",
    "hebrew_greek": "H7620"
   },
   {
@@ -30398,7 +30398,7 @@
    "term": "Well",
    "definition": "(Hebrews beer), to be distinguished from a fountain (Hebrews ‘ain). A “beer” was a deep shaft, bored far under the rocky surface by the art of man, which contained water which percolated through the strata in its sides. Such wells were those of Jacob and Beersheba, etc. (see Genesis 21:19, 25, 30, 31; 24:11; 26:15, 18-25, 32, etc.). In the Pentateuch this word beer, so rendered, occurs twenty-five times.",
    "category": "용어",
-   "definition_ko": "히브리어 베에르로, 샘(아인)과 구별되며 바위를 뚫어 만든 깊은 우물을 가리킨다(창세기 21:19).",
+   "definition_ko": "(히브리어 '베에르') 샘(히브리어 '아인')과 구별해야 한다. '베에르'는 사람의 기술로 바위 지면 아래 깊이 파 내려간 구덩이로, 그 옆의 지층을 통하여 스며든 물을 담고 있었다. 야곱의 우물과 브엘세바의 우물 등이 그러하다(창세기 21:19,25,30,31; 24:11; 26:15,18-25,32 등 참조). 오경에서 이렇게 옮겨진 '베에르'라는 낱말은 스물다섯 번 나온다.",
    "hebrew_greek": "G1444"
   },
   {
@@ -30806,7 +30806,7 @@
    "term": "Zabdi(삽디)",
    "definition": "gift of Jehovah. (1.) An ancestor of Achan (Joshua 7:1, 17, 18). He is probably the “Zimri” of 1 Chronicles 2:6. (2.) A Benjamite (1 Chronicles 8:19). (3.) Called “the Shiphmite,” one of David’s officers, who had charge of his vineyards (1 Chronicles 27:27). (4.) A Levite, one of the sons of Asaph (Nehemiah 11:17); probably the same as Zichri (1 Chronicles 9:15), and Zaccur (Nehemiah 12:35).",
    "category": "인명",
-   "definition_ko": "'여호와의 선물'이라는 뜻. (1) 아간의 조상(여호수아 7:1), 역대상의 시므리와 동일 인물로 추정됨. (2) 베냐민 사람(역대상 8:19). (3) '시브마 사람'으로 다윗의 포도원 관리자(역대상 27:27). (4) 아삽의 아들 중 하나인 레위인(느헤미야 11:17).",
+   "definition_ko": "'여호와의 선물'이라는 뜻. (1.) 아간의 조상(여호수아 7:1,17,18). 아마도 역대상 2:6의 '시므리'일 것이다. (2.) 베냐민 사람(역대상 8:19). (3.) '시브미 사람'이라 불리며 다윗의 관리 가운데 하나로 그 포도원을 맡았다(역대상 27:27). (4.) 아삽의 아들 가운데 하나인 레위 사람(느헤미야 11:17). 아마도 역대상 9:15의 시그리, 느헤미야 12:35의 삭굴과 같은 사람일 것이다.",
    "hebrew_greek": "H2067"
   },
   {
@@ -30950,7 +30950,7 @@
    "term": "Zarephath(사르밧)",
    "definition": "smelting-shop, “a workshop for the refining and smelting of metals”, a small Phoenician town, now Surafend, about a mile from the coast, almost midway on the road between Tyre and Sidon. Here Elijah sojourned with a poor widow during the “great famine,” when the “heaven was shut up three years and six months” (Luke 4:26; 1 Kings 17:10). It is called Sarepta in the New Testament (Luke 4:26).",
    "category": "지명",
-   "definition_ko": "'제련소'라는 뜻으로 두로와 시돈 사이 해안에서 약 1마일 떨어진 작은 페니키아 마을이며, 엘리야가 큰 기근 중 이곳의 가난한 과부와 함께 머물렀다(열왕기상 17:10); 신약에서는 사렙다로 불린다(누가복음 4:26).",
+   "definition_ko": "'제련소' 곧 '쇠붙이를 녹이고 정련하는 작업장'이라는 뜻으로 베니게의 작은 성읍이며, 지금은 수라펜드이고 해안에서 한 마일쯤, 두로와 시돈 사이 길의 거의 중간에 있다. 여기서 엘리야가 '큰 흉년' 때에, 곧 '하늘이 삼 년 육 개월간 닫혔을' 때에 한 가난한 과부와 함께 머물렀다(누가복음 4:26; 열왕기상 17:10). 신약에서는 사렙다라 불린다(누가복음 4:26).",
    "hebrew_greek": "G4558,H6886"
   },
   {
@@ -31014,7 +31014,7 @@
    "term": "Zealots(열심당)",
    "definition": "a sect of Jews which originated with Judas the Gaulonite (Acts 5:37). They refused to pay tribute to the Romans, on the ground that this was a violation of the principle that God was the only king of Israel. They rebelled against the Romans, but were soon scattered, and became a lawless band of mere brigands. They were afterwards called Sicarii, from their use of the sica, i.e., the Roman dagger.",
    "category": "인명",
-   "definition_ko": "갈릴리 사람 유다에게서 비롯된 유대 종파로(사도행전 5:37) 하나님만이 이스라엘의 왕이라는 원칙 위에 로마에 대한 조공 납부를 거부했으며, 후에는 무법한 강도떼가 되어 '시카리'(단검을 쓰는 자)라 불렸다.",
+   "definition_ko": "가울로니 사람 유다에게서 비롯된 유대인의 한 분파이다(사도행전 5:37). 그들은 하나님만이 이스라엘의 왕이시라는 원리를 어기는 일이라 하여 로마에 조공 바치기를 거절하였다. 그들은 로마를 거슬러 반란을 일으켰으나 이내 흩어졌고, 무법한 강도 떼가 되고 말았다. 뒤에는 로마 단검인 '시카'를 쓴 데서 시카리라 불렸다.",
    "hebrew_greek": "G2581"
   },
   {
