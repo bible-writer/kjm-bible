@@ -8252,9 +8252,6 @@
       document.getElementById('commentary-modal-backdrop').onclick = closeCommentaryModal;
       document.getElementById('btn-commentary-back-to-map').onclick = () => setRightPanelMode('map');
 
-      // 주석 패널 스크롤 네비게이션 (플로팅 버튼 + 키보드)
-      window.commentaryNavScroll = function(action) {
-
       // 주석(commentary) 영역 안에서 성구 링크 클릭 시 본문 이동 대신 팝업 표시
       // (원문사전/인명/용어 팝업에서는 원래대로 navigateToBibleVerse가 동작)
       ['commentary-text-content', 'commentary-text-ref'].forEach(id => {
@@ -8270,9 +8267,12 @@
           if (bid && ch) showVersePopup(e, bid, ch, v || 1);
         }, true);
       });
+
+      // 주석 패널 스크롤 네비게이션 (플로팅 버튼 + 키보드)
+      window.commentaryNavScroll = function(action) {
         const el = Commentary._getScrollEl();
         if (!el) return;
-        const pageH = el.clientHeight * 0.85; // 한 화면의 85% 만큼 이동
+        const pageH = el.clientHeight * 0.85;
         switch (action) {
           case 'home': el.scrollTo({ top: 0, behavior: 'smooth' }); break;
           case 'end': el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' }); break;
