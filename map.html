@@ -5371,8 +5371,7 @@
     const RAWDICT_SOURCES = [
       { key: 'easton',    label: 'Easton',    file: './easton_full.json',    storeKey: 'easton_full_dict',    editsKey: 'easton_local_edits' },
       { key: 'smith',     label: 'Smith',     file: './smith_full.json',     storeKey: 'smith_full_dict',     editsKey: 'smith_local_edits' },
-      { key: 'hastings',  label: 'Hastings',  file: './hastings_full.json',  storeKey: 'hastings_full_dict',  editsKey: 'hastings_local_edits' },
-      { key: 'schaff',    label: 'Schaff',    file: './schaff_full.json',    storeKey: 'schaff_full_dict',    editsKey: 'schaff_local_edits' },
+      { key: 'hastschaff', label: 'Hastings/Schaff', file: './hastings_schaff_full.json', storeKey: 'hastings_schaff_full_dict', editsKey: 'hastings_schaff_local_edits' },
       { key: 'hitchcock', label: 'Hitchcock', file: './hitchcock_full.json', storeKey: 'hitchcock_full_dict', editsKey: 'hitchcock_local_edits' }
     ];
     // 사전별 데이터와 편집내역을 한곳에 모아둔다 (rawDictData['easton'] 형태로 접근)
@@ -5654,6 +5653,20 @@
         const catBadge = e.category
           ? `<span style="display:inline-block;font-size:0.7em;font-weight:700;color:#fff;background:${catBadgeColors[e.category] || '#64748b'};border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:middle">${escHtml(e.category)}</span>`
           : '';
+        const originBadge = e.origin
+          ? `<span style="display:inline-block;font-size:0.68em;font-weight:600;color:#475569;background:#e2e8f0;border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:middle" title="출처 사전">${escHtml(e.origin)}</span>`
+          : '';
+        const variantBlock = (Array.isArray(e.variants) && e.variants.length)
+          ? `<div style="margin-top:6px;border-left:3px solid #cbd5e1;padding-left:8px">
+               <div style="font-size:0.72em;color:#94a3b8;margin-bottom:3px">사전별 본문이 다릅니다</div>
+               ${e.variants.map(v => `
+                 <div style="margin-bottom:6px">
+                   <div style="font-size:0.7em;font-weight:700;color:#475569">— ${escHtml(v.origin)} —</div>
+                   <div style="font-size:0.82em;color:#64748b;line-height:1.5">${linkifyVerseRefs(escHtml(v.definition || ''))}</div>
+                   ${v.definition_ko ? `<div style="font-size:0.85em;color:#1e293b;line-height:1.6;margin-top:3px">${linkifyVerseRefs(escHtml(v.definition_ko))}</div>` : ''}
+                 </div>`).join('')}
+             </div>`
+          : '';
         const termInputId = `rawdict-term-${rawdictSrc}-${e.id}`;
         const catSelectId = `rawdict-cat-${rawdictSrc}-${e.id}`;
         const headerBlock = isMetaEditing
@@ -5668,7 +5681,7 @@
                <button onclick="RawDict.saveMeta('${rawdictSrc}',${e.id})" style="font-size:0.78em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>
                <button onclick="RawDict.cancelMetaEdit('${rawdictSrc}',${e.id})" style="font-size:0.78em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 10px;cursor:pointer">취소</button>
              </div>`
-          : `<div style="font-weight:600;color:#1e293b">${catBadge}<span style="font-style:italic">${escHtml(e.term)}</span>
+          : `<div style="font-weight:600;color:#1e293b">${catBadge}${originBadge}<span style="font-style:italic">${escHtml(e.term)}</span>
                <button onclick="RawDict.editMeta('${rawdictSrc}',${e.id})" style="margin-left:6px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">✏️ 분류/표제어 수정</button>
              </div>`;
         const strongTargetId = `rawdict-strong-${rawdictSrc}-${e.id}`;
@@ -5691,6 +5704,7 @@
             <button onclick="RawDict.copyDefinition('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">📋 복사</button>
           </div>
           ${koBlock}
+          ${variantBlock}
         `;
         container.appendChild(row);
       });
@@ -5934,8 +5948,7 @@
     const RAWDICT_SOURCE_TEXT = {
       easton:    "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain)",
       smith:     "Smith's Bible Dictionary (William Smith, 1863, Public Domain)",
-      hastings:  "Hastings Dictionary of the Bible (James Hastings, 1898, Public Domain)",
-      schaff:    "Schaff's Bible Dictionary (Philip Schaff, Public Domain)",
+      hastschaff: "Hastings Dictionary of the Bible / Schaff's Bible Dictionary (CCEL, Public Domain) - 원본 XML 동일, 통합본",
       hitchcock: "Hitchcock's Bible Names Dictionary (Roswell D. Hitchcock, 1869, Public Domain)"
     };
     async function exportRawDictJson(src) {
