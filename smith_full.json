@@ -1,5 +1,5 @@
 {
-  "version": "1.10.0",
+  "version": "1.11.0",
   "date": "2026-09-03",
   "count": 4561,
   "source": "Smith's Bible Dictionary (William Smith, 1884, CCEL edition)",
@@ -15,7 +15,7 @@
     },
     {
       "id": 2,
-      "term": "Aarat(아라랏)",
+      "term": "Ararat(아라랏)",
       "definition": "(high or holy ground), a mountainous district of Asia mentioned in the Bible in connection with the following events:— (1) As the resting-place of the ark after the deluge. (Genesis 8:4) (2) As the asylum of the sons of Sennacherib. (2 Kings 19:37; Isaiah 37:38) Authorized Version has “the land of Armenia.” (3) As the ally, and probably the neighbor, of Minni and Ashchenaz. (Jeremiah 51:27) [Armenia] The name Ararat was unknown to the geographers of Greece and Rome, as it still is to the Armenians of the present day; but it was an ancient name for a portion of Armenia. In its biblical sense it is descriptive generally of the Armenian highlands—the lofty plateau which over looks the plain of the Araxes on the north and of Mesopotomia on the south. Various opinions have been put forth as to the spot where the ark rested, as described in (Genesis 8:4) (but it is probable that it rested on some of the lower portions of the range than on the lofty peak to which exclusively) Europeans have given the name Ararat, the mountain which is called Massis by the Armenians, AgriDagh, i.e. Steep Mountain, by the Turks, and Kuh-i-Nuh, i.e. Noah’s Mountain, by the Persians. It rises immediately out of the plain of the Araxes, and terminates in two conical peaks, named the Great and Less Ararat, about seven miles distant from each other; the former of which attain an elevation of 17,260 feet above the level of the sea and about 14,000 above the plain of the Araxes, while the latter is lower by 4000 feet. The summit of the higher is covered with eternal snow for about 3000 feet. Arguri, the only village known to have been built on its slopes, was the spot where, according to tradition, Noah planted his vineyard. “The mountains of Ararat ” are co-extensive with the Armenian plateau from the base of Ararat in the north to the range of Kurdistan in the south, we notice the following characteristics of that region as illustrating the Bible narrative; (1) its elevation. It rises to a height of from 6000 to 7000 feet above the level of the sea. (2) Its geographical position . Viewed with reference to the dispersion of the nations, Armenia is the true centre of the world; and at the present day Ararat is the great boundary-stone between the empires of Russia, Turkey and Persia. (3) Its physical character . The plains as well as the mountains supply evidence of volcanic agency. (4) The climate . Winter lasts from October to May, and is succeeded by a brief spring and a summer of intense heat. (5) The vegetation . Grass grows luxuriantly on the plateau, and furnishes abundant pasture during the summer months to the flocks of the nomad Kurds. Wheat, barley and vines ripen at far higher altitudes than on the Alps and the Pyrenees.",
       "category": "지명",
       "definition_ko": "'높고 거룩한 땅'이라는 뜻으로 소아시아의 산악 지대이며, 노아의 방주가 머문 곳(창세기 8:4), 산헤립의 아들들이 피신한 곳(열왕기하 19:37) 등으로 언급된다. 흠정역은 이를 '아르메니아 땅'으로 번역하며, 오늘날의 아라라트산과 관련된 지역이다."
@@ -220,7 +220,7 @@
     },
     {
       "id": 28,
-      "term": "Abiaibon(아비알본)",
+      "term": "Abialbon(아비알본)",
       "definition": "(father of strength). See Abiel Or Abiel.",
       "category": "인명",
       "definition_ko": "'힘의 아버지'라는 뜻. 아비엘(ABIEL) 항목 참조.",
@@ -2848,7 +2848,7 @@
     },
     {
       "id": 358,
-      "term": "Aramnahataim(아람나하라임)",
+      "term": "Aramnaharaim(아람나하라임)",
       "definition": "(highlands of two rivers). (Psalms 60:1), title. [Aram]",
       "category": "지명",
       "definition_ko": "'두 강 사이의 고지대'라는 뜻으로 시편 60편 표제에 나온다. 아람(1) 참조."
@@ -5284,7 +5284,7 @@
     },
     {
       "id": 665,
-      "term": "Benon(브온)",
+      "term": "Beon(브온)",
       "definition": "(Numbers 32:3) [BETH-BAALMEON] Comp. ver. 38.",
       "category": "지명",
       "definition_ko": "벧바알므온(BETH-BAALMEON) 항목 참조(민수기 32:3)."
@@ -5323,7 +5323,7 @@
     },
     {
       "id": 670,
-      "term": "Beraa(베뢰아)",
+      "term": "Berea(베뢰아)",
       "definition": "(well watered). • A city of Macedonia, mentioned in (Acts 17:10,13) It is now called Verria or KaraVerria, and is situated on the eastern slope of the Olympian mountain range, and has 15,000 or 20,000 inhabitants. • The modern Aleppo, mentioned in 2 Macc. 13:4. • A place in Judea, apparently not very far from Jerusalem. 1 Macc. 9:4.",
       "category": "지명",
       "definition_ko": "'물이 풍부한'이라는 뜻. (1) 마케도니아의 도시로(사도행전 17:10) 오늘날 베리아(카라베리아)라 불리며 올림푸스 산맥 동쪽 경사면에 위치한다. (2) 오늘날의 알레포(마카베오하 13:4). (3) 예루살렘에서 멀지 않은 유대의 한 장소(마카베오상 9:4)."
@@ -5568,7 +5568,7 @@
     },
     {
       "id": 701,
-      "term": "Bethbaalmaveth(벧아스마웻)",
+      "term": "Bethazmaveth(벧아스마웻)",
       "definition": "(house of Azmaveth). Under this name is mentioned, in (Nehemiah 7:28) only, the town of Benjamin which is elsewhere called Azmavethand BETH-SAMOS.",
       "category": "지명",
       "definition_ko": "'아스마웻의 집'이라는 뜻으로 느헤미야 7:28에만 나오며 다른 곳에서는 아스마웻 또는 벧사모스로 불리는 베냐민 성읍이다."
@@ -7392,7 +7392,7 @@
     },
     {
       "id": 931,
-      "term": "Cheani(그나니)",
+      "term": "Chenani(그나니)",
       "definition": "(a contraction of Chenaniah), one of the Levites who assisted at the solemn purification of the people under Ezra. (Nehemiah 9:4)",
       "category": "인명",
       "definition_ko": "'그나냐'의 축약형으로 에스라 시대 백성의 엄숙한 정결 의식을 도운 레위인이다(느헤미야 9:4)."
@@ -7637,7 +7637,7 @@
     },
     {
       "id": 962,
-      "term": "Chillon(길리온)",
+      "term": "Chilion(길리온)",
       "definition": "(pining, sickly), the son of Naomi and husband of Ruth. (Ruth 1:2-5; 4:9) (B.C. 1250.)",
       "category": "인명",
       "definition_ko": "'쇠약함, 병약함'이라는 뜻으로 나오미의 아들이자 룻의 남편이다(룻기 1:2-5)."
@@ -9268,7 +9268,7 @@
     },
     {
       "id": 1168,
-      "term": "Dibongan(디본갓)",
+      "term": "Dibongad(디본갓)",
       "definition": "[Dibon]",
       "category": "지명",
       "definition_ko": "디본(DIBON) 항목 참조.",
@@ -10260,7 +10260,7 @@
     },
     {
       "id": 1293,
-      "term": "Eliezar(엘리에셀)",
+      "term": "Eliezer(엘리에셀)",
       "definition": "(God is his help). • Abraham’s chief servant, called by him “Eliezer of Damascus.” (Genesis 15:2) (B.C. 1857.) • Second son of Moses and Zipporah (B.c. 1523), to whom his father gave this name because “the God of my father was mine help, and delivered me from the sword of Pharaoh.” (Exodus 18:4; 1 Chronicles 23:15,17; 26:25) • One of the sons of Becher, the son of Benjamin. (1 Chronicles 7:8) • A priest in the reign of David. (1 Chronicles 15:24) • Son of Zichri, ruler of the Reubenites in the reign of David. (1 Chronicles 27:16) • Son of Dodavah, of Mareshah in Judah, (2 Chronicles 20:37) a prophet, who rebuked Jehoshaphat for joining himself with Ahaziah king of Israel. (B.C. 895.) • A chief Israelite whom Ezra sent with others from Ahava to Cesiphia, to induce some Levites and Nethinim to accompany him to Jerusalem. (Ezra 8:16) (B.C. 459.) 8,9,10. A priest, a Levite and an Israelite of the sons of Harim, who had married foreign wives. (Ezra 10:18,23,31) • Son of Jorim, in the genealogy of Christ. (Luke 3:29)",
       "category": "인명",
       "definition_ko": "'하나님은 그의 도움이시다'라는 뜻. (1) 아브라함의 수석 종 '다메섹 사람 엘리에셀'(창세기 15:2). (2) 모세와 십보라의 둘째 아들(출애굽기 18:4). (3)~(11) 레위인, 제사장, 선지자 등 여러 인물."
@@ -13982,7 +13982,7 @@
     },
     {
       "id": 1762,
-      "term": "Haltil(핫딜)",
+      "term": "Hattil(핫딜)",
       "definition": "(doubtful). Bene-Hattil were among the children of Solomon’s slaves “who came back from captivity with Zerubbabel. (Ezra 2:57; Nehemiah 7:59) (B.C. 536.)",
       "category": "인명",
       "definition_ko": "'의심스러운'이라는 뜻으로 '하딜의 자손'은 스룹바벨과 함께 포로에서 돌아온 솔로몬의 종들의 자손 중 하나였다(에스라 2:57)."
@@ -14666,7 +14666,7 @@
     },
     {
       "id": 1848,
-      "term": "Hattuph(핫두스)",
+      "term": "Hattush(핫두스)",
       "definition": "(assembled). • A descendant of the kings of Judah apparently one of the sons of Shechaniah, (1 Chronicles 3:22) in the fourth or fifth generation from Zerubbabel. A person of the same name accompanied Ezra from Babylon to Jerusalem. (Ezra 8:2) In another statement Hattush is said to have returned with Zerubbabel. (Nehemiah 12:2) • Son of Hashabniah. one-of those who assisted Nehemiah in the repair of the wall of Jerusalem. (Nehemiah 3:10) (B.C. 446.)",
       "category": "인명",
       "definition_ko": "'모인'이라는 뜻. (1) 스룹바벨로부터 4~5대손인 스가냐의 아들로 추정되는 유다 왕실 후손(역대상 3:22)이며 동명의 인물이 에스라와 함께 바벨론에서 예루살렘으로 돌아왔고(에스라 8:2) 다른 구절에서는 스룹바벨과 함께 돌아온 것으로 언급된다(느헤미야 12:2). (2) 하삽느야의 아들로 느헤미야의 예루살렘 성벽 보수를 도운 인물(느헤미야 3:10)."
@@ -15023,7 +15023,7 @@
     },
     {
       "id": 1893,
-      "term": "Helhath(헬갓)",
+      "term": "Helkath(헬갓)",
       "definition": "(portion), the town named as the starting-point for the boundary of the tribe of Asher, (Joshua 19:25) and allotted with its “suburbs” to the Gershonite Levites. ch. (Joshua 21:31) Perhaps Yerka, seven miles from Acre.",
       "category": "지명",
       "definition_ko": "'몫'이라는 뜻으로 아셀 지파 경계의 시작점으로 언급되는 성읍이며(여호수아 19:25) 그 '주변 지역'과 함께 게르손 가문 레위인에게 배정되었다(여호수아 21:31). 아마도 아코에서 7마일 떨어진 예르카로 추정된다."
@@ -16807,7 +16807,7 @@
     },
     {
       "id": 2117,
-      "term": "Isshiab(잇시야)",
+      "term": "Isshiah(잇시야)",
       "definition": "(whom Jehovah lends). • A descendant of Moses by his younger son Eliezer. (1 Chronicles 24:21) comp. 1Chr 23:17; 26:25(B.C. after 1451.) • A Levite of the house of Kohath and family of Uzziel. (1 Chronicles 24:26) (Uncertain date.)",
       "category": "인명",
       "definition_ko": "'여호와께서 빌려주신'이라는 뜻. (1) 모세의 둘째 아들 엘리에셀의 후손(역대상 24:21). (2) 고핫 가문 웃시엘 족속의 레위인(역대상 24:26)."
@@ -17562,7 +17562,7 @@
     },
     {
       "id": 2212,
-      "term": "Japhleli(야블레디)",
+      "term": "Japhleti(야블레디)",
       "definition": "(the Japhletite). The boundary of the “Japhletite” is one of the landmarks on the south boundary line of Ephraim. (Joshua 16:3)",
       "category": "인명",
       "definition_ko": "'야블렛 사람'이라는 뜻으로 에브라임 남쪽 경계의 지표 중 하나로 쓰인 부족명이다(여호수아 16:3).",
@@ -18881,7 +18881,7 @@
     },
     {
       "id": 2378,
-      "term": "Jinah(기나)",
+      "term": "Kinah(기나)",
       "definition": "(lamentation), a city of Judah, on the extreme south boundary of the tribe, next to Edom. (Joshua 15:22)",
       "category": "지명",
       "definition_ko": "'애가'라는 뜻으로 유다 지파 남쪽 경계, 에돔과 인접한 성읍이다(여호수아 15:22)."
@@ -19005,7 +19005,7 @@
     },
     {
       "id": 2394,
-      "term": "Joda(맛다디아요)",
+      "term": "Joda(요다)",
       "definition": "in Revised Version for Juda. (Luke 3:26)",
       "category": "인명",
       "definition_ko": "개역 성경에서 유다(Juda)를 표기한 형태다(누가복음 3:26).",
@@ -19139,7 +19139,7 @@
     },
     {
       "id": 2411,
-      "term": "Jokdean(욕드암)",
+      "term": "Jokdeam(욕드암)",
       "definition": "(possessed by the people), a city of Judah, in the mountains, (Joshua 15:56) apparently south of Hebron.",
       "category": "지명",
       "definition_ko": "'백성에게 속한'이라는 뜻으로 헤브론 남쪽 산지에 있던 유다 지파 성읍이다(여호수아 15:56)."
@@ -19338,7 +19338,7 @@
     },
     {
       "id": 2436,
-      "term": "Josech(맛다디아요)",
+      "term": "Josech(요섹)",
       "definition": "the form of name given in the Revised Version for Joseph, in (Luke 3:26) It is not found in the Old Testament.",
       "category": "인명",
       "definition_ko": "개역 성경에서 요셉(Joseph)을 표기한 형태이며 구약에는 나오지 않는다(누가복음 3:26).",
@@ -21028,7 +21028,7 @@
     },
     {
       "id": 2649,
-      "term": "Lish(라이스)",
+      "term": "Laish(라이스)",
       "definition": "(lion), the city which was taken by the Danites, and under its new name of Dan became famous as the northern limit of the nation. (Judges 18:7,14,27,29) [Dan] It was near the sources of the Jordan. In the Authorized Version Laish is again mentioned in the account of Sennacherib’s march on Jerusalem. (Isaiah 10:30) This Laish is probably the small village Laishah, lying between Gallim and Anathoth in Benjamin, and of which hitherto no traces have been found. (Fairbairn’s “Imperial Bible Dictionary” suggests that it may be the present little village el-Isawiyeh, in a beautiful valley a mile northeast of Jerusalem.—ED.)",
       "category": "지명",
       "definition_ko": "단 지파가 정복해 새 이름 '단'으로 불리게 된 성읍이며 이스라엘 최북단 경계가 되었다(사사기 18장)."
@@ -22808,7 +22808,7 @@
     },
     {
       "id": 2875,
-      "term": "Merarath(마아랏)",
+      "term": "Maarath(마아랏)",
       "definition": "(bareness), one of the towns of Judah, in the district of the mountains. (Joshua 15:59) The places which occur in company with have been identified at a few miles to the north of Hebron, but Maarath has hitherto eluded observation.",
       "category": "지명",
       "definition_ko": "유다 지파 산지 성읍 중 하나다(여호수아 15:59)."
@@ -28499,7 +28499,7 @@
     },
     {
       "id": 3594,
-      "term": "Riusah(리사)",
+      "term": "Rissah(리사)",
       "definition": "(a ruin), a march-station in the wilderness. (Numbers 33:21,22)",
       "category": "지명",
       "definition_ko": "이스라엘 광야 진영 중 하나다(민수기 33:21,22)."
@@ -32533,7 +32533,7 @@
     },
     {
       "id": 4104,
-      "term": "Tabelel(다브엘)",
+      "term": "Tabeel(다브엘)",
       "definition": "(God is good), an officer of the Persian government in Samaria in the reign of Artaxerxes. (Ezra 4:7) His name appears to indicate that he was a Syrian. (B.C.519.)",
       "category": "인명",
       "definition_ko": "'하나님은 선하시다'는 뜻으로 아닥사스다 시대 사마리아 주재 바사 관리였다(에스라 4:7)."
@@ -32786,7 +32786,7 @@
     },
     {
       "id": 4136,
-      "term": "Tappush(답부아)",
+      "term": "Tappuah(답부아)",
       "definition": "(the apple-city). • A city of Judah, of the Shefelah or lowland. (Joshua 15:34) • A place on the boundary of the “children of Joseph.” (Joshua 16:8; 17:8) Its full name was probably En-tappuah. (Joshua 17:7) (“Around the city was a district called the land of Tappuah; the city belonged to Ephraim and the land to Manasseh. (Joshua 17:8) ”—Schaff.) • One of the sons of Hebron, of the tribe of Judah. (1 Chronicles 2:43) It is doubtless the same as Beth-tappuah. (B.C. before 1450.)",
       "category": "지명",
       "definition_ko": "'사과 성읍'이라는 뜻. (1) 유다 저지대(세벨라)의 성읍(여호수아 15:34). (2) '요셉 자손' 경계의 한 장소로 본래 이름은 엔답부아(여호수아 17:7). (3) 유다 지파 헤브론의 아들(역대상 2:43)."
@@ -33345,7 +33345,7 @@
     },
     {
       "id": 4207,
-      "term": "Thuhash(드하스)",
+      "term": "Thahash(드하스)",
       "definition": "(badger), son of Nahor by his concubine Reumah. (Genesis 22:24) (B.C. 1880.)",
       "category": "인명",
       "definition_ko": "'오소리'라는 뜻으로 나홀이 첩 르우마를 통해 낳은 아들이다(창세기 22:24)."
@@ -35453,7 +35453,7 @@
     },
     {
       "id": 4474,
-      "term": "Zelok(설렉)",
+      "term": "Zelek(설렉)",
       "definition": "(fissure), an Ammonite, one of David’s guard. (2 Samuel 23:37; 1 Chronicles 11:39)",
       "category": "인명",
       "definition_ko": "암몬 사람으로 다윗의 용사 중 하나다(사무엘하 23:37)."
@@ -35921,7 +35921,7 @@
     },
     {
       "id": 4533,
-      "term": "Ziphran(시브론)",
+      "term": "Ziphron(시브론)",
       "definition": "(fragrance), appoint in the north boundary of the promised land as specified by Moses. (Numbers 34:9)",
       "category": "지명",
       "definition_ko": "모세가 명시한 약속의 땅 북쪽 경계의 표지다(민수기 34:9)."
