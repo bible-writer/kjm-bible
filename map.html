@@ -10592,6 +10592,28 @@
      *                       dictVerse, dictWarn, eastonTerm/smithTerm
      *   한국어가 있으면 한국어, 없으면 영문을 표시한다.
      * ═══════════════════════════════════════════════════════════════ */
+    // 제미나이에 묻기 — API 키를 쓰지 않고 제미나이 웹으로 질문만 넘긴다 (비용 없음)
+    function askGemini(term, src, body) {
+      const t = String(term || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+      if (!t) return;
+      const book = (src === 'eas') ? '이스턴 성경사전' : '스미스 성경사전';
+      let q = '성경사전 항목 "' + t + '"에 대해 설명해 줘. '
+            + book + '의 해당 항목을 바탕으로 성경 본문 근거와 함께 한국어로 정리해 줘. '
+            + '성경 인용은 개역개정 기준으로 적고, 지명·인명도 개역개정 표기를 따라 줘'
+            + ' (애굽, 앗수르, 유브라데 등).';
+      const b = String(body || '').trim();
+      if (b) q += '\n\n[사전 원문]\n' + b.slice(0, 1200);
+      const url = 'https://gemini.google.com/app?q=' + encodeURIComponent(q);
+      if (url.length > 7500) {
+        // 주소가 너무 길면 본문은 빼고 항목 이름만 보낸다
+        const q2 = '성경사전 항목 "' + t + '"에 대해 ' + book
+                 + '을 바탕으로 성경 본문 근거와 함께 한국어로 설명해 줘. 인용은 개역개정 기준.';
+        window.open('https://gemini.google.com/app?q=' + encodeURIComponent(q2), '_blank', 'noopener');
+        return;
+      }
+      window.open(url, '_blank', 'noopener');
+    }
+
     function buildDictHtml(item) {
       const eKo = (item.eastonKo || '').trim();
       const eEn = (item.eastonEn || '').trim();
@@ -10625,7 +10647,14 @@
           +     '<span style="margin-left:auto;">' + badge + '</span>'
           +   '</div>'
           +   '<div id="' + bid + '" style="display:none;font-size:11px;line-height:1.75;'
-          +        'color:#334155;margin-top:4px;padding-left:14px;">' + escHtml(body) + '</div>'
+          +        'color:#334155;margin-top:4px;padding-left:14px;">' + escHtml(body)
+          +     '<div style="margin-top:7px;">'
+          +       '<button onclick="event.stopPropagation();askGemini(' + escHtml(JSON.stringify(item.name || '')) + ',&#39;' + key + '&#39;,' + escHtml(JSON.stringify(body)) + ')" '
+          +            'title="제미나이 웹으로 질문을 넘깁니다 (API 키·비용 없음)" '
+          +            'style="font-size:10px;padding:3px 9px;border:1px solid #c7d2fe;border-radius:4px;'
+          +            'background:#eef2ff;color:#4338ca;cursor:pointer;">\u2728 제미나이에 묻기</button>'
+          +     '</div>'
+          +   '</div>'
           + '</div>';
       }
 
