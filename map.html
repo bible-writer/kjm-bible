@@ -5604,6 +5604,15 @@
       document.getElementById('rawdict-modal').style.display = 'none';
       document.getElementById('rawdict-modal-backdrop').style.display = 'none';
     }
+    // 원문사전 탭에서 호출
+    function askGeminiRaw(srcKey, id) {
+      const list = getRawDictList(srcKey) || [];
+      const e = list.find(function(x){ return x.id === id; });
+      if (!e) { showToast('항목을 찾지 못했습니다', 'warn'); return; }
+      const label = (typeof getRawDictLabel === 'function' ? getRawDictLabel(srcKey) : srcKey) || srcKey;
+      sendToGemini(buildGeminiQuestion(e.term, label + ' 성경사전', e.definition));
+    }
+
     function renderRawDictResults(reset) {
       const container = document.getElementById('rawdict-results');
       const loadMoreWrap = document.getElementById('rawdict-load-more-wrap');
@@ -5702,6 +5711,7 @@
           <div style="display:flex;gap:6px;align-items:flex-start;margin-top:2px">
             <div style="flex:1;font-size:0.85em;color:#64748b;line-height:1.5">${linkifyVerseRefs(escHtml(e.definition))}</div>
             <button onclick="RawDict.copyDefinition('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">📋 복사</button>
+            <button onclick="askGeminiRaw('${rawdictSrc}',${e.id})" title="제미나이 웹으로 질문을 넘깁니다 (API 키·비용 없음)" style="flex-shrink:0;font-size:0.72em;color:#4338ca;background:#eef2ff;border:1px solid #c7d2fe;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✨ 제미나이</button>
           </div>
           ${koBlock}
           ${variantBlock}
@@ -10592,26 +10602,55 @@
      *                       dictVerse, dictWarn, eastonTerm/smithTerm
      *   한국어가 있으면 한국어, 없으면 영문을 표시한다.
      * ═══════════════════════════════════════════════════════════════ */
-    // 제미나이에 묻기 — API 키를 쓰지 않고 제미나이 웹으로 질문만 넘긴다 (비용 없음)
-    function askGemini(term, src, body) {
-      const t = String(term || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
-      if (!t) return;
-      const book = (src === 'eas') ? '이스턴 성경사전' : '스미스 성경사전';
+    // ── 제미나이에 묻기 ─────────────────────────────────────────────
+    // 제미나이는 URL로 질문을 미리 채워 주지 않는다(확장 프로그램이 있어야 함).
+    // 그래서 질문을 클립보드에 복사한 뒤 제미나이를 새 탭으로 연다. 붙여넣기만 하면 된다.
+    // API 키를 쓰지 않으므로 비용이 발생하지 않는다.
+    function buildGeminiQuestion(term, bookLabel, body) {
+      const raw = String(term || '').trim();
+      const mk = raw.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+      const t = (mk && /[가-힣]/.test(mk[2])) ? (mk[2].trim() + ' (' + mk[1].trim() + ')') : raw;
       let q = '성경사전 항목 "' + t + '"에 대해 설명해 줘. '
-            + book + '의 해당 항목을 바탕으로 성경 본문 근거와 함께 한국어로 정리해 줘. '
+            + bookLabel + '의 해당 항목을 바탕으로 성경 본문 근거와 함께 한국어로 정리해 줘. '
             + '성경 인용은 개역개정 기준으로 적고, 지명·인명도 개역개정 표기를 따라 줘'
             + ' (애굽, 앗수르, 유브라데 등).';
       const b = String(body || '').trim();
-      if (b) q += '\n\n[사전 원문]\n' + b.slice(0, 1200);
-      const url = 'https://gemini.google.com/app?q=' + encodeURIComponent(q);
-      if (url.length > 7500) {
-        // 주소가 너무 길면 본문은 빼고 항목 이름만 보낸다
-        const q2 = '성경사전 항목 "' + t + '"에 대해 ' + book
-                 + '을 바탕으로 성경 본문 근거와 함께 한국어로 설명해 줘. 인용은 개역개정 기준.';
-        window.open('https://gemini.google.com/app?q=' + encodeURIComponent(q2), '_blank', 'noopener');
-        return;
+      if (b) q += '\n\n[사전 원문]\n' + b;
+      return q;
+    }
+
+    async function sendToGemini(question) {
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(question);
+        copied = true;
+      } catch (err) {
+        // 보안 정책 등으로 막히면 옛 방식으로 한 번 더 시도
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = question;
+          ta.style.cssText = 'position:fixed;left:-9999px;top:0;';
+          document.body.appendChild(ta);
+          ta.select();
+          copied = document.execCommand('copy');
+          document.body.removeChild(ta);
+        } catch (e2) { copied = false; }
       }
-      window.open(url, '_blank', 'noopener');
+      if (copied) {
+        showToast('질문을 복사했습니다 — 제미나이 입력창에 붙여넣기(Ctrl+V) 하세요', 'success', 5000);
+        window.open('https://gemini.google.com/app', '_blank', 'noopener');
+      } else {
+        // 복사가 안 되면 질문을 보여 주고 직접 복사하게 한다
+        window.prompt('아래 질문을 복사해서 제미나이에 붙여넣으세요 (Ctrl+C)', question);
+        window.open('https://gemini.google.com/app', '_blank', 'noopener');
+      }
+    }
+
+    // 지도 팝업의 사전 섹션에서 호출
+    function askGemini(term, src, body) {
+      if (!String(term || '').trim()) { showToast('항목 이름을 찾지 못했습니다', 'warn'); return; }
+      const label = (src === 'eas') ? '이스턴 성경사전' : '스미스 성경사전';
+      sendToGemini(buildGeminiQuestion(term, label, body));
     }
 
     function buildDictHtml(item) {
