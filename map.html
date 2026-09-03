@@ -5617,7 +5617,7 @@
       };
       const label = KO_NAME[srcKey]
                  || ((typeof getRawDictLabel === 'function' ? getRawDictLabel(srcKey) : srcKey) + ' 성경사전');
-      sendToGemini(buildGeminiQuestion(e.term, label, e.definition));
+      sendToGemini(buildGeminiQuestion(e.term, label, e.definition, e.hebrew_greek));
     }
 
     function renderRawDictResults(reset) {
@@ -10613,14 +10613,22 @@
     // 제미나이는 URL로 질문을 미리 채워 주지 않는다(확장 프로그램이 있어야 함).
     // 그래서 질문을 클립보드에 복사한 뒤 제미나이를 새 탭으로 연다. 붙여넣기만 하면 된다.
     // API 키를 쓰지 않으므로 비용이 발생하지 않는다.
-    function buildGeminiQuestion(term, bookLabel, body) {
+    function buildGeminiQuestion(term, bookLabel, body, strong) {
       const raw = String(term || '').trim();
       const mk = raw.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
       const t = (mk && /[가-힣]/.test(mk[2])) ? (mk[2].trim() + ' (' + mk[1].trim() + ')') : raw;
+      const sc = String(strong || '').trim();
       let q = '성경사전 항목 "' + t + '"에 대해 설명해 줘. '
-            + bookLabel + '의 해당 항목을 바탕으로 성경 본문 근거와 함께 한국어로 정리해 줘. '
-            + '성경 인용은 개역개정 기준으로 적고, 지명·인명도 개역개정 표기를 따라 줘'
-            + ' (애굽, 앗수르, 유브라데 등).';
+            + bookLabel + '의 해당 항목을 바탕으로 성경 본문 근거와 함께 한국어로 정리해 줘.\n\n'
+            + '이렇게 정리해 줘.\n'
+            + '1. 핵심 뜻을 먼저 간결히\n'
+            + '2. 스트롱 코드(히브리어 H번호 / 헬라어 G번호)를 반드시 제시하고, '
+            + '각 코드마다 원어 표기와 음역과 기본 뜻을 붙여 줘'
+            + (sc ? ' (이 항목의 스트롱 코드는 ' + sc + ' 이다. 맞는지 확인하고 빠진 것이 있으면 보태 줘)' : '')
+            + '\n'
+            + '3. 성경 본문 근거를 개역개정 장·절로 제시\n'
+            + '4. 사전에 없는 배경이나 최근 연구가 있으면 덧붙이되 사전 내용과 구분해서 표시\n'
+            + '5. 지명·인명은 개역개정 표기를 따를 것 (애굽, 앗수르, 유브라데 등)';
       const b = String(body || '').trim();
       if (b) q += '\n\n[사전 원문]\n' + b;
       return q;
@@ -10654,12 +10662,12 @@
     }
 
     // 지도 팝업의 사전 섹션에서 호출
-    function askGemini(term, src, body) {
+    function askGemini(term, src, body, strong) {
       if (!String(term || '').trim()) { showToast('항목 이름을 찾지 못했습니다', 'warn'); return; }
       const label = (src === 'eas')
         ? '이스턴 성경사전(Easton\u2019s Bible Dictionary)'
         : '스미스 성경사전(Smith\u2019s Bible Dictionary)';
-      sendToGemini(buildGeminiQuestion(term, label, body));
+      sendToGemini(buildGeminiQuestion(term, label, body, strong));
     }
 
     function buildDictHtml(item) {
@@ -10697,7 +10705,7 @@
           +   '<div id="' + bid + '" style="display:none;font-size:11px;line-height:1.75;'
           +        'color:#334155;margin-top:4px;padding-left:14px;">' + escHtml(body)
           +     '<div style="margin-top:7px;">'
-          +       '<button onclick="event.stopPropagation();askGemini(' + escHtml(JSON.stringify(item.name || '')) + ',&#39;' + key + '&#39;,' + escHtml(JSON.stringify(body)) + ')" '
+          +       '<button onclick="event.stopPropagation();askGemini(' + escHtml(JSON.stringify(item.name || '')) + ',&#39;' + key + '&#39;,' + escHtml(JSON.stringify(body)) + ',' + escHtml(JSON.stringify(item.ustrong || '')) + ')" '
           +            'title="제미나이 웹으로 질문을 넘깁니다 (API 키·비용 없음)" '
           +            'style="font-size:10px;padding:3px 9px;border:1px solid #c7d2fe;border-radius:4px;'
           +            'background:#eef2ff;color:#4338ca;cursor:pointer;">\u2728 제미나이에 묻기</button>'
