@@ -5609,8 +5609,15 @@
       const list = getRawDictList(srcKey) || [];
       const e = list.find(function(x){ return x.id === id; });
       if (!e) { showToast('항목을 찾지 못했습니다', 'warn'); return; }
-      const label = (typeof getRawDictLabel === 'function' ? getRawDictLabel(srcKey) : srcKey) || srcKey;
-      sendToGemini(buildGeminiQuestion(e.term, label + ' 성경사전', e.definition));
+      const KO_NAME = {
+        easton: '이스턴 성경사전(Easton\u2019s Bible Dictionary)',
+        smith:  '스미스 성경사전(Smith\u2019s Bible Dictionary)',
+        hastschaff: '해스팅스·샤프 성경사전(Hastings / Schaff)',
+        hitchcock:  '히치콕 성경이름사전(Hitchcock\u2019s Bible Names)'
+      };
+      const label = KO_NAME[srcKey]
+                 || ((typeof getRawDictLabel === 'function' ? getRawDictLabel(srcKey) : srcKey) + ' 성경사전');
+      sendToGemini(buildGeminiQuestion(e.term, label, e.definition));
     }
 
     function renderRawDictResults(reset) {
@@ -10649,7 +10656,9 @@
     // 지도 팝업의 사전 섹션에서 호출
     function askGemini(term, src, body) {
       if (!String(term || '').trim()) { showToast('항목 이름을 찾지 못했습니다', 'warn'); return; }
-      const label = (src === 'eas') ? '이스턴 성경사전' : '스미스 성경사전';
+      const label = (src === 'eas')
+        ? '이스턴 성경사전(Easton\u2019s Bible Dictionary)'
+        : '스미스 성경사전(Smith\u2019s Bible Dictionary)';
       sendToGemini(buildGeminiQuestion(term, label, body));
     }
 
