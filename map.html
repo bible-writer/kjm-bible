@@ -979,21 +979,33 @@
     #bible-search-results {
       max-height: 70vh; overflow-y: auto; padding: 0; margin: 0;
     }
+    /* 검색 결과 글자는 본문 글자 크기(A+/A-)를 따라간다 */
     .bsr-item {
-      display: flex; align-items: flex-start; gap: 8px; padding: 8px 12px;
-      border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 13px;
+      display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9; cursor: pointer;
+      font-size: 0.95em; line-height: 1.55;
     }
     .bsr-item:hover { background: #eff6ff; }
     .bsr-ref {
-      flex-shrink: 0; font-weight: 700; color: #2563eb; font-size: 12px;
-      min-width: 65px; padding-top: 1px;
+      flex-shrink: 0; font-weight: 700; color: #2563eb; font-size: 0.9em;
+      min-width: 5.2em; padding-top: 1px; line-height: 1.55;
     }
-    .bsr-text { flex: 1; color: #334155; line-height: 1.45; }
+    .bsr-text { flex: 1; color: #334155; line-height: 1.55; }
     .bsr-text mark { background: #fef08a; border-radius: 2px; padding: 0 1px; }
     .bsr-summary {
-      padding: 8px 12px; font-size: 12px; color: #64748b;
+      padding: 9px 12px; font-size: 0.85em; line-height: 1.5; color: #64748b;
       background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-weight: 600;
     }
+    /* 원어코드 검색 — 딸려온 코드 접기 */
+    .bsr-fold { margin-top: 8px; }
+    .bsr-fold-head {
+      cursor: pointer; list-style: none;
+      background: #eef2ff; color: #4338ca; border-top: 1px solid #c7d2fe;
+    }
+    .bsr-fold-head::-webkit-details-marker { display: none; }
+    .bsr-fold-head::before { content: '\25b8 '; color: #94a3b8; }
+    .bsr-fold[open] > .bsr-fold-head::before { content: '\25be '; }
+    .bsr-fold-head:hover { background: #e0e7ff; }
     .bsr-place-tag {
       display: inline-block; background: #dbeafe; color: #1d4ed8;
       padding: 0 5px; border-radius: 3px; font-size: 10px; margin-left: 4px;
@@ -13528,17 +13540,6 @@ showToast = function(msg, type) {
         return out;
       }
 
-      // 접기/펴기 — 결과가 다시 그려져도 살아있도록 전역에 둔다
-      window.StrongWordSearch = window.StrongWordSearch || {};
-      window.StrongWordSearch.toggleFold = function(foldId, head) {
-        const box = document.querySelector('[data-fold="' + foldId + '"]');
-        if (!box) return;
-        const open = box.style.display === 'none';
-        box.style.display = open ? '' : 'none';
-        const mark = head && head.querySelector('span');
-        if (mark) mark.textContent = open ? '\u25be ' : '\u25b8 ';
-      };
-
       /* ── 원어코드 검색 결과 그리기 ── */
       function renderStrongResults(data, query) {
         if (!isSearchMode) { savedContentHtml = contentEl.innerHTML; isSearchMode = true; bsClose.style.display = ''; }
@@ -13561,22 +13562,25 @@ showToast = function(msg, type) {
           (data.source ? ' \u00b7 ' + escHtml(data.source) : '') + '</div>';
 
         const split = !data.byCode && partList.length > 0 && exactList.length > 0;
-        function drawCodes(arr, label, note, foldId) {
+        // 접기는 <details>로 한다. 브라우저가 제 힘으로 여닫으니 자바스크립트가 끼어들 데가 없다.
+        function drawCodes(arr, label, note, fold) {
           if (!arr.length) return;
-          if (label) {
-            h += '<div class="bsr-summary" style="margin-top:8px' +
-                 (foldId ? ';cursor:pointer;background:#eef2ff;border-top:1px solid #c7d2fe;color:#4338ca' : '') + '"' +
-                 (foldId ? ' onclick="StrongWordSearch.toggleFold(\'' + foldId + '\',this)"' : '') + '>' +
-                 (foldId ? '<span style="color:#94a3b8">\u25b8 </span>' : '') + label +
-                 (note ? ' <span style="font-weight:400;color:#94a3b8">' + note + '</span>' : '') +
-                 (foldId ? ' <span style="font-weight:400;color:#94a3b8">\u2014 \ub204\ub974\uba74 \ud3bc\uce68</span>' : '') +
-                 '</div>';
-          }
           // 두 무리로 나눌 때는 각 상자를 낮춘다. 안 그러면 앞 상자가 70vh를 다 먹어
           // 접기 줄이 화면 밖으로 밀린다.
-          const st = (foldId ? 'display:none;' : '') + (split ? 'max-height:34vh;' : '');
-          h += '<div id="bible-search-results"' + (foldId ? ' data-fold="' + foldId + '"' : '') +
-               (st ? ' style="' + st + '"' : '') + '>';
+          const boxStyle = split ? ' style="max-height:34vh"' : '';
+          if (fold) {
+            h += '<details class="bsr-fold"><summary class="bsr-summary bsr-fold-head">' + label +
+                 (note ? ' <span style="font-weight:400;color:#94a3b8">' + note + '</span>' : '') +
+                 '</summary><div id="bible-search-results"' + boxStyle + '>';
+            arr.forEach(drawOne);
+            h += '</div></details>';
+            return;
+          }
+          if (label) {
+            h += '<div class="bsr-summary" style="margin-top:8px">' + label +
+                 (note ? ' <span style="font-weight:400;color:#94a3b8">' + note + '</span>' : '') + '</div>';
+          }
+          h += '<div id="bible-search-results"' + boxStyle + '>';
           arr.forEach(drawOne);
           h += '</div>';
         }
@@ -13593,7 +13597,7 @@ showToast = function(msg, type) {
                '<span class="bsr-ref">' + escHtml(pad) + '</span>' +
                '<span class="bsr-text">' + head +
                ' <span style="color:#64748b">\u2014 ' + c.n + '\ud68c (' + pct + '%)</span><br>' +
-               '<span style="color:#475569;font-size:0.92em">' + ws + '</span></span></div>';
+               '<span style="color:#475569;font-size:0.95em">' + ws + '</span></span></div>';
         }
 
         if (data.byCode || partList.length === 0) {
@@ -13603,7 +13607,7 @@ showToast = function(msg, type) {
                     '\uc6a9\ub840 ' + exactTotal + '\ud68c', null);
           // 딸려온 것은 접어 둔다 ('나무'에 포도나무·무화과나무가 다 걸리므로)
           drawCodes(partList, '\ub2e4\ub978 \ub0b1\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
-                    '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34', 'strong-part-list');
+                    '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34 \u2014 \ub204\ub974\uba74 \ud3bc\uce68', true);
         }
         // 용례 (앞에서부터 최대 60절)
         if (data.hits.length) {
