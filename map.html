@@ -12545,7 +12545,10 @@
 
       let html = `<div class="chapter-title" style="font-size:14px;margin-bottom:10px;">${tr.label} ${bookObj.name} ${chapter}장</div>`;
       verses.forEach(([vNum, text]) => {
-        let safeText = escHtml(text).replace(/&lt;br&gt;/gi, '<br>').replace(/&lt;br ?\/&gt;/gi, '<br>');
+        let safeText = escHtml(text)
+          .replace(/&lt;br&gt;/gi, '<br>')
+          .replace(/&lt;br ?\/&gt;/gi, '<br>')
+          .replace(/&lt;(\/?)i&gt;/gi, '<$1i>');  // 흠정역 보충어 이탤릭(<i>…</i>) 복원
         if (tr.lang === 'en' && termHighlightEnabled && termDatabase.length > 0) {
           safeText = TermEngine.parseAndHighlightEnglish(safeText, bookId, chapter, vNum);
         }
