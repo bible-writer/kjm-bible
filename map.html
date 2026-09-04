@@ -1783,9 +1783,9 @@
           <p style="color:#64748b;font-size:13px;margin:0 0 20px;">개역개정 본문과 지명·인명·용어 사전이 함께 연동되는 성경 읽기 도구입니다.</p>
 
           <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-            <span style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 1,351개</span>
-            <span style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
-            <span style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
+            <span class="start-count" data-db="place" style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 사전</span>
+            <span class="start-count" data-db="person" style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
+            <span class="start-count" data-db="term" style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
           </div>
 
           <button onclick="document.getElementById('bdb-file-input').click()" style="display:block;width:100%;padding:14px;margin-bottom:10px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,0.3);">
@@ -6028,6 +6028,22 @@
       loadRawDictionaries();
     });
 
+    // ── 시작 화면 딱지에 실제 DB 수 표시 ──
+    function updateStartCounts() {
+      const n = {
+        place:  Array.isArray(window.placeDatabase)  ? placeDatabase.length  : 0,
+        person: Array.isArray(window.personDatabase) ? personDatabase.length : 0,
+        term:   Array.isArray(window.termDatabase)   ? termDatabase.length   : 0
+      };
+      const label = { place: '📍 지명', person: '👤 인명', term: '📖 용어' };
+      document.querySelectorAll('.start-count').forEach(el => {
+        const k = el.dataset.db;
+        el.textContent = n[k] ? `${label[k]} ${n[k].toLocaleString()}개` : `${label[k]} 사전`;
+      });
+    }
+    setInterval(updateStartCounts, 1500);
+    document.addEventListener('DOMContentLoaded', updateStartCounts);
+
     // ── 통합 사전(인물·지명·용어) 모달 ──
     let dictFilterType = 'ALL';
     let dictShownCount = 0;
@@ -8972,9 +8988,9 @@
           <p style="color:#64748b;font-size:13px;margin:0 0 20px;">개역개정 본문과 지명·인명·용어 사전이 함께 연동되는 성경 읽기 도구입니다.</p>
 
           <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-            <span style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 1,351개</span>
-            <span style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
-            <span style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
+            <span class="start-count" data-db="place" style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 사전</span>
+            <span class="start-count" data-db="person" style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
+            <span class="start-count" data-db="term" style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
           </div>
 
           ${continueBtn}
@@ -11873,7 +11889,7 @@
             <div class="chapter-title" style="margin-bottom:6px;">성경 66권 인터랙티브 독서 지도</div>
             <p style="color:#64748b;font-size:13px;margin:0 0 20px;">개역개정 본문과 지명·인명·용어 사전이 함께 연동되는 성경 읽기 도구입니다.</p>
             <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-              <span style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 1,351개</span>
+              <span class="start-count" data-db="place" style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 사전</span>
               <span style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
               <span style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
             </div>
