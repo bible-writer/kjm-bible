@@ -647,6 +647,9 @@
     #compare-content .verse-row {
       margin-bottom: 8px;
     }
+    /* 성경 DB 표시용 태그 — 흠정역 보충어(i)와 예수님 말씀(J) */
+    #compare-content i { color: #64748b; }
+    #compare-content .wj { color: #b91c1c; }
 
     /* 절별 비교 하이라이트 */
     .verse-row.compare-highlight {
@@ -955,6 +958,14 @@
     }
     #bible-search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,.15); }
     #bible-search-input::placeholder { color: #94a3b8; }
+    /* 검색 대상 번역 선택 */
+    #bs-trans-select {
+      flex: 0 0 auto; max-width: 110px;
+      border: 1px solid #cbd5e1; border-radius: 6px;
+      background: #fff; color: #334155;
+      font-size: 12px; padding: 4px 6px; cursor: pointer;
+    }
+    #bs-trans-select:focus { border-color: #3b82f6; outline: none; }
     .bs-btn {
       padding: 4px 10px; border: 1px solid #cbd5e1; border-radius: 6px;
       background: #fff; font-size: 12px; cursor: pointer; white-space: nowrap;
@@ -1768,6 +1779,7 @@
     <!-- 성경 본문 검색 바 -->
     <div id="bible-search-bar">
       <input type="text" id="bible-search-input" placeholder="성경 본문 검색 (예: 광야, 창1:1, 창세기 3:15)" autocomplete="off">
+      <select id="bs-trans-select" title="검색할 번역 선택"><option value="master">개역개정</option></select>
       <button class="bs-btn" id="bs-btn-go" title="검색 실행">🔍</button>
       <button class="bs-btn" id="bs-btn-close" title="검색 닫기" style="display:none;">✕</button>
       <button class="bs-btn" id="bs-btn-tts" title="본문 읽기 (TTS)">🔊</button>
@@ -12548,7 +12560,12 @@
         let safeText = escHtml(text)
           .replace(/&lt;br&gt;/gi, '<br>')
           .replace(/&lt;br ?\/&gt;/gi, '<br>')
-          .replace(/&lt;(\/?)i&gt;/gi, '<$1i>');  // 흠정역 보충어 이탤릭(<i>…</i>) 복원
+          // 성경 DB 안의 표시용 태그만 되살린다 (그 밖의 태그는 이스케이프된 채로 둔다)
+          .replace(/&lt;(\/?)i&gt;/gi, '<$1i>')            // 흠정역 보충어 이탤릭
+          .replace(/&lt;J&gt;/gi, '<span class="wj">')     // 예수님 말씀 시작
+          .replace(/&lt;\/J&gt;/gi, '</span>')             // 예수님 말씀 끝
+          .replace(/&lt;S&gt;[\s\S]*?&lt;\/S&gt;/gi, '')                         // 스트롱 번호 태그는 내용까지 제거
+          .replace(/&lt;\/?(?:f|n|Q|t|CM|CL|PF\d*|PI\d*)(?: [^&]*?)?&gt;/gi, '');  // 그 밖의 서식 태그는 표시만 제거
         if (tr.lang === 'en' && termHighlightEnabled && termDatabase.length > 0) {
           safeText = TermEngine.parseAndHighlightEnglish(safeText, bookId, chapter, vNum);
         }
@@ -13298,6 +13315,7 @@ showToast = function(msg, type) {
      * ═══════════════════════════════════════════════════════════════ */
     (function() {
       const bsInput  = document.getElementById('bible-search-input');
+      const bsSel    = document.getElementById('bs-trans-select');
       const bsGo     = document.getElementById('bs-btn-go');
       const bsClose  = document.getElementById('bs-btn-close');
       const contentEl = document.getElementById('bible-content');
@@ -13333,7 +13351,68 @@ showToast = function(msg, type) {
         } catch(e) { console.warn('queryVerseText error:', e); return []; }
       }
 
-      /* ── 키워드로 전체 성경 검색 ── */
+      /* ── 검색 대상 번역 목록 채우기 (등록된 번역이 바뀔 수 있으므로 열 때마다 갱신) ── */
+      function refreshTransOptions() {
+        if (!bsSel) return;
+        const cur = bsSel.value || 'master';
+        const keys = Object.keys(translationRegistry);
+        bsSel.innerHTML = '';
+        keys.forEach(function(k) {
+          const tr = translationRegistry[k];
+          const op = document.createElement('option');
+          op.value = k;
+          op.textContent = tr.label || k;
+          bsSel.appendChild(op);
+        });
+        bsSel.value = keys.indexOf(cur) >= 0 ? cur : 'master';
+      }
+
+      /* ── 성경 DB 표시용 태그 정리 (검색 결과에 <i>·<J> 따위가 드러나지 않게) ── */
+      function stripVerseTags(t) {
+        return String(t || '')
+          .replace(/<S>[\s\S]*?<\/S>/gi, '')
+          .replace(/<W[HG]\d+>/gi, '')
+          .replace(/<\/?[A-Za-z][A-Za-z0-9]*(?: [^>]*?)?>/g, '');
+      }
+
+      /* ── 선택한 번역에서 키워드 검색 ── */
+      function searchInTranslation(key, keyword, maxResults) {
+        const tr = translationRegistry[key];
+        if (!tr) return [];
+        const kw = keyword.toLowerCase();
+
+        // 내장 번역 — 메모리 맵을 훑는다
+        if (tr.type === 'builtin') {
+          const map = builtinCache[key];
+          if (!map) return null;   // 아직 안 받아진 상태
+          const out = [];
+          for (const k in map) {
+            const text = map[k];
+            if (!text || String(text).toLowerCase().indexOf(kw) < 0) continue;
+            const p = k.split('_');
+            out.push({ bookId: Number(p[0]), chapter: Number(p[1]), verse: Number(p[2]), text: String(text) });
+            if (out.length >= maxResults) break;
+          }
+          out.sort(function(a, b) { return a.bookId - b.bookId || a.chapter - b.chapter || a.verse - b.verse; });
+          return out;
+        }
+
+        // bdb 번역 — 자기 db/schema 로 조회
+        const db = (key === 'master') ? sqliteDbInstance : tr.db;
+        const sc = (key === 'master') ? detectedSchema : tr.schema;
+        if (!db || !sc) return null;
+        try {
+          const safeKw = keyword.replace(/'/g, "''");
+          const sql = 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '" WHERE "' + sc.content + '" LIKE \'%' + safeKw + '%\' ORDER BY CAST("' + sc.book + '" AS INTEGER), CAST("' + sc.chapter + '" AS INTEGER), CAST("' + sc.verse + '" AS INTEGER) LIMIT ' + maxResults;
+          const res = db.exec(sql);
+          if (!res.length) return [];
+          return res[0].values.map(function(r) {
+            return { bookId: Number(r[0]), chapter: Number(r[1]), verse: Number(r[2]), text: String(r[3] || '') };
+          });
+        } catch(e) { console.warn('searchInTranslation error:', e); return []; }
+      }
+
+      /* ── 키워드로 전체 성경 검색 (개역개정 전용, 기존 호출 유지) ── */
       function searchByKeyword(keyword, maxResults) {
         maxResults = maxResults || 200;
         if (!sqliteDbInstance || !detectedSchema) return [];
@@ -13367,7 +13446,7 @@ showToast = function(msg, type) {
       }
 
       /* ── 검색 결과를 본문 영역에 렌더링 ── */
-      function renderSearchResults(results, query, isRef) {
+      function renderSearchResults(results, query, isRef, transLabel) {
         if (!isSearchMode) {
           savedContentHtml = contentEl.innerHTML;
           isSearchMode = true;
@@ -13385,14 +13464,14 @@ showToast = function(msg, type) {
         const kw = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const re = kw ? new RegExp('(' + kw + ')', 'gi') : null;
 
-        let h = '<div class="bsr-summary">\ud83d\udcd6 "' + escHtml(query) + '" \uac80\uc0c9 \uacb0\uacfc: ' + results.length + '\uac74' + (results.length >= 200 ? ' (\uc0c1\uc704 200\uac74)' : '') + '</div>';
+        let h = '<div class="bsr-summary">\ud83d\udcd6 ' + (transLabel ? '[' + escHtml(transLabel) + '] ' : '') + '"' + escHtml(query) + '" \uac80\uc0c9 \uacb0\uacfc: ' + results.length + '\uac74' + (results.length >= 200 ? ' (\uc0c1\uc704 200\uac74)' : '') + '</div>';
         h += '<div id="bible-search-results">';
 
         results.forEach(function(r) {
           const bookObj = BIBLE_BOOKS.find(b => b.id === r.bookId);
           const bookName = bookObj ? bookObj.abbr : '?';
           const ref = bookName + r.chapter + ':' + r.verse;
-          let dt = escHtml(r.text);
+          let dt = escHtml(stripVerseTags(r.text));
           if (re && !isRef) dt = dt.replace(re, '<mark>$1</mark>');
 
           const places = findRelatedPlaces(r.bookId, r.chapter, r.verse, query);
@@ -13415,7 +13494,9 @@ showToast = function(msg, type) {
       function executeBibleSearch() {
         const raw = bsInput.value.trim();
         if (!raw) { showToast('\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
-        if (!sqliteDbInstance || !detectedSchema) {
+        const transKey = (bsSel && bsSel.value) || 'master';
+        const transObj = translationRegistry[transKey] || translationRegistry.master;
+        if (transKey === 'master' && (!sqliteDbInstance || !detectedSchema)) {
           showToast('\uc131\uacbd DB(.bdb)\uac00 \ub85c\ub4dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4.', 'warn');
           return;
         }
@@ -13435,8 +13516,12 @@ showToast = function(msg, type) {
         }
 
         if (raw.length < 2) { showToast('2\uae00\uc790 \uc774\uc0c1 \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
-        const results = searchByKeyword(raw, 200);
-        renderSearchResults(results, raw, false);
+        const results = searchInTranslation(transKey, raw, 200);
+        if (results === null) {
+          showToast('"' + (transObj.label || transKey) + '" \ubcf8\ubb38\uc774 \uc544\uc9c1 \ub85c\ub4dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \ubc88\uc5ed\uc744 \uba3c\uc800 \ub4f1\ub85d\ud558\uc138\uc694.', 'warn', 3000);
+          return;
+        }
+        renderSearchResults(results, raw, false, transObj.label || transKey);
       }
 
       /* ── 검색 닫기 ── */
@@ -13451,6 +13536,12 @@ showToast = function(msg, type) {
       window.closeBibleSearch = closeBibleSearch;
 
       /* ── 이벤트 바인딩 ── */
+      refreshTransOptions();
+      if (bsSel) {
+        bsSel.addEventListener('mousedown', refreshTransOptions);
+        bsSel.addEventListener('change', function() { if (bsInput.value.trim()) executeBibleSearch(); });
+      }
+      bsInput.addEventListener('focus', refreshTransOptions);
       bsGo.addEventListener('click', executeBibleSearch);
       bsInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') executeBibleSearch();
