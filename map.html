@@ -3799,7 +3799,7 @@
 
         panel.innerHTML = `
           <div id="term-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
-            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${refLabel ? `<span style="font-size:0.7em;color:#94a3b8;font-weight:500">${refLabel}</span> ` : ''}${escHtml(t.term_ko || '')}</span>
+            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${refLabel ? `<span style="font-size:0.7em;color:#94a3b8;font-weight:500">${refLabel}</span> ` : ''}${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
             <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
           </div>
           <div style="font-size:0.9em;color:#d97706;font-weight:600;margin-bottom:6px">${escHtml(t.term_en || '')}</div>
@@ -6035,9 +6035,12 @@
     function buildDictCombined() {
       const list = [];
       termDatabase.forEach(t => {
+        // 한글 표제어가 없으면 영문 표제어를 이름 자리에 세운다(괄호 중복 표시 방지)
+        const ko = (t.term_ko || '').trim();
+        const en = (t.term_en || '').trim();
         list.push({
-          type: 'TERM', sortKey: t.term_ko || '',
-          nameKo: t.term_ko || '', nameEn: t.term_en || '',
+          type: 'TERM', sortKey: ko || en,
+          nameKo: ko || en, nameEn: ko ? en : '',
           def: t.definition_ko || '', strong: t.hebrew_greek || '',
           ref: t
         });
