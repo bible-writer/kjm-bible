@@ -4042,6 +4042,27 @@
         }
       },
 
+      // 팝업(showPopup)용 번역 — 뜻풀이와 상세 설명을 한글로 옮긴다
+      translatePopup: async function(code, which) {
+        const entry = this.lookup(code);
+        if (!entry) return;
+        const src = (which === 'detail') ? entry.detail : entry.gloss;
+        const span = document.getElementById('strong-pop-tr-' + which);
+        const btn  = document.getElementById('strong-pop-trbtn-' + which);
+        if (!span || !src) return;
+        if (btn) { btn.disabled = true; btn.textContent = '\ubc88\uc5ed \uc911...'; }
+        try {
+          const ko = await fetchGoogleTranslateDraft(src);
+          span.textContent = ko;
+          span.style.display = 'block';
+          if (btn) btn.style.display = 'none';
+        } catch (err) {
+          span.textContent = '\ubc88\uc5ed \uc2e4\ud328 (' + err.message + ')';
+          span.style.display = 'block';
+          if (btn) { btn.disabled = false; btn.textContent = '\ud83c\udf10 \ubc88\uc5ed'; }
+        }
+      },
+
       toggleDetail: function(btn) {
         const body = btn.nextElementSibling;
         if (!body) return;
@@ -4067,7 +4088,7 @@
           document.body.appendChild(panel);
         }
         makeResizableWithAutoFont(panel, 300, 13);
-        const detailBtn = entry.detail ? `<button onclick="StrongEngine.toggleDetail(this)" style="margin-top:6px;font-size:0.78em;color:#047857;background:none;border:1px solid #a7f3d0;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button><div style="display:none;margin-top:6px;font-size:0.85em;line-height:1.5;color:#475569;padding-top:6px;border-top:1px dashed #d1fae5;max-height:240px;overflow-y:auto">${escHtml(entry.detail)}<div style="margin-top:6px;font-size:0.85em;color:#94a3b8">출처: ${code.startsWith('H') ? '<a href="https://github.com/openscriptures/HebrewLexicon" target="_blank" rel="noopener" style="color:#059669">Brown-Driver-Briggs Hebrew Lexicon (1906, Public Domain) — openscriptures/HebrewLexicon</a>' : '<a href="https://github.com/biblicalhumanities/Dodson-Greek-Lexicon" target="_blank" rel="noopener" style="color:#059669">Dodson Greek Lexicon (Public Domain) — biblicalhumanities/Dodson-Greek-Lexicon</a>'}</div></div>` : '';
+        const detailBtn = entry.detail ? `<button onclick="StrongEngine.toggleDetail(this)" style="margin-top:6px;font-size:0.78em;color:#047857;background:none;border:1px solid #a7f3d0;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button><div style="display:none;margin-top:6px;font-size:0.85em;line-height:1.5;color:#475569;padding-top:6px;border-top:1px dashed #d1fae5;max-height:240px;overflow-y:auto">${escHtml(entry.detail)}<div style="margin-top:6px"><button id="strong-pop-trbtn-detail" onclick="StrongEngine.translatePopup('${code}','detail')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button><div id="strong-pop-tr-detail" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div></div><div style="margin-top:6px;font-size:0.85em;color:#94a3b8">출처: ${code.startsWith('H') ? '<a href="https://github.com/openscriptures/HebrewLexicon" target="_blank" rel="noopener" style="color:#059669">Brown-Driver-Briggs Hebrew Lexicon (1906, Public Domain) — openscriptures/HebrewLexicon</a>' : '<a href="https://github.com/biblicalhumanities/Dodson-Greek-Lexicon" target="_blank" rel="noopener" style="color:#059669">Dodson Greek Lexicon (Public Domain) — biblicalhumanities/Dodson-Greek-Lexicon</a>'}</div></div>` : '';
         panel.innerHTML = `
           <div id="strong-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
             <span style="font-weight:bold;font-size:1.15em;color:#047857">📜 ${escHtml(code)}</span>
@@ -4076,6 +4097,10 @@
           <div style="font-size:1.3em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
           <div style="font-size:0.95em;color:#059669;margin-bottom:6px">${escHtml(entry.xlit || '')}</div>
           <div style="font-size:0.95em;line-height:1.5;color:#334155">${escHtml(entry.gloss || '')}</div>
+          ${entry.gloss ? `<div style="margin-top:6px">
+            <button id="strong-pop-trbtn-gloss" onclick="StrongEngine.translatePopup('${code}','gloss')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button>
+            <div id="strong-pop-tr-gloss" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div>
+          </div>` : ''}
           ${detailBtn}
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">출처: Strong's Exhaustive Concordance (James Strong, 1890, Public Domain)</div>
         `;
