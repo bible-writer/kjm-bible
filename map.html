@@ -6427,6 +6427,8 @@
 
     function executeUniversalSearch(keywordParam) {
       const q = (keywordParam || searchBox.value).trim().toLowerCase();
+      const nq = q.replace(/\s+/g, '');
+      const ns = v => (v || '').toLowerCase().replace(/\s+/g, '');
       acList.style.display = "none";
       searchBox.value = "";  // 검색 후 자동 클리어
 
@@ -6455,7 +6457,7 @@
       let matchedDisambig = null;
       Object.values(BibleGeoEngine.disambiguationMap).forEach(list => {
         list.forEach(item => {
-          if (item.name.toLowerCase().includes(q) || item.label.toLowerCase().includes(q)) {
+          if (ns(item.name).includes(nq) || ns(item.label).includes(nq)) {
             matchedDisambig = item;
           }
         });
@@ -6466,13 +6468,23 @@
       }
 
       const matches = placeDatabase.filter(p => {
-        return (p.name && p.name.toLowerCase().includes(q)) ||
-               (p.modern && p.modern.toLowerCase().includes(q)) ||
-               (p.orig && p.orig.toLowerCase().includes(q)) ||
-               (p.country && p.country.toLowerCase().includes(q)) ||
+        return (p.name && ns(p.name).includes(nq)) ||
+               (p.modern && ns(p.modern).includes(nq)) ||
+               (p.orig && ns(p.orig).includes(nq)) ||
+               (p.country && ns(p.country).includes(nq)) ||
                (p.verse && p.verse.toLowerCase().includes(q)) ||
                (p.era && p.era.toLowerCase().includes(q));
       });
+
+      const placeRank = p => {
+        const nm = ns(p.name), og = ns(p.orig), md = ns(p.modern);
+        if (nm === nq || og === nq || md === nq) return 0;
+        if (nm.startsWith(nq) || og.startsWith(nq) || md.startsWith(nq)) return 1;
+        if (nm.includes(nq) || og.includes(nq) || md.includes(nq)) return 2;
+        return 3;
+      };
+      matches.sort((a, b) =>
+        placeRank(a) - placeRank(b) || (a.name || '').localeCompare(b.name || '', 'ko'));
 
       if (matches.length === 1) {
         BibleGeoEngine.flyToPlace(matches[0]);
@@ -6485,6 +6497,8 @@
 
     searchBox.addEventListener("input", function() {
       const val = this.value.trim().toLowerCase();
+      const nval = val.replace(/\s+/g, '');
+      const nsv = v => (v || '').toLowerCase().replace(/\s+/g, '');
       if (!val || placeDatabase.length === 0) {
         acList.style.display = "none";
         return;
@@ -6496,12 +6510,21 @@
         const _t = placeDatabase.find(p => p.id === num);
         if (_t) matchedItems.push(_t);
       } else {
+        const acRank = p => {
+          const nm = nsv(p.name), og = nsv(p.orig), md = nsv(p.modern);
+          if (nm === nval || og === nval || md === nval) return 0;
+          if (nm.startsWith(nval) || og.startsWith(nval) || md.startsWith(nval)) return 1;
+          if (nm.includes(nval) || og.includes(nval) || md.includes(nval)) return 2;
+          return 3;
+        };
         matchedItems = placeDatabase.filter(p => {
-          return (p.name && p.name.toLowerCase().includes(val)) ||
-                 (p.orig && p.orig.toLowerCase().includes(val)) ||
-                 (p.modern && p.modern.toLowerCase().includes(val)) ||
+          return (p.name && nsv(p.name).includes(nval)) ||
+                 (p.orig && nsv(p.orig).includes(nval)) ||
+                 (p.modern && nsv(p.modern).includes(nval)) ||
                  (p.verse && p.verse.toLowerCase().includes(val));
-        }).slice(0, 8);
+        }).sort((a, b) =>
+          acRank(a) - acRank(b) || (a.name || '').localeCompare(b.name || '', 'ko')
+        ).slice(0, 8);
       }
 
       if (matchedItems.length > 0) {
