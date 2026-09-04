@@ -13426,9 +13426,11 @@ showToast = function(msg, type) {
         if (!src) return null;
         const out = { codes: {}, hits: [], source: src.label };
         const sc = src.schema;
+        // 전권을 통째로 끌어올리면 브라우저가 멎는다(원전분해는 57MB). SQL에서 먼저 거른다.
+        const kwSql = keyword.replace(/'/g, "''");
         const sql = sc
-          ? 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '"'
-          : 'SELECT book, chapter, verse, btext FROM Bible';
+          ? 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '" WHERE "' + sc.content + '" LIKE \'%' + kwSql + '%\''
+          : 'SELECT book, chapter, verse, btext FROM Bible WHERE btext LIKE \'%' + kwSql + '%\'';
         try {
           const res = src.db.exec(sql);
           if (!res || !res[0]) return out;
