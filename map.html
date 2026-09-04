@@ -3796,6 +3796,9 @@
         makeResizableWithAutoFont(panel, 320, 13);
         const strongVal = escHtml(t.hebrew_greek || '');
         const hasStrong = !!(t.hebrew_greek || '').trim();
+        // 스트롱 칸이 '아마르(H559)' 꼴이거나 코드가 여럿일 수 있어 첫 코드만 용례 단추에 건다
+        const fsm = (t.hebrew_greek || '').match(/[HG]\d{1,5}[A-Za-z]?/);
+        const firstStrongCode = fsm ? fsm[0] : '';
         const noteDisplay = t.original_note ? `<div style="font-size:0.82em;color:#92400e;background:#fffbeb;border-left:3px solid #fcd34d;padding:4px 8px;margin-bottom:4px;line-height:1.5">${escHtml(t.original_note)}</div>` : '';
         const hgDisplay = noteDisplay + (t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '');
         const hg = `
@@ -3805,8 +3808,8 @@
               ${hasStrong ? 'disabled' : ''}
               style="flex:1;font-size:0.8em;padding:3px 6px;border:1px solid ${hasStrong ? '#e2e8f0' : '#fde68a'};border-radius:4px;${hasStrong ? 'background:#f1f5f9;color:#94a3b8;' : ''}">
             ${hasStrong
-              ? `<button onclick="TermEngine.unlockStrong()" style="font-size:0.8em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">✏️ 수정</button>`
-              : `<button onclick="TermEngine.saveStrong(${t.id})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">저장</button>`
+              ? `${firstStrongCode ? `<button onclick="StrongEngine.openUsage('${firstStrongCode}')" style="font-size:0.8em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">🔤 용례</button>` : ''}<button id="term-strong-editbtn" onclick="TermEngine.unlockStrong()" style="font-size:0.8em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">✏️ 수정</button>`
+              : `<button id="term-strong-editbtn" onclick="TermEngine.saveStrong(${t.id})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">저장</button>`
             }
           </div>`;
         const def = t.definition_ko || '';
@@ -3833,12 +3836,17 @@
 
         const eastonRaw = t.easton_raw || '';
         const smithRaw = t.smith_raw || '';
+        // 스트롱 칸에 든 코드를 모두 뽑는다 ('G4756,H0102,H2426' 꼴이 있다)
+        const allStrongCodes = (t.hebrew_greek || '').match(/[HG]\d{1,5}[A-Za-z]?/g) || [];
         const tabBar = `
-          <div style="display:flex;gap:4px;margin:8px 0 6px;border-bottom:1px solid #f1f5f9">
+          <div style="display:flex;gap:4px;margin:8px 0 6px;border-bottom:1px solid #f1f5f9;flex-wrap:wrap">
             <button class="term-tab-btn active" data-tab="ko" onclick="TermEngine.switchTab('ko')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid #b45309;color:#b45309;font-weight:600">한글해설</button>
+            <button class="term-tab-btn" data-tab="orig" onclick="TermEngine.switchTab('orig')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">원어${allStrongCodes.length > 1 ? ' ' + allStrongCodes.length : ''}</button>
             <button class="term-tab-btn" data-tab="easton" onclick="TermEngine.switchTab('easton')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">Easton 원문</button>
             <button class="term-tab-btn" data-tab="smith" onclick="TermEngine.switchTab('smith')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">Smith 원문</button>
           </div>`;
+        // 원어 탭은 누를 때 채운다 (팝업을 열 때마다 사전을 뒤지지 않게)
+        const origBlock = `<div id="term-tab-content-orig" data-codes="${escHtml(allStrongCodes.join(','))}" style="display:none"></div>`;
         const eastonBlock = `<div id="term-tab-content-easton" style="display:none">
           ${eastonRaw
             ? `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(eastonRaw))}</div>`
@@ -3867,6 +3875,7 @@
             ${toggleBtn}
             ${restBlock}
           </div>
+          ${origBlock}
           ${eastonBlock}
           ${smithBlock}
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${source}</div>
@@ -3892,7 +3901,7 @@
       },
 
       switchTab: function(tab) {
-        ['ko', 'easton', 'smith'].forEach(name => {
+        ['ko', 'orig', 'easton', 'smith'].forEach(name => {
           const content = document.getElementById(`term-tab-content-${name}`);
           if (content) content.style.display = (name === tab) ? 'block' : 'none';
           const btn = document.querySelector(`#term-info-panel .term-tab-btn[data-tab="${name}"]`);
@@ -3903,6 +3912,31 @@
             btn.style.fontWeight = active ? '600' : '400';
           }
         });
+        if (tab === 'orig') this.renderOrigTab();
+      },
+
+      // 원어 탭 — 스트롱 칸의 코드마다 사전 풀이를 쌓아 보인다.
+      // 딱지를 찾아 누르지 않아도 탭 한 번으로 닿게 하려는 것.
+      renderOrigTab: async function() {
+        const box = document.getElementById('term-tab-content-orig');
+        if (!box || box.dataset.loaded === '1') return;
+        const codes = (box.dataset.codes || '').split(',').filter(Boolean);
+        if (!codes.length) {
+          box.innerHTML = '<div style="font-size:0.85em;color:#94a3b8;padding:6px 0;line-height:1.6">\uc2a4\ud2b8\ub871 \ucf54\ub4dc\uac00 \uc544\uc9c1 \uc5c6\uc2b5\ub2c8\ub2e4.<br>\uc704 \uce78\uc5d0 \ub123\uace0 \uc800\uc7a5\ud558\uc2ed\uc2dc\uc624.</div>';
+          box.dataset.loaded = '1';
+          return;
+        }
+        box.innerHTML = '<div style="font-size:0.8em;color:#94a3b8;margin:4px 0">\uc6d0\uc5b4 \uc0ac\uc804 \uc870\ud68c \uc911...</div>';
+        await StrongEngine.ensureLoaded();
+        box.innerHTML = codes.map((c, i) => `<div id="term-orig-slot-${i}"></div>`).join('');
+        codes.forEach((c, i) => {
+          const el = document.getElementById(`term-orig-slot-${i}`);
+          if (!el) return;
+          const entry = StrongEngine.lookup(c);
+          if (entry) StrongEngine.renderInline(el, c, entry);
+          else el.innerHTML = `<div style="font-size:0.8em;color:#94a3b8;margin:4px 0">'${escHtml(c)}' \uc6d0\uc5b4 \uc815\ubcf4\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.</div>`;
+        });
+        box.dataset.loaded = '1';
       },
 
       unlockStrong: function() {
@@ -3914,8 +3948,10 @@
         input.style.borderColor = '#fde68a';
         input.focus();
         // 수정 모드로 전환 시 버튼도 '저장'으로 교체
-        input.parentElement.querySelector('button').outerHTML =
-          `<button onclick="TermEngine.saveStrong(${this._currentTermId})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">저장</button>`;
+        // (용례 단추가 앞에 섞여 있으므로 id로 곧장 집는다)
+        const editBtn = document.getElementById('term-strong-editbtn');
+        if (editBtn) editBtn.outerHTML =
+          `<button id="term-strong-editbtn" onclick="TermEngine.saveStrong(${this._currentTermId})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">저장</button>`;
       },
 
       saveStrong: function(id) {
@@ -4035,9 +4071,15 @@
         container.dataset.strongCode = code;
         const detailBtn = entry.detail ? `<button onclick="StrongEngine.toggleDetail(this)" style="margin-top:4px;font-size:0.72em;color:#047857;background:none;border:1px solid #a7f3d0;border-radius:4px;padding:2px 6px;cursor:pointer">더보기 ▾</button><div style="display:none;margin-top:4px;font-size:0.78em;line-height:1.5;color:#475569;padding-top:4px;border-top:1px dashed #d1fae5">${escHtml(entry.detail)}<div style="margin-top:4px;font-size:0.85em;color:#94a3b8">출처: ${code.startsWith('H') ? '<a href="https://github.com/openscriptures/HebrewLexicon" target="_blank" rel="noopener" style="color:#059669">Brown-Driver-Briggs Hebrew Lexicon (1906, Public Domain) — openscriptures/HebrewLexicon</a>' : '<a href="https://github.com/biblicalhumanities/Dodson-Greek-Lexicon" target="_blank" rel="noopener" style="color:#059669">Dodson Greek Lexicon (Public Domain) — biblicalhumanities/Dodson-Greek-Lexicon</a>'}</div></div>` : '';
         const trSpanId = `strong-tr-${container.id}`;
-        const trBtn = entry.gloss
-          ? `<div style="margin-top:4px"><button id="strong-tr-btn-${container.id}" onclick="StrongEngine.translateInline('${code}','${container.id}')" style="font-size:0.7em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:2px 8px;cursor:pointer">🌐 번역</button><span id="${trSpanId}" style="font-size:0.82em;color:#1e40af;margin-left:6px"></span></div>`
-          : '';
+        // 🔤 용례 — 이 코드가 개역개정에서 실제로 어떻게 옮겨졌는지를 그 자리에서 연다.
+        // 용어DB 스트롱 칸을 채울 때 근거가 되는 것이 사전 뜻이 아니라 실제 번역어라서 붙였다.
+        const useBtn = `<button onclick="StrongEngine.openUsage('${code}')" style="font-size:0.7em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:2px 8px;cursor:pointer">🔤 용례</button>`;
+        const trBtn = `<div style="margin-top:4px;display:flex;gap:5px;align-items:center;flex-wrap:wrap">` +
+          useBtn +
+          (entry.gloss
+            ? `<button id="strong-tr-btn-${container.id}" onclick="StrongEngine.translateInline('${code}','${container.id}')" style="font-size:0.7em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:2px 8px;cursor:pointer">🌐 번역</button><span id="${trSpanId}" style="font-size:0.82em;color:#1e40af"></span>`
+            : '') +
+          `</div>`;
         container.innerHTML = `
           <div style="margin:6px 0;padding:8px 10px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;position:relative">
             <button onclick="StrongEngine.closeInline('${container.id}')" style="position:absolute;top:4px;right:6px;border:none;background:none;font-size:0.9em;cursor:pointer;color:#94a3b8">✕</button>
@@ -4098,6 +4140,15 @@
         btn.textContent = isHidden ? '접기 ▴' : '더보기 ▾';
       },
 
+      // 이 코드의 개역개정 용례를 본문 자리에 편다 (성경찾기의 원어코드 모드를 그대로 쓴다)
+      openUsage: function(code) {
+        if (typeof window.openStrongUsage !== 'function') {
+          showToast('\uc6a9\ub840 \ubcf4\uae30\ub97c \uc4f8 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.', 'warn');
+          return;
+        }
+        window.openStrongUsage(code);
+      },
+
       closeInline: function(containerId) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -4124,10 +4175,11 @@
           <div style="font-size:1.3em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
           <div style="font-size:0.95em;color:#059669;margin-bottom:6px">${escHtml(entry.xlit || '')}</div>
           <div style="font-size:0.95em;line-height:1.5;color:#334155">${escHtml(entry.gloss || '')}</div>
-          ${entry.gloss ? `<div style="margin-top:6px">
-            <button id="strong-pop-trbtn-gloss" onclick="StrongEngine.translatePopup('${code}','gloss')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button>
-            <div id="strong-pop-tr-gloss" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div>
-          </div>` : ''}
+          <div style="margin-top:6px;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+            <button onclick="StrongEngine.openUsage('${code}')" style="font-size:0.75em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:3px 9px;cursor:pointer">🔤 용례</button>
+            ${entry.gloss ? `<button id="strong-pop-trbtn-gloss" onclick="StrongEngine.translatePopup('${code}','gloss')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button>` : ''}
+          </div>
+          ${entry.gloss ? `<div id="strong-pop-tr-gloss" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div>` : ''}
           ${detailBtn}
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">출처: Strong's Exhaustive Concordance (James Strong, 1890, Public Domain)</div>
         `;
@@ -13857,6 +13909,23 @@ showToast = function(msg, type) {
         }
       }
       window.closeBibleSearch = closeBibleSearch;
+
+      /* ── 밖에서 원어코드 용례를 여는 문 ──
+       * 용어·스트롱 팝업의 [🔤 용례] 단추가 부른다.
+       * 검색란을 그 코드로 채우고 원어코드 모드로 돌린 뒤 그대로 실행한다.
+       * 결과는 본문 자리(contentEl)에 그려지므로 팝업은 위에 그대로 떠 있다. */
+      window.openStrongUsage = function(code) {
+        const c = String(code || '').trim();
+        if (!/^[HGhg]0*\d{1,5}[A-Za-z]?$/.test(c)) {
+          showToast('\uc6d0\uc5b4\ucf54\ub4dc \uaf34\uc774 \uc544\ub2d9\ub2c8\ub2e4: ' + c, 'info');
+          return;
+        }
+        if (!bsInput) return;
+        refreshTransOptions();
+        bsInput.value = c;
+        if (bsSel) bsSel.value = '__strong__';
+        executeBibleSearch();
+      };
 
       /* ── 이벤트 바인딩 ── */
       refreshTransOptions();
