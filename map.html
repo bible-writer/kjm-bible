@@ -827,6 +827,7 @@
     .dict-result-item:hover { background: #f8fafc; }
     .dict-result-tag {
       font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; white-space: nowrap; flex-shrink: 0;
+      max-width: 180px; overflow: hidden; text-overflow: ellipsis;
     }
     .dict-result-tag.PERSON { background: #ede9fe; color: #7c3aed; }
     .dict-result-tag.PLACE { background: #dcfce7; color: #059669; }
@@ -3740,7 +3741,8 @@
         makeResizableWithAutoFont(panel, 320, 13);
         const strongVal = escHtml(t.hebrew_greek || '');
         const hasStrong = !!(t.hebrew_greek || '').trim();
-        const hgDisplay = t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '';
+        const noteDisplay = t.original_note ? `<div style="font-size:0.82em;color:#92400e;background:#fffbeb;border-left:3px solid #fcd34d;padding:4px 8px;margin-bottom:4px;line-height:1.5">${escHtml(t.original_note)}</div>` : '';
+        const hgDisplay = noteDisplay + (t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '');
         const hg = `
           ${hgDisplay}
           <div style="display:flex;gap:4px;align-items:center;margin-bottom:6px">
@@ -6041,7 +6043,7 @@
         list.push({
           type: 'TERM', sortKey: ko || en,
           nameKo: ko || en, nameEn: ko ? en : '',
-          def: t.definition_ko || '', strong: t.hebrew_greek || '',
+          def: t.definition_ko || '', strong: t.hebrew_greek || t.original_note || '',
           ref: t
         });
       });
@@ -6142,7 +6144,7 @@
             <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}</div>
             ${defPreview ? `<div style="font-size:0.82em;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${defPreview}</div>` : ''}
           </div>
-          <span class="dict-result-tag ${it.type}">${it.strong ? escHtml(it.strong) : { PERSON: '인물', PLACE: '지명', TERM: '용어' }[it.type]}</span>
+          <span class="dict-result-tag ${it.type}" title="${escHtml(it.strong || '')}">${it.strong ? escHtml(it.strong) : { PERSON: '인물', PLACE: '지명', TERM: '용어' }[it.type]}</span>
         `;
         row.onclick = () => {
           closeDictModal();
