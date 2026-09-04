@@ -1,5 +1,5 @@
 {
- "version": "1.0",
+ "version": "1.1",
  "date": "2026-09-02",
  "count": 5288,
  "source": "Hastings Dictionary of the Bible / Schaff's Bible Dictionary (CCEL, Public Domain) — 원본 XML 동일, 통합본",
@@ -4166,7 +4166,7 @@
   },
   {
    "id": 390,
-   "term": "AROER(아로에르)",
+   "term": "AROER(아로엘)",
    "definition": "AR'OER (ruins), the name of several places. A city on the north side of the river Arnon, given to Reuben. Josh 13:9, Ex 17:16. It belonged to Sihon of the Amorites, Deut 2:36; Deut 3:12; Deut 4:48; Josh 12:2; Jud 11:26; taken by Syria, 2 Kgs 10:33; possessed by Moab, Jer 48:19. It is identified with ruins on the edge of a steep cliff, 13 miles west of the Dead Sea, and called Ara'ir. A city before Rabbah, built by Gad, Num 32:34; Josh 13:25; it was probably not far west of the modern town of Amman. Aroer, in Isa 17:2, if a proper name, must refer to a region near Damascus. A town in the south of Judah, 1 Sam 30:28 ; now Ar'arah, on the road from Gaza to Petra, and 11 miles south-west of Beer-sheba. Four wells are found there.",
    "category": "지명",
    "definition_ko": "'폐허'라는 뜻으로 여러 곳의 이름. 아르논 강 북쪽, 르우벤 지파에게 주어진 성읍(수 13:9), 랍바 앞의 갓 지파가 세운 성읍(민 32:34), 유다 남쪽의 한 성읍(삼상 30:28) 등이 있다.",
@@ -5298,7 +5298,7 @@
   },
   {
    "id": 505,
-   "term": "AZZAH(앗사)",
+   "term": "AZZAH(가사)",
    "definition": "AZ'ZAH (the strong), same as Gaza, Deut 2:23; 1 Kgs 4:24; Jer 25:20. See Gaza. AZ'ZAN (very strong), a chief of Issachar. Num 34:26.",
    "category": "지명",
    "definition_ko": "가사와 동일한 이름(신 2:23, 왕상 4:24, 렘 25:20). 가사 참조.",
@@ -12041,7 +12041,7 @@
   },
   {
    "id": 1191,
-   "term": "CUSH(구시)",
+   "term": "CUSH(구스)",
    "definition": "CUSH (black?). The oldest son of Ham, and father of Nimrod. Gen 10:6, 7, 8; 1 Chr 1:8-10. A Benjamite in the time of Saul. Ps 7, title. CUSH. A country near the Gihon, Gen 2:13, marg., north of Assyria. The country peopled by Cush or the Ethiopians, Gen 10:6, lying to the south of Egypt, on the upper Nile, and possibly extending its rule into southern Arabia. See Ethiopia.",
    "category": "인명",
    "definition_ko": "1) 함의 맏아들이자 니므롯의 아버지(창 10:6-8). 2) 사울 시대의 베냐민 사람(시 7편 표제). 3) 기혼 근처, 앗수르 북쪽의 나라(창 2:13 난외주)이자, 애굽 남쪽 나일강 상류에 자리하고 남부 아라비아까지 그 세력이 미쳤을 수 있는 구스(에티오피아) 사람의 땅이다(창 10:6).",
@@ -14991,7 +14991,7 @@
   },
   {
    "id": 1478,
-   "term": "EMIMS(에밈족)",
+   "term": "EMIMS(에밈 사람)",
    "definition": "E'MIMS (terrors), a race of giants living east of the Dead Sea; related to the Anakim. Gen 14:5 Deut 2:10-11.",
    "category": "인명",
    "definition_ko": "사해 동쪽에 살던 거인 족속으로 아낙 자손과 관련이 있다(창 14:5, 신 2:10-11).",
@@ -15529,7 +15529,7 @@
   },
   {
    "id": 1527,
-   "term": "EPHRON, MOUNT(에브론산)",
+   "term": "EPHRON, MOUNT(에브론 산)",
    "definition": "E'PHRON, MOUNT (fawn-like), on the northern boundary of Judah, Josh 15:19; probably the range of hills west of Wady Beit-Hanina.",
    "category": "지명",
    "definition_ko": "유다 북쪽 경계에 있는 산이다(수 15:9).",
@@ -15739,7 +15739,7 @@
   },
   {
    "id": 1549,
-   "term": "ESHTEMOA(에스더모아)",
+   "term": "ESHTEMOA(에스드모아)",
    "definition": "ESHTEMO'A, or ESHTEM'OA (woman of renown ?), a town in the hill-country of Judah; given to the priests, Josh 21:14; 1 Chr 6:57; visited by David, 1 Sam 30:31; now called Semu'a a village of about 200 inhabitants. Among its houses are ruins and ancient hewn stones. It was also called Eshtemoh. Josh 15:50.",
    "category": "지명",
    "definition_ko": "유다 산지의 한 성읍으로 제사장들에게 주어졌고(수 21:14, 대상 6:57) 다윗이 들렀다(삼상 30:28). 지금은 인구 200명가량의 마을 세무아라 불린다. 에스드모라고도 불렸다(수 15:50).",
@@ -15945,7 +15945,7 @@
   },
   {
    "id": 1569,
-   "term": "Ethiopian Eunuch(에티오피아 내시)",
+   "term": "Ethiopian Eunuch(에디오피아 내시)",
    "definition": "ETHIOPIAN EU'NUCH, THE, the Jewish proselyte who, returning from some feast in Jerusalem, was met by Philip the evangelist and baptized. Acts 8:26 ff. He was a eunuch in the strict sense, not in its official sense of \"courtier,\" and the treasurer of Candace, queen of the Ethiopians. Candace was the name of a dynasty, and not of individual monarchs.",
    "category": "인명",
    "definition_ko": "에티오피아 여왕 간다게(참조)의 재무 장관, 곧 국무총리. 빌립을 통해 그리스도교로 개종했다(사도행전 8:27). 에티오피아 북부는 오랫동안 여왕들이 다스린 메로에 왕국을 이루었고, 아마도 이 내시는 그 왕국 출신이었을 것이다.",
@@ -16026,7 +16026,7 @@
   },
   {
    "id": 1578,
-   "term": "EUPHRATES(에덴의 강)",
+   "term": "EUPHRATES(유브라데)",
    "definition": "EUPHRA'TES (the abounding), a noted river, the largest in western Asia, rises in Armenia in two sources. One, on the northern side of the mountain of Ararat, runs in a south-easterly course, receives many tributaries in its winding course along the borders of Syria, and skirting the Arabian desert passes through the middle of Babylon to the sea. Its whole length is 1780 miles. It is navigable for large ships to Bassora, 70 miles above its mouth; a steamer drawing 4 feet of water has ascended to Bir, 1197 miles. It flows in a broad, deep current, filled to the level of its banks, and at Babylon is considerably less than a mile in width. For the last 800 miles of its course it does not receive a single tributary. The quantity of water discharged by the river at Hit is estimated at 72,804 cubic feet per second. The Tigris flows in a narrower channel, with deeper banks and a less rapid current. The country between the two rivers slopes toward the Tigris, and thus greatly favors the draining off of the superfluous waters of the Euphrates. The Euphrates overflows its banks in the spring of every year, when the snow of the Armenian mountains dissolves, and it sometimes rises 12 feet. It swells in March, and sinks in July. Dykes, lakes, and canals constructed at vast expense preserved the water for irrigation during the dry season, and prevented its carrying away the soil. History. — Euphrates is named as one of the rivers of Eden, Gen 2:13; called \"the great river,\" Gen 15:18; Deut 1:7; noted as the eastern boundary of the Promised Land, Deut 11:24; Josh 1:4; 1 Chr 5:9; and of David's conquests, 2 Sam 8:3; 1 Chr 18:3; of those of Babylon from Egypt, 2 Kgs 24:7; is referred to in prophecy, Jer 13:4-7; Jer 46:2-10; Jer 51:63, and in Revelation 9:14; Num 16:12. In upward of 26 other passages it is spoken of as \"the river.\" By this stream the captive Jews wept. Ps 137:1. It is now called the Frat by the natives. For a sketch-map of the course of the Euphrates see Assyria. The Murad-chai, a branch of the Euphrates, was crossed by Xenophon, b.c. 410. After this unites with the other chief stream, forming the Euphrates, the river is 120 yards wide. It was used to irrigate the valley around Babylon by means of numerous canals, dykes, and aqueducts, making the plain one of the most fertile spots in the world. It was announced in 1879 that a railroad had been projected along the Euphrates from Damascus to Bagdad. See Babylon and Chaldaea.",
    "category": "지명",
    "definition_ko": "서아시아에서 가장 큰 이름난 강으로, 아르메니아에서 두 수원으로 발원한다. 하나는 아라랏산 북쪽에서 남동쪽으로 흘러 수리아 경계를 따라 굽이치며 여러 지류를 받고 아라비아 사막을 끼고 바벨론 한가운데를 지나 바다로 들어간다. 전체 길이는 1,780마일이다. 하구에서 70마일 위 바스라까지 큰 배가 다닐 수 있고, 흘수 4피트의 기선이 1,197마일 위 비르까지 올라간 적이 있다. 넓고 깊은 물줄기가 둑까지 차서 흐르며 바벨론에서는 너비가 1마일이 채 못 된다. 마지막 800마일 구간에서는 지류를 하나도 받지 않는다.",
@@ -16352,7 +16352,7 @@
   },
   {
    "id": 1610,
-   "term": "FAIR HAVENS(살모네)",
+   "term": "FAIR HAVENS(미항)",
    "definition": "FAIR HA'VENS, a harbor on the southern shore of the island of Crete. Acts 27:8-10,Acts 27:21. It is about midway between the eastern and western ends of the island, and is still known as Kalous Limionas, or \"Fair Havens.\" It is a fair winter harbor, though not as good as Phoenice, 40 miles westward.",
    "category": "지명",
    "definition_ko": "그레데 섬 남쪽 해안의 항구다(행 27:8-10,21). 섬의 동서 중간쯤에 있으며 지금도 '아름다운 항구'라는 뜻의 칼로이 리메네스로 알려져 있다. 서쪽으로 40마일 떨어진 뵈닉스만은 못해도 겨울을 나기에 좋은 항구다.",
@@ -18094,7 +18094,7 @@
   },
   {
    "id": 1792,
-   "term": "GERIZIM, MOUNT,(그리심산)",
+   "term": "GERIZIM, MOUNT,(그리심 산)",
    "definition": "GER'IZIM, MOUNT, a mountain in Ephraim, near Shechem, from which the blessings were pronounced, as the curses were from Mount Ebal, Deut 11:29; Deut 27:1-13; Josh 8:30-33, Gerizim is 2855 feet above the level of the sea, and about 800 feet above Nablus (Shechem). It is separated from Ebal by a narrow valley. Six tribes were placed on Gerizim, and six on Ebal, Deut 27:12-13, the ark probably in the valley between them, and Joshua read the blessings and cursings successively. Josh 8:33, Josh 8:35. The Levites on either side re-echoed them, and the people responded \"Amen!\" Deut 27:14-15. Gerizim was the scene of the first recorded parable — that of the trees and brambles. Jud 9:7-21. It was the site of the Samaritan temple, and referred to by the woman at the well. John 4:20. Samaritan tradition asserts that it is the place where Abraham offered Isaac, but this is not sustained by the best authorities. It is now Jebel et Tur. See Moriah. Present Condition. — The mountain is composed chiefly of limestone. It has a large plateau on its summit, covered with ruins of cisterns, paved platforms, and on one side those of a castle. The whole mountain-top bears traces of having once been covered with houses. The small remnant of the Samaritan sect at Nablus performs annually the paschal sacrifice on the top of Gerizim according, to the prescription of the book of Exodus 12. It is the only spot on earth where this Jewish festival is perpetuated in its primitive style. Dean Stanley and other travellers have visited the scene, and point out the striking resemblance to the Mosaic prescription. The amphitheatre formed by these two mounts, Gerizim and Ebal, is most suitable for assembling a vast body of people within the hearing of the human voice, and where all could see what was being done. There is no other place like it in all Palestine. Numerous travellers have repeated the experiment of stationing persons on the opposite mounts, and heard the reading of the ten commandments by each party, and they were also heard by each other with great distinctness. See Ebal, Shechem.",
    "category": "지명",
    "definition_ko": "세겜 근처 에브라임의 산으로, 에발산에서 저주가 선포된 것과 대응하여 이 산에서 축복이 선포되었다(신 11:29, 27:1-13, 수 8:30-33). 해발 2,855피트, 나블루스(세겜)보다 약 800피트 높으며 좁은 골짜기가 에발과 갈라놓는다. 여섯 지파는 그리심에, 여섯 지파는 에발에 서고(신 27:12-13) 궤는 아마도 그 사이 골짜기에 두었으며, 여호수아가 축복과 저주를 차례로 읽었다(수 8:33,35). 성경에 기록된 첫 우화, 곧 나무와 가시나무의 이야기가 여기서 있었다(삿 9:7-21). 사마리아 성전이 있던 곳으로 우물가의 여인이 언급한 산이다(요 4:20).",
@@ -18248,7 +18248,7 @@
   },
   {
    "id": 1809,
-   "term": "GIBBETHON(기브돈)",
+   "term": "GIBBETHON(깁브돈)",
    "definition": "GIB'BETHON (height), a town of Dan: given to the Kohathites, Josh 19:44; Josh 21:23; held by the Philistines in the reigns of Jeroboam, Nadab, Baasha, Elah, Zimri, and Omri. 1 Kgs 15:27; 1 Kgs 16:17. The siege lasted 27 years. Conder proposes to identify it with Gibbieh or Kibbieh, between Eltekah and Baalath.",
    "category": "지명",
    "definition_ko": "단 지파의 성읍으로 고핫 자손에게 주어졌고(수 19:44, 21:23), 여로보암·나답·바아사·엘라·시므리·오므리 때 블레셋이 차지했다(왕상 15:27, 16:17). 그 포위는 27년간 계속되었다.",
@@ -18392,7 +18392,7 @@
   },
   {
    "id": 1825,
-   "term": "GIHON(기혼강)",
+   "term": "GIHON(기혼)",
    "definition": "GI'HON (fountain, or stream). The name of the second river of Eden, Gen 2:13. Some identify it with the Nile. See Eden. A place near Jerusalem where Solomon was proclaimed king, 1 Kgs 1:33-45. Hezekiah stopped the upper watercourse of Gihon, and Manasseh built a wall on the west side of Gihon in the valley. 2 Chr 32:30; 2 Chr 33:14. Upper Gihon has been identified by some with Birket Mamilla, 150 rods west of the wall of Jerusalem, which is a pool 300 feet long, 200 wide, and 20 deep. Lower Gihon is supposed to have been the same as Birket es-Sultan, south-west of the Jaffa gate, a pool 600 feet long, 250 broad, and 40 deep. Warren, however, proposes the Pool of the Bath or Hezekiah as the Lower Gihon, the valley being that from the Jaffa gate to the temple-site, now filled up, while Grove and Conder favor the pool Siloam as the site of Gihon. See Jerusalem.",
    "category": "지명",
    "definition_ko": "1) 에덴의 둘째 강의 이름(창 2:13). 나일과 동일시하는 이도 있다. 2) 예루살렘 근처, 솔로몬이 왕으로 선포된 곳이다(왕상 1:33-45). 히스기야가 기혼의 윗 물줄기를 막았고 므낫세가 골짜기 기혼 서쪽에 성벽을 쌓았다(대하 32:30, 33:14).",
@@ -21278,7 +21278,7 @@
   },
   {
    "id": 2127,
-   "term": "HEMATH(헤맛)",
+   "term": "HEMATH(함맛)",
    "definition": "HE'MATH (heat), a person or place mentioned in 1 Chr 2:55. HE'MATH (fortress). 1 Chr 13:5; Am 6:14. See Hamath.",
    "category": "인명",
    "definition_ko": "1) 대상 2:55에 언급된 사람 또는 지명. 2) 하맛의 다른 표기(대상 13:5, 암 6:14).",
@@ -22388,7 +22388,7 @@
   },
   {
    "id": 2241,
-   "term": "HORONAIM(하소론)",
+   "term": "HORONAIM(호로나임)",
    "definition": "HORONA'IM (two caverns), a city of Moab on an eminence. Isa 15:5; Jer 48:3, Jer 48:5, Jer 48:34. Merrill locates it at Kharaneh, south-east of Hesban.",
    "category": "지명",
    "definition_ko": "'두 동굴'이라는 뜻으로, 아르논강 남쪽 모압의 성읍이며 높은 곳에 세워진 어느 정도 중요한 곳이었다(이사야 15:5; 예레미야 48:3,5,34).",
@@ -22481,7 +22481,7 @@
   },
   {
    "id": 2250,
-   "term": "HOSHAIAH(호세아)",
+   "term": "HOSHAIAH(호세야)",
    "definition": "HOSHAI'AH (whom Jehovah saved). A repairer of the wall of Jerusalem, Neh 12:32. A prominent Jew's father, Jer 42:1; Jer 43:2.",
    "category": "인명",
    "definition_ko": "'여호와께서 도우시는 자'라는 뜻. (1) 느헤미야가 재건한 예루살렘 성벽 봉헌식을 도운 인물(느헤미야 12:32). (2) 느부갓네살의 예루살렘 파괴 후 유력 인물이었던 여사냐(또는 아사랴)의 아버지(예레미야 42:1).",
@@ -22700,7 +22700,7 @@
   },
   {
    "id": 2274,
-   "term": "HUPPIM(훔빔)",
+   "term": "HUPPIM(훕빔)",
    "definition": "HUP'PIM (protection), a Benjamite. Gen 46:21; 1 Chr 7:12.",
    "category": "인명",
    "definition_ko": "'보호받는'이라는 뜻으로 베냐민 가문의 우두머리이다(창세기 46:21). 훌('구멍'이라는 뜻)은 (1) 아말렉과의 라비딤 전투에서 아론과 함께 모세의 손을 붙든 인물(출애굽기 17:10). (2) 성막의 수석 장인 브살렐의 조부(출애굽기 31:2). (3) 발람과 함께 죽임당한 미디안의 다섯 왕 중 넷째(민수기 31:8). (4) 예루살렘 주변 절반을 다스리며 느헤미야의 성벽 보수를 도운 르바야의 아버지(느헤미야 3:9). (5) 솔로몬의 에브라임 산지 물자 담당관 벤훌의 아버지(열왕기상 4:8).",
@@ -24006,7 +24006,7 @@
   },
   {
    "id": 2407,
-   "term": "ITALY(이달리아)",
+   "term": "ITALY(이달리야)",
    "definition": "IT'ALY, a well-known country in the south of Europe, and including the whole of the peninsula west of the Adriatic Sea. It has an area of about 100,000 square miles and a population of over 25,000,000. It is named in the N.T. only three times: (1) as the country from which Aquila and Priscilla were expelled. Acts 18:2; (2) Paul sailed for Italy, Acts 27:1; and (3) in the Epistle to the Hebrews some of that country joined in the salutations sent. Heb 13:24.",
    "category": "지명",
    "definition_ko": "(사도행전 18:2; 27:1,6; 히브리서 13:24) 대부분의 지리적 명칭처럼 역사의 시기마다 다르게 쓰였다. 로마의 세력이 커지면서 여러 민족이 차례로 정복되어 편입되었다.",
@@ -24270,7 +24270,7 @@
   },
   {
    "id": 2435,
-   "term": "JAALAM(야알람)",
+   "term": "JAALAM(얄람)",
    "definition": "JAA'LAM (whom God. hides), a son of Esau by his wife Aholibamah, and a chief of Edom. Gen 36:5, Gen 36:14, Gen 36:18; 1 Chr 1:35.",
    "category": "인명",
    "definition_ko": "'하나님이 숨기시는 자'라는 뜻으로 에서가 아내 오홀리바마에게서 얻은 아들이며 에돔의 족장이다(창 36:5,14,18, 대상 1:35).",
@@ -24360,7 +24360,7 @@
   },
   {
    "id": 2445,
-   "term": "JABBOK(야복강)",
+   "term": "JABBOK(얍복)",
    "definition": "JAB'BOK (emptying), a stream rising about 25 miles east of the north end of the Dead Sea, and flowing east, then northward and westward, and finally south-west, into the Jordan about midway between the Sea of Galilee and the Dead Sea. It is now called the Zerka or \"blue\" river. It has a small branch flowing into it past Gerosh, but no branch from the north-east as indicated on most maps. Across this stream Jacob sent his family, and here his wrestling for a blessing occurred. Gen 32:22-24. The Israelites conquered the kingdoms of Og and Sihon, but not the Ammonite country nor the upper Jabbok, which explains Deut 2:37. Compare Num 21:24; Deut 3:16; Josh 12:2; Jud 11:13, Neh 11:22. The Jabbok before it enters the Jordan valley flows through a deep, narrow ravine, the hills being from 1600 to 2000 feet in height. They are covered with verdure and are very picturesque. The stream in most of its course is perennial, swollen, deep, and rapid in winter; it abounds in small fish of excellent flavor.",
    "category": "지명",
    "definition_ko": "'쏟아냄' 또는 '씨름'이라는 뜻으로, 요단강 동편의 시내 중 하나로 갈릴리 바다와 사해 중간쯤, 곧 갈릴리 바다에서 약 45마일 아래 지점에서 요단강에 합류한다. 길르앗 산지 동편에서 발원한다.",
@@ -24603,7 +24603,7 @@
   },
   {
    "id": 2468,
-   "term": "Jahaza(야하사)",
+   "term": "Jahaza(야하스)",
    "definition": "JAHAZA, JAHA'ZAH, JAH'ZAH. See Jahaz.",
    "category": "지명",
    "definition_ko": "'짓밟힌'(여호수아 13:18). 야하스(JAHAZ) 항목 참조.",
@@ -25561,7 +25561,7 @@
   },
   {
    "id": 2565,
-   "term": "JEHOASH(여호아스)",
+   "term": "JEHOASH(요아스)",
    "definition": "JEHO'ASH (whom Jehovah bestowed), original uncontracted form of the name commonly written Joash, and applied to two kings. See Joash, 3 and 4.",
    "category": "인명",
    "definition_ko": "'여호와께서 주신'이라는 뜻. (1.) 아하시야 왕의 아들. 아직 갓난아기였을 때 고모 여호세바에 의해 왕가 전체 학살에서 구출되어, 솔로몬의 유일한 생존 후손이 되었다(역대하 21:4,17).",
@@ -26044,7 +26044,7 @@
   },
   {
    "id": 2612,
-   "term": "JEREMOTH(여리못)",
+   "term": "JEREMOTH(여레못)",
    "definition": "JER'EMOTH (heights). Head of a Benjamite family. 1 Chr 8:14. A Merarite Levite, 1 Chr 23:23; called Jerimoth in 1 Chr 24:30. The head of the 13th course of musicians. 1 Chr 25:22. In v. 4 the name is Jerimoth. Two who had foreign wives. Ezr 10:26-27. Two who had foreign wives. Ezr 10:26-27.",
    "category": "인명",
    "definition_ko": "'높음들'이라는 뜻. (1) 벨라의 아들 또는 후손, 베냐민 사람(역대상 8:14). (2) 므라리 가문 레위인, 무시의 아들(역대상 23:23). (3) 헤만의 아들, 성전 음악 열다섯째 반차 우두머리(역대상 25:22). (4)(5) 이방인 아내를 취한 엘람·삿두 가문 사람들(에스라 10:26).",
@@ -32738,7 +32738,7 @@
   },
   {
    "id": 3296,
-   "term": "MIGDOL(미그돌)",
+   "term": "MIGDOL(믹돌)",
    "definition": "MIG'DOL (tower), the name of two places in Egypt. A place near the head of the Red Sea, Ex 14:2; Num 33:7-8; probably identical with Bir Makhdal, 10 miles west of Suez. A city and fortified place situated in the northern limits of Egypt toward Palestine. Jer 44:1; Eze 48:14. This name is rendered \"tower\" in the phrase \"from the tower of Syene,\" Eze 29:10; Ex 30:6; but the margin correctly has \"from Migdol to Syene\" - i.e., Syene the most southern border of Egypt, and Migdol the most northern. The phrase is used to signify the whole of Egypt. In Egyptian the name is written Meshtol, \"many hills,\" and in the Septuagint Magdolum.",
    "category": "지명",
    "definition_ko": "'망대'라는 뜻으로 애굽의 두 곳의 이름이다. 하나는 홍해 어귀 근처의 곳으로(출 14:2, 민 33:7-8) 수에즈 서쪽 10마일의 비르 마크달과 같은 곳으로 추정된다. 다른 하나는 애굽 북쪽 팔레스타인 쪽 경계에 있던 성읍이자 요새다(렘 44:1, 겔 29:10). 이 이름이 '수에네 탑에서부터'라는 구절에서 '탑'으로 번역되나(겔 29:10, 30:6) 난외주는 바르게 '믹돌에서 수에네까지'로 읽는다. 곧 수에네는 애굽 최남단, 믹돌은 최북단이며 이 표현은 애굽 전역을 뜻한다.",
@@ -33231,7 +33231,7 @@
   },
   {
    "id": 3348,
-   "term": "MIZPAH(미스베)",
+   "term": "MIZPAH(미스바)",
    "definition": "MIZ'PAH, and MIZ'PEH (watch-tower), the name of several places in Palestine. On Mount Gilead, also called Mizpeh of Gilead, Jud 11:29, and elsewhere probably Ramoth-mizpeh, Josh 13:26, and Ramoth-gilead, 1 Kgs 4:13 and elsewhere, the place where Laban and Jacob set up a heap of stones as a witness and landmark between them. Gen 31:23,Deut 23:25, Gen 24:48, 2 Kgs 5:52. Here also the Israelites assembled to fight against the Ammonites, Jud 10:17: and here Jephthah was met by his daughter. Jud 11:29. Some suppose that this was the place also where the tribes assembled to avenge the great sin committed in Benjamin, Jud 20:1, Num 1:3; Jud 21:1, Jud 21:5, Acts 21:8, but this is more usually applied to the Mizpah in Benjamin. See No. 6. This Mizpah has been identified with a high peak east of the Jordan, 3 miles north-west of Ramoth-gilead, called Jebel Osh'a, or \"the Mount of Hosea.\" Conder suggests Remtheh, 25 miles west of Bozrah, but Merrill, with greater probability, locates it at Kulat er Rubad on the Wady 'Ajlun, about 10 miles east of the Jordan. This summit commands a wide view, and is in harmony with the name Mizpeh, or \"watch-tower.\" Mizpeh of Moab, where the king of that nation was living when David committed his parents to his care, 1 Sam 22:3; possibly now Kerak. The land of Mizpeh, in the North of Palestine, the residence of the Hivites, Josh 11:3; possibly identical with - The valley of Mizpeh, Josh 11:3, 1 Kgs 15:8, whither the confederate hosts were pursued by Joshua; perhaps the modern Buka'a, the great country of Coele-Syria, between Lebanon and Anti-Lebanon. A city in Judah, Josh 15:38:possibly identical with the modern Tell es-Safiyeh, or, as Conder has suggested, at Kirhbet el-Musheirifeh, near Gaza. The position fits and the name is the Arabic equivalent of the Hebrew. This is the place others have identified with Misrephothmaim, which See. A city in Benjamin, Josh 18:26, where Israel assembled. 1 Sam 7:5-7, 1 Sam 7:11-12, 1 Sam 7:16. Here Saul was elected king. 1 Sam 10:17-21. Asa fortified Mizpah. 1 Kgs 15:22; 2 Chr 16:6; it was where Gedaliah was assassinated, 2 Kgs 25:23, Gal 4:25; Jer 40:6-15; Jer 41:1-16; the men of Mizpah joined in rebuilding a part of the wall of Jerusalem. Neh 3:7, 2 Sam 20:15, Acts 1:19. Messepha of 1 Mace. 3:46, which is probably identical with this place, and about 3i miles west of north from Jerusalem, is the modern village of Neby Samwil, standing on a peak which rises about 600 feet above the plain of Gibeon. This village is claimed as the most probable site for Mizpah by Robinson, Porter, Baedeker, and others. It is 3006 feet above the sea-level, and the highest mountain near Jerusalem. From its summit the most extensive view in Southern Palestine is obtained, embracing the Mediterranean, Jerusalem, the Mount of Olives and the mountains of Moab. Upon its summit is a mosque, once a Christian church, built by the Crusaders on the spot where pilgrims first saw Jerusalem. Grove, Stanley, Bonar, Major Wilson, and others would identify Mizpah with Mount Scopus, one of the summits just north of Jerusalem in the continuation of the Olivet range. From this place the traveller gets a very complete view of the Holy City, and from there the emperor Titus looked down upon it. Not far away is the modern village of Shafat. Conder notes that a part of the ridge is called Arkub es-Suffa, or \"the ridge of the view.\" Ensebius and Jerome located Mizpah near Kirjathjearim, and Conder notes a Shufa immediately south of Kuryet el-Anab (Kirjath-jearim), a name having exactly the same meaning with Mizpah - viz., \"place of view.\" Conder also says that there is a place called Umni Suffa. equivalent to the Hebrew Mizpah, existing on the road from Samaria to Jerusalem, which would be a suitable position for the Mizpah of Neh 3:Jeremiah, 40-41. which is not necessarily the Mizpah of Samuel. (Quarterly, 1876, p. 171.) But his final conclusion is that Mizpah and Nob are identical. Whether the Mizpah of Hosea 5:1, was in Benjamin or in Gilead is uncertain.",
    "category": "지명",
    "definition_ko": "팔레스타인의 여러 곳에 같은 이름이 있다. (1) 길르앗의 미스바로 라반과 야곱이 돌 무더기를 쌓아 경계로 삼은 곳(창 31:23-52)이며 입다의 딸이 맞이한 곳(삿 11:29). (2) 베냐민의 미스바로 사무엘이 이스라엘을 모아 기도하고 블레셋을 물리친 곳(삼상 7:5-12)이며, 총독 그다랴의 관저였다(왕하 25:23). 예루살렘 북서쪽 약 5마일의 네비 삼윌과 동일시되는 견해가 유력하다.",
@@ -34321,7 +34321,7 @@
   },
   {
    "id": 3462,
-   "term": "Nebo(느보산)",
+   "term": "Nebo(느보)",
    "definition": "NE'BO (proclaimer), one of the Assyrian deities, who is represented, with Nebo. (From a Statue in the British Museum.) Bel, as being unable to resist the destruction to which Cyrus subjected their idols. Isa 46:1. This god was called \"he who possesses intelligence,\" and statues of him are still preserved. One is in the British Museum which was erected by the Assyrian monarch Pul. The word \"Nebo\" occurs in the compounds Nabopolassar, Nebuchadnezzar, etc., which points to the esteem in which the god was held. Nebo was regarded as the protector against misfortune. NE'BO (prophet), a mountain of Moab \"over against Jericho,\" from which Moses beheld the land of Canaan. Deut 32:49. \"And Moses went up from the plains of Moab unto the mountain of Nebo, to the top of Pisgah, . . . and the Lord showed him all the land of Gilead unto Dan.\" Deut 34:1. Nebo was a mountain in the range of mountains called Abarim. Eusebius says it was shown in his day on the other side of Jordan, six miles to the west of Heshbon. If then definitely known, its location was afterward lost. Of the peaks in the Abarim range which have been suggested as Nebo are - Jebel Atturus, but this is not \"over against Jericho,\" and is too far south: Jehel Jilad, 15 miles farther north than Jericho, and therefore not answering to the scriptural narrative. The explorations of De Sauley, Due de Luynes, Tristram, Warren, Paine, and Merrill have led to the conclusion that Nebo was at the northern end of the Abarim range of mountains, i.e. Jebel Nebo. This mountain was 5 or 6 miles south-west of Heshbon, is about 2700 feet high, and commands a fine view of the country. Paine appears to apply Jebel Nebo to the eastern portion of the northern group of peaks, and Jebel Singbak to the western portion; Dr. Merrill claims that the Arabs use Jebel Nebo, Jebel Musa, and Jebel Singbak indiscriminately for this group. While the discussions respecting Pisgah have been sharp, the majority of explorers and scholars agree in identifying Nebo with the northern end of the Abarim range, Jebel Nebo. See Pisgah.",
    "category": "용어",
    "definition_ko": "(1) 앗수르의 신으로, 벨과 함께 우상 파멸 시 무력한 존재로 묘사된다(사 46:1). (2) 모압의 산으로, 모세가 가나안 땅을 바라보고 죽은 곳이다(신 32:49; 34:1). 아바림 산맥의 북단에 위치하며, 헤스본 남서쪽 5~6마일, 해발 약 2,700피트의 예벨느보와 동일시된다.",
@@ -34885,7 +34885,7 @@
   },
   {
    "id": 3522,
-   "term": "NIMRAH(님라)",
+   "term": "NIMRAH(니므라)",
    "definition": "NIM'RAH (limpid, pure), a city of Gad east of the Jordan; noticed only in Num 32:3, and probably identical with Beth-nimrah. Num 32:36. Its site may be on the hill of Nimrin, about 3 miles east of the Jordan and 10 miles north of the Dead Sea, where are some ruins.",
    "category": "지명",
    "definition_ko": "'맑은', '깨끗한'이라는 뜻으로 요단 동편 갓의 성읍이며 민 32:3에만 언급되고 아마도 벧니므라와 같은 곳일 것이다(민 32:36). 그 자리는 요단 동쪽 3마일, 사해 북쪽 10마일의 니므린 언덕일 수 있는데 거기에 폐허가 있다.",
@@ -35474,7 +35474,7 @@
   },
   {
    "id": 3582,
-   "term": "OLIVES, MOUNT OF(감람산)",
+   "term": "OLIVES, MOUNT OF(감람 산)",
    "definition": "OLIVES, and OLIVET, MOUNT OF, a noted mountain or range of hills east of Jerusalem. Names and Scripture History. - The mountain derives its name from the olive trees which formerly abounded on its sides, some of which are still found thereon. It is called \"Olivet'\" and \"Mount of Olives\" in the O.T., 2 Sam 15:30; Zech 14:4, and is also alluded to as the \"mount,\" Neh 8:15, the mount facing Jerusalem, 1 Kgs 11:7, the \"mountain which is on the east side of the city,\" Eze 11:23; and the \"mount of corruption \" probably refers to a portion of Olivet. 2 Kgs 23:13. It is also called, in the N.T., \"Mount of Olives\" and \"Olivet,\" and was a scene of several of the most interesting events in the life of our Lord. Matt 21:1; 1 Sam 24:3; Acts 26:30; Mark 11:1; Gen 13:3; Mark 14:26; Luke 19:29, 2 Kgs 18:37; Josh 21:37; Luke 22:39; John 8:1; Acts 1:12. The modern Arabic name is sometimes Jebel ez-Zeitun, or \"mount of olives,\" but more usually it is Jebel et-Turs, or \"mount of the summit.\" The mountain is first mentioned in connection with David's flight from Jerusalem to escape from Absalom. 2 Sam 15:30, 2 Sam 15:32; 2 Sam 16:1. Upon it Solomon built high places for the gods of his numerous wives, but these idolatrous places were destroyed by King Josiah. 1 Kgs 11:7; 2 Kgs 23:13-14. When the captive Jews celebrated the feast of tabernacles, the olive, pine, myrtle, and palm branches used in building their booths were brought from this mountain. Neh 8:15. The greatest interest, however, in this mountain is in connection with the closing scenes of our Saviour's ministry. At Bethany, on the eastern slope of the mountain, lived Mary, Martha, and Lazarus, and here he performed his last and greatest miracle; from Olivet he made his triumphal entry into Jerusalem; upon it he spent the nights during the week of his passion; from its slopes he looked down upon .Jerusalem and wept over the ungrateful city as he foretold its fearful doom; on the night of his betrayal he retired to a garden at its foot, and spent those hours of prayer and agony; and after his resurrection, in the presence of his disciples, he ascended from Olivet to heaven to sit on the right hand of the Father in his glory. John 11:1; Neh 12:1; Matt 21:1; Mark 11:1; Luke 19:29-38; Josh 21:37; Matt 26:36; Mark 14:32; Luke 22:39; Luke 24:50; Acts 1:12. Physical Features. - Olivet, or the Mount of Olives, is not a single peak, but a ridge having not less than four separate summits. Osborne describes six prominent heights in the Olivet range, but he includes Scopus, on the north, and the hill of \"Evil Counsel,\" on the extreme south, of the ridge. The Olivet range extends north without any marked depression to the portion called Scopus, and the general elevation of the ridge is a little less than 3000 feet above the sea-level. It lies directly east of Jerusalem, and is separated from the city by the valley of the Kedron. The four chief peaks south of Scopus are:(1) The northern summit, called Viri Galilaei, from a tradition that the angels stood upon it when they spoke to the disciples. Acts 1:11. It is about half a mile north-east from the city, and is 2682 feet above the sea. (2) The central summit, or the \"Mount of Ascension,\" 2665 feet in height, is situated directly east of the temple-area, and is the Mount of Olives proper. Three paths lead to this summit - one by a nearly direct ascent, another winding around the southern shoulder, and a third path leading around the northern shoulder. On the top of this peak is a chapel built upon the site of a church erected by Helena, the mother of Constantine, since tradition points out this spot as the place of the ascension of Christ. The monks point out even the footprint made by the ascending Lord, and the spot, a little south of this, where Christ is said to have taught the disciples the model, or Lord's, prayer. The true place of the ascension, however, was beyond the summit of Olivet, and near Bethany. Luke 24:50. (3) The third summit, about 600 yards south-west of the former, and three-fourths of a mile from Bethany, is called \"the Prophets,\" from a curious catacomb called the \"Prophets' Tombs\" on its side. (4) The fourth summit, Olivet from the West. about 1000 yards from No. 3, is the \"Mount of Offence,\" so called from the idol-worship which Solomon established there. None of the depressions which separate these summits are very deep; some are to be regarded as quite slight. It is evident that in ancient times this mountain-ridge was covered with olives, myrtles, figs, cypresses, and some species of the terebinth or oak, and also abounded in flowers. \"The olives and olive-yards,\" says Stanley, \"from which it derived its name must in earlier times have clothed it far more completely than at present, where it is only in the deeper and more secluded slopes leading up to the northernmost summit that these venerable trees spread into anything like a forest. And in those times, as we see from the name of Bethany ('house of dates'), and from the allusions after the Captivity and in the gospel history, myrtle-groves, pines, and palm trees - all of which have now disappeared - must have made it a constant resort for pleasure and seclusion. Two gigantic cedars, probably amongst the very few in Palestine, stood near its summit, under which were four shops where pigeons were sold for purification. The olive and fig alone now remain - the olive still in more or less abundance, the fig here and there on the roadside, but both enough to justify the Mussulmans' belief that in the oath in the Koran, 'By the olive and the fig,' the Almighty swears by his favorite city of Jerusalem, with this adjacent mountain.\" - Sinai and Palestine, p. 184. As our Lord must frequently have looked over the city and the surrounding country from the top of this mount, it will be interesting to describe the scene now presented to the eye of the traveller from this spot. The view from the top of the minaret upon the central summit, or Mount of Ascension, is extensive and magnificent. \"Beyond the valley of the Kedron extends the spacious plateau of the Haram esh-Sherif, where the Dome of the Rock and the Aksa mosque present a particularly imposing appearance. The spectator should observe the direction taken by the temple-hill, the higher site of the ancient Bezetha, to the north of the temple, and the hollow of the Tyropoeon, which is plainly distinguishable, though now filled with rubbish, between the temple-hill and the upper part of the town. The dome-covered roofs of the houses form a very peculiar characteristic of the town. Toward the north, beyond the olive-grove outside the Damascus Gate, is seen the upper (western) course of the valley of the Kedron, decked with rich verdure in spring, beyond which rises the Scopus. The view toward the east is striking. Here, for the first time, we perceive that extraordinary and unique depression of the earth's surface which few travellers thoroughly realize. The blue waters of the Dead Sea, lying at the foot of the mountains which bound the eastern horizon, and apparently not many hundred feet below us, are really no less than 3900 feet below our present standpoint. The clearness of the atmosphere, too, is so deceptive that the mysterious lake seems quite near, though it can only be reached after a seven hours' ride over barren, uninhabited ranges of hills. The blue mountains which rise beyond the deep chasm, reaching the same height as the Mount of Olives, once belonged to the tribe of Reuben, and it is among these that Mount Nebo must be sought. To the extreme south of that range a small eminence, crowned by the village of Kerak, is visible in clear weather. On the eastern margin of the Dead Sea are seen two wide openings:that to the south is the valley of the river Arnon, and that to the north the valley of the Zerka. Farther north rises the Jehel Jilad, once the possession of the tribe of Gad. Nearer to us lies the valley of Jordan, the course of the river being indicated by a green line on a whitish ground. Toward the south-east we see the course of the valley of the Kedron, or 'Valley of Fire,' and on a hill-plateau, to the left, the village of Abu Dis. Bethany is not visible. Quite near us rises the 'Mountain of Offence:' beyond the Kedron that of 'Evil Counsel,' and farther distant, to the south, is the summit of the 'Frank Mountain,' or 'Hill of Paradise,' with the heights of Bethlehem and Tekoah; to the south-west, on the fringe of hills which bounds the plain of Kephaim on the south, lies the monastery of Mar Elyas, past which winds the road to Bethlehem. That town itself is concealed from view, but the large village of Bet Jala and several villages to the south of Jerusalem, such as Beit Sufafa and Esh-Sherafat, are distinctly visible.\" - Baedeker's Palestine and Syria, p. 219. The slopes of Olivet are terraced and cultivated, but the vegetation is not luxuriant. The principal trees now are the olive, fig, and carob, with here and there a few apricot, almond, terebinth, and hawthorn. At the western base of the mountain is Silwan, a miserable little village. Jewish tradition declares that the shekinah, or divine presence, after retiring from Jerusalem, dwelt three years and a half on Olivet, to see whether the Jews would repent, but when they would not, retired to his own place. See Jerusalem and Gethsemane.",
    "category": "지명",
    "definition_ko": "예루살렘 동쪽의 이름난 산 또는 구릉이다. 예전에 그 비탈에 무성했던 감람나무에서 이름이 왔고 지금도 얼마간 남아 있다. 구약에서 '감람산'이라 불리고(삼하 15:30, 슥 14:4), '산'(느 8:15), '예루살렘 앞 산'(왕상 11:7), '성 동쪽 산'(겔 11:23)으로도 언급되며, '멸망의 산'(왕하 23:13)도 감람산의 한 부분을 가리키는 듯하다. 신약에서도 '감람산', '올리벳'이라 불리며 여러 사건의 무대다.",
@@ -36568,7 +36568,7 @@
   },
   {
    "id": 3694,
-   "term": "PATHROS(파드로스)",
+   "term": "PATHROS(바드로스)",
    "definition": "PATH'ROS (region of the south), a district of Egypt near Thebes; named, as some suppose, from a town called Ha-hathor, or \"the abode of Hathor,\" the Egyptian Venus. Originally it was ruled by its own kings, independent of Egypt. It was probably the Thebaid of the Greeks and the Said of the Arabs. The country is mentioned in the Prophets, and nearly always in connection with Egypt. Isa 11:11; Isa 19:11-13; Jer 44:1-15; Eze 29:14. Its inhabitants were known as the Pathrusim, the descendants of Ham through Mizraim. Gen 10:14; 1 Chr 1:12.",
    "category": "지명",
    "definition_ko": "'남쪽 지역'이라는 뜻으로 테베 근처 애굽의 한 지역이다. 어떤 이는 하하토르, 곧 '애굽의 비너스 하토르의 거처'라는 성읍에서 이름이 왔다고 본다. 본래 애굽에서 독립해 자체 왕들이 다스렸다. 아마도 헬라인의 테바이스이자 아랍인의 사이드였을 것이다. 이 나라는 선지서에 언급되며 거의 언제나 애굽과 함께 나온다(사 11:11, 렘 44:1-15, 겔 29:14). 그 주민은 바드루심으로 알려졌고 미스라임을 통한 함의 후손이다(창 10:14, 대상 1:12).",
@@ -40835,7 +40835,7 @@
   },
   {
    "id": 4134,
-   "term": "SABEANS(스바인)",
+   "term": "SABEANS(스바 사람)",
    "definition": "SABE'ANS. Two tribes of this name are mentioned in the A.V. Descendants of Seba, Isa 45:14; it should be simply \"people of Seba,\" son of Cush. In Joel 3:8 the descendants of Sheba, son of Joktan, are meant. Possibly a third tribe is spoken of in Job 1:15. The translation \"Sabeans\" in Eze 23:42 is incorrect; read, as in the margin, \"drunkards.\"",
    "category": "인명",
    "definition_ko": "스바의 후손들(창세기 10:7)로, 아프리카 지역 사람들을 가리킨다(이사야 43:3). 체구가 크고 상인으로 알려졌으며(이사야 45:14), 주께 돌아올 것이 예언되었다(시편 72:10).",
@@ -41069,7 +41069,7 @@
   },
   {
    "id": 4160,
-   "term": "SALMON(살마)",
+   "term": "SALMON(살몬)",
    "definition": "SAL'MON (shady), Ps 68:14, or ZAL'MON, Jud 9:48, was one of the high hills which environed the ancient Shechem and afforded pasturage for Jacob's flocks. See Zalmon.",
    "category": "인명",
    "definition_ko": "짤몬이라고도 하며, 세겜 남쪽의 검은 숲으로 뒤덮인 산으로 아비멜렉과 그 부하들이 세겜을 불태울 나무를 모은 곳이다(사사기 9:48). 시편 68:14의 표현과 관련된다.",
@@ -41368,7 +41368,7 @@
   },
   {
    "id": 4189,
-   "term": "SAPPHIRE(사파이어)",
+   "term": "SAPPHIRE(청옥)",
    "definition": "SAP'PHIRE. This was one of the precious stones of the high priest's breastplate, and of the foundations of the Apocalyptic city, Ex 28:18; Rev 21:19, and is often mentioned in the O.T. It was certainly of a blue color. Ex 24:10; Eze 1:26; Dan 10:1. But it is generally agreed that the ordinary sapphire of the ancients was our lapis-lazuli, an opaque mineral of a dark azure hue. Some scholars still hold that the Bible references require a transparent, hard, and valuable gem like the true sapphire. This stone is next to the diamond in lustre, beauty, and hardness. It differs only in color from the Oriental ruby, varying from the deepest to the lightest blue, and even to pure white. See Stones, Precious.",
    "category": "인명",
    "definition_ko": "대제사장 흉패의 보석 중 하나이자 새 예루살렘 성 기초의 보석 중 하나이며(출 28:18, 계 21:19) 구약에 자주 언급된다. 분명 푸른빛이었다(출 24:10, 겔 1:26). 그러나 고대인의 통상적 사파이어는 우리의 청금석, 곧 짙은 하늘빛의 불투명한 광물이었다는 데 대체로 견해가 일치한다. 다만 성경의 언급이 참 사파이어처럼 투명하고 단단하며 값진 보석을 요구한다고 보는 학자들도 있다. 이 돌은 광택과 아름다움과 단단함에서 다이아몬드 다음이다. 동방 루비와 색만 다르며 가장 짙은 푸름에서 가장 옅은 푸름, 심지어 순백까지 다양하다.",
@@ -42554,7 +42554,7 @@
   },
   {
    "id": 4314,
-   "term": "SHALLUM(살룬)",
+   "term": "SHALLUM(살룸)",
    "definition": "SHAL'LUM (retribution). The murderer of Zachariah, king of Israel. He usurped the crown, but was slain by Menahem at the end of the first month of his reign, b.c. 771. 2 Kgs 15:10-15. The husband of the prophetess Huldah in the reign of Josiah. 2 Kgs 22:14; 2 Chr 34:22. A man of Judah. 1 Chr 2:40-41. The fourth son of Josiah, king of Judah, and king three months, 1 Chr 3:15; Jer 22:11; called Jehoahaz in 2 Kgs 23:31-34; 2 Chr 36:1-4. A man of Simeon. 1 Chr 4:25. A high priest. 1 Chr 6:12-13; Ezr 7:2. A son of Naphtali. 1 Chr 7:13. See Shillem. The chief of a family of porters. 1 Chr 9:17. His descendants returned with Zerubbabel. Ezr 2:42; Neh 7:45. One of the porters. 1 Chr 9:19, 1 Chr 9:31. A chief Ephraimite. 2 Chr 28:12. A Levite porter who had a foreign wife. Ezr 10:24. A similar offender. Ezr 10:42. One who helped to build the wall. Neh 3:12. The uncle of the prophet Jeremiah, Jer 32:7. A temple-doorkeeper. Jer 35:4.",
    "category": "인명",
    "definition_ko": "'보응'이라는 뜻. 야베스의 아들은 스가랴 왕을 암살하고 이스라엘 왕이 되었으나 한 달 만에 므나헴에게 죽임을 당했다(열왕기하 15:10-15). 여러 제사장·레위인·문지기 등에게도 쓰인 이름이며, 요시야 왕의 아들 중 하나는 여호아하스라는 이름으로 즉위했으나 애굽 왕 느고에게 폐위되어 애굽에서 포로로 죽은 최초의 유다 왕이 되었다.",
@@ -43239,7 +43239,7 @@
   },
   {
    "id": 4382,
-   "term": "SHELEMIAH(셀레마)",
+   "term": "SHELEMIAH(셀레먀)",
    "definition": "SHELEMI'AH (whom Jehovah repays). 1 Chr 26:14. See Meshel-emiah. 2., 3. Two persons who had foreign wives. Ezr 10:39, 1 Chr 4:41. Father of Hananiah. Neh 3:30. A priest appointed by Nehemiah a treasurer. Josh 13:13. Ancestors of one in time of Jehoiakin. Jer 36:14. Father of one of Jeremiah's accusers to Zedekiah, Job 37:3; Isa 38:1; perhaps identical with him mentioned in Jer 36:26. Father of the captain of a ward who arrested Jeremiah. Ps 37:13.",
    "category": "인명",
    "definition_ko": "'여호와께서 갚으신다'는 뜻. 대상 26:14의 므셀레먀 참조. 이방 아내를 둔 두 사람(스 10:39,41), 하나냐의 아버지(느 3:30), 느헤미야가 곳간 맡은 자로 세운 제사장(느 13:13), 여호야긴 때 어떤 사람의 조상(렘 36:14), 시드기야에게 예레미야를 고발한 사람의 아버지(렘 37:3, 38:1), 예레미야를 붙잡은 문지기 대장의 아버지(렘 37:13) 등을 가리킨다.",
@@ -44651,7 +44651,7 @@
   },
   {
    "id": 4528,
-   "term": "SIBMAH(시브마)",
+   "term": "SIBMAH(십마)",
    "definition": "SIB'MAH (coolness, or fragrance), a city east of the Jordan, built or fortified by the Reubenites; called also Shebam and Shibmah. Josh 13:19; Num 32:3, Acts 7:38. It is not noticed again until the prophet's lament over Moab. Isa 16:8-9; Jer 48:32. At that time it was a Moabite town noted for its grapes. Jerome says it was 500 paces from Heshbon. A trace of the name is found in the ruins es-Sameh, 4 miles east of Heshbon.",
    "category": "지명",
    "definition_ko": "'서늘함', '향기'라는 뜻으로 요단강 동쪽 모압 땅 르우벤 지파에 속한 성읍이며 세밤, 십마라고도 불린다. 포도나무로 유명했다(이사야 16:9).",
@@ -48921,7 +48921,7 @@
   },
   {
    "id": 4968,
-   "term": "TYRUS(두루스)",
+   "term": "TYRUS(두로)",
    "definition": "TY'RUS. See Tyre.",
    "category": "지명",
    "definition_ko": "예레미야, 에스겔, 호세아(요엘서는 '두로'로 표기), 아모스, 스가랴서 흠정역에서 쓰인 표기이다.",
@@ -50818,7 +50818,7 @@
   },
   {
    "id": 5162,
-   "term": "ZANOAH(자노아)",
+   "term": "ZANOAH(사노아)",
    "definition": "ZANO'AH (marsh, bog), a name for two towns, A town in Judah, in the lowlands or \"valley.\" Josh 15:34; Neh 3:13; Neh 11:30. Robinson fixed its site up the valley of Sorek, east of Beth-shemesh, at Zamu'a, on the slope of a hill, 14 miles west-south-west of Jerusalem. The Pal. Memoirs also accept this large ruin as the site of Zanoah. A town in the highlands of Judah. Josh 15:56. Robinson proposed Za'untah, 10 miles south-south-west of Hebron, and Conder, after proposing and abandoning another site, appears to accept Robinson's identification.",
    "category": "지명",
    "definition_ko": "'늪', '수렁'이라는 뜻으로 두 성읍의 이름이다. 하나는 유다 저지대 곧 '평지'의 성읍이고(수 15:34, 느 3:13, 11:30), 로빈슨은 소렉 골짜기를 거슬러 벧세메스 동쪽, 예루살렘 서남서 14마일의 언덕 비탈 자무아에 그 자리를 두었다. 다른 하나는 유다 산지의 성읍으로(수 15:56) 로빈슨은 헤브론 남남서 10마일의 자누타를 제안했다.",
@@ -51271,7 +51271,7 @@
   },
   {
    "id": 5207,
-   "term": "ZEPHANIAH(스바니야)",
+   "term": "ZEPHANIAH(스바냐)",
    "definition": "ZEPHANI'AH (Jehovah hides). The ninth of the minor prophets, was the son of Cushi, and lived in the days of Josiah. His prophecy was uttered in the early part of the ministry of Jeremiah, between b.c. 020 and 609. It is mainly designed to excite the Jewish nation to repentance, in view of threatened judgments, and to comfort the people of God with promises of the final triumph of righteousness. The description of the judgment in Zeph 1:14-15, \"The great day of Jehovah is near\" (in the Latin version Dies irae, dies illa), has furnished the keynote to the sublimest hymn of the Middle Ages, the Dies Irae of Thomas a Celano (1250) - so often translated, but never equalled - which brings before us, with most thrilling effect, the final judgment as an awful impending reality. A priest in the reign of Zedekiah. 2 Kgs 25:18-21; Jer 21:1; Jer 29:25-29; Job 37:3; Jer 52:24-27. A Kohathite Levite. 1 Chr 6:36. The father of Josiah. Zech 6:10.",
    "category": "인명",
    "definition_ko": "'여호와께서 숨기셨다'는 뜻. (1) 구시의 아들로 열두 소선지자 중 아홉 번째이며 요시야 왕 시대(주전 641~610년)에 예언했다. 그의 책은 세상과 이스라엘에 대한 심판 선언, 이방 나라에 대한 심판, 예루살렘의 비참함, 구원의 약속으로 구성된다. (2) 마아세야의 아들로 스데기야 시대의 '둘째 제사장'이었으며(예레미야 21:1) 바벨론 왕에게 처형되었다(열왕기하 25:21).",
@@ -51982,7 +51982,7 @@
   },
   {
    "id": 5282,
-   "term": "ZUAR(수리알)",
+   "term": "ZUAR(수알)",
    "definition": "ZUAR (smallness), father of Nethaneel. Num 1:8; Neh 2:5; Isa 7:18, Lev 7:23; Josh 10:15.",
    "category": "인명",
    "definition_ko": "출애굽 당시 잇사갈 지파 지도자 느다넬의 아버지다(민수기 1:8).",
