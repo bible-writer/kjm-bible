@@ -13550,7 +13550,7 @@ showToast = function(msg, type) {
         if (list.length === 0) {
           contentEl.innerHTML = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(query) + '" \uc5d0 \ub300\ud55c \uacb0\uacfc\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.</div>' +
             '<div style="padding:16px;color:#64748b;font-size:13px;line-height:1.8">' +
-            '\ud55c\uae00 \ub099\ub9d0(\uc608: \uc758\ub85c\uc6b4) \ub610\ub294 \uc2a4\ud2b8\ub871 \ucf54\ub4dc(\uc608: H7225)\ub97c \ub123\uc73c\uc2ed\uc2dc\uc624.<br>' +
+            '\ud55c\uae00 \ub0b1\ub9d0(\uc608: \uc758\ub85c\uc6b4) \ub610\ub294 \uc2a4\ud2b8\ub871 \ucf54\ub4dc(\uc608: H7225)\ub97c \ub123\uc73c\uc2ed\uc2dc\uc624.<br>' +
             '\ucc3e\uc740 \uacf3: ' + escHtml(data.source || '') + '</div>';
           return;
         }
@@ -13560,17 +13560,23 @@ showToast = function(msg, type) {
           (data.byCode ? '\ubc88\uc5ed\uc5b4' : '\uc6d0\uc5b4\ucf54\ub4dc') + ' ' + list.length + '\uac1c \u00b7 \uc6a9\ub840 ' + total + '\ud68c' +
           (data.source ? ' \u00b7 ' + escHtml(data.source) : '') + '</div>';
 
+        const split = !data.byCode && partList.length > 0 && exactList.length > 0;
         function drawCodes(arr, label, note, foldId) {
           if (!arr.length) return;
           if (label) {
-            h += '<div class="bsr-summary" style="margin-top:8px' + (foldId ? ';cursor:pointer' : '') + '"' +
+            h += '<div class="bsr-summary" style="margin-top:8px' +
+                 (foldId ? ';cursor:pointer;background:#eef2ff;border-top:1px solid #c7d2fe;color:#4338ca' : '') + '"' +
                  (foldId ? ' onclick="StrongWordSearch.toggleFold(\'' + foldId + '\',this)"' : '') + '>' +
                  (foldId ? '<span style="color:#94a3b8">\u25b8 </span>' : '') + label +
                  (note ? ' <span style="font-weight:400;color:#94a3b8">' + note + '</span>' : '') +
                  (foldId ? ' <span style="font-weight:400;color:#94a3b8">\u2014 \ub204\ub974\uba74 \ud3bc\uce68</span>' : '') +
                  '</div>';
           }
-          h += '<div id="bible-search-results"' + (foldId ? ' data-fold="' + foldId + '" style="display:none"' : '') + '>';
+          // 두 무리로 나눌 때는 각 상자를 낮춘다. 안 그러면 앞 상자가 70vh를 다 먹어
+          // 접기 줄이 화면 밖으로 밀린다.
+          const st = (foldId ? 'display:none;' : '') + (split ? 'max-height:34vh;' : '');
+          h += '<div id="bible-search-results"' + (foldId ? ' data-fold="' + foldId + '"' : '') +
+               (st ? ' style="' + st + '"' : '') + '>';
           arr.forEach(drawOne);
           h += '</div>';
         }
@@ -13593,10 +13599,10 @@ showToast = function(msg, type) {
         if (data.byCode || partList.length === 0) {
           drawCodes(list, '', '', null);
         } else {
-          drawCodes(exactList, '\u2705 \ub099\ub9d0\uc774 \uadf8\ub300\ub85c \ub9de\ub294 \uac83 ' + exactList.length + '\uac1c',
+          drawCodes(exactList, '\u2705 \ub0b1\ub9d0\uc774 \uadf8\ub300\ub85c \ub9de\ub294 \uac83 ' + exactList.length + '\uac1c',
                     '\uc6a9\ub840 ' + exactTotal + '\ud68c', null);
           // 딸려온 것은 접어 둔다 ('나무'에 포도나무·무화과나무가 다 걸리므로)
-          drawCodes(partList, '\ub2e4\ub978 \ub099\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
+          drawCodes(partList, '\ub2e4\ub978 \ub0b1\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
                     '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34', 'strong-part-list');
         }
         // 용례 (앞에서부터 최대 60절)
