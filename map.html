@@ -13445,10 +13445,25 @@ showToast = function(msg, type) {
           const reFull = /\[([^\]]+)\]\s*\(\uae30\ubcf8\s*<W([HG]\d+)>\s*\[([^\]]+)\]\s*([^)]+)\)@([^#]+)#\s*([^*]+)\*/g;
           const reTag  = /<W([HG]\d+)>/g;
 
+          // 조사를 떼고 낱말이 그대로 맞는지 — '나무'를 찾을 때 '포도나무'가 딸려오는 것을 가른다
+          const JOSA = ['에게서','으로서','에서는','으로','에게','에서','까지','부터','들을','들이','들은','들의',
+                        '이며','이니','이요','이라','으로다','은','는','이','가','을','를','의','에','와','과','도','만','로','요','다'];
+          function bare(w) {
+            let t = String(w || '').replace(/\s+/g, '');
+            for (let i = 0; i < 2; i++) {
+              for (const j of JOSA) {
+                if (t.length > j.length && t.endsWith(j)) { t = t.slice(0, -j.length); break; }
+              }
+            }
+            return t;
+          }
+          const kwBare = bare(keyword);
+
           function add(code, gloss, morph, root, xlit, row) {
-            if (!out.codes[code]) out.codes[code] = { code: code, n: 0, root: root || '', xlit: xlit || '', words: {} };
+            if (!out.codes[code]) out.codes[code] = { code: code, n: 0, root: root || '', xlit: xlit || '', words: {}, exact: 0 };
             const c = out.codes[code];
             c.n++;
+            if (byCode || bare(gloss) === kwBare) c.exact++;
             c.words[gloss] = (c.words[gloss] || 0) + 1;
             if (!c.root && root) { c.root = root; c.xlit = xlit || ''; }
             if (out.hits.length < (maxVerses || 200)) {
@@ -13491,7 +13506,11 @@ showToast = function(msg, type) {
       /* ── 원어코드 검색 결과 그리기 ── */
       function renderStrongResults(data, query) {
         if (!isSearchMode) { savedContentHtml = contentEl.innerHTML; isSearchMode = true; bsClose.style.display = ''; }
-        const list = Object.values(data.codes).sort(function(a, b) { return b.n - a.n; });
+        const all = Object.values(data.codes).sort(function(a, b) { return b.n - a.n; });
+        // 낱말이 그대로 맞는 것을 앞에, 다른 낱말 속에 든 것을 뒤에
+        const exactList = all.filter(function(c) { return c.exact > 0; });
+        const partList  = all.filter(function(c) { return c.exact === 0; });
+        const list = all;
         if (list.length === 0) {
           contentEl.innerHTML = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(query) + '" \uc5d0 \ub300\ud55c \uacb0\uacfc\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.</div>' +
             '<div style="padding:16px;color:#64748b;font-size:13px;line-height:1.8">' +
@@ -13500,11 +13519,23 @@ showToast = function(msg, type) {
           return;
         }
         const total = list.reduce(function(a, b) { return a + b.n; }, 0);
+        const exactTotal = exactList.reduce(function(a, b) { return a + b.exact; }, 0);
         let h = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(query) + '" ' +
           (data.byCode ? '\ubc88\uc5ed\uc5b4' : '\uc6d0\uc5b4\ucf54\ub4dc') + ' ' + list.length + '\uac1c \u00b7 \uc6a9\ub840 ' + total + '\ud68c' +
           (data.source ? ' \u00b7 ' + escHtml(data.source) : '') + '</div>';
-        h += '<div id="bible-search-results">';
-        list.forEach(function(c) {
+
+        function drawCodes(arr, label, note) {
+          if (!arr.length) return;
+          if (label) {
+            h += '<div class="bsr-summary" style="margin-top:8px">' + label +
+                 (note ? ' <span style="font-weight:400;color:#94a3b8">' + note + '</span>' : '') + '</div>';
+          }
+          h += '<div id="bible-search-results">';
+          arr.forEach(drawOne);
+          h += '</div>';
+        }
+
+        function drawOne(c) {
           const pct = Math.round(c.n / total * 100);
           const ws = Object.keys(c.words).sort(function(a, b) { return c.words[b] - c.words[a]; }).slice(0, 6)
                        .map(function(w) { return escHtml(w) + '(' + c.words[w] + ')'; }).join(' \u00b7 ');
@@ -13517,12 +13548,24 @@ showToast = function(msg, type) {
                '<span class="bsr-text">' + head +
                ' <span style="color:#64748b">\u2014 ' + c.n + '\ud68c (' + pct + '%)</span><br>' +
                '<span style="color:#475569;font-size:0.92em">' + ws + '</span></span></div>';
-        });
-        h += '</div>';
+        }
+
+        if (data.byCode || partList.length === 0) {
+          drawCodes(list, '', '');
+        } else {
+          drawCodes(exactList, '\u2705 \ub099\ub9d0\uc774 \uadf8\ub300\ub85c \ub9de\ub294 \uac83 ' + exactList.length + '\uac1c',
+                    '\uc6a9\ub840 ' + exactTotal + '\ud68c');
+          drawCodes(partList, '\u25b8 \ub2e4\ub978 \ub099\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
+                    '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34');
+        }
         // 용례 (앞에서부터 최대 60절)
         if (data.hits.length) {
           h += '<div class="bsr-summary" style="margin-top:10px">\ud83d\udcd6 \uc6a9\ub840</div><div id="bible-search-results">';
-          data.hits.slice(0, 60).forEach(function(r) {
+          const okCodes = {};
+          exactList.forEach(function(c) { okCodes[c.code] = 1; });
+          const hitList = data.byCode ? data.hits
+            : data.hits.slice().sort(function(a, b) { return (okCodes[b.code] || 0) - (okCodes[a.code] || 0); });
+          hitList.slice(0, 60).forEach(function(r) {
             const bo = BIBLE_BOOKS.find(function(b) { return b.id === r.bookId; });
             const ref = (bo ? bo.abbr : '?') + r.chapter + ':' + r.verse;
             h += '<div class="bsr-item" onclick="closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
