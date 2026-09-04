@@ -13364,7 +13364,84 @@ showToast = function(msg, type) {
           op.textContent = tr.label || k;
           bsSel.appendChild(op);
         });
-        bsSel.value = keys.indexOf(cur) >= 0 ? cur : 'master';
+        const opS = document.createElement('option');
+        opS.value = '__strong__';
+        opS.textContent = '\uc6d0\uc5b4\ucf54\ub4dc';   // 원어코드
+        bsSel.appendChild(opS);
+        bsSel.value = (keys.indexOf(cur) >= 0 || cur === '__strong__') ? cur : 'master';
+      }
+
+      /* ── 낱말로 원어코드 찾기 (원전분해 DB 전수) ──
+       * 개역개정 번역어(# 뒤)에 검색어가 든 낱말을 모아 스트롱 코드별로 센다.
+       * 용어DB 스트롱 칸을 채울 때 근거로 쓰려는 것이라, 코드별 빈도와 실제 용례를 함께 보인다. */
+      function searchStrongByWord(keyword, maxVerses) {
+        if (!interlinearDbInstance) return null;
+        const out = { codes: {}, hits: [] };
+        try {
+          const res = interlinearDbInstance.exec('SELECT book, chapter, verse, btext FROM Bible');
+          if (!res || !res[0]) return out;
+          const re = /\[([^\]]+)\]\s*\(\uae30\ubcf8\s*<W([HG]\d+)>\s*\[([^\]]+)\]\s*([^)]+)\)@([^#]+)#\s*([^*]+)\*/g;
+          for (const row of res[0].values) {
+            const bt = String(row[3] || '');
+            if (bt.indexOf(keyword) < 0) continue;
+            re.lastIndex = 0;
+            let m;
+            while ((m = re.exec(bt)) !== null) {
+              const gloss = m[6].trim();
+              if (gloss.indexOf(keyword) < 0) continue;
+              const code = m[2].trim();
+              if (!out.codes[code]) out.codes[code] = { code: code, n: 0, root: m[3].trim(), xlit: m[4].trim(), words: {} };
+              const c = out.codes[code];
+              c.n++;
+              c.words[gloss] = (c.words[gloss] || 0) + 1;
+              if (out.hits.length < (maxVerses || 200)) {
+                out.hits.push({ bookId: Number(row[0]), chapter: Number(row[1]), verse: Number(row[2]),
+                                code: code, gloss: gloss, morph: m[5].trim() });
+              }
+            }
+          }
+        } catch (e) { console.warn('searchStrongByWord error:', e); }
+        return out;
+      }
+
+      /* ── 원어코드 검색 결과 그리기 ── */
+      function renderStrongResults(data, query) {
+        if (!isSearchMode) { savedContentHtml = contentEl.innerHTML; isSearchMode = true; bsClose.style.display = ''; }
+        const list = Object.values(data.codes).sort(function(a, b) { return b.n - a.n; });
+        if (list.length === 0) {
+          contentEl.innerHTML = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(query) + '" \uc5d0 \ubd99\uc740 \uc6d0\uc5b4\ucf54\ub4dc\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.</div>';
+          return;
+        }
+        const total = list.reduce(function(a, b) { return a + b.n; }, 0);
+        let h = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(query) + '" \uc6d0\uc5b4\ucf54\ub4dc ' + list.length + '\uac1c \u00b7 \uc6a9\ub840 ' + total + '\ud68c</div>';
+        h += '<div id="bible-search-results">';
+        list.forEach(function(c) {
+          const pct = Math.round(c.n / total * 100);
+          const ws = Object.keys(c.words).sort(function(a, b) { return c.words[b] - c.words[a]; }).slice(0, 6)
+                       .map(function(w) { return escHtml(w) + '(' + c.words[w] + ')'; }).join(' \u00b7 ');
+          const pad = c.code.charAt(0) + String(c.code.slice(1)).padStart(4, '0');
+          h += '<div class="bsr-item" onclick="StrongEngine.handleClick(\'' + pad + '\')" title="\uc6d0\uc5b4 \ub73b \ubcf4\uae30">' +
+               '<span class="bsr-ref">' + escHtml(pad) + '</span>' +
+               '<span class="bsr-text"><b>' + escHtml(c.root) + '</b> ' + escHtml(c.xlit) +
+               ' <span style="color:#64748b">\u2014 ' + c.n + '\ud68c (' + pct + '%)</span><br>' +
+               '<span style="color:#475569;font-size:0.92em">' + ws + '</span></span></div>';
+        });
+        h += '</div>';
+        // 용례 (앞에서부터 최대 60절)
+        if (data.hits.length) {
+          h += '<div class="bsr-summary" style="margin-top:10px">\ud83d\udcd6 \uc6a9\ub840</div><div id="bible-search-results">';
+          data.hits.slice(0, 60).forEach(function(r) {
+            const bo = BIBLE_BOOKS.find(function(b) { return b.id === r.bookId; });
+            const ref = (bo ? bo.abbr : '?') + r.chapter + ':' + r.verse;
+            h += '<div class="bsr-item" onclick="closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
+                 '<span class="bsr-ref">' + escHtml(ref) + '</span>' +
+                 '<span class="bsr-text"><mark>' + escHtml(r.gloss) + '</mark> ' +
+                 '<span style="color:#94a3b8">' + escHtml(r.code) + ' \u00b7 ' + escHtml(r.morph) + '</span></span></div>';
+          });
+          h += '</div>';
+        }
+        contentEl.innerHTML = h;
+        contentEl.scrollTop = 0;
       }
 
       /* ── 성경 DB 표시용 태그 정리 (검색 결과에 <i>·<J> 따위가 드러나지 않게) ── */
@@ -13495,6 +13572,19 @@ showToast = function(msg, type) {
         const raw = bsInput.value.trim();
         if (!raw) { showToast('\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
         const transKey = (bsSel && bsSel.value) || 'master';
+
+        // 원어코드 찾기 — 낱말을 넣으면 원전분해에서 스트롱 코드를 모아 준다
+        if (transKey === '__strong__') {
+          if (raw.length < 2) { showToast('2\uae00\uc790 \uc774\uc0c1 \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
+          const sd = searchStrongByWord(raw, 300);
+          if (sd === null) {
+            showToast('\uc6d0\uc804\ubd84\ud574 DB\uac00 \ub85c\ub4dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4.', 'warn', 3000);
+            return;
+          }
+          renderStrongResults(sd, raw);
+          return;
+        }
+
         const transObj = translationRegistry[transKey] || translationRegistry.master;
         if (transKey === 'master' && (!sqliteDbInstance || !detectedSchema)) {
           showToast('\uc131\uacbd DB(.bdb)\uac00 \ub85c\ub4dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4.', 'warn');
