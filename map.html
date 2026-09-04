@@ -12391,6 +12391,8 @@
 
       // 비교탭 버튼도 갱신
       renderCompareTabButtons();
+      // 검색란의 번역 목록도 함께 갱신
+      if (window.refreshSearchTransOptions) window.refreshSearchTransOptions();
     }
 
     function renderCompareTabButtons() {
@@ -13354,8 +13356,12 @@ showToast = function(msg, type) {
       /* ── 검색 대상 번역 목록 채우기 (등록된 번역이 바뀔 수 있으므로 열 때마다 갱신) ── */
       function refreshTransOptions() {
         if (!bsSel) return;
-        const cur = bsSel.value || 'master';
         const keys = Object.keys(translationRegistry);
+        // 목록이 그대로면 건드리지 않는다.
+        // (상자를 펼치는 도중에 innerHTML을 갈아치우면 선택 자체가 먹통이 된다)
+        const sig = keys.join(',') + ',__strong__';
+        if (bsSel.dataset.sig === sig) return;
+        const cur = bsSel.value || 'master';
         bsSel.innerHTML = '';
         keys.forEach(function(k) {
           const tr = translationRegistry[k];
@@ -13368,8 +13374,11 @@ showToast = function(msg, type) {
         opS.value = '__strong__';
         opS.textContent = '\uc6d0\uc5b4\ucf54\ub4dc';   // 원어코드
         bsSel.appendChild(opS);
+        bsSel.dataset.sig = sig;
         bsSel.value = (keys.indexOf(cur) >= 0 || cur === '__strong__') ? cur : 'master';
       }
+      // 번역이 새로 붙거나 빠질 때 밖에서 부를 수 있게 열어 둔다
+      window.refreshSearchTransOptions = refreshTransOptions;
 
       /* ── 낱말로 원어코드 찾기 (원전분해 DB 전수) ──
        * 개역개정 번역어(# 뒤)에 검색어가 든 낱말을 모아 스트롱 코드별로 센다.
@@ -13628,7 +13637,6 @@ showToast = function(msg, type) {
       /* ── 이벤트 바인딩 ── */
       refreshTransOptions();
       if (bsSel) {
-        bsSel.addEventListener('mousedown', refreshTransOptions);
         bsSel.addEventListener('change', function() { if (bsInput.value.trim()) executeBibleSearch(); });
       }
       bsInput.addEventListener('focus', refreshTransOptions);
