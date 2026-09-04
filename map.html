@@ -13663,9 +13663,16 @@ showToast = function(msg, type) {
       function executeBibleSearch() {
         const raw = bsInput.value.trim();
         if (!raw) { showToast('\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
-        const transKey = (bsSel && bsSel.value) || 'master';
+        let transKey = (bsSel && bsSel.value) || 'master';
 
-        // 원어코드 찾기 — 낱말을 넣으면 원전분해에서 스트롱 코드를 모아 준다
+        // 'H7225' 꼴을 넣으면 어느 번역이 골라져 있든 원어코드 검색으로 보낸다.
+        // (본문에는 그런 글자가 없으니 그냥 두면 늘 "결과 없음"이 된다)
+        if (transKey !== '__strong__' && /^[HGhg]0*\d{1,5}$/.test(raw)) {
+          transKey = '__strong__';
+          if (bsSel) bsSel.value = '__strong__';
+        }
+
+        // 원어코드 찾기 — 낱말이면 코드를, 코드면 번역어를 모아 준다
         if (transKey === '__strong__') {
           if (raw.length < 2) { showToast('2\uae00\uc790 \uc774\uc0c1 \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
           const sd = searchStrongByWord(raw, 300);
