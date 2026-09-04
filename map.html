@@ -5627,15 +5627,26 @@
 
       const source = getRawDictList(rawdictSrc);
       const q = (document.getElementById('rawdict-search-input').value || '').trim().toLowerCase();
+      const nq = q.replace(/\s+/g, '');
+      const ns = v => (v || '').toLowerCase().replace(/\s+/g, '');
       let filtered = source;
       if (rawdictCatFilter) {
         filtered = filtered.filter(e => e.category === rawdictCatFilter);
       }
-      if (q) {
+      if (nq) {
         filtered = filtered.filter(e =>
-          e.term.toLowerCase().includes(q) ||
+          ns(e.term).includes(nq) ||
           (e.definition_ko && e.definition_ko.toLowerCase().includes(q))
         );
+        const rank = e => {
+          const t = ns(e.term);
+          if (t === nq) return 0;
+          if (t.startsWith(nq)) return 1;
+          if (t.includes(nq)) return 2;
+          return 3;
+        };
+        filtered = filtered.slice().sort((a, b) =>
+          rank(a) - rank(b) || (a.term || '').localeCompare(b.term || '', 'ko'));
       }
 
       if (filtered.length === 0) {
@@ -6091,14 +6102,25 @@
       if (!dictCombinedCache) dictCombinedCache = buildDictCombined();
 
       const q = (document.getElementById('dict-search-input').value || '').trim().toLowerCase();
+      const nq = q.replace(/\s+/g, '');
+      const ns = v => (v || '').toLowerCase().replace(/\s+/g, '');
       let filtered = dictCombinedCache;
       if (dictFilterType !== 'ALL') filtered = filtered.filter(it => it.type === dictFilterType);
-      if (q) {
+      if (nq) {
         filtered = filtered.filter(it =>
-          it.nameKo.toLowerCase().includes(q) ||
-          it.nameEn.toLowerCase().includes(q) ||
-          it.def.toLowerCase().includes(q)
+          ns(it.nameKo).includes(nq) ||
+          ns(it.nameEn).includes(nq) ||
+          (it.def || '').toLowerCase().includes(q)
         );
+        const rank = it => {
+          const ko = ns(it.nameKo), en = ns(it.nameEn);
+          if (ko === nq || en === nq) return 0;
+          if (ko.startsWith(nq) || en.startsWith(nq)) return 1;
+          if (ko.includes(nq) || en.includes(nq)) return 2;
+          return 3;
+        };
+        filtered = filtered.slice().sort((a, b) =>
+          rank(a) - rank(b) || (a.nameKo || '').localeCompare(b.nameKo || '', 'ko'));
       }
 
       if (filtered.length === 0) {
