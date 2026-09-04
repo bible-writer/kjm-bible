@@ -1684,7 +1684,7 @@
       <div class="file-btn-group" style="display:none">
         <label class="btn-file-custom">
           [성경 DB (.bdb) 열기]
-          <input type="file" id="bdb-file-input" accept=".bdb,.db,.sqlite">
+          <input type="file" id="bdb-file-input" accept=".bdb,.db,.sdb,.sqlite">
         </label>
         <label class="btn-file-custom">
           [지명 시트(XLSX/CSV) 열기]
@@ -1693,10 +1693,10 @@
       </div>
 
       <!-- 숨김 파일 입력 (프로그래matic 열기용) -->
-      <input type="file" id="file-input-bdb"   accept=".bdb,.db,.sqlite" style="display:none" multiple>
+      <input type="file" id="file-input-bdb"   accept=".bdb,.db,.sdb,.sqlite" style="display:none" multiple>
       <input type="file" id="file-input-xlsx"  accept=".xlsx,.xls,.csv"  style="display:none">
       <input type="file" id="file-input-json"  accept=".json"             style="display:none">
-      <input type="file" id="file-input-any"   accept=".bdb,.db,.sqlite,.xlsx,.xls,.csv,.json" style="display:none" multiple>
+      <input type="file" id="file-input-any"   accept=".bdb,.db,.sdb,.sqlite,.xlsx,.xls,.csv,.json" style="display:none" multiple>
 
       <!-- ══ 통합 드래그앤드롭 업로드 존 ══ -->
       <div id="upload-zone" title="클릭하거나 파일을 여기에 끌어다 놓으세요">
@@ -2145,7 +2145,7 @@
   </div>
 
   <!-- extra-bdb-input은 유지 (bdb 파일 선택용) -->
-  <input type="file" id="extra-bdb-input" accept=".bdb,.db,.sqlite" style="display:none">
+  <input type="file" id="extra-bdb-input" accept=".bdb,.db,.sdb,.sqlite" style="display:none">
 
   <!-- bdb 파일 용도 선택 모달 -->
   <div id="bdb-role-backdrop"></div>
@@ -2303,10 +2303,26 @@
 
       try {
         if (type === 'bdb' && await looksLikeInterlinearDb(file)) {
-          await handleInterlinearFile(file);
-          showProgress(100);
-          zone.classList.add('drop-success');
-          addUploadedFileItem(file, 'interlinear', '스트롱코드 DB 등록');
+          // 스트롱 태그가 든 DB라도 쓰임이 둘이다.
+          //  · 원전분해.sdb  → 절별 원어분해 (원전분해 슬롯)
+          //  · 개역개정S.sdb → 스트롱 붙은 본문 (비교 번역으로 쓰고 싶을 수 있다)
+          // 이미 원전분해가 올라와 있으면 묻지 않고 덮어쓰지 않는다.
+          let asInterlinear = true;
+          if (interlinearDbInstance) {
+            asInterlinear = confirm(
+              file.name + '\n\n\uc774\ubbf8 \uc6d0\uc804\ubd84\ud574 DB\uac00 \uc62c\ub77c\uc788\uc2b5\ub2c8\ub2e4.\n\n' +
+              '\ud655\uc778 : \uc6d0\uc804\ubd84\ud574\ub97c \uc774 \ud30c\uc77c\ub85c \ubc14\uafc9\ub2c8\ub2e4\n' +
+              '\ucde8\uc18c : \ube44\uad50 \ubc88\uc5ed\uc73c\ub85c \ub4f1\ub85d\ud569\ub2c8\ub2e4'
+            );
+          }
+          if (asInterlinear) {
+            await handleInterlinearFile(file);
+            showProgress(100);
+            zone.classList.add('drop-success');
+            addUploadedFileItem(file, 'interlinear', '스트롱코드 DB 등록');
+          } else {
+            await askBdbRole(file);
+          }
         } else if (type === 'bdb') {
           // [핵심수정] 마스터 DB가 이미 있으면 용도 선택 모달 표시
           if (sqliteDbInstance) {
@@ -2763,7 +2779,7 @@
     function askBdbRole(file) {
       return new Promise((resolve) => {
         // 파일명에서 번역 이름 추출 (확장자 제거)
-        const suggestedName = file.name.replace(/\.(bdb|db|sqlite3?)$/i, '').trim();
+        const suggestedName = file.name.replace(/\.(bdb|db|sdb|sqlite3?)$/i, '').trim();
 
         // 모달 표시
         document.getElementById('brm-filename').textContent = file.name;
@@ -13383,30 +13399,77 @@ showToast = function(msg, type) {
       /* ── 낱말로 원어코드 찾기 (원전분해 DB 전수) ──
        * 개역개정 번역어(# 뒤)에 검색어가 든 낱말을 모아 스트롱 코드별로 센다.
        * 용어DB 스트롱 칸을 채울 때 근거로 쓰려는 것이라, 코드별 빈도와 실제 용례를 함께 보인다. */
+      /* 스트롱 태그가 든 DB를 고른다.
+       * 첫째는 원전분해 슬롯, 없으면 등록된 번역 가운데 <W…> 태그가 있는 것 */
+      function pickStrongSource() {
+        if (interlinearDbInstance) return { db: interlinearDbInstance, label: '\uc6d0\uc804\ubd84\ud574' };
+        for (const k in translationRegistry) {
+          const tr = translationRegistry[k];
+          const db = (k === 'master') ? sqliteDbInstance : tr.db;
+          const sc = (k === 'master') ? detectedSchema : tr.schema;
+          if (!db || !sc) continue;
+          try {
+            const t = db.exec('SELECT "' + sc.content + '" FROM "' + sc.table + '" WHERE "' + sc.content + '" LIKE \'%<W%>%\' LIMIT 1');
+            if (t && t[0] && t[0].values && t[0].values.length) {
+              return { db: db, schema: sc, label: tr.label || k };
+            }
+          } catch (e) {}
+        }
+        return null;
+      }
+
+      /* 두 가지 태그 형식을 모두 읽는다.
+       *  가) 원전분해   [원어] (기본 <WH559> [기본형] 음역)@품사 # 번역어*
+       *  나) 스트롱본문  번역어<WH559>            (개역개정S 따위) */
       function searchStrongByWord(keyword, maxVerses) {
-        if (!interlinearDbInstance) return null;
-        const out = { codes: {}, hits: [] };
+        const src = pickStrongSource();
+        if (!src) return null;
+        const out = { codes: {}, hits: [], source: src.label };
+        const sc = src.schema;
+        const sql = sc
+          ? 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '"'
+          : 'SELECT book, chapter, verse, btext FROM Bible';
         try {
-          const res = interlinearDbInstance.exec('SELECT book, chapter, verse, btext FROM Bible');
+          const res = src.db.exec(sql);
           if (!res || !res[0]) return out;
-          const re = /\[([^\]]+)\]\s*\(\uae30\ubcf8\s*<W([HG]\d+)>\s*\[([^\]]+)\]\s*([^)]+)\)@([^#]+)#\s*([^*]+)\*/g;
+          const reFull = /\[([^\]]+)\]\s*\(\uae30\ubcf8\s*<W([HG]\d+)>\s*\[([^\]]+)\]\s*([^)]+)\)@([^#]+)#\s*([^*]+)\*/g;
+          const reTag  = /<W([HG]\d+)>/g;
+
+          function add(code, gloss, morph, root, xlit, row) {
+            if (!out.codes[code]) out.codes[code] = { code: code, n: 0, root: root || '', xlit: xlit || '', words: {} };
+            const c = out.codes[code];
+            c.n++;
+            c.words[gloss] = (c.words[gloss] || 0) + 1;
+            if (!c.root && root) { c.root = root; c.xlit = xlit || ''; }
+            if (out.hits.length < (maxVerses || 200)) {
+              out.hits.push({ bookId: Number(row[0]), chapter: Number(row[1]), verse: Number(row[2]),
+                              code: code, gloss: gloss, morph: morph || '' });
+            }
+          }
+
           for (const row of res[0].values) {
             const bt = String(row[3] || '');
             if (bt.indexOf(keyword) < 0) continue;
-            re.lastIndex = 0;
-            let m;
-            while ((m = re.exec(bt)) !== null) {
+
+            // 가) 원전분해 형식
+            reFull.lastIndex = 0;
+            let m, matched = false;
+            while ((m = reFull.exec(bt)) !== null) {
+              matched = true;
               const gloss = m[6].trim();
               if (gloss.indexOf(keyword) < 0) continue;
-              const code = m[2].trim();
-              if (!out.codes[code]) out.codes[code] = { code: code, n: 0, root: m[3].trim(), xlit: m[4].trim(), words: {} };
-              const c = out.codes[code];
-              c.n++;
-              c.words[gloss] = (c.words[gloss] || 0) + 1;
-              if (out.hits.length < (maxVerses || 200)) {
-                out.hits.push({ bookId: Number(row[0]), chapter: Number(row[1]), verse: Number(row[2]),
-                                code: code, gloss: gloss, morph: m[5].trim() });
-              }
+              add(m[2].trim(), gloss, m[5].trim(), m[3].trim(), m[4].trim(), row);
+            }
+            if (matched) continue;
+
+            // 나) 태그 바로 앞의 낱말을 번역어로 본다
+            reTag.lastIndex = 0;
+            let pos = 0;
+            while ((m = reTag.exec(bt)) !== null) {
+              const word = bt.slice(pos, m.index).replace(/<[^>]*>/g, '').trim();
+              pos = reTag.lastIndex;
+              if (!word || word.indexOf(keyword) < 0) continue;
+              add(m[1].trim(), word, '', '', '', row);
             }
           }
         } catch (e) { console.warn('searchStrongByWord error:', e); }
@@ -13422,7 +13485,7 @@ showToast = function(msg, type) {
           return;
         }
         const total = list.reduce(function(a, b) { return a + b.n; }, 0);
-        let h = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(query) + '" \uc6d0\uc5b4\ucf54\ub4dc ' + list.length + '\uac1c \u00b7 \uc6a9\ub840 ' + total + '\ud68c</div>';
+        let h = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(query) + '" \uc6d0\uc5b4\ucf54\ub4dc ' + list.length + '\uac1c \u00b7 \uc6a9\ub840 ' + total + '\ud68c' + (data.source ? ' \u00b7 ' + escHtml(data.source) : '') + '</div>';
         h += '<div id="bible-search-results">';
         list.forEach(function(c) {
           const pct = Math.round(c.n / total * 100);
@@ -13587,7 +13650,7 @@ showToast = function(msg, type) {
           if (raw.length < 2) { showToast('2\uae00\uc790 \uc774\uc0c1 \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
           const sd = searchStrongByWord(raw, 300);
           if (sd === null) {
-            showToast('\uc6d0\uc804\ubd84\ud574 DB\uac00 \ub85c\ub4dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4.', 'warn', 3000);
+            showToast('\uc2a4\ud2b8\ub871 \ud0dc\uadf8\uac00 \ub4e0 DB\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. \uc6d0\uc804\ubd84\ud574.sdb \ub610\ub294 \uac1c\uc5ed\uac1c\uc815S.sdb\ub97c \uc62c\ub824 \uc8fc\uc138\uc694.', 'warn', 3500);
             return;
           }
           renderStrongResults(sd, raw);
