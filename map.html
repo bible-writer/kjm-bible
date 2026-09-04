@@ -13528,6 +13528,17 @@ showToast = function(msg, type) {
         return out;
       }
 
+      // 접기/펴기 — 결과가 다시 그려져도 살아있도록 전역에 둔다
+      window.StrongWordSearch = window.StrongWordSearch || {};
+      window.StrongWordSearch.toggleFold = function(foldId, head) {
+        const box = document.querySelector('[data-fold="' + foldId + '"]');
+        if (!box) return;
+        const open = box.style.display === 'none';
+        box.style.display = open ? '' : 'none';
+        const mark = head && head.querySelector('span');
+        if (mark) mark.textContent = open ? '\u25be ' : '\u25b8 ';
+      };
+
       /* ── 원어코드 검색 결과 그리기 ── */
       function renderStrongResults(data, query) {
         if (!isSearchMode) { savedContentHtml = contentEl.innerHTML; isSearchMode = true; bsClose.style.display = ''; }
@@ -13549,13 +13560,17 @@ showToast = function(msg, type) {
           (data.byCode ? '\ubc88\uc5ed\uc5b4' : '\uc6d0\uc5b4\ucf54\ub4dc') + ' ' + list.length + '\uac1c \u00b7 \uc6a9\ub840 ' + total + '\ud68c' +
           (data.source ? ' \u00b7 ' + escHtml(data.source) : '') + '</div>';
 
-        function drawCodes(arr, label, note) {
+        function drawCodes(arr, label, note, foldId) {
           if (!arr.length) return;
           if (label) {
-            h += '<div class="bsr-summary" style="margin-top:8px">' + label +
-                 (note ? ' <span style="font-weight:400;color:#94a3b8">' + note + '</span>' : '') + '</div>';
+            h += '<div class="bsr-summary" style="margin-top:8px' + (foldId ? ';cursor:pointer' : '') + '"' +
+                 (foldId ? ' onclick="StrongWordSearch.toggleFold(\'' + foldId + '\',this)"' : '') + '>' +
+                 (foldId ? '<span style="color:#94a3b8">\u25b8 </span>' : '') + label +
+                 (note ? ' <span style="font-weight:400;color:#94a3b8">' + note + '</span>' : '') +
+                 (foldId ? ' <span style="font-weight:400;color:#94a3b8">\u2014 \ub204\ub974\uba74 \ud3bc\uce68</span>' : '') +
+                 '</div>';
           }
-          h += '<div id="bible-search-results">';
+          h += '<div id="bible-search-results"' + (foldId ? ' data-fold="' + foldId + '" style="display:none"' : '') + '>';
           arr.forEach(drawOne);
           h += '</div>';
         }
@@ -13576,12 +13591,13 @@ showToast = function(msg, type) {
         }
 
         if (data.byCode || partList.length === 0) {
-          drawCodes(list, '', '');
+          drawCodes(list, '', '', null);
         } else {
           drawCodes(exactList, '\u2705 \ub099\ub9d0\uc774 \uadf8\ub300\ub85c \ub9de\ub294 \uac83 ' + exactList.length + '\uac1c',
-                    '\uc6a9\ub840 ' + exactTotal + '\ud68c');
-          drawCodes(partList, '\u25b8 \ub2e4\ub978 \ub099\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
-                    '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34');
+                    '\uc6a9\ub840 ' + exactTotal + '\ud68c', null);
+          // 딸려온 것은 접어 둔다 ('나무'에 포도나무·무화과나무가 다 걸리므로)
+          drawCodes(partList, '\ub2e4\ub978 \ub099\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
+                    '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34', 'strong-part-list');
         }
         // 용례 (앞에서부터 최대 60절)
         if (data.hits.length) {
