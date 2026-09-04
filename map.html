@@ -3516,12 +3516,27 @@
       panelEl.style.height = (savedSize && savedSize.h) ? savedSize.h : 'auto';
       panelEl._lastFontSize = baseFontPx; // 옵저버가 참조하는 기준값도 매번 초기화
 
+      function fontForWidth(w) {
+        const scale = w / baseWidth;
+        return Math.max(baseFontPx * 0.85, Math.min(baseFontPx * 2.4, baseFontPx * scale));
+      }
+
+      // 팝업을 다시 열 때 크기가 저장된 값 그대로라면 ResizeObserver가 울리지 않는다.
+      // 그러면 글자만 기본값(작게)으로 되돌아간 채 남으므로, 지금 폭을 보고 곧바로 맞춘다.
+      requestAnimationFrame(function () {
+        const w = panelEl.clientWidth;
+        if (!w) return;
+        const cs = window.getComputedStyle(panelEl);
+        const inner = w - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
+        const size = fontForWidth(inner);
+        panelEl._lastFontSize = size;
+        panelEl.style.fontSize = size.toFixed(1) + 'px';
+      });
+
       if (panelEl._autoFontObserver) return; // 옵저버는 한 번만 등록(중복 방지), 크기 자체는 위에서 이미 초기화됨
       const observer = new ResizeObserver(entries => {
         for (const entry of entries) {
-          const w = entry.contentRect.width;
-          const scale = w / baseWidth;
-          const newSize = Math.max(baseFontPx * 0.85, Math.min(baseFontPx * 2.4, baseFontPx * scale));
+          const newSize = fontForWidth(entry.contentRect.width);
           // 아주 미세한 폭 변동(스크롤바 유무 등)으로 인한 떨림을 걸러낸다
           if (Math.abs(newSize - panelEl._lastFontSize) < 0.5) continue;
           panelEl._lastFontSize = newSize;
@@ -13585,6 +13600,22 @@ showToast = function(msg, type) {
           h += '</div>';
         }
 
+        // 맨 위 한 줄 요약 — 잦은 코드를 딱지로 늘어놓아 한눈에 보이게
+        function drawChips(arr) {
+          if (arr.length < 2) return;
+          h += '<div style="padding:8px 12px;display:flex;flex-wrap:wrap;gap:6px;background:#f8fafc;border-bottom:1px solid #e2e8f0">';
+          arr.slice(0, 8).forEach(function(c) {
+            const pad = c.code.charAt(0) + String(c.code.slice(1)).padStart(4, '0');
+            h += '<span onclick="StrongEngine.handleClick(\'' + pad + '\')" ' +
+                 'style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border:1px solid #cbd5e1;' +
+                 'border-radius:14px;background:#fff;cursor:pointer;font-size:0.82em;white-space:nowrap">' +
+                 (c.root ? '<b style="font-size:1.05em">' + escHtml(c.root) + '</b>' : '') +
+                 '<span style="color:#2563eb;font-weight:700">' + escHtml(pad) + '</span>' +
+                 '<span style="color:#94a3b8">' + c.n + '\ud68c</span></span>';
+          });
+          h += '</div>';
+        }
+
         function drawOne(c) {
           const pct = Math.round(c.n / total * 100);
           const ws = Object.keys(c.words).sort(function(a, b) { return c.words[b] - c.words[a]; }).slice(0, 6)
@@ -13593,12 +13624,21 @@ showToast = function(msg, type) {
           const head = (c.root || c.xlit)
             ? '<b>' + escHtml(c.root) + '</b> ' + escHtml(c.xlit)
             : '<b>' + escHtml(pad) + '</b>';
+          // 스트롱 사전의 뜻을 한 줄 곁들인다 (있을 때만)
+          let dictGloss = '';
+          try {
+            const e = StrongEngine.lookup(pad);
+            if (e && e.gloss) dictGloss = '<br><span style="color:#64748b;font-size:0.88em">' +
+                                          escHtml(String(e.gloss).slice(0, 90)) + '</span>';
+          } catch (err) {}
           h += '<div class="bsr-item" onclick="StrongEngine.handleClick(\'' + pad + '\')" title="\uc6d0\uc5b4 \ub73b \ubcf4\uae30">' +
                '<span class="bsr-ref">' + escHtml(pad) + '</span>' +
                '<span class="bsr-text">' + head +
                ' <span style="color:#64748b">\u2014 ' + c.n + '\ud68c (' + pct + '%)</span><br>' +
-               '<span style="color:#475569;font-size:0.95em">' + ws + '</span></span></div>';
+               '<span style="color:#475569;font-size:0.95em">' + ws + '</span>' + dictGloss + '</span></div>';
         }
+
+        if (!data.byCode) drawChips(exactList.length ? exactList : list);
 
         if (data.byCode || partList.length === 0) {
           drawCodes(list, '', '', null);
