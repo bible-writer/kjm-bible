@@ -3836,29 +3836,47 @@
 
         const eastonRaw = t.easton_raw || '';
         const smithRaw = t.smith_raw || '';
+        // 손으로 붙여넣은 것이 없으면 원문사전에서 찾아 온다
+        const eastonAuto = eastonRaw ? null : this.findRawEntry(t.term_en, 'easton');
+        const smithAuto  = smithRaw  ? null : this.findRawEntry(t.term_en, 'smith');
+        // 맞춘 표제어가 원 표제어와 다를 수 있으니 무엇에 걸렸는지 밝혀 둔다
+        const rawHead = (e) => `<div style="font-size:0.75em;color:#94a3b8;margin-bottom:3px">\uc0ac\uc804 \ud45c\uc81c\uc5b4: <b style="color:#b45309">${escHtml(e.term || '')}</b>${e.hebrew_greek ? ' \u00b7 ' + StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), 'term-strong-inline') : ''}</div>`;
+        const rawBody = (txt) => `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(txt))}</div>`;
+        // 못 찾았을 때, 사전이 아직 안 읽힌 것인지 표제어가 없는 것인지 갈라 말한다
+        const dictLoaded = {
+          easton: ((typeof eastonFullDict !== 'undefined' && eastonFullDict) || []).length,
+          smith:  ((typeof smithFullDict  !== 'undefined' && smithFullDict)  || []).length
+        };
+        const rawMiss = (which, label) => dictLoaded[which]
+          ? `<div style="font-size:0.8em;color:#94a3b8;margin-bottom:6px">${label} \uc0ac\uc804 ${dictLoaded[which].toLocaleString()}\ud56d\ubaa9\uc5d0\uc11c <b>${escHtml(t.term_en || '')}</b> \ud45c\uc81c\uc5b4\ub97c \ubabb \ucc3e\uc558\uc2b5\ub2c8\ub2e4.</div>`
+          : `<div style="font-size:0.8em;color:#b45309;margin-bottom:6px">${label} \uc6d0\ubb38\uc0ac\uc804\uc774 \uc544\uc9c1 \uc548 \uc77d\ud614\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ub4a4\uc5d0 \ub2e4\uc2dc \uc5f4\uc5b4 \ubcf4\uc138\uc694.</div>`;
         // 스트롱 칸에 든 코드를 모두 뽑는다 ('G4756,H0102,H2426' 꼴이 있다)
         const allStrongCodes = (t.hebrew_greek || '').match(/[HG]\d{1,5}[A-Za-z]?/g) || [];
         const tabBar = `
           <div style="display:flex;gap:4px;margin:8px 0 6px;border-bottom:1px solid #f1f5f9;flex-wrap:wrap">
             <button class="term-tab-btn active" data-tab="ko" onclick="TermEngine.switchTab('ko')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid #b45309;color:#b45309;font-weight:600">한글해설</button>
             <button class="term-tab-btn" data-tab="orig" onclick="TermEngine.switchTab('orig')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">원어${allStrongCodes.length > 1 ? ' ' + allStrongCodes.length : ''}</button>
-            <button class="term-tab-btn" data-tab="easton" onclick="TermEngine.switchTab('easton')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">Easton 원문</button>
-            <button class="term-tab-btn" data-tab="smith" onclick="TermEngine.switchTab('smith')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:#94a3b8">Smith 원문</button>
+            <button class="term-tab-btn" data-tab="easton" onclick="TermEngine.switchTab('easton')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:${(eastonRaw || eastonAuto) ? '#94a3b8' : '#d8dee9'}">Easton 원문</button>
+            <button class="term-tab-btn" data-tab="smith" onclick="TermEngine.switchTab('smith')" style="font-size:0.78em;padding:4px 8px;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;color:${(smithRaw || smithAuto) ? '#94a3b8' : '#d8dee9'}">Smith 원문</button>
           </div>`;
         // 원어 탭은 누를 때 채운다 (팝업을 열 때마다 사전을 뒤지지 않게)
         const origBlock = `<div id="term-tab-content-orig" data-codes="${escHtml(allStrongCodes.join(','))}" style="display:none"></div>`;
         const eastonBlock = `<div id="term-tab-content-easton" style="display:none">
           ${eastonRaw
-            ? `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(eastonRaw))}</div>`
-            : `<textarea id="term-easton-input" placeholder="Easton's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
-               <button onclick="TermEngine.saveRawText(${t.id},'easton')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`
+            ? rawBody(eastonRaw)
+            : (eastonAuto
+              ? rawHead(eastonAuto) + rawBody(eastonAuto.definition || '')
+              : rawMiss('easton', 'Easton') + `<textarea id="term-easton-input" placeholder="Easton's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
+               <button onclick="TermEngine.saveRawText(${t.id},'easton')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
           }
         </div>`;
         const smithBlock = `<div id="term-tab-content-smith" style="display:none">
           ${smithRaw
-            ? `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(smithRaw))}</div>`
-            : `<textarea id="term-smith-input" placeholder="Smith's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
-               <button onclick="TermEngine.saveRawText(${t.id},'smith')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`
+            ? rawBody(smithRaw)
+            : (smithAuto
+              ? rawHead(smithAuto) + rawBody(smithAuto.definition || '')
+              : rawMiss('smith', 'Smith') + `<textarea id="term-smith-input" placeholder="Smith's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
+               <button onclick="TermEngine.saveRawText(${t.id},'smith')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
           }
         </div>`;
 
@@ -3900,8 +3918,60 @@
         this.switchTab(which);
       },
 
-      switchTab: function(tab) {
-        ['ko', 'orig', 'easton', 'smith'].forEach(name => {
+      /* ── 용어DB ↔ 원문사전 잇기 ──
+       * easton_full.json / smith_full.json 은 이미 앱이 읽고 있다.
+       * 용어DB의 term_en 으로 그 표제어를 찾아 영문 원문을 그대로 보인다.
+       * 맞추는 열쇠는 영문뿐이다. 한글로 맞추면 동음이의가 충돌한다. */
+      _rawNorm: function(s) {
+        return String(s || '').replace(/\([^)]*\)/g, '').replace(/[^A-Za-z]/g, '').toUpperCase();
+      },
+      // 'ABIA, ABIAH' · 'ALMS, ALMS DEEDS' 처럼 표제어 여럿을 한 줄에 적은 것이 많아 쪼개 둔다.
+      // 사전 쪽과 질의 쪽에 다른 잣대를 쓴다.
+      //   사전 쪽  온전한 표제어 + 첫 쉼표 앞 + or/;/ 로 갈린 딴이름
+      //            쉼표 뒤까지 다 쪼개면 'Ebal, Mount'가 MOUNT 열쇠를 차지해
+      //            엉뚱한 항목이 걸린다
+      //   질의 쪽  'SEA, THE MEDITERRANEAN' 같은 겹표제어를 풀어야 하므로 넓게 쪼갠다
+      _rawVariants: function(s, forDict) {
+        const base = String(s || '').replace(/\([^)]*\)/g, '');
+        const out = [];
+        const seen = {};
+        const push = (p) => { const n = this._rawNorm(p); if (n.length >= 2 && !seen[n]) { seen[n] = 1; out.push(n); } };
+        push(base);
+        if (forDict) {
+          push(base.split(',')[0]);
+          base.split(/[;\/]| or /i).forEach(push);
+        } else {
+          base.split(/[,;\/]| or | and /i).forEach(push);
+        }
+        return out;
+      },
+      _rawIndex: null,
+      _rawIndexSig: '',
+      _buildRawIndex: function() {
+        const eL = (typeof eastonFullDict !== 'undefined' && eastonFullDict) || [];
+        const sL = (typeof smithFullDict !== 'undefined' && smithFullDict) || [];
+        const sig = eL.length + ':' + sL.length;
+        if (this._rawIndex && this._rawIndexSig === sig) return this._rawIndex;
+        const idx = { easton: {}, smith: {} };
+        [['easton', eL], ['smith', sL]].forEach(pair => {
+          const k = pair[0];
+          pair[1].forEach(e => {
+            this._rawVariants(e.term, true).forEach(v => { if (!idx[k][v]) idx[k][v] = e; });
+          });
+        });
+        this._rawIndex = idx;
+        this._rawIndexSig = sig;
+        return idx;
+      },
+      findRawEntry: function(termEn, which) {
+        if (!termEn) return null;
+        const m = this._buildRawIndex()[which] || {};
+        const vs = this._rawVariants(termEn);   // 온전한 표제어를 먼저 본다
+        for (let i = 0; i < vs.length; i++) { if (m[vs[i]]) return m[vs[i]]; }
+        return null;
+      },
+
+      switchTab: function(tab) {        ['ko', 'orig', 'easton', 'smith'].forEach(name => {
           const content = document.getElementById(`term-tab-content-${name}`);
           if (content) content.style.display = (name === tab) ? 'block' : 'none';
           const btn = document.querySelector(`#term-info-panel .term-tab-btn[data-tab="${name}"]`);
@@ -3927,15 +3997,23 @@
           return;
         }
         box.innerHTML = '<div style="font-size:0.8em;color:#94a3b8;margin:4px 0">\uc6d0\uc5b4 \uc0ac\uc804 \uc870\ud68c \uc911...</div>';
-        await StrongEngine.ensureLoaded();
+        try {
+          await StrongEngine.ensureLoaded();
+        } catch (e) {
+          box.innerHTML = '<div style="font-size:0.82em;color:#b45309;margin:4px 0;line-height:1.6">\uc6d0\uc5b4 \uc0ac\uc804(strongDict.json)\uc744 \uc77d\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4.<br>' + escHtml(String(e && e.message || e)) + '</div>';
+          return;   // 다시 눌러 볼 수 있게 loaded 표시를 남기지 않는다
+        }
         box.innerHTML = codes.map((c, i) => `<div id="term-orig-slot-${i}"></div>`).join('');
+        let shown = 0;
         codes.forEach((c, i) => {
           const el = document.getElementById(`term-orig-slot-${i}`);
           if (!el) return;
-          const entry = StrongEngine.lookup(c);
-          if (entry) StrongEngine.renderInline(el, c, entry);
+          let entry = null;
+          try { entry = StrongEngine.lookup(c); } catch (e) { entry = null; }
+          if (entry) { StrongEngine.renderInline(el, c, entry); shown++; }
           else el.innerHTML = `<div style="font-size:0.8em;color:#94a3b8;margin:4px 0">'${escHtml(c)}' \uc6d0\uc5b4 \uc815\ubcf4\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.</div>`;
         });
+        if (!shown && !codes.length) box.innerHTML = '<div style="font-size:0.85em;color:#94a3b8;padding:6px 0">\ubcf4\uc77c \uac83\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.</div>';
         box.dataset.loaded = '1';
       },
 
@@ -12684,6 +12762,7 @@
           .replace(/&lt;br ?\/&gt;/gi, '<br>')
           // 성경 DB 안의 표시용 태그만 되살린다 (그 밖의 태그는 이스케이프된 채로 둔다)
           .replace(/&lt;(\/?)i&gt;/gi, '<$1i>')            // 흠정역 보충어 이탤릭
+          .replace(/&lt;(\/?)sup&gt;/gi, '<$1sup>')        // NIV 각주 번호 ①②
           .replace(/&lt;J&gt;/gi, '<span class="wj">')     // 예수님 말씀 시작
           .replace(/&lt;\/J&gt;/gi, '</span>')             // 예수님 말씀 끝
           .replace(/&lt;S&gt;[\s\S]*?&lt;\/S&gt;/gi, '')                         // 스트롱 번호 태그는 내용까지 제거
