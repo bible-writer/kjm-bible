@@ -3988,10 +3988,26 @@
         if (isStub(to)) return null;
         return to;
       },
+      // 단수·복수만 다른 자리가 102건 있다 (EYES↔Eye · Cucumber↔Cucumbers · Horims↔Horim).
+      // 질의 쪽에서만 늘린다. 사전 쪽까지 늘리면 열쇠가 겹쳐 엉뚱한 항목이 걸린다
+      _plural: function(ks) {
+        const out = [];
+        const seen = {};
+        const push = (k) => { if (k && k.length >= 2 && !seen[k]) { seen[k] = 1; out.push(k); } };
+        ks.forEach(push);
+        ks.forEach(k => {
+          if (/IES$/.test(k)) push(k.slice(0, -3) + 'Y');
+          if (/ES$/.test(k) && k.length > 4) push(k.slice(0, -2));
+          if (/S$/.test(k) && k.length > 3) push(k.slice(0, -1));
+          else { push(k + 'S'); push(k + 'ES'); }
+          if (/Y$/.test(k) && k.length > 3) push(k.slice(0, -1) + 'IES');
+        });
+        return out;
+      },
       findRawEntry: function(termEn, which) {
         if (!termEn) return null;
         const m = this._buildRawIndex()[which] || {};
-        const vs = this._rawVariants(termEn);   // 온전한 표제어를 먼저 본다
+        const vs = this._plural(this._rawVariants(termEn));   // 온전한 표제어를 먼저 본다
         for (let i = 0; i < vs.length; i++) { if (m[vs[i]]) return m[vs[i]]; }
         return null;
       },
@@ -12411,7 +12427,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-4`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
