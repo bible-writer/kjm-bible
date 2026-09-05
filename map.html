@@ -4249,7 +4249,8 @@
         } catch (err) {
           span.textContent = '번역 실패 (' + err.message + ')';
         } finally {
-          if (btn) { btn.style.display = 'none'; }
+          // 성공하든 실패하든 단추는 남긴다. 결과가 시원찮으면 다시 누를 수 있어야 한다.
+          if (btn) { btn.disabled = false; btn.textContent = '🌐 다시 번역'; }
         }
       },
 
@@ -4266,11 +4267,12 @@
           const ko = await fetchGoogleTranslateDraft(src);
           span.textContent = ko;
           span.style.display = 'block';
-          if (btn) btn.style.display = 'none';
         } catch (err) {
           span.textContent = '\ubc88\uc5ed \uc2e4\ud328 (' + err.message + ')';
           span.style.display = 'block';
-          if (btn) { btn.disabled = false; btn.textContent = '\ud83c\udf10 \ubc88\uc5ed'; }
+        } finally {
+          // 성공해도 단추를 남긴다. 무료 번역기라 결과가 들쭉날쭉해 다시 누를 일이 잦다.
+          if (btn) { btn.disabled = false; btn.textContent = '\ud83c\udf10 \ub2e4\uc2dc \ubc88\uc5ed'; }
         }
       },
 
@@ -6065,7 +6067,15 @@
 
     function splitForTranslate(text, maxLen = 400) {
       // 문장 단위(마침표/물음표/느낌표 뒤 공백)로 우선 분할, 그래도 너무 길면 강제로 자름
-      const sentences = text.match(/[^.!?]+[.!?]+(\s+|$)|[^.!?]+$/g) || [text];
+      // 주의: i.e. / e.g. / n.m. / cstr. 같은 약어의 마침표를 문장 끝으로 오인하면
+      //      "(i.e. Christ)"가 "i." + "e. Christ)"로 쪼개져 번역 결과가 조각난다.
+      //      그래서 나누기 전에 약어의 점을 임시 기호로 감춰 두고, 나눈 뒤 되돌린다.
+      const DOT = '\u0001'; // 원문에 나올 일이 없는 제어문자 — 길이가 1이라 maxLen 계산도 그대로 맞는다
+      const ABBR = /\b(?:i\.e|e\.g|cf|etc|vs|viz|approx|ca|Mr|Mrs|Dr|St|Jr|Sr|no|fig|lit|prob|perh|appar|usu|esp|prop|subst|adj|adv|vb|pl|sg|abs|cstr|sf|dub|coll|poet|acc|subj|obj|trans|intrans|masc|fem|sf|id|A\.D|B\.C|n\.m|n\.f|n\.pr)\./gi;
+      let masked = String(text).replace(ABBR, m => m.replace(/\./g, DOT));
+      // J. E. / R. V. 같은 한 글자 이니셜 연속도 보호
+      masked = masked.replace(/\b([A-Za-z])\.(?=\s*[A-Za-z]\.)/g, (m, c) => c + DOT);
+      const sentences = masked.match(/[^.!?]+[.!?]+(\s+|$)|[^.!?]+$/g) || [masked];
       const chunks = [];
       let cur = '';
       for (let s of sentences) {
@@ -6081,7 +6091,7 @@
         }
       }
       if (cur) chunks.push(cur);
-      return chunks;
+      return chunks.map(c => c.split(DOT).join('.')).filter(c => c.trim());
     }
 
     // ── 사전 우선 번역 ────────────────────────────────────────────────
@@ -6132,9 +6142,21 @@
     async function fetchGoogleTranslateDraft(text, sl = 'en', tl = 'ko') {
       const chunks = splitForTranslate(text);
       const results = [];
+      let failed = 0;
       for (const chunk of chunks) {
-        results.push(await fetchGoogleTranslateChunk(chunk, sl, tl));
+        let out = '';
+        try {
+          out = await fetchGoogleTranslateChunk(chunk, sl, tl);
+        } catch (e) {
+          console.warn('[번역] 조각 실패:', e);
+          out = '';
+        }
+        // 조각 하나가 빈 값으로 오면 그대로 버리지 말고 원문을 남긴다.
+        // 그러지 않으면 앞 문장이 통째로 사라지고 끝 조각만 남는다.
+        if (!out || !String(out).trim()) { out = chunk; failed++; }
+        results.push(out);
       }
+      if (chunks.length && failed === chunks.length) throw new Error('번역 응답 없음');
       return results.join('');
     }
 
@@ -12450,7 +12472,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-5`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-6`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
