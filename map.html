@@ -3837,10 +3837,16 @@
         const eastonRaw = t.easton_raw || '';
         const smithRaw = t.smith_raw || '';
         // 손으로 붙여넣은 것이 없으면 원문사전에서 찾아 온다
-        const eastonAuto = eastonRaw ? null : this.findRawEntry(t.term_en, 'easton');
-        const smithAuto  = smithRaw  ? null : this.findRawEntry(t.term_en, 'smith');
+        let eastonAuto = eastonRaw ? null : this.findRawEntry(t.term_en, 'easton');
+        let smithAuto  = smithRaw  ? null : this.findRawEntry(t.term_en, 'smith');
+        // 넘김표만 든 항목이면 가리키는 데까지 따라간다
+        const eastonVia = eastonAuto, smithVia = smithAuto;
+        const eastonTo = this.followRef(eastonAuto, 'easton');
+        const smithTo  = this.followRef(smithAuto, 'smith');
+        if (eastonTo) eastonAuto = eastonTo;
+        if (smithTo)  smithAuto  = smithTo;
         // 맞춘 표제어가 원 표제어와 다를 수 있으니 무엇에 걸렸는지 밝혀 둔다
-        const rawHead = (e) => `<div style="font-size:0.75em;color:#94a3b8;margin-bottom:3px">\uc0ac\uc804 \ud45c\uc81c\uc5b4: <b style="color:#b45309">${escHtml(e.term || '')}</b>${e.hebrew_greek ? ' \u00b7 ' + StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), 'term-strong-inline') : ''}</div>`;
+        const rawHead = (e, via) => `<div style="font-size:0.75em;color:#94a3b8;margin-bottom:3px">\uc0ac\uc804 \ud45c\uc81c\uc5b4: ${via && via !== e ? `<span style="color:#cbd5e1">${escHtml(via.term || '')} \u2192</span> ` : ''}<b style="color:#b45309">${escHtml(e.term || '')}</b>${e.hebrew_greek ? ' \u00b7 ' + StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), 'term-strong-inline') : ''}</div>`;
         const rawBody = (txt) => `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(txt))}</div>`;
         // 못 찾았을 때, 사전이 아직 안 읽힌 것인지 표제어가 없는 것인지 갈라 말한다
         const dictLoaded = {
@@ -3865,7 +3871,7 @@
           ${eastonRaw
             ? rawBody(eastonRaw)
             : (eastonAuto
-              ? rawHead(eastonAuto) + rawBody(eastonAuto.definition || '')
+              ? rawHead(eastonAuto, eastonVia) + rawBody(eastonAuto.definition || '')
               : rawMiss('easton', 'Easton') + `<textarea id="term-easton-input" placeholder="Easton's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
                <button onclick="TermEngine.saveRawText(${t.id},'easton')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
           }
@@ -3874,7 +3880,7 @@
           ${smithRaw
             ? rawBody(smithRaw)
             : (smithAuto
-              ? rawHead(smithAuto) + rawBody(smithAuto.definition || '')
+              ? rawHead(smithAuto, smithVia) + rawBody(smithAuto.definition || '')
               : rawMiss('smith', 'Smith') + `<textarea id="term-smith-input" placeholder="Smith's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
                <button onclick="TermEngine.saveRawText(${t.id},'smith')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
           }
@@ -3962,6 +3968,25 @@
         this._rawIndex = idx;
         this._rawIndexSig = sig;
         return idx;
+      },
+      // '[Day]' 나 'See Alpha' 처럼 본문 대신 넘김표만 든 항목이 있다 (Smith 320 · Easton 25).
+      // 그대로 보이면 대괄호 한 줄만 나오므로 가리키는 항목까지 따라간다. 한 번만 따라간다.
+      followRef: function(entry, which) {
+        if (!entry) return null;
+        const isStub = (e) => {
+          const d = String((e && e.definition) || '').trim();
+          if (d.length > 60) return null;
+          return d.match(/^\[([^\]]+)\]\.?$/) || d.match(/^See\s+([A-Za-z][A-Za-z \-.,']*?)\.?$/i);
+        };
+        const m = isStub(entry);
+        if (!m) return null;
+        const to = this.findRawEntry(m[1], which);
+        if (!to || to === entry || !(to.definition || '').trim()) return null;
+        // 가리킨 데가 또 넘김표면 따라가지 않는다.
+        // Smith의 Flesh는 본문이 '[Flood]'인데 이는 원 사전의 흠이라,
+        // 이어서 따라가면 육체 항목에 노아 이야기가 붙는다. 흠은 흠대로 보이는 편이 낫다
+        if (isStub(to)) return null;
+        return to;
       },
       findRawEntry: function(termEn, which) {
         if (!termEn) return null;
