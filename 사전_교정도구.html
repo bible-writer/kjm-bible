@@ -246,6 +246,21 @@ kbd{
 .ftab.on{border-color:var(--ink);color:var(--ink);font-weight:600;background:var(--paper)}
 .ftab:disabled{opacity:.35;cursor:default}
 .cit.nobook{border-bottom-style:dotted;border-bottom-color:var(--blue)}
+/* 훑어보기 번역 */
+.tbtn{
+  border:1px solid var(--blue);background:transparent;color:var(--blue);
+  font-size:.72rem;padding:0 .4em;margin-right:.4rem;
+}
+.tbtn:hover{background:var(--blue);color:var(--paper-lit)}
+#trbox{margin-top:.7rem;padding-top:.6rem;border-top:1px dashed var(--ochre)}
+#trbox .trbody{
+  font-size:.88rem;line-height:1.7;color:var(--ochre);
+}
+#trbox::before{content:'';}
+#trbox:not(:empty)::before{
+  content:'기계 번역 — 뜻만 짚어 보는 용도이며 파일에 들어가지 않습니다';
+  display:block;font-size:.7rem;color:var(--ink-soft);margin-bottom:.35rem;
+}
 .mapset{font-size:.75rem;color:var(--ink-soft);display:flex;align-items:center;gap:.3rem}
 .mapset input{
   border:1px solid var(--rule);background:var(--paper);padding:.15rem .35rem;
@@ -647,6 +662,40 @@ function markKo(t, focus, pick){
   return markKoPlain(t.slice(0,rm.index),focus,pick)
        + '<span class="refmark">'+markKoPlain(rm[0],focus,pick)+'</span>';
 }
+/* ── 영문 훑어보기 번역 (MyMemory) ──
+   파일에 넣지 않고 화면에만 보인다. 500자 제한이 있어 문장 단위로 잘라 보낸다. */
+const TRC={};                       /* 한 번 옮긴 것은 기억해 둔다 */
+function splitForTranslate(t, lim){
+  lim=lim||430; const out=[]; let cur='';
+  String(t).replace(/\s+/g,' ').trim().split(/(?<=[.!?;])\s+/).forEach(sn=>{
+    if((cur+' '+sn).trim().length>lim){ if(cur) out.push(cur.trim()); 
+      while(sn.length>lim){ out.push(sn.slice(0,lim)); sn=sn.slice(lim); }
+      cur=sn; }
+    else cur=(cur+' '+sn).trim();
+  });
+  if(cur) out.push(cur);
+  return out;
+}
+async function translateEn(txt, box){
+  const key=txt.length+'|'+txt.slice(0,60);
+  if(TRC[key]){ box.innerHTML='<div class="trbody">'+esc(TRC[key])+'</div>'; return; }
+  const parts=splitForTranslate(txt), got=[];
+  for(let i=0;i<parts.length;i++){
+    box.innerHTML='<p class="hint">옮기는 중… '+(i+1)+' / '+parts.length+'</p>';
+    try{
+      const r=await fetch('https://api.mymemory.translated.net/get?langpair=en|ko&q='+encodeURIComponent(parts[i]));
+      const j=await r.json();
+      const v=j && j.responseData && j.responseData.translatedText;
+      got.push(v && !/MYMEMORY WARNING|QUERY LENGTH/i.test(v) ? v : '(이 대목은 옮기지 못했습니다)');
+    }catch(e){ got.push('(이 대목은 옮기지 못했습니다)'); }
+  }
+  const all=got.join(' ');
+  const failed=got.filter(x=>x.indexOf('옮기지 못했습니다')>=0).length;
+  TRC[key]=all;
+  box.innerHTML='<div class="trbody">'+esc(all)+'</div>'
+    + (failed? '<p class="hint">'+failed+'토막을 옮기지 못했습니다. 📋 복사로 영문을 떠서 다른 번역기에 붙여 보십시오.</p>':'');
+}
+
 /* 영문 기준 대조 */
 function cmpRows(y, fld){
   const EC=enCites(y[fld.en]||''), KC=koCites(y[fld.ko]||'');
@@ -788,8 +837,11 @@ function drawDetail(){
   const komate = PICK ? PICKKO : r.kocit;
   h+='<div id="twocol">';
   if(fld && fld.en){
-    h+=`<div class="pane"><div class="lab"><span>${esc(fld.label)} 영문 — 고치지 않음</span><span>${(y[fld.en]||'').length}자</span></div>
-      <div class="scroll"><div class="body en">${markEn(y[fld.en], PICK||r.cit, PICK||null)}</div></div></div>`;
+    h+=`<div class="pane"><div class="lab">
+        <span>${esc(fld.label)} 영문 — 고치지 않음</span>
+        <span><button class="tbtn" id="trgo">🌐 뜻 보기</button><button class="tbtn" id="trcopy">📋 복사</button> ${(y[fld.en]||'').length}자</span></div>
+      <div class="scroll"><div class="body en">${markEn(y[fld.en], PICK||r.cit, PICK||null)}</div>
+      <div id="trbox"></div></div></div>`;
   }
   const kof = fld ? (fld.ko||fld) : (PROF.koOnly[0]||null);
   const kotxt = kof ? (y[kof.ko||kof]||'') : '';
@@ -829,6 +881,21 @@ function drawDetail(){
     d.querySelectorAll('#twocol .cit.pick').forEach(el=>el.scrollIntoView&&el.scrollIntoView({block:'center'}));
   });
   const on=(id,fn)=>{const el=$('#'+id); if(el) el.onclick=fn;};
+  on('trgo',()=>{
+    const box=$('#trbox'); const b=$('#trgo');
+    if(box.dataset.on==='1'){ box.innerHTML=''; box.dataset.on=''; b.textContent='🌐 뜻 보기'; return; }
+    box.dataset.on='1'; b.textContent='🌐 닫기';
+    translateEn(y[fld.en]||'', box);
+  });
+  on('trcopy',()=>{
+    const t=(y[fld.en]||'');
+    const say=ok=>{ const b=$('#trcopy'); b.textContent=ok?'📋 복사됨':'📋 안 됨';
+      setTimeout(()=>{const c=$('#trcopy'); if(c) c.textContent='📋 복사';},1600); };
+    if(navigator.clipboard&&navigator.clipboard.writeText)
+      navigator.clipboard.writeText(t).then(()=>say(1),()=>say(0));
+    else { const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta);
+      ta.select(); try{document.execCommand('copy');say(1);}catch(e){say(0);} ta.remove(); }
+  });
   on('reffill',()=>{ const i=$('#refin'), have=i.value.trim();
     const add=missingRefs(y,fld).filter(t=>have.indexOf(t)<0);
     i.value=have?have+'; '+add.join('; '):add.join('; '); i.focus(); });
