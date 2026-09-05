@@ -1864,6 +1864,7 @@
       <button class="btn-catalog-trigger" id="btn-open-catalog" title="지명 도감">📖 도감</button>
       <button class="btn-catalog-trigger" id="btn-open-dict" style="margin-left:4px" title="통합 사전 (인물·지명·용어)">📚 사전</button>
       <button class="btn-catalog-trigger" id="btn-open-rawdict" style="margin-left:4px;background:#475569" title="원문사전 (영문)">📜 원문</button>
+      <button class="btn-catalog-trigger" id="btn-open-proof" style="margin-left:4px;background:#334155" title="교정 책상 — 성구 인용 대조">🖉 교정</button>
       <label class="label-toggle-group" title="지명 표시">
         <input type="checkbox" id="chk-permanent-labels">
         <span>📍 표시</span>
@@ -9368,6 +9369,35 @@
       }, 300);
     }
 
+
+    /* ── 교정 책상 잇기 ─────────────────────────────────────────
+       (가) 주소로 성구 열기:  map.html?goto=1.13.8  →  창세기 13:8
+       (나) 툴바 🖉 교정 단추로 교정 책상 열기
+       교정 책상에서 성구를 누르면 (가)로 되돌아온다.                */
+    const PROOF_TOOL = '사전_교정도구.html';
+    function openProofDesk(){
+      const u = PROOF_TOOL + '?map=' + encodeURIComponent(location.origin + location.pathname);
+      window.open(u, '_blank', 'noopener');
+    }
+    function gotoFromUrl(){
+      const q = new URLSearchParams(location.search);
+      const g = q.get('goto');
+      if(!g) return;
+      const m = String(g).split('.');
+      const b = parseInt(m[0],10), c = parseInt(m[1]||'1',10), v = parseInt(m[2]||'1',10);
+      if(!b || b<1 || b>66) return;
+      const run = () => {
+        try { navigateToBibleVerse(b, c, v); }
+        catch(e){ setTimeout(run, 400); }
+      };
+      setTimeout(run, 600);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const pb = document.getElementById('btn-open-proof');
+      if (pb) pb.onclick = openProofDesk;
+      gotoFromUrl();
+    });
+
     function navigateToBibleVerse(bookId, chapter, targetVerse) {
       if (window.innerWidth <= 768) {
         switchMobileTab('bible');
@@ -12472,7 +12502,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-6`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-7`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }

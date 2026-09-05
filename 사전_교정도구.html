@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>교정 책상 — 성경사전 인용 대조</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E6E9EC;      /* 교정지 */
+  --paper-lit:#F2F4F6;
+  --ink:#1E2A33;        /* 본문 잉크 */
+  --ink-soft:#5A6873;
+  --rule:#C3CAD1;
+  --red:#A8323C;        /* 고칠 것 */
+  --blue:#2E5E8C;       /* 물음 */
+  --ochre:#8A7A3E;      /* 원문대로 */
+  --green:#3F6B4A;      /* 마친 것 */
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Noto Serif KR",'Nanum Myeongjo',Batang,serif;
+  font-weight:300; font-size:14.5px; line-height:1.6;
+  display:flex; flex-direction:column;
+}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+
+/* ── 머리 ── */
+header{
+  display:flex;align-items:baseline;gap:1rem;
+  padding:.5rem 1rem .45rem;border-bottom:1px solid var(--ink);
+  background:var(--paper-lit);flex:none;flex-wrap:wrap;
+}
+h1{margin:0;font-size:1.15rem;font-weight:600;letter-spacing:.06em}
+.sub{color:var(--ink-soft);font-size:.82rem}
+header .sp{flex:1}
+.btn{
+  border:1px solid var(--ink);background:transparent;color:var(--ink);
+  padding:.28rem .8rem;border-radius:0;font-size:.85rem;
+}
+.btn:hover{background:var(--ink);color:var(--paper-lit)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn:disabled:hover{background:transparent;color:var(--ink)}
+.btn.red{border-color:var(--red);color:var(--red)}
+.btn.red:hover{background:var(--red);color:var(--paper-lit)}
+
+/* ── 큰 틀 ── */
+main{flex:1;display:flex;min-height:0}
+#rail{
+  width:206px;flex:none;border-right:1px solid var(--rule);
+  overflow-y:auto;background:var(--paper-lit);
+}
+#listwrap{width:262px;flex:none;border-right:1px solid var(--rule);overflow-y:auto}
+#detail{flex:1;display:flex;min-width:0;overflow:hidden}
+#cmpcol{
+  width:330px;flex:none;border-right:1px solid var(--rule);
+  overflow-y:auto;padding:.7rem .8rem 2rem;background:var(--paper-lit);
+}
+#textcol{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+#textcol>.entryhead{flex:none;margin:0;padding:.55rem 1.1rem .3rem}
+/* 영문과 한글을 좌우로 나란히 — 각자 따로 굴린다 */
+#twocol{flex:1;display:flex;min-height:0}
+#twocol>.pane{
+  flex:1;min-width:0;margin:0;max-width:none;
+  display:flex;flex-direction:column;overflow:hidden;
+  padding:0 1.1rem 1rem;
+}
+#twocol>.pane+.pane{border-left:1px solid var(--rule)}
+#twocol .lab{flex:none;margin-bottom:.3rem;position:sticky;top:0;background:var(--paper);padding-top:.35rem}
+#twocol .scroll{flex:1;overflow-y:auto;padding-bottom:1.5rem}
+#twocol .acts{flex:none;padding-top:.5rem;border-top:1px solid var(--rule);margin-top:0}
+#twocol textarea{min-height:0;flex:1}
+/* 참조 구절 — 한글 칸 아래 */
+.refbox{
+  margin-top:.5rem;padding-top:.5rem;
+  border-top:1px dashed var(--blue);
+}
+/* 참조가 들어간 뒤에는 초록 잉크로 — 손댄 자리를 알아보게 */
+.refbox.filled{border-top-color:var(--green)}
+.refbox.filled .reflab{color:var(--green)}
+.refbox.filled input{border-color:var(--green);background:rgba(63,107,74,.07)}
+.refbox.filled .refhint{color:var(--green)}
+/* 본문에 붙은 참조 구절 */
+.refmark{color:var(--green);font-weight:400}
+.refmark .cit{border-bottom-color:var(--green);color:var(--green)}
+/* 고친 항목 표시 */
+.entryhead.touched{border-bottom-color:var(--green)}
+.tag-touched{
+  color:var(--green);border:1px solid var(--green);
+  font-size:.7rem;padding:0 .35em;margin-left:.4rem;letter-spacing:.04em;
+}
+.row.touched .rterm::before{content:"✎ ";color:var(--green)}
+.pane .lab .edited{color:var(--green)}
+.reflab{font-size:.72rem;color:var(--ink-soft);margin-bottom:.3rem}
+.refbox input{
+  width:100%;padding:.35rem .5rem;border:1px solid var(--blue);
+  background:var(--paper-lit);font-size:.88rem;
+}
+.refbox input:focus{outline:2px solid var(--blue);outline-offset:-1px}
+.refacts{display:flex;gap:.4rem;margin-top:.4rem;flex-wrap:wrap}
+.refhint{font-size:.76rem;color:var(--blue);margin-top:.35rem;line-height:1.45}
+/* 성구 대조표 — 한글을 기준으로 영문의 짝을 나란히 */
+.cmp{width:100%;border-collapse:collapse;margin:0;font-size:.83rem;line-height:1.35}
+.cmp caption{
+  text-align:left;font-size:.72rem;color:var(--ink-soft);line-height:1.5;
+  border-bottom:1px solid var(--ink);padding-bottom:.25rem;margin-bottom:.3rem;
+}
+.cmp th{
+  text-align:left;font-weight:400;font-size:.7rem;color:var(--ink-soft);
+  padding:.1rem .35rem .2rem 0;border-bottom:1px solid var(--rule);
+  position:sticky;top:0;background:var(--paper-lit);
+}
+.cmp td{padding:.16rem .35rem .16rem .25rem;border-bottom:1px solid rgba(195,202,209,.5);
+  font-variant-numeric:tabular-nums;vertical-align:top;word-break:keep-all}
+.cmp tr{cursor:pointer}
+.cmp tr:hover td{background:var(--paper-lit)}
+.cmp tr.bad td,.cmp tr.miss td{color:var(--red)}
+.cmp tr.bad td:first-child,.cmp tr.miss td:first-child{box-shadow:inset 3px 0 0 var(--red)}
+.cmp tr.miss .mk,.cmp tr.bad .mk{color:var(--red)}
+.cmp tr.only td{color:var(--ink-soft);opacity:.75}
+.cmp tr.only .mk{color:var(--blue)}
+.cmp tr.only td{color:var(--ink-soft)}
+.cmp tr.on td{background:var(--paper-lit);font-weight:600}
+.cmp .mk{text-align:center;width:1.7rem;padding-right:0}
+.cmp tr.ok .mk{color:var(--green)}
+.cmp tr.bad .mk{color:var(--red)}
+.cmp tr.only .mk{color:var(--ink-soft)}
+.cmp .none{color:var(--ink-soft)}
+.cit.pick{background:rgba(46,94,140,.16);border-bottom-color:var(--blue)}
+
+/* ── 왼쪽 소견 ── */
+.railsec{padding:.6rem .8rem;border-bottom:1px solid var(--rule)}
+.railsec h2{margin:0 0 .35rem;font-size:.78rem;font-weight:600;color:var(--ink-soft);letter-spacing:.1em}
+.kind{
+  display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;
+  padding:.16rem 0;cursor:pointer;border:none;background:none;width:100%;text-align:left;
+}
+.kind:hover .kn{text-decoration:underline}
+.kind[aria-current="true"] .kn{font-weight:600}
+.kind[aria-current="true"]{background:rgba(30,42,51,.06);margin:0 -.5rem;padding-left:.5rem;padding-right:.5rem}
+.kn{font-size:.9rem}
+.kc{font-variant-numeric:tabular-nums;font-size:.86rem;color:var(--ink-soft)}
+.kind.k-red .kc{color:var(--red);font-weight:600}
+.kind.k-blue .kc{color:var(--blue)}
+.kind.k-ok .kc{color:var(--green)}
+.kind.quiet .kn{color:var(--ink-soft)}
+.kind.quiet .kn::after{content:' ·';opacity:.6}
+
+/* ── 가운데 목록 ── */
+.row{
+  display:block;width:100%;text-align:left;border:none;background:none;
+  padding:.36rem .7rem;border-bottom:1px solid var(--rule);
+}
+.row:hover{background:var(--paper-lit)}
+.row[aria-current="true"]{background:var(--paper-lit);box-shadow:inset 3px 0 0 var(--blue)}
+.row .rid{font-size:.74rem;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.row .rterm{font-size:.93rem}
+.row .rnote{font-size:.78rem;color:var(--ink-soft);margin-top:.1rem}
+/* 목록 줄에도 잉크 색을 실어 급한 것이 바로 보이게 */
+.row{border-left:4px solid transparent}
+.row.t-red{border-left-color:var(--red)}
+.row.t-red .rterm{color:var(--red)}
+.row.t-red .rnote{color:var(--red);opacity:.85}
+.row.t-blue{border-left-color:var(--blue)}
+.row.t-note{border-left-color:var(--ochre)}
+.row.t-note .rnote{color:var(--ochre)}
+.row .rbadge{
+  float:right;font-size:.68rem;letter-spacing:.06em;
+  border:1px solid currentColor;padding:0 .35em;line-height:1.5;
+}
+.row.t-red .rbadge{color:var(--red)}
+.row.t-blue .rbadge{color:var(--blue)}
+.row.t-note .rbadge{color:var(--ochre)}
+.row.done{border-left-color:var(--green)!important;opacity:.55}
+.row.done .rterm,.row.done .rnote{color:var(--green)}
+.row.done .rbadge{display:none}
+.row.done .rterm{color:var(--green)}
+.row.done .rterm::after{content:" ✓";color:var(--green)}
+
+/* ── 오른쪽 상세 ── */
+.entryhead{border-bottom:1px solid var(--ink);padding-bottom:.35rem;margin-bottom:.7rem}
+.entryhead .t{font-size:1.22rem;font-weight:600;margin:0}
+.entryhead .m{font-size:.8rem;color:var(--ink-soft);margin-top:.15rem}
+.pane{margin-bottom:.95rem;max-width:78ch}
+.pane .lab{
+  font-size:.72rem;color:var(--ink-soft);letter-spacing:.1em;
+  border-bottom:1px solid var(--rule);padding-bottom:.15rem;margin-bottom:.35rem;
+  display:flex;justify-content:space-between;align-items:baseline;
+}
+.body{font-size:.95rem;line-height:1.72;white-space:pre-wrap}
+.en{font-size:.92rem;line-height:1.7}
+
+/* ── 성구 토큰: 이 도구의 주인공 ── */
+.cit{
+  padding:0 .12em;border-bottom:2px solid transparent;
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.cit.ok{border-bottom-color:var(--rule)}
+.cit.miss{border-bottom-color:var(--red);color:var(--red);font-weight:400}
+.cit.diff{border-bottom-color:var(--blue);color:var(--blue)}
+.cit.note{border-bottom-color:var(--ochre);color:var(--ochre)}
+
+textarea{
+  width:100%;min-height:9rem;padding:.55rem .65rem;
+  border:1px solid var(--ink);background:var(--paper-lit);
+  line-height:1.85;font-size:.98rem;resize:vertical;
+}
+textarea:focus{outline:2px solid var(--blue);outline-offset:-1px}
+.acts{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem;align-items:center}
+.hint{font-size:.8rem;color:var(--ink-soft)}
+.sugg{
+  display:inline-flex;gap:.4rem;align-items:baseline;
+  border:1px dashed var(--blue);color:var(--blue);background:none;
+  padding:.22rem .6rem;font-size:.85rem;
+}
+.sugg:hover{background:var(--blue);color:var(--paper-lit)}
+.empty{color:var(--ink-soft);padding:3rem 0;max-width:52ch}
+.empty h3{font-weight:400;font-size:1.05rem;margin:0 0 .5rem;color:var(--ink)}
+
+#drop{
+  position:fixed;inset:0;background:rgba(230,233,236,.96);z-index:50;
+  display:none;align-items:center;justify-content:center;text-align:center;
+}
+#drop.on{display:flex}
+#drop div{border:2px dashed var(--ink);padding:3rem 4rem}
+footer{
+  flex:none;border-top:1px solid var(--rule);background:var(--paper-lit);
+  padding:.32rem 1rem;font-size:.8rem;color:var(--ink-soft);
+  display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;
+}
+kbd{
+  border:1px solid var(--rule);border-bottom-width:2px;padding:0 .3em;
+  font-family:inherit;font-size:.9em;
+}
+/* 칸 고르는 딱지 — 지명·인명DB는 영·한 짝이 여럿이라 */
+.fldtabs{display:flex;gap:.25rem;margin-bottom:.4rem;flex-wrap:wrap}
+.ftab{
+  border:1px solid var(--rule);background:transparent;color:var(--ink-soft);
+  padding:.1rem .5rem;font-size:.76rem;
+}
+.ftab.on{border-color:var(--ink);color:var(--ink);font-weight:600;background:var(--paper)}
+.ftab:disabled{opacity:.35;cursor:default}
+.cit.nobook{border-bottom-style:dotted;border-bottom-color:var(--blue)}
+.mapset{font-size:.75rem;color:var(--ink-soft);display:flex;align-items:center;gap:.3rem}
+.mapset input{
+  border:1px solid var(--rule);background:var(--paper);padding:.15rem .35rem;
+  font-size:.72rem;width:15rem;
+}
+#gitbox{position:fixed;inset:0;background:rgba(30,42,51,.45);z-index:60;display:none;
+  align-items:center;justify-content:center}
+#gitbox.on{display:flex}
+#gitbox .sheet{background:var(--paper-lit);border:1px solid var(--ink);padding:1.2rem 1.4rem;
+  width:min(30rem,92vw)}
+#gitbox h3{margin:0 0 .3rem;font-size:1.05rem;font-weight:600}
+#gitbox select,#gitbox input{width:100%;margin-top:.5rem;padding:.35rem .5rem;
+  border:1px solid var(--ink);background:var(--paper);font-size:.9rem}
+.sheetacts{display:flex;gap:.5rem;margin-top:.8rem}
+@media (max-width:1200px){ #cmpcol{width:270px} }
+@media (max-width:1000px){
+  main{flex-direction:column}
+  #rail,#listwrap{width:100%;max-height:150px;border-right:none;border-bottom:1px solid var(--rule)}
+  #detail{flex-direction:column;overflow-y:auto}
+  #cmpcol{width:100%;max-height:220px;border-right:none;border-bottom:1px solid var(--rule)}
+}
+@media (prefers-reduced-motion:no-preference){
+  .row,.kind{transition:background .12s}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>교정 책상</h1>
+  <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
+  <span class="sp"></span>
+  <button class="btn" id="open">파일 열기</button>
+  <button class="btn" id="fromGit">깃허브에서 열기</button>
+  <button class="btn" id="fillAll" disabled>참조 구절 모두 채우기</button>
+  <button class="btn" id="wipeRef" disabled>참조 씻어 내기</button>
+  <button class="btn" id="expJson" disabled>평문 내려받기</button>
+  <button class="btn" id="expEnc" disabled>암호본 내려받기</button>
+  <button class="btn" id="expCsv" disabled>소견표 내려받기</button>
+  <input type="file" id="file" accept=".json" hidden>
+  <label class="mapset">성경지도 <input id="mapbase" value="https://bible-writer.github.io/kjm-bible/map.html"></label>
+</header>
+
+<main>
+  <nav id="rail"></nav>
+  <div id="listwrap"><div id="list"></div></div>
+  <section id="detail">
+    <div id="cmpcol"></div>
+    <div id="textcol">
+    <div class="empty">
+      <h3>사전 파일을 여십시오</h3>
+      <p>easton_full.json 또는 smith_full.json을 열면 영문과 한글의 성구 인용을 맞대어 보고,
+      성경에 없는 절과 그 밖의 흠을 찾아 목록으로 세웁니다.</p>
+      <p>절 수는 개역개정 기준으로 담아 두었습니다. 성경 본문은 담지 않았습니다.</p>
+    </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span><kbd>j</kbd> <kbd>k</kbd> 다음·이전</span>
+  <span><kbd>e</kbd> 한글 고치기</span>
+  <span><kbd>d</kbd> 마친 것으로</span>
+  <span id="stat"></span>
+</footer>
+
+<div id="drop"><div>여기에 놓으십시오</div></div>
+
+<div id="gitbox">
+  <div class="sheet">
+    <h3>깃허브에서 바로 열기</h3>
+    <p class="hint">암호본은 비밀번호를 넣으면 풀어서 엽니다. 사전 두 종은 평문이라 비워 두어도 됩니다.</p>
+    <select id="gitpick"></select>
+    <input id="gitpw" type="password" placeholder="비밀번호 (암호본일 때만)">
+    <div class="sheetacts">
+      <button class="btn red" id="gitgo">열기</button>
+      <button class="btn" id="gitcancel">그만두기</button>
+    </div>
+    <p class="hint" id="gitmsg"></p>
+  </div>
+</div>
+<script>
+/* ══════════ 심어 둔 자료 ══════════ */
+const VC  = {"창세기":[31,25,24,26,32,22,24,22,29,32,32,20,18,24,21,16,27,33,38,18,34,24,20,67,34,35,46,22,35,43,55,32,20,31,29,43,36,30,23,23,57,38,34,34,28,34,31,22,33,26],"출애굽기":[22,25,22,31,23,30,25,32,35,29,10,51,22,31,27,36,16,27,25,26,36,31,33,18,40,37,21,43,46,38,18,35,23,35,35,38,29,31,43,38],"레위기":[17,16,17,35,19,30,38,36,24,20,47,8,59,57,33,34,16,30,37,27,24,33,44,23,55,46,34],"민수기":[54,34,51,49,31,27,89,26,23,36,35,16,33,45,41,50,13,32,22,29,35,41,30,25,18,65,23,31,40,16,54,42,56,29,34,13],"신명기":[46,37,29,49,33,25,26,20,29,22,32,32,18,29,23,22,20,22,21,20,23,30,25,22,19,19,26,68,29,20,30,52,29,12],"여호수아":[18,24,17,24,15,27,26,35,27,43,23,24,33,15,63,10,18,28,51,9,45,34,16,33],"사사기":[36,23,31,24,31,40,25,35,57,18,40,15,25,20,20,31,13,31,30,48,25],"룻기":[22,23,18,22],"사무엘상":[28,36,21,22,12,21,17,22,27,27,15,25,23,52,35,23,58,30,24,42,15,23,29,22,44,25,12,25,11,30,13],"사무엘하":[27,32,39,12,25,23,29,18,13,19,27,31,39,33,37,23,29,33,43,26,22,51,39,25],"열왕기상":[53,46,28,34,18,38,51,66,28,29,43,33,34,31,34,34,24,46,21,43,29,53],"열왕기하":[18,25,27,44,27,33,20,29,37,36,21,21,25,29,38,20,41,37,37,21,26,20,37,20,30],"역대상":[54,55,24,43,26,81,40,40,44,14,47,40,14,17,29,43,27,17,19,8,30,19,32,31,31,32,34,21,30],"역대하":[17,18,17,22,14,42,22,18,31,19,23,16,22,15,19,14,19,34,11,37,20,12,21,27,28,23,9,27,36,27,21,33,25,33,27,23],"에스라":[11,70,13,24,17,22,28,36,15,44],"느헤미야":[11,20,32,23,19,19,73,18,38,39,36,47,31],"에스더":[22,23,15,17,14,14,10,17,32,3],"욥기":[22,13,26,21,27,30,21,22,35,22,20,25,28,22,35,22,16,21,29,29,34,30,17,25,6,14,23,28,25,31,40,22,33,37,16,33,24,41,30,24,34,17],"시편":[6,12,8,8,12,10,17,9,20,18,7,8,6,7,5,11,15,50,14,9,13,31,6,10,22,12,14,9,11,12,24,11,22,22,28,12,40,22,13,17,13,11,5,26,17,11,9,14,20,23,19,9,6,7,23,13,11,11,17,12,8,12,11,10,13,20,7,35,36,5,24,19,28,23,10,12,20,72,13,19,16,8,18,12,13,17,7,18,52,17,16,15,5,23,11,13,12,9,9,5,8,28,22,35,45,48,43,13,31,7,10,10,9,8,18,19,2,29,176,7,8,9,4,8,5,6,5,6,8,8,3,18,3,3,21,26,9,8,24,13,10,7,12,15,21,10,20,14,9,6],"잠언":[33,22,35,27,23,35,27,36,18,32,31,28,25,35,33,33,28,24,29,30,31,29,35,34,28,28,27,28,27,33,31],"전도서":[18,26,22,16,20,12,29,17,18,20,10,14],"아가":[17,17,11,16,16,13,13,14],"이사야":[31,22,26,6,30,13,25,22,21,34,16,6,22,32,9,14,14,7,25,6,17,25,18,23,12,21,13,29,24,33,9,20,24,17,10,22,38,22,8,31,29,25,28,28,25,13,15,22,26,11,23,15,12,17,13,12,21,14,21,22,11,12,19,12,25,24],"예레미야":[19,37,25,31,31,30,34,22,26,25,23,17,27,22,21,21,27,23,15,18,14,30,40,10,38,24,22,17,32,24,40,44,26,22,19,32,21,28,18,16,18,22,13,30,5,28,7,47,39,46,64,34],"예레미야애가":[22,22,66,22,22],"에스겔":[28,10,27,17,17,14,27,18,11,22,25,28,23,23,8,63,24,32,14,49,32,31,49,27,17,21,36,26,21,26,18,32,33,31,15,38,28,23,29,49,26,20,27,31,25,24,23,35],"다니엘":[21,49,30,37,31,28,28,27,27,21,45,13],"호세아":[11,23,5,19,15,11,16,14,17,15,12,14,16,9],"요엘":[20,32,21],"아모스":[15,16,15,13,27,14,17,14,15],"오바댜":[21],"요나":[17,10,10,11],"미가":[16,13,12,13,15,16,20],"나훔":[15,13,19],"하박국":[17,20,19],"스바냐":[18,15,20],"학개":[15,23],"스가랴":[21,13,10,14,11,15,14,23,17,12,17,14,9,21],"말라기":[14,17,18,6],"마태복음":[25,23,17,25,48,34,29,34,38,42,30,50,58,36,39,28,27,35,30,34,46,46,39,51,46,75,66,20],"마가복음":[45,28,35,41,43,56,37,38,50,52,33,44,37,72,47,20],"누가복음":[80,52,38,44,39,49,50,56,62,42,54,59,35,35,32,31,37,43,48,47,38,71,56,53],"요한복음":[51,25,36,54,47,71,53,59,41,42,57,50,38,31,27,33,26,40,42,31,25],"사도행전":[26,47,26,37,42,15,60,40,43,48,30,25,52,28,41,40,34,28,41,38,40,30,35,27,27,32,44,31],"로마서":[32,29,31,25,21,23,25,39,33,21,36,21,14,23,33,27],"고린도전서":[31,16,23,21,13,20,40,13,27,33,34,31,13,40,58,24],"고린도후서":[24,17,18,18,21,18,16,24,15,18,33,21,13],"갈라디아서":[24,21,29,31,26,18],"에베소서":[23,22,21,32,33,24],"빌립보서":[30,30,21,23],"골로새서":[29,23,25,18],"데살로니가전서":[10,20,13,18,28],"데살로니가후서":[12,17,18],"디모데전서":[20,15,16,16,25,21],"디모데후서":[18,26,17,22],"디도서":[16,15,15],"빌레몬서":[25],"히브리서":[14,18,19,16,14,20,28,13,28,39,40,29,25],"야고보서":[27,26,18,17,20],"베드로전서":[25,25,22,19,14],"베드로후서":[21,22,18],"요한일서":[10,29,24,21,21],"요한이서":[13],"요한삼서":[15],"유다서":[25],"요한계시록":[20,29,22,11,14,17,17,13,21,11,19,17,18,20,8,21,18,24,21,15,27,21]};   /* 개역개정 절 수 (숫자만) */
+const E2K = {"Genesis":"창세기","Exodus":"출애굽기","Leviticus":"레위기","Numbers":"민수기","Deuteronomy":"신명기","Joshua":"여호수아","Judges":"사사기","Ruth":"룻기","1 Samuel":"사무엘상","2 Samuel":"사무엘하","1 Kings":"열왕기상","2 Kings":"열왕기하","1 Chronicles":"역대상","2 Chronicles":"역대하","Ezra":"에스라","Nehemiah":"느헤미야","Esther":"에스더","Job":"욥기","Psalms":"시편","Proverbs":"잠언","Ecclesiastes":"전도서","Song of Solomon":"아가","Isaiah":"이사야","Jeremiah":"예레미야","Lamentations":"예레미야애가","Ezekiel":"에스겔","Daniel":"다니엘","Hosea":"호세아","Joel":"요엘","Amos":"아모스","Obadiah":"오바댜","Jonah":"요나","Micah":"미가","Nahum":"나훔","Habakkuk":"하박국","Zephaniah":"스바냐","Haggai":"학개","Zechariah":"스가랴","Malachi":"말라기","Matthew":"마태복음","Mark":"마가복음","Luke":"누가복음","John":"요한복음","Acts":"사도행전","Romans":"로마서","1 Corinthians":"고린도전서","2 Corinthians":"고린도후서","Galatians":"갈라디아서","Ephesians":"에베소서","Philippians":"빌립보서","Colossians":"골로새서","1 Thessalonians":"데살로니가전서","2 Thessalonians":"데살로니가후서","1 Timothy":"디모데전서","2 Timothy":"디모데후서","Titus":"디도서","Philemon":"빌레몬서","Hebrews":"히브리서","James":"야고보서","1 Peter":"베드로전서","2 Peter":"베드로후서","1 John":"요한일서","2 John":"요한이서","3 John":"요한삼서","Jude":"유다서","Revelation":"요한계시록"};      /* 영문 책이름 → 한글 */
+const K2E = {}; for (const k in E2K) K2E[E2K[k]] = k;
+const BOOKS = Object.keys(E2K);                       /* 1~66 차례 */
+const KOBOOK = BOOKS.map(b=>E2K[b]);
+/* 개역개정 짧은 이름 — 지명DB의 "왕하5:12" 꼴을 읽으려고 */
+const KOABBR = ['창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하',
+ '스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나',
+ '합','습','학','슥','말','마','막','눅','요','행','롬','고전','고후','갈','엡','빌','골','살전','살후',
+ '딤전','딤후','딛','몬','히','약','벧전','벧후','요일','요이','요삼','유','계'];
+const ABBR2KO = {}; KOABBR.forEach((a,i)=>ABBR2KO[a]=KOBOOK[i]);
+
+const SHORT={Ge:'Genesis',Gen:'Genesis',Ex:'Exodus',Exo:'Exodus',Le:'Leviticus',Lev:'Leviticus',
+ Nu:'Numbers',Num:'Numbers',De:'Deuteronomy',Deu:'Deuteronomy',Jos:'Joshua',Jud:'Judges',Jdg:'Judges',
+ Ru:'Ruth',Ezr:'Ezra',Ne:'Nehemiah',Es:'Esther',Ps:'Psalms',Psa:'Psalms',Pr:'Proverbs',Pro:'Proverbs',
+ Ec:'Ecclesiastes',So:'Song of Solomon',Isa:'Isaiah',Jer:'Jeremiah',La:'Lamentations',Eze:'Ezekiel',
+ Da:'Daniel',Ho:'Hosea',Joe:'Joel',Am:'Amos',Ob:'Obadiah',Jon:'Jonah',Mic:'Micah',Na:'Nahum',
+ Hab:'Habakkuk',Zep:'Zephaniah',Zec:'Zechariah',Mal:'Malachi',Mt:'Matthew',Mr:'Mark',Mk:'Mark',
+ Lu:'Luke',Lk:'Luke',Joh:'John',Jn:'John',Ac:'Acts',Ro:'Romans',Ga:'Galatians',Eph:'Ephesians',
+ Php:'Philippians',Col:'Colossians',Tit:'Titus',Phm:'Philemon',Heb:'Hebrews',Jas:'James',Re:'Revelation'};
+const ALT = {Psalm:'Psalms',Cant:'Song of Solomon',Canticles:'Song of Solomon',Hos:'Hosea',
+  Phil:'Philippians',Nah:'Nahum',Obad:'Obadiah',Hag:'Haggai',Zeph:'Zephaniah',Habak:'Habakkuk'};
+Object.assign(ALT, SHORT);
+const NUMBERED={Sam:'Samuel',Sa:'Samuel',Ki:'Kings',Kin:'Kings',Kgs:'Kings',Ch:'Chronicles',
+ Chr:'Chronicles',Chron:'Chronicles',Co:'Corinthians',Cor:'Corinthians',Th:'Thessalonians',
+ Thes:'Thessalonians',Thess:'Thessalonians',Ti:'Timothy',Tim:'Timothy',Pe:'Peter',Pet:'Peter',
+ Jo:'John',Joh:'John',Jn:'John'};
+function normBook(raw){
+  if(!raw) return null;
+  let t=raw.replace(/\./g,'').replace(/\s+/g,' ').trim();
+  const m=t.match(/^([1-3])\s*(.+)$/);
+  let num='', rest=t;
+  if(m){ num=m[1]; rest=m[2]; }
+  if(num && NUMBERED[rest]) rest=NUMBERED[rest];
+  let full=num? num+' '+rest : rest;
+  full=ALT[full]||full;
+  return E2K[full]? full : null;
+}
+const LENIENT = new Set(['에스더','요엘']);
+const KJV_OK  = new Set(['고린도후서 13:14','시편 72:20']);
+
+/* ══════════ 절이 실제로 있는가 ══════════ */
+function maxVerse(koBook, ch){ const a=VC[koBook]; return (a && ch>=1 && ch<=a.length)? a[ch-1] : null; }
+function nChap(koBook){ const a=VC[koBook]; return a?a.length:0; }
+function grade(koBook, ch, v){
+  if(LENIENT.has(koBook)) return 0;
+  if(KJV_OK.has(koBook+' '+ch+':'+v)) return 0;
+  const m=maxVerse(koBook,ch);
+  if(m===null) return 2;
+  if(v>=1 && v<=m) return 0;
+  return (v>m && v<=m+3) ? 1 : 2;
+}
+function crossChapter(koBook, ch, tail){
+  const m=String(tail).match(/^(\d+)\s*[-–]\s*(\d+)$/); if(!m) return false;
+  const end=+m[2], mv=maxVerse(koBook,ch);
+  return mv!==null && end>mv && end>ch && end<=nChap(koBook);
+}
+function worst(c){
+  if(crossChapter(c.book,c.ch,c.tail)) return 1;
+  let g=0; c.vs.forEach(v=>{const x=grade(c.book,c.ch,v); if(x>g) g=x;}); return g;
+}
+
+/* ══════════ 인용 뽑기 ══════════ */
+function joinable(gap){
+  if(gap.length>14) return false;
+  return /^[\s;,)(\[\]:.\-–]*$/.test(gap) || /^\s*(and|comp\.?|cf\.?|또|및)\s*$/i.test(gap);
+}
+function trimTail(tail, after){
+  if(after && after[0]===':'){
+    const m=String(tail).match(/^(.*?)\s*[,\-–]\s*\d+$/);
+    if(m) return m[1];
+  }
+  return tail;
+}
+function spread(tail){
+  const out=new Set();
+  String(tail).split(/\s*,\s*/).forEach(p=>{
+    const r=p.split(/\s*[-–]\s*/);
+    if(r.length===2 && /^\d+$/.test(r[0]) && /^\d+$/.test(r[1])){ for(let i=+r[0];i<=+r[1];i++) out.add(i); }
+    else if(/^\d+$/.test(p)) out.add(+p);
+  });
+  return out;
+}
+const EN_ANY = /(?:\b((?:[1-3]\s?)?[A-Z][a-zA-Z]+(?:\sof\s[A-Z][a-z]+)?)\.?[\s(]{0,3})?(\d+):(\d+(?:\s*[,\-–]\s*\d+)*)/g;
+function enCites(t){
+  const out=[]; if(!t) return out; EN_ANY.lastIndex=0; let m, last=null, lastEnd=-1;
+  while((m=EN_ANY.exec(t))){
+    let ko=null, en=null;
+    if(m[1]){ const b=normBook(m[1]); if(b){ ko=E2K[b]; en=b; last=b; } else { last=null; lastEnd=-1; continue; } }
+    else if(last && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))){ en=last; ko=E2K[last]; }
+    else { last=null; lastEnd=-1; continue; }
+    const tail=trimTail(m[3], t.slice(m.index+m[0].length));
+    const cut=m[0].length-(m[3].length-tail.length);
+    const piece=m[0].slice(0,cut);
+    const raw=piece.trim().replace(/\s*\(\s*(?=\d)/,' ').replace(/\s+/g,' ');
+    out.push({raw, book:ko, en, ch:+m[2], vs:spread(tail), tail,
+              at:m.index+piece.indexOf(piece.trim()), len:piece.trim().length, inferred:!m[1]});
+    lastEnd=m.index+cut;
+  }
+  return out;
+}
+const KO_LONG = KOBOOK.slice().sort((a,b)=>b.length-a.length);
+const KO_ANY = new RegExp('(?:('+KO_LONG.join('|')+')\\s*)?(\\d+):(\\d+(?:\\s*[,\\-–]\\s*\\d+)*)','g');
+function koCites(t){
+  const out=[]; if(!t) return out; KO_ANY.lastIndex=0; let m, last=null, lastEnd=-1;
+  while((m=KO_ANY.exec(t))){
+    let b=null;
+    if(m[1]){ b=m[1]; last=m[1]; }
+    else if(last && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))) b=last;
+    else { last=null; lastEnd=-1; continue; }
+    const tail=trimTail(m[3], t.slice(m.index+m[0].length));
+    const cut=m[0].length-(m[3].length-tail.length);
+    const piece=m[0].slice(0,cut), raw=piece.trim();
+    out.push({raw, book:b, ch:+m[2], vs:spread(tail), tail,
+              at:m.index+piece.indexOf(raw), len:raw.length, inferred:!m[1]});
+    lastEnd=m.index+cut;
+  }
+  return out;
+}
+/* 지명DB의 "왕하5:12; 삼상3:1" 짧은 꼴 */
+const ABBR_RE = new RegExp('('+KOABBR.slice().sort((a,b)=>b.length-a.length).join('|')+')\\s*(\\d+):(\\d+(?:[,\\-–]\\d+)*)','g');
+function abbrCites(t){
+  const out=[]; if(!t) return out; ABBR_RE.lastIndex=0; let m;
+  while((m=ABBR_RE.exec(t))){
+    const b=ABBR2KO[m[1]]; if(!b) continue;
+    out.push({raw:m[0], book:b, ch:+m[2], vs:spread(m[3]), tail:m[3], at:m.index, len:m[0].length});
+  }
+  return out;
+}
+
+let DB=null, PROF=null, FILE='', ROWS=[], KIND='all', CUR=null, CURID=null, EDIT=false, SHOW=250, PICK=null, PICKKO=null;
+let MAPBASE='https://bible-writer.github.io/kjm-bible/map.html';
+
+/* ══════════ 파일 종류별 프로필 ══════════ */
+const PROFILES=[
+ {id:'dict', name:'사전', arr:'entries', idk:'id',
+  title:e=>e.term, meta:e=>[e.category, e.hebrew_greek],
+  pairs:[{en:'definition', ko:'definition_ko', label:'본문'}],
+  koOnly:[], codes:['hebrew_greek'], loose:[], dupTitle:true, verseArr:null, verseAbbr:[],
+  test:d=>Array.isArray(d.entries)&&d.entries[0]&&'definition' in d.entries[0]},
+
+ {id:'place', name:'지명DB', arr:'places', idk:'id',
+  title:e=>(e.name||'')+(e.orig?' · '+e.orig:''), meta:e=>[e.country, e.hebrew_greek||e.ustrong],
+  pairs:[{en:'eastonEn', ko:'eastonKo', label:'이스턴'},{en:'smithEn', ko:'smithKo', label:'스미스'}],
+  koOnly:['desc'], codes:['hebrew_greek'], loose:['ustrong'], dupTitle:true, verseArr:null, verseAbbr:['verse','dictVerse'],
+  test:d=>Array.isArray(d.places)},
+
+ {id:'person', name:'인명DB', arr:'persons', idk:'id',
+  title:e=>(e.name_ko||'')+(e.name_en?' · '+e.name_en:''), meta:e=>[e.type, e.strong||e.ustrong],
+  pairs:[{en:'article', ko:'article_ko', label:'해설'},{en:'summary', ko:'summary_ko', label:'요약'},
+         {en:'short', ko:'short_ko', label:'짧은 글'},{en:'briefest', ko:'briefest_ko', label:'한 마디'}],
+  koOnly:[], codes:['strong'], loose:['ustrong'], dupTitle:false, verseArr:'verses', verseAbbr:['first_ref'],
+  test:d=>Array.isArray(d.persons)},
+
+ {id:'term', name:'용어DB', arr:'terms', idk:'id',
+  title:e=>(e.term_ko||'')+(e.term_en?' · '+e.term_en:''), meta:e=>[e.source&&String(e.source).slice(0,24), e.hebrew_greek],
+  pairs:[], koOnly:['definition_ko'], codes:['hebrew_greek'], loose:[], dupTitle:true, verseArr:null, verseAbbr:[],
+  test:d=>Array.isArray(d.terms)},
+];
+function detect(d){ return PROFILES.find(p=>{try{return p.test(d)}catch(e){return false}}) || null; }
+
+/* ══════════ 갈래 ══════════ */
+const KINDS=[
+  {id:'en_bad',  name:'영문 — 없는 절',   tone:'red',  tag:'없는 절'},
+  {id:'ko_bad',  name:'한글 — 없는 절',   tone:'red',  tag:'없는 절'},
+  {id:'ref_bad', name:'절 목록 — 없는 절', tone:'red',  tag:'절 목록'},
+  {id:'versify', name:'절 구분·장 넘는 범위', tone:'note', tag:'넘어감'},
+  {id:'mismatch',name:'영문↔한글 어긋남',  tone:'red',  tag:'어긋남'},
+  {id:'en_miss', name:'한글에 빠진 인용',  tone:'blue', tag:'빠짐'},
+  {id:'nobook',  name:'책 이름 없는 인용', tone:'blue', tag:'책없음'},
+  {id:'ko_none', name:'한글 번역 없음',    tone:'blue', tag:'미번역'},
+  {id:'paren',   name:'괄호 불균형',       tone:'red',  tag:'괄호'},
+  {id:'hanja',   name:'한자 섞임',         tone:'red',  tag:'한자'},
+  {id:'strong',  name:'스트롱 형식 오류',  tone:'red',  tag:'코드'},
+  {id:'duptitle',name:'표제어 중복',       tone:'blue', tag:'중복'},
+  {id:'dupid',   name:'id 중복',           tone:'red',  tag:'id중복'},
+];
+
+/* ══════════ 검사 ══════════ */
+function items(){ return DB && PROF ? (DB[PROF.arr]||[]) : []; }
+function pairsOf(y){                 /* 영·한 짝이 있는 칸만 */
+  return PROF.pairs.filter(p=>(y[p.en]||'').trim() && (y[p.ko]||'').trim());
+}
+function scan(){
+  ROWS=[]; const seenId={}, seenT={};
+  items().forEach(y=>{
+    const id=y[PROF.idk], title=PROF.title(y)||'(이름 없음)';
+    const push=(kind,note,ex)=>ROWS.push(Object.assign({id,term:title,kind,note},ex||{}));
+    seenId[id]=(seenId[id]||0)+1; seenT[title]=(seenT[title]||0)+1;
+
+    const over=c=>c.book+' '+c.ch+'장은 '+(maxVerse(c.book,c.ch)===null?'없음':maxVerse(c.book,c.ch)+'절까지');
+    const seen=new Set(), key=c=>c.book+'|'+c.ch+'|'+[...c.vs].join(',');
+
+    PROF.pairs.forEach(pr=>{
+      const en=y[pr.en]||'', ko=y[pr.ko]||'';
+      if(!en.trim()) return;
+      const EC=enCites(en), KC=koCites(ko);
+      const both=c=>KC.some(o=>!o.inferred&&key(o)===key(c))||EC.some(o=>!o.inferred&&key(o)===key(c));
+      [[EC,'en'],[KC,'ko']].forEach(([L,side])=>L.forEach(c=>{
+        if(c.inferred) return;
+        const k=pr.label+'|'+key(c); if(seen.has(k)) return; seen.add(k);
+        const g=worst(c), who=both(c)?'영문·한글':(side==='en'?'영문':'한글');
+        if(g===2) push(side==='en'?'en_bad':'ko_bad', pr.label+' '+who+' '+c.raw+'  →  '+over(c),
+                       side==='en'?{cit:c.raw,fld:pr}:{kocit:c.raw,fld:pr});
+        else if(g===1) push('versify', pr.label+' '+who+' '+c.raw+
+                       (crossChapter(c.book,c.ch,c.tail)?' — 장을 넘는 범위':' — KJV 절 구분 차이일 수 있음'),
+                       side==='en'?{cit:c.raw,fld:pr}:{kocit:c.raw,fld:pr});
+      }));
+      if(!ko.trim()){ push('ko_none', pr.label+' — 영문 '+en.length+'자, 한글 없음', {fld:pr}); return; }
+      /* 영문 인용이 한글에 옮겨졌는가 */
+      EC.forEach(c=>{
+        if(c.inferred) return;
+        const same=KC.filter(k=>k.book===c.book && k.ch===c.ch);
+        if(!same.length){ push('en_miss', pr.label+' 영문 '+c.raw+' — 한글에 '+c.book+' '+c.ch+'장 인용이 없음',
+                               {cit:c.raw, kocit:null, fld:pr}); return; }
+        const all=new Set(); same.forEach(k=>k.vs.forEach(v=>all.add(v)));
+        if(![...c.vs].some(v=>all.has(v)))
+          push('mismatch', pr.label+' 영문 '+c.raw+'  ·  한글 '+same.map(k=>k.raw).join(', '),
+               {cit:c.raw, kocit:same.length===1?same[0].raw:null, fld:pr,
+                want:same.length===1?c.book+' '+c.ch+':'+[...c.vs].join(','):null, got:same.map(k=>k.raw)});
+      });
+      /* 한글에 책 이름 없이 장:절만 있는 인용 */
+      KC.forEach(k=>{ if(k.inferred) push('nobook', pr.label+' 한글 '+k.raw+' — 앞의 '+k.book+'을 이어받은 것으로 보임',
+                                          {kocit:k.raw, fld:pr, want:k.book+' '+k.raw}); });
+    });
+
+    /* 한글만 있는 칸 */
+    PROF.koOnly.forEach(f=>{
+      const ko=y[f]||''; if(!ko.trim()) return;
+      koCites(ko).forEach(c=>{ if(c.inferred) return;
+        const g=worst(c);
+        if(g===2) push('ko_bad', f+' '+c.raw+'  →  '+over(c), {kocit:c.raw, fld:{ko:f,label:f}});
+        else if(g===1) push('versify', f+' '+c.raw+' — 절 구분 차이일 수 있음', {kocit:c.raw, fld:{ko:f,label:f}}); });
+    });
+
+    /* 짧은 꼴 성구 칸 (지명DB verse 등) */
+    (PROF.verseAbbr||[]).forEach(f=>{
+      const t=y[f]; if(!t || typeof t!=='string') return;
+      abbrCites(t).forEach(c=>{ const g=worst(c);
+        if(g===2) push('ref_bad', f+' '+c.raw+'  →  '+over(c), {fld:{ko:f,label:f}}); });
+    });
+
+    /* 절 목록 배열 (인명DB verses) */
+    if(PROF.verseArr && Array.isArray(y[PROF.verseArr])){
+      const bad=[];
+      y[PROF.verseArr].forEach(v=>{
+        const b=KOBOOK[(v.book|0)-1];
+        if(!b || grade(b, v.chapter|0, v.verse|0)===2) bad.push((b||('책'+v.book))+' '+v.chapter+':'+v.verse);
+      });
+      if(bad.length) push('ref_bad', PROF.verseArr+' — 없는 절 '+bad.length+'건 · '+bad.slice(0,4).join(' · '));
+    }
+
+    /* 그 밖 */
+    const allKo=[...PROF.pairs.map(p=>y[p.ko]), ...PROF.koOnly.map(f=>y[f])].filter(x=>typeof x==='string').join(' ');
+    const o=(allKo.match(/\(/g)||[]).length, cc=(allKo.match(/\)/g)||[]).length;
+    if(o!==cc) push('paren','여는 괄호 '+o+' · 닫는 괄호 '+cc);
+    if(/[\u4e00-\u9fff]/.test(allKo+' '+title)) push('hanja','한자가 들어 있음');
+    PROF.codes.forEach(f=>String(y[f]||'').split(',').forEach(c=>{
+      c=c.trim(); if(c && !/^[HG]\d{4}$/.test(c)) push('strong', f+' "'+c+'" 는 H0000·G0000 꼴이 아님'); }));
+    /* ustrong 같은 TIPNR 코드는 뒤에 글자가 붙는 것이 정상이므로 느슨히 본다 */
+    (PROF.loose||[]).forEach(f=>String(y[f]||'').split(',').forEach(c=>{
+      c=c.trim(); if(c && !/^[HG]\d{4}[A-Za-z]?$/.test(c)) push('strong', f+' "'+c+'" 는 H0000·G0000 꼴이 아님'); }));
+  });
+  items().forEach(y=>{
+    const id=y[PROF.idk], t=PROF.title(y)||'(이름 없음)';
+    if(seenId[id]>1)  ROWS.push({id,term:t,kind:'dupid',note:'같은 id가 '+seenId[id]+'개'});
+    if(PROF.dupTitle && seenT[t]>1) ROWS.push({id,term:t,kind:'duptitle',note:'같은 표제어가 '+seenT[t]+'개'});
+  });
+  ROWS=ROWS.filter((r,i,a)=>a.findIndex(x=>x.id===r.id&&x.kind===r.kind&&x.note===r.note)===i);
+  ROWS.forEach((r,i)=>{r.key=i; r.done=false;});
+}
+
+/* ══════════ 그리기 ══════════ */
+const $=s=>document.querySelector(s);
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function bookId(ko){ const i=KOBOOK.indexOf(ko); return i<0?null:i+1; }
+function mapUrl(c){
+  const b=bookId(c.book); if(!b) return null;
+  const v=[...c.vs][0]||1;
+  return MAPBASE + (MAPBASE.indexOf('?')<0?'?':'&') + 'goto=' + b + '.' + c.ch + '.' + v;
+}
+function markEn(t, focus, pick){
+  if(!t) return '';
+  let out='', last=0;
+  enCites(t).forEach(c=>{
+    out+=esc(t.slice(last,c.at));
+    const g=c.inferred?0:worst(c);
+    let cls=g===2?'miss':g===1?'note':(focus&&c.raw===focus?'diff':'ok');
+    if(pick&&c.raw===pick) cls+=' pick';
+    const u=mapUrl(c);
+    out+=(u?'<a class="cit '+cls+'" href="'+u+'" target="_blank" rel="noopener">':'<span class="cit '+cls+'">')
+       + esc(t.substr(c.at,c.len)) + (u?'</a>':'</span>');
+    last=c.at+c.len;
+  });
+  return out+esc(t.slice(last));
+}
+function markKoPlain(t, focus, pick){
+  if(!t) return '';
+  let out='', last=0;
+  koCites(t).forEach(c=>{
+    out+=esc(t.slice(last,c.at));
+    const g=c.inferred?0:worst(c);
+    let cls=g===2?'miss':(g===1||LENIENT.has(c.book))?'note':(focus&&focus.some(f=>f===c.raw)?'diff':'ok');
+    if(c.inferred) cls+=' nobook';
+    if(pick&&c.raw===pick) cls+=' pick';
+    const u=mapUrl(c);
+    out+=(u?'<a class="cit '+cls+'" href="'+u+'" target="_blank" rel="noopener">':'<span class="cit '+cls+'">')
+       + esc(t.substr(c.at,c.len)) + (u?'</a>':'</span>');
+    last=c.at+c.len;
+  });
+  return out+esc(t.slice(last));
+}
+function markKo(t, focus, pick){
+  if(!t) return '';
+  const rm=t.match(/\s*\(\s*참조\s*:[^()]*\)+\s*$/);
+  if(!rm) return markKoPlain(t,focus,pick);
+  return markKoPlain(t.slice(0,rm.index),focus,pick)
+       + '<span class="refmark">'+markKoPlain(rm[0],focus,pick)+'</span>';
+}
+/* 영문 기준 대조 */
+function cmpRows(y, fld){
+  const EC=enCites(y[fld.en]||''), KC=koCites(y[fld.ko]||'');
+  const used=new Set(), rows=[];
+  EC.forEach(c=>{
+    const same=KC.filter(k=>k.book===c.book&&k.ch===c.ch);
+    const hit=same.find(k=>[...c.vs].some(v=>k.vs.has(v)));
+    const mate=hit||same[0]||null;
+    if(mate) used.add(mate.at);
+    rows.push({en:c, ko:mate, state:hit?'ok':mate?'bad':'miss'});
+  });
+  KC.forEach(k=>{ if(!used.has(k.at)) rows.push({en:null, ko:k, state:'only'}); });
+  return rows;
+}
+function missingRefs(y, fld){
+  const out=[], seen=new Set();
+  cmpRows(y,fld).forEach(p=>{
+    if(p.state!=='miss'||!p.en||p.en.inferred) return;
+    if(!KOBOOK.includes(p.en.book)) return;          /* 한글 책 이름이 아니면 넣지 않는다 */
+    const t=p.en.book+' '+p.en.ch+':'+String(p.en.tail).replace(/\s+/g,'');
+    if(!seen.has(t)){ seen.add(t); out.push(t); }
+  });
+  return out;
+}
+/* 이미 붙은 참조를 남김없이 떼어 낸다.
+   옛 판이 겹쳐 붙이며 "(참조: …)) (참조: …)" 처럼 괄호가 어긋난 것도 씻는다. */
+const REF_ALL=/\s*\(\s*참조\s*:[^()]*\)*\s*$/;
+function stripRefs(v){
+  let t=String(v||'');
+  for(let i=0;i<8;i++){
+    const n=t.replace(REF_ALL,'').replace(/\s*\)+\s*$/, m=>{
+      /* 참조를 떼고 남은 짝 없는 닫는 괄호만 지운다 */
+      const head=t.slice(0,t.length-m.length);
+      return (head.split('(').length-1) > (head.split(')').length-1) ? m : '';
+    });
+    if(n===t) break; t=n;
+  }
+  return t.replace(/\s+$/,'');
+}
+function refLine(v){
+  const t=String(v||''); const m=t.match(/\(\s*참조\s*:\s*([^()]*)\)/g);
+  if(!m) return '';
+  return m.map(x=>x.replace(/^\(\s*참조\s*:\s*/,'').replace(/\)$/,'').trim())
+          .join('; ').split(/\s*;\s*/).filter((v,i,a)=>v&&a.indexOf(v)===i).join('; ');
+}
+function balanced(t){ return (String(t).split('(').length) === (String(t).split(')').length); }
+function setRefs(y, fld, text){
+  const cur=stripRefs(y[fld.ko]);
+  const list=String(text).split(/\s*;\s*/).map(x=>x.trim()).filter((v,i,a)=>v&&a.indexOf(v)===i);
+  const next = list.length ? cur+' (참조: '+list.join('; ')+')' : cur;
+  if(!balanced(next)){ alert('괄호가 맞지 않아 넣지 않았습니다. 한글 본문을 먼저 살펴보십시오.'); return false; }
+  y[fld.ko]=next; y.__touched=true; return true;
+}
+function counts(){ const c={}; ROWS.forEach(r=>{ if(!r.done) c[r.kind]=(c[r.kind]||0)+1; }); return c; }
+function drawRail(){
+  const c=counts(), left=ROWS.filter(r=>!r.done&&!QUIET.has(r.kind)).length, done=ROWS.filter(r=>r.done).length;
+  let h='<div class="railsec"><h2>소견</h2>'
+   +`<button class="kind" data-k="all" aria-current="${KIND==='all'}"><span class="kn">모두</span><span class="kc">${left}</span></button>`;
+  KINDS.forEach(k=>{const n=c[k.id]||0;
+    h+=`<button class="kind k-${n?k.tone:'ok'}${QUIET.has(k.id)?' quiet':''}" data-k="${k.id}" aria-current="${KIND===k.id}">
+        <span class="kn">${k.name}</span><span class="kc">${n?n:'—'}</span></button>`;});
+  h+='</div><div class="railsec"><h2>마친 것</h2>'
+   +`<button class="kind k-ok" data-k="done" aria-current="${KIND==='done'}"><span class="kn">판정 끝</span><span class="kc">${done}</span></button></div>`
+   +'<div class="railsec"><h2>표시</h2><p class="hint" style="margin:0">'
+   +'<span class="cit miss">붉은 밑줄</span> 성경에 없는 절<br>'
+   +'<span class="cit diff">푸른 밑줄</span> 지금 보는 인용<br>'
+   +'<span class="cit note">누런 밑줄</span> 넘어가도 되는 것<br>'
+   +'<span class="cit nobook">점선</span> 책 이름 없는 인용<br>'
+   +'<span style="color:var(--green)">초록</span> 손댄 자리<br>'
+   +'<span class="hint">성구를 누르면 성경지도가 열립니다</span></p></div>';
+  $('#rail').innerHTML=h;
+  $('#rail').querySelectorAll('.kind').forEach(b=>b.onclick=()=>{KIND=b.dataset.k;CUR=null;CURID=null;SHOW=250;draw();});
+}
+const TONE={red:0,note:1,blue:2};
+/* '모두'에서는 빼 두고, 왼쪽에서 그 갈래를 눌러야 보이는 것들 */
+const QUIET=new Set(['nobook','ko_none']);
+function visible(){
+  if(KIND==='done') return ROWS.filter(r=>r.done);
+  const v=ROWS.filter(r=>!r.done&&(KIND==='all'?!QUIET.has(r.kind):r.kind===KIND));
+  if(KIND!=='all') return v;
+  const t=r=>{const k=KINDS.find(x=>x.id===r.kind); return TONE[k?k.tone:'blue'];};
+  return v.slice().sort((a,b)=>t(a)-t(b)||a.id-b.id);
+}
+function drawList(){
+  const all=visible(), v=all.slice(0,SHOW);
+  $('#list').innerHTML = all.length ? v.map(r=>{
+    const k=KINDS.find(x=>x.id===r.kind)||{tone:'blue',tag:r.kind};
+    const y=items().find(e=>e[PROF.idk]===r.id);
+    return `<button class="row t-${k.tone} ${r.done?'done':''}${y&&y.__touched?' touched':''}" data-key="${r.key}" aria-current="${CUR===r.key}">
+      <span class="rbadge">${esc(k.tag)}</span><span class="rid">${r.id}</span>
+      <div class="rterm">${esc(r.term)}</div><div class="rnote">${esc(r.note)}</div></button>`;}).join('')
+    + (all.length>SHOW?`<button class="row" id="more" style="text-align:center;color:var(--blue)">아래로 더 보기 <span class="rid">(${SHOW} / ${all.length})</span></button>`:'')
+    : '<p class="hint" style="padding:1.2rem">이 갈래에는 남은 것이 없습니다.</p>';
+  $('#list').querySelectorAll('.row').forEach(b=>{
+    if(b.id==='more'){ b.onclick=()=>{SHOW+=250;drawList();}; return; }
+    b.onclick=()=>{CUR=+b.dataset.key; CURID=ROWS.find(x=>x.key===CUR).id; EDIT=false; PICK=null; PICKKO=null; draw();};
+  });
+  const cur=$('#list [aria-current="true"]'); if(cur&&cur.scrollIntoView) cur.scrollIntoView({block:'nearest'});
+}
+function drawDetail(){
+  const d=$('#textcol'), cc=$('#cmpcol');
+  let r = CUR!==null ? ROWS.find(x=>x.key===CUR) : null;
+  if(!r && CURID!==null) r={id:CURID, term:'', kind:'clear', note:''};
+  if(!r){ cc.innerHTML=''; d.innerHTML='<div class="empty"><h3>왼쪽에서 하나를 고르십시오</h3><p>성구 대조표가 왼쪽에, 본문이 여기에 나옵니다.</p></div>'; return; }
+  const y=items().find(e=>e[PROF.idk]===r.id);
+  if(!y){ cc.innerHTML=''; d.innerHTML=''; return; }
+  const kind=KINDS.find(k=>k.id===r.kind)||{name:'남은 소견 없음',tone:'ok'};
+  const col=kind.tone==='red'?'var(--red)':kind.tone==='note'?'var(--ochre)':kind.tone==='ok'?'var(--green)':'var(--blue)';
+  const fld = r.fld && r.fld.en ? PROF.pairs.find(p=>p.label===r.fld.label) : (pairsOf(y)[0]||PROF.pairs[0]||null);
+
+  /* 대조표 */
+  if(fld && fld.en){
+    const P=cmpRows(y,fld), n={ok:0,bad:0,miss:0,only:0}; P.forEach(p=>n[p.state]++);
+    let ch=`<div class="fldtabs">${PROF.pairs.map(p=>
+      `<button class="ftab${p.label===fld.label?' on':''}" data-f="${esc(p.label)}"${(y[p.en]||'').trim()?'':' disabled'}>${esc(p.label)}</button>`).join('')}</div>`;
+    ch+=`<table class="cmp"><caption>영문 ${n.ok+n.bad+n.miss}건 ·
+      <span style="color:var(--green)">옮겨짐 ${n.ok}</span> ·
+      <span style="color:var(--red)">빠짐 ${n.miss}</span> ·
+      <span style="color:var(--red)">어긋남 ${n.bad}</span>${n.only?' · 한글에만 '+n.only:''}</caption>
+      <thead><tr><th>영문</th><th>한글</th><th class="mk">일치</th></tr></thead><tbody>`;
+    P.forEach(p=>{
+      const mk=p.state==='ok'?'✓':p.state==='only'?'＋':'✗';
+      const on=(PICK&&p.en&&p.en.raw===PICK)?' on':'';
+      ch+=`<tr class="${p.state}${on}" data-en="${esc(p.en?p.en.raw:'')}" data-ko="${esc(p.ko?p.ko.raw:'')}">
+        <td>${p.en?esc(p.en.raw):'<span class="none">영문에 없음</span>'}</td>
+        <td>${p.ko?esc(p.ko.raw):'<span class="none">한글에 없음</span>'}</td>
+        <td class="mk">${mk}</td></tr>`;
+    });
+    cc.innerHTML=ch+'</tbody></table>';
+  } else {
+    cc.innerHTML='<p class="hint">이 파일에는 영문 원문이 없어 대조표를 만들 수 없습니다.</p>';
+  }
+
+  /* 본문 */
+  const metas=(PROF.meta(y)||[]).filter(Boolean).map(esc).join(' · ');
+  let h=`<div class="entryhead${y.__touched?' touched':''}" style="border-bottom-color:${y.__touched?'var(--green)':col}">
+    <p class="t">${esc(PROF.title(y))}${y.__touched?'<span class="tag-touched">고침</span>':''}</p>
+    <p class="m">id ${y[PROF.idk]}${metas?' · '+metas:''} · <span style="color:${col};font-weight:600">${esc(kind.name)}</span></p></div>`;
+  const komate = PICK ? PICKKO : r.kocit;
+  h+='<div id="twocol">';
+  if(fld && fld.en){
+    h+=`<div class="pane"><div class="lab"><span>${esc(fld.label)} 영문 — 고치지 않음</span><span>${(y[fld.en]||'').length}자</span></div>
+      <div class="scroll"><div class="body en">${markEn(y[fld.en], PICK||r.cit, PICK||null)}</div></div></div>`;
+  }
+  const kof = fld ? (fld.ko||fld) : (PROF.koOnly[0]||null);
+  const kotxt = kof ? (y[kof.ko||kof]||'') : '';
+  const kokey = kof ? (kof.ko||kof) : null;
+  h+=`<div class="pane"><div class="lab"><span>${esc(fld?fld.label:(kokey||''))} 한글${y.__touched?' <span class="edited">· 고침</span>':''}</span><span>${kotxt.length}자</span></div>`;
+  if(EDIT){
+    h+=`<textarea id="ta">${esc(kotxt)}</textarea>
+        <div class="acts"><button class="btn red" id="save">고친 것 넣기</button><button class="btn" id="cancel">그만두기</button></div>`;
+  } else {
+    const miss = fld&&fld.en ? missingRefs(y,fld) : [];
+    const have = kokey ? refLine(y[kokey]) : '';
+    const notIn = miss.filter(t=>have.indexOf(t)<0);
+    h+=`<div class="scroll"><div class="body">${markKo(kotxt, komate?[komate]:r.got, komate)}</div>`;
+    if(fld && fld.en){
+      h+=`<div class="refbox${have?' filled':''}">
+        <div class="reflab">${have?'참조 구절 — 넣었습니다':'참조 구절 — 영문에만 있는 성구를 한글 끝에 붙입니다'}</div>
+        <input id="refin" value="${esc(have)}" placeholder="예) 사무엘상 6:18; 열왕기상 1:19">
+        <div class="refacts">${notIn.length?`<button class="sugg" id="reffill">영문에만 있는 ${notIn.length}건 채우기</button>`:''}
+          <button class="btn" id="refsave">참조 넣기</button>${have?'<button class="btn" id="refclear">참조 씻어 내기</button>':''}</div>
+        <div class="refhint">${miss.length?miss.map(esc).join(' · '):'영문에만 있는 성구가 없습니다.'}</div></div>`;
+    }
+    h+='</div><div class="acts"><button class="btn" id="edit">한글 고치기</button>';
+    if(r.kind==='mismatch'&&r.want&&r.kocit&&kotxt.indexOf(r.kocit)>=0)
+      h+=`<button class="sugg" id="apply">한글의 ${esc(r.kocit)} 를 ${esc(r.want)} 로</button>`;
+    if(r.kind==='nobook'&&r.want&&r.kocit&&kotxt.indexOf(r.kocit)>=0)
+      h+=`<button class="sugg" id="apply">한글의 ${esc(r.kocit)} 에 책 이름 넣기 → ${esc(r.want)}</button>`;
+    h+=`<button class="btn" id="done">${r.done?'다시 열기':'판정 끝'}</button></div>`;
+  }
+  d.innerHTML=h+'</div></div>';
+
+  cc.querySelectorAll('.ftab').forEach(b=>b.onclick=()=>{
+    const p=PROF.pairs.find(x=>x.label===b.dataset.f);
+    if(!p) return; r.fld=p; PICK=null; PICKKO=null; drawDetail(); });
+  cc.querySelectorAll('.cmp tbody tr').forEach(tr=>tr.onclick=()=>{
+    const k=tr.dataset.en||tr.dataset.ko;
+    PICK=(PICK===k)?null:k; PICKKO=tr.dataset.ko||null; drawDetail();
+    d.querySelectorAll('#twocol .cit.pick').forEach(el=>el.scrollIntoView&&el.scrollIntoView({block:'center'}));
+  });
+  const on=(id,fn)=>{const el=$('#'+id); if(el) el.onclick=fn;};
+  on('reffill',()=>{ const i=$('#refin'), have=i.value.trim();
+    const add=missingRefs(y,fld).filter(t=>have.indexOf(t)<0);
+    i.value=have?have+'; '+add.join('; '):add.join('; '); i.focus(); });
+  on('refsave',()=>{ if(setRefs(y,fld,$('#refin').value)) rescan(); });
+  on('refclear',()=>{ y[fld.ko]=stripRefs(y[fld.ko]); y.__touched=true; rescan(); });
+  on('edit',()=>{EDIT=true;drawDetail();setTimeout(()=>{const t=$('#ta'); if(t)t.focus();},0);});
+  on('cancel',()=>{EDIT=false;drawDetail();});
+  on('save',()=>{ if(kokey){ y[kokey]=$('#ta').value; y.__touched=true; } EDIT=false; rescan(); });
+  on('apply',()=>{ if(kokey){ y[kokey]=String(y[kokey]).replace(r.kocit, r.want); y.__touched=true; } rescan(); });
+  on('done',()=>{ r.done=!r.done; draw(); });
+}
+function rescan(){
+  const keep=CURID, doneSet=new Set(ROWS.filter(r=>r.done).map(r=>r.id+'|'+r.kind+'|'+r.note));
+  scan(); ROWS.forEach(r=>{ if(doneSet.has(r.id+'|'+r.kind+'|'+r.note)) r.done=true; });
+  const same=ROWS.find(r=>r.id===keep&&!r.done); CUR=same?same.key:null; draw();
+}
+function draw(){ drawRail(); drawList(); drawDetail(); drawStat(); }
+function drawStat(){
+  const t=DB?items().filter(e=>e.__touched).length:0;
+  $('#stat').textContent = DB? `소견 ${ROWS.filter(r=>!r.done).length} 남음 · 고친 항목 ${t}` : '';
+  ['expJson','expEnc','expCsv'].forEach(i=>$('#'+i).disabled=!DB);
+  const dirty=DB?items().filter(y=>PROF.pairs.some(f=>/\(\s*참조\s*:/.test(String(y[f.ko]||'')))).length:0;
+  const wb=$('#wipeRef'); wb.disabled=!dirty;
+  wb.textContent = dirty?`참조 ${dirty}항목 씻어 내기`:'참조 씻어 내기';
+  const miss=DB?[...new Set(ROWS.filter(r=>r.kind==='en_miss'&&!r.done).map(r=>r.id))].length:0;
+  const fb=$('#fillAll'); fb.disabled=!miss;
+  fb.textContent = miss?`참조 ${miss}항목 채우기`:'참조 채우기';
+}
+
+/* ══════════ 파일 읽기 ══════════ */
+function load(text, name){
+  let j; try{ j=JSON.parse(text); }catch(e){ alert('JSON을 읽지 못했습니다. '+e.message); return; }
+  const p=detect(j);
+  if(!p){ alert('아는 얼개가 아닙니다. 사전(entries) · 지명(places) · 인명(persons) · 용어(terms) 가운데 하나여야 합니다.'); return; }
+  DB=j; PROF=p; FILE=name;
+  $('#loaded').textContent = `${p.name} · ${name} · v${j.version||'?'} · ${(j[p.arr]||[]).length.toLocaleString()}항목`;
+  scan(); KIND='all'; CUR=null; CURID=null; SHOW=250; PICK=null; PICKKO=null; draw();
+}
+$('#open').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{const f=e.target.files[0]; if(f) f.text().then(t=>load(t,f.name)); };
+const drop=$('#drop');
+['dragenter','dragover'].forEach(ev=>document.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('on');}));
+['dragleave','drop'].forEach(ev=>document.addEventListener(ev,e=>{
+  e.preventDefault();
+  if(ev==='dragleave'&&e.relatedTarget) return;
+  drop.classList.remove('on');
+  if(ev==='drop'){ const f=e.dataTransfer.files[0]; if(f) f.text().then(t=>load(t,f.name)); }
+}));
+
+/* ══════════ 깃허브에서 바로 읽기 (암호본이면 풀어서) ══════════ */
+const RAW='https://raw.githubusercontent.com/bible-writer/kjm-bible/HEAD/';
+const FILES=[['easton_full.json','이스턴 사전'],['smith_full.json','스미스 사전'],
+             ['placeDatabase.json','지명DB'],['personDatabase.json','인명DB'],['termDatabase.json','용어DB']];
+function b64(s){ const b=atob(s), a=new Uint8Array(b.length); for(let i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return a; }
+async function decrypt(z, pw){
+  const enc=new TextEncoder();
+  const base=await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key=await crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt:b64(z.salt), iterations:z.iterations||200000, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const out=await crypto.subtle.decrypt({name:'AES-GCM', iv:b64(z.iv)}, key, b64(z.ciphertext));
+  return new TextDecoder().decode(out);
+}
+$('#fromGit').onclick=()=>{
+  const sel=$('#gitpick');
+  sel.innerHTML=FILES.map(f=>`<option value="${f[0]}">${f[1]}</option>`).join('');
+  $('#gitbox').classList.add('on'); $('#gitpw').focus();
+};
+$('#gitcancel').onclick=()=>$('#gitbox').classList.remove('on');
+$('#gitgo').onclick=async ()=>{
+  const f=$('#gitpick').value, pw=$('#gitpw').value;
+  const msg=$('#gitmsg'); msg.textContent='내려받는 중…';
+  try{
+    const res=await fetch(RAW+f, {cache:'no-store'});
+    if(!res.ok) throw new Error('내려받지 못했습니다 ('+res.status+')');
+    let text=await res.text();
+    const j=JSON.parse(text);
+    if(j.encrypted){
+      if(!pw){ msg.textContent='이 파일은 암호본입니다. 비밀번호를 넣으십시오.'; return; }
+      msg.textContent='푸는 중…';
+      text=await decrypt(j, pw);
+    }
+    $('#gitbox').classList.remove('on'); msg.textContent='';
+    load(text, f);
+  }catch(e){ msg.textContent='읽지 못했습니다 — '+e.message; }
+};
+
+/* ══════════ 내보내기 ══════════ */
+function dl(name, text, type){
+  const b=new Blob([text],{type:type||'application/json'}), u=URL.createObjectURL(b);
+  const a=document.createElement('a'); a.href=u; a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+}
+function bumped(){
+  const n=items().filter(e=>e.__touched).length;
+  const v=String(DB.version||'0.0.0').split('.');
+  v[v.length-1]=(+v[v.length-1]+1)||1; DB.version=v.join('.');
+  DB.date=new Date().toISOString().slice(0,10);
+  DB.note=(DB.note||'')+` | ${DB.date}: 교정 책상에서 ${n}항목 수정.`;
+  return {n, out:JSON.parse(JSON.stringify(DB,(k,val)=>k==='__touched'?undefined:val))};
+}
+$('#expJson').onclick=()=>{
+  const n=items().filter(e=>e.__touched).length;
+  if(!n && !confirm('고친 항목이 없습니다. 그래도 내려받으시겠습니까?')) return;
+  const {out}=bumped();
+  dl(FILE.replace(/\.json$/,'')+'_v'+DB.version+'.json', JSON.stringify(out,null,1));
+  drawStat();
+};
+$('#expEnc').onclick=async ()=>{
+  const pw=prompt('암호본으로 만들 비밀번호를 넣으십시오.');
+  if(!pw) return;
+  const {out}=bumped();
+  const plain=new TextEncoder().encode(JSON.stringify(out,null,1));
+  const salt=crypto.getRandomValues(new Uint8Array(16)), iv=crypto.getRandomValues(new Uint8Array(12));
+  const base=await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},
+    base, {name:'AES-GCM',length:256}, false, ['encrypt']);
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, plain);
+  const B=a=>btoa(String.fromCharCode(...new Uint8Array(a)));
+  dl(FILE.replace(/\.json$/,'')+'_v'+DB.version+'_encrypted.json',
+     JSON.stringify({encrypted:true,algo:'AES-GCM-256',kdf:'PBKDF2-SHA256',iterations:200000,
+       salt:B(salt), iv:B(iv), ciphertext:B(ct)}));
+  drawStat();
+};
+$('#expCsv').onclick=()=>{
+  const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+  const lines=[['id','표제어','갈래','소견','판정끝','고침'].map(q).join(',')].concat(ROWS.map(r=>{
+    const y=items().find(e=>e[PROF.idk]===r.id);
+    return [r.id,r.term,(KINDS.find(k=>k.id===r.kind)||{}).name||r.kind,r.note,r.done?'끝':'',y&&y.__touched?'고침':''].map(q).join(',');
+  }));
+  dl(FILE.replace(/\.json$/,'')+'_소견표.csv','\uFEFF'+lines.join('\r\n'),'text/csv');
+};
+$('#fillAll').onclick=()=>{
+  const ids=[...new Set(ROWS.filter(r=>r.kind==='en_miss'&&!r.done).map(r=>r.id))];
+  if(!ids.length){ alert('채울 것이 없습니다.'); return; }
+  if(!confirm(ids.length+'개 항목의 한글 끝에 참조 구절을 붙입니다. 이어서 하시겠습니까?')) return;
+  let n=0;
+  ids.forEach(id=>{
+    const y=items().find(e=>e[PROF.idk]===id); if(!y) return;
+    PROF.pairs.forEach(fld=>{
+      if(!(y[fld.en]||'').trim()||!(y[fld.ko]||'').trim()) return;
+      const miss=missingRefs(y,fld); if(!miss.length) return;
+      const have=refLine(y[fld.ko]);
+      const add=miss.filter(x=>have.indexOf(x)<0); if(!add.length) return;
+      if(setRefs(y,fld, have?have+'; '+add.join('; '):add.join('; '))) n++;
+    });
+  });
+  rescan(); alert(n+'곳에 참조 구절을 붙였습니다.');
+};
+
+$('#wipeRef').onclick=()=>{
+  const hit=items().filter(y=>PROF.pairs.some(f=>/\(\s*참조\s*:/.test(String(y[f.ko]||''))));
+  if(!hit.length){ alert('붙은 참조가 없습니다.'); return; }
+  if(!confirm(hit.length+'개 항목에 붙은 참조 구절을 모두 떼어 냅니다. 이어서 하시겠습니까?')) return;
+  hit.forEach(y=>PROF.pairs.forEach(f=>{
+    if(/\(\s*참조\s*:/.test(String(y[f.ko]||''))){ y[f.ko]=stripRefs(y[f.ko]); y.__touched=true; }
+  }));
+  rescan(); alert(hit.length+'개 항목에서 참조를 떼어 냈습니다.');
+};
+
+/* ══════════ 자판 ══════════ */
+document.addEventListener('keydown',e=>{
+  if(!DB||/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+  const v=visible(); if(!v.length) return;
+  const i=v.findIndex(r=>r.key===CUR);
+  const go=k=>{CUR=k; CURID=ROWS.find(x=>x.key===k).id; EDIT=false; PICK=null; PICKKO=null; draw();};
+  if(e.key==='j'){ if(i>=SHOW-1) SHOW+=250; go(v[Math.min(Math.max(i+1,0),v.length-1)].key); }
+  if(e.key==='k'){ go(v[Math.max(i-1,0)].key); }
+  if(e.key==='e'&&CUR!==null){ EDIT=true; drawDetail(); setTimeout(()=>{const t=$('#ta'); if(t)t.focus();},0); }
+  if(e.key==='d'&&CUR!==null){ const r=ROWS.find(x=>x.key===CUR); r.done=!r.done; draw(); }
+});
+/* 주소로 넘어온 파일 열기: ?open=easton_full.json */
+(function(){
+  const q=new URLSearchParams(location.search);
+  if(q.get('map')) { MAPBASE=q.get('map'); $('#mapbase').value=MAPBASE; }
+  if(q.get('open')) setTimeout(()=>{ $('#fromGit').click(); $('#gitpick').value=q.get('open'); },100);
+})();
+$('#mapbase').onchange=e=>{ MAPBASE=e.target.value.trim()||MAPBASE; if(CUR!==null||CURID!==null) drawDetail(); };
+</script>
+</body>
+</html>
