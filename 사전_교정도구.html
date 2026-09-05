@@ -295,6 +295,7 @@ kbd{
   <button class="btn" id="open">파일 열기</button>
   <button class="btn" id="fromGit">깃허브에서 열기</button>
   <button class="btn" id="fillAll" disabled>참조 구절 모두 채우기</button>
+  <button class="btn" id="fixBooks" disabled>책 이름 채우기</button>
   <button class="btn" id="wipeRef" disabled>참조 씻어 내기</button>
   <button class="btn" id="expJson" disabled>평문 내려받기</button>
   <button class="btn" id="expEnc" disabled>암호본 내려받기</button>
@@ -553,20 +554,27 @@ function scan(){
       }));
       if(!ko.trim()){ push('ko_none', pr.label+' — 영문 '+en.length+'자, 한글 없음', {fld:pr}); return; }
       /* 영문 인용이 한글에 옮겨졌는가 */
+      const missList=[];
       EC.forEach(c=>{
         if(c.inferred) return;
         const same=KC.filter(k=>k.book===c.book && k.ch===c.ch);
-        if(!same.length){ push('en_miss', pr.label+' 영문 '+c.raw+' — 한글에 '+c.book+' '+c.ch+'장 인용이 없음',
-                               {cit:c.raw, kocit:null, fld:pr}); return; }
+        if(!same.length){ missList.push(c.raw); return; }
         const all=new Set(); same.forEach(k=>k.vs.forEach(v=>all.add(v)));
         if(![...c.vs].some(v=>all.has(v)))
           push('mismatch', pr.label+' 영문 '+c.raw+'  ·  한글 '+same.map(k=>k.raw).join(', '),
                {cit:c.raw, kocit:same.length===1?same[0].raw:null, fld:pr,
                 want:same.length===1?c.book+' '+c.ch+':'+[...c.vs].join(','):null, got:same.map(k=>k.raw)});
       });
-      /* 한글에 책 이름 없이 장:절만 있는 인용 */
-      KC.forEach(k=>{ if(k.inferred) push('nobook', pr.label+' 한글 '+k.raw+' — 앞의 '+k.book+'을 이어받은 것으로 보임',
-                                          {kocit:k.raw, fld:pr, want:k.book+' '+k.raw}); });
+      /* 한 항목·한 칸의 빠짐은 한 줄로 묶는다 */
+      if(missList.length)
+        push('en_miss', pr.label+' — 한글에 빠진 인용 '+missList.length+'건 · '+missList.slice(0,5).join(' · ')
+             +(missList.length>5?' …':''), {cit:missList[0], kocit:null, fld:pr});
+      /* 책 이름 없는 인용도 묶는다 */
+      const nb=KC.filter(k=>k.inferred);
+      if(nb.length)
+        push('nobook', pr.label+' — 책 이름 없는 인용 '+nb.length+'건 · '
+             +nb.slice(0,5).map(k=>k.raw+'→'+k.book).join(' · ')+(nb.length>5?' …':''),
+             {kocit:nb[0].raw, fld:pr});
     });
 
     /* 한글만 있는 칸 */
@@ -735,6 +743,30 @@ function stripRefs(v){
   }
   return t.replace(/\s+$/,'');
 }
+/* 책 이름이 빠진 한글 인용에 이름을 넣는다.
+   영문의 같은 장:절 인용이 오직 하나의 책을 가리키고 그 책이 한글이 이어받은 책과
+   같을 때만 '확실'로 보아 채운다. 다른 책이 섞이면 손대지 않는다. */
+function bookFixes(y, fld){
+  const EC=enCites(y[fld.en]||''), KC=koCites(y[fld.ko]||'');
+  const sure=[], doubt=[];
+  KC.forEach(k=>{
+    if(!k.inferred) return;
+    const cand=EC.filter(c=>c.ch===k.ch && [...c.vs].some(v=>k.vs.has(v)));
+    const books=[...new Set(cand.map(c=>c.book))];
+    if(books.length===1 && books[0]===k.book) sure.push({at:k.at, len:k.len, raw:k.raw, to:k.book+' '+k.raw});
+    else doubt.push({raw:k.raw, book:k.book, en:books});
+  });
+  return {sure, doubt};
+}
+function applyBookFixes(y, fld){
+  const {sure}=bookFixes(y,fld);
+  if(!sure.length) return 0;
+  let t=String(y[fld.ko]||'');
+  sure.slice().sort((a,b)=>b.at-a.at).forEach(f=>{      /* 뒤에서부터 넣어야 자리가 안 밀린다 */
+    t = t.slice(0,f.at) + f.to + t.slice(f.at+f.len);
+  });
+  y[fld.ko]=t; y.__touched=true; return sure.length;
+}
 function refLine(v){
   const t=String(v||''); const m=t.match(/\(\s*참조\s*:\s*([^()]*)\)/g);
   if(!m) return '';
@@ -866,8 +898,11 @@ function drawDetail(){
     h+='</div><div class="acts"><button class="btn" id="edit">한글 고치기</button>';
     if(r.kind==='mismatch'&&r.want&&r.kocit&&kotxt.indexOf(r.kocit)>=0)
       h+=`<button class="sugg" id="apply">한글의 ${esc(r.kocit)} 를 ${esc(r.want)} 로</button>`;
-    if(r.kind==='nobook'&&r.want&&r.kocit&&kotxt.indexOf(r.kocit)>=0)
-      h+=`<button class="sugg" id="apply">한글의 ${esc(r.kocit)} 에 책 이름 넣기 → ${esc(r.want)}</button>`;
+    if(r.kind==='nobook'&&fld&&fld.en){
+      const bf=bookFixes(y,fld);
+      if(bf.sure.length) h+=`<button class="sugg" id="bookfix">확실한 ${bf.sure.length}건에 책 이름 넣기</button>`;
+      if(bf.doubt.length) h+=`<span class="hint" style="color:var(--red)">손으로 볼 것 ${bf.doubt.length}건 — ${esc(bf.doubt.slice(0,3).map(x=>x.raw+'(한글 '+x.book+' / 영문 '+(x.en.join('·')||'짝없음')+')').join(' · '))}</span>`;
+    }
     h+=`<button class="btn" id="done">${r.done?'다시 열기':'판정 끝'}</button></div>`;
   }
   d.innerHTML=h+'</div></div>';
@@ -904,6 +939,7 @@ function drawDetail(){
   on('edit',()=>{EDIT=true;drawDetail();setTimeout(()=>{const t=$('#ta'); if(t)t.focus();},0);});
   on('cancel',()=>{EDIT=false;drawDetail();});
   on('save',()=>{ if(kokey){ y[kokey]=$('#ta').value; y.__touched=true; } EDIT=false; rescan(); });
+  on('bookfix',()=>{ const n=applyBookFixes(y,fld); if(n) rescan(); else alert('확실한 것이 없습니다.'); });
   on('apply',()=>{ if(kokey){ y[kokey]=String(y[kokey]).replace(r.kocit, r.want); y.__touched=true; } rescan(); });
   on('done',()=>{ r.done=!r.done; draw(); });
 }
@@ -918,6 +954,9 @@ function drawStat(){
   $('#stat').textContent = DB? `소견 ${ROWS.filter(r=>!r.done).length} 남음 · 고친 항목 ${t}` : '';
   ['expJson','expEnc','expCsv'].forEach(i=>$('#'+i).disabled=!DB);
   const dirty=DB?items().filter(y=>PROF.pairs.some(f=>/\(\s*참조\s*:/.test(String(y[f.ko]||'')))).length:0;
+  const nb=DB?[...new Set(ROWS.filter(r=>r.kind==='nobook'&&!r.done).map(r=>r.id))].length:0;
+  const bb=$('#fixBooks'); bb.disabled=!nb;
+  bb.textContent = nb?`책 이름 ${nb}항목 채우기`:'책 이름 채우기';
   const wb=$('#wipeRef'); wb.disabled=!dirty;
   wb.textContent = dirty?`참조 ${dirty}항목 씻어 내기`:'참조 씻어 내기';
   const miss=DB?[...new Set(ROWS.filter(r=>r.kind==='en_miss'&&!r.done).map(r=>r.id))].length:0;
@@ -1046,6 +1085,20 @@ $('#fillAll').onclick=()=>{
   rescan(); alert(n+'곳에 참조 구절을 붙였습니다.');
 };
 
+$('#fixBooks').onclick=()=>{
+  const ids=[...new Set(ROWS.filter(r=>r.kind==='nobook'&&!r.done).map(r=>r.id))];
+  if(!ids.length){ alert('채울 것이 없습니다.'); return; }
+  let sure=0, doubt=0;
+  ids.forEach(id=>{ const y=items().find(e=>e[PROF.idk]===id); if(!y) return;
+    PROF.pairs.forEach(f=>{ if(!(y[f.en]||'').trim()||!(y[f.ko]||'').trim()) return;
+      const bf=bookFixes(y,f); sure+=bf.sure.length; doubt+=bf.doubt.length; }); });
+  if(!confirm(`확실한 ${sure}건에 책 이름을 넣습니다.\n영문 쪽 책이 다르거나 짝이 없는 ${doubt}건은 그대로 두어 손으로 보시게 남깁니다.\n\n이어서 하시겠습니까?`)) return;
+  let n=0, e=0;
+  ids.forEach(id=>{ const y=items().find(e2=>e2[PROF.idk]===id); if(!y) return;
+    let m=0; PROF.pairs.forEach(f=>{ if(!(y[f.en]||'').trim()||!(y[f.ko]||'').trim()) return; m+=applyBookFixes(y,f); });
+    if(m){ n+=m; e++; } });
+  rescan(); alert(`${e}개 항목 ${n}건에 책 이름을 넣었습니다.\n남은 ${doubt}건은 왼쪽 '책 이름 없는 인용'에서 손으로 보십시오.`);
+};
 $('#wipeRef').onclick=()=>{
   const hit=items().filter(y=>PROF.pairs.some(f=>/\(\s*참조\s*:/.test(String(y[f.ko]||''))));
   if(!hit.length){ alert('붙은 참조가 없습니다.'); return; }
