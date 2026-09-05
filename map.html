@@ -3847,7 +3847,10 @@
         if (smithTo)  smithAuto  = smithTo;
         // 맞춘 표제어가 원 표제어와 다를 수 있으니 무엇에 걸렸는지 밝혀 둔다
         const rawHead = (e, via) => `<div style="font-size:0.75em;color:#94a3b8;margin-bottom:3px">\uc0ac\uc804 \ud45c\uc81c\uc5b4: ${via && via !== e ? `<span style="color:#cbd5e1">${escHtml(via.term || '')} \u2192</span> ` : ''}<b style="color:#b45309">${escHtml(e.term || '')}</b>${e.hebrew_greek ? ' \u00b7 ' + StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), 'term-strong-inline') : ''}</div>`;
-        const rawBody = (txt) => `<div style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(txt))}</div>`;
+        const rawBody = (txt, which) => `<div id="term-raw-${which}" style="font-size:0.92em;line-height:1.6;color:#1e293b;white-space:pre-wrap;font-style:italic">${linkifyVerseRefs(escHtml(txt))}</div>` +
+          (String(txt || '').trim()
+            ? `<div style="margin-top:6px"><button id="term-raw-trbtn-${which}" onclick="TermEngine.translateRaw('${which}')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">\ud83c\udf10 \ubc88\uc5ed</button><div id="term-raw-tr-${which}" style="display:none;margin-top:6px;font-size:0.92em;line-height:1.6;color:#1e40af;white-space:pre-wrap"></div></div>`
+            : '');
         // 못 찾았을 때, 사전이 아직 안 읽힌 것인지 표제어가 없는 것인지 갈라 말한다
         const dictLoaded = {
           easton: ((typeof eastonFullDict !== 'undefined' && eastonFullDict) || []).length,
@@ -3869,18 +3872,18 @@
         const origBlock = `<div id="term-tab-content-orig" data-codes="${escHtml(allStrongCodes.join(','))}" style="display:none"></div>`;
         const eastonBlock = `<div id="term-tab-content-easton" style="display:none">
           ${eastonRaw
-            ? rawBody(eastonRaw)
+            ? rawBody(eastonRaw, 'easton')
             : (eastonAuto
-              ? rawHead(eastonAuto, eastonVia) + rawBody(eastonAuto.definition || '')
+              ? rawHead(eastonAuto, eastonVia) + rawBody(eastonAuto.definition || '', 'easton')
               : rawMiss('easton', 'Easton') + `<textarea id="term-easton-input" placeholder="Easton's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
                <button onclick="TermEngine.saveRawText(${t.id},'easton')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
           }
         </div>`;
         const smithBlock = `<div id="term-tab-content-smith" style="display:none">
           ${smithRaw
-            ? rawBody(smithRaw)
+            ? rawBody(smithRaw, 'smith')
             : (smithAuto
-              ? rawHead(smithAuto, smithVia) + rawBody(smithAuto.definition || '')
+              ? rawHead(smithAuto, smithVia) + rawBody(smithAuto.definition || '', 'smith')
               : rawMiss('smith', 'Smith') + `<textarea id="term-smith-input" placeholder="Smith's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
                <button onclick="TermEngine.saveRawText(${t.id},'smith')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
           }
@@ -4010,6 +4013,26 @@
         const vs = this._plural(this._rawVariants(termEn));   // 온전한 표제어를 먼저 본다
         for (let i = 0; i < vs.length; i++) { if (m[vs[i]]) return m[vs[i]]; }
         return null;
+      },
+
+      // 원문 탭의 영문을 그 자리에서 구글 번역 초안으로 보인다 — 저장하지 않고 볼 때마다 즉석 번역
+      translateRaw: async function(which) {
+        const src = document.getElementById('term-raw-' + which);
+        const out = document.getElementById('term-raw-tr-' + which);
+        const btn = document.getElementById('term-raw-trbtn-' + which);
+        if (!src || !out) return;
+        const text = src.textContent || '';
+        if (!text.trim()) return;
+        if (btn) { btn.disabled = true; btn.textContent = '\ubc88\uc5ed \uc911...'; }
+        try {
+          out.textContent = await fetchGoogleTranslateDraft(text);
+          out.style.display = 'block';
+          if (btn) btn.style.display = 'none';
+        } catch (err) {
+          out.textContent = '\ubc88\uc5ed \uc2e4\ud328 (' + (err && err.message || err) + ')';
+          out.style.display = 'block';
+          if (btn) { btn.disabled = false; btn.textContent = '\ud83c\udf10 \ubc88\uc5ed'; }
+        }
       },
 
       switchTab: function(tab) {        ['ko', 'orig', 'easton', 'smith'].forEach(name => {
@@ -12427,7 +12450,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-4`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-5`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
