@@ -12409,7 +12409,9 @@
         const titleEl = document.getElementById('app-title');
         const subEl   = document.getElementById('app-subtitle');
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판`;
+        // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
+        // 고칠 때마다 이 숫자를 올릴 것
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260905-3`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
