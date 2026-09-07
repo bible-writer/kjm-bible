@@ -298,7 +298,7 @@ header .q:disabled{opacity:.45}
 </head>
 <body>
 <header>
-  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260907-1</span></h1>
+  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260907-2</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
   <span class="sp"></span>
   <button class="btn" id="open">파일 열기</button>
@@ -679,7 +679,7 @@ function scan(){
   ROWS=[]; const seenId={}, seenT={};
   items().forEach(y=>{
     const id=y[PROF.idk], title=PROF.title(y)||'(이름 없음)';
-    const logged=PROF.pairs.some(p=>/※\s*원문\s*오류/.test(String(y[p.ko]||'')));
+    const logged=PROF.pairs.some(p=>/※\s*원문\s*(?:오류|결손|훼손|참고)/.test(String(y[p.ko]||'')));
     const push=(kind,note,ex)=>ROWS.push(Object.assign(
       {id,term:title,kind,note:(logged&&/^(en_miss|mismatch|en_bad)$/.test(kind)?'[원문 오류 적어 둠] ':'')+note},ex||{}));
     seenId[id]=(seenId[id]||0)+1; seenT[title]=(seenT[title]||0)+1;
@@ -875,7 +875,7 @@ function missingRefs(y, fld){
   /* 이미 원문 오류를 적어 둔 항목은 손대지 않는다.
      한글에 그 인용이 없는 까닭이 영문이 틀려서 바른 절로 갈아 놓았기 때문이므로,
      되붙이면 고쳐 놓은 것이 도로 살아난다. */
-  if(/※\s*원문\s*오류/.test(String(y[fld.ko]||''))) return out;
+  if(/※\s*원문\s*(?:오류|결손|훼손|참고)/.test(String(y[fld.ko]||''))) return out;
   /* 한글 본문 어디에든 이미 적힌 절은 다시 붙이지 않는다 */
   const has=new Set(), hasCV=new Set();
   koCites(String(y[fld.ko]||'')).forEach(k=>k.vs.forEach(v=>{
