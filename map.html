@@ -3306,11 +3306,31 @@
     );
 
     // 정의문(HTML 이스케이프 완료된 텍스트)에서 성경 구절 표기(한글·영문 모두)를 찾아 클릭 가능한 링크로 변환
+    // 성구 묶음 보관소 — 한 괄호 안에서 쌍반점·쉼표로 이어진 인용을 한 묶음으로 본다.
+    // 「요한복음 2:1-11; 4:46」이면 둘이 한 묶음이 되어, 하나를 눌러도 함께 뜬다.
+    const VREF_GROUPS = {};
+    let vrefSeq = 0;
+    function vrefRange(s) {
+      const ns = String(s || '').match(/\d+/g);
+      if (!ns) return { v: 1, to: 1 };
+      const a = parseInt(ns[0], 10), b = parseInt(ns[ns.length - 1], 10);
+      return { v: a, to: (b > a && b - a <= 60) ? b : a };
+    }
     function linkifyVerseRefs(escapedText) {
       if (!escapedText) return '';
-      let lastBookId = null;
+      let lastBookId = null, lastEnd = -1, gid = null;
+      if (vrefSeq > 20000) { for (const k in VREF_GROUPS) delete VREF_GROUPS[k]; vrefSeq = 0; } // 오래 쓰면 비운다
+      const add = (bookId, chapter, r, label, offset, len) => {
+        const joinable = lastEnd >= 0 && /^[\s;,·]*$/.test(escapedText.slice(lastEnd, offset));
+        if (!joinable || !gid) { gid = 'vg' + (++vrefSeq); VREF_GROUPS[gid] = []; }
+        const idx = VREF_GROUPS[gid].length;
+        VREF_GROUPS[gid].push({ b: bookId, c: chapter, v: r.v, to: r.to, label: label });
+        lastEnd = offset + len;
+        return { gid: gid, idx: idx };
+      };
       return escapedText.replace(BOOK_REF_REGEX, (...args) => {
         const groups = args[args.length - 1];
+        const offset = args[args.length - 3];
         const whole = args[0];
         if (groups.book) {
           const bookId = BOOK_REF_MAP[groups.book];
@@ -3319,21 +3339,84 @@
           const maxChapters = BOOK_ID_TO_CHAPTERS[bookId];
           if (maxChapters && chapter > maxChapters) return whole;
           lastBookId = bookId;
-          const firstVerseMatch = groups.bverse && groups.bverse.match(/\d+/);
-          const verse = firstVerseMatch ? parseInt(firstVerseMatch[0], 10) : 1;
-          return `<span class="term-verse-ref" data-bid="${bookId}" data-ch="${chapter}" data-v="${verse}" onclick="navigateToBibleVerse(${bookId},${chapter},${verse})">${whole}</span>`;
+          const r = vrefRange(groups.bverse);
+          const g = add(bookId, chapter, r, whole, offset, whole.length);
+          return `<span class="term-verse-ref" data-bid="${bookId}" data-ch="${chapter}" data-v="${r.v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${whole}</span>`;
         }
         if (groups.cchap && lastBookId) {
           const chapter = parseInt(groups.cchap, 10);
           const maxChapters = BOOK_ID_TO_CHAPTERS[lastBookId];
           if (maxChapters && chapter > maxChapters) return whole;
-          const firstVerseMatch = groups.cverse.match(/\d+/);
-          const verse = firstVerseMatch ? parseInt(firstVerseMatch[0], 10) : 1;
+          const r = vrefRange(groups.cverse);
           const refPart = whole.slice(groups.sep.length);
-          return `${groups.sep}<span class="term-verse-ref" data-bid="${lastBookId}" data-ch="${chapter}" data-v="${verse}" onclick="navigateToBibleVerse(${lastBookId},${chapter},${verse})">${refPart}</span>`;
+          const g = add(lastBookId, chapter, r, refPart, offset + groups.sep.length, refPart.length);
+          return `${groups.sep}<span class="term-verse-ref" data-bid="${lastBookId}" data-ch="${chapter}" data-v="${r.v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${refPart}</span>`;
         }
         return whole;
       });
+    }
+
+    // 성구 묶음 팝업 — 위쪽에 탭을 두고, 누른 것부터 보여 준다.
+    function showVerseGroupPopup(event, gid, idx) {
+      event.stopPropagation();
+      const list = VREF_GROUPS[gid];
+      if (!list || !list.length) return;
+      document.querySelectorAll('.verse-inline-popup').forEach(el => el.remove());
+      const anchor = event.currentTarget || event.target;
+      const pop = document.createElement('div');
+      pop.className = 'verse-inline-popup';
+      pop.style.cssText = 'position:fixed;z-index:99999;max-width:460px;min-width:260px;max-height:60vh;overflow-y:auto;background:#1e293b;color:#f1f5f9;border-radius:8px;padding:10px 12px;font-size:14px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,0.35)';
+      document.body.appendChild(pop);
+      const draw = (n) => {
+        const it = list[n];
+        const bookObj = BIBLE_BOOKS.find(b => b.id === it.b);
+        const bname = bookObj ? bookObj.name : ('책' + it.b);
+        let rows = [];
+        if (typeof sqliteDbInstance !== 'undefined' && sqliteDbInstance && typeof detectedSchema !== 'undefined' && detectedSchema) {
+          try {
+            const S = detectedSchema;
+            const sql = 'SELECT "' + S.verse + '","' + S.content + '" FROM "' + S.table + '" WHERE "' + S.book + '"=' + it.b
+                      + ' AND "' + S.chapter + '"=' + it.c + ' AND "' + S.verse + '" BETWEEN ' + it.v + ' AND ' + it.to
+                      + ' ORDER BY "' + S.verse + '"';
+            const res = sqliteDbInstance.exec(sql);
+            if (res.length) rows = res[0].values.map(r => ({ v: r[0], t: String(r[1] || '') }));
+          } catch (e) { console.warn('showVerseGroupPopup query error:', e); }
+        }
+        const span = it.to > it.v ? (it.v + '-' + it.to) : String(it.v);
+        const tabs = list.length > 1
+          ? '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">' + list.map((o, i) => {
+              const bo = BIBLE_BOOKS.find(b => b.id === o.b);
+              const nm = (bo ? bo.name : '') + ' ' + o.c + ':' + (o.to > o.v ? o.v + '-' + o.to : o.v);
+              const on = i === n;
+              return '<button data-i="' + i + '" style="padding:3px 9px;border:1px solid ' + (on ? '#60a5fa' : '#475569') + ';border-radius:5px;background:' + (on ? '#1d4ed8' : '#0f172a') + ';color:' + (on ? '#fff' : '#cbd5e1') + ';cursor:pointer;font-size:12px;white-space:nowrap">' + escHtml(nm) + '</button>';
+            }).join('') + '</div>'
+          : '';
+        const body = rows.length
+          ? rows.map(r => '<div style="margin-bottom:3px"><b style="color:#93c5fd;font-size:12px">' + r.v + '</b> ' + escHtml(r.t) + '</div>').join('')
+          : '<div style="color:#94a3b8">(성경 DB를 먼저 열어 주십시오)</div>';
+        pop.innerHTML = tabs
+          + '<div style="font-weight:700;color:#60a5fa;margin-bottom:5px">' + escHtml(bname + ' ' + it.c + ':' + span) + '</div>'
+          + '<div>' + body + '</div>'
+          + '<div style="margin-top:9px;display:flex;gap:8px;justify-content:flex-end">'
+          + '<button id="vgp-close" style="padding:4px 10px;border:none;border-radius:4px;background:#334155;color:#93c5fd;cursor:pointer;font-size:12px">닫기</button>'
+          + '<button id="vgp-go" style="padding:4px 10px;border:none;border-radius:4px;background:#2563eb;color:#fff;cursor:pointer;font-size:12px">본문 이동</button>'
+          + '</div>';
+        pop.querySelectorAll('button[data-i]').forEach(b => b.onclick = ev => { ev.stopPropagation(); draw(+b.dataset.i); });
+        pop.querySelector('#vgp-close').onclick = ev => { ev.stopPropagation(); pop.remove(); };
+        pop.querySelector('#vgp-go').onclick = ev => { ev.stopPropagation(); pop.remove(); navigateToBibleVerse(it.b, it.c, it.v); };
+      };
+      draw(Math.min(idx, list.length - 1));
+      const rect = anchor.getBoundingClientRect();
+      let top = rect.bottom + 6, left = rect.left;
+      const h = pop.offsetHeight || 220, w = pop.offsetWidth || 400;
+      if (top + h > window.innerHeight - 10) top = Math.max(10, rect.top - h - 6);
+      if (left + w > window.innerWidth - 10) left = window.innerWidth - w - 10;
+      pop.style.top = Math.max(10, top) + 'px';
+      pop.style.left = Math.max(10, left) + 'px';
+      setTimeout(() => {
+        function closeOnClick(e) { if (!pop.contains(e.target)) { pop.remove(); document.removeEventListener('click', closeOnClick, true); } }
+        document.addEventListener('click', closeOnClick, true);
+      }, 100);
     }
 
     // 성구 클릭 시 본문을 이동하지 않고, 클릭 위치에 해당 절 내용을 팝업으로 표시
@@ -12543,7 +12626,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-4`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
