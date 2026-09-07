@@ -287,11 +287,18 @@ kbd{
 @media (prefers-reduced-motion:no-preference){
   .row,.kind{transition:background .12s}
 }
+header .q{
+  border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+  padding:.28rem .6rem;border-radius:0;width:12rem;
+}
+header .q:focus{outline:none;border-color:var(--ink);background:#fff}
+header .q:disabled{opacity:.45}
+.qhit{color:var(--ink-soft);font-size:.8rem;padding:.5rem 1rem 0}
 </style>
 </head>
 <body>
 <header>
-  <h1>교정 책상</h1>
+  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260907-1</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
   <span class="sp"></span>
   <button class="btn" id="open">파일 열기</button>
@@ -303,6 +310,7 @@ kbd{
   <button class="btn" id="expEnc" disabled>암호본 내려받기</button>
   <button class="btn" id="expCsv" disabled>소견표 내려받기</button>
   <input type="file" id="file" accept=".json" hidden>
+  <input id="q" class="q" placeholder="표제어 · id 찾기" disabled>
   <label class="mapset">성경지도 <input id="mapbase" value="https://bible-writer.github.io/kjm-bible/map.html"></label>
 </header>
 
@@ -326,6 +334,7 @@ kbd{
   <span><kbd>j</kbd> <kbd>k</kbd> 다음·이전</span>
   <span><kbd>e</kbd> 한글 고치기</span>
   <span><kbd>d</kbd> 마친 것으로</span>
+  <span><kbd>/</kbd> 찾기</span>
   <span id="stat"></span>
 </footer>
 
@@ -402,6 +411,17 @@ function grade(koBook, ch, v){
   if(v>=1 && v<=m) return 0;
   return (v>m && v<=m+3) ? 1 : 2;
 }
+/* 그 책·장에 그 절이 다 있는가 / 하나라도 없는가 */
+function allOk(koBook, ch, tail){
+  const vs=spread(tail); if(!vs.size) return false;
+  for(const v of vs) if(grade(koBook,ch,v)!==0) return false;
+  return true;
+}
+function anyBad(koBook, ch, tail){
+  const vs=spread(tail);
+  for(const v of vs) if(grade(koBook,ch,v)===2) return true;
+  return false;
+}
 function crossChapter(koBook, ch, tail){
   const m=String(tail).match(/^(\d+)\s*[-–]\s*(\d+)$/); if(!m) return false;
   const end=+m[2], mv=maxVerse(koBook,ch);
@@ -418,7 +438,9 @@ function worst(c){
    책 이름을 생략하므로, 구분자뿐 아니라 같은 문장 안이면 이어받는다.
    마침표·물음표·느낌표를 넘으면 끊는다. 다른 책 이름이 끼어들면 이어받기는
    enCites 안에서 그 책으로 바뀐다. */
+const ABBRDOT=/\b(?:B\.C\.|A\.D\.|i\.e\.|e\.g\.|q\.v\.|cf\.|ch\.|vs\.|comp\.|marg\.|R\.V\.|A\.V\.|LXX\.|Heb\.|Gr\.|Vulg\.|St\.|Mr\.|Dr\.)/gi;
 function joinable(gap){
+  gap=String(gap).replace(ABBRDOT,' ');   /* 줄임말의 마침표는 문장 끝이 아니다 */
   if(/[.!?]\s/.test(gap) || /[.!?]$/.test(gap)) return false;
   if(gap.length>120) return false;
   if(/\d+\s*[:.]\s*\d/.test(gap)) return false;
@@ -438,6 +460,12 @@ function bareSet(t){
   return out;
 }
 function trimTail(tail, after){
+  /* 「Exodus 12:37-19」 「2 Kings 24:18-25」처럼 뒤엣수가 앞엣수보다 작으면
+     그것은 절이 아니라 끝나는 장의 번호이다. 절 범위로 읽지 않는다. */
+  {
+    const m=String(tail).match(/^(\d+)\s*[-\u2013]\s*(\d+)$/);
+    if(m && +m[2] < +m[1]) return m[1];
+  }
   /* "창세기 1:27-5장" · "Genesis 1:27-ch. 5" 처럼 장 범위이면 그 수는 장 번호이므로 떼어 낸다 */
   if(after && /^\s*장/.test(after)){
     const m=String(tail).match(/^(.*?)\s*[,\-–]\s*\d+$/);
@@ -460,10 +488,23 @@ function spread(tail){
 }
 const EN_ANY = /(?:\b((?:[1-3]\s?)?[A-Z][a-zA-Z]+(?:\sof\s[A-Z][a-z]+)?)\.?[\s(]{0,3})?(\d+):(\d+(?:\s*[,\-–]\s*\d+)*)/g;
 function enCites(t){
-  const out=[]; if(!t) return out; EN_ANY.lastIndex=0; let m, last=null, lastEnd=-1;
+  const out=[]; if(!t) return out; EN_ANY.lastIndex=0; let m, last=null, lastEnd=-1, lastNamed=null;
   while((m=EN_ANY.exec(t))){
     let ko=null, en=null;
-    if(m[1]){ const b=normBook(m[1]); if(b){ ko=E2K[b]; en=b; last=b; } else { last=null; lastEnd=-1; continue; } }
+    let carried=false;
+    if(m[1]){ const b=normBook(m[1]);
+      if(b){
+        /* 이스턴·스미스는 사람 이름을 그대로 적는다. 「Daniel (14:14)」의 다니엘은
+           사람이고 절은 앞의 에스겔에서 이어받는다. 이름과 같은 책에는 없는 장·절인데
+           앞에서 이어받은 책에는 온전히 있으면, 이어받은 책으로 읽는다. */
+        let use=b;
+        /* 그 책에 없는 장·절인데, 앞에서 이름을 밝힌 책에는 온전히 있으면 그 책으로 읽는다.
+           문장이 바뀌어도 이스턴·스미스는 앞의 책을 이어받아 적는다. */
+        const back = (last && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))) ? last : lastNamed;
+        if(back && back!==b && anyBad(E2K[b], +m[2], m[3]) && allOk(E2K[back], +m[2], m[3])){ use=back; carried=true; }
+        ko=E2K[use]; en=use; last=use; lastNamed=use;
+      } else { last=null; lastEnd=-1; continue; }
+    }
     else if(last && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))){ en=last; ko=E2K[last]; }
     else { last=null; lastEnd=-1; continue; }
     /* 'Genesis 1:27-ch. 5' 는 장 범위이므로 '-ch' 앞에서 끊는다 */
@@ -474,20 +515,38 @@ function enCites(t){
     const cut=m[0].length-(m[3].length-tail.length);
     const piece=m[0].slice(0,cut);
     const raw=piece.trim().replace(/\s*\(\s*(?=\d)/,' ').replace(/\s+/g,' ');
-    out.push({raw, book:ko, en, ch:+m[2], vs:spread(tail), tail,
-              at:m.index+piece.indexOf(piece.trim()), len:piece.trim().length, inferred:!m[1]});
+    out.push({raw, book:ko, en, ch:+m[2], vs:spread(tail), tail, carried,
+              at:m.index+piece.indexOf(piece.trim()), len:piece.trim().length, inferred:(!m[1]||carried)});
     lastEnd=m.index+cut;
   }
   return out;
 }
 const KO_LONG = KOBOOK.slice().sort((a,b)=>b.length-a.length);
-const KO_ANY = new RegExp('(?:('+KO_LONG.join('|')+')\\s*)?(\\d+):(\\d+(?:\\s*[,\\-–]\\s*\\d+)*)','g');
+/* 「누가복음(20:27-38)」 「요나서(1:17)」처럼 책 이름 뒤에 바로 여는 괄호가 오거나
+   「서」가 붙는 것도 우리 표기이므로 함께 읽는다. */
+const KO_ANY = new RegExp('(?:('+KO_LONG.join('|')+')서?[\\s(]{0,3})?(\\d+):(\\d+(?:\\s*[,\\-–]\\s*\\d+)*)','g');
+/* 한글 본문 끝에 붙은 「※ 원문 오류 / 판정 근거 / 원문 대조」 주석 덩이를 떼어 낸다.
+   주석에 든 성구는 판정 근거로 든 것이지 이 항목의 본문 인용이 아니므로,
+   영문↔한글 대조에 섞이면 없는 소견이 생긴다.
+   주석은 언제나 맨 끝에 붙으므로 앞부분만 남기면 글자 자리(at)는 그대로 맞는다. */
+function koBody(t){
+  const s = String(t || '');
+  const i = s.indexOf('\n※ ');
+  return i < 0 ? s : s.slice(0, i);
+}
 function koCites(t){
+  t = koBody(t);
   const out=[]; if(!t) return out; KO_ANY.lastIndex=0; let m, last=null, lastEnd=-1;
   while((m=KO_ANY.exec(t))){
     let b=null;
+    let inside=false;
     if(m[1]){ b=m[1]; last=m[1]; }
-    else if(last && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))) b=last;
+    else if(last && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))){
+      b=last;
+      /* 앞 인용과 같은 괄호·묶음 안이면 책 이름을 다시 적지 않는 것이 우리 표기이다.
+         「요한계시록 1:8,11; 21:6」 · 「창세기 25:19에서 35:29까지」 · 「[흠정역 13:14]」 */
+      inside = !/[)\u3011]/.test(t.slice(lastEnd, m.index));
+    }
     else { last=null; lastEnd=-1; continue; }
     /* 'Genesis 1:27-ch. 5' 는 장 범위이므로 '-ch' 앞에서 끊는다 */
     let rawTail=m[3];
@@ -496,12 +555,29 @@ function koCites(t){
     const tail=trimTail(rawTail, t.slice(m.index+m[0].length));
     const cut=m[0].length-(m[3].length-tail.length);
     const piece=m[0].slice(0,cut), raw=piece.trim();
-    out.push({raw, book:b, ch:+m[2], vs:spread(tail), tail,
-              at:m.index+piece.indexOf(raw), len:raw.length, inferred:!m[1]});
+    out.push({raw, book:b, ch:+m[2], vs:spread(tail), tail, inside,
+              at:m.index+piece.indexOf(raw), len:raw.length, inferred:(!m[1] && !inside)});
     lastEnd=m.index+cut;
   }
   return out;
 }
+/* 한글은 장만 가리킬 때 「열왕기하 18-20장」 「이사야 36장에서 39장까지」 「신명기 32장」으로 적는다.
+   영문이 「2 Kings 18:20」처럼 줄여 쓴 장 범위를 이것과 맞대어 보려면 이 꼴도 읽어야 한다. */
+const KOCH_RANGE = new RegExp('('+KO_LONG.join('|')+')\\s*(\\d+)\\s*(?:장?\\s*(?:[-\\u2013~]|에서)\\s*)(\\d+)\\s*장','g');
+const KOCH_ONE   = new RegExp('('+KO_LONG.join('|')+')\\s*(\\d+)\\s*장','g');
+function koChapters(t){
+  t = koBody(t);
+  const out=new Set(); if(!t) return out;
+  KOCH_RANGE.lastIndex=0; let m;
+  while((m=KOCH_RANGE.exec(t))){
+    const a=+m[2], b=+m[3];
+    if(b>=a) for(let c=a;c<=b;c++) out.add(m[1]+'|'+c);
+  }
+  KOCH_ONE.lastIndex=0;
+  while((m=KOCH_ONE.exec(t))) out.add(m[1]+'|'+m[2]);
+  return out;
+}
+
 /* 지명DB의 "왕하5:12; 삼상3:1" 짧은 꼴 */
 const ABBR_RE = new RegExp('('+KOABBR.slice().sort((a,b)=>b.length-a.length).join('|')+')\\s*(\\d+):(\\d+(?:[,\\-–]\\d+)*)','g');
 function abbrCites(t){
@@ -514,6 +590,7 @@ function abbrCites(t){
 }
 
 let DB=null, PROF=null, FILE='', ROWS=[], KIND='all', CUR=null, CURID=null, EDIT=false, SHOW=250, PICK=null, PICKKO=null;
+let Q='';                              /* 표제어·id 찾기 */
 let MAPBASE='https://bible-writer.github.io/kjm-bible/map.html';
 let BARE=null;
 function pairUp(EC, KC){
@@ -602,7 +679,9 @@ function scan(){
   ROWS=[]; const seenId={}, seenT={};
   items().forEach(y=>{
     const id=y[PROF.idk], title=PROF.title(y)||'(이름 없음)';
-    const push=(kind,note,ex)=>ROWS.push(Object.assign({id,term:title,kind,note},ex||{}));
+    const logged=PROF.pairs.some(p=>/※\s*원문\s*오류/.test(String(y[p.ko]||'')));
+    const push=(kind,note,ex)=>ROWS.push(Object.assign(
+      {id,term:title,kind,note:(logged&&/^(en_miss|mismatch|en_bad)$/.test(kind)?'[원문 오류 적어 둠] ':'')+note},ex||{}));
     seenId[id]=(seenId[id]||0)+1; seenT[title]=(seenT[title]||0)+1;
 
     const over=c=>c.book+' '+c.ch+'장은 '+(maxVerse(c.book,c.ch)===null?'없음':maxVerse(c.book,c.ch)+'절까지');
@@ -626,9 +705,13 @@ function scan(){
       if(!ko.trim()){ push('ko_none', pr.label+' — 영문 '+en.length+'자, 한글 없음', {fld:pr}); return; }
       /* 영문 인용이 한글에 옮겨졌는가 */
       const missList=[];
+      const KOCH=koChapters(ko);        /* 한글이 장으로만 가리킨 자리 */
       BARE=bareSet(en);
       pairUp(EC, KC).forEach(p2=>{
         if(!p2.en || p2.en.inferred) return;
+        /* 한글이 그 장을 통째로 가리켰으면 옮겨진 것으로 본다.
+           영문 「2 Kings 18:20」(=18~20장) · 한글 「열왕기하 18-20장」 따위 */
+        if(KOCH.has(p2.en.book+'|'+p2.en.ch)) return;
         if(p2.state==='miss'){ missList.push(p2.en.raw); return; }
         if(p2.state==='bad')
           push('mismatch', pr.label+' 영문 '+p2.en.raw+'  ·  한글 '+p2.ko.raw,
@@ -641,7 +724,7 @@ function scan(){
         push('en_miss', pr.label+' — 한글에 빠진 인용 '+missList.length+'건 · '+missList.slice(0,5).join(' · ')
              +(missList.length>5?' …':''), {cit:missList[0], kocit:null, fld:pr});
       /* 책 이름 없는 인용도 묶는다 */
-      const nb=KC.filter(k=>k.inferred);
+      const nb=KC.filter(k=>k.inferred && !k.inside);
       if(nb.length)
         push('nobook', pr.label+' — 책 이름 없는 인용 '+nb.length+'건 · '
              +nb.slice(0,5).map(k=>k.raw+'→'+k.book).join(' · ')+(nb.length>5?' …':''),
@@ -789,9 +872,22 @@ function cmpRows(y, fld){
 }
 function missingRefs(y, fld){
   const out=[], seen=new Set();
+  /* 이미 원문 오류를 적어 둔 항목은 손대지 않는다.
+     한글에 그 인용이 없는 까닭이 영문이 틀려서 바른 절로 갈아 놓았기 때문이므로,
+     되붙이면 고쳐 놓은 것이 도로 살아난다. */
+  if(/※\s*원문\s*오류/.test(String(y[fld.ko]||''))) return out;
+  /* 한글 본문 어디에든 이미 적힌 절은 다시 붙이지 않는다 */
+  const has=new Set(), hasCV=new Set();
+  koCites(String(y[fld.ko]||'')).forEach(k=>k.vs.forEach(v=>{
+    has.add(k.book+'|'+k.ch+'|'+v); hasCV.add(k.ch+'|'+v); }));
   cmpRows(y,fld).forEach(p=>{
     if(p.state!=='miss'||!p.en||p.en.inferred) return;
     if(!KOBOOK.includes(p.en.book)) return;          /* 한글 책 이름이 아니면 넣지 않는다 */
+    if(anyBad(p.en.book, p.en.ch, p.en.tail)) return; /* 성경에 없는 절은 붙이지 않는다 */
+    if([...p.en.vs].every(v=>has.has(p.en.book+'|'+p.en.ch+'|'+v))) return;
+    /* 같은 장·절이 다른 책 이름으로 한글에 적혀 있으면 옮긴이가 일부러 그 책으로 읽은 것이다.
+       「Joshua (6:9-15)」의 여호수아는 사람이고 절은 스가랴인 것 따위. */
+    if([...p.en.vs].every(v=>hasCV.has(p.en.ch+'|'+v))) return;
     const t=p.en.book+' '+p.en.ch+':'+String(p.en.tail).replace(/\s+/g,'');
     if(!seen.has(t)){ seen.add(t); out.push(t); }
   });
@@ -819,7 +915,7 @@ function bookFixes(y, fld){
   const EC=enCites(y[fld.en]||''), KC=koCites(y[fld.ko]||'');
   const sure=[], doubt=[];
   KC.forEach(k=>{
-    if(!k.inferred) return;
+    if(!k.inferred || k.inside) return;   /* 같은 괄호 안 이어받기는 우리 표기이므로 그대로 둔다 */
     const cand=EC.filter(c=>c.ch===k.ch && [...c.vs].some(v=>k.vs.has(v)));
     const books=[...new Set(cand.map(c=>c.book))];
     if(books.length===1 && books[0]===k.book) sure.push({at:k.at, len:k.len, raw:k.raw, to:k.book+' '+k.raw});
@@ -880,7 +976,44 @@ function visible(){
   const t=r=>{const k=KINDS.find(x=>x.id===r.kind); return TONE[k?k.tone:'blue'];};
   return v.slice().sort((a,b)=>t(a)-t(b)||a.id-b.id);
 }
+/* 찾기 — 소견이 없는 항목까지 사전 전체에서 고른다 */
+function searchRows(){
+  const q=Q.trim().toLowerCase(); if(!q) return null;
+  const num=/^\d+$/.test(q);
+  const hit=[];
+  items().forEach(y=>{
+    const id=y[PROF.idk], title=String(PROF.title(y)||'');
+    const ok = num ? String(id)===q || String(id).startsWith(q)
+                   : title.toLowerCase().includes(q);
+    if(!ok) return;
+    const mine=ROWS.filter(r=>r.id===id && !r.done);
+    hit.push({id, term:title, kind:mine.length?mine[0].kind:'clear',
+              note: mine.length ? ('소견 '+mine.length+'건 · '+mine[0].note)
+                                : '소견 없음 — 본문을 봅니다',
+              key: mine.length ? mine[0].key : null});
+  });
+  return hit.sort((a,b)=>a.id-b.id);
+}
 function drawList(){
+  const found=searchRows();
+  if(found){
+    const v=found.slice(0,SHOW);
+    $('#list').innerHTML = found.length
+      ? `<p class="qhit">「${esc(Q)}」 — ${found.length}항목</p>` + v.map(r=>{
+          const k=KINDS.find(x=>x.id===r.kind)||{tone:'blue',tag:'봄'};
+          return `<button class="row t-${k.tone}" data-id="${r.id}" data-key="${r.key===null?'':r.key}"
+            aria-current="${CURID===r.id}"><span class="rbadge">${esc(k.tag)}</span>
+            <span class="rid">${r.id}</span><div class="rterm">${esc(r.term)}</div>
+            <div class="rnote">${esc(r.note)}</div></button>`;}).join('')
+        + (found.length>SHOW?`<button class="row" id="more" style="text-align:center;color:var(--blue)">아래로 더 보기 <span class="rid">(${SHOW} / ${found.length})</span></button>`:'')
+      : `<p class="hint" style="padding:1.2rem">「${esc(Q)}」에 맞는 표제어가 없습니다.</p>`;
+    $('#list').querySelectorAll('.row').forEach(b=>{
+      if(b.id==='more'){ b.onclick=()=>{SHOW+=250;drawList();}; return; }
+      b.onclick=()=>{ CURID=+b.dataset.id; CUR=b.dataset.key===''?null:+b.dataset.key;
+                      EDIT=false; PICK=null; PICKKO=null; draw(); };
+    });
+    return;
+  }
   const all=visible(), v=all.slice(0,SHOW);
   $('#list').innerHTML = all.length ? v.map(r=>{
     const k=KINDS.find(x=>x.id===r.kind)||{tone:'blue',tag:r.kind};
@@ -1028,7 +1161,10 @@ function drawStat(){
   bb.textContent = nb?`책 이름 ${nb}항목 채우기`:'책 이름 채우기';
   const wb=$('#wipeRef'); wb.disabled=!dirty;
   wb.textContent = dirty?`참조 ${dirty}항목 씻어 내기`:'참조 씻어 내기';
-  const miss=DB?[...new Set(ROWS.filter(r=>r.kind==='en_miss'&&!r.done).map(r=>r.id))].length:0;
+  let miss=0;
+  if(DB) items().forEach(y=>{
+    if(PROF.pairs.some(f=>(y[f.en]||'').trim() && (y[f.ko]||'').trim() && missingRefs(y,f).length)) miss++;
+  });
   const fb=$('#fillAll'); fb.disabled=!miss;
   fb.textContent = miss?`참조 ${miss}항목 채우기`:'참조 채우기';
 }
@@ -1040,7 +1176,9 @@ function load(text, name){
   if(!p){ alert('아는 얼개가 아닙니다. 사전(entries) · 지명(places) · 인명(persons) · 용어(terms) 가운데 하나여야 합니다.'); return; }
   DB=j; PROF=p; FILE=name;
   $('#loaded').textContent = `${p.name} · ${name} · v${j.version||'?'} · ${(j[p.arr]||[]).length.toLocaleString()}항목`;
-  scan(); KIND='all'; CUR=null; CURID=null; SHOW=250; PICK=null; PICKKO=null; draw();
+  scan(); KIND='all'; CUR=null; CURID=null; SHOW=250; PICK=null; PICKKO=null; Q='';
+  const qb=$('#q'); if(qb){ qb.value=''; qb.disabled=false; }
+  draw();
 }
 $('#open').onclick=()=>$('#file').click();
 $('#file').onchange=e=>{const f=e.target.files[0]; if(f) f.text().then(t=>load(t,f.name)); };
@@ -1179,7 +1317,14 @@ $('#wipeRef').onclick=()=>{
 };
 
 /* ══════════ 자판 ══════════ */
+$('#q').addEventListener('input',e=>{ Q=e.target.value; SHOW=250; drawList(); });
+$('#q').addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ e.target.value=''; Q=''; drawList(); e.target.blur(); }
+  e.stopPropagation();
+});
 document.addEventListener('keydown',e=>{
+  if(e.key==='/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)){
+    e.preventDefault(); $('#q').focus(); return; }
   if(!DB||/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
   const v=visible(); if(!v.length) return;
   const i=v.findIndex(r=>r.key===CUR);

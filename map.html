@@ -5972,15 +5972,16 @@
         const editKey = `${rawdictSrc}:${e.id}`;
         const isEditing = rawdictEditingSet.has(editKey);
         const koParts = splitKoNotes(e.definition_ko);
+        // 주석 덩이는 본문 div(white-space:pre-wrap) 바깥에 형제로 둔다.
+        // 안에 넣으면 템플릿 문자열의 줄바꿈·들여쓰기가 그대로 찍혀 빈 줄이 생긴다.
         const noteBlock = koParts.notes
-          ? `<details style="margin-top:5px;border-left:3px solid #fbbf24;padding-left:8px">
-               <summary style="cursor:pointer;font-size:0.76em;color:#b45309;list-style:none;outline:none">⚠️ 원문 인용 정정 ${koParts.count}건</summary>
-               <div style="font-size:0.82em;color:#78350f;line-height:1.6;white-space:pre-wrap;margin-top:4px">${linkifyVerseRefs(escHtml(koParts.notes))}</div>
-             </details>`
+          ? `<details style="margin-top:5px;border-left:3px solid #fbbf24;padding-left:8px"><summary style="cursor:pointer;font-size:0.76em;color:#b45309;list-style:none;outline:none">⚠️ 원문 인용 정정 ${koParts.count}건</summary><div style="font-size:0.82em;color:#78350f;line-height:1.6;white-space:pre-wrap;margin-top:4px">${linkifyVerseRefs(escHtml(koParts.notes))}</div></details>`
           : '';
         const koBlock = (e.definition_ko && !isEditing)
           ? `<div style="display:flex;gap:4px;align-items:flex-start;margin-top:6px">
-               <div style="flex:1;font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyVerseRefs(escHtml(koParts.body))}${noteBlock}</div>
+               <div style="flex:1;min-width:0">
+                 <div style="font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyVerseRefs(escHtml(koParts.body))}</div>${noteBlock}
+               </div>
                <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
              </div>`
           : `<div style="margin-top:6px">
@@ -12542,7 +12543,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-2`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-3`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
