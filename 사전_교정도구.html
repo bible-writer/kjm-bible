@@ -294,15 +294,36 @@ header .q{
 header .q:focus{outline:none;border-color:var(--ink);background:#fff}
 header .q:disabled{opacity:.45}
 .qhit{color:var(--ink-soft);font-size:.8rem;padding:.5rem 1rem 0}
+
+    .catbar{margin-top:4px;font-size:.78rem;color:var(--dim);display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+    .catbtn{font:inherit;padding:1px 9px;border:1px solid var(--border);border-radius:999px;
+      background:#fff;color:var(--dim);cursor:pointer}
+    .catbtn:hover{border-color:var(--blue);color:var(--blue)}
+    .catbtn.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+
+    #newbox{position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;
+      align-items:center;justify-content:center;z-index:9999}
+    .newcard{background:#fff;border-radius:12px;padding:1.1rem 1.3rem;min-width:340px;
+      max-width:92vw;box-shadow:0 12px 40px rgba(0,0,0,.28)}
+    .newcard h3{margin:0 0 .8rem;font-size:1.02rem}
+    .newcard .nid{font-size:.76rem;font-weight:400;color:var(--dim);margin-left:.4rem}
+    .newcard label{display:block;font-size:.82rem;color:var(--dim);margin-bottom:.5rem}
+    .newcard input{display:block;width:100%;box-sizing:border-box;margin-top:.25rem;
+      font:inherit;padding:6px 9px;border:1px solid var(--border);border-radius:6px}
+    .newcard .ncat{margin:.1rem 0 .6rem;font-size:.8rem;color:var(--dim);display:flex;gap:4px;align-items:center}
+    .newcard .nhint{margin:.2rem 0 .9rem;font-size:.76rem;color:var(--dim);line-height:1.5}
+    .newcard .nacts{display:flex;gap:6px;justify-content:flex-end}
+    .newcard .btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
 </style>
 </head>
 <body>
 <header>
-  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260907-2</span></h1>
+  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260907-5</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
   <span class="sp"></span>
   <button class="btn" id="open">파일 열기</button>
   <button class="btn" id="fromGit">깃허브에서 열기</button>
+  <button class="btn" id="addNew" disabled>＋ 새 항목</button>
   <button class="btn" id="fillAll" disabled>참조 구절 모두 채우기</button>
   <button class="btn" id="fixBooks" disabled>책 이름 채우기</button>
   <button class="btn" id="wipeRef" disabled>참조 씻어 내기</button>
@@ -631,12 +652,17 @@ const PROFILES=[
   title:e=>e.term, meta:e=>[e.category, e.hebrew_greek],
   pairs:[{en:'definition', ko:'definition_ko', label:'본문'}],
   koOnly:[], codes:['hebrew_greek'], loose:[], dupTitle:true, verseArr:null, verseAbbr:[],
+  titleKey:'term', hasCat:true,
+  blank:()=>({term:'', definition:'', definition_ko:'', category:'', hebrew_greek:'', origin:'추가'}),
   test:d=>Array.isArray(d.entries)&&d.entries[0]&&'definition' in d.entries[0]},
 
  {id:'place', name:'지명DB', arr:'places', idk:'id',
   title:e=>(e.name||'')+(e.orig?' · '+e.orig:''), meta:e=>[e.country, e.hebrew_greek||e.ustrong],
   pairs:[{en:'eastonEn', ko:'eastonKo', label:'이스턴'},{en:'smithEn', ko:'smithKo', label:'스미스'}],
   koOnly:['desc'], codes:['hebrew_greek'], loose:['ustrong'], dupTitle:true, verseArr:null, verseAbbr:['verse','dictVerse'],
+  titleKey:'name', hasCat:false,
+  blank:()=>({name:'', orig:'', country:'', desc:'', hebrew_greek:'', verse:'',
+              eastonEn:'', eastonKo:'', smithEn:'', smithKo:''}),
   test:d=>Array.isArray(d.places)},
 
  {id:'person', name:'인명DB', arr:'persons', idk:'id',
@@ -644,11 +670,17 @@ const PROFILES=[
   pairs:[{en:'article', ko:'article_ko', label:'해설'},{en:'summary', ko:'summary_ko', label:'요약'},
          {en:'short', ko:'short_ko', label:'짧은 글'},{en:'briefest', ko:'briefest_ko', label:'한 마디'}],
   koOnly:[], codes:['strong'], loose:['ustrong'], dupTitle:false, verseArr:'verses', verseAbbr:['first_ref'],
+  titleKey:'name_ko', hasCat:false,
+  blank:()=>({name_ko:'', name_en:'', type:'', strong:'', first_ref:'', verses:[],
+              article:'', article_ko:'', summary:'', summary_ko:'',
+              short:'', short_ko:'', briefest:'', briefest_ko:''}),
   test:d=>Array.isArray(d.persons)},
 
  {id:'term', name:'용어DB', arr:'terms', idk:'id',
   title:e=>(e.term_ko||'')+(e.term_en?' · '+e.term_en:''), meta:e=>[e.source&&String(e.source).slice(0,24), e.hebrew_greek],
   pairs:[], koOnly:['definition_ko'], codes:['hebrew_greek'], loose:[], dupTitle:true, verseArr:null, verseAbbr:[],
+  titleKey:'term_ko', hasCat:false,
+  blank:()=>({term_ko:'', term_en:'', definition_ko:'', hebrew_greek:'', source:'추가'}),
   test:d=>Array.isArray(d.terms)},
 ];
 function detect(d){ return PROFILES.find(p=>{try{return p.test(d)}catch(e){return false}}) || null; }
@@ -663,6 +695,8 @@ const KINDS=[
   {id:'en_miss', name:'한글에 빠진 인용',  tone:'blue', tag:'빠짐'},
   {id:'nobook',  name:'책 이름 없는 인용', tone:'blue', tag:'책없음'},
   {id:'ko_none', name:'한글 번역 없음',    tone:'blue', tag:'미번역'},
+  {id:'nocat',   name:'분류 없음',        tone:'blue', tag:'분류'},
+  {id:'isnew',   name:'새로 만든 것',      tone:'note', tag:'새것'},
   {id:'paren',   name:'괄호 불균형',       tone:'red',  tag:'괄호'},
   {id:'hanja',   name:'한자 섞임',         tone:'red',  tag:'한자'},
   {id:'strong',  name:'스트롱 형식 오류',  tone:'red',  tag:'코드'},
@@ -739,6 +773,16 @@ function scan(){
         if(g===2) push('ko_bad', f+' '+c.raw+'  →  '+over(c), {kocit:c.raw, fld:{ko:f,label:f}});
         else if(g===1) push('versify', f+' '+c.raw+' — 절 구분 차이일 수 있음', {kocit:c.raw, fld:{ko:f,label:f}}); });
     });
+
+    /* 이 자리에서 새로 만든 항목 */
+    if(y.__new) push('isnew','새로 만든 항목이다 — 내용을 채우고 「판정 끝」으로 표하십시오');
+
+    /* 분류(인명·지명·용어)가 비었는가 */
+    if(('category' in y) || PROF.id==='dict'){
+      const c=(y.category||'').trim();
+      if(!c) push('nocat','분류가 비어 있다 — 인명·지명·용어 가운데 하나를 고르십시오');
+      else if(['인명','지명','용어'].indexOf(c)<0) push('nocat','분류가 「'+c+'」이다 — 인명·지명·용어가 아니다');
+    }
 
     /* 짧은 꼴 성구 칸 (지명DB verse 등) */
     (PROF.verseAbbr||[]).forEach(f=>{
@@ -1065,9 +1109,15 @@ function drawDetail(){
 
   /* 본문 */
   const metas=(PROF.meta(y)||[]).filter(Boolean).map(esc).join(' · ');
+  /* 분류(인명·지명·용어)를 눌러 바꾼다. category 칸이 있는 파일에서만 나온다. */
+  const CATS=['인명','지명','용어'];
+  const catbar = ('category' in y) || PROF.id==='dict'
+    ? `<p class="catbar">분류 ${CATS.map(c=>
+        `<button class="catbtn${y.category===c?' on':''}" data-c="${c}">${c}</button>`).join('')}<button class="catbtn${!y.category?' on':''}" data-c="">비움</button></p>`
+    : '';
   let h=`<div class="entryhead${y.__touched?' touched':''}" style="border-bottom-color:${y.__touched?'var(--green)':col}">
     <p class="t">${esc(PROF.title(y))}${y.__touched?'<span class="tag-touched">고침</span>':''}</p>
-    <p class="m">id ${y[PROF.idk]}${metas?' · '+metas:''} · <span style="color:${col};font-weight:600">${esc(kind.name)}</span></p></div>`;
+    <p class="m">id ${y[PROF.idk]}${metas?' · '+metas:''} · <span style="color:${col};font-weight:600">${esc(kind.name)}</span></p>${catbar}</div>`;
   const komate = PICK ? PICKKO : r.kocit;
   h+='<div id="twocol">';
   if(fld && fld.en){
@@ -1117,6 +1167,11 @@ function drawDetail(){
     PICK=(PICK===k)?null:k; PICKKO=tr.dataset.ko||null; drawDetail();
     d.querySelectorAll('#twocol .cit.pick').forEach(el=>el.scrollIntoView&&el.scrollIntoView({block:'center'}));
   });
+  d.querySelectorAll('.catbtn').forEach(b=>b.onclick=()=>{
+    const c=b.dataset.c;
+    if((y.category||'')===c) return;
+    y.category=c; y.__touched=true; rescan();
+  });
   const on=(id,fn)=>{const el=$('#'+id); if(el) el.onclick=fn;};
   on('trgo',()=>{
     const box=$('#trbox'); const b=$('#trgo');
@@ -1155,6 +1210,7 @@ function drawStat(){
   const t=DB?items().filter(e=>e.__touched).length:0;
   $('#stat').textContent = DB? `소견 ${ROWS.filter(r=>!r.done).length} 남음 · 고친 항목 ${t}` : '';
   ['expJson','expEnc','expCsv'].forEach(i=>$('#'+i).disabled=!DB);
+  $('#addNew').disabled=!DB;
   const dirty=DB?items().filter(y=>PROF.pairs.some(f=>/\(\s*참조\s*:/.test(String(y[f.ko]||'')))).length:0;
   const nb=DB?[...new Set(ROWS.filter(r=>r.kind==='nobook'&&!r.done).map(r=>r.id))].length:0;
   const bb=$('#fixBooks'); bb.disabled=!nb;
@@ -1237,12 +1293,64 @@ function dl(name, text, type){
 }
 function bumped(){
   const n=items().filter(e=>e.__touched).length;
+  const add=items().filter(e=>e.__new).length;
   const v=String(DB.version||'0.0.0').split('.');
   v[v.length-1]=(+v[v.length-1]+1)||1; DB.version=v.join('.');
   DB.date=new Date().toISOString().slice(0,10);
-  DB.note=(DB.note||'')+` | ${DB.date}: 교정 책상에서 ${n}항목 수정.`;
-  return {n, out:JSON.parse(JSON.stringify(DB,(k,val)=>k==='__touched'?undefined:val))};
+  DB.note=(DB.note||'')+` | ${DB.date}: 교정 책상에서 ${n}항목 수정`+(add?`, ${add}항목 새로 추가`:'')+'.';
+  if(add && DB.count!==undefined) DB.count=items().length;
+  /* __ 로 시작하는 내부 표는 파일에 넣지 않는다 */
+  return {n, out:JSON.parse(JSON.stringify(DB,(k,val)=>String(k).startsWith('__')?undefined:val))};
 }
+/* ══════════ 새 항목 만들기 ══════════ */
+/* id는 지금 파일의 가장 큰 id + 1 로 자동 채번한다. 가운데 끼우지 않고
+   언제나 맨 끝에 붙이므로, map.html과 세 데이터베이스의 id 연결이 깨지지 않는다. */
+function nextId(){
+  const list=items(), k=PROF.idk;
+  let mx=0;
+  list.forEach(y=>{ const n=parseInt(y[k],10); if(!isNaN(n)&&n>mx) mx=n; });
+  return mx+1;
+}
+function openNewBox(){
+  if(!DB){ alert('먼저 파일을 여십시오.'); return; }
+  const id=nextId();
+  const cats=['인명','지명','용어'];
+  const box=document.createElement('div');
+  box.id='newbox';
+  box.innerHTML=`<div class="newcard">
+    <h3>새 항목 만들기 <span class="nid">${PROF.name} · id ${id}</span></h3>
+    <label>표제어<input id="nterm" placeholder="${PROF.id==='dict'?'예) Zoar(소알)':'예) 소알'}" autocomplete="off"></label>
+    ${PROF.hasCat?`<p class="ncat">분류 ${cats.map((c,i)=>
+      `<button class="catbtn${i===2?' on':''}" data-c="${c}">${c}</button>`).join('')}</p>`:''}
+    <p class="nhint">만들면 맨 끝에 붙고 곧바로 그 항목이 열립니다. 영문과 한글은 「한글 고치기」로 채우십시오.</p>
+    <div class="nacts"><button class="btn" id="ncancel">그만두기</button>
+      <button class="btn on" id="nok">만들기</button></div></div>`;
+  document.body.appendChild(box);
+  let cat=PROF.hasCat?'용어':'';
+  box.querySelectorAll('.catbtn').forEach(b=>b.onclick=()=>{
+    box.querySelectorAll('.catbtn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); cat=b.dataset.c; });
+  const close=()=>box.remove();
+  box.onclick=e=>{ if(e.target===box) close(); };
+  $('#ncancel').onclick=close;
+  $('#nok').onclick=()=>{
+    const t=$('#nterm').value.trim();
+    if(!t){ alert('표제어를 넣으십시오.'); $('#nterm').focus(); return; }
+    const dup=items().find(y=>String(y[PROF.titleKey]||'').trim()===t);
+    if(dup && !confirm('「'+t+'」이 id '+dup[PROF.idk]+'에 이미 있습니다. 그래도 만드시겠습니까?')) return;
+    const y=PROF.blank();
+    y[PROF.idk]=id; y[PROF.titleKey]=t;
+    if(PROF.hasCat) y.category=cat;
+    y.__touched=true; y.__new=true;
+    items().push(y);
+    close(); CURID=id; CUR=null; EDIT=true; PICK=null; PICKKO=null;
+    rescan();
+    setTimeout(()=>{const ta=$('#ta'); if(ta) ta.focus();},60);
+  };
+  setTimeout(()=>$('#nterm').focus(),30);
+}
+$('#addNew').onclick=openNewBox;
+
 $('#expJson').onclick=()=>{
   const n=items().filter(e=>e.__touched).length;
   if(!n && !confirm('고친 항목이 없습니다. 그래도 내려받으시겠습니까?')) return;
