@@ -11615,16 +11615,25 @@
     }
 
     function wpDicts(code) {
-      // 다섯 사전에서 그 스트롱 코드를 지닌 표제어를 찾는다
-      const c = String(code).toUpperCase();
-      const pad = c[0] + String(parseInt(c.slice(1), 10));
+      /* 다섯 사전에서 그 스트롱 코드를 지닌 표제어를 찾는다.
+         낱 코드로 끊어 견주어야 한다 — 글자만 견주면 H0430(하나님)이
+         H4308(마드렛) 안의 'H430'에 걸려 엉뚱한 것이 나온다. */
+      const norm = t => {
+        const m = String(t || '').toUpperCase().match(/^([HG])0*(\d+)/);
+        return m ? m[1] + parseInt(m[2], 10) : '';
+      };
+      const want = norm(code);
+      if (!want) return [];
       const out = [];
       (typeof RAWDICT_SOURCES !== 'undefined' ? RAWDICT_SOURCES : []).forEach(src => {
         const list = (typeof getRawDictList === 'function') ? getRawDictList(src.key) : [];
         for (let i = 0; i < list.length && out.length < 12; i++) {
-          const e = list[i], hg = String(e.hebrew_greek || '').toUpperCase();
+          const e = list[i], hg = String(e.hebrew_greek || '');
           if (!hg) continue;
-          if (hg.indexOf(c) >= 0 || hg.indexOf(pad) >= 0)
+          /* '아마르(H559)' 처럼 다른 글자가 섞였거나 코드가 여럿일 수 있다 */
+          const codes = hg.match(/[HG]\d{1,5}/g);
+          if (!codes) continue;
+          if (codes.some(x => norm(x) === want))
             out.push({ label: src.label, term: e.term, ko: (e.definition_ko || '').slice(0, 90) });
         }
       });
@@ -11662,7 +11671,7 @@
       let h = ''
         + '<div id="word-panel-handle" style="display:flex;justify-content:space-between;align-items:center;'
         + 'padding:9px 12px;background:#ecfdf5;border-bottom:1px solid #a7f3d0;cursor:move;user-select:none">'
-        + '<b style="color:#047857;font-size:0.95em">' + escHtml(ref) + ' 「' + escHtml(w.surface) + '」</b>'
+        + '<b style="color:#047857;font-size:0.95em">' + escHtml(ref) + ' 「' + escHtml(w.gloss || w.surface) + '」</b>'
         + '<button onclick="document.getElementById(\'word-panel\').style.display=\'none\'"'
         + ' style="border:none;background:none;font-size:1.1em;cursor:pointer;color:#94a3b8">✕</button></div>'
         + '<div style="padding:12px">'
@@ -11688,11 +11697,14 @@
         + '<div style="padding:2px 12px 11px">' + inner + '</div></details>';
 
       /* ── 접힘 1: 이 절의 다른 낱말 ── */
+      /* 뜻이 없는 문법 표지(목적격 표지 따위)는 흐리게 하여 눈에 덜 띄게 한다 */
+      const bare = g => !g || !/[가-힣A-Za-z]/.test(String(g).replace(/[_\-\s]/g, ''));
       const others = st.words.map((x, i) =>
         '<div onclick="wpPick(' + i + ')" style="padding:4px 0;border-bottom:1px dashed #e2e8f0;cursor:pointer'
-        + (i === st.idx ? ';background:#d1fae5' : '') + '">'
+        + (i === st.idx ? ';background:#d1fae5' : '') + (bare(x.gloss) ? ';opacity:0.45' : '') + '">'
         + '<span style="direction:rtl;unicode-bidi:isolate;font-weight:600">' + escHtml(x.surface) + '</span> '
-        + '<span style="color:#94a3b8;font-size:0.92em">' + escHtml(x.code) + ' · ' + escHtml(x.gloss) + '</span></div>').join('');
+        + '<span style="color:#94a3b8;font-size:0.92em">' + escHtml(x.code)
+        + (bare(x.gloss) ? ' · 문법 표지' : ' · ' + escHtml(x.gloss)) + '</span></div>').join('');
       h += fold('w', '이 절의 다른 낱말', st.words.length, others);
 
       /* ── 접힘 2: 이 낱말이 쓰인 곳 (본문을 옮기지 않는다) ── */
@@ -12773,7 +12785,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-7`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-8`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
