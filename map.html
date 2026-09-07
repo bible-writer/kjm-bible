@@ -3798,6 +3798,8 @@
           ${sourceCredit}
         `;
         panel.style.display = 'block';
+        /* 원어·쓰인 곳·사전 칸을 이 창 아래에 덧붙인다 */
+        wpAttach('person-info-panel', p.ustrong || p.strong || '');
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#person-info-drag-handle');
       },
@@ -4010,6 +4012,7 @@
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${source}</div>
         `;
         panel.style.display = 'block';
+        wpAttach('term-info-panel', t.hebrew_greek || '');
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#term-info-drag-handle');
       },
@@ -6863,6 +6866,8 @@
       }
 
       panel.style.display = 'block';
+      /* 원어·쓰인 곳·사전 칸을 이 창 아래에 덧붙인다 */
+      wpAttach('place-quick-panel', place.ustrong || place.hebrew_greek || '');
     }
 
     // 미니 패널 외부 클릭 시 닫기
@@ -11759,6 +11764,73 @@
     };
     window.openWordPanel = openWordPanel;
 
+    /* ══════════════════════════════════════════════════════════════
+       인명·지명·용어 창에 「원어 · 쓰인 곳 · 사전」 칸을 덧붙인다.
+       창을 새로 만들지 않고 이미 뜬 창 아래에 붙이므로 창이 하나로 유지된다.
+       ══════════════════════════════════════════════════════════════ */
+    const _wpAtOpen = { u: false, d: false, s: false };
+
+    function wpAttach(panelId, rawCode) {
+      const panel = document.getElementById(panelId);
+      if (!panel) return;
+      const m = String(rawCode || '').match(/[HG]\d{1,5}/);
+      if (!m) return;                       // 스트롱 코드가 없으면 아무것도 붙이지 않는다
+      const code = m[0].toUpperCase();
+
+      let box = panel.querySelector('.wp-attach');
+      if (!box) { box = document.createElement('div'); box.className = 'wp-attach'; panel.appendChild(box); }
+
+      const fold = (key, label, count, inner) =>
+        '<details class="wpa-fold"' + (_wpAtOpen[key] ? ' open' : '') + ' data-k="' + key + '"'
+        + ' style="border-top:1px solid #e2e8f0;margin-top:8px">'
+        + '<summary style="padding:7px 0;cursor:pointer;color:#64748b;font-size:0.85em;'
+        + 'display:flex;justify-content:space-between;list-style:none">'
+        + '<span>' + label + '</span><span style="color:#94a3b8">' + count + '</span></summary>'
+        + '<div style="padding:2px 0 8px;font-size:0.85em">' + inner + '</div></details>';
+
+      let h = '';
+
+      /* 원어 뜻 */
+      h += fold('s', '📜 원어 ' + escHtml(code), '',
+        '<div id="' + panelId + '-wpstrong"></div>'
+        + '<button onclick="StrongEngine.handleClick(\'' + code + '\',\'' + panelId + '-wpstrong\')"'
+        + ' style="font-size:0.9em;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;'
+        + 'border-radius:4px;padding:2px 9px;cursor:pointer">원어 사전 보기</button>');
+
+      /* 이 낱말이 쓰인 곳 — 본문을 옮기지 않는다 */
+      const u = (typeof wpUsages === 'function') ? wpUsages(code, 30) : { total: 0, rows: [] };
+      if (u.total) {
+        const ul = u.rows.map(r => {
+          const b2 = BIBLE_BOOKS.find(b => b.id === r[0]);
+          const lab = (b2 ? b2.abbr : '?') + r[1] + ':' + r[2];
+          const t = (typeof wpVerseText === 'function') ? wpVerseText(r[0], r[1], r[2]).slice(0, 42) : '';
+          return '<div style="padding:4px 0;border-bottom:1px dashed #e2e8f0">'
+            + '<span style="color:#4338ca;font-weight:600">' + escHtml(lab) + '</span> '
+            + '<span style="color:#475569">' + escHtml(t) + '</span> '
+            + '<button onclick="wpGo(' + r[0] + ',' + r[1] + ',' + r[2] + ')"'
+            + ' style="font-size:0.8em;color:#64748b;background:none;border:1px solid #e2e8f0;'
+            + 'border-radius:3px;padding:0 5px;cursor:pointer">이동</button></div>';
+        }).join('')
+        + (u.total > u.rows.length ? '<div style="color:#94a3b8;padding-top:5px">앞의 ' + u.rows.length + '건만 보입니다</div>' : '');
+        h += fold('u', '이 낱말이 쓰인 곳', u.total.toLocaleString(), ul);
+      }
+
+      /* 다섯 사전에서 찾기 */
+      const dd = (typeof wpDicts === 'function') ? wpDicts(code) : [];
+      if (dd.length) {
+        const dl = dd.map(x => '<div style="padding:4px 0;border-bottom:1px dashed #e2e8f0">'
+          + '<b>' + escHtml(x.label) + '</b> <span style="color:#334155">' + escHtml(x.term) + '</span><br>'
+          + '<span style="color:#94a3b8">' + escHtml(x.ko) + '…</span></div>').join('');
+        h += fold('d', '사전에서 찾기', dd.length, dl);
+      }
+
+      box.innerHTML = h;
+      box.querySelectorAll('.wpa-fold').forEach(el =>
+        el.addEventListener('toggle', () => { _wpAtOpen[el.dataset.k] = el.open; }));
+    }
+    window.wpAttach = wpAttach;
+
+
 
 
     // 이미 태그(인명/지명/용어)로 감싸진 부분은 건드리지 않고, 순수 텍스트 구간에서만 순서대로 단어를 찾아 클릭 가능한 태그로 감싼다
@@ -12785,7 +12857,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-8`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-9`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
