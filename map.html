@@ -11838,7 +11838,7 @@
         + 'border-radius:4px;padding:2px 9px;cursor:pointer">원어 사전 보기</button>');
 
       /* 이 낱말이 쓰인 곳 — 본문을 옮기지 않는다 */
-      const u = (typeof wpUsages === 'function') ? wpUsages(code, 30) : { total: 0, rows: [] };
+      const u = (typeof wpUsages === 'function') ? wpUsages(code, 100) : { total: 0, rows: [] };
       if (u.total) {
         const ul = u.rows.map(r => {
           const b2 = BIBLE_BOOKS.find(b => b.id === r[0]);
@@ -12897,7 +12897,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-10`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-11`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -14327,19 +14327,24 @@ showToast = function(msg, type) {
         const tr = translationRegistry[key];
         if (!tr) return [];
         const kw = keyword.toLowerCase();
+        /* 상한에 걸려 잘렸는지 알리려고 전체 수를 따로 적어 둔다 */
+        window._searchTotal = null;
 
         // 내장 번역 — 메모리 맵을 훑는다
         if (tr.type === 'builtin') {
           const map = builtinCache[key];
           if (!map) return null;   // 아직 안 받아진 상태
           const out = [];
+          let total = 0;
           for (const k in map) {
             const text = map[k];
             if (!text || String(text).toLowerCase().indexOf(kw) < 0) continue;
+            total++;
+            if (out.length >= maxResults) continue;
             const p = k.split('_');
             out.push({ bookId: Number(p[0]), chapter: Number(p[1]), verse: Number(p[2]), text: String(text) });
-            if (out.length >= maxResults) break;
           }
+          window._searchTotal = total;
           out.sort(function(a, b) { return a.bookId - b.bookId || a.chapter - b.chapter || a.verse - b.verse; });
           return out;
         }
@@ -14411,7 +14416,10 @@ showToast = function(msg, type) {
         const kw = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const re = kw ? new RegExp('(' + kw + ')', 'gi') : null;
 
-        let h = '<div class="bsr-summary">\ud83d\udcd6 ' + (transLabel ? '[' + escHtml(transLabel) + '] ' : '') + '"' + escHtml(query) + '" \uac80\uc0c9 \uacb0\uacfc: ' + results.length + '\uac74' + (results.length >= 200 ? ' (\uc0c1\uc704 200\uac74)' : '') + '</div>';
+        let h = '<div class="bsr-summary">\ud83d\udcd6 ' + (transLabel ? '[' + escHtml(transLabel) + '] ' : '') + '"' + escHtml(query) + '" \uac80\uc0c9 \uacb0\uacfc: ' + results.length + '\uac74'
+          + ((window._searchTotal && window._searchTotal > results.length)
+              ? ' \u2014 \ubaa8\ub450 ' + window._searchTotal.toLocaleString() + '\uac74 \uac00\uc6b4\ub370 \uc55e\uc758 ' + results.length + '\uac74'
+              : '') + '</div>';
         h += '<div id="bible-search-results">';
 
         results.forEach(function(r) {
@@ -14483,7 +14491,10 @@ showToast = function(msg, type) {
         }
 
         if (raw.length < 2) { showToast('2\uae00\uc790 \uc774\uc0c1 \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
-        const results = searchInTranslation(transKey, raw, 200);
+        /* 상한이 낮으면 앞쪽(구약)만 채워지고 뒤쪽(신약)이 아예 안 나온다.
+           「아내」는 구약에만 510절이라 200으로는 신명기에서 끊겼다. */
+        const SEARCH_LIMIT = 1000;
+        const results = searchInTranslation(transKey, raw, SEARCH_LIMIT);
         if (results === null) {
           showToast('"' + (transObj.label || transKey) + '" \ubcf8\ubb38\uc774 \uc544\uc9c1 \ub85c\ub4dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \ubc88\uc5ed\uc744 \uba3c\uc800 \ub4f1\ub85d\ud558\uc138\uc694.', 'warn', 3000);
           return;
