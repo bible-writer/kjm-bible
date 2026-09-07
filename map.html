@@ -3310,21 +3310,29 @@
     // 「요한복음 2:1-11; 4:46」이면 둘이 한 묶음이 되어, 하나를 눌러도 함께 뜬다.
     const VREF_GROUPS = {};
     let vrefSeq = 0;
-    function vrefRange(s) {
-      const ns = String(s || '').match(/\d+/g);
-      if (!ns) return { v: 1, to: 1 };
-      const a = parseInt(ns[0], 10), b = parseInt(ns[ns.length - 1], 10);
-      return { v: a, to: (b > a && b - a <= 60) ? b : a };
+    // 「7:1,2,9,10,19」는 다섯 절을 따로 든 것이고 「2:1-11」만 범위이다.
+    // 쉼표로 가른 뒤, 조각마다 붙임표가 있으면 범위로 읽는다.
+    function vrefParts(s) {
+      const out = [];
+      String(s || '').split(',').forEach(part => {
+        const ns = part.match(/\d+/g);
+        if (!ns) return;
+        const a = parseInt(ns[0], 10);
+        const hasDash = /[-–~]/.test(part);
+        const b = (hasDash && ns.length > 1) ? parseInt(ns[ns.length - 1], 10) : a;
+        out.push({ v: a, to: (b > a && b - a <= 60) ? b : a });
+      });
+      return out.length ? out : [{ v: 1, to: 1 }];
     }
     function linkifyVerseRefs(escapedText) {
       if (!escapedText) return '';
       let lastBookId = null, lastEnd = -1, gid = null;
       if (vrefSeq > 20000) { for (const k in VREF_GROUPS) delete VREF_GROUPS[k]; vrefSeq = 0; } // 오래 쓰면 비운다
-      const add = (bookId, chapter, r, label, offset, len) => {
+      const add = (bookId, chapter, parts, offset, len) => {
         const joinable = lastEnd >= 0 && /^[\s;,·]*$/.test(escapedText.slice(lastEnd, offset));
         if (!joinable || !gid) { gid = 'vg' + (++vrefSeq); VREF_GROUPS[gid] = []; }
         const idx = VREF_GROUPS[gid].length;
-        VREF_GROUPS[gid].push({ b: bookId, c: chapter, v: r.v, to: r.to, label: label });
+        parts.forEach(r => VREF_GROUPS[gid].push({ b: bookId, c: chapter, v: r.v, to: r.to }));
         lastEnd = offset + len;
         return { gid: gid, idx: idx };
       };
@@ -3339,18 +3347,18 @@
           const maxChapters = BOOK_ID_TO_CHAPTERS[bookId];
           if (maxChapters && chapter > maxChapters) return whole;
           lastBookId = bookId;
-          const r = vrefRange(groups.bverse);
-          const g = add(bookId, chapter, r, whole, offset, whole.length);
-          return `<span class="term-verse-ref" data-bid="${bookId}" data-ch="${chapter}" data-v="${r.v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${whole}</span>`;
+          const parts = vrefParts(groups.bverse);
+          const g = add(bookId, chapter, parts, offset, whole.length);
+          return `<span class="term-verse-ref" data-bid="${bookId}" data-ch="${chapter}" data-v="${parts[0].v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${whole}</span>`;
         }
         if (groups.cchap && lastBookId) {
           const chapter = parseInt(groups.cchap, 10);
           const maxChapters = BOOK_ID_TO_CHAPTERS[lastBookId];
           if (maxChapters && chapter > maxChapters) return whole;
-          const r = vrefRange(groups.cverse);
+          const parts = vrefParts(groups.cverse);
           const refPart = whole.slice(groups.sep.length);
-          const g = add(lastBookId, chapter, r, refPart, offset + groups.sep.length, refPart.length);
-          return `${groups.sep}<span class="term-verse-ref" data-bid="${lastBookId}" data-ch="${chapter}" data-v="${r.v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${refPart}</span>`;
+          const g = add(lastBookId, chapter, parts, offset + groups.sep.length, refPart.length);
+          return `${groups.sep}<span class="term-verse-ref" data-bid="${lastBookId}" data-ch="${chapter}" data-v="${parts[0].v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${refPart}</span>`;
         }
         return whole;
       });
@@ -12626,7 +12634,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-4`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-5`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
