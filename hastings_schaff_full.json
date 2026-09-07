@@ -1,9 +1,9 @@
 {
- "version": "1.23.0",
+ "version": "1.25.0",
  "date": "2026-09-07",
  "count": 4960,
  "source": "Hastings Dictionary of the Bible / Schaff's Bible Dictionary (CCEL, Public Domain) — 원본 XML 동일, 통합본",
- "note": "원 데이터셋(neuu-org/bible-dictionary-dataset)이 동일 XML을 두 사전으로 분리 파싱한 것을 통합. origin 필드로 출처 구분, 본문이 다를 경우 variants에 양쪽 보존. 병합 오염 항목은 절단 복구하고 repaired에 기록. | 2026-09-07: 파싱이 깨진 표제어 146항목 제거 — 두 벌로 들어온 것 115, 알파벳 조각 26, 소제목 5. 제거한 것의 내용은 모두 다른 항목이나 스미스·이스턴에 있어 잃은 것이 없다. | 2026-09-07: 영문과 한글이 어긋난 82항목을 성구 겹침 검사로 찾아 영문에서 전부 다시 옮김(retrans=v2). 비율 0.15 → 0.47. 스미스·이스턴과 같은 규칙(성구 온이름, 「」 인용, 개역개정 어휘) 적용. | 2026-09-07: 한자 7건 한글로 바꿈, 번호 매김 「1)」을 「(1)」로 통일하여 괄호 균형 맞춤. | 2026-09-07: 성구 줄임말을 개역개정 온이름으로 통일(창→창세기 따위). 앞에 한글이 붙지 않은 자리만 바꾸어 「이사야」의 「아」 같은 낱말 꼬리는 건드리지 않음. 조사 「과·와」 뒤의 책 이름 없는 이어받기 인용은 그대로 둠. | 2026-09-07: 같은 원본을 두 사전으로 나누어 읽어 생긴 두 벌 182쌍을 합침. 영문이 더 긴 쪽(잘리지 않은 쪽)을 남기고, 표제어는 한글 음역이 있는 쪽, 한글 본문은 더 긴 쪽을 취했으며, 버린 쪽은 variants에 통째로 보관하고 merged_20260907에 기록. | 2026-09-07: 참단독 항목 가운데 한글이 요약뿐이던 116항목을 영문에서 전수 보강 완료(retrans=v2). 비율 0.15 → 0.45. | 2026-09-07: 한글 본문의 없는 절 99건을 뺌. 두 성구가 붙어 하나가 된 것(이사야 41:44 = 41:4+44:6 따위)이 대부분이며, 영문 대조로 되살릴 수 있도록 뺀 것을 removed_verses_20260907에 기록.",
+ "note": "원 데이터셋(neuu-org/bible-dictionary-dataset)이 동일 XML을 두 사전으로 분리 파싱한 것을 통합. origin 필드로 출처 구분, 본문이 다를 경우 variants에 양쪽 보존. 병합 오염 항목은 절단 복구하고 repaired에 기록. | 2026-09-07: 파싱이 깨진 표제어 146항목 제거 — 두 벌로 들어온 것 115, 알파벳 조각 26, 소제목 5. 제거한 것의 내용은 모두 다른 항목이나 스미스·이스턴에 있어 잃은 것이 없다. | 2026-09-07: 영문과 한글이 어긋난 82항목을 성구 겹침 검사로 찾아 영문에서 전부 다시 옮김(retrans=v2). 비율 0.15 → 0.47. 스미스·이스턴과 같은 규칙(성구 온이름, 「」 인용, 개역개정 어휘) 적용. | 2026-09-07: 한자 7건 한글로 바꿈, 번호 매김 「1)」을 「(1)」로 통일하여 괄호 균형 맞춤. | 2026-09-07: 성구 줄임말을 개역개정 온이름으로 통일(창→창세기 따위). 앞에 한글이 붙지 않은 자리만 바꾸어 「이사야」의 「아」 같은 낱말 꼬리는 건드리지 않음. 조사 「과·와」 뒤의 책 이름 없는 이어받기 인용은 그대로 둠. | 2026-09-07: 같은 원본을 두 사전으로 나누어 읽어 생긴 두 벌 182쌍을 합침. 영문이 더 긴 쪽(잘리지 않은 쪽)을 남기고, 표제어는 한글 음역이 있는 쪽, 한글 본문은 더 긴 쪽을 취했으며, 버린 쪽은 variants에 통째로 보관하고 merged_20260907에 기록. | 2026-09-07: 참단독 항목 가운데 한글이 요약뿐이던 116항목을 영문에서 전수 보강 완료(retrans=v2). 비율 0.15 → 0.45. | 2026-09-07: 한글 본문의 없는 절 99건을 뺌. 두 성구가 붙어 하나가 된 것(이사야 41:44 = 41:4+44:6 따위)이 대부분이며, 영문 대조로 되살릴 수 있도록 뺀 것을 removed_verses_20260907에 기록. | 2026-09-07: 영문↔한글 어긋남을 개역개정 본문과 대조하여 가림. 한글이 틀린 28건은 고치고, 영문이 틀린 36항목은 한글을 그대로 두고 「※ 원문 오류」 주석을 붙임(스미스·이스턴과 같은 형식). | 2026-09-07: 보류 21건을 띄어쓰기·꼬리말을 헤아려 다시 대조. 벧아놋(한글 오류)과 헬갓핫수림(영문 오류) 2건 추가 처리, 아낙 족속은 두 절에 다 나와 보류로 옮김.",
  "entries": [
   {
    "id": 1,
@@ -619,7 +619,7 @@
    "term": "ABSALOMS PLACE(압살롬의 기념비)",
    "definition": "ABSALOM'S PLACE, or PILLAR, was in the \"king's dale,\" or valley of the Kedron. 2 Sam 18:8. \"The Tomb of Absalom,\" now standing east of Jerusalem, at the foot of Mount Olivet, is supposed by the Jews to be the one erected by Absalom during his lifetime, and is pelted by them with stones, as they pass by, in ACC ACH execration of his treason; but the monument betrays Grajco-Latin architecture Absalom's Tomb. (From original Photographs. Bonfils.) (especially the Ionic columns), and is not mentioned before A. D. 333.",
    "category": "지명",
-   "definition_ko": "압살롬의 자리 곧 기둥이니 「왕의 골짜기」 곧 기드론 골짜기에 있었다(사무엘하 18:18). 지금 예루살렘 동쪽 감람 산 기슭에 서 있는 「압살롬의 무덤」을 유대인이 압살롬이 살아 있을 때에 세운 것으로 여기며, 지나면서 그 반역을 저주하여 돌을 던진다. 그러나 그 기념물이 헬라 로마 건축을 드러내고(특히 이오니아 기둥이 그러하다) 주후 333년 앞서 언급된 적이 없다.",
+   "definition_ko": "압살롬의 자리 곧 기둥이니 「왕의 골짜기」 곧 기드론 골짜기에 있었다(사무엘하 18:18). 지금 예루살렘 동쪽 감람 산 기슭에 서 있는 「압살롬의 무덤」을 유대인이 압살롬이 살아 있을 때에 세운 것으로 여기며, 지나면서 그 반역을 저주하여 돌을 던진다. 그러나 그 기념물이 헬라 로마 건축을 드러내고(특히 이오니아 기둥이 그러하다) 주후 333년 앞서 언급된 적이 없다.\n※ 원문 오류: 2 Sam 18:8 → 사무엘하 18:18\n※ 판정 근거: 본문 대조. 사무엘하 18:18에 「압살롬의 기념비」이(가) 나오나 2 Sam 18:8에는 나오지 않는다.",
    "hebrew_greek": "",
    "origin": "Hastings/Schaff",
    "retrans": "v2"
@@ -1696,7 +1696,7 @@
    "term": "AHIMAAZ(아히마아스)",
    "definition": "AHIM'AAZ (brother of wrath). 1. The father of Saul's wife Ahinoam. 1 Sam 14:50. Son and successor of Zadok the priest. During the revolt of Absalom, Zadok and Abiathar, the high priests, stayed in Jerusalem with Hushai, David's friend; while Ahimaaz and Jonathan, the son of Abiathar, stationed themselves at En-rogel, a short distance from the city, and the plot was that all that Hushai should hear respecting Absalom's plans he should communicate to Zadok and Abiathar, and they to their sons Ahimaaz and Jonathan, by whom the intelligence should be communicated to David. 2 Sam 15:30. As soon as Absalom had rejected the counsel of Ahithophel, and adopted that of Hushai, Zadok and Abiathar were promptly informed of it, and directed their sons to go with all possible haste to David and tell him to cross Jordan at once. A woman bore the message. Seeing her speak to the men, and noticing that they ran off with haste, a lad informed Absalom of the suspicious event, and accordingly he ordered a pursuit. When they came to Bahurim, they concealed themselves in a well. The woman of the house covered the mouth of the well with a blanket, on which she spread corn to dry ; and when Absalom's messengers came up in the pursuit, and inquired where they were, she told them that the young men had passed on. Thus they escaped, and while their pursuers returned to Jerusalem they hastened to David with their message. 2 Sam 17:15-22. At his own urgent request, Ahimaaz was employed to carry the intelligence of Absalom's death to David, his father. He outran Cushi, who had been previously despatched on the same errand. Before he had delivered his message, however, Cushi came up, and made known the sad event. 2 Sam 18:19-33. See David. A son-in-law of Solomon, and one of his commissariat officers. 1 Kgs 4:15.",
    "category": "인명",
-   "definition_ko": "'진노의 형제'라는 뜻. ① 사울의 아내 아히노암의 아버지(사무엘상 14:50). ② 제사장 사독의 아들이자 후계자. 압살롬의 반역 때 요나단과 함께 다윗에게 소식을 전하는 위험한 일을 맡았다(사무엘하 15:27, 17:17-21).",
+   "definition_ko": "'진노의 형제'라는 뜻. ① 사울의 아내 아히노암의 아버지(사무엘상 14:50). ② 제사장 사독의 아들이자 후계자. 압살롬의 반역 때 요나단과 함께 다윗에게 소식을 전하는 위험한 일을 맡았다(사무엘하 15:27, 17:17-21).\n※ 원문 오류: 2 Sam 15:30 → 사무엘하 15:27\n※ 판정 근거: 본문 대조. 사무엘하 15:27에 「아히마아스」이(가) 나오나 2 Sam 15:30에는 나오지 않는다.",
    "hebrew_greek": "H0290",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -2198,7 +2198,7 @@
    "term": "ALEXANDER(알렉산더)",
    "definition": "ALEXAN'DER (man-defender). 1. The son of Simon the Cyrenian. Mark 15:21. A distinguished Jew who, with others, took part against Peter and John. Acts 4:6. A Jew of Ephesus who took a conspicuous part in the controversy between Paul and the populace of that city, and attempted, without success, to quell the commotion. Acts 19:33. A coppersmith and apostate from Christianity, whom Paul mentions in terms of severe reproach. 1 Tim 1:19, Gen 23:20 and 1 Tim 1:2 1 Tim 4:14.",
    "category": "인명",
-   "definition_ko": "'사람을 지키는 자'라는 뜻. ① 구레네 사람 시몬의 아들(마가복음 15:21). ② 베드로와 요한을 대적한 유대인(사도행전 4:6). ③ 에베소의 유대인으로 소요 중에 변명하려 했다(사도행전 19:33). ④ 바울이 넘겨준 구리 세공업자(디모데전서 1:20; 디모데후서 4:14).",
+   "definition_ko": "'사람을 지키는 자'라는 뜻. ① 구레네 사람 시몬의 아들(마가복음 15:21). ② 베드로와 요한을 대적한 유대인(사도행전 4:6). ③ 에베소의 유대인으로 소요 중에 변명하려 했다(사도행전 19:33). ④ 바울이 넘겨준 구리 세공업자(디모데전서 1:20; 디모데후서 4:14).\n※ 원문 오류: 1 Tim 1:2 → 디모데전서 1:20\n※ 원문 오류: 1 Tim 1:19 → 디모데전서 1:20\n※ 판정 근거: 본문 대조. 디모데전서 1:20에 「알렉산더」이(가) 나오나 1 Tim 1:2·19에는 나오지 않는다.",
    "hebrew_greek": "G0223",
    "origin": "Hastings/Schaff"
   },
@@ -5612,7 +5612,7 @@
    "term": "BABYLON(바벨론)",
    "definition": "BABYLON, PROVINCE OR KINGDOM OF, the country of which Babylon was the capital. Dan 2:19; Dan 3:1, Jud 4:12, 1 Kgs 20:30; Dan 4:29, Its boundaries and history are involved in much obscurity. It was originally known as the \" land of Shinar \" and the \"land of Nimrod,\" Gen 10:1; Mic 5:6. It was chiefly between the Euphra- BAB BAB tes and Tigris Rivers. Asshur or Assyria and Mesopotamia were on the north, Elam and Media on the east, Chaldea on the south. As Chaldea gained in power its name was applied to the whole country, including Babylon. See Chaldea. The early kingdom of Babylon is generally regarded as covering an extent of about 27,000 square miles, rich of soil and abundant in resources, the home of one of the earliest civilized nations. After the time of Nimrod, Babel or Babylon appears to be displaced in Scripture history by Chaldea until the time of Joshua, Josh 7:21; after this both again disappear until about the time of the Captivity. At the fall of Nineveh, b.c. 626, Babylonia speedily extended its sway over most of western Asia and Egypt, and under Nebuchadnezzar became a vast empire, lasting, however, less than a century, and fell before the Medians under Cyrus and Darius, b.c. 538, and soon after dropped out of history as a separate country. General History. — Bernsus gives a list of ten mythical kings, including Xisithrus, who ruled Babylonia before the Flood; while the inscriptions so far discovered on the tablets and monuments give three mythical kings before the Flood, and four after it. From the inscriptions, long lists of kings during the historical period have also been deciphered. The earliest list of twelve kings in this period begins with Izdubar, who is identified with Nimrod by George Smith. To this list he adds from the inscriptions the names of six viceroys, six kings of Ur, five kings of Karrak, six of Erech and Larsa, five of Akkad, and four Elamite kings; and among the latter is Chedorlaomer of Gen 14:1-17. Five native kings were contemporary with these Elamite kings, and twenty other kings ruled successively until the accession of an Assyrian dynasty in b.c. 1271. The last list given by George Smith from the inscriptions covers the period from b.c. 1150 to 539, and includes Sargon, b.c. 710, Merodach-baladan III., restored b.c. 705, Esarhaddon, who rebuilt Babylon, b.c. 681, Assurbanipal, b.c. 648, Nebuchadnezzar III., the Nebuchadnezzar of Scripture, b.c. 605, Amil-maruduk, the Evil-merodach of the Bible, b.c. 562, and Bel-sar-uzar, the Belshazzar of the book of Daniel, and who reigned with his father until the fall of the Babylonian empire, b.c. 538. It is not certain how far back the records of Babylonia reach, but George Smith regards it as certain that they reach to the twenty fourth century before Christ, and some scholars would stretch them nearly two thousand years beyond that early period. The civilization, literature, and government found in Babylonia two thousand years before the Christian era could not have sprung up in a day, but further explorations only can determine its age. Among the biblical cities named in the earliest inscriptions — those of Izdubar — are Babylon, Cuthah, and Erech, thus adding new light to the truth of Scripture history. See George Smith's Assyrian Discoveries, 1875, chap. 23. The Babylonian Empire. — Upon the fall of Nineveh, b.c. 625, the Chaldaeans and Babylonians controlled all the southern and western portions of the former Assyrian empire. This Babylonian empire extended, therefore, over Susiana, Elam, Mesopotamia, Syria including Palestine and Phoenicia, Idumaea, northern Arabia, and lower Egypt. Among the important cities of the empire were Babylon, Borsippa, Sippara or Sepharvaim. Isa 36:19, Cuthah, 2 Kgs 17:24, Orchoe or Erech, in Babylonia; and in the provinces, Susa, Carchemish, Harran, Hamath, Damascus, Jerusalem, Tyre, Sidon, Ashdod, Askelon, and Gaza. Of those in the provinces, Susa was of the first importance, and may be regarded as the second city of the empire. It had a royal palace, where the Babylonian kings spent a portion of their time, Dan 8:2, doubtless during the heat of summer. The dominant people in the Babylonian empire were, according to Rawlinson and others, a mixed race, mainly descendants of the earlier Chaldaeans (who were chiefly Cushites), mixed with those of the later Assyrians, who were of the Semitic type. The Babylonians were celebrated for their wisdom and learning, Dan 1:4; Jer 50:35; Isa 47:10, especially for their knowledge of astronomy. They were also a commercial, avaricious, and luxurious people, Hab 2:9; Jer 51:13; Isa 47:8, though they were likewise valorous and war BAB",
    "category": "지명",
-   "definition_ko": "바벨론 지방 곧 나라이니, 바벨론이 그 서울이던 나라이다(다니엘 2:19; 다니엘 3:1; 유딧서 4:12; 열왕기상 20:30; 다니엘 4:29). 그 경계와 역사가 많이 어렴풋하다. 본디 「시날 땅」과 「니므롯의 땅」으로 알려졌다(창세기 10:10; 미가 5:6). 주로 유브라데와 티그리스 두 강 사이에 있었다. 앗수르와 메소보다미아가 북쪽에, 엘람과 메대가 동쪽에, 갈대아가 남쪽에 있었다. 갈대아가 힘을 얻으매 그 이름이 바벨론을 아우른 온 나라에 쓰였다. 갈대아 항목을 보라. 이른 때의 바벨론 나라는 두루 이만 칠천 제곱마일쯤을 덮은 것으로 여겨지니, 흙이 기름지고 물산이 넉넉하며 가장 이른 문명 민족의 하나가 살던 곳이다. 니므롯 때 뒤로 바벨 곧 바벨론이 여호수아 때까지 성경 역사에서 갈대아에 밀려난 듯 보이고(여호수아 7:21), 이 뒤에 둘 다 사로잡힘 무렵까지 다시 사라진다. 주전 626년 니느웨가 무너지매 바벨로니아가 곧 서아시아 대부분과 애굽에 그 다스림을 넓혔고, 느부갓네살 아래에서 큰 제국이 되었으나 백 해가 못 되어 주전 538년 고레스와 다리오 아래 메대 사람에게 무너졌으며, 얼마 뒤에 따로 선 나라로서 역사에서 사라졌다. 두루 된 역사. 베로소스가 홍수 앞서 바벨로니아를 다스린 신화의 왕 열을 드니 그 가운데 크시수트로스가 있다. 한편 지금까지 발견된 서판과 기념물의 비문은 홍수 앞에 신화의 왕 셋을, 뒤에 넷을 준다. 비문에서 역사 시기의 긴 왕 명단도 읽어 내었다. 이 시기 열두 왕의 가장 이른 명단은 이즈두바르로 시작하니, 조지 스미스가 그를 니므롯과 같은 이로 본다. 이 명단에 그가 비문에서 총독 여섯과 우르의 왕 여섯과 카라크의 왕 다섯과 에렉과 라르사의 왕 여섯과 아카드의 왕 다섯과 엘람 왕 넷의 이름을 더하니, 그 마지막 가운데 창세기 14:1-17의 그돌라오멜이 있다. 이 엘람 왕들과 같은 때에 그 고장의 왕 다섯이 있었고, 주전 1271년 앗수르 왕조가 서기까지 스무 왕이 잇달아 다스렸다. 조지 스미스가 비문에서 준 마지막 명단은 주전 1150년부터 539년까지를 덮으니, 주전 710년의 사르곤과 주전 705년에 되세워진 므로닥발라단 삼세와 주전 681년에 바벨론을 다시 세운 에살핫돈과 주전 648년의 앗수르바니팔과 주전 605년의 느부갓네살 삼세 곧 성경의 느부갓네살과 주전 562년의 아밀마르둑 곧 성경의 에윌므로닥과, 다니엘서의 벨사살인 벨사루수르가 든다. 벨사살은 바벨론 제국이 무너진 주전 538년까지 그 아버지와 함께 다스렸다. 바벨로니아의 기록이 얼마나 멀리 거슬러 오르는지 확실하지 않으나, 조지 스미스는 그리스도보다 앞선 스물넷째 세기에 이름이 확실하다 여기고, 어떤 학자는 그 이른 때보다 이천 해를 더 늘리려 한다. 그리스도 기원보다 이천 해 앞서 바벨로니아에 있던 문명과 문학과 다스림이 하루에 솟았을 수 없으나, 그 오램은 더 파 보아야 정해질 수 있다. 가장 이른 비문 곧 이즈두바르의 것에 이름이 나오는 성경의 성 가운데 바벨론과 구다와 에렉이 있으니, 그리하여 성경 역사의 참됨에 새 빛을 더한다. 조지 스미스 『앗수르 발견』(1875) 23장을 보라. 바벨론 제국. 주전 625년 니느웨가 무너지매 갈대아 사람과 바벨론 사람이 옛 앗수르 제국의 남쪽과 서쪽 부분을 다 다스렸다. 그러므로 이 바벨론 제국이 수시아나와 엘람과 메소보다미아와, 팔레스타인과 베니게를 아우른 수리아와 이두매와 북쪽 아라비아와 아래 애굽에 미쳤다. 이 제국의 중요한 성 가운데 바벨로니아의 바벨론과 보르시파와 십바라 곧 스발와임(이사야 36:19)과 구다(열왕기하 17:24)와 오르코에 곧 에렉이 있었고, 여러 지방에 수사와 갈그미스와 하란과 하맛과 다메섹과 예루살렘과 두로와 시돈과 아스돗과 아스글론과 가사가 있었다. 지방의 것 가운데 수사가 으뜸으로 중요하여 제국의 둘째 성으로 볼 만하다. 거기 왕궁이 있어 바벨론 왕들이 그 시간의 얼마를 보냈으니(다니엘 8:2) 틀림없이 한여름의 더위 때였다. 롤린슨과 다른 이들에 따르면 바벨론 제국의 다스리는 백성은 섞인 겨레였으니, 주로 이른 갈대아 사람(대개 구스 계통)의 후손에 셈 계통인 뒤의 앗수르 사람의 후손이 섞였다. 바벨론 사람이 그 지혜와 학문으로, 특히 천문의 앎으로 이름났다(다니엘 1:4; 예레미야 50:35; 이사야 47:10). 또한 장사하고 탐내고 사치하는 백성이었으나(하박국 2:9; 예레미야 51:13; 이사야 47:8) 마찬가지로 용맹하고 싸움에 능하였다.",
+   "definition_ko": "바벨론 지방 곧 나라이니, 바벨론이 그 서울이던 나라이다(다니엘 2:19; 다니엘 3:1; 유딧서 4:12; 열왕기상 20:30; 다니엘 4:29). 그 경계와 역사가 많이 어렴풋하다. 본디 「시날 땅」과 「니므롯의 땅」으로 알려졌다(창세기 10:10; 미가 5:6). 주로 유브라데와 티그리스 두 강 사이에 있었다. 앗수르와 메소보다미아가 북쪽에, 엘람과 메대가 동쪽에, 갈대아가 남쪽에 있었다. 갈대아가 힘을 얻으매 그 이름이 바벨론을 아우른 온 나라에 쓰였다. 갈대아 항목을 보라. 이른 때의 바벨론 나라는 두루 이만 칠천 제곱마일쯤을 덮은 것으로 여겨지니, 흙이 기름지고 물산이 넉넉하며 가장 이른 문명 민족의 하나가 살던 곳이다. 니므롯 때 뒤로 바벨 곧 바벨론이 여호수아 때까지 성경 역사에서 갈대아에 밀려난 듯 보이고(여호수아 7:21), 이 뒤에 둘 다 사로잡힘 무렵까지 다시 사라진다. 주전 626년 니느웨가 무너지매 바벨로니아가 곧 서아시아 대부분과 애굽에 그 다스림을 넓혔고, 느부갓네살 아래에서 큰 제국이 되었으나 백 해가 못 되어 주전 538년 고레스와 다리오 아래 메대 사람에게 무너졌으며, 얼마 뒤에 따로 선 나라로서 역사에서 사라졌다. 두루 된 역사. 베로소스가 홍수 앞서 바벨로니아를 다스린 신화의 왕 열을 드니 그 가운데 크시수트로스가 있다. 한편 지금까지 발견된 서판과 기념물의 비문은 홍수 앞에 신화의 왕 셋을, 뒤에 넷을 준다. 비문에서 역사 시기의 긴 왕 명단도 읽어 내었다. 이 시기 열두 왕의 가장 이른 명단은 이즈두바르로 시작하니, 조지 스미스가 그를 니므롯과 같은 이로 본다. 이 명단에 그가 비문에서 총독 여섯과 우르의 왕 여섯과 카라크의 왕 다섯과 에렉과 라르사의 왕 여섯과 아카드의 왕 다섯과 엘람 왕 넷의 이름을 더하니, 그 마지막 가운데 창세기 14:1-17의 그돌라오멜이 있다. 이 엘람 왕들과 같은 때에 그 고장의 왕 다섯이 있었고, 주전 1271년 앗수르 왕조가 서기까지 스무 왕이 잇달아 다스렸다. 조지 스미스가 비문에서 준 마지막 명단은 주전 1150년부터 539년까지를 덮으니, 주전 710년의 사르곤과 주전 705년에 되세워진 므로닥발라단 삼세와 주전 681년에 바벨론을 다시 세운 에살핫돈과 주전 648년의 앗수르바니팔과 주전 605년의 느부갓네살 삼세 곧 성경의 느부갓네살과 주전 562년의 아밀마르둑 곧 성경의 에윌므로닥과, 다니엘서의 벨사살인 벨사루수르가 든다. 벨사살은 바벨론 제국이 무너진 주전 538년까지 그 아버지와 함께 다스렸다. 바벨로니아의 기록이 얼마나 멀리 거슬러 오르는지 확실하지 않으나, 조지 스미스는 그리스도보다 앞선 스물넷째 세기에 이름이 확실하다 여기고, 어떤 학자는 그 이른 때보다 이천 해를 더 늘리려 한다. 그리스도 기원보다 이천 해 앞서 바벨로니아에 있던 문명과 문학과 다스림이 하루에 솟았을 수 없으나, 그 오램은 더 파 보아야 정해질 수 있다. 가장 이른 비문 곧 이즈두바르의 것에 이름이 나오는 성경의 성 가운데 바벨론과 구다와 에렉이 있으니, 그리하여 성경 역사의 참됨에 새 빛을 더한다. 조지 스미스 『앗수르 발견』(1875) 23장을 보라. 바벨론 제국. 주전 625년 니느웨가 무너지매 갈대아 사람과 바벨론 사람이 옛 앗수르 제국의 남쪽과 서쪽 부분을 다 다스렸다. 그러므로 이 바벨론 제국이 수시아나와 엘람과 메소보다미아와, 팔레스타인과 베니게를 아우른 수리아와 이두매와 북쪽 아라비아와 아래 애굽에 미쳤다. 이 제국의 중요한 성 가운데 바벨로니아의 바벨론과 보르시파와 십바라 곧 스발와임(이사야 36:19)과 구다(열왕기하 17:24)와 오르코에 곧 에렉이 있었고, 여러 지방에 수사와 갈그미스와 하란과 하맛과 다메섹과 예루살렘과 두로와 시돈과 아스돗과 아스글론과 가사가 있었다. 지방의 것 가운데 수사가 으뜸으로 중요하여 제국의 둘째 성으로 볼 만하다. 거기 왕궁이 있어 바벨론 왕들이 그 시간의 얼마를 보냈으니(다니엘 8:2) 틀림없이 한여름의 더위 때였다. 롤린슨과 다른 이들에 따르면 바벨론 제국의 다스리는 백성은 섞인 겨레였으니, 주로 이른 갈대아 사람(대개 구스 계통)의 후손에 셈 계통인 뒤의 앗수르 사람의 후손이 섞였다. 바벨론 사람이 그 지혜와 학문으로, 특히 천문의 앎으로 이름났다(다니엘 1:4; 예레미야 50:35; 이사야 47:10). 또한 장사하고 탐내고 사치하는 백성이었으나(하박국 2:9; 예레미야 51:13; 이사야 47:8) 마찬가지로 용맹하고 싸움에 능하였다.\n※ 원문 오류: Gen 10:1 → 창세기 10:10\n※ 판정 근거: 본문 대조. 창세기 10:10에 「바벨론」이(가) 나오나 Gen 10:1에는 나오지 않는다.",
    "hebrew_greek": "H0894,H0895,H0896,H3679,H3778",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -7145,7 +7145,7 @@
    "term": "BETH-ANOTH(벧아놋)",
    "definition": "BETH-A'NOTH (house of echo), a city of Judah, Josh 15:59; perhaps Beit 'Ainun, 3 miles northeast of Hebron.",
    "category": "지명",
-   "definition_ko": "'메아리의 집'이라는 뜻으로 유다 산악 지대의 성읍이며 할훌, 벧술 등과 함께 언급된다(여호수아 15:58).",
+   "definition_ko": "'메아리의 집'이라는 뜻으로 유다 산악 지대의 성읍이며 할훌, 벧술 등과 함께 언급된다(여호수아 15:59).",
    "hebrew_greek": "H1042",
    "origin": "Hastings/Schaff"
   },
@@ -7235,7 +7235,7 @@
    "term": "BETH-CAR(벧갈)",
    "definition": "BETH'-CAR (house of lambs), a place west of Mizpeh. 1 Sam 7:1. Conder locates it at 'Ain Karim.",
    "category": "지명",
-   "definition_ko": "'어린양의 집'이라는 뜻으로 이스라엘이 블레셋을 추격한 지점으로 언급되며(사무엘상 7:11) 미스바 서쪽에 위치한다.",
+   "definition_ko": "'어린양의 집'이라는 뜻으로 이스라엘이 블레셋을 추격한 지점으로 언급되며(사무엘상 7:11) 미스바 서쪽에 위치한다.\n※ 원문 오류: 1 Sam 7:1 → 사무엘상 7:11\n※ 판정 근거: 본문 대조. 사무엘상 7:11에 「벧갈」이(가) 나오나 1 Sam 7:1에는 나오지 않는다.",
    "hebrew_greek": "H1033",
    "origin": "Hastings/Schaff"
   },
@@ -7854,7 +7854,7 @@
    "term": "BINNUI(빈누이)",
    "definition": "BINNU'I (a building). 1. A Levite. Ezr 8:23. 2, 3. Two who had foreign wives. Ezr 10:30, Acts 7:38. 4. A Levite, a builder of the wall. Neh 3:24. 5. The father of some who returned with Zerubbabel, Neh 7:15; called, Bani in Ezr 2:10.",
    "category": "인명",
-   "definition_ko": "레위인(에스라 8:33), 이방 여인과 결혼한 두 사람(에스라 10:30,38), 성벽을 건축한 레위인(느헤미야 3:24), 스룹바벨과 함께 돌아온 자들의 조상(느헤미야 7:15) 등을 가리킨다.",
+   "definition_ko": "레위인(에스라 8:33), 이방 여인과 결혼한 두 사람(에스라 10:30,38), 성벽을 건축한 레위인(느헤미야 3:24), 스룹바벨과 함께 돌아온 자들의 조상(느헤미야 7:15) 등을 가리킨다.\n※ 원문 오류: Ezr 8:23 → 에스라 8:33\n※ 판정 근거: 본문 대조. 에스라 8:33에 「빈누이」이(가) 나오나 Ezr 8:23에는 나오지 않는다.",
    "hebrew_greek": "H1131",
    "origin": "Hastings/Schaff",
    "repaired": "1165자 절단(삼킨 항목: BIRDS)"
@@ -8785,7 +8785,7 @@
    "term": "BUNNI(분니)",
    "definition": "BUN'NI (built). Jud 9:4. One who sealed the covenant. Neh 10:16. A Levite. Neh 11:15. Bunni is said to have been the Jewish name of Nicodemus. — Kaeuld.",
    "category": "인명",
-   "definition_ko": "언약에 서명한 사람(느헤미야 10:15), 레위인(느헤미야 11:15) 등을 가리킨다.",
+   "definition_ko": "언약에 서명한 사람(느헤미야 10:15), 레위인(느헤미야 11:15) 등을 가리킨다.\n※ 원문 오류: Neh 10:16 → 느헤미야 10:15\n※ 판정 근거: 본문 대조. 느헤미야 10:15에 「분니」이(가) 나오나 Neh 10:16에는 나오지 않는다.",
    "hebrew_greek": "H1138",
    "origin": "Hastings/Schaff"
   },
@@ -9832,7 +9832,7 @@
    "term": "CHANAAN(가나안)",
    "definition": "CHA'NAAN, Greek form of Canaan. Acts 7:1. See Canaan.",
    "category": "지명",
-   "definition_ko": "가나안의 헬라어 표기(사도행전 7:11). 가나안 참조.",
+   "definition_ko": "가나안의 헬라어 표기(사도행전 7:11). 가나안 참조.\n※ 원문 오류: Acts 7:1 → 사도행전 7:11\n※ 판정 근거: 본문 대조. 사도행전 7:11에 「가나안」이(가) 나오나 Acts 7:1에는 나오지 않는다.",
    "hebrew_greek": "G5477,G5478,H3667,H3669",
    "origin": "Hastings/Schaff"
   },
@@ -12085,7 +12085,7 @@
    "term": "DANIEL(다니엘)",
    "definition": "DANIEL, BOOK OF. It consists of two distinct parts. Historical, chs. Dan 1-6, containing the interesting narrative given in the preceding section, and with it an account of the attempted burning of Shadrach, Meshach, and Abed-nego in a fiery furnace because they would not worship the golden image which Nebuchadnezzar set up on the plain of Dura. Apocalyptic, chs. Dan 1:7-12, or the record of Daniel's visions. Ch.Dan 1:1 contains the introduction,- chs. Dan 1:2-6 present a general view of the progressive history of the powers of the world, and of the principles of the divine government, as seen in events in the life of Daniel; and chs. Dan 1:7-12, the prophecy of the future of the people of God. The book is written in prose, but not in the same language throughout. The introduction, chs. Dan 1:1-2:4, first clause, is written in Hebrew, but from the second clause of the fourth verse of the second chapter to the end of ch. 7 it is in Aramaic, called Syriac in that verse. From the beginning of ch. 8 to the end, in which part the visions are related in the first person, the language is Hebrew. The interpretation of Daniel requires profound knowledge of ancient history. The book is, in fact, a sort of religious philosophy of history. Its fundamental idea is that all the kingdoms of the world, which pass away, are ruled and overruled by divine Providence for the kingdom of Christ, which will last for ever. The book of Daniel occupies in the O.T. the same position which the Revelation of John occupies in the New. It views the kingdom of God in its contact and conflicts with the empires of the world, and looks forward to the universal reign of Christ, the resurrection of the dead, and the final judgment. The empires of the world appear first in Nebuchadnezzar's dream, ch. Lev 10:2, under the figure of a colossal image with a head of gold, a breast and arms of silver, a belly of brass, and legs and feet of iron and clay. These represent respectively (according to the usual orthodox interpretation) the Babylonian, the Medo-Persian, the Macedo-Greek, and the Roman empires; they are overthrown at last by a stone cut out of the mountain without hands and becoming a great mountain, which represents the reign of the Messiah. The indestructible rock of God's own workmanship breaks to pieces the metal colossus of man's hand. The same succession of monarchies is presented in the seventh chapter, under the form of a vision of four beasts seen by the prophet himself. The fourth beast has ten horns, denoting ten kingdoms, growing out of it, and a little horn (Song of Solomon 7:8, Jud 6:24) springing up among the four fractured horns of the Greek empire. Interpreters agree as to the first empire, which must be Babylonia, but differ as to the other three. Some combine the Medes and Persians in one empire; others divide them, and regard the Greeks (Alexander the Great and his successors) as representing the fourth empire, and refer the \"little horn\" to Antiochus Epiphanes. Still others give the prophecy of Daniel a more comprehensive sweep over all the world-empires before and after Christ, as preparing the way for the ultimate and everlasting reign of Christ. This prophecy of Christ, the most important in the book, is constantly fulfilling before our eyes, and cannot be set aside by any negative criticism. The book of Daniel has been much attacked, but also successfully vindicated by biblical scholars. In the second part Daniel speaks in the first person as the receiver of the divine revelations recorded therein, so that the only alternative here is between truth and fraud. The very fact that two languages are used renders it extremely unlikely that it should have been forged or written in any later period, but to Daniel, familiar as he was with both Hebrew and Aramaic, it was natural. The book displays familiar acquaintance with Babylonian life and royal manners, and suits throughout the period of the Babylonian exile and the peculiar position of Daniel at the Babylonian court. The genuineness is sanctioned by the highest authority -that of Christ, Matt 24:15, from which there is no appeal for believers. The attacks upon the book have been in three lines: (1) Its extraordinary events -the golden image, the burning fiery furnace, the dreams, the lions' den, etc.; (2) its minute prophecies; (3) its foreign (Greek) words; (4) its narrative. To these objections it is sufficient to reply:(1) The characteristics of Babylon, the manners and customs of the East, amply justify the language and prove that the book is genuinely Oriental and Babylonian. (2) The peculiar position of Daniel required an exceptional and startling character for his revelations; his prophecies have been in great part fulfilled. (3) The Greek words are only four in number, and are the names of musical instruments which may have been imported from Greece as early as b.c. 600. (4) Its historical difficulties. Belshazzar is represented as the last king of Babylon, while the authority there known gave Nabonnedus as the last king. This difficulty was solved by Sir Henry Rawlinson's decipherment of a cylinder among the ruins of Ur in Chaldaea in 1854. Nabonnedus had his eldest son, Belshazzar, as co-regent, and therefore it might well be that while he met the Persians in the field his son ruled in the capital. Thus is explained how Daniel was made the third ruler in the kingdom. Dan 5:16, 1 Chr 2:29. Apocryphal Additions to Daniel. -These exist in the Greek version, and are: The Song of the Three Holy Children, the History of Susanna, and the Story of Bel and the Dragon. They passed into the Vulgate, and so into modern translations. They embody popular traditions, but never formed part of the Hebrew Bible. The Song of the Three Holy Children purports to be the triumphal song of the three confessors in the furnace, Dan 3:23, in praise of their miraculous deliverance. The chief part has been used as a hymn (Benedicite) in the Christian Church since the fourth century. The History of Susanna, who was cleared from a charge of adultery by the shrewdness of Daniel. Probably based upon a fact. The History of Bel and the Dragon, a strange exaggeration of the record of the divine deliverance of Daniel, ch. 1 Chr 24:6.",
    "category": "인명",
-   "definition_ko": "(1) 네 대선지자 중 하나. 귀족, 어쩌면 왕족 출신으로 아마 예루살렘에서 태어났다(다니엘 1:3). 어린 나이에 하나냐·미사엘·아사랴 등 다른 세 히브리 소년과 함께 느부갓네살에게 바벨론으로 사로잡혀 갔다(BC 604년). 그곳에서 갈대아의 언어와 학문을 배우며 궁중 봉사를 위해 훈련받았다(다니엘 1:1-4). 환관장이 그들의 이름을 벨드사살, 사드락, 메삭, 아벳느고로 바꾸었다. 네 사람은 왕의 음식과 포도주를 거절하고 채소와 물을 택했으나 오히려 이방 신하들보다 더 좋아 보였다. 3년 훈련 후 느부갓네살이 잊어버린 꿈을 해석하여(단 2장) 바벨론 온 지방을 다스리는 자이자 모든 지혜자의 어른이 되었다.",
+   "definition_ko": "(1) 네 대선지자 중 하나. 귀족, 어쩌면 왕족 출신으로 아마 예루살렘에서 태어났다(다니엘 1:7). 어린 나이에 하나냐·미사엘·아사랴 등 다른 세 히브리 소년과 함께 느부갓네살에게 바벨론으로 사로잡혀 갔다(BC 604년). 그곳에서 갈대아의 언어와 학문을 배우며 궁중 봉사를 위해 훈련받았다(다니엘 1:1-4). 환관장이 그들의 이름을 벨드사살, 사드락, 메삭, 아벳느고로 바꾸었다. 네 사람은 왕의 음식과 포도주를 거절하고 채소와 물을 택했으나 오히려 이방 신하들보다 더 좋아 보였다. 3년 훈련 후 느부갓네살이 잊어버린 꿈을 해석하여(단 2장) 바벨론 온 지방을 다스리는 자이자 모든 지혜자의 어른이 되었다.",
    "hebrew_greek": "G1158,H1840,H1841",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -12479,7 +12479,7 @@
    "term": "DERBE(더베)",
    "definition": "DER'BE, a city of Lyeaonia, Acts 14:16, Ruth 4:20; Mark 16:1, about 20 miles from Lystra. Kiepert places it near Lake Ak-Ghieul, but Hamilton at Diele, several miles farther south.",
    "category": "지명",
-   "definition_ko": "루가오니아의 성읍으로 루스드라에서 약 20마일 떨어져 있다(사도행전 14:6,20).",
+   "definition_ko": "루가오니아의 성읍으로 루스드라에서 약 20마일 떨어져 있다(사도행전 14:6,20).\n※ 원문 오류: Acts 14:16 → 사도행전 14:6\n※ 판정 근거: 본문 대조. 사도행전 14:6에 「더베」이(가) 나오나 Acts 14:16에는 나오지 않는다.",
    "hebrew_greek": "G1190,G1191",
    "origin": "Hastings/Schaff"
   },
@@ -14119,7 +14119,7 @@
    "term": "ELIEZER(엘리에서)",
    "definition": "ELIE'ZER (God is help). Abraham's steward and confidential servant. Gen 15:2. The second son of Moses and Zipporah. Ex 18:4; 1 Chr 23:15, 1 Chr 23:17; 1 Chr 26:25. A Benjamite chief. 1 Chr 7:8. A priest in David's reign. 1 Chr 15:24. A ruler of the Reubenites in David's time. 1 Chr 27:10. A prophet who rebuked Jehoshaphat. 2 Chr 20:37. A prominent Jew sent by Ezra to fetch Levites. Ezr 8:16. 9, 10. Those who had foreign wives. Ezr 10:18, Ezr 10:23, Ezr 10:31. One of Christ's ancestors. Luke 3:29.",
    "category": "인명",
-   "definition_ko": "아브라함의 청지기이자 신임받는 종(창세기 15:2), 모세와 십보라의 둘째 아들(출애굽기 18:4, 역대상 23:15), 베냐민 지파 지도자(역대상 7:8), 다윗 때의 제사장(역대상 15:24), 르우벤 사람의 관장(역대상 27:16), 여호사밧을 책망한 선지자(역대하 20:37), 에스라가 레위인을 데려오라 보낸 유력한 유대인(에스라 8:16), 그리스도의 조상 중 한 사람(누가복음 3:29) 등을 가리킨다.",
+   "definition_ko": "아브라함의 청지기이자 신임받는 종(창세기 15:2), 모세와 십보라의 둘째 아들(출애굽기 18:4, 역대상 23:15), 베냐민 지파 지도자(역대상 7:8), 다윗 때의 제사장(역대상 15:24), 르우벤 사람의 관장(역대상 27:16), 여호사밧을 책망한 선지자(역대하 20:37), 에스라가 레위인을 데려오라 보낸 유력한 유대인(에스라 8:16), 그리스도의 조상 중 한 사람(누가복음 3:29) 등을 가리킨다.\n※ 원문 오류: 1 Chr 27:10 → 역대상 27:16\n※ 판정 근거: 본문 대조. 역대상 27:16에 「엘리에서」이(가) 나오나 1 Chr 27:10에는 나오지 않는다.",
    "hebrew_greek": "G1663,H0461",
    "origin": "Hastings/Schaff"
   },
@@ -14362,7 +14362,7 @@
    "term": "ELKANAH(엘가나)",
    "definition": "EL'KANAH (God creates), the name of several descendants of Korah mentioned in the O.T., for we are expressly told that \"the children of Korah died not\" in the rebellion of Korah. Num 26:11. The only one of the name of any interest is the husband of Hannah and father of Samuel. 1 Sam 1:1 ff.; 1 Sam 2:11, 1 Sam 2:20; 1 Chr 6:27, 1 Chr 6:34. The few words that are spoken of him set him in a very favorable light. He was a kind and faithful husband, a pious Hebrew and a self-sacrificing father. Although he was a Levite, he did not apparently perform any of the usual offices. Judging from the sacrifices he offered annually, 1 Sam 1:4, and from the present he brought to the Lord when Samuel was dedicated, he was a man of wealth. The son of Korah. Ex 6:24; 1 Chr 6:23. A Korhite. 1 Chr 6:26, 1 Chr 6:35. A Levite. 1 Chr 9:16. A Korhite. 1 Chr 12:6. An officer of the household of Ahaz, probably the second in command. 2 Chr 28:7. He was killed by Zichri the Ephraimite.",
    "category": "인명",
-   "definition_ko": "구약에 언급되는 고라 자손 여럿의 이름이다. 고라의 반역 때 '고라의 아들들은 죽지 아니하였더라' 하였기 때문이다(민수기 26:11). 그중 주목할 만한 이는 한나의 남편이자 사무엘의 아버지다(사무엘상 1:1). 그에 관한 몇 마디 말은 그를 매우 좋게 그려 준다. 친절하고 신실한 남편이요 경건한 히브리인이며 자기를 희생한 아버지였다. 레위인이었으나 통상적 직무를 수행하지는 않은 듯하다. 해마다 드린 제사(사무엘상 1:3-4)와 사무엘을 바칠 때 가져온 예물로 보아 재산이 있는 사람이었다.",
+   "definition_ko": "구약에 언급되는 고라 자손 여럿의 이름이다. 고라의 반역 때 '고라의 아들들은 죽지 아니하였더라' 하였기 때문이다(민수기 26:11). 그중 주목할 만한 이는 한나의 남편이자 사무엘의 아버지다(사무엘상 1:1). 그에 관한 몇 마디 말은 그를 매우 좋게 그려 준다. 친절하고 신실한 남편이요 경건한 히브리인이며 자기를 희생한 아버지였다. 레위인이었으나 통상적 직무를 수행하지는 않은 듯하다. 해마다 드린 제사(사무엘상 1:1-4)와 사무엘을 바칠 때 가져온 예물로 보아 재산이 있는 사람이었다.",
    "hebrew_greek": "H0511",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -15013,7 +15013,7 @@
    "term": "EPHAH(에바)",
    "definition": "E'PHAH (darkness). A son of Midian. and grandson of Abraham, Gen 25:4; 1 Chr 1:38; descendants mentioned in Isa 60:6. A concubine of Caleb, the son of Hezron. 1 Chr 2:46. One of Judah's descendants. 1 Chr 2:47. E'PHAH (from the Egyptian, a measure, especially of corn). See Measures,",
    "category": "인명",
-   "definition_ko": "(1) 미디안의 아들이자 아브라함의 손자(창세기 25:4, 역대상 1:33). 그 후손이 이사야 60:6에 언급된다. (2) 헤스론의 아들 갈렙의 첩(역대상 2:46). (3) 유다의 후손 중 하나(역대상 2:47). 또한 곡식 등을 되는 단위이기도 하다(도량형 참조).",
+   "definition_ko": "(1) 미디안의 아들이자 아브라함의 손자(창세기 25:4, 역대상 1:33). 그 후손이 이사야 60:6에 언급된다. (2) 헤스론의 아들 갈렙의 첩(역대상 2:46). (3) 유다의 후손 중 하나(역대상 2:47). 또한 곡식 등을 되는 단위이기도 하다(도량형 참조).\n※ 원문 오류: 1 Chr 1:38 → 역대상 1:33\n※ 판정 근거: 본문 대조. 역대상 1:33에 「에바」이(가) 나오나 1 Chr 1:38에는 나오지 않는다.",
    "hebrew_greek": "H0374,H5891",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -15043,7 +15043,7 @@
    "term": "EPHER(에벨)",
    "definition": "E'PHER (a calf). A son of Midian. Gen 25:4; 1 Chr 1:32. A descendant of Judah. 1 Chr 4:17. A chief of the trans-Jordanic Manasseh. 1 Chr 5:24.",
    "category": "인명",
-   "definition_ko": "미디안의 아들(창세기 25:4, 역대상 1:33), 유다의 후손(역대상 4:17), 요단 동편 므낫세의 지도자(역대상 5:24).",
+   "definition_ko": "미디안의 아들(창세기 25:4, 역대상 1:33), 유다의 후손(역대상 4:17), 요단 동편 므낫세의 지도자(역대상 5:24).\n※ 원문 오류: 1 Chr 1:32 → 역대상 1:33\n※ 판정 근거: 본문 대조. 역대상 1:33에 「에벨」이(가) 나오나 1 Chr 1:32에는 나오지 않는다.",
    "hebrew_greek": "H6081",
    "origin": "Hastings/Schaff"
   },
@@ -15382,7 +15382,7 @@
    "term": "ESHEK(에섹)",
    "definition": "E'SHEK (oppression), a descendant of Saul. 1 Chr 8:29.",
    "category": "인명",
-   "definition_ko": "사울의 후손(역대상 8:39).",
+   "definition_ko": "사울의 후손(역대상 8:39).\n※ 원문 오류: 1 Chr 8:29 → 역대상 8:39\n※ 판정 근거: 본문 대조. 역대상 8:39에 「에섹」이(가) 나오나 1 Chr 8:29에는 나오지 않는다.",
    "hebrew_greek": "H0501,H6232",
    "origin": "Hastings/Schaff"
   },
@@ -15400,7 +15400,7 @@
    "term": "ESHTEMOA(에스드모아)",
    "definition": "ESHTEMO'A, or ESHTEM'OA (woman of renown ?), a town in the hill-country of Judah; given to the priests, Josh 21:14; 1 Chr 6:57; visited by David, 1 Sam 30:31; now called Semu'a a village of about 200 inhabitants. Among its houses are ruins and ancient hewn stones. It was also called Eshtemoh. Josh 15:50.",
    "category": "지명",
-   "definition_ko": "유다 산지의 한 성읍으로 제사장들에게 주어졌고(여호수아 21:14, 역대상 6:57) 다윗이 들렀다(사무엘상 30:28). 지금은 인구 200명가량의 마을 세무아라 불린다. 에스드모라고도 불렸다(여호수아 15:50).",
+   "definition_ko": "유다 산지의 한 성읍으로 제사장들에게 주어졌고(여호수아 21:14, 역대상 6:57) 다윗이 들렀다(사무엘상 30:28). 지금은 인구 200명가량의 마을 세무아라 불린다. 에스드모라고도 불렸다(여호수아 15:50).\n※ 원문 오류: 1 Sam 30:31 → 사무엘상 30:28\n※ 판정 근거: 본문 대조. 사무엘상 30:28에 「에스드모아」이(가) 나오나 1 Sam 30:31에는 나오지 않는다.",
    "hebrew_greek": "H0851",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -15920,7 +15920,7 @@
    "term": "EZEM(에셈)",
    "definition": "E'ZEM (bone), a city of Simeon, 1 Chr 4:29; also called Azem. Josh 19:8.",
    "category": "지명",
-   "definition_ko": "시므온의 한 성읍으로(역대상 4:29) 아셈이라고도 불린다(여호수아 19:3).",
+   "definition_ko": "시므온의 한 성읍으로(역대상 4:29) 아셈이라고도 불린다(여호수아 19:3).\n※ 원문 오류: Josh 19:8 → 여호수아 19:3\n※ 판정 근거: 본문 대조. 여호수아 19:3에 「에셈」이(가) 나오나 Josh 19:8에는 나오지 않는다.",
    "hebrew_greek": "H6107",
    "origin": "Hastings/Schaff"
   },
@@ -16172,7 +16172,7 @@
    "term": "FELIX(벨릭스)",
    "definition": "FE'LIX (happy), the Roman governor of Judaea, a.d. 52-60, was a profligate and cruel man. Acts 23:26. He was married three times. His third wife was Drusilla, whom he persuaded to leave her husband and marry him, and they were residing at Caesarea when Paul was brought there in custody. He is specially known for the manner in which he treated the exhortations and warnings of Paul, Acts 24:26, who preached before him a most practical sermon, arraigning his crimes and urging upon him the duty of repentance in view of future judgment. The sermon made an impression, for \"Felix trembled,\" but it was transient. He kept the apostle imprisoned for 2 years, and postponed the inquiry respecting his own salvation until a \"convenient season,\" which, so far as we know, never came. Felix was superseded by Porcius Festus 2 years after this event, and tried at Rome before Nero for malversation of office, but escaped punishment through the intervention of Pallas, the freedman of Claudius and his successor, Nero.",
    "category": "인명",
-   "definition_ko": "AD 52~60년 유대의 로마 총독으로 방탕하고 잔인한 사람이었다(사도행전 23:26). 세 번 결혼했는데 셋째 아내가 드루실라로, 남편을 버리고 자기와 결혼하도록 설득했다. 바울이 압송되어 왔을 때 가이사랴에 살고 있었다. 바울의 권면과 경고를 대한 태도로 특히 알려져 있는데(사도행전 24:25), 바울이 그 앞에서 매우 실제적인 설교를 하여 그 죄를 지적하고 장차 올 심판에 비추어 회개할 의무를 촉구했다. 설교가 인상을 남겨 '벨릭스가 두려워하였으나' 그것은 잠시였다. 사도를 2년간 가두어 두었고, 자기 구원에 관한 물음은 '틈이 있을 때'로 미루었는데 우리가 아는 한 그때는 오지 않았다.",
+   "definition_ko": "AD 52~60년 유대의 로마 총독으로 방탕하고 잔인한 사람이었다(사도행전 23:26). 세 번 결혼했는데 셋째 아내가 드루실라로, 남편을 버리고 자기와 결혼하도록 설득했다. 바울이 압송되어 왔을 때 가이사랴에 살고 있었다. 바울의 권면과 경고를 대한 태도로 특히 알려져 있는데(사도행전 24:25), 바울이 그 앞에서 매우 실제적인 설교를 하여 그 죄를 지적하고 장차 올 심판에 비추어 회개할 의무를 촉구했다. 설교가 인상을 남겨 '벨릭스가 두려워하였으나' 그것은 잠시였다. 사도를 2년간 가두어 두었고, 자기 구원에 관한 물음은 '틈이 있을 때'로 미루었는데 우리가 아는 한 그때는 오지 않았다.\n※ 원문 오류: Acts 24:26 → 사도행전 24:25\n※ 판정 근거: 본문 대조. 사도행전 24:25에 「벨릭스」이(가) 나오나 Acts 24:26에는 나오지 않는다.",
    "hebrew_greek": "G5344",
    "origin": "Hastings/Schaff"
   },
@@ -18069,7 +18069,7 @@
    "term": "GILGAL(길갈)",
    "definition": "GIL'GAL (rolling). 1 . The name of the first station of the Israelites after crossing the Jordan, and \"in the east border of Jericho,\" Josh 4:19-20, the twelve stones were set up, and the tabernacle remained at Gilgal until removed to Shiloh. Josh 18:1. Samuel judged, and Saul was made king there, 1 Sam 7:16; 1 Sam 10:8; 1 Sam 11:14-15; at Gilgal the people gathered for war; there Agag was hewn in pieces. 1 Sam 13:4-7; 1 Sam 15:33. Later on, Gilgal became a seat of idolatry, but whether this one or the Gilgal above Bethel is yet unsettled. Gilgal is not named in the N.T. Josephus places this Gilgal 10 furlongs from Jericho and 50 from the Jordan; Jerome had it pointed out 2 miles from Jericho; Thomson and others locate it near the modern village of Riba; Zschokke, at Tell Jeljal, north of Wady Kelt. Conder favors this, and gives the name Jiljulieh. The Gilgal in Elijah's time was probably in the range of hills beyond Bethel, since the prophet \"went down\" from that Gilgal to Bethel, 2 Kgs 2:2. As Bethel is 3300 feet above the Jordan plain, it must have been a Gilgal not in that plain, but one higher up than Bethel. It has been identified with Jijilia, 8 miles north of Bethel, where the school of the prophets was probably established. Gilgal of Josh 12:23 is supposed to be at a Jiljulieh, 4 miles south of Antipatris, in the plain of Sharon. There is a Kilkilieh — another form of Gilgal — also, 2 miles east of Antipatris.",
    "category": "지명",
-   "definition_ko": "(1) 이스라엘이 요단을 건넌 후 첫 진 친 곳으로 '여리고 동쪽 경계'에 있었다(여호수아 4:19-20). 열두 돌을 세웠고 성막이 실로로 옮겨질 때까지 길갈에 있었다(여호수아 18:1). 사무엘이 여기서 재판했고 사울이 왕이 되었다(사무엘상 7:16, 11:14-15). 백성이 전쟁을 위해 모였고 아각이 찍혀 죽은 곳이다(사무엘상 13:4-7, 15:33). 후에 우상숭배의 자리가 되었다. 신약에는 나오지 않는다. (2) 엘리야 때의 길갈은 벧엘 너머 산지에 있었을 것이니, 선지자가 그 길갈에서 벧엘로 '내려갔기' 때문이다(열왕기하 2:1-2).",
+   "definition_ko": "(1) 이스라엘이 요단을 건넌 후 첫 진 친 곳으로 '여리고 동쪽 경계'에 있었다(여호수아 4:19-20). 열두 돌을 세웠고 성막이 실로로 옮겨질 때까지 길갈에 있었다(여호수아 18:1). 사무엘이 여기서 재판했고 사울이 왕이 되었다(사무엘상 7:16, 11:14-15). 백성이 전쟁을 위해 모였고 아각이 찍혀 죽은 곳이다(사무엘상 13:4-7, 15:33). 후에 우상숭배의 자리가 되었다. 신약에는 나오지 않는다. (2) 엘리야 때의 길갈은 벧엘 너머 산지에 있었을 것이니, 선지자가 그 길갈에서 벧엘로 '내려갔기' 때문이다(열왕기하 2:1-2).\n※ 원문 오류: 2 Kgs 2:2 → 열왕기하 2:1\n※ 판정 근거: 본문 대조. 열왕기하 2:1에 「길갈」이(가) 나오나 2 Kgs 2:2에는 나오지 않는다.",
    "hebrew_greek": "H1537",
    "origin": "Hastings/Schaff"
   },
@@ -19281,7 +19281,7 @@
    "term": "HAMATH(하맛)",
    "definition": "HA'MATH (fortress, citadel), one of the most important cities of Syria, and one of the oldest in the world. It was founded by a son of Canaan, Gen 10:18; Num 34:8, and was situated in the valley of the Orontes, between its source and the site of the city of Antioch. It thus commanded the route to the Euphrates from Phoenicia, and may be called the \"key\" of northern Palestine. It was 165 miles in a straight line north of Jerusalem, and was the capital of a kingdom or province of which little is known. It was visited by the spies, Num 13:21, and it is frequently noticed as the northern boundary of Palestine. Num 34:8; Josh 13:5. Its king, Toi, blessed David for his victory over Zobah, 2 Sam 8:9-12; Solomon extended his kingdom to Hamath, 1 Kgs 8:6; 2 Chr 8:4, and built store-cities in that region; afterward the city and country became independent, but were again subdued by Jeroboam II., 2 Kgs 14:25, 2 Kgs 14:28. It was taken by the Assyrians, 2 Kgs 18:34; Isa 10:9; Amos calls it \"Hamath the great,\" and speaks of its desolation. Am 6:2. Later History-The name of Hamath was changed by Antiochus Epiphanes to Epiphania, though the old name does not appear to have been lost, since it was known as Hamath in the time of Jerome. The place was taken by the Moslems, a.d. 639; by the Franks, a.d. 1108; by the Turks, a.d. 1115; was destroyed by an earthquake in which 15,000 persons perished, a.d. 1157; and taken by Saladin, a.d. 1178. Its modern name is Hamah, and it is now a place of 30,000 inhabitants. Porter regards it as a town where life has been at a standstill for 30 centuries. It, how Inscription discovered at Hamath. (From a report of the Am, Palestine Exploration Society.) ever, has large bazaars, baths, mosques, and hydraulic works, and carries on an active trade with Aleppo and other towns of Asia and Africa. The Persian water-wheels, which creak and groan as they raise the water for the supply of the city, are great curiosities. The Hamath inscriptions, which have in late years excited the attention of scholars, were first seen by Burckhardt, but attracted little notice until 1870. The stones are four in number, and are inscribed in hieroglyphics of a very ancient character; they have not yet been satisfactorilv deciphered.",
    "category": "지명",
-   "definition_ko": "수리아의 가장 중요한 성읍 중 하나이자 세상에서 가장 오래된 성읍 중 하나다. 가나안의 아들이 세웠고(창세기 10:18) 오론테스 골짜기, 그 수원과 안디옥 사이에 있었다. 베니게에서 유브라데로 가는 길목을 지켜 북부 팔레스타인의 '열쇠'라 할 수 있다. 예루살렘 북쪽 직선거리 165마일에 있으며 알려진 바 적은 한 왕국 또는 속주의 수도였다. 정탐꾼들이 들렀고(민수기 13:21) 흔히 팔레스타인 북쪽 경계로 언급된다(민수기 34:8, 여호수아 13:5). 그 왕 도이가 소바를 이긴 다윗을 축복했고(사무엘하 8:9-12), 솔로몬이 나라를 하맛까지 넓혔다(열왕기상 8:65, 역대하 8:4). 후에 독립했다가 여로보암 2세에게 다시 정복되었고(열왕기하 14:25,28) 앗수르에게 함락되었다(열왕기하 18:34, 이사야 10:9).",
+   "definition_ko": "수리아의 가장 중요한 성읍 중 하나이자 세상에서 가장 오래된 성읍 중 하나다. 가나안의 아들이 세웠고(창세기 10:18) 오론테스 골짜기, 그 수원과 안디옥 사이에 있었다. 베니게에서 유브라데로 가는 길목을 지켜 북부 팔레스타인의 '열쇠'라 할 수 있다. 예루살렘 북쪽 직선거리 165마일에 있으며 알려진 바 적은 한 왕국 또는 속주의 수도였다. 정탐꾼들이 들렀고(민수기 13:21) 흔히 팔레스타인 북쪽 경계로 언급된다(민수기 34:8, 여호수아 13:5). 그 왕 도이가 소바를 이긴 다윗을 축복했고(사무엘하 8:9-12), 솔로몬이 나라를 하맛까지 넓혔다(열왕기상 8:65, 역대하 8:4). 후에 독립했다가 여로보암 2세에게 다시 정복되었고(열왕기하 14:25,28) 앗수르에게 함락되었다(열왕기하 18:34, 이사야 10:9).\n※ 원문 오류: 1 Kgs 8:6 → 열왕기상 8:65\n※ 판정 근거: 본문 대조. 열왕기상 8:65에 「하맛」이(가) 나오나 1 Kgs 8:6에는 나오지 않는다.",
    "hebrew_greek": "H0935,H2574,H6678",
    "origin": "Hastings/Schaff"
   },
@@ -20744,7 +20744,7 @@
    "term": "HELKATH-HAZZURIM(헬갓핫수림)",
    "definition": "HEL'KATH-HAZ'ZURIM (field of swords), a place near Gibeon; so called from the deadly combat mentioned in 2 Sam 2:13-17. Drake proposes to place it in the broad, smooth valley el-Askar.",
    "category": "지명",
-   "definition_ko": "'바위의 밭'이라는 뜻으로 기브온 못 근처의 평평한 땅이며 요압의 부하들과 아브넬의 부하들이 결투를 벌여 양측 전원이 죽고 전면전으로 이어진 곳이다(사무엘하 2:16).",
+   "definition_ko": "'바위의 밭'이라는 뜻으로 기브온 못 근처의 평평한 땅이며 요압의 부하들과 아브넬의 부하들이 결투를 벌여 양측 전원이 죽고 전면전으로 이어진 곳이다(사무엘하 2:16).\n※ 원문 오류: 2 Sam 2:13 → 사무엘하 2:16\n※ 판정 근거: 본문 대조. 사무엘하 2:16에 「헬갓 핫수림」이 나오나 2 Sam 2:13에는 나오지 않는다.",
    "hebrew_greek": "H2521",
    "origin": "Hastings/Schaff",
    "repaired": "2646자 절단(삼킨 항목: HELL.)"
@@ -21387,7 +21387,7 @@
    "term": "HILKIAH(힐기야)",
    "definition": "HILKI'AH (the Lord is my portion). The father of Eliakim. 2 Kgs 18:18; Isa 22:20; Gen 36:3, Isa 36:22. The high priest in the reign of Josiah, who accidentally, while \"summing up\" the silver in the temple, found the book of the Law, 2 Kgs 22:8. 3, 4. Two Merarite Levites. 1 Chr 6:45; 1 Chr 26:11. One who stood by Ezra during the reading of the Law, Neh 8:4. A priest who returned with Zerubbabel, Neh 12:7, Neh 12:21. The father of the prophet Jeremiah, Jer 1:1. The father of one of Zedekiah's ambassadors to Nebuchadnezzar, Jer 29:3.",
    "category": "인명",
-   "definition_ko": "'여호와의 몫'이라는 뜻. (1.) 역대상 6:54. (2.) 역대상 26:11. (3.) 엘리아김의 아버지(열왕기하 18:18,26,37). (4.) 그마랴의 아버지(예레미야 29:3). (5.) 선지자 예레미야의 아버지(1:1). (6.) 요시야 시대의 대제사장.",
+   "definition_ko": "'여호와의 몫'이라는 뜻. (1.) 역대상 6:45. (2.) 역대상 26:11. (3.) 엘리아김의 아버지(열왕기하 18:18,26,37). (4.) 그마랴의 아버지(예레미야 29:3). (5.) 선지자 예레미야의 아버지(1:1). (6.) 요시야 시대의 대제사장.",
    "hebrew_greek": "H2518",
    "origin": "Hastings/Schaff"
   },
@@ -22798,7 +22798,7 @@
    "term": "IMRAH(이므라)",
    "definition": "IM'RAH (obstinacy), an Asherite. 1 Chr 7:30.",
    "category": "인명",
-   "definition_ko": "'완고한'이라는 뜻으로 아셀의 후손, 소바 가문이다(역대상 7:36).",
+   "definition_ko": "'완고한'이라는 뜻으로 아셀의 후손, 소바 가문이다(역대상 7:36).\n※ 원문 오류: 1 Chr 7:30 → 역대상 7:36\n※ 판정 근거: 본문 대조. 역대상 7:36에 「이므라」이(가) 나오나 1 Chr 7:30에는 나오지 않는다.",
    "hebrew_greek": "H3236",
    "origin": "Hastings/Schaff"
   },
@@ -23493,7 +23493,7 @@
    "term": "ITHRAN(이드란)",
    "definition": "ITH'RAN (abundance). A Horite. Gen 36:26; 1 Chr 1:41. An Asherite. 1 Chr 7:37.",
    "category": "인명",
-   "definition_ko": "'탁월함'이라는 뜻. (1) 호리 사람 디손의 아들로 호리 족속의 족장으로 추정(창세기 36:26). (2) 아셀의 후손(역대상 7:30).",
+   "definition_ko": "'탁월함'이라는 뜻. (1) 호리 사람 디손의 아들로 호리 족속의 족장으로 추정(창세기 36:26). (2) 아셀의 후손(역대상 7:37).",
    "hebrew_greek": "H3506",
    "origin": "Hastings/Schaff"
   },
@@ -24116,7 +24116,7 @@
    "term": "JAIR(야일)",
    "definition": "JA'IR (whom Jehovah enlightens). A chief warrior under Moses, descended from the most powerful family of Judah and Manasseh by his father and mother respectively. He took all the country of Argob (the modern Lejab) on the east side of Jordan, and, besides, some villages in Gilead, which he called Havoth-jair, \"villages of Jair.\" 1 Chr 2:21-23; Num 32:41; Deut 3:14; comp. Josh 13:30. Jair the Gileadite, who judged Israel 22 years. \"He had thirty sons who rode on thirty ass-colts, and they had thirty cities, which are called Havothjair, which are in Gilead.\" Jud 10:3-5. A Benjamite, father of Mordeeai. Esth 2:5. In 1 Chr 20:5 in the A.V., Jair occurs, but it is a totally different name in Hebrew, meaning \"whom God awakens.\" This Jair was the father of Elhanan, who killed Lachmi, the brother of Goliath. He is called Jaareoregim in 2 Sam 21:19.",
    "category": "인명",
-   "definition_ko": "'빛을 비추는 자'라는 뜻. (1.) 스굽의 아들. 어머니와 함께 길르앗에서 자랐고 그곳에 소유지가 있었다(역대상 2:22). 바산을 향한 원정에서 두각을 나타내 길르앗 경계 아르곱 지역에 정착했다.",
+   "definition_ko": "'빛을 비추는 자'라는 뜻. (1.) 스굽의 아들. 어머니와 함께 길르앗에서 자랐고 그곳에 소유지가 있었다(역대상 2:22). 바산을 향한 원정에서 두각을 나타내 길르앗 경계 아르곱 지역에 정착했다.\n※ 원문 오류: 1 Chr 2:21 → 역대상 2:22\n※ 판정 근거: 본문 대조. 역대상 2:22에 「야일」이(가) 나오나 1 Chr 2:21에는 나오지 않는다.",
    "hebrew_greek": "G2383,H2971,H2972",
    "origin": "Hastings/Schaff"
   },
@@ -24134,7 +24134,7 @@
    "term": "JAIRUS(야이로)",
    "definition": "JAI'RUS (whom Jehovah enlightens), an officer of the Jewish church who applied to Christ to restore to life his daughter, who was at the point of death when he left home. He evinced very strong faith. Christ with his disciples went to the ruler's house, and his daughter was restored. Mark 5:42.",
    "category": "인명",
-   "definition_ko": "가버나움 회당장으로, 그의 외동딸을 예수께서 살리셨다(마가복음 5:22; 누가복음 8:41). 베드로와 야고보와 요한, 그리고 소녀의 부모와 함께 죽음의 방으로 들어가 침상 앞으로 나아가셨다.",
+   "definition_ko": "가버나움 회당장으로, 그의 외동딸을 예수께서 살리셨다(마가복음 5:22; 누가복음 8:41). 베드로와 야고보와 요한, 그리고 소녀의 부모와 함께 죽음의 방으로 들어가 침상 앞으로 나아가셨다.\n※ 원문 오류: Mark 5:42 → 마가복음 5:22\n※ 판정 근거: 본문 대조. 마가복음 5:22에 「야이로」이(가) 나오나 Mark 5:42에는 나오지 않는다.",
    "hebrew_greek": "G2383",
    "origin": "Hastings/Schaff"
   },
@@ -26007,7 +26007,7 @@
    "term": "JOAB(요압)",
    "definition": "JO'AB (whose father is Jehovah). The eldest of the three sons of Zeruiah, David's sister, and the commander-in-chief of his army. 1 Chr 2:10; 1 Chr 11:6. He was evidently a valiant man, but ambitious and revengeful. To revenge the death of his brother Asahel, whom Abner had killed in self-defence, 2 Sam 2:23, he treacherously assassinated this distinguished general. 2 Sam 3:27. He brought about a reconciliation between Absalom and his father after the murder of Amnon; but when Absalom rebelled, Joab adhered to his master, and under his generalship the troops of David, though much inferior in numbers, obtained a complete victory over the army of Absalom, and, contrary to the express orders of David, Joab put him to death with his own hand as he hung suspended from the oak tree. 2 Sam 18:14. After this event David promoted Amasa to be his general-in-chief, by which Joab was deeply offended, and secretly resolved on the death of his rival, and took the first opportunity of assassinating him as he had done Abner. 2 Sam 20:10. David after this seems to have taken him again into favor. 2 Sam 24:2. When David the king had become old, however, Joab combined with Abiathar the priest and others to set Adonijah on the throne in defiance of the will of David, who had, by divine direction, resolved to make Solomon king. 1 Kgs 1:7. The plot was seasonably defeated, and Solomon was proclaimed king the same day. But Joab now seemed to David so evidently an object of the divine displeasure that he solemnly charged Solomon to punish him for all his enormous crimes, and especially for the murder of two valiant men, both better than himself, Abner and Amasa. Joab, conscious that his life was forfeited, sought an asylum at the horns of the altar, which position he absolutely refused to relinquish, and Benaiah, now advanced to be the captain of the host, slew him by the altar, agreeably to the command of the young king. He was buried in his own house in the wilderness. 1 Kgs 2:5-34. A descendant of Kenaz. 1 Chr 4:14. One whose posterity returned with Zerubbabel. Ezr 2:6; Rom 8:9; Neh 7:11.",
    "category": "인명",
-   "definition_ko": "'여호와는 그의 아버지'라는 뜻. (1.) 다윗의 누이 스루야의 세 아들 중 하나로, 다윗의 통치 기간 내내 '군대 지휘관'이었다(사무엘하 2:13; 10:7; 11:1). 그의 아버지 이름은 어디에도 언급되지 않는다.",
+   "definition_ko": "'여호와는 그의 아버지'라는 뜻. (1.) 다윗의 누이 스루야의 세 아들 중 하나로, 다윗의 통치 기간 내내 '군대 지휘관'이었다(사무엘하 2:13; 10:7; 11:1). 그의 아버지 이름은 어디에도 언급되지 않는다.\n※ 원문 오류: 2 Sam 2:23 → 사무엘하 2:13\n※ 판정 근거: 본문 대조. 사무엘하 2:13에 「요압」이(가) 나오나 2 Sam 2:23에는 나오지 않는다.",
    "hebrew_greek": "H3097",
    "origin": "Hastings/Schaff"
   },
@@ -26105,7 +26105,7 @@
    "term": "JOCHEBED(요게벳)",
    "definition": "JOCH'EBED (whose glory is Jehovah), the mother of Aaron, Moses, and Miriam, was the wife and aunt of Amram, and the daughter of Levi. Ex 6:20; Num 26:69.",
    "category": "인명",
-   "definition_ko": "'여호와는 그녀의 영광'이라는 뜻으로, 아므람의 아내이며 미리암과 아론과 모세의 어머니(민수기 26:59). 아므람의 아버지 고핫의 누이로 언급된다(출애굽기 6:20).",
+   "definition_ko": "'여호와는 그녀의 영광'이라는 뜻으로, 아므람의 아내이며 미리암과 아론과 모세의 어머니(민수기 26:59). 아므람의 아버지 고핫의 누이로 언급된다(출애굽기 6:20).\n※ 원문 오류: Num 26:69 → 민수기 26:59\n※ 판정 근거: 본문 대조. 민수기 26:59에 「요게벳」이(가) 나오나 Num 26:69에는 나오지 않는다.",
    "hebrew_greek": "H3115",
    "origin": "Hastings/Schaff"
   },
@@ -26388,7 +26388,7 @@
    "term": "JORAM(요람)",
    "definition": "JO'RAM (whom Jehovah has exalted). A son of Toi, the king of Hamath, sent to congratulate David on his victory over Hadadezer. 2 Sam 8:10. The son of Ahab. 2 Kgs 8:1, See Jehoram, 2. The son of Jehoshaphat. 2 Kgs 8:24. See Jehoram, 1. A Levite of David's day. 1 Chr 26:25.",
    "category": "인명",
-   "definition_ko": "'여호와께서 높이신 자'라는 뜻. 하맛 왕 도이의 아들로 다윗이 하닷에셀을 이긴 것을 축하하러 보냄받았다(사무엘하 8:10). 아합의 아들(열왕기하 8:16, 여호람 참조), 여호사밧의 아들(열왕기하 8:24, 여호람 참조), 다윗 때의 레위인(역대상 26:25)이 있다.",
+   "definition_ko": "'여호와께서 높이신 자'라는 뜻. 하맛 왕 도이의 아들로 다윗이 하닷에셀을 이긴 것을 축하하러 보냄받았다(사무엘하 8:10). 아합의 아들(열왕기하 8:16, 여호람 참조), 여호사밧의 아들(열왕기하 8:24, 여호람 참조), 다윗 때의 레위인(역대상 26:25)이 있다.\n※ 원문 오류: 2 Kgs 8:1 → 열왕기하 8:16\n※ 원문 오류: 2 Kgs 8:24 → 열왕기하 8:16\n※ 판정 근거: 본문 대조. 열왕기하 8:16에 「요람」이(가) 나오나 2 Kgs 8:1·24에는 나오지 않는다.",
    "hebrew_greek": "G2496,H3141",
    "origin": "Hastings/Schaff"
   },
@@ -26460,7 +26460,7 @@
    "term": "JOSEPH(요셉)",
    "definition": "JO'SEPH (he will add). The first son of Jacob and Rachel, born in Padan-aram after his mother had been long barren, but \"God hearkened to her.\" Gen 30:24. The name she gave him indicated her confidence that God would give her another son — a confidence justified by the birth of Benjamin. Ps 35:17. The two sons of Rachel, Jacob's favorite wife, were the patriarch's delight. In the case of Joseph this fondness led to evil consequences, because it excited the envy of his brothers. The story of Joseph's life is told with so much simplicity and graphic power that he is numbered among our acquaintances. We enter with the liveliest sympathy into all his troubles. He is ever the innocent victim of spite and cruelty, and from the time he comes before us in his long coat with sleeves — not \"coat of many colors\" — down to the day the mourning of Egypt bursts forth over his corpse, his life has for us the interest of a romance heightened by the knowledge that it is truth. Instead of repeating the twice-told tale — every one knows it, and the inspired record cannot be improved — we present a condensed translation of the article on \"Joseph\" by Prof. Ebers, the Egyptologist, in Riehm's Handworterbuch Des Biblischen Altertums, (1878), which interprets the Egyptian setting and shows its complete harmony with modern researches. It is worthy of note that the money paid for Joseph by the Midianites corresponds exactly to the extreme price set by Moses upon a slave of his age. Comp. Gen 37:28 with Lev 27:5. The captains of the guard, of whom Potiphar was one, were commanders of regiments of 2000 men, and so long as they were in office as the king's body-guard the commander was the chief inspector of the state-prisoners, and chief executioner of corporal and capital punishment. Potiphar was a \"eunuch.\" The word, however, may express nothing more than an officer. The Egyptian monuments make us acquainted with the daily life of an \"overseer,\" which Joseph led in Potiphar's household. Everything was conducted with the most scrupulous regularity — at least, in the pictures — and the position was one of great responsibility. The story of Joseph's trial of virtue is strikingly illustrated by an Egyptian tale of similar contents written for a son of Rameses II. (See Brugsch, Geschichte AEgyptens, p. 249). The belief in dreams, in revelations of the divine will, the office of chief baker and chief butler, the custom of granting pardons and other favors upon Pharaoh's birthday, — all are confirmed by the monuments. The magicians and wise men consulted by Pharaoh after his two dreams — which are thoroughly Egyptian: seven was a sacred number — belonged to the priest caste. That Joseph, before appearing in the presence of Pharaoh, must shave himself, face and head, and change his raiment, brings out the Egyptian passion for cleanliness. The exaltation of Joseph receives explanation from the fact that the priests shared in the government, particularly- in the allotment of the taxes, and for the latter purpose inspected the material condition of the country. Joseph's rank was described by two terms, \"father\" and \"lord of all Egypt.\" \"Father\" was the usual term. Every feature of the following scenes in the narrative, all the circumstances of the investiture, are true to the life. The new name, or rather title, which he received — Zaphnath paaneah — is interpreted \"creator\" or \"preserver of life.\" The name of his wife is the genuinely Egyptian, and very common, feminine name of Sant or Snat. It is impossible to say how far Joseph became an Egyptian. He conformed to many of their customs, but ever retained his belief in Israel's God. His position during the famine resembles that of a certain Baba, who in his epitaph tells us: \"I gathered grain, a friend of the god of harvest. I was watchful at the seed-time. And during a famine which lasted through many years, I distributed the grain through the town to every hunger-stricken one.\" Brugsch, indeed (Gench. AEgyptens, p. 246), believed the famine referred to here is that of Genesis. The charge Joseph brings against his brethren was one often made, doubtless, at a time when there was constant dread of the irruption of the wandering tribes to the eastward of Egypt. That the Egyptians would not eat with the Hebrews and that the latter were regarded with aversion are traits in keeping with the monumental records. But these show us that shepherds formed a separate caste and were not shunned, except the swineherds, who could not enter a temple. But the nomadic shepherds, as the Israelites, were ever looked upon with fear and disgust. Joseph's claim to the gift of divination was just what one would expect. The bubbles and movements of the water of a cup into which one had thrown a coin or a ring, or any other object, were watched, and by certain rules the future read therefrom. The arrangements which Joseph made during the years of plenty and of famine, by which eventually the entire nation became the purchase of Pharaoh, and the land, with the exception of that of the priests, passed to the crown, have been much criticised. But they were not unparalleled in Egypt. Considering the fertility of the land, the fifth part taken up during the plentiful years was not at all excessive, Gen 41:34, Gen 41:47-49; when the famine came it was natural and proper to sell so long as there was any money left to buy therewith. And that it was the case in Egypt that the king and the priests owned all the land is asserted by the monuments and ancient historians. These latter also speak of the priests being free from tax. We see, then, in Gen 47:22, Gen 47:26, the statement of a fact and the explanation of a subsequent phenomenon. The question. Who was the Pharaoh of Joseph? does not admit of a decisive answer. The name \"Pharaoh,\" being a generic title of the sovereigns, does not help us any. The most satisfactory answer is that he belonged to an altogether different dynasty from that of the persecuting Pharaoh of Exodus. This throws the time back to some dynasty of the Shepherd-kings. Of these tradition singles out Apophis, one of the last of them. Manasseh and Ephraim, sons of Joseph by his marriage with Asenath, became the founders of the powerful tribes that bear their name, and Jacob's blessing was fulfilled. Joseph died at the age of 110, but his bones, by express command, were carried with the host, and not buried until the Israelites had conquered Canaan, Gen 50:25, when they were deposited in Shechem. Josh 24:32. His tomb is shown within a stone's throw of Jacob's Well. But the Mohammedans claim that the body of Joseph is in the Machpelah, in Hebron, having been transported thither from Shechem. The father of Igal, who was the spy from Issachar. Num 13:7. One who had married a foreign wife. Ezr 10:42. A priest. Neh 12:14. 5., 6., 7. Three persons in the ancestry of Christ. Luke 3:24, Acts 11:26, 1 Kgs 20:30. The husband of Mary, the mother of Christ, was by occupation a carpenter. Matt 13:55, at which trade our Lord himself labored until he entered upon his public ministry. Mark 6:3. Joseph is called a \"just man,\" \"a man of uprightness,\" Matt 1:19. He was informed by an angel that Mary was to be the mother of the promised Messiah, and accompanied her to Bethlehem to be registered in the tax-books, according to the command of the emperor, when Christ was born. When the babe was 40 days old, Joseph and his wife went with him to Jerusalem, in observance of the Law of Moses; and when about returning again to Bethlehem, he was divinely admonished to go into Egypt, for Herod, the king, was resolved to destroy the infant Redeemer if he could get him into his power. After the death of Herod they set out again for Judaea, but, apprehensive that the king's successor, Archelaus, might be equally cruel, they went into Galilee, and took up their abode at Nazareth, their old home. When Jesus was 12 years of age, Joseph and Mary took him with them on their journey to Jerusalem to celebrate the feast of the Passover. After that we find nothing more of Joseph in the sacred history. It is generally supposed he died before Christ began his public ministry, as he is not mentioned with Mary, and as Christ commended her to the care of one of the disciples. John 19:25-27. Joseph of Arimathea, Matt 27:57, Ps 57:59, a wealthy citizen, probably residing in the vicinity of Jerusalem, a member of the Sanhedrin, and a man of eminent wisdom and piety. Mark 15:43; Luke 23:51. He was a disciple of Christ, though he did not appear openly as such. John 19:38. It is said that the Jews, as a mark of ignominy, did not allow the bodies of those executed as malefactors to be deposited in the tombs of their fathers except tne flesh had been previously consumed. It may have been to prevent this use of the body of Christ that Joseph so early asked leave to remove it and place it in his own tomb. A disciple called Barsabas, one of the candidates for Judas's place in the college of the apostles. Acts 1:23.",
    "category": "인명",
-   "definition_ko": "'제거하는 자 또는 더하는 자'라는 뜻. (1.) 야곱이 라헬에게서 얻은 두 아들 중 형(창세기 30:23,24)으로, 태어났을 때 '하나님이 내 부끄러움을 씻으셨다'고 말했다.",
+   "definition_ko": "'제거하는 자 또는 더하는 자'라는 뜻. (1.) 야곱이 라헬에게서 얻은 두 아들 중 형(창세기 30:24,24)으로, 태어났을 때 '하나님이 내 부끄러움을 씻으셨다'고 말했다.",
    "hebrew_greek": "G2501,H3084,H3130",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -27630,7 +27630,7 @@
    "term": "KIR-HARASETH(길하레셋)",
    "definition": "KIR-HAR'ASETH (brick-fortress), 2 Kgs 3:26, or KIR-HAR'ESETH, Isa 16:7, or KIR-HA'-RESH, Isa 16:11, or KIR-HERES, Jer 58:41, Eze 23:36, or simply KIR OF MOAB, Isa 15:1, a strong fortress in Moab, situated near the south-eastern shore of the Dead Sea. It is now called Kerak, and was in the time of the crusaders a place of great strength, almost impregnable.",
    "category": "지명",
-   "definition_ko": "'벽돌 요새'라는 뜻으로 모압의 길(Kir Of Moab)과 같은 곳을 가리키는 여러 표기 중 하나다(열왕기하 3:25; 이사야 16:11; 예레미야 48:31,36).",
+   "definition_ko": "'벽돌 요새'라는 뜻으로 모압의 길(Kir Of Moab)과 같은 곳을 가리키는 여러 표기 중 하나다(열왕기하 3:25; 이사야 16:11; 예레미야 48:31,36).\n※ 원문 오류: 2 Kgs 3:26 → 열왕기하 3:25\n※ 판정 근거: 본문 대조. 열왕기하 3:25에 「길하레셋」이(가) 나오나 2 Kgs 3:26에는 나오지 않는다.",
    "hebrew_greek": "H7025",
    "origin": "Hastings/Schaff"
   },
@@ -29971,7 +29971,7 @@
    "term": "MAHANAIM(마하나임)",
    "definition": "MAHANA'IM (two camps), a town east of the Jordan; named by Jacob. Gen 32:1-2. It was assigned to the Levites, Josh 13:26, 1 Kgs 20:30; Josh 21:38;1 Chr 6:80, and lay within the territory of Gad, north of the torrent Jabbok. Mahanaim became in the time of the monarchy a place of mark. 2 Sam 2:9, 2 Sam 2:12; 2 Sam 4:6. Abner fixed Ishbosheth's residence there, and David took refuge in it when driven out of the western part of his kingdom by Absalom. 2 Sam 17:24; 1 Kgs 2:8. Mahanaim was the seat of one of Solomon's commissariat officers, 1 Kgs 4:14, and it is alluded to in his Song, Song 6:13. Dr. Merrill locates Mahanaim in the Jordan valley, 6 miles north of the Jabbok, at a ruin called Saleikhat. Here water is abundant; the ruins are extensive and about 300 feet above the plain and near the dividing line between Gad and Manasseh. It answers the biblical requirement better than other suggested sites, like Mahneh and Gerasa.",
    "category": "지명",
-   "definition_ko": "'두 진영'이라는 뜻으로, 요단강 건너 얍복강 근처의 한 장소로 야곱이 '하나님의 천사들'을 만나고 밧단아람에서 돌아오던 길에 자기 일행을 '두 무리'로 나눈 곳이다(창세기 32:2).",
+   "definition_ko": "'두 진영'이라는 뜻으로, 요단강 건너 얍복강 근처의 한 장소로 야곱이 '하나님의 천사들'을 만나고 밧단아람에서 돌아오던 길에 자기 일행을 '두 무리'로 나눈 곳이다(창세기 32:2).\n※ 원문 오류: Gen 32:1 → 창세기 32:2\n※ 판정 근거: 본문 대조. 창세기 32:2에 「마하나임」이(가) 나오나 Gen 32:1에는 나오지 않는다.",
    "hebrew_greek": "H4266",
    "origin": "Hastings/Schaff"
   },
@@ -30941,7 +30941,7 @@
    "term": "MEDAD(메닷)",
    "definition": "ME'DAD (love), one who, together with Eldad, prophesied in the Israelite camp in the wilderness. Num 11:26-27.",
    "category": "인명",
-   "definition_ko": "'사랑'이라는 뜻으로, 모세를 도와 백성을 다스리도록 지명된 장로 중 하나. 그는 엘닷과 함께 '진영에서 예언했다'(민수기 11:24-29).",
+   "definition_ko": "'사랑'이라는 뜻으로, 모세를 도와 백성을 다스리도록 지명된 장로 중 하나. 그는 엘닷과 함께 '진영에서 예언했다'(민수기 11:26-29).",
    "hebrew_greek": "H4312",
    "origin": "Hastings/Schaff"
   },
@@ -31094,7 +31094,7 @@
    "term": "MELCHI(멜기)",
    "definition": "MEL'CHI (Jehovah's king), two persons in the genealogy of Jesus. Luke 3:21, Acts 20:28.",
    "category": "인명",
-   "definition_ko": "「여호와의 왕」이라는 뜻이니, 예수의 족보에 든 두 사람이다(누가복음 3:24,28).",
+   "definition_ko": "「여호와의 왕」이라는 뜻이니, 예수의 족보에 든 두 사람이다(누가복음 3:24,28).\n※ 원문 오류: Luke 3:21 → 누가복음 3:24\n※ 판정 근거: 본문 대조. 누가복음 3:24에 「멜기」이(가) 나오나 Luke 3:21에는 나오지 않는다.",
    "hebrew_greek": "G3197",
    "origin": "Hastings/Schaff",
    "retrans": "v2"
@@ -31158,7 +31158,7 @@
    "term": "MELITA(멜리데)",
    "definition": "MEL'ITA (honey, or sweetness), an island in the Mediterranean upon which Paul was shipwrecked during his voyage to Rome. Acts 28:1-14. Two islands formerly bore the name Melita:(1) Melita, in the Adriatic Sea, and (2) Malta, in the Mediterranean. The location of the first would not answer the requirements of the scriptural narrative. Malta, the ancient Melita, is about 60 miles in circumference, and was successively subject to the Phoenicians, Greeks, Carthaginians, Romans, Vandals, Goths, Saracens, Normans, and French, until Charles V. surrendered it to the Knights of St. John, at Jerusalem, who in 1798 were dispossessed by Napoleon Bonaparte. In 1800 the French garrison surrendered to an English force, and the island has been ever since a dependency of the British crown. The island is 62 miles south-west of Sicily, is 17 miles long and 8 or 9 miles wide, and is now reckoned 960 miles from Gibraltar, 840 miles from Alexandria, and 1200 miles from Jerusalem. It is of an irregular oval shape, the coast indented with numerous bays. The soil, naturally barren, has been made productive; frost and snow are unknown. According to Acts 27:1-44, it was about the time of the autumnal equinox, when sailing was dangerous, that Paul and his companions embarked at Caesarea for Italy. Mr. Smith of Jordan Hill, a nautical man, in his work On the Voyage and Shipwreck of St. Paul, has shown, from a personal examination of the localities of the shipwreck, compared with the incidents in the narrative of Luke, that the ship could not have been wrecked anywhere but at Malta. The following is a summary of his statements. Paul's company on the second day touched at Sidon, 78 miles from Caesarea. Loosing thence, they were forced by strong westerly winds to leave Cyprus on the left hand. Thence, favored by the landbreeze and currents, they arrived at Myra, in Lycia. At this port they were then transferred to a ship from Alexandria bound for Italy. Their progress, on account of unfavorable winds, was extremely slow, for it was \"many days\" before they came over against Cnidus, not more than 150 miles from Myra. Sailing in the direction of Salmone, the eastern promontory of Crete, they coasted along, with north-west winds, as far as Cape Matala, the south side of the island. Here, however, the land bends suddenly to the north, and they made for the Fair Havens, a roadstead near the port of Lasea, as being the nearest to Cape Matala. As the season of safe navigation had passed, Paul urged the officers to winter at Fair Havens, but his advice was overruled; and, improving a gentle north wind that blew, they set sail for Phenice, a harbor on the coast about 40 miles farther west. The harbor seems to have been the one now called Lutro, which opens in the same direction in which the wind Libe blows — i.e., toward the north-east — and is situated exactly opposite to the island of Clauda. But soon the weather changed; the ship was caught in a typhoon, and the wind euroclydon (east north-east), which blew with such violence, forced them to run under the south shore of Clauda, now Clozzo, about 20 miles south-west by west from Fair Havens. Here they availed themselves of the smooth water to secure the boat and undergird the ship by frapping it round the middle with a cable, to prepare it to resist the fury of the storm. But, fearing they should be driven Map of Place of Shipwreck, Si. Paul's Bay. The figures denote fathoms toward the Syrtis — i.e., the quicksands of the coast of Africa — they lowered the gear; and the ship thus borne along was not only made snug, but had storm-sails set and was on the starboard tack — i.e., with her right side to the wind — which was the only course by which she could avoid falling into the Syrtis. On the next day they threw overboard the mainyard, an immense spar probably as long as the ship. The storm continued with unabated fury for eleven days more, and all hope was taken away. At length, on the fourteenth night, the seamen suspected the approach of land, probably from the noise of the breakers, sounded, and found the depth 20 fathoms, and then 15 fathoms. Fearing lest they should fall upon rocks, they cast four anchors out of the stern, and lightened the ship by throwing the wheat into the sea. When the day broke they succeeded in running the ship aground in a creek, where she went to pieces, but the whole ship's company escaped safe to land. The place proved to be a bay on the north-east side of Malta, now known as St. Paul's Bay, an inlet, with a creek, about 2 miles deep and a mile broad. Mr. Smith has shown by calculation that a ship starting late in the evening from Clauda, would, by midnight on the fourteenth day, be less than 3 miles from the entrance of St. Paul's Bay — i. e., a distance of 476 miles. In 1810 the British frigate Lively went to pieces on those very breakers, at the point of Koura, at the entrance of the bay. The crew, like Paul's shipmen, at the distance of a quarter of a mile, could not see the land, but they saw the surf on the shore. So, also, Mr. Smith has shown that every ship approaching the land must here pass over 20 fathoms, and not only must this depth be close to the spot where they had the indications of land, but it must bear east by south from the 15 fathom depth. The 15 fathom depth is, as nearly as possible, a quarter of a mile from the shore, which is here girt with mural precipices, and on which the sea must have been breaking violently. At the bottom of the Bay of St. Paul's there is a communication with the sea outside by a channel not more than a hundred yards in breadth, formed by the separation of Salmone Island, a long rocky ridge, from the main land. Near this channel, where \"two seas meet,\" are two creeks, into one of which they ran the ship ashore; the forepart stuck fast in the mud and clay, while the stern was dashed to pieces by the force of the waves. It has been asserted that no vipers exist in Malta, but Lewin saw a serpent there which he regarded as a viper; but even if not found on the thickly-populated island now, this would not prove that they did not exist in Paul's day and have since been exterminated.",
    "category": "용어",
-   "definition_ko": "바울이 로마로 가는 항해 중 난파한 지중해의 섬(사도행전 28:1-14)으로, 현재의 몰타와 동일시된다. 둘레 약 60마일이며 페니키아·그리스·카르타고·로마 등의 지배를 거쳤다. 바울 일행이 276명과 함께 해변에 도착했을 때 원주민들이 친절히 대접했으며, 바울이 독사에 물려도 해를 입지 않고 총독 보블리오의 아버지를 고쳐 주었다(사도행전 28:3-8).",
+   "definition_ko": "바울이 로마로 가는 항해 중 난파한 지중해의 섬(사도행전 28:1-14)으로, 현재의 몰타와 동일시된다. 둘레 약 60마일이며 페니키아·그리스·카르타고·로마 등의 지배를 거쳤다. 바울 일행이 276명과 함께 해변에 도착했을 때 원주민들이 친절히 대접했으며, 바울이 독사에 물려도 해를 입지 않고 총독 보블리오의 아버지를 고쳐 주었다(사도행전 28:1-8).",
    "hebrew_greek": "G3194",
    "origin": "Hastings/Schaff"
   },
@@ -31693,7 +31693,7 @@
    "term": "METHUSELAH(므두셀라)",
    "definition": "METHU'SELAH (man of dart, or he dies and it is sent - namely, the Flood), the son of Enoch, and, according to Hebrew chronology, 969 years old when he died, in the first year of the Flood. The longest-lived man was the son of the saintliest of his time. Gen 5:27; 1 Chr 1:3.",
    "category": "인명",
-   "definition_ko": "'창의 사람'이라는 뜻으로, 에녹의 아들이며 노아의 조부. 성경 기록상 가장 오래 산 사람으로, 홍수가 난 해에 구백육십구 세로 죽었다(창세기 5:21-27; 역대상 1:3).",
+   "definition_ko": "'창의 사람'이라는 뜻으로, 에녹의 아들이며 노아의 조부. 성경 기록상 가장 오래 산 사람으로, 홍수가 난 해에 구백육십구 세로 죽었다(창세기 5:21-27; 역대상 1:3).\n※ 원문 오류: Gen 5:27 → 창세기 5:21\n※ 판정 근거: 본문 대조. 창세기 5:21에 「므두셀라」이(가) 나오나 Gen 5:27에는 나오지 않는다.",
    "hebrew_greek": "G3103,H4968",
    "origin": "Hastings/Schaff"
   },
@@ -31738,7 +31738,7 @@
    "term": "MIAMIN(미야민)",
    "definition": "MI'AMIN (from the right hand). One who had married a foreign wife. Ezr 10:25. A priest who had returned with Zerubbabel, Neh 12:6; called Mijamin, Neh 10:7, and Miniamin, Heb 12:17.",
    "category": "인명",
-   "definition_ko": "「오른손에서」라는 뜻이다. 이방 아내를 맞은 이이다(에스라 10:25). 스룹바벨과 함께 돌아온 제사장이다(느헤미야 12:5). 미야민이라고도 하고(느헤미야 10:7) 미냐민이라고도 한다.",
+   "definition_ko": "「오른손에서」라는 뜻이다. 이방 아내를 맞은 이이다(에스라 10:25). 스룹바벨과 함께 돌아온 제사장이다(느헤미야 12:5). 미야민이라고도 하고(느헤미야 10:7) 미냐민이라고도 한다.\n※ 원문 오류: Neh 12:6 → 느헤미야 12:5\n※ 판정 근거: 본문 대조. 느헤미야 12:5에 「미야민」이(가) 나오나 Neh 12:6에는 나오지 않는다.",
    "hebrew_greek": "H4326,H4509",
    "origin": "Hastings/Schaff",
    "retrans": "v2"
@@ -32463,7 +32463,7 @@
    "term": "MOLADAH(몰라다)",
    "definition": "MOL'ADAH (birth), a city in the South of Judah, Josh 15:21-26; given to Simeon, and occupied by Shimei, Josh 19:2; 1 Chr 4:28; settled after the Captivity, Neh 11:26. Probably el-Milh, 10 miles east of Beersheba, marks the site of ancient Moladah. There are ruins of a fortified town, two wells, one with water at the depth of 40 feet; and the wells are surrounded with marble troughs. Arab tradition says that Abraham dug these wells and watered his flocks here.",
    "category": "지명",
-   "definition_ko": "'출생'이라는 뜻으로 유다 남부의 성읍이며(여호수아 15:26) 시므온에게 주어져 시므이가 살았고(여호수아 19:2, 역대상 4:28) 포로기 이후 사람이 살았다(느헤미야 11:26). 아마도 브엘세바 동쪽 10마일의 엘밀이 옛 몰라다 자리일 것이다. 견고한 성읍의 폐허와 우물 둘이 있는데 하나는 40피트 깊이에 물이 있고, 우물 둘레에 대리석 구유가 있다. 아랍 전승은 아브라함이 이 우물들을 파고 여기서 가축에게 물을 먹였다고 한다.",
+   "definition_ko": "'출생'이라는 뜻으로 유다 남부의 성읍이며(여호수아 15:26) 시므온에게 주어져 시므이가 살았고(여호수아 19:2, 역대상 4:28) 포로기 이후 사람이 살았다(느헤미야 11:26). 아마도 브엘세바 동쪽 10마일의 엘밀이 옛 몰라다 자리일 것이다. 견고한 성읍의 폐허와 우물 둘이 있는데 하나는 40피트 깊이에 물이 있고, 우물 둘레에 대리석 구유가 있다. 아랍 전승은 아브라함이 이 우물들을 파고 여기서 가축에게 물을 먹였다고 한다.\n※ 원문 오류: Josh 15:21 → 여호수아 15:26\n※ 판정 근거: 본문 대조. 여호수아 15:26에 「몰라다」이(가) 나오나 Josh 15:21에는 나오지 않는다.",
    "hebrew_greek": "H4137",
    "origin": "Hastings/Schaff"
   },
@@ -32601,7 +32601,7 @@
    "term": "MOSERA(모세라)",
    "definition": "MOSE'RA, and MOSE'ROTH (bond, bonds), a station in the journey of the Israelites through the wilderness, and near Mount Hor. Deut 10:6; Num 33:30-31.",
    "category": "지명",
-   "definition_ko": "'묶임'이라는 뜻으로, 호르산 기슭, 이스라엘 백성이 광야를 유랑하며 머문 진지 중 하나(신명기 10:6; 민수기 33:37,38 참조). 호르산 오르막으로 이어지는 고갯길 아래의 작은 샘 엘타이예베와 동일시된다.",
+   "definition_ko": "'묶임'이라는 뜻으로, 호르산 기슭, 이스라엘 백성이 광야를 유랑하며 머문 진지 중 하나(신명기 10:6; 민수기 33:30,38 참조). 호르산 오르막으로 이어지는 고갯길 아래의 작은 샘 엘타이예베와 동일시된다.",
    "hebrew_greek": "H4149",
    "origin": "Hastings/Schaff"
   },
@@ -33564,7 +33564,7 @@
    "term": "NEHEMIAH(느헤미야)",
    "definition": "NEHEMI'AH (whom Jehovah consoles). Son of Hachaliah, the distinguished and pious restorer and governor of Jerusalem after the Babylonian exile. The forlorn condition of the remnant of returned Hebrews in Jerusalem awakened his deepest sympathy and enkindled his patriotism, Neh 1:4. The condition of his feelings soon became known to King Artaxerxes, at whose court he held the high position of cup-bearer. Ruth 2:1. At his eager request, Neh 2:5, the king granted Nehemiah permission to return to the land of his fathers, Num 2:7, and gave him letters of safe escort to the governors beyond the Euphrates, and orders for timber on the keeper of the royal forest. At Jerusalem desolation and ruin met him on every hand, but he makes the proposition and oversees the execution of restoring the city. Num 2:18. The people co-operate heartily with their enthusiastic leader in the reconstruction of the walls and gates, but the work is not completed without insidious and determined opposition. Sanballat was at the head of it. These enemies endeavored to overthrow Nehemiah by false charges of intended rebellion against the Persian supremacy, Neh 6:7-19, and to intimidate him, but all in vain. The work of reconstruction accomplished, he re-established the religious customs of his fathers by bringing the Law into new esteem, Isa 8:3, and the reinstitution of the Sabbath, offerings, etc., Ezr 10:29, sqq. He also made special legislation for the government of the city. Nehemiah administered the government of Jerusalem twelve years, Neh 5:14, and at the end of this period returned to Persia, where he remained for some time. Neh 13:6. During his absence most flagrant abuses crept in, which on his return he made it his first business to correct, especially the violation of the Sabbath and heathen marriages, Neh 13. By these means he restored his people, in some degree, to their former happy condition, and probably remained in power till his death, which it is supposed took place in Jerusalem. Few men in any age of the world have combined in themselves a more rigid adherence to duty, a sterner opposition to wrong, private or public, a more unswerving faith in God, or a purer patriotism, than Nehemiah. Book of, is the sixteenth in the order of the books of the O.T. It may be regarded as a continuation of or supplement to the book of Ezra, which immediately precedes it. It is concerned with Nehemiah's great work of rebuilding Jerusalem and the reclamation of the customs and laws of Moses, which had fallen into desuetude. It gives the whole history of this movement in the circumstances which led to it, the elements of opposition which threatened to defeat it, and the complete success which crowned it. Incidentally we are admitted to a glance at the then condition, moral and political, of the Jews, at the growing bitterness between them and the Samaritans, and at some scenes in Assyrian life. The account of the walls and gates in Neh 3 is among the most valuable documents for the settlement of the topography of ancient Jerusalem. The registers and lists of names are also of value. Nehemiah is the author of the first seven chapters, and part of the twelfth and thirteenth. The change from the use of the first person to that of the third in the remaining chapters, and the fact that some names in the lists were not extant till after Nehemiah's death, point to some other hand as their author. One who returned in the first expedition from Babylon under Zerubbabel. Ezr 2:2; Neh 7:7. The son of Azbuk, who helped to repair the gates of Jerusalem. Neh 3:16.",
    "category": "인명",
-   "definition_ko": "'여호와께서 위로하신'이라는 뜻. (1.) 에스라 2:2; 느헤미야 7:7. (2.) 느헤미야 3:16. (3.) 하가랴의 아들(느헤미야 1:1)이며 아마도 유다 지파. 그의 가문은 예루살렘에 속했을 것이다(느헤미야 2:3).",
+   "definition_ko": "'여호와께서 위로하신'이라는 뜻. (1.) 에스라 2:2; 느헤미야 7:7. (2.) 느헤미야 3:16. (3.) 하가랴의 아들(느헤미야 1:1)이며 아마도 유다 지파. 그의 가문은 예루살렘에 속했을 것이다(느헤미야 2:3).\n※ 원문 오류: Neh 1:4 → 느헤미야 1:1\n※ 판정 근거: 본문 대조. 느헤미야 1:1에 「느헤미야」이(가) 나오나 Neh 1:4에는 나오지 않는다.",
    "hebrew_greek": "H5166",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -33927,7 +33927,7 @@
    "term": "NICANOR(니가노르)",
    "definition": "NICA'NOR (conqueror), one of the first seven deacons appointed by the early Church. Acts 6:5.",
    "category": "인명",
-   "definition_ko": "'정복자'라는 뜻으로, 사도 시대 교회에서 임명된 일곱 집사 중 하나(사도행전 6:1-6). 그에 대해 더 이상 알려진 것은 없다.",
+   "definition_ko": "'정복자'라는 뜻으로, 사도 시대 교회에서 임명된 일곱 집사 중 하나(사도행전 6:5-6). 그에 대해 더 이상 알려진 것은 없다.",
    "hebrew_greek": "G3527",
    "origin": "Hastings/Schaff"
   },
@@ -34647,7 +34647,7 @@
    "term": "OMRI(오므리)",
    "definition": "OM'RI (servant of Jehovah). An officer in the army of Israel. 1 Kgs 16:16. He was engaged in the siege of Gibbethon (which see) when he received intelligence that Zimri, another officer of the army, had assassinated the king and usurped the throne. The army, by general acclamation, made Omri king, and, raising the siege of Gibbethon, they forthwith marched to Tirzah, where Zimri resided, and captured it. Zimri set fire to the house he occupied, and was consumed. The Israelites were then divided into two parties; but after a short struggle Omri prevailed and took the throne, which he disgraced through a reign of twelve years. Omri, in the sixth year of his reign, built Samaria, which thereafter became the capital of the ten tribes. The prophet Micah, Mic 6:16, speaks of the \"statutes of Omri,\" and denounces them. They were probably of an idolatrous character. A descendant of Benjamin 1 Chr 7:8. A descendant of Judah. 1 Chr 9:4. Chief of the tribe of Issachar in the reign of David. 1 Chr 27:18.",
    "category": "인명",
-   "definition_ko": "'여호와의 종'이라는 뜻. 엘라가 디르사에서 시므리에게 암살당했을 때(열왕기상 16:15-27), 그의 군대 지휘관 오므리가 왕이 되었다(주전 931년). 사 년간 그의 통치에 계속 반대가 있었다.",
+   "definition_ko": "'여호와의 종'이라는 뜻. 엘라가 디르사에서 시므리에게 암살당했을 때(열왕기상 16:16-27), 그의 군대 지휘관 오므리가 왕이 되었다(주전 931년). 사 년간 그의 통치에 계속 반대가 있었다.",
    "hebrew_greek": "H6018",
    "origin": "Hastings/Schaff"
   },
@@ -35133,7 +35133,7 @@
    "term": "PADON(바돈)",
    "definition": "PA'DON (deliverance), ancestor of a family of Nethinim which returned with Zerubbabel. Ezr 2:44; Neh 7:47.",
    "category": "인명",
-   "definition_ko": "스룹바벨과 함께 돌아온 느디님 가문의 조상이다(에스라 2:41).",
+   "definition_ko": "스룹바벨과 함께 돌아온 느디님 가문의 조상이다(에스라 2:44).",
    "hebrew_greek": "H6303",
    "origin": "Hastings/Schaff"
   },
@@ -35142,7 +35142,7 @@
    "term": "PAGIEL(바기엘)",
    "definition": "PA'GIEL (God allots) was the chief of the tribe of Asher in the wilderness. Num 1:18; Num 2:27; Num 7:72, Num 7:77; 1 Kgs 10:26.",
    "category": "인명",
-   "definition_ko": "'하나님이 나누어 주신다'는 뜻으로 광야에서 아셀 지파의 지도자였다(민수기 1:13, 2:27, 7:72,77, 10:26).",
+   "definition_ko": "'하나님이 나누어 주신다'는 뜻으로 광야에서 아셀 지파의 지도자였다(민수기 1:13, 2:27, 7:72,77, 10:26).\n※ 원문 오류: Num 1:18 → 민수기 1:13\n※ 판정 근거: 본문 대조. 민수기 1:13에 「바기엘」이(가) 나오나 Num 1:18에는 나오지 않는다.",
    "hebrew_greek": "H6295",
    "origin": "Hastings/Schaff"
   },
@@ -36214,7 +36214,7 @@
    "term": "PETER(베드로)",
    "definition": "PE'TER (stone, or rock; Syriac Cephas; Greek Petros), one of the twelve apostles, one of the three favorite disciples (with John and James), and the most active of all in word and deed (except Paul, who did not belong to the twelve). His original name was \"Simon\" or \"Simeon.\" He was a son of Jonas (John, according to the reading of the best manuscripts), a brother of Andrew, probably a native of Bethsaida in Galilee. He was a fisherman by trade, and resided at Capernaum with his wife and mother-in-law, who was healed by Christ of a fever. See John 1:42; Josh 21:15; Matt 16:18; Luke 5:3-10; Matt 8:14-15; Mark 1:29-31; Luke 4:38. When he forsook all to follow Christ he must have made a considerable sacrifice. His new name \"Peter\" (\"rock-man\") was given him when he was called to the apostleship, John 1:42, and was solemnly confirmed when he, in the name of all the other apostles, made that remarkable confession of the divinity of our Lord which is the fundamental creed of Christendom and the immovable foundation of the Christian Church.Matt 16:18. The name \"Peter\" or \"Cephas\" was a prophecy of the prominent position which he, as the confessor of Christ, would occupy in the primitive age of the Church. He laid the foundation of the Church among the Jews on the day of Pentecost, Acts 2, and, after a special revelation, among the Gentiles also, in the conversion of Cornelius. Acts 10. He appears throughout in the Gospels and the first part of the Acts as the head and mouthpiece of the twelve. He had an ardent nature, a sanguine, impulsive, hopeful temperament, was frank, open, fresh, enthusiastic, and energetic, and born to take the lead, but apt to overrate his strength and liable to change and inconsistency. He was the first to confess and the first to deny his Lord and Saviour, yet he repented bitterly, and had no rest and peace till the Lord forgave him. He had a great deal of genuine human nature, but divine grace did its full work, and overruled even his faults for his advancement in humility and meekness, which shine out so beautifully from his Epistles. The labors of Peter are recorded in the Acts. Chs. 1 to 12 and ch. 15. He was the leading apostle from the day of Pentecost to the Council of Jerusalem, in a.d. 50. After that time his whereabouts are involved in obscurity. Paul mentions him as being at Antioch, about a.d. 52, and censures him for inconsistency of conduct, which he showed at that time toward the Gentile converts, from fear of offending the Judaizing party. The alienation of the two apostles was merely temporary. We must admire the meekness and humility with which Peter bore the sharp rebuke of his younger colleague, and with which he alluded afterward to the Epistles of his \"beloved brother Paul,\" 2 Pet 3:15, as much as the boldness and fearlessness with which Paul stood up for principle and the rights and liberty of the Gentile Christians. Paul mentions him again, a.d. 57, 1 Cor 9:5, as engaged, in company with his wife, in missionary journeys and labors, perhaps among the dispersed Jews in Asia Minor, to whom he addressed his Epistles. 1 Pet 1:1. This allusion to Peter's wife is important as proving that he did not give up the family ties when he entered upon his spiritual calling. Clement of Alexandria expressly states that Peter and Philip had children, and that both took about with them their wives, who aided them in ministering to women at their own homes. It is a singular fact that he whom Roman Catholics hold to be the first pope should have been and remained a married man and thus protested against clerical celibacy. According to the unanimous testimony of Christian antiquity, Peter suffered Portraits of Peter and Paul. (From a Gilded Glass Cup found in the Catacombs of Rome.) martyrdom in Rome under Nero, but the length of his residence in Rome and the year of his martyrdom are uncertain. When Paul arrived at Rome, a.d. 61, and during his imprisonment, a.d. 61-63, no mention is made of Peter. It is therefore improbable that he reached Rome before the close of 63. The report of a twenty or twenty-five years' residence of Peter in Rome rests on a chronological miscalculation of Eusebius and Jerome, who assume that he went to Rome a.d. 42, immediately after his deliverance from prison (Acts 12:17, \"he went into another place\"), and is entirely irreconcilable with the silence of Scripture, and we may say even with the mere fact of Paul's Epistle to the Romans, written in 58; for Paul says not a word of previous labors of Peter in that city, and never built on other men's foundation. Peter's martyrdom may have taken place either in a.d. 64, during the terrible Neronian persecution after the great conflagration, or in 67. He is said to have been crucified, and thus he followed his Lord literally in the mode of his death. Comp. John 21:18-19. Origen adds, however, that Peter, deeming himself unworthy to be, in the mode of his death, conformed to his Master, was at his own request crucified with his head downward. The Epistles of Peter belong to the last years of his life, and are addressed to churches in Asia Minor, chiefly planted by Paul and his companions. They contain precious consolations and exhortations, and confirm the harmony of his doctrine with that of the apostle of the Gentiles. 1 Pet 5:12; 2 Pet 3:15. They breathe a sweet, gentle, lovely, humble spirit, thoroughly mastered and softened by divine grace, and are full of joy and hope in view of the threatening persecutions. The First Epistle is dated from Babylon, 1 Pet 5:13; but commentators differ. Some refer it to the famous Babylon in Asia, which after its destruction was still inhabited by a Jewish colony, and remained for several centuries a chief seat of rabbinical learning; others refer it to Babylon in Egypt, now called Old Cairo; still others understand it mystically of heathen Rome, in which sense \"Babylon\" is certainly used in the Apocalypse of John. The last view is favored by the terms co-elect (\"elected together with you\") and Marcus my son, which occur in the same verse, and which scarcely bear a literal interpretation (\"Peter's wife and son\"), but probably mean the Christian Church and Mark the evangelist, who was his spiritual son. In this case the passage would be the first, and the only scriptural, proof for Peter's presence in Rome. If the letter was written during or after the terrible persecution of 64, he might have had good reason to call Rome by the name of Babylon, the ancient enemy of the people of God. Mark was a companion and interpreter of Peter in his missionary labors. The Epistle was transmitted by Silvanus, 1 Pet 5:12, a disciple and fellow-laborer of Paul, and a connecting link between him and Peter, well qualified to assure the Jewish converts in the churches of Asia Minor of the harmony of the two great apostles in all the essential doctrines of salvation. The Second Epistle is a valedictory of Peter, written shortly before his martyrdom, with warnings against Antinomian heresies, which began to disturb the harmony and purity of the Church. The external testimonies in favor of the Second Epistle are not so numerous as those in favor of the First, nor was it as much used. But the author expressly designates himself as an eye-witness of the transfiguration of Christ on the mount, 2 Pet 1:16-18, and bears ample evidence of apostolic depth and unction. It attests some of the most important facts in our Lord's ministry; it confirms the unity of apostolic teaching; it adds the doctrine of the final destruction of the material universe to make room for a new heaven and a new earth \"wherein dwelleth righteousness;\" and it appropriately closes with the exhortation to \"grow in grace and in the knowledge of our Lord and Saviour Jesus Christ. To him be glory both now and for ever.\"",
    "category": "인명",
-   "definition_ko": "본래 시몬(=시므온, 곧 '들음')이라 불렸으며, 신약에서 매우 흔한 유대 이름이었다. 요나의 아들이었다(마태복음 16:17). 그의 어머니는 성경에 이름이 나오지 않는다. 안드레라는 동생이 있었다.",
+   "definition_ko": "본래 시몬(=시므온, 곧 '들음')이라 불렸으며, 신약에서 매우 흔한 유대 이름이었다. 요나의 아들이었다(마태복음 16:18). 그의 어머니는 성경에 이름이 나오지 않는다. 안드레라는 동생이 있었다.",
    "hebrew_greek": "G0920,G2786,G4074,G4613,G4826",
    "origin": "Hastings/Schaff"
   },
@@ -36334,7 +36334,7 @@
    "term": "PHARAOHS DAUGHTER(바로의 딸)",
    "definition": "PHARAOH'S DAUGHTER. Three Egyptian princesses are mentioned in the Bible. Moses' preserver. Ex 2:10. Bithiah, the wife of Mered, an Israelite. 1 Chr 4:18. A wife of Solomon. 1 Kgs 3:1.",
    "category": "인명",
-   "definition_ko": "모세를 구한 바로의 딸(출애굽기 2:6-10), 이스라엘 사람 므렛의 아내 비디아(역대상 4:18), 솔로몬의 아내가 된 바로의 딸(열왕기상 3:1) 등 세 명의 애굽 공주가 성경에 언급된다.",
+   "definition_ko": "모세를 구한 바로의 딸(출애굽기 2:10-10), 이스라엘 사람 므렛의 아내 비디아(역대상 4:18), 솔로몬의 아내가 된 바로의 딸(열왕기상 3:1) 등 세 명의 애굽 공주가 성경에 언급된다.",
    "hebrew_greek": "H6547",
    "origin": "Hastings/Schaff"
   },
@@ -36534,7 +36534,7 @@
    "term": "PHILOLOGUS(빌롤로고)",
    "definition": "PHILOL'OGUS(learned), a Christian in Rome to whom Paul sends a salutation. Rom 16:16.",
    "category": "인명",
-   "definition_ko": "바울이 로마서에서 문안한 로마의 그리스도인이다(로마서 16:15).",
+   "definition_ko": "바울이 로마서에서 문안한 로마의 그리스도인이다(로마서 16:15).\n※ 원문 오류: Rom 16:16 → 로마서 16:15\n※ 판정 근거: 본문 대조. 로마서 16:15에 「빌롤로고」이(가) 나오나 Rom 16:16에는 나오지 않는다.",
    "hebrew_greek": "G5378",
    "origin": "Hastings/Schaff"
   },
@@ -36991,7 +36991,7 @@
    "term": "PITHON(비돈)",
    "definition": "PI'THON (probably harmless), a son of Micah, a descendant of Saul. 1 Chr 8:35; 1 Chr 9:41.",
    "category": "인명",
-   "definition_ko": "므비보셋의 아들 미가의 네 아들 중 하나다(역대상 8:36).",
+   "definition_ko": "므비보셋의 아들 미가의 네 아들 중 하나다(역대상 8:35).",
    "hebrew_greek": "H6377",
    "origin": "Hastings/Schaff"
   },
@@ -39039,7 +39039,7 @@
    "term": "REPHAH(레바)",
    "definition": "RE'PHAH (riches), a descendant of Ephraira. 1 Chr 7:25.",
    "category": "인명",
-   "definition_ko": "에브라임의 아들이며 여호수아의 조상이다(역대상 7:26).",
+   "definition_ko": "에브라임의 아들이며 여호수아의 조상이다(역대상 7:25).",
    "hebrew_greek": "H7506",
    "origin": "Hastings/Schaff"
   },
@@ -39359,7 +39359,7 @@
    "term": "RIMMON(림몬)",
    "definition": "RIM'MON (pomegranate). The name of an idol worshipped in Damascus. 2 Kgs 5:18. Naaman, who was in the habit of attending the king in his idolatrous services in the temple of Rimmon, seems to have been perplexed about a question of duty as to continuing this practice. See Naaman. A Benjamite, father of the two men who slew Ish-bosheth. 2 Sam 4:2, 2 Sam 4:5, 2 Sam 4:9. RIM'MON (pomegranate), a name of not less than three places. A town in Judah, afterward given to Simeon. Josh 15:21, Jud 1:32; Josh 19:7; 1 Chr 4:32; Neh 11:29; Zech 14:10. Some have identified this with the ruin Umm er-Remamin, 13 miles south-west of Hebron, and nearly the same distance north-east of Beer-sheba. On the top of the hill are foundations of important buildings, and also rock-cut cisterns. Two miles south are two other hills, containing ruins and a fine spring with a reservoir. A Levitical city in Zebulun. 1 Chr 6:77. It is also called Remmon-methoar. Josh 19:13. It is identified with the present village Rummaneh, about 6 miles north of Nazareth. A rock whither the 600 surviving Benjamites retreated after the slaughter of their tribe. Jud 20:45, Josh 15:47; Josh 21:13. Its site is at the modern village Rummon, about 10 or 15 miles north of Jerusalem, on a limestone hill visible in all directions, having rugged sides difficult of ascent and deep valleys around it. The houses cling to the sides as huge steps. The view from the top of the hill is extensive.",
    "category": "지명",
-   "definition_ko": "(1) 다메섹에서 숭배된 우상(열왕기하 5:18). (2) 이스보셋을 죽인 두 사람의 아버지인 베냐민 사람(사무엘하 4:2). (3) 유다와 시므온에 속한 성읍(여호수아 15:32; 19:7). (4) 스불론의 레위인 성읍(역대상 6:77). (5) 베냐민 지파 생존자 600명이 피한 바위(사사기 20:45).",
+   "definition_ko": "(1) 다메섹에서 숭배된 우상(열왕기하 5:18). (2) 이스보셋을 죽인 두 사람의 아버지인 베냐민 사람(사무엘하 4:2). (3) 유다와 시므온에 속한 성읍(여호수아 15:32; 19:7). (4) 스불론의 레위인 성읍(역대상 6:77). (5) 베냐민 지파 생존자 600명이 피한 바위(사사기 20:45).\n※ 원문 오류: Josh 15:21 → 여호수아 15:32\n※ 원문 오류: Josh 15:47 → 여호수아 15:32\n※ 판정 근거: 본문 대조. 여호수아 15:32에 「림몬」이(가) 나오나 Josh 15:21·47에는 나오지 않는다.",
    "hebrew_greek": "H2886,H7417",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -40250,7 +40250,7 @@
    "term": "SAMOS(기오 섬)",
    "definition": "SA'MOS (a height), an island in the AEgean Sea, a few miles from the main land, and 42 miles south-west of Smyrna, The island is 27 miles long, 10 miles wide, and has an area of 165 square miles. It was the seat of Juno-worship, the birthplace of Pythagoras, and noted for its valuable pottery. Paul visited the island on his third missionary journey. Acts 20:16. Samos was then the capital of the island. Two miles to the west was the temple of Juno; there was a sacred way, which can still be traced, from the city to the temple. The modern name of the port at which Paul landed is Tiqani. The island now contains about 60,000 inhabitants, and is noted for its productions of oil, wine, oranges, grapes, raisins, and silk.",
    "category": "지명",
-   "definition_ko": "'높은 곳'이라는 뜻으로 에게해의 섬이며 본토에서 몇 마일, 서머나 남서쪽 42마일에 있다. 길이 27마일, 너비 10마일, 면적 165평방마일이다. 유노 숭배의 중심지였고 피타고라스의 출생지이며 값진 도기로 유명했다. 바울이 세 번째 선교 여행 때 들렀다(사도행전 20:15). 당시 사모가 섬의 수도였다. 서쪽 2마일에 유노 신전이 있었고 성읍에서 신전까지 성스러운 길이 있어 지금도 흔적을 찾을 수 있다. 지금 이 섬에는 약 6만 명이 살며 기름, 포도주, 오렌지, 포도, 건포도, 비단으로 유명하다.",
+   "definition_ko": "'높은 곳'이라는 뜻으로 에게해의 섬이며 본토에서 몇 마일, 서머나 남서쪽 42마일에 있다. 길이 27마일, 너비 10마일, 면적 165평방마일이다. 유노 숭배의 중심지였고 피타고라스의 출생지이며 값진 도기로 유명했다. 바울이 세 번째 선교 여행 때 들렀다(사도행전 20:15). 당시 사모가 섬의 수도였다. 서쪽 2마일에 유노 신전이 있었고 성읍에서 신전까지 성스러운 길이 있어 지금도 흔적을 찾을 수 있다. 지금 이 섬에는 약 6만 명이 살며 기름, 포도주, 오렌지, 포도, 건포도, 비단으로 유명하다.\n※ 원문 오류: Acts 20:16 → 사도행전 20:15\n※ 판정 근거: 본문 대조. 사도행전 20:15에 「기오 섬」이(가) 나오나 Acts 20:16에는 나오지 않는다.",
    "hebrew_greek": "G4544",
    "origin": "Hastings/Schaff"
   },
@@ -40609,7 +40609,7 @@
    "term": "SCEVA(스게와)",
    "definition": "SCE'VA (fitted), an Ephesian Jewish priest whose seven sons practised exorcism. Acts 19:14.",
    "category": "인명",
-   "definition_ko": "에베소의 제사장 우두머리로 유대인이었으며(사도행전 19:13-16), 그의 일곱 아들이 바울을 흉내내 예수의 이름으로 귀신을 쫓아내려다 실패했다.",
+   "definition_ko": "에베소의 제사장 우두머리로 유대인이었으며(사도행전 19:14-16), 그의 일곱 아들이 바울을 흉내내 예수의 이름으로 귀신을 쫓아내려다 실패했다.",
    "hebrew_greek": "G4630",
    "origin": "Hastings/Schaff",
    "repaired": "267자 절단(삼킨 항목: SCHISM)"
@@ -41115,7 +41115,7 @@
    "term": "SENNACHERIB(산헤립)",
    "definition": "SENNACH'ERIB (Heb. Sanherib, Sin, the moon, sent many brothers - i.e., he was not his father's eldest son) was king of Assyria when Hezekiah reigned in Judah. He was the son and successor of Sargon. Judah had paid tribute to Assyria, but under Hezekiah it revolted, and so revenge was determined upon; accordingly Sennacherib appears in the Bible as the invader of Palestine on two occasions. The first time he was pacified by a tribute. 2 Kgs 18:14. But, Hezekiah having the second time revolted, he sent an embassy with a few troops to the capital and demanded submission. He also sent an insulting letter to Hezekiah, who went up to the house of the Lord and prayed for deliverance. His prayer was answered, for the Assyrian army besieging Libnah was smitten with a plague so severe Seunacherib on his Throne. (From monuments at Kouyunjik.) that it is stated 185,000 died in one night. The effect of this catastrophe was that the siege was raised and Sennacherib retreated to Nineveh. 2 Kgs 19:35. Many years - perhaps twenty - after this he was worshipping in the house of his god Nisroch when Adrammelech and Sharezer, his sons, smote him with the sword. 2 Kgs 19:37. He was succeeded by Esar-haddon. Sennacherib's reign lasted twenty-two years, b.c. 705-682. It was brilliant. He crushed the revolt of Babylon, attacked Sidon, made many cities tribute, and, as Sargon had done, laid a heavy hand upon the neighboring nations. He made Nineveh his capital and adorned it with many splendid buildings. His palaces were large and beautiful. His monuments exist in unexpected places. Thus, at the mouth of the Nahr el-Kalb, near Beyrout, and close by an inscription of Rameses the Great of Egypt, is the record of his arrival.",
    "category": "인명",
-   "definition_ko": "사르곤의 아들로 그 뒤를 이어 아시리아 왕위에 올랐다(주전 705년). 히스기야가 굴복하지 않자 대군을 이끌고 유다를 침공해 여러 성읍을 함락시켰으나(열왕기하 18:13), 예루살렘 포위 중 여호와의 사자가 하룻밤에 아시리아 진영을 쳐 군대가 전멸했다(열왕기하 19:35). 이후 자기 아들들에게 암살당하고 에살핫돈이 뒤를 이었다.",
+   "definition_ko": "사르곤의 아들로 그 뒤를 이어 아시리아 왕위에 올랐다(주전 705년). 히스기야가 굴복하지 않자 대군을 이끌고 유다를 침공해 여러 성읍을 함락시켰으나(열왕기하 18:13), 예루살렘 포위 중 여호와의 사자가 하룻밤에 아시리아 진영을 쳐 군대가 전멸했다(열왕기하 19:35). 이후 자기 아들들에게 암살당하고 에살핫돈이 뒤를 이었다.\n※ 원문 오류: 2 Kgs 18:14 → 열왕기하 18:13\n※ 판정 근거: 본문 대조. 열왕기하 18:13에 「산헤립」이(가) 나오나 2 Kgs 18:14에는 나오지 않는다.",
    "hebrew_greek": "H5576,H5623",
    "origin": "Hastings/Schaff"
   },
@@ -41446,7 +41446,7 @@
    "term": "SHADRACH(사드락)",
    "definition": "SHA'DRACH (royal ?). Dan 1:7. See Abednego.",
    "category": "인명",
-   "definition_ko": "느부갓네살이 포로로 끌고 간 히브리 청년 하나냐에게 붙인 갈대아 이름이다(다니엘 1:6,7). 느부갓네살이 세운 신상에 절하기를 거부해 풀무불에 던져졌으나 기적적으로 보호받았다(다니엘 3:12-30).",
+   "definition_ko": "느부갓네살이 포로로 끌고 간 히브리 청년 하나냐에게 붙인 갈대아 이름이다(다니엘 1:7,7). 느부갓네살이 세운 신상에 절하기를 거부해 풀무불에 던져졌으나 기적적으로 보호받았다(다니엘 3:12-30).",
    "hebrew_greek": "H2608,H7714,H7715",
    "origin": "Hastings/Schaff"
   },
@@ -42547,7 +42547,7 @@
    "term": "SHEREBIAH(세레뱌)",
    "definition": "SHEREBI'AH (heat of Jehovah), one of the chief Levitical friends and helpers of Ezra, and one who sealed the covenant. Ezr 8:18, Jud 6:24; Neh 8:7; Jud 9:4; Eze 10:12.",
    "category": "인명",
-   "definition_ko": "'여호와의 불꽃'이라는 뜻으로 에스라와 느헤미야의 예루살렘 사역에 함께한 제사장이다(에스라 8:17,18).",
+   "definition_ko": "'여호와의 불꽃'이라는 뜻으로 에스라와 느헤미야의 예루살렘 사역에 함께한 제사장이다(에스라 8:18,18).",
    "hebrew_greek": "H8274",
    "origin": "Hastings/Schaff"
   },
@@ -43843,7 +43843,7 @@
    "term": "SIMEON(시므온)",
    "definition": "SIM'EON (a hearing). Son of Jacob and Leah. Gen 29:33. According to the prediction of Jacob, Gen 49:5-7, and as a punishment for his offence in the matter of the Shechemites, Gen 34 (see Dinah), his posterity dwindled, comp. Num 1:22-23; Gen 26:14, and their inheritance was only a dismembered portion of the territory of Judah. Josh 19:1. A man of singular piety residing at Jerusalem. Luke 2:25. He had been favored with a divine intimation that he should live to see the incarnate Redeemer, the Lord's Christ, and, being led by the Spirit into the temple at the particular time when the infant Jesus was brought thither by his parents, according to the requirement of the Law, Ex 13:12; Ex 22:29 he took him up in his arms and uttered the most devout thanksgivings to God, accompanied with a remarkable prediction respecting the various effects of his advent. A man of this name was among the prophets and teachers of the Christian church at Antioch. Acts 13:1. Some have supposed (though without warrant) that he is the same with Simon the Cyrenian. Matt 27:32. \"Simeon\" is a Hebrew name, and in Acts 15:14 is the same with \"Simon.\" A name in our Lord's genealogy. Luke 3:30.",
    "category": "인명",
-   "definition_ko": "'들음'이라는 뜻. (1) 야곱과 레아의 둘째 아들로 레위와 함께 세겜 사람들에게 복수했다(창세기 34:25). 아버지의 임종 시 저주를 받았다(49:5-7). (2) 예수님이 성전에 드려질 때 축복한 경건한 노인(누가복음 2:29-35). (4) 니게르라 불린 안디옥 교회의 교사(사도행전 13:1-3). (5) 야고보가 베드로를 이렇게 부르기도 했다(사도행전 15:14).",
+   "definition_ko": "'들음'이라는 뜻. (1) 야곱과 레아의 둘째 아들로 레위와 함께 세겜 사람들에게 복수했다(창세기 34:25). 아버지의 임종 시 저주를 받았다(49:5-7). (2) 예수님이 성전에 드려질 때 축복한 경건한 노인(누가복음 2:25-35). (4) 니게르라 불린 안디옥 교회의 교사(사도행전 13:1-3). (5) 야고보가 베드로를 이렇게 부르기도 했다(사도행전 15:14).",
    "hebrew_greek": "G4826,H8095,H8099",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -44478,7 +44478,7 @@
    "term": "SOSTHENES(소스데네)",
    "definition": "SOS'THENES (safe in strength), a ruler of the Jewish synagogue at Corinth. He was seized and beaten in that city by a party of Greeks, who were thus excited to acts of violence by what they thought the unjustifiable and malicious persecution of Paul. Acts 18:17. It is thought that he afterward became a convert to the Christian faith. 1 Cor 1:1-2.",
    "category": "인명",
-   "definition_ko": "고린도 회당장으로 바울을 고발하려던 유대인들의 요청이 거부되자 무리에게 매를 맞았다(사도행전 18:12-17).",
+   "definition_ko": "고린도 회당장으로 바울을 고발하려던 유대인들의 요청이 거부되자 무리에게 매를 맞았다(사도행전 18:17-17).",
    "hebrew_greek": "G4988",
    "origin": "Hastings/Schaff"
   },
@@ -44913,7 +44913,7 @@
    "term": "SUCCOTH(숙곳)",
    "definition": "SUC'COTH (booths), a name for two places. The place to which Jacob journeyed after leaving Esau, and where he built him a house and made booths for his cattle. Gen 33:17. It was given to the tribe of Gad. Josh 13:27. From this fact it would appear to be on the east side of the Jordan. Gideon severely punished the people of the place for not aiding him against the Midianites. Jud 8:5-8, Jud 8:14-16. At this town were the brass-foundries for casting the metal-work for the temple. 1 Kgs 7:46; 2 Chr 4:17. In the valley of the Jordan, about a mile from the river, and 10 miles south of Beisan, is a ruin called Sakut, which is identified by Robinson and others as Succoth. But the position of this place is on the wrong side of the Jordan for Succoth. The Talmud calls Succoth, Tarala, and Dr. Merrill discovered a site on the east side of the Jordan, called Tell Darala, which is 1 mile north of the Jabbok. This may be the ancient Succoth. The principal mound is thickly covered with broken pottery. The first camping-place of the Israelites in the desert. Ex 12:37; Josh 13:20; Num 33:5-6. It was a day's journey from Rameses, and must have been 12 or 15 miles east of that place. Some would identify it with Birket Timseh, or \"Lake of crocodiles,\" a few miles north of the northern end of the Red Sea.",
    "category": "지명",
-   "definition_ko": "'초막들'이라는 뜻. (1) 이스라엘이 라암셋을 떠난 후 첫 진영지(출애굽기 12:37). (2) 요단강 동쪽 도시로 야곱이 이곳에 집을 짓고 가축을 위한 초막을 만들었으며(창세기 33:17), 훗날 기드온이 도움을 거부한 이곳 지도자들을 벌했다(사사기 8:13-16).",
+   "definition_ko": "'초막들'이라는 뜻. (1) 이스라엘이 라암셋을 떠난 후 첫 진영지(출애굽기 12:37). (2) 요단강 동쪽 도시로 야곱이 이곳에 집을 짓고 가축을 위한 초막을 만들었으며(창세기 33:17), 훗날 기드온이 도움을 거부한 이곳 지도자들을 벌했다(사사기 8:5-16).",
    "hebrew_greek": "H5523",
    "origin": "Hastings/Schaff"
   },
@@ -45536,7 +45536,7 @@
    "term": "TAHATH(다핫)",
    "definition": "TA'HATH (station). 1. A Levite. 1 Chr 6:24, 1 Chr 6:37. 2, 3. Two Ephraimites. 1 Chr 7:20. TA'HATH (place, station), one of the camping-stations of Israel in the wilderness. Num 33:26-27. Palmer notes that the difficulty at Kibroth-hattaavah began with the mixed multitude, \"or riffraff,\" and he found a Wady Tahbmeh, and \"Tahmeh\" denotes, in Arabic, \"a mixed multitude in a state of sedition.\" Tahath is probably to be found in the region of the Tyahah Arabs, and at Jebel et-Tih.",
    "category": "지명",
-   "definition_ko": "(1) 마그헬롯과 다라 사이 이스라엘의 광야 진영지(민수기 33:26), 위치 미확인. (2) 고핫 가문 레위인으로 사무엘과 헤만의 조상(역대상 6:22). (3)(4) 에브라임의 아들 또는 손자(역대상 7:20).",
+   "definition_ko": "(1) 마그헬롯과 다라 사이 이스라엘의 광야 진영지(민수기 33:26), 위치 미확인. (2) 고핫 가문 레위인으로 사무엘과 헤만의 조상(역대상 6:24). (3)(4) 에브라임의 아들 또는 손자(역대상 7:20).",
    "hebrew_greek": "H8480",
    "origin": "Hastings/Schaff",
    "variants": [
@@ -46008,7 +46008,7 @@
    "term": "TELABIB(델아빕)",
    "definition": "TEL'ABIB (corn-hill), a city of Chaldaea or Babylonia, on the river Chebar, the residence of Ezekiel. Eze 3:15.",
    "category": "지명",
-   "definition_ko": "'옥수수 언덕'이라는 뜻으로 흔히 알려진 것과 달리 상부 메소포타미아가 아닌 갈대아(바빌로니아)의 한 도시로 추정된다(에스겔 3:16). 에스겔의 예언과 환상의 무대는 갈대아 본토였으며 그발강도 하볼강이 아니라 유브라데강의 한 지류였던 것으로 보인다.",
+   "definition_ko": "'옥수수 언덕'이라는 뜻으로 흔히 알려진 것과 달리 상부 메소포타미아가 아닌 갈대아(바빌로니아)의 한 도시로 추정된다(에스겔 3:15). 에스겔의 예언과 환상의 무대는 갈대아 본토였으며 그발강도 하볼강이 아니라 유브라데강의 한 지류였던 것으로 보인다.",
    "hebrew_greek": "H8512",
    "origin": "Hastings/Schaff"
   },
@@ -48171,7 +48171,7 @@
    "term": "UZZAH(웃사)",
    "definition": "UZ'ZAH (strength), a son of Abinadab, in whose house at Kirjath-jearim the ark had rested, was instantly killed by the immediate action of God for laying his hands upon the ark, while guiding the carriage on which it was brought to Jerusalem, in violation of the express provisions of the divine law. Num 4:15; 2 Sam 6:3-8. In 1 Chr 13:7-11 he is called Uzza.",
    "category": "인명",
-   "definition_ko": "'힘'이라는 뜻으로 아비나답의 아들이며, 다윗이 언약궤를 예루살렘으로 옮길 때 수레를 몰다가 소가 넘어지자 손을 뻗어 궤를 붙들었고 이는 율법 위반이었으므로 즉시 죽임을 당했다(사무엘하 6:2-11).",
+   "definition_ko": "'힘'이라는 뜻으로 아비나답의 아들이며, 다윗이 언약궤를 예루살렘으로 옮길 때 수레를 몰다가 소가 넘어지자 손을 뻗어 궤를 붙들었고 이는 율법 위반이었으므로 즉시 죽임을 당했다(사무엘하 6:3-11).",
    "hebrew_greek": "H5798",
    "origin": "Hastings/Schaff"
   },
@@ -48334,7 +48334,7 @@
    "term": "VASHTI(와스디)",
    "definition": "VASH'TI (Persian, a beautiful woman), queen of Persia, and the repudiated wife of Ahasuerus. Esth 1:9. See Esther.",
    "category": "인명",
-   "definition_ko": "아하수에로의 왕후로 왕의 잔치에 나오라는 명령을 거부해 폐위되었다(에스더 1:10-12).",
+   "definition_ko": "아하수에로의 왕후로 왕의 잔치에 나오라는 명령을 거부해 폐위되었다(에스더 1:9-12).",
    "hebrew_greek": "H2060",
    "origin": "Hastings/Schaff"
   },
@@ -49364,7 +49364,7 @@
    "term": "ZABAD(사밧)",
    "definition": "ZA'BAD (qift). One of David's mighty men. 1 Chr 2:36-37; 1 Chr 11:41. An Ephraimite slain by the Gathites. 1 Chr 7:21. One of the murderers of King Joash, 2 Chr 24:26 called Jozachar in 2 Kgs 12:21, probably the more correct form. 5, 6. Three who had foreign wives. Ezr 10:27, 1 Sam 15:33, Acts 2:43.",
    "category": "인명",
-   "definition_ko": "'선물'이라는 뜻. (1) 다윗의 용사 중 하나(역대상 11:41). (2) 다핫의 후손(역대상 7:21). (3) 유다 왕 요아스를 암살한 인물, 요사갈이라고도 불림(역대하 24:25,26). (4)~(6) 에스라서에 언급된 인물들.",
+   "definition_ko": "'선물'이라는 뜻. (1) 다윗의 용사 중 하나(역대상 11:41). (2) 다핫의 후손(역대상 7:21). (3) 유다 왕 요아스를 암살한 인물, 요사갈이라고도 불림(역대하 24:26,26). (4)~(6) 에스라서에 언급된 인물들.",
    "hebrew_greek": "H2066",
    "origin": "Hastings/Schaff"
   },
@@ -49745,7 +49745,7 @@
    "term": "ZEBADIAH(스바댜)",
    "definition": "ZEBADI'AH (gift of Jehovah). 1, 2, 3. Three Benjamites, sons of Beriah, 1 Chr 8:15, Elpaal, 1 Chr 8:17, and Jeroham of Gedor. 1 Chr 12:7. A Korhite Levite. 1 Chr 26:2. A Levite teaching the Law in the cities of Judah during the reign of Jehoshaphat. 2 Chr 17:8. A son of Asahel, the brother of Joab. 1 Chr 27:7. A son of Ishmael, of the house of Judah. 2 Chr 19:11. One who returned with Ezra. Ezr 8:8. A priest who had married a foreign wife after the return from Babylon. Ezr 10:20.",
    "category": "인명",
-   "definition_ko": "'여호와의 선물'이라는 뜻. (1) 요압의 형제 아사헬의 아들(역대상 27:7). (2) 여호사밧이 세운 교육 제도의 교사 중 하나인 레위인(역대하 17:7,8). (3) 이스마엘의 아들로 유다 집안의 통치자(역대하 19:8-11). (4) 브리아의 아들(역대상 8:15). (5) 고라 가문의 문지기(역대상 26:2).",
+   "definition_ko": "'여호와의 선물'이라는 뜻. (1) 요압의 형제 아사헬의 아들(역대상 27:7). (2) 여호사밧이 세운 교육 제도의 교사 중 하나인 레위인(역대하 17:8,8). (3) 이스마엘의 아들로 유다 집안의 통치자(역대하 19:11-11). (4) 브리아의 아들(역대상 8:15). (5) 고라 가문의 문지기(역대상 26:2).",
    "hebrew_greek": "H2069",
    "origin": "Hastings/Schaff"
   },
@@ -53336,5 +53336,484 @@
     "민수기 20:33"
    ]
   }
- ]
+ ],
+ "mismatch_20260907": {
+  "ko_fixed": [
+   {
+    "id": 1223,
+    "term": "DANIEL(다니엘)",
+    "before": "다니엘 1:3",
+    "after": "다니엘 1:7"
+   },
+   {
+    "id": 1450,
+    "term": "ELKANAH(엘가나)",
+    "before": "사무엘상 1:3",
+    "after": "사무엘상 1:1"
+   },
+   {
+    "id": 2181,
+    "term": "HILKIAH(힐기야)",
+    "before": "역대상 6:54",
+    "after": "역대상 6:45"
+   },
+   {
+    "id": 2414,
+    "term": "ITHRAN(이드란)",
+    "before": "역대상 7:30",
+    "after": "역대상 7:37"
+   },
+   {
+    "id": 2721,
+    "term": "JOSEPH(요셉)",
+    "before": "창세기 30:23",
+    "after": "창세기 30:24"
+   },
+   {
+    "id": 3189,
+    "term": "MEDAD(메닷)",
+    "before": "민수기 11:24",
+    "after": "민수기 11:26"
+   },
+   {
+    "id": 3214,
+    "term": "MELITA(멜리데)",
+    "before": "사도행전 28:3",
+    "after": "사도행전 28:1"
+   },
+   {
+    "id": 3371,
+    "term": "MOSERA(모세라)",
+    "before": "민수기 33:37",
+    "after": "민수기 33:30"
+   },
+   {
+    "id": 3513,
+    "term": "NICANOR(니가노르)",
+    "before": "사도행전 6:1",
+    "after": "사도행전 6:5"
+   },
+   {
+    "id": 3588,
+    "term": "OMRI(오므리)",
+    "before": "열왕기상 16:15",
+    "after": "열왕기상 16:16"
+   },
+   {
+    "id": 3635,
+    "term": "PADON(바돈)",
+    "before": "에스라 2:41",
+    "after": "에스라 2:44"
+   },
+   {
+    "id": 3752,
+    "term": "PETER(베드로)",
+    "before": "마태복음 16:17",
+    "after": "마태복음 16:18"
+   },
+   {
+    "id": 3764,
+    "term": "PHARAOHS DAUGHTER(바로의 딸)",
+    "before": "출애굽기 2:6",
+    "after": "출애굽기 2:10"
+   },
+   {
+    "id": 3837,
+    "term": "PITHON(비돈)",
+    "before": "역대상 8:36",
+    "after": "역대상 8:35"
+   },
+   {
+    "id": 4049,
+    "term": "REPHAH(레바)",
+    "before": "역대상 7:26",
+    "after": "역대상 7:25"
+   },
+   {
+    "id": 4214,
+    "term": "SCEVA(스게와)",
+    "before": "사도행전 19:13",
+    "after": "사도행전 19:14"
+   },
+   {
+    "id": 4304,
+    "term": "SHADRACH(사드락)",
+    "before": "다니엘 1:6",
+    "after": "다니엘 1:7"
+   },
+   {
+    "id": 4414,
+    "term": "SHEREBIAH(세레뱌)",
+    "before": "에스라 8:17",
+    "after": "에스라 8:18"
+   },
+   {
+    "id": 4553,
+    "term": "SIMEON(시므온)",
+    "before": "누가복음 2:29",
+    "after": "누가복음 2:25"
+   },
+   {
+    "id": 4618,
+    "term": "SOSTHENES(소스데네)",
+    "before": "사도행전 18:12",
+    "after": "사도행전 18:17"
+   },
+   {
+    "id": 4666,
+    "term": "SUCCOTH(숙곳)",
+    "before": "사사기 8:13",
+    "after": "사사기 8:5"
+   },
+   {
+    "id": 4734,
+    "term": "TAHATH(다핫)",
+    "before": "역대상 6:22",
+    "after": "역대상 6:24"
+   },
+   {
+    "id": 4783,
+    "term": "TELABIB(델아빕)",
+    "before": "에스겔 3:16",
+    "after": "에스겔 3:15"
+   },
+   {
+    "id": 5008,
+    "term": "UZZAH(웃사)",
+    "before": "사무엘하 6:2",
+    "after": "사무엘하 6:3"
+   },
+   {
+    "id": 5027,
+    "term": "VASHTI(와스디)",
+    "before": "에스더 1:10",
+    "after": "에스더 1:9"
+   },
+   {
+    "id": 5139,
+    "term": "ZABAD(사밧)",
+    "before": "역대하 24:25",
+    "after": "역대하 24:26"
+   },
+   {
+    "id": 5181,
+    "term": "ZEBADIAH(스바댜)",
+    "before": "역대하 17:7",
+    "after": "역대하 17:8"
+   },
+   {
+    "id": 5181,
+    "term": "ZEBADIAH(스바댜)",
+    "before": "역대하 19:8",
+    "after": "역대하 19:11"
+   },
+   {
+    "id": 694,
+    "term": "BETH-ANOTH(벧아놋)",
+    "before": "여호수아 15:58",
+    "after": "여호수아 15:59"
+   }
+  ],
+  "en_noted": [
+   {
+    "id": 62,
+    "term": "ABSALOMS PLACE(압살롬의 기념비)",
+    "notes": [
+     "※ 원문 오류: 2 Sam 18:8 → 사무엘하 18:18",
+     "※ 판정 근거: 본문 대조. 사무엘하 18:18에 「압살롬의 기념비」이(가) 나오나 사무엘하 18:8에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 160,
+    "term": "AHIMAAZ(아히마아스)",
+    "notes": [
+     "※ 원문 오류: 2 Sam 15:30 → 사무엘하 15:27",
+     "※ 판정 근거: 본문 대조. 사무엘하 15:27에 「아히마아스」이(가) 나오나 사무엘하 15:30에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 201,
+    "term": "ALEXANDER(알렉산더)",
+    "notes": [
+     "※ 원문 오류: 1 Tim 1:2 → 디모데전서 1:20",
+     "※ 원문 오류: 1 Tim 1:19 → 디모데전서 1:20",
+     "※ 판정 근거: 본문 대조. 디모데전서 1:20에 「알렉산더」이(가) 나오나 디모데전서 1:2·19에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 533,
+    "term": "BABYLON(바벨론)",
+    "notes": [
+     "※ 원문 오류: Gen 10:1 → 창세기 10:10",
+     "※ 판정 근거: 본문 대조. 창세기 10:10에 「바벨론」이(가) 나오나 창세기 10:1에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 704,
+    "term": "BETH-CAR(벧갈)",
+    "notes": [
+     "※ 원문 오류: 1 Sam 7:1 → 사무엘상 7:11",
+     "※ 판정 근거: 본문 대조. 사무엘상 7:11에 「벧갈」이(가) 나오나 사무엘상 7:1에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 768,
+    "term": "BINNUI(빈누이)",
+    "notes": [
+     "※ 원문 오류: Ezr 8:23 → 에스라 8:33",
+     "※ 판정 근거: 본문 대조. 에스라 8:33에 「빈누이」이(가) 나오나 에스라 8:23에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 866,
+    "term": "BUNNI(분니)",
+    "notes": [
+     "※ 원문 오류: Neh 10:16 → 느헤미야 10:15",
+     "※ 판정 근거: 본문 대조. 느헤미야 10:15에 「분니」이(가) 나오나 느헤미야 10:16에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 975,
+    "term": "CHANAAN(가나안)",
+    "notes": [
+     "※ 원문 오류: Acts 7:1 → 사도행전 7:11",
+     "※ 판정 근거: 본문 대조. 사도행전 7:11에 「가나안」이(가) 나오나 사도행전 7:1에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1263,
+    "term": "DERBE(더베)",
+    "notes": [
+     "※ 원문 오류: Acts 14:16 → 사도행전 14:6",
+     "※ 판정 근거: 본문 대조. 사도행전 14:6에 「더베」이(가) 나오나 사도행전 14:16에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1427,
+    "term": "ELIEZER(엘리에서)",
+    "notes": [
+     "※ 원문 오류: 1 Chr 27:10 → 역대상 27:16",
+     "※ 판정 근거: 본문 대조. 역대상 27:16에 「엘리에서」이(가) 나오나 역대상 27:10에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1514,
+    "term": "EPHAH(에바)",
+    "notes": [
+     "※ 원문 오류: 1 Chr 1:38 → 역대상 1:33",
+     "※ 판정 근거: 본문 대조. 역대상 1:33에 「에바」이(가) 나오나 역대상 1:38에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1516,
+    "term": "EPHER(에벨)",
+    "notes": [
+     "※ 원문 오류: 1 Chr 1:32 → 역대상 1:33",
+     "※ 판정 근거: 본문 대조. 역대상 1:33에 「에벨」이(가) 나오나 역대상 1:32에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1547,
+    "term": "ESHEK(에섹)",
+    "notes": [
+     "※ 원문 오류: 1 Chr 8:29 → 역대상 8:39",
+     "※ 판정 근거: 본문 대조. 역대상 8:39에 「에섹」이(가) 나오나 역대상 8:29에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1549,
+    "term": "ESHTEMOA(에스드모아)",
+    "notes": [
+     "※ 원문 오류: 1 Sam 30:31 → 사무엘상 30:28",
+     "※ 판정 근거: 본문 대조. 사무엘상 30:28에 「에스드모아」이(가) 나오나 사무엘상 30:31에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1602,
+    "term": "EZEM(에셈)",
+    "notes": [
+     "※ 원문 오류: Josh 19:8 → 여호수아 19:3",
+     "※ 판정 근거: 본문 대조. 여호수아 19:3에 「에셈」이(가) 나오나 여호수아 19:8에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1628,
+    "term": "FELIX(벨릭스)",
+    "notes": [
+     "※ 원문 오류: Acts 24:26 → 사도행전 24:25",
+     "※ 판정 근거: 본문 대조. 사도행전 24:25에 「벨릭스」이(가) 나오나 사도행전 24:26에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1830,
+    "term": "GILGAL(길갈)",
+    "notes": [
+     "※ 원문 오류: 2 Kgs 2:2 → 열왕기하 2:1",
+     "※ 판정 근거: 본문 대조. 열왕기하 2:1에 「길갈」이(가) 나오나 열왕기하 2:2에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 1959,
+    "term": "HAMATH(하맛)",
+    "notes": [
+     "※ 원문 오류: 1 Kgs 8:6 → 열왕기상 8:65",
+     "※ 판정 근거: 본문 대조. 열왕기상 8:65에 「하맛」이(가) 나오나 열왕기상 8:6에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2338,
+    "term": "IMRAH(이므라)",
+    "notes": [
+     "※ 원문 오류: 1 Chr 7:30 → 역대상 7:36",
+     "※ 판정 근거: 본문 대조. 역대상 7:36에 「이므라」이(가) 나오나 역대상 7:30에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2484,
+    "term": "JAIR(야일)",
+    "notes": [
+     "※ 원문 오류: 1 Chr 2:21 → 역대상 2:22",
+     "※ 판정 근거: 본문 대조. 역대상 2:22에 「야일」이(가) 나오나 역대상 2:21에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2486,
+    "term": "JAIRUS(야이로)",
+    "notes": [
+     "※ 원문 오류: Mark 5:42 → 마가복음 5:22",
+     "※ 판정 근거: 본문 대조. 마가복음 5:22에 「야이로」이(가) 나오나 마가복음 5:42에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2675,
+    "term": "JOAB(요압)",
+    "notes": [
+     "※ 원문 오류: 2 Sam 2:23 → 사무엘하 2:13",
+     "※ 판정 근거: 본문 대조. 사무엘하 2:13에 「요압」이(가) 나오나 사무엘하 2:23에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2683,
+    "term": "JOCHEBED(요게벳)",
+    "notes": [
+     "※ 원문 오류: Num 26:69 → 민수기 26:59",
+     "※ 판정 근거: 본문 대조. 민수기 26:59에 「요게벳」이(가) 나오나 민수기 26:69에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2713,
+    "term": "JORAM(요람)",
+    "notes": [
+     "※ 원문 오류: 2 Kgs 8:1 → 열왕기하 8:16",
+     "※ 원문 오류: 2 Kgs 8:24 → 열왕기하 8:16",
+     "※ 판정 근거: 본문 대조. 열왕기하 8:16에 「요람」이(가) 나오나 열왕기하 8:1·24에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2840,
+    "term": "KIR-HARASETH(길하레셋)",
+    "notes": [
+     "※ 원문 오류: 2 Kgs 3:26 → 열왕기하 3:25",
+     "※ 판정 근거: 본문 대조. 열왕기하 3:25에 「길하레셋」이(가) 나오나 열왕기하 3:26에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3084,
+    "term": "MAHANAIM(마하나임)",
+    "notes": [
+     "※ 원문 오류: Gen 32:1 → 창세기 32:2",
+     "※ 판정 근거: 본문 대조. 창세기 32:2에 「마하나임」이(가) 나오나 창세기 32:1에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3207,
+    "term": "MELCHI(멜기)",
+    "notes": [
+     "※ 원문 오류: Luke 3:21 → 누가복음 3:24",
+     "※ 판정 근거: 본문 대조. 누가복음 3:24에 「멜기」이(가) 나오나 누가복음 3:21에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3270,
+    "term": "METHUSELAH(므두셀라)",
+    "notes": [
+     "※ 원문 오류: Gen 5:27 → 창세기 5:21",
+     "※ 판정 근거: 본문 대조. 창세기 5:21에 「므두셀라」이(가) 나오나 창세기 5:27에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3275,
+    "term": "MIAMIN(미야민)",
+    "notes": [
+     "※ 원문 오류: Neh 12:6 → 느헤미야 12:5",
+     "※ 판정 근거: 본문 대조. 느헤미야 12:5에 「미야민」이(가) 나오나 느헤미야 12:6에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3356,
+    "term": "MOLADAH(몰라다)",
+    "notes": [
+     "※ 원문 오류: Josh 15:21 → 여호수아 15:26",
+     "※ 판정 근거: 본문 대조. 여호수아 15:26에 「몰라다」이(가) 나오나 여호수아 15:21에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3473,
+    "term": "NEHEMIAH(느헤미야)",
+    "notes": [
+     "※ 원문 오류: Neh 1:4 → 느헤미야 1:1",
+     "※ 판정 근거: 본문 대조. 느헤미야 1:1에 「느헤미야」이(가) 나오나 느헤미야 1:4에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3636,
+    "term": "PAGIEL(바기엘)",
+    "notes": [
+     "※ 원문 오류: Num 1:18 → 민수기 1:13",
+     "※ 판정 근거: 본문 대조. 민수기 1:13에 「바기엘」이(가) 나오나 민수기 1:18에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 3788,
+    "term": "PHILOLOGUS(빌롤로고)",
+    "notes": [
+     "※ 원문 오류: Rom 16:16 → 로마서 16:15",
+     "※ 판정 근거: 본문 대조. 로마서 16:15에 「빌롤로고」이(가) 나오나 로마서 16:16에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 4082,
+    "term": "RIMMON(림몬)",
+    "notes": [
+     "※ 원문 오류: Josh 15:21 → 여호수아 15:32",
+     "※ 원문 오류: Josh 15:47 → 여호수아 15:32",
+     "※ 판정 근거: 본문 대조. 여호수아 15:32에 「림몬」이(가) 나오나 여호수아 15:21·47에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 4175,
+    "term": "SAMOS(기오 섬)",
+    "notes": [
+     "※ 원문 오류: Acts 20:16 → 사도행전 20:15",
+     "※ 판정 근거: 본문 대조. 사도행전 20:15에 「기오 섬」이(가) 나오나 사도행전 20:16에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 4269,
+    "term": "SENNACHERIB(산헤립)",
+    "notes": [
+     "※ 원문 오류: 2 Kgs 18:14 → 열왕기하 18:13",
+     "※ 판정 근거: 본문 대조. 열왕기하 18:13에 「산헤립」이(가) 나오나 열왕기하 18:14에는 나오지 않는다."
+    ]
+   },
+   {
+    "id": 2117,
+    "term": "HELKATH-HAZZURIM(헬갓핫수림)",
+    "notes": [
+     "※ 원문 오류: 2 Sam 2:13 → 사무엘하 2:16",
+     "※ 판정 근거: 본문 대조. 사무엘하 2:16에 「헬갓 핫수림」이 나오나 2 Sam 2:13에는 나오지 않는다."
+    ]
+   }
+  ]
+ }
 }
