@@ -3750,6 +3750,7 @@
 
       // 클릭한 태그의 정확한 구절 위치로 어느 인물인지 명확히 구분해서 조회 (동명이인/개명 대응)
       handleClickAt: function(name, book, chapter, verse) {
+        if (typeof wpSetRef === 'function') wpSetRef(book, chapter, verse);
         const key = `${book}-${chapter}-${verse}`;
         const p = personVerseIndex[key] && personVerseIndex[key][name];
         if (!p) { showToast(`'${name}' 인물 정보를 찾을 수 없습니다.`, 'info'); return; }
@@ -3881,6 +3882,7 @@
       },
 
       handleClick: function(name, bookId, chapter, vNum) {
+        if (typeof wpSetRef === 'function') wpSetRef(bookId, chapter, vNum);
         const t = termIndex[name];
         if (!t) { showToast(`'${name}' 용어 정보를 찾을 수 없습니다.`, 'info'); return; }
         const bookObjForTerm = BIBLE_BOOKS.find(b => b.id === bookId);
@@ -5439,6 +5441,15 @@
       },
 
       handleClick: function(name, currentContext) {
+        /* 지명 태그는 절 번호를 넘겨받지 않는다. 지금 보고 있는 장의 첫 절을
+           기준으로 삼아 구약·신약만이라도 바르게 가리게 한다. */
+        try {
+          const mm = String(currentContext || '').match(/^(.+?)\s*(\d+)/);
+          if (mm) {
+            const bo = BIBLE_BOOKS.find(b => b.abbr === mm[1] || b.name === mm[1]);
+            if (bo && typeof wpSetRef === 'function') wpSetRef(bo.id, parseInt(mm[2], 10), 0);
+          }
+        } catch (e) {}
         // 동명이지 분기가 필요한 경우
         if (this.disambiguationMap[name]) {
           const candidates = this.disambiguationMap[name];
@@ -11650,6 +11661,7 @@
       if (!words.length) { showToast('원전분해 정보를 찾을 수 없습니다.', 'info'); return; }
       if (idx == null || idx < 0 || idx >= words.length) idx = 0;
       _wpState = { bookId, chapter, vNum, idx, words };
+      if (typeof wpSetRef === 'function') wpSetRef(bookId, chapter, vNum);
       wpDraw();
     }
 
@@ -11770,12 +11782,40 @@
        ══════════════════════════════════════════════════════════════ */
     const _wpAtOpen = { u: false, d: false, s: false };
 
-    function wpAttach(panelId, rawCode) {
+    /* 용어·인명·지명의 스트롱 칸에는 코드가 여럿 들어 있을 수 있다.
+       예) 「아내」 = G1135,G4632,H0802,H7695 (히브리 둘 + 헬라 둘)
+       어느 것을 쓸지는 그 절의 원전분해에 실제로 나온 코드로 고른다.
+       원전분해가 없으면 절이 구약이면 H를, 신약이면 G를 고른다. */
+    /* 본문에서 마지막으로 누른 절. 창이 뜰 때 어느 절인지 알려면 필요하다.
+       각 엔진의 showPopup 서명을 바꾸면 다른 호출처가 깨지므로 여기에 적어 둔다. */
+    let _wpRef = { bookId: 0, chapter: 0, vNum: 0 };
+    window.wpSetRef = function(b, c, v) { _wpRef = { bookId: b | 0, chapter: c | 0, vNum: v | 0 }; };
+
+    function wpPickCode(rawCode, bookId, chapter, vNum) {
+      const codes = String(rawCode || '').toUpperCase().match(/[HG]\d{1,5}/g);
+      if (!codes || !codes.length) return '';
+      if (codes.length === 1) return codes[0];
+      const norm = t => { const m = t.match(/^([HG])0*(\d+)/); return m ? m[1] + parseInt(m[2], 10) : ''; };
+
+      /* 1) 그 절의 원전분해에 실제로 나온 코드가 있으면 그것을 쓴다 */
+      if (bookId && typeof getInterlinearWordsFull === 'function') {
+        try {
+          const used = getInterlinearWordsFull(bookId, chapter, vNum).map(w => norm(w.code));
+          const hit = codes.find(c => used.indexOf(norm(c)) >= 0);
+          if (hit) return hit;
+        } catch (e) {}
+      }
+      /* 2) 없으면 구약은 H, 신약은 G */
+      const want = (bookId && bookId >= 40) ? 'G' : 'H';
+      return codes.find(c => c[0] === want) || codes[0];
+    }
+
+    function wpAttach(panelId, rawCode, bookId, chapter, vNum) {
       const panel = document.getElementById(panelId);
       if (!panel) return;
-      const m = String(rawCode || '').match(/[HG]\d{1,5}/);
-      if (!m) return;                       // 스트롱 코드가 없으면 아무것도 붙이지 않는다
-      const code = m[0].toUpperCase();
+      if (!bookId) { bookId = _wpRef.bookId; chapter = _wpRef.chapter; vNum = _wpRef.vNum; }
+      const code = wpPickCode(rawCode, bookId, chapter, vNum);
+      if (!code) return;                    // 스트롱 코드가 없으면 아무것도 붙이지 않는다
 
       let box = panel.querySelector('.wp-attach');
       if (!box) { box = document.createElement('div'); box.className = 'wp-attach'; panel.appendChild(box); }
@@ -12857,7 +12897,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-9`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-10`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
