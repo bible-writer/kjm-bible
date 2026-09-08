@@ -494,6 +494,14 @@
     .term-verse-ref:hover {
       color: #1d4ed8;
     }
+    /* 원문 오류를 우리가 판정해 고쳐 넣은 성구 — 인쇄본에 그대로 있는 것이 아니므로 흐리게 보인다 */
+    .term-verse-ref.vref-corrected {
+      color: #94a3b8;
+      text-decoration-style: dashed;
+    }
+    .term-verse-ref.vref-corrected:hover {
+      color: #64748b;
+    }
 
     /* ═══════════════════════════════════════════════════
        비교성경 패널 UI (다중 번역 병렬 보기)
@@ -3324,7 +3332,37 @@
       });
       return out.length ? out : [{ v: 1, to: 1 }];
     }
-    function linkifyVerseRefs(escapedText) {
+    // 「※ 원문 오류: … → 여호수아 15:35」 주석 덩이에서 우리가 고쳐 넣은 성구를 뽑아
+    // 'bookId:장:절' 꼴 열쇠 집합으로 돌려준다. 본문에서 같은 성구를 흐리게 하는 데 쓴다.
+    function correctedVerseKeys(notes) {
+      const set = new Set();
+      if (!notes) return set;
+      const lines = notes.split('\n');
+      for (const ln of lines) {
+        if (!/^※ 원문 (?:오류|결손|훼손)/.test(ln)) continue;
+        const arrow = ln.indexOf('→');
+        if (arrow < 0) continue;
+        const tail = ln.slice(arrow + 1);
+        let m;
+        const re = new RegExp(BOOK_REF_REGEX.source, 'g');
+        let lastBid = null;
+        while ((m = re.exec(tail)) !== null) {
+          const g = m.groups || {};
+          if (g.book) {
+            const bid = BOOK_REF_MAP[g.book];
+            if (!bid) continue;
+            lastBid = bid;
+            if (!g.bverse) continue;   // 「여호수아 15장」처럼 절이 없는 꼴은 흐리게 하지 않는다
+            vrefParts(g.bverse).forEach(r => set.add(bid + ':' + parseInt(g.bchap, 10) + ':' + r.v));
+          } else if (g.cchap && lastBid) {
+            vrefParts(g.cverse).forEach(r => set.add(lastBid + ':' + parseInt(g.cchap, 10) + ':' + r.v));
+          }
+        }
+      }
+      return set;
+    }
+
+    function linkifyVerseRefs(escapedText, dimSet) {
       if (!escapedText) return '';
       let lastBookId = null, lastEnd = -1, gid = null;
       if (vrefSeq > 20000) { for (const k in VREF_GROUPS) delete VREF_GROUPS[k]; vrefSeq = 0; } // 오래 쓰면 비운다
@@ -3349,7 +3387,8 @@
           lastBookId = bookId;
           const parts = vrefParts(groups.bverse);
           const g = add(bookId, chapter, parts, offset, whole.length);
-          return `<span class="term-verse-ref" data-bid="${bookId}" data-ch="${chapter}" data-v="${parts[0].v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${whole}</span>`;
+          const dim1 = (dimSet && dimSet.has(bookId + ':' + chapter + ':' + parts[0].v)) ? ' vref-corrected' : '';
+          return `<span class="term-verse-ref${dim1}" data-bid="${bookId}" data-ch="${chapter}" data-v="${parts[0].v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${whole}</span>`;
         }
         if (groups.cchap && lastBookId) {
           const chapter = parseInt(groups.cchap, 10);
@@ -3358,7 +3397,8 @@
           const parts = vrefParts(groups.cverse);
           const refPart = whole.slice(groups.sep.length);
           const g = add(lastBookId, chapter, parts, offset + groups.sep.length, refPart.length);
-          return `${groups.sep}<span class="term-verse-ref" data-bid="${lastBookId}" data-ch="${chapter}" data-v="${parts[0].v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${refPart}</span>`;
+          const dim2 = (dimSet && dimSet.has(lastBookId + ':' + chapter + ':' + parts[0].v)) ? ' vref-corrected' : '';
+          return `${groups.sep}<span class="term-verse-ref${dim2}" data-bid="${lastBookId}" data-ch="${chapter}" data-v="${parts[0].v}" onclick="showVerseGroupPopup(event,'${g.gid}',${g.idx})">${refPart}</span>`;
         }
         return whole;
       });
@@ -6085,7 +6125,7 @@
         const koBlock = (e.definition_ko && !isEditing)
           ? `<div style="display:flex;gap:4px;align-items:flex-start;margin-top:6px">
                <div style="flex:1;min-width:0">
-                 <div style="font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyVerseRefs(escHtml(koParts.body))}</div>${noteBlock}
+                 <div style="font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyVerseRefs(escHtml(koParts.body), correctedVerseKeys(koParts.notes))}</div>${noteBlock}
                </div>
                <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
              </div>`
@@ -12897,7 +12937,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260907-11`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260910-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
