@@ -5805,7 +5805,7 @@
     const RAWDICT_SOURCES = [
       { key: 'easton',    label: 'Easton',    file: './easton_full.json',    storeKey: 'easton_full_dict',    editsKey: 'easton_local_edits' },
       { key: 'smith',     label: 'Smith',     file: './smith_full.json',     storeKey: 'smith_full_dict',     editsKey: 'smith_local_edits' },
-      { key: 'hastschaff', label: 'Hastings/Schaff', file: './hastings_schaff_full.json', storeKey: 'hastings_schaff_full_dict', editsKey: 'hastings_schaff_local_edits' },
+      { key: 'hastschaff', label: 'Schaff', file: './schaff_full.json', storeKey: 'hastings_schaff_full_dict', editsKey: 'hastings_schaff_local_edits' },
       { key: 'hitchcock', label: 'Hitchcock', file: './hitchcock_full.json', storeKey: 'hitchcock_full_dict', editsKey: 'hitchcock_local_edits' }
     ];
     // 사전별 데이터와 편집내역을 한곳에 모아둔다 (rawDictData['easton'] 형태로 접근)
@@ -6070,7 +6070,7 @@
       const KO_NAME = {
         easton: '이스턴 성경사전(Easton\u2019s Bible Dictionary)',
         smith:  '스미스 성경사전(Smith\u2019s Bible Dictionary)',
-        hastschaff: '해스팅스·샤프 성경사전(Hastings / Schaff)',
+        hastschaff: '샤프 성경사전(Schaff\u2019s Bible Dictionary, 1880)',
         hitchcock:  '히치콕 성경이름사전(Hitchcock\u2019s Bible Names)'
       };
       const label = KO_NAME[srcKey]
@@ -6476,7 +6476,7 @@
     const RAWDICT_SOURCE_TEXT = {
       easton:    "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain)",
       smith:     "Smith's Bible Dictionary (William Smith, 1863, Public Domain)",
-      hastschaff: "Hastings Dictionary of the Bible / Schaff's Bible Dictionary (CCEL, Public Domain) - 원본 XML 동일, 통합본",
+      hastschaff: "Schaff\'s Bible Dictionary (Philip Schaff, 1880, Public Domain) - CCEL 전자본",
       hitchcock: "Hitchcock's Bible Names Dictionary (Roswell D. Hitchcock, 1869, Public Domain)"
     };
     async function exportRawDictJson(src) {
@@ -9146,7 +9146,7 @@
         eastonLocalEdits: eastonLocalEdits,
         smithFullDict: smithFullDict,
         smithLocalEdits: smithLocalEdits,
-        // 새로 추가한 사전들(Hastings·Schaff·Hitchcock 등)은 원문이 공개 자료라 다시 받을 수 있으므로,
+        // 새로 추가한 사전들(Schaff·Hitchcock 등)은 원문이 공개 자료라 다시 받을 수 있으므로,
         // 백업 용량을 아끼기 위해 "내가 직접 고친 항목"만 담는다.
         rawDictUserEdits: (function() {
           const out = {};
@@ -12964,7 +12964,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260910-2`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260910-3`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
