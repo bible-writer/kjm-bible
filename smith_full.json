@@ -1,5 +1,5 @@
 {
- "version": "1.314.0",
+ "version": "1.314.1",
  "date": "2026-09-10",
  "count": 4561,
  "source": "Smith's Bible Dictionary (William Smith, 1884, CCEL edition)",
@@ -33715,7 +33715,7 @@
    "term": "Picture(형상)",
    "definition": "In two of the three passages in which “picture” is used in the Authorized Version it denotes idolatrous representations, either independent images or more usually stones “portrayed,” i.e. sculptured in low relief, or engraved and colored. (Ezekiel 23:14) Layard, Nin. and Rob. ii. 306, 308. Moveable pictures, in the modern sense, were doubtless unknown to the Jews. The “pictures of silver” of (Proverbs 25:11) were probably well surfaces or cornices with carvings.",
    "category": "용어",
-   "definition_ko": "흠정역에서 「형상」이라는 말이 쓰인 세 곳 가운데 둘에서 그것은 우상 숭배의 그림을 가리키니, 홀로 선 신상이거나 더 흔하게는 「새긴」 돌 곧 얕게 돋을새김하거나 새겨 빛깔을 입힌 돌이다(에스겔 23:14; 레이어드 『니느웨와 바벨론』 2권 306,308쪽). 오늘 뜻의 옮길 수 있는 그림은 유대인에게 틀림없이 알려지지 않았다. 잠언 25:11의 「은 쟁반」은 아마 새김을 넣은 벽면이나 처마였을 것이다.",
+   "definition_ko": "흠정역에서 「형상」이라는 말이 쓰인 세 곳 가운데 둘에서 그것은 우상 숭배의 그림을 가리키니, 홀로 선 신상이거나 더 흔하게는 「새긴」 돌 곧 얕게 돋을새김하거나 새겨 빛깔을 입힌 돌이다(에스겔 23:14; 레이어드 『니느웨와 그 유적』 2권 306,308쪽). 오늘 뜻의 옮길 수 있는 그림은 유대인에게 틀림없이 알려지지 않았다. 잠언 25:11의 「은 쟁반」은 아마 새김을 넣은 벽면이나 처마였을 것이다.\n※ 원문 결손: Layard, Nin. and Rob. → 『니느웨와 그 유적』(Nineveh and its Remains)\n※ 판정 근거: 책 이름 줄임말 「Rob.」는 뜻이 없는 꼴이다. 레이어드의 책 가운데 권 번호 「ii.」가 붙는 두 권짜리는 「Nineveh and its Remains」(1849)이고, 「Nineveh and Babylon」(1853)은 한 권이다. 그러므로 「Rem.」이 「Rob.」로 깨진 것으로 보인다. 앞선 한글은 이를 『니느웨와 바빌론』으로 옮겼고 오늘 앞 판에서 『니느웨와 바벨론』으로 고쳤으나, 둘 다 틀린 책 이름이었으므로 바로잡는다.\n※ 원문 대조: CCEL 전자본(_smith_full.txt)에도 「Nin. and Rob.」이다. 인쇄면은 보지 않았다.",
    "hebrew_greek": "H4906,H7914",
    "retrans": "v2",
    "pdf_page": 800
@@ -45878,6 +45878,11 @@
    "version": "1.314.0",
    "date": "2026-09-10",
    "note": "성경 지명을 개역개정 꼴로(샤프와 같은 규칙) — 79자리 56항목. 옛 나라는 바사, 오늘의 나라는 페르시아(대표님 판정). 이름 풀이·근현대 스페인·식물 이름은 두고, 그리스·스바랏의 스페인·이스턴 힛데겔 항목의 티그리스는 보류. 표제어 4219 Tigris(에덴의 강)→Tigris(힛데겔)."
+  },
+  {
+   "version": "1.314.1",
+   "date": "2026-09-10",
+   "note": "3377 Picture — 레이어드 책 이름을 『니느웨와 그 유적』으로 바로잡음(「Nin. and Rob.」 = Nineveh and its Remains, 권 번호로 판단)."
   }
  ],
  "strong_headword_rule_20260910": {

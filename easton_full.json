@@ -1,5 +1,5 @@
 {
- "version": "1.18.1",
+ "version": "1.18.2",
  "date": "2026-09-10",
  "count": 3964,
  "source": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축",
@@ -34298,7 +34298,7 @@
    "id": 3443,
    "term": "Silver",
    "definition": "used for a great variety of purposes, as may be judged from the frequent references to it in Scripture. It first appears in commerce in Genesis 13:2; 23:15, 16. It was largely employed for making vessels for  the sanctuary in the wilderness (Exodus 26:19; 27:17; Numbers 7:13, 19; 10:2). There is no record of its having been found in Syria or Palestine. It was brought in large quantities by foreign merchants from abroad, from Spain and India and other countries probably.",
-   "definition_ko": "성경에 자주 언급되는 것으로 미루어 알 수 있듯 매우 여러 가지로 쓰였다. 장사에서는 창세기 13:2과 창세기 23:15,16에 처음 나온다. 광야의 성소에서 쓸 기구를 만드는 데 많이 쓰였다(출애굽기 26:19; 출애굽기 27:17; 민수기 7:13,19; 민수기 10:2). 수리아나 팔레스타인에서 은이 났다는 기록은 없다. 외국 상인들이 아마도 서바나과 인도와 다른 나라들에서 많은 양을 들여왔다.",
+   "definition_ko": "성경에 자주 언급되는 것으로 미루어 알 수 있듯 매우 여러 가지로 쓰였다. 장사에서는 창세기 13:2과 창세기 23:15,16에 처음 나온다. 광야의 성소에서 쓸 기구를 만드는 데 많이 쓰였다(출애굽기 26:19; 출애굽기 27:17; 민수기 7:13,19; 민수기 10:2). 수리아나 팔레스타인에서 은이 났다는 기록은 없다. 외국 상인들이 아마도 서바나와 인도와 다른 나라들에서 많은 양을 들여왔다.",
    "category": "용어",
    "hebrew_greek": "G0694,G0696,H3701,H3702",
    "retrans": "v2",
@@ -39631,6 +39631,11 @@
    "version": "1.18.1",
    "date": "2026-09-10",
    "note": "1785 Hiddekel — 강 설명의 「티그리스는」을 「힛데겔은」으로(대표님 판정, 샤프 2173과 같게). 이름 풀이 「빠른 티그리스」는 그대로."
+  },
+  {
+   "version": "1.18.2",
+   "date": "2026-09-10",
+   "note": "지명 뒤 조사를 받침에 맞춤: 3443 서바나과→서바나와. 검사기에 지명 조사 검사를 더함."
   }
  ],
  "strong_headword_rule_20260910": {
