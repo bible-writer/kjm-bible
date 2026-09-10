@@ -49,19 +49,6 @@ header .sp{flex:1}
 .btn.red{border-color:var(--red);color:var(--red)}
 .btn.red:hover{background:var(--red);color:var(--paper-lit)}
 
-/* ── 영문 MD5 (파일 전체의 사실이라 소견 목록이 아니라 머리에 둔다) ── */
-.md5box{display:inline-flex;align-items:baseline;gap:.4rem;font-size:.8rem}
-.md5box .sub{font-size:.78rem}
-#md5now{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.78rem;letter-spacing:.01em}
-#md5base{
-  border:1px solid var(--rule);background:var(--paper);color:var(--ink);
-  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.72rem;
-  padding:.12rem .35rem;width:15em;
-}
-#md5say{font-size:.78rem;font-weight:600}
-#md5say.same{color:var(--green)}
-#md5say.diff{color:var(--red)}
-
 /* ── 큰 틀 ── */
 main{flex:1;display:flex;min-height:0}
 #rail{
@@ -98,31 +85,6 @@ main{flex:1;display:flex;min-height:0}
 .refbox.filled .reflab{color:var(--green)}
 .refbox.filled input{border-color:var(--green);background:rgba(63,107,74,.07)}
 .refbox.filled .refhint{color:var(--green)}
-/* ── 인쇄본 면 ──
-   영문 칸 아래에 그 항목이 실린 인쇄면을 그대로 띄운다.
-   PDF 는 파일에 담지 않고 브라우저에 한 번 붙여 쓴다. */
-.pdfbar{
-  flex:none; display:flex; align-items:center; gap:.5rem; flex-wrap:wrap;
-  border-top:1px solid var(--rule); padding:.35rem 0 .3rem; font-size:.82rem;
-}
-.pdfbar .pg{ font-weight:600 }
-.pdfbar .hint{ font-size:.78rem }
-.pdfwrap{ flex:none; border:1px solid var(--rule); background:var(--paper-lit); height:52vh; }
-.pdfwrap iframe{ width:100%; height:100%; border:0; display:block }
-/* ── ※ 주석 잉크 ──
-   원문이 틀린 것은 붉은 잉크, 판정을 기다리는 것은 푸른 잉크,
-   옮김에 관한 밝힘은 누런 잉크로 둔다. 인쇄면 쪽수는 굵게 하여 바로 찾게 한다. */
-.konote{
-  margin:.5rem 0 0; padding:.3rem 0 .3rem .6rem;
-  border-left:2px solid var(--rule); font-size:.9em; line-height:1.55;
-  color:var(--ink-soft); white-space:pre-wrap;
-}
-.konote.err{ border-left-color:var(--red); color:var(--red) }
-.konote.ask{ border-left-color:var(--blue); color:var(--blue) }
-.konote.say{ border-left-color:var(--ochre); color:var(--ochre) }
-.konote .pg{ font-weight:600; text-decoration:underline }
-.notewrap{ margin-top:.7rem; border-top:1px solid var(--rule); padding-top:.4rem }
-.notewrap .nhead{ font-size:.78rem; color:var(--ink-soft); letter-spacing:.04em }
 /* 본문에 붙은 참조 구절 */
 .refmark{color:var(--green);font-weight:400}
 .refmark .cit{border-bottom-color:var(--green);color:var(--green)}
@@ -181,6 +143,16 @@ main{flex:1;display:flex;min-height:0}
   padding:.16rem 0;cursor:pointer;border:none;background:none;width:100%;text-align:left;
 }
 .kind:hover .kn{text-decoration:underline}
+.notes{margin-top:1.1em;border-top:1px dashed #cbd5e1;padding-top:.6em}
+.note{margin:.45em 0;padding:.35em .6em;border-left:3px solid;font-size:.92em;line-height:1.65}
+.note.ink-red{border-color:#b91c1c;color:#7f1d1d;background:#fef2f2}
+.note.ink-blue{border-color:#1d4ed8;color:#1e3a8a;background:#eff6ff}
+.note.ink-ochre{border-color:#a16207;color:#713f12;background:#fefce8}
+.note.ink-gray{border-color:#94a3b8;color:#334155;background:#f8fafc}
+.note u{text-decoration-thickness:1.5px;text-underline-offset:2px}
+.pdfbox{margin-top:.8em;border-top:1px solid #e2e8f0;padding-top:.5em}
+.pdfbox .pbar{display:flex;gap:.5em;align-items:center;font-size:.85em;color:#475569;margin-bottom:.35em}
+.pdfbox iframe{width:100%;height:70vh;border:1px solid #cbd5e1;background:#fff}
 .kind[aria-current="true"] .kn{font-weight:600}
 .kind[aria-current="true"]{background:rgba(30,42,51,.06);margin:0 -.5rem;padding-left:.5rem;padding-right:.5rem}
 .kn{font-size:.9rem}
@@ -358,12 +330,6 @@ header .q:disabled{opacity:.45}
 <header>
   <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260910-1</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
-  <span class="md5box">
-    <span class="sub">영문 MD5</span>
-    <span id="md5now">—</span>
-    <input id="md5base" placeholder="기준값" spellcheck="false" title="기준 MD5를 넣어 두면 열 때마다 대조합니다">
-    <span id="md5say"></span>
-  </span>
   <span class="sp"></span>
   <button class="btn" id="open">파일 열기</button>
   <button class="btn" id="fromGit">깃허브에서 열기</button>
@@ -375,8 +341,8 @@ header .q:disabled{opacity:.45}
   <button class="btn" id="expEnc" disabled>암호본 내려받기</button>
   <button class="btn" id="expCsv" disabled>소견표 내려받기</button>
   <input type="file" id="file" accept=".json" hidden>
-  <button class="btn" id="pdfpick">인쇄본 붙이기</button>
-  <input type="file" id="pdffile" accept=".pdf" hidden>
+  <button class="btn" id="pdfBtn" title="PDF 는 파일에 담기지 않고 이 창에서만 씁니다">인쇄본 붙이기</button>
+  <input type="file" id="pdfFile" accept=".pdf,application/pdf" hidden>
   <input id="q" class="q" placeholder="표제어 · id 찾기" disabled>
   <label class="mapset">성경지도 <input id="mapbase" value="https://bible-writer.github.io/kjm-bible/map.html"></label>
 </header>
@@ -389,7 +355,7 @@ header .q:disabled{opacity:.45}
     <div id="textcol">
     <div class="empty">
       <h3>사전 파일을 여십시오</h3>
-      <p>easton_full.json · smith_full.json · schaff_full.json을 열면 영문과 한글의 성구 인용을 맞대어 보고,
+      <p>schaff_full.json · easton_full.json · smith_full.json을 열면 영문과 한글의 성구 인용을 맞대어 보고,
       성경에 없는 절과 그 밖의 흠을 찾아 목록으로 세웁니다.</p>
       <p>절 수는 개역개정 기준으로 담아 두었습니다. 성경 본문은 담지 않았습니다.</p>
     </div>
@@ -442,7 +408,11 @@ const SHORT={Ge:'Genesis',Gen:'Genesis',Ex:'Exodus',Exo:'Exodus',Le:'Leviticus',
  Hab:'Habakkuk',Zep:'Zephaniah',Zec:'Zechariah',Mal:'Malachi',Mt:'Matthew',Mr:'Mark',Mk:'Mark',
  Lu:'Luke',Lk:'Luke',Joh:'John',Jn:'John',Ac:'Acts',Ro:'Romans',Ga:'Galatians',Eph:'Ephesians',
  Php:'Philippians',Col:'Colossians',Tit:'Titus',Phm:'Philemon',Heb:'Hebrews',Jas:'James',Re:'Revelation'};
-const ALT = {Psalm:'Psalms',Cant:'Song of Solomon',Canticles:'Song of Solomon',Hos:'Hosea',
+const ALT = {Josh:'Joshua',Deut:'Deuteronomy',Neh:'Nehemiah',Esth:'Esther',Est:'Esther',Prov:'Proverbs',
+  Eccl:'Ecclesiastes',Ecc:'Ecclesiastes',Song:'Song of Solomon',Sol:'Song of Solomon',Matt:'Matthew',Rom:'Romans',
+  Zech:'Zechariah',Rev:'Revelation',Judg:'Judges',Ezek:'Ezekiel',Lam:'Lamentations',Gal:'Galatians',Dan:'Daniel',
+  Phlm:'Philemon',Philem:'Philemon',Is:'Isaiah',Exod:'Exodus',Jas:'James',
+  Psalm:'Psalms',Cant:'Song of Solomon',Canticles:'Song of Solomon',Hos:'Hosea',
   Phil:'Philippians',Nah:'Nahum',Obad:'Obadiah',Hag:'Haggai',Zeph:'Zephaniah',Habak:'Habakkuk'};
 Object.assign(ALT, SHORT);
 const NUMBERED={Sam:'Samuel',Sa:'Samuel',Ki:'Kings',Kin:'Kings',Kgs:'Kings',Ch:'Chronicles',
@@ -596,15 +566,15 @@ const KO_ANY = new RegExp('(?:('+KO_LONG.join('|')+')서?[\\s(]{0,3})?(\\d+):(\\
    주석에 든 성구는 판정 근거로 든 것이지 이 항목의 본문 인용이 아니므로,
    영문↔한글 대조에 섞이면 없는 소견이 생긴다.
    주석은 언제나 맨 끝에 붙으므로 앞부분만 남기면 글자 자리(at)는 그대로 맞는다. */
+/* 주석 문투가 둘이다 — 앞선 세션의 「\n※ 원문 오류: …」와 새 「\n「※ … 」」.
+   한쪽만 찾으면 다른 쪽이 통째로 본문으로 샌다. verify.py 의 strip_notes 와 한 글자도 다르지 않게 둔다. */
+const NOTE_RE = /\n[ \t]*[「]?※/;
 function koBody(t){
   const s = String(t || '');
-  /* 주석 문투가 둘이다 — 「※ … 」(낫표로 감쌈)와 ※ …(낫표 없음).
-     낫표만 찾거나 낫표 없는 것만 찾으면 한쪽이 통째로 본문으로 샌다.
-     주석은 언제나 맨 끝에 붙으므로 먼저 나오는 자리에서 자르면
-     글자 자리(at)는 그대로 맞는다. */
-  const m = s.match(/\n[ \t]*[「]?※/);
+  const m = NOTE_RE.exec(s);
   return m ? s.slice(0, m.index) : s;
 }
+function koNotes(t){ const s=String(t||''); return s.slice(koBody(s).length); }
 function koCites(t){
   t = koBody(t);
   const out=[]; if(!t) return out; KO_ANY.lastIndex=0; let m, last=null, lastEnd=-1;
@@ -743,6 +713,8 @@ const KINDS=[
   {id:'versify', name:'절 구분·장 넘는 범위', tone:'note', tag:'넘어감'},
   {id:'mismatch',name:'영문↔한글 어긋남',  tone:'red',  tag:'어긋남'},
   {id:'en_miss', name:'한글에 빠진 인용',  tone:'blue', tag:'빠짐'},
+  {id:'ratio_lo',name:'비 낮음 (v2)',       tone:'blue', tag:'비↓'},
+  {id:'ratio_hi',name:'비 높음 (v2)',       tone:'note', tag:'비↑'},
   {id:'nobook',  name:'책 이름 없는 인용', tone:'blue', tag:'책없음'},
   {id:'ko_none', name:'한글 번역 없음',    tone:'blue', tag:'미번역'},
   {id:'nocat',   name:'분류 없음',        tone:'blue', tag:'분류'},
@@ -752,8 +724,6 @@ const KINDS=[
   {id:'strong',  name:'스트롱 형식 오류',  tone:'red',  tag:'코드'},
   {id:'duptitle',name:'표제어 중복',       tone:'blue', tag:'중복'},
   {id:'dupid',   name:'id 중복',           tone:'red',  tag:'id중복'},
-  {id:'dupen',   name:'영문 중복',          tone:'red',  tag:'본문겹침'},
-  {id:'ratio',   name:'재번역 비율 이상',    tone:'blue', tag:'비율'},
 ];
 
 /* ══════════ 검사 ══════════ */
@@ -761,120 +731,6 @@ function items(){ return DB && PROF ? (DB[PROF.arr]||[]) : []; }
 function pairsOf(y){                 /* 영·한 짝이 있는 칸만 */
   return PROF.pairs.filter(p=>(y[p.en]||'').trim() && (y[p.ko]||'').trim());
 }
-/* MD5 — SubtleCrypto에는 없어서 직접 둔다. utf-8로 바꾼 뒤 셈한다.
-   파이썬 hashlib.md5(영문.encode()).hexdigest() 와 값이 같다. */
-function md5(s){
-  function rl(n,c){return (n<<c)|(n>>>(32-c))}
-  function ad(a,b){const l=(a&0xFFFF)+(b&0xFFFF);return (((a>>16)+(b>>16)+(l>>16))<<16)|(l&0xFFFF)}
-  function cmn(q,a,b,x,t,c){return ad(rl(ad(ad(a,q),ad(x,t)),c),b)}
-  const ff=(a,b,c,d,x,t,r)=>cmn((b&c)|(~b&d),a,b,x,t,r);
-  const gg=(a,b,c,d,x,t,r)=>cmn((b&d)|(c&~d),a,b,x,t,r);
-  const hh=(a,b,c,d,x,t,r)=>cmn(b^c^d,a,b,x,t,r);
-  const ii=(a,b,c,d,x,t,r)=>cmn(c^(b|~d),a,b,x,t,r);
-  const u=unescape(encodeURIComponent(s));
-  const n=u.length, w=[];
-  for(let i=0;i<n;i++) w[i>>2]=(w[i>>2]||0)|(u.charCodeAt(i)<<((i%4)<<3));
-  w[n>>2]=(w[n>>2]||0)|(0x80<<((n%4)<<3));
-  const L=(((n+8)>>6)+1)<<4; for(let i=0;i<L;i++) w[i]=w[i]||0;
-  w[L-2]=n<<3; w[L-1]=n>>>29;
-  let a=1732584193,b=-271733879,c=-1732584194,d=271733878;
-  const R=[7,12,17,22,5,9,14,20,4,11,16,23,6,10,15,21];
-  for(let i=0;i<L;i+=16){
-    const oa=a,ob=b,oc=c,od=d,x=w.slice(i,i+16);
-    a=ff(a,b,c,d,x[0],-680876936,R[0]);  d=ff(d,a,b,c,x[1],-389564586,R[1]);
-    c=ff(c,d,a,b,x[2],606105819,R[2]);   b=ff(b,c,d,a,x[3],-1044525330,R[3]);
-    a=ff(a,b,c,d,x[4],-176418897,R[0]);  d=ff(d,a,b,c,x[5],1200080426,R[1]);
-    c=ff(c,d,a,b,x[6],-1473231341,R[2]); b=ff(b,c,d,a,x[7],-45705983,R[3]);
-    a=ff(a,b,c,d,x[8],1770035416,R[0]);  d=ff(d,a,b,c,x[9],-1958414417,R[1]);
-    c=ff(c,d,a,b,x[10],-42063,R[2]);     b=ff(b,c,d,a,x[11],-1990404162,R[3]);
-    a=ff(a,b,c,d,x[12],1804603682,R[0]); d=ff(d,a,b,c,x[13],-40341101,R[1]);
-    c=ff(c,d,a,b,x[14],-1502002290,R[2]);b=ff(b,c,d,a,x[15],1236535329,R[3]);
-    a=gg(a,b,c,d,x[1],-165796510,R[4]);  d=gg(d,a,b,c,x[6],-1069501632,R[5]);
-    c=gg(c,d,a,b,x[11],643717713,R[6]);  b=gg(b,c,d,a,x[0],-373897302,R[7]);
-    a=gg(a,b,c,d,x[5],-701558691,R[4]);  d=gg(d,a,b,c,x[10],38016083,R[5]);
-    c=gg(c,d,a,b,x[15],-660478335,R[6]); b=gg(b,c,d,a,x[4],-405537848,R[7]);
-    a=gg(a,b,c,d,x[9],568446438,R[4]);   d=gg(d,a,b,c,x[14],-1019803690,R[5]);
-    c=gg(c,d,a,b,x[3],-187363961,R[6]);  b=gg(b,c,d,a,x[8],1163531501,R[7]);
-    a=gg(a,b,c,d,x[13],-1444681467,R[4]);d=gg(d,a,b,c,x[2],-51403784,R[5]);
-    c=gg(c,d,a,b,x[7],1735328473,R[6]);  b=gg(b,c,d,a,x[12],-1926607734,R[7]);
-    a=hh(a,b,c,d,x[5],-378558,R[8]);     d=hh(d,a,b,c,x[8],-2022574463,R[9]);
-    c=hh(c,d,a,b,x[11],1839030562,R[10]);b=hh(b,c,d,a,x[14],-35309556,R[11]);
-    a=hh(a,b,c,d,x[1],-1530992060,R[8]); d=hh(d,a,b,c,x[4],1272893353,R[9]);
-    c=hh(c,d,a,b,x[7],-155497632,R[10]); b=hh(b,c,d,a,x[10],-1094730640,R[11]);
-    a=hh(a,b,c,d,x[13],681279174,R[8]);  d=hh(d,a,b,c,x[0],-358537222,R[9]);
-    c=hh(c,d,a,b,x[3],-722521979,R[10]); b=hh(b,c,d,a,x[6],76029189,R[11]);
-    a=hh(a,b,c,d,x[9],-640364487,R[8]);  d=hh(d,a,b,c,x[12],-421815835,R[9]);
-    c=hh(c,d,a,b,x[15],530742520,R[10]); b=hh(b,c,d,a,x[2],-995338651,R[11]);
-    a=ii(a,b,c,d,x[0],-198630844,R[12]); d=ii(d,a,b,c,x[7],1126891415,R[13]);
-    c=ii(c,d,a,b,x[14],-1416354905,R[14]);b=ii(b,c,d,a,x[5],-57434055,R[15]);
-    a=ii(a,b,c,d,x[12],1700485571,R[12]);d=ii(d,a,b,c,x[3],-1894986606,R[13]);
-    c=ii(c,d,a,b,x[10],-1051523,R[14]);  b=ii(b,c,d,a,x[1],-2054922799,R[15]);
-    a=ii(a,b,c,d,x[8],1873313359,R[12]); d=ii(d,a,b,c,x[15],-30611744,R[13]);
-    c=ii(c,d,a,b,x[6],-1560198380,R[14]);b=ii(b,c,d,a,x[13],1309151649,R[15]);
-    a=ii(a,b,c,d,x[4],-145523070,R[12]); d=ii(d,a,b,c,x[11],-1120210379,R[13]);
-    c=ii(c,d,a,b,x[2],718787259,R[14]);  b=ii(b,c,d,a,x[9],-343485551,R[15]);
-    a=ad(a,oa); b=ad(b,ob); c=ad(c,oc); d=ad(d,od);
-  }
-  const hex=v=>{let o='';for(let i=0;i<4;i++)o+=((v>>(i*8+4))&15).toString(16)+((v>>(i*8))&15).toString(16);return o};
-  return hex(a)+hex(b)+hex(c)+hex(d);
-}
-
-/* 영문이 서로 겹치는 항목 짝을 찾는다.
-   넘김말 항목(「DIVES. 나사로 참조」 따위)이 바로 뒤 항목의 본문을 통째로
-   삼킨 것이 대부분이라, 그대로 번역하면 같은 글이 두 벌 생긴다.
-   문장 단위로 견주므로 인쇄면이 어긋나도 잡힌다. */
-function scanDupEn(){
-  const sent=new Map(), len={}, ttl={};
-  items().forEach(y=>{
-    const id=y[PROF.idk];
-    ttl[id]=PROF.title(y)||'(이름 없음)';
-    const en=PROF.pairs.map(p=>y[p.en]||'').join(' ').replace(/\s+/g,' ').trim().toLowerCase();
-    len[id]=en.length;
-    if(en.length<250) return;
-    en.split(/(?<=[.!?]) /).forEach(s=>{
-      if(s.length<80) return;
-      if(!sent.has(s)) sent.set(s,new Set());
-      sent.get(s).add(id);
-    });
-  });
-  const share=new Map();
-  sent.forEach((ids,s)=>{
-    if(ids.size<2) return;
-    const a=[...ids];
-    for(let i=0;i<a.length;i++) for(let j=i+1;j<a.length;j++){
-      const k=a[i]<a[j]?a[i]+'|'+a[j]:a[j]+'|'+a[i];
-      share.set(k,(share.get(k)||0)+s.length);
-    }
-  });
-  share.forEach((n,k)=>{
-    const [x,z]=k.split('|');
-    const small=Math.min(len[x],len[z]);
-    if(n<200 || n/small<=0.5) return;
-    const pct=Math.round(n/small*100);
-    [[x,z],[z,x]].forEach(([me,you])=>{
-      ROWS.push({id:isNaN(+me)?me:+me, term:ttl[me], kind:'dupen',
-        note:'영문이 id '+you+' 「'+ttl[you]+'」와 '+n.toLocaleString()+'자 겹친다 ('+pct+'%)'
-             +' — 짧은 쪽이 긴 쪽의 본문을 삼켰는지 보십시오'});
-    });
-  });
-}
-
-/* 영문 원문이 한 글자도 바뀌지 않았는지 보는 표. 파일 전체의 사실이라
-   소견 목록이 아니라 머리에 둔다. */
-function enMd5(){
-  if(!DB||!PROF) return '';
-  return md5(items().map(y=>PROF.pairs.map(p=>y[p.en]||'').join('')).join(''));
-}
-function drawMd5(){
-  const now=enMd5(); $('#md5now').textContent = now ? now : '—';
-  const base=($('#md5base').value||'').trim().toLowerCase(), say=$('#md5say');
-  say.className=''; say.textContent='';
-  if(!now||!base) return;
-  const same=base===now;
-  say.className=same?'same':'diff';
-  say.textContent=same?'무변':'바뀜';
-}
-
 function scan(){
   ROWS=[]; const seenId={}, seenT={};
   items().forEach(y=>{
@@ -903,6 +759,12 @@ function scan(){
                        side==='en'?{cit:c.raw,fld:pr}:{kocit:c.raw,fld:pr});
       }));
       if(!ko.trim()){ push('ko_none', pr.label+' — 영문 '+en.length+'자, 한글 없음', {fld:pr}); return; }
+      /* 비는 주석과 참조 줄을 뺀 본문으로 잰다. 주석을 본문으로 세면 비 높음이 거의 다 헛걸린다. */
+      if(y.retrans==='v2' && en.length>=250){
+        const rt=stripRefs(koBody(ko)).length/en.length;
+        if(rt<0.40) push('ratio_lo', pr.label+' 비 '+rt.toFixed(3)+' — 영문 '+en.length+'자', {fld:pr});
+        else if(rt>0.75) push('ratio_hi', pr.label+' 비 '+rt.toFixed(3)+' — 영문 '+en.length+'자', {fld:pr});
+      }
       /* 영문 인용이 한글에 옮겨졌는가 */
       const missList=[];
       const KOCH=koChapters(ko);        /* 한글이 장으로만 가리킨 자리 */
@@ -972,18 +834,6 @@ function scan(){
     const o=(allKo.match(/\(/g)||[]).length, cc=(allKo.match(/\)/g)||[]).length;
     if(o!==cc) push('paren','여는 괄호 '+o+' · 닫는 괄호 '+cc);
     if(/[\u4e00-\u9fff]/.test(allKo+' '+title)) push('hanja','한자가 들어 있음');
-
-    /* 재번역을 마친 것(retrans=v2)인데 한글 분량이 집안 기준을 벗어나는가.
-       0.40 미만은 빠뜨린 데가 있다는 뜻이고, 0.75 초과는 다른 데서 온 내용이
-       섞였을 수 있다는 뜻이다. 1을 넘으면 거의 틀림없다. */
-    if(y.retrans==='v2') PROF.pairs.forEach(p=>{
-      /* 주석은 본문이 아니므로 비에서 뺀다. 주석이 긴 항목이 헛걸리던 흠을 고친 것. */
-      const en=(y[p.en]||'').length, ko=koBody(y[p.ko]||'').length;
-      if(en<250 || !ko) return;
-      const q=ko/en;
-      if(q<0.40) push('ratio', p.label+' 비 '+q.toFixed(3)+' — 낮다 · 영문 '+en+'자 한글 '+ko+'자');
-      else if(q>0.75) push('ratio', p.label+' 비 '+q.toFixed(3)+' — 높다'+(q>1?' · 한글이 영문보다 길다':'')+' · 영문 '+en+'자 한글 '+ko+'자');
-    });
     PROF.codes.forEach(f=>String(y[f]||'').split(',').forEach(c=>{
       c=c.trim(); if(c && !/^[HG]\d{4}$/.test(c)) push('strong', f+' "'+c+'" 는 H0000·G0000 꼴이 아님'); }));
     /* ustrong 같은 TIPNR 코드는 뒤에 글자가 붙는 것이 정상이므로 느슨히 본다 */
@@ -995,7 +845,6 @@ function scan(){
     if(seenId[id]>1)  ROWS.push({id,term:t,kind:'dupid',note:'같은 id가 '+seenId[id]+'개'});
     if(PROF.dupTitle && seenT[t]>1) ROWS.push({id,term:t,kind:'duptitle',note:'같은 표제어가 '+seenT[t]+'개'});
   });
-  scanDupEn();
   ROWS=ROWS.filter((r,i,a)=>a.findIndex(x=>x.id===r.id&&x.kind===r.kind&&x.note===r.note)===i);
   ROWS.forEach((r,i)=>{r.key=i; r.done=false;});
 }
@@ -1040,39 +889,33 @@ function markKoPlain(t, focus, pick){
   });
   return out+esc(t.slice(last));
 }
-/* ※ 주석은 본문이 아니므로 따로 갈라 잉크를 입혀 보인다.
-   원문이 틀렸다는 소견은 붉게, 판정을 기다리는 것은 푸르게,
-   옮김에 관한 밝힘은 누렇게 둔다. 인쇄면 쪽수에는 밑줄을 친다. */
-function noteInk(head){
-  /* 붉은 잉크 — 원문이 틀렸다는 소견과 그 근거.
-     「판정 근거」는 바로 앞 「원문 오류」에 딸린 것이므로 같은 잉크로 둔다.
-     푸른 잉크 — 아직 판정하지 못한 것.
-     누런 잉크 — 옮김에 관한 밝힘처럼 흠이 아닌 것. */
-  if(/^(원문|판정 근거|한글 오류)/.test(head)) return 'err';
-  if(/(대기|보류|요청|의심|정정|해결)/.test(head)) return 'ask';
-  return 'say';
-}
-function markNotes(tail){
-  const lines = tail.split('\n').map(x=>x.trim()).filter(Boolean);
-  let out='<div class="notewrap"><div class="nhead">소견 '+lines.length+'</div>';
-  lines.forEach(l=>{
-    const m=l.match(/^[「]?※\s*([^:：]{1,24})[:：]?\s*([\s\S]*)$/);
-    const head=m?m[1].trim():'';
-    let body=m?m[2]:l;
-    body=body.replace(/」\s*$/,'');
-    let html=esc(body).replace(/(인쇄본 \d+쪽\(PDF \d+면\))/g,'<span class="pg">$1</span>');
-    out+='<div class="konote '+noteInk(head)+'"><b>'+esc(head)+'</b> — '+html+'</div>';
-  });
-  return out+'</div>';
-}
-function markKo(t, focus, pick){
+function markKoBody(t, focus, pick){
   if(!t) return '';
-  const nm=String(t).match(/\n[ \t]*[「]?※/);
-  if(nm) return markKo(t.slice(0,nm.index), focus, pick) + markNotes(t.slice(nm.index));
   const rm=t.match(/\s*\(\s*참조\s*:[^()]*\)+\s*$/);
   if(!rm) return markKoPlain(t,focus,pick);
   return markKoPlain(t.slice(0,rm.index),focus,pick)
        + '<span class="refmark">'+markKoPlain(rm[0],focus,pick)+'</span>';
+}
+/* 소견 잉크 — 붉음: 흠과 그 근거 · 푸름: 아직 판정이 남은 것 · 누름: 옮김에 관한 밝힘 */
+function inkOf(b){
+  const k=(b.match(/※\s*([^:：」]{1,14})/)||[])[1]||'';
+  if(/대기|보류|요청|정정|확인/.test(k)) return 'ink-blue';
+  if(/옮김|밝힘|절\s*나눔/.test(k)) return 'ink-ochre';
+  if(/오류|결함|결손|훼손|근거|대조/.test(k)) return 'ink-red';
+  return 'ink-gray';
+}
+function markNotes(n){
+  if(!n.trim()) return '';
+  /* 주석 덩이를 ※ 가 여는 줄마다 끊는다 */
+  const blocks=n.split(/\n(?=[ \t]*[「]?※)/).map(x=>x.trim()).filter(Boolean);
+  return '<div class="notes">'+blocks.map(b=>{
+    let h=esc(b).replace(/(인쇄본\s*\d+쪽(?:\s*\(PDF\s*\d+면\))?|PDF\s*\d+면|전자판\s*\d+[쪽면])/g,'<u>$1</u>');
+    return '<p class="note '+inkOf(b)+'">'+h.replace(/\n/g,'<br>')+'</p>';
+  }).join('')+'</div>';
+}
+function markKo(t, focus, pick){
+  if(!t) return '';
+  return markKoBody(koBody(t),focus,pick) + markNotes(koNotes(t));
 }
 /* ── 영문 훑어보기 번역 (MyMemory) ──
    파일에 넣지 않고 화면에만 보인다. 500자 제한이 있어 문장 단위로 잘라 보낸다. */
@@ -1122,12 +965,10 @@ function cmpRows(y, fld){
 }
 function missingRefs(y, fld){
   const out=[], seen=new Set();
-  /* 이미 소견을 적어 둔 항목은 손대지 않는다.
-     한글에 그 인용이 없는 까닭이 영문이 틀려서 바른 절로 갈아 놓았기 때문이거나,
-     다른 항목에서 넘어온 글이라 일부러 뺐기 때문이므로, 되붙이면 고쳐 놓은 것이 도로 살아난다.
-     ※ 원문 오류 말고도 원문 결함·절 나눔 차이·판정 대기·옮김에 관한 밝힘 따위가 모두 그러한 자리이니,
-     ※ 로 시작하는 소견이 하나라도 있으면 손대지 않는다. */
-  if(/(^|\n)[ \t]*[「]?※/.test(String(y[fld.ko]||''))) return out;
+  /* 이미 원문 오류를 적어 둔 항목은 손대지 않는다.
+     한글에 그 인용이 없는 까닭이 영문이 틀려서 바른 절로 갈아 놓았기 때문이므로,
+     되붙이면 고쳐 놓은 것이 도로 살아난다. */
+  const skip=noteCiteSet(y[fld.ko]);
   /* 한글 본문 어디에든 이미 적힌 절은 다시 붙이지 않는다 */
   const has=new Set(), hasCV=new Set();
   koCites(String(y[fld.ko]||'')).forEach(k=>k.vs.forEach(v=>{
@@ -1137,6 +978,8 @@ function missingRefs(y, fld){
     if(!KOBOOK.includes(p.en.book)) return;          /* 한글 책 이름이 아니면 넣지 않는다 */
     if(anyBad(p.en.book, p.en.ch, p.en.tail)) return; /* 성경에 없는 절은 붙이지 않는다 */
     if([...p.en.vs].every(v=>has.has(p.en.book+'|'+p.en.ch+'|'+v))) return;
+    /* 주석이 「원문 오류」로 짚어 둔 영문 인용은 가짜 주소이므로 되붙이지 않는다 */
+    if([...p.en.vs].some(v=>skip.has(p.en.book+'|'+p.en.ch+'|'+v))) return;
     /* 같은 장·절이 다른 책 이름으로 한글에 적혀 있으면 옮긴이가 일부러 그 책으로 읽은 것이다.
        「Joshua (6:9-15)」의 여호수아는 사람이고 절은 스가랴인 것 따위. */
     if([...p.en.vs].every(v=>hasCV.has(p.en.ch+'|'+v))) return;
@@ -1145,10 +988,25 @@ function missingRefs(y, fld){
   });
   return out;
 }
+/* 주석 안에 적힌 원문 인용을 모은다. 저희 주석은 원문 인용을 늘 낫표 안에 적는다(「Ruth 4:20」).
+   앞선 세션 꼴 「※ 원문 오류: 1 Chr 24:23 → 레위기 24:23」은 화살표 앞이 원문이다. */
+function noteCiteSet(ko){
+  const n=koNotes(ko), out=new Set(); if(!n) return out;
+  const pieces=[];
+  n.replace(/「([^「」]*)」/g,(m,a)=>{pieces.push(a);return m;});
+  n.replace(/원문\s*(?:오류|결함)\s*:\s*([^\n→]+?)\s*→/g,(m,a)=>{pieces.push(a);return m;});
+  pieces.forEach(p=>enCites(p).forEach(c=>{ if(c.inferred&&!c.book) return; c.vs.forEach(v=>out.add(c.book+'|'+c.ch+'|'+v)); }));
+  return out;
+}
 /* 이미 붙은 참조를 남김없이 떼어 낸다.
    옛 판이 겹쳐 붙이며 "(참조: …)) (참조: …)" 처럼 괄호가 어긋난 것도 씻는다. */
 const REF_ALL=/\s*\(\s*참조\s*:[^()]*\)*\s*$/;
 function stripRefs(v){
+  const all=String(v||''), notes=koNotes(all), body=koBody(all);
+  const ws=notes ? (body.match(/\s*$/)||[''])[0] : '';   /* 주석 앞의 빈 줄은 그대로 둔다 */
+  return stripRefsBody(body) + ws + notes;
+}
+function stripRefsBody(v){
   let t=String(v||'');
   for(let i=0;i<8;i++){
     const n=t.replace(REF_ALL,'').replace(/\s*\)+\s*$/, m=>{
@@ -1192,9 +1050,11 @@ function refLine(v){
 }
 function balanced(t){ return (String(t).split('(').length) === (String(t).split(')').length); }
 function setRefs(y, fld, text){
-  const cur=stripRefs(y[fld.ko]);
+  const all=String(y[fld.ko]||''), notes=koNotes(all), body=koBody(all);
+  const ws=notes ? (body.match(/\s*$/)||[''])[0] : '';
+  const cur=stripRefsBody(body);
   const list=String(text).split(/\s*;\s*/).map(x=>x.trim()).filter((v,i,a)=>v&&a.indexOf(v)===i);
-  const next = list.length ? cur+' (참조: '+list.join('; ')+')' : cur;
+  const next = (list.length ? cur+' (참조: '+list.join('; ')+')' : cur) + ws + notes;
   if(!balanced(next)){ alert('괄호가 맞지 않아 넣지 않았습니다. 한글 본문을 먼저 살펴보십시오.'); return false; }
   y[fld.ko]=next; y.__touched=true; return true;
 }
@@ -1214,12 +1074,7 @@ function drawRail(){
    +'<span class="cit note">누런 밑줄</span> 넘어가도 되는 것<br>'
    +'<span class="cit nobook">점선</span> 책 이름 없는 인용<br>'
    +'<span style="color:var(--green)">초록</span> 손댄 자리<br>'
-   +'<span class="hint">성구를 누르면 성경지도가 열립니다</span></p></div>'
-   +'<div class="railsec"><h2>소견 잉크</h2><p class="hint" style="margin:0">'
-   +'<span style="color:var(--red);font-weight:600">붉은 소견</span> 원문이 틀린 것<br>'
-   +'<span style="color:var(--blue);font-weight:600">푸른 소견</span> 판정을 기다리는 것<br>'
-   +'<span style="color:var(--ochre);font-weight:600">누런 소견</span> 옮김에 관한 밝힘<br>'
-   +'<span style="text-decoration:underline;font-weight:600">밑줄</span> 인쇄면 쪽수 · PDF 면</p></div>';
+   +'<span class="hint">성구를 누르면 성경지도가 열립니다</span></p></div>';
   $('#rail').innerHTML=h;
   $('#rail').querySelectorAll('.kind').forEach(b=>b.onclick=()=>{KIND=b.dataset.k;CUR=null;CURID=null;SHOW=250;draw();});
 }
@@ -1286,33 +1141,21 @@ function drawList(){
   });
   const cur=$('#list [aria-current="true"]'); if(cur&&cur.scrollIntoView) cur.scrollIntoView({block:'nearest'});
 }
-/* 인쇄본 면 — 항목의 pdf_page 를 보이고, 붙여 둔 PDF 가 있으면 그 면을 띄운다.
-   인쇄 쪽수는 PDF 면에서 여섯을 뺀 값이다(이 판의 앞머리가 여섯 장). */
-let PDFURL=null, PDFSHOW=true;
-/* 사전마다 인쇄 쪽 셈이 다르다.
-   샤프는 스캔본이라 인쇄 쪽 = PDF 면 − 6,
-   스미스는 CCEL 쪽 = PDF 면 − 5,
-   이스턴은 전자 판이라 따로 인쇄 쪽이 없다.
-   파일 머리의 pdf_기준 에 적어 두었으므로 그것에서 읽는다. */
-function pageOffset(){
-  const t=(DB && DB.pdf_기준) || '';
-  const m=t.match(/[−-]\s*(\d+)/);
-  return m ? +m[1] : 0;
+/* ── 인쇄본 면 보기 ── PDF 는 URL.createObjectURL 로만 쓰고 파일에 담지 않는다.
+   쪽 셈은 파일 머리의 pdf_기준 에서 읽는다(「인쇄 쪽 = PDF 면 − 6」 꼴). 사전마다 알아서 달라진다. */
+let PDFURL=null, PDFNAME='', PGADJ=0, PGFOR=null;
+function pdfOffset(){
+  const t=String((DB&&DB['pdf_기준'])||'');
+  const m=t.match(/PDF\s*면\s*[−-]\s*(\d+)/); return m? +m[1] : null;
 }
-function pdfBar(y){
-  const p = y.pdf_page;
-  if(!p) return '';
-  const off = pageOffset();
-  const label = off ? '인쇄 '+(p-off)+'쪽 · PDF '+p+'면' : 'PDF '+p+'면';
-  let h = '<div class="pdfbar"><span class="pg">'+label+'</span>';
-  if(PDFURL){
-    h += '<button class="tbtn" id="pdftoggle">'+(PDFSHOW?'면 감추기':'면 보기')+'</button>'
-       + '<a class="tbtn" href="'+PDFURL+'#page='+p+'" target="_blank" rel="noopener">새 창</a></div>';
-    if(PDFSHOW) h += '<div class="pdfwrap"><iframe src="'+PDFURL+'#page='+p+'&view=FitH"></iframe></div>';
-  } else {
-    h += '<span class="hint">머리의 「인쇄본 붙이기」로 PDF 를 고르면 여기에 그 면이 나옵니다</span></div>';
-  }
-  return h;
+function pdfPane(y){
+  if(!PDFURL || !y || !y.pdf_page) return '';
+  if(PGFOR!==y[PROF.idk]){ PGFOR=y[PROF.idk]; PGADJ=0; }
+  const pg=(+y.pdf_page)+PGADJ, off=pdfOffset();
+  return `<div class="pdfbox"><div class="pbar"><button class="tbtn" id="pgprev">◀</button>
+    <span>PDF ${pg}면${off!==null?' · 인쇄본 '+(pg-off)+'쪽':''}${PGADJ?' (항목 기준 '+(PGADJ>0?'+':'')+PGADJ+')':''} · ${esc(PDFNAME)}</span>
+    <button class="tbtn" id="pgnext">▶</button></div>
+    <iframe src="${PDFURL}#page=${pg}" title="인쇄본 ${pg}면"></iframe></div>`;
 }
 function drawDetail(){
   const d=$('#textcol'), cc=$('#cmpcol');
@@ -1366,7 +1209,7 @@ function drawDetail(){
         <span>${esc(fld.label)} 영문 — 고치지 않음</span>
         <span><button class="tbtn" id="trgo">🌐 뜻 보기</button><button class="tbtn" id="trcopy">📋 복사</button> ${(y[fld.en]||'').length}자</span></div>
       <div class="scroll"><div class="body en">${markEn(y[fld.en], PICK||r.cit, PICK||null)}</div>
-      <div id="trbox"></div></div>${pdfBar(y)}</div>`;
+      <div id="trbox"></div>${pdfPane(y)}</div></div>`;
   }
   const kof = fld ? (fld.ko||fld) : (PROF.koOnly[0]||null);
   const kotxt = kof ? (y[kof.ko||kof]||'') : '';
@@ -1414,8 +1257,6 @@ function drawDetail(){
     y.category=c; y.__touched=true; rescan();
   });
   const on=(id,fn)=>{const el=$('#'+id); if(el) el.onclick=fn;};
-  /* 인쇄본 면 보이기·감추기 — 다시 그리지 않고 그 자리만 여닫는다 */
-  on('pdftoggle',()=>{ PDFSHOW=!PDFSHOW; drawDetail(); });
   on('trgo',()=>{
     const box=$('#trbox'); const b=$('#trgo');
     if(box.dataset.on==='1'){ box.innerHTML=''; box.dataset.on=''; b.textContent='🌐 뜻 보기'; return; }
@@ -1442,7 +1283,14 @@ function drawDetail(){
   on('bookfix',()=>{ const n=applyBookFixes(y,fld); if(n) rescan(); else alert('확실한 것이 없습니다.'); });
   on('apply',()=>{ if(kokey){ y[kokey]=String(y[kokey]).replace(r.kocit, r.want); y.__touched=true; } rescan(); });
   on('done',()=>{ r.done=!r.done; draw(); });
+  on('pgprev',()=>{ PGADJ--; drawDetail(); });
+  on('pgnext',()=>{ PGADJ++; drawDetail(); });
 }
+$('#pdfBtn').onclick=()=>$('#pdfFile').click();
+$('#pdfFile').onchange=e=>{ const f=e.target.files[0]; if(!f) return;
+  if(PDFURL) URL.revokeObjectURL(PDFURL);
+  PDFURL=URL.createObjectURL(f); PDFNAME=f.name; PGFOR=null; $('#pdfBtn').textContent='인쇄본 ✓';
+  if(DB) drawDetail(); };
 function rescan(){
   const keep=CURID, doneSet=new Set(ROWS.filter(r=>r.done).map(r=>r.id+'|'+r.kind+'|'+r.note));
   scan(); ROWS.forEach(r=>{ if(doneSet.has(r.id+'|'+r.kind+'|'+r.note)) r.done=true; });
@@ -1477,14 +1325,8 @@ function load(text, name){
   $('#loaded').textContent = `${p.name} · ${name} · v${j.version||'?'} · ${(j[p.arr]||[]).length.toLocaleString()}항목`;
   scan(); KIND='all'; CUR=null; CURID=null; SHOW=250; PICK=null; PICKKO=null; Q='';
   const qb=$('#q'); if(qb){ qb.value=''; qb.disabled=false; }
-  drawMd5();
   draw();
 }
-try{ $('#md5base').value = localStorage.getItem('md5base_'+location.pathname) || ''; }catch(e){}
-$('#md5base').oninput=()=>{
-  try{ localStorage.setItem('md5base_'+location.pathname, $('#md5base').value); }catch(e){}
-  drawMd5();
-};
 $('#open').onclick=()=>$('#file').click();
 $('#file').onchange=e=>{const f=e.target.files[0]; if(f) f.text().then(t=>load(t,f.name)); };
 const drop=$('#drop');
@@ -1498,8 +1340,7 @@ const drop=$('#drop');
 
 /* ══════════ 깃허브에서 바로 읽기 (암호본이면 풀어서) ══════════ */
 const RAW='https://raw.githubusercontent.com/bible-writer/kjm-bible/HEAD/';
-const FILES=[['easton_full.json','이스턴 사전'],['smith_full.json','스미스 사전'],
-             ['schaff_full.json','샤프 사전'],
+const FILES=[['schaff_full.json','샤프 사전'],['easton_full.json','이스턴 사전'],['smith_full.json','스미스 사전'],
              ['placeDatabase.json','지명DB'],['personDatabase.json','인명DB'],['termDatabase.json','용어DB']];
 function b64(s){ const b=atob(s), a=new Uint8Array(b.length); for(let i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return a; }
 async function decrypt(z, pw){
@@ -1511,13 +1352,6 @@ async function decrypt(z, pw){
   const out=await crypto.subtle.decrypt({name:'AES-GCM', iv:b64(z.iv)}, key, b64(z.ciphertext));
   return new TextDecoder().decode(out);
 }
-$('#pdfpick').onclick=()=>$('#pdffile').click();
-$('#pdffile').onchange=e=>{
-  const f=e.target.files[0]; if(!f) return;
-  if(PDFURL) URL.revokeObjectURL(PDFURL);
-  PDFURL=URL.createObjectURL(f); PDFSHOW=true;
-  if(CUR!==null||CURID!==null) drawDetail();
-};
 $('#fromGit').onclick=()=>{
   const sel=$('#gitpick');
   sel.innerHTML=FILES.map(f=>`<option value="${f[0]}">${f[1]}</option>`).join('');
