@@ -1,5 +1,5 @@
 {
- "version": "1.312.0",
+ "version": "1.313.0",
  "date": "2026-09-10",
  "count": 4561,
  "source": "Smith's Bible Dictionary (William Smith, 1884, CCEL edition)",
@@ -38288,7 +38288,7 @@
   },
   {
    "id": 3836,
-   "term": "Shema(스마)",
+   "term": "Shema(세마)",
    "definition": "• A Reubenite, ancestor of Bela. (1 Chronicles 5:8) (B.C. before 1090.) • Son of Elpaal. (1 Chronicles 8:13) Probably the same as Shimhi. (B.C. after 1450.) • One of those who stood at Ezra’s right hand when he read the law to the people. (Nehemiah 8:4) (B.C. 458.) • (Joshua 15:26) [Sheba]",
    "category": "인명",
    "definition_ko": "(1) 르우벤 사람이요 벨라의 조상이다(역대상 5:8). (주전 1090년 이전.) (2) 엘바알의 아들이다(역대상 8:13). 아마 시므이와 같은 이일 것이다. (주전 1450년 이후.) (3) 에스라가 백성에게 율법을 읽어 줄 때에 그 오른편에 선 이 가운데 하나이다(느헤미야 8:4). (주전 458년.) (4) 여호수아 15:26에 나온다. 스바 항목을 보라.",
@@ -38321,7 +38321,7 @@
    "term": "Shemariah(스마랴)",
    "definition": "(kept by Jehovah). • A Benjamite warrior who came to David at Ziklag. (1 Chronicles 12:5) (B.C. 1054.) • One of the family of Harim, a lay man of Israel who put away his foreign wife in the time of Ezra. (Ezra 10:32) (B.C. 658.) • Another who did the same. (Ezra 10:41)",
    "category": "인명",
-   "definition_ko": "「여호와께서 지키신 이」라는 뜻. (1) 시글락에서 다윗에게 나아온 베냐민 용사이다(역대상 12:5). (주전 1054년.) (2) 하림 집안 사람이니, 에스라 때에 이방 아내를 내보낸 이스라엘의 평민이다(에스라 10:32). (주전 458년.) (3) 같은 일을 한 또 다른 이이다(에스라 10:41).",
+   "definition_ko": "「여호와께서 지키신 이」라는 뜻. (1) 시글락에서 다윗에게 나아온 베냐민 용사이다(역대상 12:5). (주전 1054년.) (2) 하림 집안 사람이니, 에스라 때에 이방 아내를 내보낸 이스라엘의 평민이다(에스라 10:32). (주전 458년.) (3) 같은 일을 한 또 다른 이이다(에스라 10:41).\n※ 원문 오류: (B.C. 658.) → 주전 458년\n※ 판정 근거: 문맥. 에스라 때에 이방 아내를 내보낸 일(에스라 10장)이니 이 사전의 세마 항목(3836)도 에스라가 율법을 읽은 때를 주전 458년으로 적는다. 주전 658년은 에스라보다 이백 년 앞선다. 앞선 한글이 이미 458로 옮겼으나 근거가 적혀 있지 않아 이제 적는다.\n※ 원문 대조: CCEL 전자본(_smith_full.txt)에도 「(B.C. 658.)」로 적혀 있다.",
    "hebrew_greek": "H8114",
    "retrans": "v2",
    "pdf_page": 944
@@ -45868,6 +45868,11 @@
   {
    "version": "1.309.0",
    "note": "원문 오류 주석 307항목 전부에 판정 근거 명기 완료. 갈래: 책 이름 없는 인용/본문 대조/CCEL 훼손/문맥/없는 절/책 이름/CCEL 결손/인용 형식/판단 보류/절 구분. CCEL 2018년 전자판 PDF로 대조하여, de→Deuteronomy·Ast→Eastward 따위가 CCEL 자동 처리의 산물임을 확인."
+  },
+  {
+   "version": "1.313.0",
+   "date": "2026-09-10",
+   "note": "id 3836 Shema 표제어 「스마」→「세마」(개역개정 H8087 다섯 자리 중 넷이 세마, 대표님 판정). id 3839 Shemariah 「B.C. 658」→주전 458 소견(근거 없던 교정)."
   }
  ],
  "strong_headword_rule_20260910": {
