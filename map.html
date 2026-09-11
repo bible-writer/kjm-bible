@@ -5808,6 +5808,13 @@
       { key: 'hastschaff', label: 'Schaff', file: './schaff_full.json', storeKey: 'hastings_schaff_full_dict', editsKey: 'hastings_schaff_local_edits' },
       { key: 'hitchcock', label: 'Hitchcock', file: './hitchcock_full.json', storeKey: 'hitchcock_full_dict', editsKey: 'hitchcock_local_edits' }
     ];
+    // ── 잠시 가리는 사전 (2026-09-10 kjm) ──
+    // 샤프는 한글이 초벌 번역(검수 전)이라 재번역을 마칠 때까지 화면에서 가린다.
+    // 불러오기·백업·동기화는 그대로 하므로 저장된 데이터와 내가 고친 내역은 사라지지 않는다.
+    // 다시 보이게 하려면 아래 목록에서 'hastschaff' 를 지우면 된다.
+    // 잠깐 확인만 할 때는 주소 끝에 ?schaff=1 을 붙여 연다.
+    const RAWDICT_HIDDEN = new Set(/[?&]schaff=1/.test(location.search) ? [] : ['hastschaff']);
+    const rawDictVisible = s => !RAWDICT_HIDDEN.has(s.key);
     // 사전별 데이터와 편집내역을 한곳에 모아둔다 (rawDictData['easton'] 형태로 접근)
     const rawDictData = {};
     const rawDictEdits = {};
@@ -6033,7 +6040,7 @@
       });
     }
     function openRawDictModal() {
-      const total = RAWDICT_SOURCES.reduce((s, d) => s + getRawDictList(d.key).length, 0);
+      const total = RAWDICT_SOURCES.filter(rawDictVisible).reduce((s, d) => s + getRawDictList(d.key).length, 0);
       if (total === 0) {
         showToast('원문사전 데이터가 아직 없습니다.', 'warn'); return;
       }
@@ -6045,7 +6052,7 @@
       initRawDictModalDrag();
       // 사전 탭을 목록에서 자동으로 만든다 — 아직 파일이 없는 사전은 탭도 만들지 않는다
       const tabWrap = document.getElementById('rawdict-filter-tabs');
-      const available = RAWDICT_SOURCES.filter(s => getRawDictList(s.key).length > 0);
+      const available = RAWDICT_SOURCES.filter(s => rawDictVisible(s) && getRawDictList(s.key).length > 0);
       if (!available.some(s => s.key === rawdictSrc) && available.length > 0) {
         rawdictSrc = available[0].key; // 현재 선택한 사전이 없으면 첫 번째로
       }
@@ -11708,7 +11715,7 @@
       const want = norm(code);
       if (!want) return [];
       const out = [];
-      (typeof RAWDICT_SOURCES !== 'undefined' ? RAWDICT_SOURCES : []).forEach(src => {
+      (typeof RAWDICT_SOURCES !== 'undefined' ? RAWDICT_SOURCES.filter(rawDictVisible) : []).forEach(src => {
         const list = (typeof getRawDictList === 'function') ? getRawDictList(src.key) : [];
         for (let i = 0; i < list.length && out.length < 12; i++) {
           const e = list[i], hg = String(e.hebrew_greek || '');
