@@ -356,7 +356,7 @@ header .q:disabled{opacity:.45}
 </head>
 <body>
 <header>
-  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260911-2</span></h1>
+  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260911-3</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
   <span class="md5box">
     <span class="sub">영문 MD5</span>
@@ -696,7 +696,10 @@ let MAPBASE='https://bible-writer.github.io/kjm-bible/map.html';
 let BARE=null;
 function pairUp(EC, KC){
   const usedK=new Set(), usedE=new Set(), rows=[];
-  EC.forEach((c,ci)=>{
+  /* 책 이름이 적힌 영문 인용이 먼저 짝을 고른다. 책 이름을 이어받은 인용은 앞 책이 틀릴 수 있어
+     (「Leviticus 24:15; 24:19-22」의 뒤는 신명기) 먼저 고르면 진짜 인용의 짝을 빼앗는다 — 스미스 2599 */
+  const order=[...EC.keys()].sort((a,b)=>(EC[a].inferred?1:0)-(EC[b].inferred?1:0));
+  order.forEach(ci=>{ const c=EC[ci];
     const hit=KC.findIndex((k,ki)=>!usedK.has(ki)&&k.book===c.book&&k.ch===c.ch&&[...c.vs].some(v=>k.vs.has(v)));
     if(hit>=0){ usedK.add(hit); usedE.add(ci); rows.push({en:c, ko:KC[hit], state:'ok'}); }
   });
