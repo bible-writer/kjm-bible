@@ -1,5 +1,5 @@
 {
- "version": "1.314.1",
+ "version": "1.314.2",
  "date": "2026-09-10",
  "count": 4561,
  "source": "Smith's Bible Dictionary (William Smith, 1884, CCEL edition)",
@@ -16180,10 +16180,10 @@
   },
   {
    "id": 1621,
-   "term": "Gerizites(그리시 족속)",
+   "term": "Gerizites(기르스 족속)",
    "definition": "(1 Samuel 27:8) [Gerzites]",
    "category": "인명",
-   "definition_ko": "(사무엘상 27:8) [그르시 족속 항목]",
+   "definition_ko": "(사무엘상 27:8) [기르스 족속 항목]",
    "retrans": "v2",
    "hebrew_greek": "H1511",
    "pdf_page": 326
@@ -16220,7 +16220,7 @@
   },
   {
    "id": 1625,
-   "term": "Gerzites(그르시 족속)",
+   "term": "Gerzites(기르스 족속)",
    "definition": "(dwellers in the desert), The, a tribe who with the Geshurites and the Amalekites occupied the land between the south of Palestine and Egypt in the time of Saul. (1 Samuel 27:8) In the name of Mount Gerizim we have the only remaining trace of the presence of this old tribe of Bedouins in central Palestine.",
    "category": "인명",
    "definition_ko": "「광야에 사는 이들」이라는 뜻으로, 사울 때에 그술 족속과 아말렉 족속과 함께 팔레스타인 남쪽과 애굽 사이의 땅을 차지한 족속이다(사무엘상 27:8). 그리심산이라는 이름에 이 옛 베두인 족속이 팔레스타인 가운데 지방에 있었던 오직 하나의 자취가 남아 있다.",
@@ -16310,10 +16310,10 @@
   },
   {
    "id": 1634,
-   "term": "Gezrites(그르시 족속)",
+   "term": "Gezrites(기르스 족속)",
    "definition": "The word which the Jewish critics have substituted in the margin of the Bible for the ancient reading, “the Gerizite.” (1 Samuel 27:8) [Gerizites, THE]",
    "category": "용어",
-   "definition_ko": "유대 학자들이 옛 읽기 「그리시 족속」을 대신하여 성경 난외에 넣은 말이다(사무엘상 27:8). [그리시 족속 항목]",
+   "definition_ko": "유대 학자들이 옛 읽기 「기르스 족속」을 대신하여 성경 난외에 넣은 말이다(사무엘상 27:8). [기르스 족속 항목]\n※ 옮김에 관한 밝힘: 사무엘상 27:8 의 이 족속을 개역개정은 본문 읽기(Gerizite·Gerzite)를 따라 「기르스 사람」이라 한다. Gezrites 는 유대 학자들이 난외에 둔 읽기이며 흠정역이 이를 따랐다. 세 표제어가 모두 같은 족속이므로 개역개정을 따라 「기르스 족속」으로 맞추었다(대표님 판정).",
    "hebrew_greek": "H1511",
    "retrans": "v2",
    "pdf_page": 328
@@ -45883,6 +45883,11 @@
    "version": "1.314.1",
    "date": "2026-09-10",
    "note": "3377 Picture — 레이어드 책 이름을 『니느웨와 그 유적』으로 바로잡음(「Nin. and Rob.」 = Nineveh and its Remains, 권 번호로 판단)."
+  },
+  {
+   "version": "1.314.2",
+   "date": "2026-09-10",
+   "note": "1621 Gerizites · 1625 Gerzites · 1634 Gezrites 표제어를 「그리시/그르시 족속」에서 「기르스 족속」으로(개역개정 사무엘상 27:8, 대표님 판정). 본문의 넘김 표시도 같게."
   }
  ],
  "strong_headword_rule_20260910": {
