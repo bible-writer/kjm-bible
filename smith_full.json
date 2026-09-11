@@ -1,5 +1,5 @@
 {
- "version": "1.318.2",
+ "version": "1.320.0",
  "date": "2026-09-11",
  "count": 4561,
  "source": "Smith's Bible Dictionary (William Smith, 1884, CCEL edition)",
@@ -1878,7 +1878,7 @@
    "term": "Aholibamah(오홀리바마)",
    "definition": "(my tabernacle is exulted), One of the three wives of Esau. (B.C. 1797.) She was the daughter of Anah. (Genesis 36:2,26) In the earlier narrative, (Genesis 26:34) Aholibamah is called Judith, which may have been her original name.",
    "category": "인명",
-   "definition_ko": "「나의 장막이 높임을 받는다」는 뜻으로 에서의 세 아내 가운데 하나이다. (주전 1797년.) 그는 아나의 딸이었다(창세기 36:2,26). 앞선 기록인 창세기 26:34에서는 오홀리바마를 유딧이라 하니, 이것이 본디 이름이었을 수도 있다.",
+   "definition_ko": "「나의 장막이 높임을 받는다」는 뜻으로 에서의 세 아내 가운데 하나이다. (주전 1797년.) 그는 아나의 딸이었다(창세기 36:2,25). 앞선 기록인 창세기 26:34에서는 오홀리바마를 유딧이라 하니, 이것이 본디 이름이었을 수도 있다.\n※ 원문 오류: Genesis 36:2,26 → 창세기 36:2,25\n※ 판정 근거: 본문 대조. 아나의 딸 오홀리바마는 창세기 36:25(「오홀리바마는 아나의 딸이며」)요, 36:26은 디손의 자녀를 적은 절이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 43면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H0173",
    "retrans": "v2",
    "pdf_page": 43
@@ -5452,7 +5452,7 @@
    "term": "Bahurim(바후림)",
    "definition": "(low ground), a village, (2 Samuel 16:6) apparently on or close to the road leading up from the Jordan valley to Jerusalem, and near the south boundary of Benjamin.",
    "category": "지명",
-   "definition_ko": "「낮은 땅」이라는 뜻으로 한 마을이며(사무엘하 16:6) 보아하니 요단 골짜기에서 예루살렘으로 오르는 길 위나 그 가까이, 베냐민 남쪽 경계 가까이에 있었다.",
+   "definition_ko": "「낮은 땅」이라는 뜻으로 한 마을이며(사무엘하 16:5) 보아하니 요단 골짜기에서 예루살렘으로 오르는 길 위나 그 가까이, 베냐민 남쪽 경계 가까이에 있었다.\n※ 원문 오류: 2 Samuel 16:6 → 사무엘하 16:5\n※ 판정 근거: 본문 대조. 바후림이 나오는 절은 사무엘하 16:5(「다윗 왕이 바후림에 이르매」)요, 16:6은 시므이가 돌을 던진 절이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 118면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H0978,H0980,H1273",
    "retrans": "v2",
    "pdf_page": 118
@@ -6952,7 +6952,7 @@
    "term": "Bethanoth(벧아놋)",
    "definition": "(house of echo), a town in the mountainous district of Judah, named with Halhul, Beth-zur and others in (Joshua 15:58) only.",
    "category": "지명",
-   "definition_ko": "「메아리의 집」이라는 뜻으로 유다 산지의 성읍이며 오직 여호수아 15:58에서만 할훌과 벧술 따위와 함께 이름이 나온다.",
+   "definition_ko": "「메아리의 집」이라는 뜻으로 유다 산지의 성읍이며 오직 여호수아 15:59에서만 할훌과 벧술 따위와 함께 이름이 나온다.\n※ 원문 오류: Joshua 15:58 → 여호수아 15:59\n※ 판정 근거: 본문 대조. 할훌과 벧술은 여호수아 15:58에 있으나 벧아놋이 나오는 절은 15:59(「마아랏과 벧 아놋과 엘드곤이니」)이다. 두 절이 한 성읍 무리를 이룬다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 140면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H1042",
    "retrans": "v2",
    "pdf_page": 140
@@ -7911,7 +7911,7 @@
    "term": "Bochim(보김)",
    "definition": "(the weepers) a place on the west of Jordan, above Gilgal; so named from the weeping of Israel. (Judges 2:1,6)",
    "category": "지명",
-   "definition_ko": "「우는 이들」이라는 뜻으로 요단 서쪽 길갈 위쪽에 있던 곳이며 이스라엘이 운 데서 그 이름이 왔다(사사기 2:1,6).",
+   "definition_ko": "「우는 이들」이라는 뜻으로 요단 서쪽 길갈 위쪽에 있던 곳이며 이스라엘이 운 데서 그 이름이 왔다(사사기 2:1,5).\n※ 원문 오류: Judges 2:1,6 → 사사기 2:1,5\n※ 판정 근거: 본문 대조. 이름을 붙인 것은 사사기 2:5(「그 곳을 이름하여 보김이라 하고」)요, 2:6은 여호수아가 백성을 보낸 절이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 156면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H0206,H1008,H1017,H1066,H3870",
    "retrans": "v2",
    "pdf_page": 156
@@ -19967,7 +19967,7 @@
    "term": "Hosham(후삼)",
    "definition": "(haste), one of the early kings of Edom. Genesis36:34,36; 1Chr 1:45,46",
    "category": "인명",
-   "definition_ko": "「서두름」이라는 뜻으로 에돔의 이른 왕 가운데 하나이다(창세기 36:34,36; 역대상 1:45,46).",
+   "definition_ko": "「서두름」이라는 뜻으로 에돔의 이른 왕 가운데 하나이다(창세기 36:34,35; 역대상 1:45,46).\n※ 원문 오류: Genesis 36:34,36 → 창세기 36:34,35\n※ 판정 근거: 본문 대조. 후삼은 창세기 36:34과 36:35(「후삼이 죽고」)에 나오고, 36:36은 하닷이 죽고 삼라가 왕이 된 절이다. 짝인 역대상 1:45,46과도 맞는다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 397면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H2367",
    "retrans": "v2",
    "pdf_page": 397
@@ -20337,7 +20337,7 @@
    "term": "Ibhar(입할)",
    "definition": "(whom God chooses), one of the sons of David, (2 Samuel 5:15; 1 Chronicles 3:6; 14:6) (born in Jerusalem. B.C. after 1044.)",
    "category": "인명",
-   "definition_ko": "「하나님이 택하신 이」라는 뜻으로 다윗의 아들 가운데 하나이다(사무엘하 5:15; 역대상 3:6; 역대상 14:6). (예루살렘에서 났다. 주전 1044년 뒤.)",
+   "definition_ko": "「하나님이 택하신 이」라는 뜻으로 다윗의 아들 가운데 하나이다(사무엘하 5:15; 역대상 3:6; 역대상 14:5). (예루살렘에서 났다. 주전 1044년 뒤.)\n※ 원문 오류: 1 Chronicles 14:6 → 역대상 14:5\n※ 판정 근거: 본문 대조. 입할은 역대상 14:5(「입할과 엘리수아와 엘벨렛과」)에 나오고, 14:6은 노가와 네벡과 야비아이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 408면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H2984",
    "retrans": "v2",
    "pdf_page": 408
@@ -21136,7 +21136,7 @@
    "term": "Isshiah(잇시야)",
    "definition": "(whom Jehovah lends). • A descendant of Moses by his younger son Eliezer. (1 Chronicles 24:21) comp. 1Chr 23:17; 26:25(B.C. after 1451.) • A Levite of the house of Kohath and family of Uzziel. (1 Chronicles 24:26) (Uncertain date.)",
    "category": "인명",
-   "definition_ko": "「여호와께서 빌려주시는 이」라는 뜻. (1) 모세가 그 작은아들 엘리에셀을 통하여 얻은 자손이다(역대상 24:21. 역대상 23:17과 역대상 26:25와 견주어 보라). (주전 1451년 뒤.) (2) 고핫의 집 웃시엘 집안의 레위 사람이다(역대상 24:26). (때는 확실하지 않다.)",
+   "definition_ko": "「여호와께서 빌려주시는 이」라는 뜻. (1) 모세가 그 작은아들 엘리에셀을 통하여 얻은 자손이다(역대상 24:21. 역대상 23:17과 역대상 26:25와 견주어 보라). (주전 1451년 뒤.) (2) 고핫의 집 웃시엘 집안의 레위 사람이다(역대상 24:25). (때는 확실하지 않다.)\n※ 원문 오류: 1 Chronicles 24:26 → 역대상 24:25\n※ 판정 근거: 본문 대조. 웃시엘 자손 미가(역대상 24:24)의 아우가 역대상 24:25(「미가의 아우는 잇시야라」)이고, 24:26은 므라리의 아들들이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 424면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H3449",
    "retrans": "v2",
    "pdf_page": 424
@@ -23524,7 +23524,7 @@
    "term": "Jeush(여우스)",
    "definition": "(assembler). • Son of Esau by Aholiabamah the daughter of Anah, the son of Zebeon the Hivite. (Genesis 36:6,14,18; 1 Chronicles 1:35) (B.C. after 1797.) • A Benjamite, son of Bilhah. (1 Chronicles 7:10,11) • A Gershonite Levite, of the house of Shimei. (1 Chronicles 23:10,11) (B.C. 1014.) • Son of Rehoboam king of Judah. (2 Chronicles 11:18,19) (B.C. after 97.)",
    "category": "인명",
-   "definition_ko": "「모으는 이」라는 뜻. (1) 히위 사람 시브온의 아들 아나의 딸 오홀리바마가 에서에게서 낳은 아들이다(창세기 36:6,14,18; 역대상 1:35). (주전 1797년 이후.) (2) 베냐민 사람이요 빌한의 아들이다(역대상 7:10,11). (3) 시므이 집안에 속한 게르손 자손 레위 사람이다(역대상 23:10,11). (주전 1014년.) (4) 유다 왕 르호보암의 아들이다(역대하 11:18,19). (주전 970년쯤 이후.)\n※ 원문 오류: B.C. after 97 → 주전 970년쯤 이후로 보임\n※ 판정 근거: 문맥. 여우스는 르호보암의 아들이므로 주전 970년쯤 이후이다. 「B.C. after 97」은 끝자리 0이 떨어진 오식이다.",
+   "definition_ko": "「모으는 이」라는 뜻. (1) 히위 사람 시브온의 아들 아나의 딸 오홀리바마가 에서에게서 낳은 아들이다(창세기 36:5,14,18; 역대상 1:35). (주전 1797년 이후.) (2) 베냐민 사람이요 빌한의 아들이다(역대상 7:10,11). (3) 시므이 집안에 속한 게르손 자손 레위 사람이다(역대상 23:10,11). (주전 1014년.) (4) 유다 왕 르호보암의 아들이다(역대하 11:18,19). (주전 970년쯤 이후.)\n※ 원문 오류: B.C. after 97 → 주전 970년쯤 이후로 보임\n※ 판정 근거: 문맥. 여우스는 르호보암의 아들이므로 주전 970년쯤 이후이다. 「B.C. after 97」은 끝자리 0이 떨어진 오식이다.\n※ 원문 오류: Genesis 36:6,14,18 → 창세기 36:5,14,18\n※ 판정 근거: 본문 대조. 오홀리바마가 여우스를 낳은 것은 창세기 36:5(「오홀리바마는 여우스와 얄람과 고라를 낳았으니」)요, 36:6은 에서가 식솔을 이끌고 떠난 절이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 479면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H3266,H3274",
    "retrans": "v2",
    "pdf_page": 479
@@ -24391,7 +24391,7 @@
    "term": "Joshbekashah(요스브가사)",
    "definition": "(a seat in a hard place), son of Heman, head of the seventeenth course of musicians. (1 Chronicles 25:4,25) (B.C. 1014.)",
    "category": "인명",
-   "definition_ko": "「굳은 자리에 앉음」이라는 뜻이니, 헤만의 아들이요 노래하는 이들의 열일곱째 반차의 우두머리이다(역대상 25:4,25). (주전 1014년.)",
+   "definition_ko": "「굳은 자리에 앉음」이라는 뜻이니, 헤만의 아들이요 노래하는 이들의 열일곱째 반차의 우두머리이다(역대상 25:4,24). (주전 1014년.)\n※ 원문 오류: 1 Chronicles 25:4,25 → 역대상 25:4,24\n※ 판정 근거: 본문 대조. 열일곱째 반차는 역대상 25:24(「열일곱째는 요스브가사니」)요, 25:25는 열여덟째 하나니이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 504면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H3436",
    "retrans": "v2",
    "pdf_page": 504
@@ -24947,7 +24947,7 @@
    "term": "Kedemoth(그데못)",
    "definition": "(beginnings), one of the towns in the district east of the Dead Sea allotted to the tribe of Reuben, (Joshua 13:18) given by the Merarite Levites. (Joshua 21:37; 1 Chronicles 6:79) It possibly conferred its name on the “wilderness,” or uncultivated pasture land, “of Kedemoth.” (Numbers 21:33; 2:26,27) etc.",
    "category": "지명",
-   "definition_ko": "「시작들」이라는 뜻이니, 사해 동쪽 지역에서 르우벤 지파에게 나누어 준 성읍 가운데 하나요(여호수아 13:18) 므라리 자손 레위 사람에게 준 곳이다(여호수아 21:37; 역대상 6:79). 아마 「그데못 광야」 곧 갈지 않은 목초지에 제 이름을 준 듯하다(민수기 21:33; 신명기 2:26,27 등).",
+   "definition_ko": "「시작들」이라는 뜻이니, 사해 동쪽 지역에서 르우벤 지파에게 나누어 준 성읍 가운데 하나요(여호수아 13:18) 므라리 자손 레위 사람에게 준 곳이다(여호수아 21:37; 역대상 6:79). 아마 「그데못 광야」 곧 갈지 않은 목초지에 제 이름을 준 듯하다(민수기 21:33; 신명기 2:26,27 등).\n※ 원문 오류: (2:26,27)[앞의 Numbers를 이어받으면 민수기 2:26,27] → 신명기 2:26,27\n※ 판정 근거: 본문 대조. 「그데못 광야」가 나오는 절은 신명기 2:26(「내가 그데못 광야에서 헤스본 왕 시혼에게 사자를 보내어」)이요, 민수기 2:26,27은 단 지파의 군대 수와 아셀 지파의 진영이다. 앞선 한글이 말없이 신명기로 옮겨 두었으므로 소견을 붙인다. 함께 든 민수기 21:33은 옥이 바산 길에서 맞선 절이라 그데못과 닿지 않으니, 시혼이 「광야로 나와서 야하스에 이르러」 싸운 21:23일 수 있으나 확정할 수 없어 그대로 둔다.\n※ 원문 대조: CCEL PDF 520면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H6932",
    "retrans": "v2",
    "pdf_page": 520
@@ -30899,7 +30899,7 @@
    "term": "Nehemiah(느헤미야)",
    "definition": "(consolation of the Lord). • Son of Hachaliah, and apparently of the tribe of Judah. All that we know certainly concerning him is contained in the book which bears his name. We first find him at Shushan, the winter residence of the kings of Persia, in high office as the cupbearer of King Artaxerxes Longimanus. In the twentieth year of the king’s reign, i.e. B.C. 445, certain Jews arrived from Judea, and gave Nehemiah a deplorable account of the state of Jerusalem. He immediately conceived the idea of going to Jerusalem to endeavor to better their state, and obtained the king’s consent to his mission. Having received his appointment as governor of Judea, he started upon his journey, being under promise to return to Persia within a given time. Nehemiah’s great work was rebuilding, for the first time since their destruction by Nebuzar-adan, the walls of Jerusalem, and restoring that city to its former state and dignity as a fortified town. To this great object therefore Nehemiah directed his whole energies without an hour’s unnecessary delay. In a wonderfully short time the walls seemed to emerge from the heaps of burnt rubbish, end to encircle the city as in the days of old. It soon became apparent how wisely Nehemiah had acted in hastening on the work. On his very first arrival, as governor, Sanballat and Tobiah had given unequivocal proof of their mortification at his appointment; but when the restoration was seen to be rapidly progressing, their indignation knew no bounds. They made a great conspiracy to fall upon the builders with an armed force and put a stop to the undertaking. The project was defeated by the vigilance and prudence of Nehemiah. Various stratagems were then resorted to get Nehemiah away from Jerusalem and if possible to take his life; but that which most nearly succeeded was the attempt to bring him into suspicion with the king of Persia, as if he intended to set himself up as an independent king as soon as the walls were completed. The artful letter of Sanballat so-far wrought upon Artaxerxes that he issued a decree stopping the work till further orders. If is probable that at the same time he recalled Nehemiah, or perhaps his leave of absence had previously expired. But after a delay, perhaps of several years he was permitted to return to Jerusalem land to crown his work by repairing the temple and dedicating the walls. During his government Nehemiah firmly repressed the exactions of the nobles and the usury of the rich, and rescued the poor Jews from spoliation and slavery. He refused to receive his lawful allowance as governor from the people, in consideration of their poverty, during the whole twelve years that he was in office but kept at his own charge a table for 150 Jews, at which any who returned from captivity were welcome. He made most careful provision for the maintenance of the ministering priests and Levites and for the due and constant celebration of divine worship. He insisted upon the sanctity of the precincts of the temple being preserved inviolable, and peremptorily ejected the powerful Tobiah from one of the chambers which Eliashib had assigned to him. With no less firmness and impartiality he expelled from all sacred functions those of the high priest’s family who had contracted heathen marriages, and rebuked and punished those of the common people who had likewise intermarried with foreigners; and lastly, he provided for keeping holy the Sabbath day, which was shamefully profaned by many both Jews and foreign merchants, and by his resolute conduct succeeded in repressing the lawless traffic on the day of rest. Beyond the thirty-second year of Artaxerxes, to which Nehemiah’s own narrative leads us, we have no account of him whatever. • One of the leaders of the first expedition from Babylon to Jerusalem under Zerabbabel. (Ezra 2:2; Nehemiah 7:7) • Son of Azbuk and ruler of the half part of Beth-zur, who helped to repair the wall of Jerusalem. (Nehemiah 3:18)",
    "category": "인명",
-   "definition_ko": "「주의 위로」라는 뜻. (1) 하가랴의 아들이요 보아하니 유다 지파 사람이다. 그에 대하여 우리가 확실히 아는 것은 다 그 이름을 딴 책에 담겨 있다. 우리는 그를 먼저 바사 왕들의 겨울 거처인 수산에서 만나니, 아닥사스다 롱기마누스 왕의 술 맡은 관원이라는 높은 자리에 있었다. 왕이 다스린 스무째 해 곧 주전 445년에 유대에서 어떤 유대인들이 이르러 느헤미야에게 예루살렘의 참담한 형편을 알렸다. 그는 곧바로 예루살렘으로 가서 그 형편을 낫게 하려는 뜻을 품었고 왕에게 그 사명을 허락받았다. 유대 총독으로 임명을 받고 정한 때 안에 바사로 돌아오겠다는 약속 아래 길을 떠났다. 느헤미야의 큰 일은 느부사라단에게 헐린 뒤로 처음으로 예루살렘 성벽을 다시 쌓아, 그 성을 굳게 한 성읍으로서 옛 모습과 위엄을 되찾게 한 것이다. 그러므로 느헤미야는 한 시간도 헛되이 늦추지 않고 이 큰 일에 온 힘을 쏟았다. 놀랄 만큼 짧은 사이에 성벽이 불탄 흙더미에서 솟아나 옛날처럼 성을 두르는 듯하였다. 느헤미야가 일을 서두른 것이 얼마나 슬기로웠는지 곧 드러났다. 그가 총독으로 처음 이르렀을 때에 산발랏과 도비야가 그 임명을 못마땅해하는 기색을 뚜렷이 드러내었는데, 회복이 빠르게 나아가는 것이 보이자 그 노여움이 끝이 없었다. 그들은 무장한 무리로 성 쌓는 이들을 덮쳐 그 일을 그치게 하려고 큰 음모를 꾸몄다. 그 일은 느헤미야의 깨어 있음과 슬기로 어그러졌다. 그러자 느헤미야를 예루살렘에서 끌어내고 될 수 있으면 그 목숨을 앗으려고 온갖 꾀를 썼는데, 가장 그럴 뻔한 것은 성벽을 다 쌓으면 그가 스스로 독립한 왕이 되려 한다는 듯이 바사 왕에게 의심을 사게 한 일이었다. 산발랏의 교묘한 편지가 아닥사스다에게 얼마나 통하였던지 왕이 다음 명이 있을 때까지 그 일을 멈추라는 조서를 내렸다. 아마 그때에 느헤미야를 불러들였거나, 아니면 그 자리를 비운 기한이 앞서 다하였을 것이다. 그러나 아마 몇 해가 지난 뒤에 그는 예루살렘으로 돌아가 성전을 고치고 성벽을 봉헌함으로 그 일을 마칠 수 있었다. 다스리는 동안 느헤미야는 귀인들의 착취와 부자들의 이자 놓는 일을 굳게 눌렀고, 가난한 유대인을 노략과 종살이에서 건져 내었다. 그는 백성이 가난한 것을 헤아려 직무에 있던 열두 해 내내 총독으로 마땅히 받을 몫을 받지 않았고, 오히려 제 돈으로 유대인 백오십 명의 상을 차려 사로잡힘에서 돌아온 이는 누구나 맞아들였다. 섬기는 제사장과 레위 사람을 먹여 살리는 일과 하나님을 예배하는 일이 마땅히 끊이지 않고 이어지도록 더없이 세심하게 마련하였다. 성전 뜰의 거룩함이 침범당하지 않도록 고집하여, 엘리아십이 힘 있는 도비야에게 내어 준 방에서 그를 단호히 쫓아내었다. 못지않은 굳셈과 치우침 없음으로 이방 여인과 혼인한 대제사장 집안 사람들을 모든 거룩한 직무에서 내쫓았고, 마찬가지로 이방인과 혼인한 여느 백성을 꾸짖고 벌하였다. 끝으로 안식일을 거룩히 지키도록 마련하였으니, 그날은 유대인이든 이방 장사꾼이든 많은 이가 부끄럽게 더럽히던 날이었다. 그의 단호한 처신으로 쉬는 날의 무법한 장사를 눌러 없애는 데에 성공하였다. 느헤미야 자신의 이야기가 우리를 이끄는 아닥사스다 서른두째 해 너머로는 그에 대한 기록이 전혀 없다. (2) 스룹바벨 아래에서 바벨론에서 예루살렘으로 온 첫 무리의 지도자 가운데 하나이다(에스라 2:2; 느헤미야 7:7). (3) 아스북의 아들이요 벧술 지방 절반을 다스린 이이니, 예루살렘 성벽을 고치는 일을 도왔다(느헤미야 3:18).",
+   "definition_ko": "「주의 위로」라는 뜻. (1) 하가랴의 아들이요 보아하니 유다 지파 사람이다. 그에 대하여 우리가 확실히 아는 것은 다 그 이름을 딴 책에 담겨 있다. 우리는 그를 먼저 바사 왕들의 겨울 거처인 수산에서 만나니, 아닥사스다 롱기마누스 왕의 술 맡은 관원이라는 높은 자리에 있었다. 왕이 다스린 스무째 해 곧 주전 445년에 유대에서 어떤 유대인들이 이르러 느헤미야에게 예루살렘의 참담한 형편을 알렸다. 그는 곧바로 예루살렘으로 가서 그 형편을 낫게 하려는 뜻을 품었고 왕에게 그 사명을 허락받았다. 유대 총독으로 임명을 받고 정한 때 안에 바사로 돌아오겠다는 약속 아래 길을 떠났다. 느헤미야의 큰 일은 느부사라단에게 헐린 뒤로 처음으로 예루살렘 성벽을 다시 쌓아, 그 성을 굳게 한 성읍으로서 옛 모습과 위엄을 되찾게 한 것이다. 그러므로 느헤미야는 한 시간도 헛되이 늦추지 않고 이 큰 일에 온 힘을 쏟았다. 놀랄 만큼 짧은 사이에 성벽이 불탄 흙더미에서 솟아나 옛날처럼 성을 두르는 듯하였다. 느헤미야가 일을 서두른 것이 얼마나 슬기로웠는지 곧 드러났다. 그가 총독으로 처음 이르렀을 때에 산발랏과 도비야가 그 임명을 못마땅해하는 기색을 뚜렷이 드러내었는데, 회복이 빠르게 나아가는 것이 보이자 그 노여움이 끝이 없었다. 그들은 무장한 무리로 성 쌓는 이들을 덮쳐 그 일을 그치게 하려고 큰 음모를 꾸몄다. 그 일은 느헤미야의 깨어 있음과 슬기로 어그러졌다. 그러자 느헤미야를 예루살렘에서 끌어내고 될 수 있으면 그 목숨을 앗으려고 온갖 꾀를 썼는데, 가장 그럴 뻔한 것은 성벽을 다 쌓으면 그가 스스로 독립한 왕이 되려 한다는 듯이 바사 왕에게 의심을 사게 한 일이었다. 산발랏의 교묘한 편지가 아닥사스다에게 얼마나 통하였던지 왕이 다음 명이 있을 때까지 그 일을 멈추라는 조서를 내렸다. 아마 그때에 느헤미야를 불러들였거나, 아니면 그 자리를 비운 기한이 앞서 다하였을 것이다. 그러나 아마 몇 해가 지난 뒤에 그는 예루살렘으로 돌아가 성전을 고치고 성벽을 봉헌함으로 그 일을 마칠 수 있었다. 다스리는 동안 느헤미야는 귀인들의 착취와 부자들의 이자 놓는 일을 굳게 눌렀고, 가난한 유대인을 노략과 종살이에서 건져 내었다. 그는 백성이 가난한 것을 헤아려 직무에 있던 열두 해 내내 총독으로 마땅히 받을 몫을 받지 않았고, 오히려 제 돈으로 유대인 백오십 명의 상을 차려 사로잡힘에서 돌아온 이는 누구나 맞아들였다. 섬기는 제사장과 레위 사람을 먹여 살리는 일과 하나님을 예배하는 일이 마땅히 끊이지 않고 이어지도록 더없이 세심하게 마련하였다. 성전 뜰의 거룩함이 침범당하지 않도록 고집하여, 엘리아십이 힘 있는 도비야에게 내어 준 방에서 그를 단호히 쫓아내었다. 못지않은 굳셈과 치우침 없음으로 이방 여인과 혼인한 대제사장 집안 사람들을 모든 거룩한 직무에서 내쫓았고, 마찬가지로 이방인과 혼인한 여느 백성을 꾸짖고 벌하였다. 끝으로 안식일을 거룩히 지키도록 마련하였으니, 그날은 유대인이든 이방 장사꾼이든 많은 이가 부끄럽게 더럽히던 날이었다. 그의 단호한 처신으로 쉬는 날의 무법한 장사를 눌러 없애는 데에 성공하였다. 느헤미야 자신의 이야기가 우리를 이끄는 아닥사스다 서른두째 해 너머로는 그에 대한 기록이 전혀 없다. (2) 스룹바벨 아래에서 바벨론에서 예루살렘으로 온 첫 무리의 지도자 가운데 하나이다(에스라 2:2; 느헤미야 7:7). (3) 아스북의 아들이요 벧술 지방 절반을 다스린 이이니, 예루살렘 성벽을 고치는 일을 도왔다(느헤미야 3:16).\n※ 원문 오류: Nehemiah 3:18 → 느헤미야 3:16\n※ 판정 근거: 본문 대조. 아스북의 아들 느헤미야는 느헤미야 3:16(「벧술 지방 절반을 다스리는 아스북의 아들 느헤미야가 중수하여」)이요, 3:18은 그일라 지방 절반을 다스리는 바왜이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 683면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H5166",
    "retrans": "v2",
    "pdf_page": 683
@@ -31867,7 +31867,7 @@
    "term": "Omar(오말)",
    "definition": "(eloquent, talkative), son of Eliphaz the first-born of Esau. (Genesis 36:11,15; 1 Chronicles 1:38) (B.C. 1750.)",
    "category": "인명",
-   "definition_ko": "「말 잘하는」 곧 「이야기 많은」이라는 뜻이니, 에서의 맏아들 엘리바스의 아들이다(창세기 36:11,15; 역대상 1:38). (주전 1750년.)",
+   "definition_ko": "「말 잘하는」 곧 「이야기 많은」이라는 뜻이니, 에서의 맏아들 엘리바스의 아들이다(창세기 36:11,15; 역대상 1:36). (주전 1750년.)\n※ 원문 오류: 1 Chronicles 1:38 → 역대상 1:36\n※ 판정 근거: 본문 대조. 오말은 역대상 1:36(「엘리바스의 아들은 데만과 오말과」)에 나오고, 1:38은 세일의 아들들이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 725면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H0201",
    "retrans": "v2",
    "pdf_page": 725
@@ -33980,7 +33980,7 @@
    "term": "Pithon(비돈)",
    "definition": "(harmless), one of the four sons of Micah, the son of Mephibosheth. (1 Chronicles 8:36; 9:41) (B.C. 1050.)",
    "category": "인명",
-   "definition_ko": "「해 없는」이라는 뜻이니, 므비보셋의 아들 미가의 네 아들 가운데 하나이다(역대상 8:36; 역대상 9:41). (주전 1050년.)",
+   "definition_ko": "「해 없는」이라는 뜻이니, 므비보셋의 아들 미가의 네 아들 가운데 하나이다(역대상 8:35; 역대상 9:41). (주전 1050년.)\n※ 원문 오류: 1 Chronicles 8:36 → 역대상 8:35\n※ 판정 근거: 본문 대조. 비돈은 역대상 8:35(「미가의 아들들은 비돈과」)에 나오고, 8:36은 아하스의 자손이다. 짝인 역대상 9:41은 바르다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 806면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H6377",
    "retrans": "v2",
    "pdf_page": 806
@@ -35683,7 +35683,7 @@
    "term": "Reuel(르우엘)",
    "definition": "(friend of God) One of the sons of Esau, by his wife Bashemath, sister of Ishmael. (Genesis 36:4,10,13,17; 1 Chronicles 1:36,37) (B.C. about 1790.) • One of the names of Moses’ father-in-law. (Exodus 2:18) (B.C. 1530.) • Father of Eliasaph, the leader of the tribe of Gad at the time of the census at Sinai. (Numbers 2:14) (B.C. 1490.) • A Benjamite, ancestor of Elah. (1 Chronicles 9:8)",
    "category": "인명",
-   "definition_ko": "「하나님의 벗」이라는 뜻. (1) 에서가 그 아내 바스맛 곧 이스마엘의 누이에게서 낳은 아들 가운데 하나이다(창세기 36:4,10,13,17; 역대상 1:36,37). (주전 1790년쯤.) (2) 모세의 장인의 이름 가운데 하나이다(출애굽기 2:18). (주전 1530년.) (3) 엘리아삽의 아버지이니, 엘리아삽은 시내에서 수를 헤아릴 때에 갓 지파의 우두머리였다(민수기 2:14). (주전 1490년.) (4) 베냐민 사람이요 엘라의 조상이다(역대상 9:8).",
+   "definition_ko": "「하나님의 벗」이라는 뜻. (1) 에서가 그 아내 바스맛 곧 이스마엘의 누이에게서 낳은 아들 가운데 하나이다(창세기 36:4,10,13,17; 역대상 1:35,37). (주전 1790년쯤.) (2) 모세의 장인의 이름 가운데 하나이다(출애굽기 2:18). (주전 1530년.) (3) 엘리아삽의 아버지이니, 엘리아삽은 시내에서 수를 헤아릴 때에 갓 지파의 우두머리였다(민수기 2:14). (주전 1490년.) (4) 베냐민 사람이요 엘라의 조상이다(역대상 9:8).\n※ 원문 오류: 1 Chronicles 1:36,37 → 역대상 1:35,37\n※ 판정 근거: 본문 대조. 에서의 아들 르우엘은 역대상 1:35(「에서의 아들은 엘리바스와 르우엘과」)에 나오고, 1:36은 엘리바스의 아들들이다. 앞선 한글이 영문 절을 그대로 따르고 있었으므로 바른 절로 고친다.\n※ 원문 대조: CCEL PDF 865면에도 같은 꼴로 찍혀 있다.",
    "hebrew_greek": "H7467",
    "retrans": "v2",
    "pdf_page": 865

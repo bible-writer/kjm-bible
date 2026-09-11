@@ -1,5 +1,5 @@
 {
- "version": "1.22.2",
+ "version": "1.24.0",
  "date": "2026-09-11",
  "count": 3964,
  "source": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축",
@@ -31844,7 +31844,7 @@
   },
   {
    "id": 3198,
-   "term": "Sallai(살루)",
+   "term": "Sallai(살래)",
    "definition": "basket-maker. (1.) A Benjamite (Nehemiah 11:8). (2.) A priest in the days of Joshua and Zerubbabel (Nehemiah 12:20).",
    "definition_ko": "「바구니 만드는 자」라는 뜻이다. (1) 한 베냐민 사람이다(느헤미야 11:8). (2) 예수아와 스룹바벨 때의 제사장이다(느헤미야 12:20).",
    "category": "인명",
@@ -38662,7 +38662,7 @@
    "id": 3881,
    "term": "Zaretan(사르단)",
    "definition": "When the Hebrews crossed the Jordan, as soon as the feet of the priests were dipped in the water, the flow of the stream was arrested. The point of arrest was the “city of Adam beside Zaretan,” probably near  Succoth, at the mouth of the Jabbok, some 30 miles up the river from where the people were encamped. There the water “stood and rose upon an heap.” Thus the whole space of 30 miles of the river-bed was dry, that the tribes might pass over (Joshua 3:16, 17; comp. Psalm 104:3).",
-   "definition_ko": "히브리 사람이 요단을 건널 때 제사장들의 발이 물에 잠기자마자 그 흐름이 멈추었다. 멈춘 곳은 「사르단 곁 아담 성읍」이었는데, 아마도 얍복 어귀의 숙곳 가까이로 백성이 진 친 곳에서 강을 삼십 마일쯤 거슬러 올라간 데였다. 거기서 물이 「멈추어 한 곳에 쌓였다」. 그리하여 강바닥 삼십 마일 온 사이가 말라 지파들이 건널 수 있었다(여호수아 3:16,17. 시편 104:3과 견주라).",
+   "definition_ko": "히브리 사람이 요단을 건널 때 제사장들의 발이 물에 잠기자마자 그 흐름이 멈추었다. 멈춘 곳은 「사르단 곁 아담 성읍」이었는데, 아마도 얍복 어귀의 숙곳 가까이로 백성이 진 친 곳에서 강을 삼십 마일쯤 거슬러 올라간 데였다. 거기서 물이 「멈추어 한 곳에 쌓였다」. 그리하여 강바닥 삼십 마일 온 사이가 말라 지파들이 건널 수 있었다(여호수아 3:16,17. 시편 114:3과 견주라).\n※ 원문 오류: Psalm 104:3 → 시편 114:3\n※ 판정 근거: 본문 대조. 요단 물이 멈추어 쌓인 일과 견줄 절은 시편 114:3(「바다가 보고 도망하며 요단은 물러갔으니」)이요, 104:3은 「물에 자기 누각의 들보를 얹으시며」로 창조를 노래한 절이다. 이 사전의 요단 항목(2120)도 시편 114:3을 든다.\n※ 원문 대조: 1996년 전자판 1214쪽에 같은 꼴로 찍혀 있다. 우리 쪽 추출 훼손이 아니다.",
    "category": "지명",
    "hebrew_greek": "H6891",
    "retrans": "v2",
