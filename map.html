@@ -4083,21 +4083,69 @@
           }
         </div>`;
 
+        /* ── 한글해설 = 사전 원문 (2026-09-12) ──
+         * 앱DB 의 definition_ko 는 사전에서 옛날에 떠온 복사본이라 덜 되어 있다.
+         * 3,663 가운데 사전과 같은 것은 5자리뿐이고 1,388자리가 30% 넘게 짧다.
+         * Mincing 은 첫 문장이, 암미나답은 알맹이가 통째로 빠져 있다.
+         * 그래서 이스턴·스미스·힛치콕의 definition_ko 를 그대로 보인다.
+         *   이스턴·스미스 → 펼친 채로 (고칠 때 견주어야 하므로)
+         *   힛치콕        → 접어 둠 (이름 뜻만 든 짧은 사전)
+         *   셋 다 없으면  → 앱DB 글로 물러선다 (667자리) */
+        const hitchAuto = this.findRawEntry(t.term_en, 'hitchcock');
+        /* 세로줄형 — 사전마다 2px 색 띠를 두어 어느 사전 글인지 눈으로 바로 갈리게 한다.
+         * 이스턴 보라 · 스미스 청록 · 힛치콕 회색.
+         * 띠가 한쪽에만 있는 테두리이므로 border-radius 는 0 이어야 한다. */
+        const DICTBAR = {
+          '이스턴': { bar: '#AFA9EC', ink: '#534AB7' },
+          '스미스': { bar: '#5DCAA5', ink: '#0F6E56' },
+          '힛치콕': { bar: '#B4B2A9', ink: '#5F5E5A' }
+        };
+        function dictKoSection(entry, label, open) {
+          if (!entry) return '';
+          const ko = String(entry.definition_ko || '').trim();
+          if (!ko) return '';
+          const bid = 'term-dictko-' + label;
+          const col = DICTBAR[label];
+          return ''
+            + '<div style="border-left:2px solid ' + col.bar + ';border-radius:0;'
+            +      'padding-left:14px;margin-bottom:16px">'
+            +   '<div onclick="toggleDictSection(\'' + bid + '\', this)" '
+            +        'style="display:flex;align-items:center;gap:5px;cursor:pointer;'
+            +        'font-size:0.78em;color:' + col.ink + ';margin-bottom:5px">'
+            +     '<span class="dict-arrow">' + (open ? '\u25be' : '\u25b8') + '</span>'
+            +     '<span>' + label + ' \u00b7 ' + escHtml(entry.term || '') + '</span>'
+            +   '</div>'
+            +   '<div id="' + bid + '" style="display:' + (open ? 'block' : 'none') + ';'
+            +        'font-size:1em;line-height:1.8;color:#1e293b;white-space:pre-wrap">'
+            +     linkifyVerseRefs(escHtml(ko))
+            +   '</div>'
+            + '</div>';
+        }
+        let dictKoBlock =
+            dictKoSection(eastonAuto, '이스턴', true)
+          + dictKoSection(smithAuto,  '스미스', true)
+          + dictKoSection(hitchAuto,  '힛치콕', false);
+        if (!dictKoBlock) {
+          dictKoBlock = '<div style="font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">'
+                      + previewHtml + (needsToggle ? '\u2026' : '') + '</div>'
+                      + toggleBtn + restBlock;
+        }
+
         panel.innerHTML = `
           <div id="term-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
-            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${refLabel ? `<span style="font-size:0.7em;color:#94a3b8;font-weight:500">${refLabel}</span> ` : ''}<span onclick="TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="cursor:pointer;border-bottom:1px dashed #fcd34d">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span></span>
+            <span style="display:flex;align-items:baseline;gap:9px;min-width:0">
+              ${refLabel ? `<span style="font-size:0.72em;color:#94a3b8">${refLabel}</span>` : ''}
+              <span onclick="TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="font-size:1.2em;font-weight:500;color:#1e293b;cursor:pointer">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
+              <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사" style="font-size:0.8em;color:#94a3b8;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.term_en || '')}</span>
+              <button onclick="TermEngine.editTermKo(${t.id})" title="한글 표제어 수정" style="margin-left:auto;flex-shrink:0;border:none;background:none;font-size:0.85em;color:#94a3b8;cursor:pointer;padding:0 2px">\u270f\ufe0f</button>
+            </span>
             <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
           </div>
-          <div style="font-size:0.9em;color:#d97706;font-weight:600;margin-bottom:6px">
-            <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사" style="cursor:pointer;border-bottom:1px dashed #fcd34d">${escHtml(t.term_en || '')}</span>
-            ${t.term_en ? `<button onclick="TermEngine.gotoRawDict(${t.id})" title="원문사전에서 이 표제어 찾기 (사전끼리 견주기)" style="margin-left:6px;font-size:0.72em;font-weight:400;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 7px;cursor:pointer">\ud83d\udcdc 사전 비교</button>` : ''}
-          </div>
+          ${t.term_en ? `<div style="margin-bottom:8px"><button onclick="TermEngine.gotoRawDict(${t.id})" title="원문사전에서 이 표제어 찾기 (사전끼리 견주기)" style="font-size:0.72em;font-weight:400;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;cursor:pointer">\ud83d\udcdc 사전 비교</button></div>` : ''}
           ${hg}
           ${tabBar}
           <div id="term-tab-content-ko">
-            <div style="font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">${previewHtml}${needsToggle ? '…' : ''}</div>
-            ${toggleBtn}
-            ${restBlock}
+            ${dictKoBlock}
           </div>
           ${origBlock}
           ${eastonBlock}
@@ -4157,10 +4205,12 @@
       _buildRawIndex: function() {
         const eL = (typeof eastonFullDict !== 'undefined' && eastonFullDict) || [];
         const sL = (typeof smithFullDict !== 'undefined' && smithFullDict) || [];
-        const sig = eL.length + ':' + sL.length;
+        // 힛치콕은 이름 뜻 사전이다. 용어 팝업에서 참고로 쓰므로 함께 담는다(2026-09-12)
+        const hL = (typeof rawDictData !== 'undefined' && rawDictData.hitchcock) || [];
+        const sig = eL.length + ':' + sL.length + ':' + hL.length;
         if (this._rawIndex && this._rawIndexSig === sig) return this._rawIndex;
-        const idx = { easton: {}, smith: {} };
-        [['easton', eL], ['smith', sL]].forEach(pair => {
+        const idx = { easton: {}, smith: {}, hitchcock: {} };
+        [['easton', eL], ['smith', sL], ['hitchcock', hL]].forEach(pair => {
           const k = pair[0];
           pair[1].forEach(e => {
             this._rawVariants(e.term, true).forEach(v => { if (!idx[k][v]) idx[k][v] = e; });
