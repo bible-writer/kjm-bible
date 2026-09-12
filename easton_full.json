@@ -1,5 +1,5 @@
 {
- "version": "1.27.0",
+ "version": "1.28.0",
  "date": "2026-09-12",
  "count": 3964,
  "source": "Easton's Bible Dictionary (M.G. Easton, 1897, Public Domain) - PDF 원문 전체 기준 재구축",
@@ -2565,7 +2565,7 @@
   },
   {
    "id": 261,
-   "term": "Ape",
+   "term": "Ape(원숭이)",
    "definition": "an animal of the monkey tribe (1 Kings 10:22; 2 Chronicles 9:21). It was brought from India by the fleets of Solomon and Hiram, and was called by the Hebrews koph, and by the Greeks kepos, both words being just the Indian Tamil name of the monkey, kapi, i.e., swift, nimble, active. No species of ape has ever been found in Palestine or the adjacent regions.",
    "definition_ko": "원숭이 무리의 짐승이다(열왕기상 10:22; 역대하 9:21). 솔로몬과 히람의 배들이 인도에서 가져왔고, 히브리 사람이 코프라 하고 헬라 사람이 케포스라 하였으니, 두 낱말이 다 원숭이를 이르는 인도 타밀말 카피 곧 「빠른, 날쌘, 활발한」이라는 말 그대로이다. 팔레스타인이나 그 이웃 지방에서는 어떤 종의 원숭이도 발견된 적이 없다.",
    "category": "용어",
@@ -3105,7 +3105,7 @@
   },
   {
    "id": 315,
-   "term": "Arm",
+   "term": "Arm(팔)",
    "definition": "used to denote power (Psalm 10:15; Ezekiel 30:21; Jeremiah 48:25). It is also used of the omnipotence of God (Exodus 15:16; Psalm 89:13; 98:1; 77:15; Isaiah 53:1; John 12:38; Acts 13:17)",
    "definition_ko": "힘을 나타내는 데 쓴다(시편 10:15; 에스겔 30:21; 예레미야 48:25). 또한 하나님의 전능하심을 이르는 데도 쓴다(출애굽기 15:16; 시편 89:13; 시편 98:1; 시편 77:15; 이사야 53:1; 요한복음 12:38; 사도행전 13:17).",
    "category": "용어",
@@ -4245,7 +4245,7 @@
   },
   {
    "id": 429,
-   "term": "Balance",
+   "term": "Balance(저울)",
    "definition": "occurs in Leviticus 19:36 and Isaiah 46:6, as the rendering of the Hebrew kanch’, which properly means “a reed” or “a cane,” then a rod or beam of a balance. This same word is translated “measuring reed” in  Ezekiel 40:3,5; 42:16-18. There is another Hebrew word, mozena’yim, i.e., “two poisers”, also so rendered (Daniel 5:27). The balances as represented on the most ancient Egyptian monuments resemble those now in use. A “pair of balances” is a symbol of justice and fair dealing (Job 31:6; Psalm 62:9; Proverbs 11:1). The expression denotes great want and scarcity in Revelation 6:5.",
    "definition_ko": "레위기 19:36과 이사야 46:6에 나오니 히브리말 카네를 옮긴 것이며, 본디 「갈대」 또는 「대」를 뜻하고 그다음에 저울대를 뜻한다. 같은 낱말이 에스겔 40:3,5와 에스겔 42:16-18에서 「측량하는 장대」로 옮겨진다. 또 다른 히브리 낱말 모즈나임 곧 「두 저울판」도 그렇게 옮겨진다(다니엘 5:27).\n\n가장 오랜 애굽 기념물에 나타난 저울이 지금 쓰는 것과 비슷하다. 「저울 한 벌」은 공의와 바르게 다룸의 상징이다(욥기 31:6; 시편 62:9; 잠언 11:1). 요한계시록 6:5에서는 이 표현이 큰 궁핍과 모자람을 나타낸다.",
    "category": "용어",
@@ -4305,7 +4305,7 @@
   },
   {
    "id": 435,
-   "term": "Bands",
+   "term": "Bands(도적 떼)",
    "definition": "of love (Hos. 11:4); (2) of Christ (Psalm 2:3); (3) uniting together Christ’s body the church (Colossians 2:19; 3:14; Ephesians 4:3); (4) the emblem of the captivity of Israel (Ezekiel 34:27; Isaiah 28:22; 52:2); (5) of brotherhood (Ezekiel 37:15-28); (6) no bands to the wicked in their death (Psalm 73:4; Job 21:7; Psalm 10:6). Also denotes chains (Luke 8:29); companies of soldiers (Acts 21:31); a shepherd’s staff, indicating the union between Judah and Israel (Zechariah 11:7).",
    "definition_ko": "사랑의 줄(호세아 11:4), (2) 그리스도의 결박(시편 2:3), (3) 그리스도의 몸인 교회를 하나로 잇는 것(골로새서 2:19; 골로새서 3:14; 에베소서 4:3), (4) 이스라엘이 사로잡힘의 표(에스겔 34:27; 이사야 28:22; 이사야 52:2), (5) 형제 됨의 것(에스겔 37:15-28), (6) 악인이 죽을 때 고통이 없음(시편 73:4; 욥기 21:7; 시편 10:6)을 이른다. 또한 쇠사슬(누가복음 8:29)과 군사의 부대(사도행전 21:31)와, 유다와 이스라엘의 하나 됨을 나타내는 목자의 막대기(스가랴 11:7)를 이른다.",
    "category": "용어",
@@ -5875,7 +5875,7 @@
   },
   {
    "id": 592,
-   "term": "Bird",
+   "term": "Bird(새)",
    "definition": "Birds are divided in the Mosaic law into two classes, (1) the clean (Leviticus 1:14-17; 5:7-10; 14:4-7), which were offered in sacrifice; and (2) the unclean (Leviticus 11:13-20). When offered in sacrifice, they were not divided as other victims were (Genesis 15:10). They are mentioned also as an article of food (Deuteronomy 14:11). The art of snaring wild birds is referred to (Psalm 124:7; Proverbs 1:17; 7:23; Jeremiah 5:27). Singing birds are mentioned in Psalm 104:12; Ecclesiastes 12:4. Their timidity is alluded to (Hos. 11:11). The reference in Psalm 84:3 to the swallow and the sparrow may be only a comparison equivalent to, “What her house is to the sparrow, and her nest to the swallow, that thine altars are to my soul.”",
    "definition_ko": "모세의 율법에서 새는 두 부류로 나뉘니, (1) 정한 새(레위기 1:14-17; 레위기 5:7-10; 레위기 14:4-7)로서 제물로 드려진 것과 (2) 부정한 새이다(레위기 11:13-20). 제물로 드릴 때에는 다른 희생처럼 쪼개지 않았다(창세기 15:10). 새는 먹을거리로도 언급된다(신명기 14:11). 들새를 덫으로 잡는 재주가 언급된다(시편 124:7; 잠언 1:17; 잠언 7:23; 예레미야 5:27). 노래하는 새는 시편 104:12과 전도서 12:4에 나온다. 그 겁 많음을 가리킨 곳도 있다(호세아 11:11). 시편 84:3에서 제비와 참새를 말한 것은 다만 「참새에게 그 집이, 제비에게 그 보금자리가 그러하듯 주의 제단이 내 영혼에게 그러하다」는 말과 같은 견줌일 수 있다.",
    "category": "용어",
@@ -6225,7 +6225,7 @@
   },
   {
    "id": 627,
-   "term": "Booth",
+   "term": "Booth(초막)",
    "definition": "a hut made of the branches of a tree. In such tabernacles Jacob sojourned for a season at a place named from this circumstance Succoth (Genesis 33:17). Booths were erected also at the feast of Tabernacles (q.v.), Leviticus 23:42, 43, which commemorated the abode of the Israelites in the wilderness.",
    "definition_ko": "나뭇가지로 만든 오두막이다. 야곱이 이런 초막에서 한동안 머물렀고, 그 일로 그곳 이름이 숙곳이라 불렸다(창세기 33:17). 초막절(참조)에도 초막을 세웠으니(레위기 23:42,43), 이는 이스라엘 사람이 광야에서 머물던 일을 기념하는 것이었다.",
    "category": "용어",
@@ -9779,7 +9779,7 @@
   },
   {
    "id": 987,
-   "term": "Date",
+   "term": "Date(대추야자)",
    "definition": "the fruit of a species of palm (q.v.), the Phoenix dactilifera. This was a common tree in Palestine (Joel 1:12; Nehemiah 8:15). Palm branches were carried by the Jews on festive occasions, and especially at the feast of Tabernacles (Leviticus 23:40; Nehemiah 8:15).",
    "definition_ko": "종려나무(참조)의 한 종인 포이닉스 닥틸리페라의 열매이다. 팔레스타인에서 흔한 나무였다(요엘 1:12; 느헤미야 8:15). 유대인은 절기에, 특히 초막절에 종려나무 가지를 들었다(레위기 23:40; 느헤미야 8:15).",
    "category": "용어",
@@ -13940,7 +13940,7 @@
   },
   {
    "id": 1404,
-   "term": "Funeral",
+   "term": "Funeral(장례)",
    "definition": "Burying was among the Jews the only mode of disposing of corpses (Genesis 23:19; 25:9; 35:8, 9, etc.).  The first traces of burning the dead are found in 1 Samuel 31:12. The burning of the body was affixed by the law of Moses as a penalty to certain crimes (Leviticus 20:14; 21:9). To leave the dead unburied was regarded with horror (1 Kings 13:22; 14:11; 16:4; 21:24, etc.). In the earliest times of which we have record kinsmen carried their dead to the grave (Genesis 25:9; 35:29; Judges 16:31), but in later times this was done by others (Amos 6:10). Immediately after decease the body was washed, and then wrapped in a large cloth (Acts 9:37; Matthew 27:59; Mark 15:46). In the case of persons of distinction, aromatics were laid on the folds of the cloth (John 19:39; comp. John 12:7). As a rule the burial (q.v.) took place on the very day of the death (Acts 5:6, 10), and the body was removed to the grave in an open coffin or on a bier (Luke 7:14). After the burial a funeral meal was usually given (2 Samuel 3:35; Jeremiah 16:5, 7; Hos. 9:4).",
    "definition_ko": "유대인에게 주검을 처리하는 오직 하나뿐인 방식은 장사하는 것이었다(창세기 23:19; 창세기 25:9; 창세기 35:8,9 등). 죽은 자를 불사른 첫 자취가 사무엘상 31:12에 나온다. 몸을 불사르는 것은 모세의 율법으로 어떤 죄에 대한 벌로 정해졌다(레위기 20:14; 레위기 21:9). 죽은 자를 장사하지 않고 버려두는 것은 끔찍한 일로 여겨졌다(열왕기상 13:22; 열왕기상 14:11; 열왕기상 16:4; 열왕기상 21:24 등). 우리에게 기록이 있는 가장 이른 때에는 친족이 그 죽은 이를 무덤으로 옮겼으나(창세기 25:9; 창세기 35:29; 사사기 16:31), 뒷날에는 다른 이들이 이 일을 하였다(아모스 6:10). 숨을 거두면 곧 그 몸을 씻고 큰 천으로 쌌다(사도행전 9:37; 마태복음 27:59; 마가복음 15:46). 두드러진 이의 경우에는 그 천의 주름에 향품을 놓았다(요한복음 19:39. 요한복음 12:7과 견주라). 대개 장사(참조)는 죽은 바로 그날에 이루어졌고(사도행전 5:6,10), 그 몸을 뚜껑 없는 관이나 상여에 실어 무덤으로 옮겼다(누가복음 7:14). 장사한 뒤에는 대개 장례의 밥을 나누었다(사무엘하 3:35; 예레미야 16:5,7; 호세아 9:4).",
    "category": "용어",
@@ -17827,7 +17827,7 @@
   },
   {
    "id": 1793,
-   "term": "Hill",
+   "term": "Hill(언덕)",
    "definition": "Heb. gib’eah, a curved or rounded hill, such as are common to Palestine (Psalm 65:12; 72:3; 114:4, 6). (2.) Heb. har, properly a mountain range rather than an individual eminence (Exodus 24:4, 12, 13, 18; Numbers 14:40, 44, 45). In Deuteronomy 1:7, Joshua 9:1; 10:40; 11:16, it denotes the elevated district of Judah, Benjamin, and Ephraim, which forms the watershed between the Mediterranean and the Dead Sea. (3.) Heb. ma’aleh in 1 Samuel 9:11. Authorized Version “hill” is correctly rendered in the Revised Version “ascent.” (4.) In Luke 9:37 the “hill” is the Mount of Transfiguration.",
    "definition_ko": "(1.) 히브리 말 「기브아」이니 팔레스타인에 흔한, 굽거나 둥근 언덕이다(시편 65:12; 시편 72:3; 시편 114:4,6). (2.) 히브리 말 「하르」이니 본래 하나의 솟은 데라기보다 산줄기이다(출애굽기 24:4,12,13,18; 민수기 14:40,44,45). 신명기 1:7과 여호수아 9:1, 여호수아 10:40, 여호수아 11:16에서는 지중해와 사해 사이의 분수령을 이루는 유다와 베냐민과 에브라임의 높은 지역을 나타낸다. (3.) 사무엘상 9:11의 히브리 말 「마알레」이다. 흠정역의 「언덕」을 개정역이 「오르막」이라 바르게 옮긴다. (4.) 누가복음 9:37의 「산」은 변화의 산이다.",
    "category": "용어",
@@ -19024,7 +19024,7 @@
   },
   {
    "id": 1913,
-   "term": "Ishmeelites",
+   "term": "Ishmeelites(이스마엘 사람)",
    "definition": "(Genesis 37:28; 39:1, A.V.) should be “Ishmaelites,” as in the Revised Version.",
    "definition_ko": "(창세기 37:28; 창세기 39:1 흠정역) 개정역대로 「이스마엘 사람」이라야 한다.",
    "category": "용어",
@@ -21694,7 +21694,7 @@
   },
   {
    "id": 2181,
-   "term": "Kenites",
+   "term": "Kenites(겐 사람)",
    "definition": "smiths, the name of a tribe inhabiting the desert lying between southern Palestine and the mountains of Sinai. Jethro was of this tribe (Judges 1:16). He is called a “Midianite” (Numbers 10:29), and hence it is concluded that the Midianites and the Kenites were the same tribe. They were wandering smiths, “the gipsies and travelling tinkers of the old Oriental world. They formed an important guild in an age when the art of metallurgy was confined to a few” (Sayce’s Races, etc.). They showed kindness to Israel in their journey through the wilderness. They  accompanied them in their march as far as Jericho (Judges 1:16), and then returned to their old haunts among the Amalekites, in the desert to the south of Judah. They sustained afterwards friendly relations with the Israelites when settled in Canaan (Judges 4:11, 17-21; 1 Samuel 27:10; 30:29). The Rechabites belonged to this tribe (1 Chronicles 2:55) and in the days of Jeremiah (35:7-10) are referred to as following their nomad habits. Saul bade them depart from the Amalekites (1 Samuel 15:6) when, in obedience to the divine commission, he was about to “smite Amalek.” And his reason is, “for ye showed kindness to all the children of Israel when they came up out of Egypt.” Thus “God is not unrighteous to forget the kindnesses shown to his people; but they shall be remembered another day, at the farthest in the great day, and recompensed in the resurrection of the just” (M. Henry’s Commentary). They are mentioned for the last time in Scripture in 1 Samuel 27:10; comp. 30:20.",
    "definition_ko": "「대장장이」라는 뜻이다. 팔레스타인 남부와 시내 산지 사이 광야에 살던 한 족속의 이름이다. 이드로가 이 족속이었다(사사기 1:16). 그는 「미디안 사람」이라고도 불리므로(민수기 10:29) 미디안 사람과 겐 사람이 같은 족속이었다고 여겨진다. 그들은 떠돌이 대장장이였으니 「옛 동방 세계의 집시요 떠돌이 땜장이였다. 야금 기술이 몇 사람에게만 있던 시대에 그들은 중요한 조합을 이루었다」(세이스, 『민족』).\n그들은 이스라엘이 광야를 지날 때 친절을 베풀었고, 여리고까지 그 행진에 동행하였다가(사사기 1:16) 유다 남쪽 광야의 아말렉 사람들 가운데 있던 옛 거처로 돌아갔다. 그 뒤 이스라엘이 가나안에 정착한 뒤에도 그들과 우호 관계를 이어 갔다(사사기 4:11,17-21; 사무엘상 27:10; 사무엘상 30:29). 레갑 족속이 이 족속에 속하며(역대상 2:55) 예레미야 때에도 유목하는 버릇을 그대로 좇고 있었다고 언급된다(예레미야 35:7-10).\n사울은 하나님의 명을 좇아 「아말렉을 치려」 할 때 그들에게 아말렉 사람에게서 떠나라고 하였는데(사무엘상 15:6), 그 까닭은 「이스라엘 모든 자손이 애굽에서 올라올 때에 너희가 그들을 선대하였음이니라」 하는 것이었다. 이처럼 「하나님은 자기 백성에게 베푼 친절을 잊으실 만큼 불의하지 아니하시니, 그것은 다른 날에, 늦어도 그 큰 날에 기억되어 의인의 부활 때에 갚아질 것이다」(매튜 헨리, 『주석』). 성경에서 그들이 마지막으로 언급된 곳은 사무엘상 27:10이다(사무엘상 30:29 비교).\n※ 원문 오류: 1 Samuel 30:20 → 사무엘상 30:29\n※ 판정 근거: 본문 대조. 사무엘상 30:29가 「겐 사람의 성읍들에 있는 자와」로 겐 사람을 말하고, 30:20은 다윗이 되찾은 가축이다.\n※ 원문 대조: 1996년 전자판 693쪽에 같은 꼴로 찍혀 있다. 우리 쪽 추출 훼손이 아니다.",
    "category": "용어",
@@ -24159,7 +24159,7 @@
   },
   {
    "id": 2428,
-   "term": "Market-Place",
+   "term": "Market-Place(장터)",
    "definition": "any place of public resort, and hence a public place or broad street (Matthew 11:16; 20:3), as well as a forum or market-place proper, where goods were exposed for sale, and where public assemblies and trials were held (Acts 16:19; 17:17). This word occurs in the Old Testament only in Ezekiel 27:13. In early times markets were held at the gates of cities, where commodities were exposed for sale (2 Kings 7:18). In large towns the sale of particular articles seems to have been confined to certain streets, as we may infer from such expressions as “the bakers’ street” (Jeremiah 37:21), and from the circumstance that in the time of Josephus the valley between Mounts Zion and Moriah was called the Tyropoeon or the “valley of the cheesemakers.”",
    "definition_ko": "사람들이 모이는 온갖 자리를 뜻하며, 따라서 공공의 장소나 넓은 거리(마태복음 11:16; 마태복음 20:3)뿐 아니라, 물건을 벌여 놓고 팔며 공적인 모임과 재판이 열리던 광장이나 저자를 가리킨다(사도행전 16:19; 사도행전 17:17). 구약에서는 에스겔 27:13에만 이 말이 나온다. 옛 시대에는 성문에서 장이 섰고 거기에 물건을 벌여 놓고 팔았다(열왕기하 7:18). 큰 성읍에서는 어떤 물건을 파는 곳이 어느 거리에 모여 있었던 듯한데, 이는 「떡 굽는 자의 거리」(예레미야 37:21) 같은 표현과, 요세푸스 때에 시온 산과 모리아 산 사이의 골짜기가 티로포에온 곧 「치즈 만드는 자의 골짜기」라 불린 사정에서 미루어 알 수 있다.",
    "category": "용어",
@@ -31525,7 +31525,7 @@
   },
   {
    "id": 3166,
-   "term": "Ruby",
+   "term": "Ruby(홍보석)",
    "definition": "(Heb. peninim), only in plural (Lamentations 4:7). The ruby was one of the stones in the high priest’s breastplate (Exodus 28:17). A comparison is made between the value of wisdom and rubies (Job 28:18;  Proverbs 3:15; 8:11). The price of a virtuous woman is said to be “far above rubies” (Proverbs 31:10). The exact meaning of the Hebrew word is uncertain. Some render it “red coral;” others, “pearl” or “mother-of-pearl.”",
    "definition_ko": "히브리어 「페니님」이며 복수 꼴로만 쓰인다(예레미야애가 4:7). 홍보석이 대제사장 흉패의 보석 가운데 하나였다(출애굽기 28:17). 지혜의 값어치를 홍보석에 견준다(욥기 28:18; 잠언 3:15; 잠언 8:11). 현숙한 여인의 값이 「진주보다 더하다」고 한다(잠언 31:10). 이 히브리 낱말의 정확한 뜻은 확실하지 않다. 어떤 이들은 「붉은 산호」로, 다른 이들은 「진주」나 「진주층」으로 옮긴다.",
    "category": "용어",
@@ -34301,7 +34301,7 @@
   },
   {
    "id": 3444,
-   "term": "Silverling",
+   "term": "Silverling(은전)",
    "definition": "(Isaiah 7:23). Literally the words are “at a thousand of silver”, i.e., “pieces of silver,” or shekels.",
    "definition_ko": "이사야 7:23에 나온다. 글자대로는 「은 천에」이니 곧 「은 조각」 곧 세겔이다.",
    "category": "용어",
