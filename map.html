@@ -1670,17 +1670,8 @@
 .upload-badges-inline .upload-badge { font-size: 11px; padding: 3px 8px; }
 
 /* 헤더 접기 모드 */
-#left-pane.header-collapsed .panel-header { display: none; }
-#left-pane.header-collapsed #upload-zone { display: none !important; }
-#left-pane.header-collapsed .upload-title-inline { display: none !important; }
-#left-pane.header-collapsed .upload-icon-inline { display: none !important; }
-#left-pane.header-collapsed #uploaded-files-list, #left-pane.header-collapsed .uploaded-files-list { display: none !important; }
-#left-pane.header-collapsed .file-btn-group { display: none !important; }
-#left-pane.header-collapsed #db-status-bar { display: none !important; }
-#left-pane.header-collapsed .font-control-row { display: none !important; }
-#left-pane.header-collapsed .upload-badges, #left-pane.header-collapsed #upload-badges { display: none !important; }
-#left-pane.header-collapsed .upload-progress, #left-pane.header-collapsed #upload-progress { display: none !important; }
-#left-pane.header-collapsed .controls-bar { padding-top: 0 !important; margin-top: 0 !important; }
+/* 2026-09-12: 접기 기능을 뺐다. 상단이 세 줄이라 접을 게 없다.
+ * 이 규칙들이 #db-status-bar 를 통째로 감춰 단추가 안 먹는 흠을 냈다. */
 #header-toggle-bar {
   display: block; background: #eef2f7; border-bottom: 1px solid #e2e8f0;
   padding: 3px 10px; cursor: pointer; text-align: center; font-size: 11px; color: #3b82f6;
@@ -14516,6 +14507,9 @@ setTimeout(function() {
 // 헤더 접기/펼치기
 // ── 상단 묶음 메뉴(내보내기·동기화·편집이력) 열고 닫기 ──
 (function initMenuGroups() {
+  // 옛 판에서 붙은 header-collapsed 가 브라우저에 남아 상단을 감출 수 있다(2026-09-12)
+  document.getElementById('left-pane')?.classList.remove('header-collapsed');
+
   document.querySelectorAll('.menu-group .menu-trigger').forEach(function(trigger) {
     trigger.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -14548,32 +14542,14 @@ setTimeout(function() {
   });
 })();
 
-function toggleHeaderCollapse() {
-  var pane = document.getElementById('left-pane');
-  var bar = document.getElementById('header-toggle-bar');
-  if (pane.classList.contains('header-collapsed')) {
-    pane.classList.remove('header-collapsed');
-    bar.textContent = '▲ 접기';
-  } else {
-    pane.classList.add('header-collapsed');
-    bar.textContent = '▼ 펼치기';
-  }
-}
+/* 상단이 세 줄로 줄어 접을 게 없다(2026-09-12). 부르는 데가 남아 있을 수 있어 껍데기만 둔다. */
+function toggleHeaderCollapse() { /* 하는 일 없음 */ }
 
-// 데이터 로드 완료 시 자동 접기
-var _origShowToast = showToast;
-showToast = function(msg, type) {
-  _origShowToast(msg, type);
-  if (type === 'success' && (msg.includes('백업 복원') || msg.includes('로드 완료'))) {
-    setTimeout(function() {
-      var pane = document.getElementById('left-pane');
-      if (!pane.classList.contains('header-collapsed')) {
-        pane.classList.add('header-collapsed');
-        document.getElementById('header-toggle-bar').textContent = '▼ 파일 영역 펼치기';
-      }
-    }, 1500);
-  }
-};
+/* 2026-09-12: 자동 접기를 없앴다.
+ * 「로드 완료」 알림이 뜨면 1.5초 뒤 header-collapsed 를 붙였는데,
+ * 그 클래스가 #db-status-bar 를 통째로 감춘다.
+ * 상단을 세 줄로 줄이면서 접을 게 없어졌고, 이 자동 접기 때문에
+ * 백업·내보내기·동기화·⋯ 가 사라져 단추가 안 먹었다. */
 
     /* ═══════════════════════════════════════════════════════════════
      * [성경찾기] v4.2.0-PWA — 키워드 검색 / 구절 검색 / 팝업 본문 미리보기
