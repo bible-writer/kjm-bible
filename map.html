@@ -4091,7 +4091,15 @@
          *   이스턴·스미스 → 펼친 채로 (고칠 때 견주어야 하므로)
          *   힛치콕        → 접어 둠 (이름 뜻만 든 짧은 사전)
          *   셋 다 없으면  → 앱DB 글로 물러선다 (667자리) */
-        const hitchAuto = this.findRawEntry(t.term_en, 'hitchcock');
+        /* 한글해설 칸은 따로 찾는다.
+         * eastonAuto 는 easton_raw(손으로 붙여넣은 영문)가 있으면 null 이 되는데,
+         * 영문을 붙여넣었다고 해서 한글까지 안 보일 까닭이 없다. */
+        const koE = this.followRef(this.findRawEntry(t.term_en, 'easton'), 'easton')
+                 || this.findRawEntry(t.term_en, 'easton');
+        const koS = this.followRef(this.findRawEntry(t.term_en, 'smith'), 'smith')
+                 || this.findRawEntry(t.term_en, 'smith');
+        const koH = this.findRawEntry(t.term_en, 'hitchcock');
+        const hitchAuto = koH;
         /* 세로줄형 — 사전마다 2px 색 띠를 두어 어느 사전 글인지 눈으로 바로 갈리게 한다.
          * 이스턴 보라 · 스미스 청록 · 힛치콕 회색.
          * 띠가 한쪽에만 있는 테두리이므로 border-radius 는 0 이어야 한다. */
@@ -4122,9 +4130,9 @@
             + '</div>';
         }
         let dictKoBlock =
-            dictKoSection(eastonAuto, '이스턴', true)
-          + dictKoSection(smithAuto,  '스미스', true)
-          + dictKoSection(hitchAuto,  '힛치콕', false);
+            dictKoSection(koE, '이스턴', true)
+          + dictKoSection(koS, '스미스', true)
+          + dictKoSection(koH, '힛치콕', false);
         if (!dictKoBlock) {
           dictKoBlock = '<div style="font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">'
                       + previewHtml + (needsToggle ? '\u2026' : '') + '</div>'
