@@ -2599,6 +2599,8 @@
               termDatabaseMeta = { note: pkg.note || '' };
               await setLocalItem('saved_term_database', termDatabase);
               await setLocalItem('saved_term_database_meta', termDatabaseMeta);
+              // 파일을 직접 열 때도 판을 저장해야 내보낼 때 끝자리를 바로 올린다(2026-09-12)
+              await setLocalItem('saved_term_database_version', pkg.version || '');
               buildTermIndex(termDatabase);
               loadBibleText();
               showToast(`용어 DB 로드 완료: ${termDatabase.length}개`, 'success');
@@ -11268,8 +11270,16 @@
      * 둘 다 「고칠 때마다 판 번호와 날짜를 올린다」는 규칙을 어긴다.
      * termDB 망가짐 사고(1,838 표제어가 v1.0.0 에 묶여 덮어써진 일)가 이것 때문이었다.
      * 이제 지금 불러온 판을 읽어 끝자리만 올린다. 못 읽으면 멈추고 사람에게 묻는다. */
+    function verNum(v) {
+      const m = String(v || '').trim().match(/^(\d+)\.(\d+)\.(\d+)$/);
+      return m ? (+m[1]) * 1e6 + (+m[2]) * 1e3 + (+m[3]) : -1;
+    }
     function bumpVersion(cur, fallback) {
       const v = String(cur || '').trim();
+      /* 손안에 남은 판이 여벌(지금 나가 있는 판)보다 낮으면 여벌을 쓴다.
+       * 옛 판이 브라우저에 남아 1.5.0 을 받기 전이면 1.4.1 로 나가 버린다.
+       * 실제로 그런 일이 있었다(2026-09-12). */
+      if (verNum(v) >= 0 && verNum(fallback) > verNum(v)) return fallback;
       // '2026.09.12' 같은 날짜 꼴은 판 번호가 아니다. 옛 내보내기가 이런 값을 남겼다.
       if (/^(19|20)\d\d\.\d\d?\.\d\d?$/.test(v)) return fallback;
       const m = v.match(/^(\d+)\.(\d+)\.(\d+)$/);
@@ -11280,16 +11290,23 @@
     }
     async function askVersion(label, cur, fallback) {
       const next = bumpVersion(cur, fallback);
-      const v = window.prompt(
-        label + ' 판 번호\n\n지금: ' + (cur || '(모름)') + '\n\n'
-        + '확인을 누르면 아래 번호로 내보냅니다. 고치려면 여기서 바꾸세요.', next);
-      if (v === null) return null;
-      const t = v.trim();
-      if (!/^\d+\.\d+\.\d+$/.test(t)) {
+      const known = /^\d+\.\d+\.\d+$/.test(String(cur || '').trim());
+      const head = known
+        ? '지금: ' + cur
+        : '지금 판을 알 수 없습니다. GitHub 에 올라가 있는 판을 보고 적어 주세요.';
+      // 세 번까지 다시 묻는다. 그만두려면 취소.
+      let v = next;
+      for (let i = 0; i < 3; i++) {
+        const r = window.prompt(
+          label + ' 판 번호\n\n' + head + '\n\n'
+          + '이 번호로 내보냅니다. 고치려면 여기서 바꾸세요. (1.2.3 꼴)', v);
+        if (r === null) return null;
+        const t = r.trim();
+        if (/^\d+\.\d+\.\d+$/.test(t)) return t;
         showToast('판 번호는 1.2.3 꼴이어야 합니다', 'warn');
-        return null;
+        v = t;
       }
-      return t;
+      return null;
     }
 
     async function exportPlaceDatabaseJson() {
@@ -11300,7 +11317,7 @@
       try { password = await EncryptedDB.askPasswordForExport(); }
       catch (e) { showToast('비밀번호를 입력하지 않아 내보내기가 취소되었습니다.', 'info'); return; }
       const curV = (await getLocalItem('saved_place_database_version')) || '';
-      const newV = await askVersion('지명DB', curV, '6.1.1');
+      const newV = await askVersion('지명DB', curV, '6.1.1');   // 여벌은 지금 판 +1. 판이 오르면 함께 고칠 것
       if (!newV) { showToast('내보내기를 그만두었습니다', 'info'); return; }
       const db = {
         version: newV,
@@ -11328,7 +11345,7 @@
       try { password = await EncryptedDB.askPasswordForExport(); }
       catch (e) { showToast('비밀번호를 입력하지 않아 내보내기가 취소되었습니다.', 'info'); return; }
       const curV = (await getLocalItem('saved_term_database_version')) || '';
-      const newV = await askVersion('용어DB', curV, '1.5.1');
+      const newV = await askVersion('용어DB', curV, '1.5.1');   // 여벌은 지금 판 +1. 판이 오르면 함께 고칠 것
       if (!newV) { showToast('내보내기를 그만두었습니다', 'info'); return; }
       const db = {
         version: newV,
