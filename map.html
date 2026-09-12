@@ -11309,6 +11309,30 @@
       return null;
     }
 
+    /* 파일 하나 내려받기 */
+    function downloadJson(obj, filename, pretty) {
+      const text = pretty
+        ? JSON.stringify(obj, null, 1)   // 평문은 indent=1 — kjm 손안의 파일과 바이트까지 같아진다
+        : JSON.stringify(obj);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    /* 암호본과 평문을 함께 낸다(2026-09-12).
+     * 평문은 이름에 _plain_ 과 판 번호를 넣어 GitHub 에 실수로 올리는 일을 막는다.
+     * 브라우저가 잇단 내려받기를 막을 수 있어 사이를 조금 띄운다. */
+    async function exportBoth(db, baseName, password, label) {
+      const enc = await EncryptedDB.encrypt(db, password);
+      downloadJson(enc, baseName + '.json', false);
+      const plainName = baseName + '_plain_v' + String(db.version).replace(/\./g, '_') + '.json';
+      await new Promise(r => setTimeout(r, 400));
+      downloadJson(db, plainName, true);
+      showToast('📦 ' + baseName + '.json(암호본, GitHub 에 올리세요)  +  '
+              + plainName + '(평문, 손안에만 두세요) — ' + label, 'success');
+    }
+
     async function exportPlaceDatabaseJson() {
       if (placeDatabase.length === 0) {
         showToast('내보낼 지명 데이터가 없습니다.', 'warn'); return;
@@ -11326,14 +11350,8 @@
         source: 'OpenBible.info + IAA + Satellite Bible Atlas',
         places: placeDatabase // 필드를 임의로 재구성하지 않고 전체 그대로 내보냄 (ob_id/ob_score/이스턴·스미스 연동 등 데이터 손실 방지)
       };
-      const encrypted = await EncryptedDB.encrypt(db, password);
-      const blob = new Blob([JSON.stringify(encrypted)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'placeDatabase.json';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast(`📦 placeDatabase.json(암호화됨) 생성 완료 (${placeDatabase.length}개 지명) — GitHub에 업로드하세요`, 'success');
+      await exportBoth(db, 'placeDatabase', password, `지명 ${placeDatabase.length}개`);
+      await setLocalItem('saved_place_database_version', newV);
     }
 
     // 용어DB(스트롱코드 등 수동 수정분 포함) 내보내기 — 팝업에서 저장한 내용이 termDatabase 배열에 반영되어 있음
@@ -11355,14 +11373,8 @@
         note: termDatabaseMeta.note || '',
         terms: termDatabase
       };
-      const encrypted = await EncryptedDB.encrypt(db, password);
-      const blob = new Blob([JSON.stringify(encrypted)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'termDatabase.json';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast(`📦 termDatabase.json(암호화됨) 생성 완료 (${termDatabase.length}개 용어) — GitHub에 업로드하세요`, 'success');
+      await exportBoth(db, 'termDatabase', password, `용어 ${termDatabase.length}개`);
+      await setLocalItem('saved_term_database_version', newV);
     }
 
 
