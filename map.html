@@ -5592,7 +5592,7 @@
             // 임시 마커 생성 (검색 결과 표시용)
             if (window._searchTempMarker) map.removeLayer(window._searchTempMarker);
             window._searchTempMarker = L.marker([lat, lng]).addTo(map);
-            window._searchTempMarker.bindPopup(generatePopupHtml(p), {autoPan: false, maxWidth: 420, minWidth: 280}).openPopup();
+            window._searchTempMarker.bindPopup(generatePopupHtml(p), {autoPan: false, maxWidth: PLACE_POPUP_W, minWidth: 280}).openPopup();
             window._searchTempMarker.on('popupclose', function() {
               if (window._searchTempMarker) { map.removeLayer(window._searchTempMarker); window._searchTempMarker = null; }
             });
@@ -11392,6 +11392,31 @@
                en: String((item && item[enKey]) || '').trim() };
     }
 
+    /* ── 지명 팝업 크기와 사전 글자 크기 (2026-09-12) ──
+     * 사전 글이 길어져 11px 로는 읽기 힘들다. 팝업을 넓히고 글자 크기를 조절하게 한다.
+     * 고른 값은 localStorage 에 남겨 다음에도 그대로 쓴다. */
+    var PLACE_POPUP_W = (function () {
+      var v = parseInt(localStorage.getItem('place_popup_w') || '', 10);
+      return (v >= 320 && v <= 1200) ? v : 640;
+    })();
+    function placeDictFontSize() {
+      var v = parseInt(localStorage.getItem('place_dict_fs') || '', 10);
+      return (v >= 10 && v <= 28) ? v : 14;
+    }
+    // A- / A+ 를 누르면 열려 있는 팝업의 사전 글자를 그 자리에서 바꾼다
+    function placeDictFont(step) {
+      var v = placeDictFontSize() + step;
+      if (v < 10) v = 10;
+      if (v > 28) v = 28;
+      localStorage.setItem('place_dict_fs', String(v));
+      document.querySelectorAll('.popup-dict-body').forEach(function (el) {
+        el.style.fontSize = v + 'px';
+      });
+      document.querySelectorAll('.popup-dict-fs').forEach(function (el) {
+        el.textContent = v + 'px';
+      });
+    }
+
     function buildDictHtml(item) {
       const _e = placeDictText(item, 'easton');
       const _s = placeDictText(item, 'smith');
@@ -11404,7 +11429,13 @@
       if (!eKo && !eEn && !sKo && !sEn && !dv && !(item.cdbKo || '').trim()) return '';
 
       const dim = warn ? 'opacity:.72;' : '';
-      let html = '<div class="popup-dict-box" style="margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">';
+      let html = '<div class="popup-dict-box" style="margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">'
+        + '<div style="display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-bottom:2px;">'
+        +   '<span style="font-size:9px;color:#94a3b8;margin-right:auto;">사전 글자</span>'
+        +   '<button onclick="placeDictFont(-1)" style="font-size:10px;padding:1px 7px;border:1px solid #e2e8f0;border-radius:4px;background:#f8fafc;color:#475569;cursor:pointer;">A −</button>'
+        +   '<span class="popup-dict-fs" style="font-size:9px;color:#94a3b8;min-width:26px;text-align:center;">' + placeDictFontSize() + 'px</span>'
+        +   '<button onclick="placeDictFont(1)" style="font-size:10px;padding:1px 7px;border:1px solid #e2e8f0;border-radius:4px;background:#f8fafc;color:#475569;cursor:pointer;">A +</button>'
+        + '</div>';
 
       if (warn) {
         html += '<div style="background:#fef3c7;border-radius:5px;padding:5px 8px;margin-bottom:6px;'
@@ -11426,7 +11457,7 @@
           +     '<span class="dict-arrow">\u25b8</span><span>' + label + '</span>'
           +     '<span style="margin-left:auto;">' + badge + '</span>'
           +   '</div>'
-          +   '<div id="' + bid + '" style="display:none;font-size:11px;line-height:1.75;'
+          +   '<div id="' + bid + '" class="popup-dict-body" style="display:none;font-size:' + placeDictFontSize() + 'px;line-height:1.75;'
           +        'color:#334155;margin-top:4px;padding-left:14px;">' + escHtml(body)
           +     '<div style="margin-top:7px;">'
           +       '<button onclick="event.stopPropagation();askGemini(' + escHtml(JSON.stringify(item.name || '')) + ',&#39;' + key + '&#39;,' + escHtml(JSON.stringify(body)) + ',' + escHtml(JSON.stringify(item.ustrong || '')) + ')" '
@@ -11492,6 +11523,54 @@
      */
     var map = L.map('map', { center: [31.77, 35.23], zoom: 7 });
     window.map = map;
+
+    /* [지명 팝업 크기 조절] 오른쪽 아래 구석을 끌어 팝업을 넓히거나 키운다.
+     * Leaflet 기본 팝업은 크기 조절이 없어 손잡이를 손으로 붙인다.
+     * 고른 폭은 localStorage 에 남겨 다음 팝업부터 그 폭으로 열린다.
+     * Pointer Events 를 쓰므로 마우스·손가락·펜이 모두 같게 먹는다. */
+    map.on('popupopen', function (e) {
+      var container = e.popup && e.popup._container;
+      var wrapper = container && container.querySelector('.leaflet-popup-content-wrapper');
+      var content = container && container.querySelector('.leaflet-popup-content');
+      if (!wrapper || !content || wrapper._resizeBound) return;
+      wrapper._resizeBound = true;
+      wrapper.style.position = 'relative';
+      content.style.width = PLACE_POPUP_W + 'px';
+      content.style.maxHeight = '70vh';
+      content.style.overflowY = 'auto';
+
+      var grip = document.createElement('div');
+      grip.title = '끌어서 창 크기 조절';
+      grip.style.cssText = 'position:absolute;right:1px;bottom:1px;width:16px;height:16px;'
+        + 'cursor:nwse-resize;z-index:1000;touch-action:none;'
+        + 'background:linear-gradient(135deg,transparent 50%,#cbd5e1 50%,#cbd5e1 60%,transparent 60%,'
+        + 'transparent 70%,#cbd5e1 70%,#cbd5e1 80%,transparent 80%);';
+      wrapper.appendChild(grip);
+
+      var sx = 0, sy = 0, sw = 0, sh = 0, on = false;
+      grip.addEventListener('pointerdown', function (ev) {
+        on = true; sx = ev.clientX; sy = ev.clientY;
+        sw = content.offsetWidth; sh = content.offsetHeight;
+        grip.setPointerCapture(ev.pointerId);
+        ev.preventDefault(); ev.stopPropagation();
+      });
+      grip.addEventListener('pointermove', function (ev) {
+        if (!on) return;
+        var w = Math.min(1200, Math.max(280, sw + (ev.clientX - sx)));
+        var h = Math.min(window.innerHeight * 0.9, Math.max(160, sh + (ev.clientY - sy)));
+        content.style.width = w + 'px';
+        content.style.maxHeight = h + 'px';
+        content.style.height = h + 'px';
+        ev.preventDefault(); ev.stopPropagation();
+      });
+      grip.addEventListener('pointerup', function (ev) {
+        if (!on) return;
+        on = false;
+        try { grip.releasePointerCapture(ev.pointerId); } catch (err) {}
+        PLACE_POPUP_W = content.offsetWidth;
+        localStorage.setItem('place_popup_w', String(PLACE_POPUP_W));
+      });
+    });
 
     // [지도창 드래그] 지명 팝업(Leaflet 기본 팝업)을 마우스/터치로 자유롭게 옮길 수 있게 함
     map.on('popupopen', function(e) {
@@ -11614,7 +11693,7 @@
           className: 'pin-label'
         });
 
-        marker.bindPopup(generatePopupHtml(item), {maxWidth: 420, minWidth: 280, autoPan: false});
+        marker.bindPopup(generatePopupHtml(item), {maxWidth: PLACE_POPUP_W, minWidth: 280, autoPan: false});
           // 팝업 열릴 때 사진 갤러리 자동 로드
           marker.on('popupopen', function() {
             const popup = this.getPopup();
@@ -11647,7 +11726,7 @@
             className: 'pin-label'
           });
 
-          marker.bindPopup(generatePopupHtml(item), {maxWidth: 420, minWidth: 280, autoPan: false});
+          marker.bindPopup(generatePopupHtml(item), {maxWidth: PLACE_POPUP_W, minWidth: 280, autoPan: false});
           // 팝업 열릴 때 사진 갤러리 자동 로드
           marker.on('popupopen', function() {
             const popup = this.getPopup();
@@ -13048,7 +13127,7 @@
           setTimeout(() => {
             if (window._searchTempMarker) map.removeLayer(window._searchTempMarker);
             window._searchTempMarker = L.marker([lat, lng]).addTo(map);
-            window._searchTempMarker.bindPopup(generatePopupHtml(p), {autoPan: false, maxWidth: 420, minWidth: 280}).openPopup();
+            window._searchTempMarker.bindPopup(generatePopupHtml(p), {autoPan: false, maxWidth: PLACE_POPUP_W, minWidth: 280}).openPopup();
             window._searchTempMarker.on('popupclose', () => {
               if (window._searchTempMarker) { map.removeLayer(window._searchTempMarker); window._searchTempMarker = null; }
             });
