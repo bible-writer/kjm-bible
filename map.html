@@ -3933,6 +3933,51 @@
         this.showPopup(t, refLabel);
       },
 
+      /* ── 용어 팝업에서 바로 고치기·견주기 (2026-09-12) ──
+       * 한글 표제어를 눌러 고치고, 영문 표제어를 눌러 복사한다.
+       * 「사전 비교」는 원문사전(📜)을 그 표제어로 열어 이스턴·스미스·힛치콕을 나란히 본다. */
+      editTermKo: function (id) {
+        var t = termDatabase.find(function (x) { return x.id === id; });
+        if (!t) return;
+        var cur = (t.term_ko || '').trim();
+        var v = window.prompt('한글 표제어 수정  (' + (t.term_en || '') + ')\n\n'
+                            + '비워 두고 확인하면 고치지 않습니다.', cur);
+        if (v === null) return;
+        v = v.trim();
+        if (!v || v === cur) return;
+        t.term_ko = v;
+        setLocalItem('saved_term_database', termDatabase);
+        if (typeof dictCombinedCache !== 'undefined') dictCombinedCache = null;
+        this.showPopup(t);
+        showToast('한글 표제어를 「' + v + '」로 고쳤습니다', 'success');
+      },
+      copyTermEn: function (id) {
+        var t = termDatabase.find(function (x) { return x.id === id; });
+        if (!t || !t.term_en) return;
+        var txt = t.term_en;
+        function done() { showToast('「' + txt + '」 복사했습니다', 'success'); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(txt).then(done, function () { window.prompt('복사하세요', txt); });
+        } else {
+          window.prompt('복사하세요', txt);
+        }
+      },
+      gotoRawDict: function (id) {
+        var t = termDatabase.find(function (x) { return x.id === id; });
+        if (!t || !t.term_en) return;
+        if (typeof openRawDictModal !== 'function') { showToast('원문사전을 열 수 없습니다', 'warn'); return; }
+        openRawDictModal();
+        setTimeout(function () {
+          var box = document.getElementById('rawdict-search-input');
+          if (box) { box.value = t.term_en; }
+          if (typeof rawdictCatFilter !== 'undefined') rawdictCatFilter = '';
+          document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(function (b) {
+            b.classList.toggle('active', !b.dataset.cat);
+          });
+          if (typeof renderRawDictResults === 'function') renderRawDictResults(true);
+        }, 60);
+      },
+
       showPopup: function(t, refLabel) {
         this._currentTermId = t.id;
         let panel = document.getElementById('term-info-panel');
@@ -4040,10 +4085,13 @@
 
         panel.innerHTML = `
           <div id="term-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
-            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${refLabel ? `<span style="font-size:0.7em;color:#94a3b8;font-weight:500">${refLabel}</span> ` : ''}${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
+            <span style="font-weight:bold;font-size:1.25em;color:#b45309">📖 ${refLabel ? `<span style="font-size:0.7em;color:#94a3b8;font-weight:500">${refLabel}</span> ` : ''}<span onclick="TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="cursor:pointer;border-bottom:1px dashed #fcd34d">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span></span>
             <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
           </div>
-          <div style="font-size:0.9em;color:#d97706;font-weight:600;margin-bottom:6px">${escHtml(t.term_en || '')}</div>
+          <div style="font-size:0.9em;color:#d97706;font-weight:600;margin-bottom:6px">
+            <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사" style="cursor:pointer;border-bottom:1px dashed #fcd34d">${escHtml(t.term_en || '')}</span>
+            ${t.term_en ? `<button onclick="TermEngine.gotoRawDict(${t.id})" title="원문사전에서 이 표제어 찾기 (사전끼리 견주기)" style="margin-left:6px;font-size:0.72em;font-weight:400;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 7px;cursor:pointer">\ud83d\udcdc 사전 비교</button>` : ''}
+          </div>
           ${hg}
           ${tabBar}
           <div id="term-tab-content-ko">
