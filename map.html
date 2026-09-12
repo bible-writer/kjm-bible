@@ -7941,6 +7941,14 @@
       });
     }
     async function deleteCommentaryItem(id) {
+      // 기억해 둔 PDF 도 함께 버린다(2026-09-12)
+      try {
+        if (typeof Commentary !== 'undefined' && Commentary._pdfCache && Commentary._pdfCache.has(id)) {
+          const doc = Commentary._pdfCache.get(id);
+          Commentary._pdfCache.delete(id);
+          try { doc.destroy(); } catch (e) {}
+        }
+      } catch (e) {}
       const db = await openCommentaryDB();
       return new Promise((resolve, reject) => {
         const tx = db.transaction('items', 'readwrite');
@@ -7967,9 +7975,24 @@
         }
         return true;
       };
-      for (let p = 1; p <= pdfDoc.numPages; p++) {
-        const page = await pdfDoc.getPage(p);
-        const content = await page.getTextContent();
+      /* 2026-09-12 빠르게 고침 (둘째).
+       * 전에는 쪽마다 getTextContent() 를 하나씩 줄 서서 기다렸다.
+       * 300쪽이면 300번을 차례로 기다리는 셈이라 등록이 오래 걸렸다.
+       * 여섯 쪽씩 한꺼번에 돌린다 — pdf.js 는 여러 쪽을 함께 다룰 수 있다. */
+      const BATCH = 6;
+      let done = 0;
+      for (let base = 1; base <= pdfDoc.numPages; base += BATCH) {
+        const nums = [];
+        for (let k = 0; k < BATCH && base + k <= pdfDoc.numPages; k++) nums.push(base + k);
+        const pages = await Promise.all(nums.map(async n => {
+          const pg = await pdfDoc.getPage(n);
+          const ct = await pg.getTextContent();
+          try { pg.cleanup(); } catch (e) {}
+          return { n, ct };
+        }));
+        for (const pageData of pages) {
+        const p = pageData.n;
+        const content = pageData.ct;
 
         // 전략 1: pdf.js가 알려주는 실제 줄바꿈(hasEOL)을 기준으로 줄을 복원
         let cur = '';
@@ -7985,23 +8008,29 @@
         // 전략 2: Y좌표가 비슷한 조각들을 묶고 X좌표 순으로 이어붙임 (조각이 여러 개로 쪼개진 경우 대비)
         // 두 전략 모두 줄 전체를 대상으로 하므로, "...시작(1:1, 14)부터..."처럼 문장 속에 섞인
         // 인용구는 줄 전체가 패턴과 일치하지 않아 자동으로 걸러진다.
-        const groups = [];
+        /* 2026-09-12 빠르게 고침.
+         * 전에는 조각마다 groups.find() 를 돌려 낱말 수의 제곱만큼 걸렸다.
+         * 한 쪽에 조각이 2,000개면 200만 번 견주고, 쪽수를 곱하면 등록이 하염없이 느려진다.
+         * Y좌표를 3픽셀 칸으로 나눠 열쇠로 삼으면 한 번만 훑으면 된다. */
+        const byY = new Map();
         content.items.forEach(item => {
-          const y = item.transform[5];
-          let group = groups.find(g => Math.abs(g.y - y) <= 3);
-          if (!group) { group = { y, items: [] }; groups.push(group); }
-          group.items.push(item);
+          const key = Math.round(item.transform[5] / 3);
+          let arr = byY.get(key);
+          if (!arr) { arr = []; byY.set(key, arr); }
+          arr.push(item);
         });
-        groups.forEach(g => {
-          const line = g.items.sort((a, b) => a.transform[4] - b.transform[4]).map(it => it.str).join('');
-          addMatch(line, p);
+        byY.forEach(arr => {
+          if (arr.length > 1) arr.sort((a, b) => a.transform[4] - b.transform[4]);
+          addMatch(arr.map(it => it.str).join(''), p);
         });
 
         if (!sampleLinesLogged && p === Math.min(3, pdfDoc.numPages)) {
           sampleLinesLogged = true;
           console.log(`[주석 매핑 진단] ${p}페이지 텍스트 조각 샘플:`, content.items.slice(0, 15).map(it => it.str));
         }
-        if (onProgress) onProgress(p, pdfDoc.numPages);
+        done++;
+        if (onProgress) onProgress(done, pdfDoc.numPages);
+        }
       }
       console.log(`[주석 매핑 진단] 총 매핑된 절 수: ${Object.keys(verseMap).length}`);
       return verseMap;
@@ -8077,10 +8106,12 @@
 
       // 책 번호별로 절 텍스트를 그룹핑
       const byBook = {};
-      rows.forEach(([book, chapter, verse, btext]) => {
-        if (!byBook[book]) byBook[book] = {};
-        byBook[book][`${chapter}:${verse}`] = btext;
-      });
+      for (let i = 0; i < rows.length; i++) {
+        const r = rows[i];
+        let m = byBook[r[0]];
+        if (!m) { m = Object.create(null); byBook[r[0]] = m; }
+        m[r[1] + ':' + r[2]] = r[3];
+      }
 
       const db = await openCommentaryDB();
       // 같은 이름으로 이미 등록된 주석이 있으면 중복 등록을 막는다
@@ -8096,27 +8127,31 @@
         if (!ok) return 0;
       }
       const bookIds = Object.keys(byBook).map(Number).sort((a, b) => a - b);
+      /* 2026-09-12 빠르게 고침.
+       * 전에는 책마다 거래(transaction)를 새로 열어 66번을 줄 서서 썼다.
+       * IndexedDB 는 거래를 여는 값이 비싸다. 한 거래에 몰아 쓰면 훨씬 빠르다. */
       let created = 0;
-      for (const bId of bookIds) {
-        const bookObj = BIBLE_BOOKS.find(b => b.id === bId);
-        const bookName = bookObj ? bookObj.name : `책${bId}`;
-        const record = {
-          name: `${name} ${bookName}`,
-          bookId: bId,
-          type: 'json',
-          sourceType: 'cdb',
-          versesText: byBook[bId],
-          createdAt: Date.now()
-        };
-        await new Promise((resolve, reject) => {
-          const tx = db.transaction('items', 'readwrite');
-          const req = tx.objectStore('items').add(record);
-          req.onsuccess = resolve;
-          req.onerror = reject;
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction('items', 'readwrite');
+        const store = tx.objectStore('items');
+        bookIds.forEach(bId => {
+          const bookObj = BIBLE_BOOKS.find(b => b.id === bId);
+          const bookName = bookObj ? bookObj.name : `책${bId}`;
+          store.add({
+            name: `${name} ${bookName}`,
+            bookId: bId,
+            type: 'json',
+            sourceType: 'cdb',
+            versesText: byBook[bId],
+            createdAt: Date.now()
+          });
+          created++;
+          if (onProgress) onProgress(created, bookIds.length, bookName);
         });
-        created++;
-        if (onProgress) onProgress(created, bookIds.length, bookName);
-      }
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+        tx.onabort = () => reject(tx.error);
+      });
       return created;
     }
     // JSON 주석에서 특정 절의 텍스트를 찾는다 (정확히 일치하는 절이 없으면
@@ -8651,8 +8686,24 @@
           document.getElementById('commentary-empty-state').style.display = 'none';
           document.getElementById('commentary-text-view').style.display = 'none';
           document.getElementById('commentary-pdf-wrap').style.display = 'flex';
-          const arrayBuffer = await item.pdfBlob.arrayBuffer();
-          this.currentPdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          /* 열 때마다 PDF 전체를 처음부터 다시 읽어 느렸다(2026-09-12).
+           * 한 번 연 것은 기억해 두고, 같은 주석을 다시 열면 그대로 쓴다.
+           * 앞뒤로 둘까지만 두어 메모리가 불어나지 않게 한다. */
+          this._pdfCache = this._pdfCache || new Map();
+          if (this._pdfCache.has(itemId)) {
+            this.currentPdfDoc = this._pdfCache.get(itemId);
+          } else {
+            showToast('주석을 읽는 중…', 'info');
+            const arrayBuffer = await item.pdfBlob.arrayBuffer();
+            this.currentPdfDoc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            this._pdfCache.set(itemId, this.currentPdfDoc);
+            while (this._pdfCache.size > 2) {
+              const oldest = this._pdfCache.keys().next().value;
+              const doc = this._pdfCache.get(oldest);
+              this._pdfCache.delete(oldest);
+              try { doc.destroy(); } catch (e) {}
+            }
+          }
           this.baseScale = null;
           this.zoomFactor = 1;
           InkEngine.setTool('off'); // 새 PDF를 열면 항상 '보기' 모드로 시작 (스크롤이 먼저 되도록)
