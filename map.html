@@ -6217,6 +6217,7 @@
               <button onclick="RawDict.copyDefinition('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">📋 복사</button>
               <button onclick="askGeminiRaw('${rawdictSrc}',${e.id})" title="제미나이 웹으로 질문을 넘깁니다 (API 키·비용 없음)" style="flex-shrink:0;font-size:0.72em;color:#4338ca;background:#eef2ff;border:1px solid #c7d2fe;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✨ 제미나이</button>
             </div>
+            ${rawDictStubHtml(e, rawdictSrc)}
           </details>
           ${koBlock}
           ${variantBlock}
@@ -6230,6 +6231,66 @@
       } else {
         loadMoreWrap.innerHTML = `<span style="font-size:0.8em;color:#94a3b8">총 ${filtered.length}개 표시됨</span>`;
       }
+    }
+
+    /* ── 넘김표 항목 안내 (2026-09-12) ──
+     * 본문 대신 넘김표만 든 항목이 있다 — 스미스 30자리, 이스턴 25자리.
+     *   예) David, City Of 의 영문 원문은 '[Jerusalem]' 열한 글자가 전부다.
+     * 이는 파일이 상한 것이 아니라 원 사전(CCEL판 스미스)이 그렇게 적은 것이다.
+     * 원문사전 창은 원문을 있는 그대로 보는 곳이므로 원문은 고치지 않고,
+     * 그 아래에 가리키는 항목으로 건너뛰는 단추만 붙인다. */
+    function rawDictStubTarget(e, srcKey) {
+      const d = String((e && e.definition) || '').trim();
+      if (!d || d.length > 60) return null;
+      const m = d.match(/^\[([^\]]+)\]\.?$/) || d.match(/^See\s+([A-Za-z][A-Za-z \-.,']*?)\.?$/i);
+      if (!m) return null;
+      let name = m[1].replace(/^See\s+/i, '').trim();
+      /* 원 사전에 꼴이 어긋난 자리가 많다. 셋만 다듬는다.
+       *   '[Mars Hill’ HILL]'                  뒤에 대문자 되풀이
+       *   '[See Galilee, Sea Of, SEA OF]'      쉼표 뒤 대문자 되풀이
+       *   '[Weights And MeasuresAND Measures]' 낱말이 통째로 겹쳐 적힘
+       *   '[Fenced CitiesCITIES]'              같은 꼴 */
+      name = name.replace(/[’']\s*[A-Z][A-Z ]*$/, '')
+                 .replace(/,\s*[A-Z][A-Z ,]*$/, '')
+                 .replace(/([a-z])([A-Z][A-Z]+.*)$/, '$1')
+                 .trim();
+      if (!name) return null;
+      if (typeof TermEngine === 'undefined' || !TermEngine.findRawEntry) return null;
+      let to = null;
+      try { to = TermEngine.findRawEntry(name, srcKey); } catch (err) { return null; }
+      if (!to || to === e || String(to.definition || '').trim().length <= 60) return null;
+      return to;
+    }
+    function rawDictStubHtml(e, srcKey) {
+      const to = rawDictStubTarget(e, srcKey);
+      if (!to) return '';
+      return '<div style="margin-top:4px;font-size:0.78em;color:#92400e;background:#fffbeb;'
+           + 'border:1px solid #fde68a;border-radius:5px;padding:4px 8px;">'
+           + '이 항목은 원 사전이 넘김표만 두었습니다. 본문은 다른 항목에 있습니다. '
+           + '<button onclick="rawDictGoto(\'' + srcKey + '\',' + to.id + ')" '
+           + 'style="margin-left:4px;font-size:0.95em;color:#b45309;background:#fff;'
+           + 'border:1px solid #fcd34d;border-radius:4px;padding:1px 8px;cursor:pointer;">'
+           + '\u2192 ' + escHtml(to.term) + ' \ubcf4\uae30</button></div>';
+    }
+    // 검색칸에 그 표제어를 넣고 다시 그린다
+    function rawDictGoto(srcKey, id) {
+      const list = getRawDictList(srcKey) || [];
+      const to = list.find(x => x && x.id === id);
+      if (!to) { showToast('가리키는 항목을 찾지 못했습니다', 'warn'); return; }
+      rawdictSrc = srcKey;                 // 사전 딱지도 함께 옮긴다
+      rawdictCatFilter = '';               // 갈래 거르기는 풀어야 건너간 항목이 보인다
+      const box = document.getElementById('rawdict-search-input');
+      if (box) { box.value = to.term; }
+      // 딱지 칠을 손으로 맞춘다(딱지는 class 로 그려진다)
+      document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.src === srcKey);
+      });
+      document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach((b, i) => {
+        b.classList.toggle('active', !b.dataset.cat);
+      });
+      renderRawDictResults(true);
+      const results = document.getElementById('rawdict-results');
+      if (results) results.scrollTop = 0;
     }
 
     // 구글 비공식 무료 번역 엔드포인트 호출 (API 키 불필요, 개인/소량 사용 목적).
