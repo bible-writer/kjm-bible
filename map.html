@@ -1747,6 +1747,7 @@
             <button id="menu-open-bdb" onclick="menuPickFile('bdb')">📖 성경DB 열기</button>
             <button id="menu-open-xlsx" onclick="menuPickFile('xlsx')">📊 지명시트 열기</button>
             <button id="menu-open-interlinear" onclick="menuPickFile('interlinear')">🔤 스트롱코드 DB 등록</button>
+            <button id="menu-open-hebko" onclick="menuPickFile('hebko')">📕 한글 원어사전 등록</button>
 
             <div class="menu-sect">백업</div>
             <button id="btn-import-backup-trigger">💾 백업에서 복원</button>
@@ -1768,6 +1769,8 @@
         </div>
 
         <input type="file" id="backup-file-input" accept=".json" style="display:none;" />
+        <!-- 한글 원어사전 (2026-09-12). 상용 사전이라 GitHub 에 올리지 않고 kjm 이 손수 올린다 -->
+        <input type="file" id="hebko-file-input" accept=".json" style="display:none;" />
         <!-- JS 호환용 숨김 단추 (기존 코드가 이 id 로 이벤트를 붙인다) -->
         <button id="btn-open-add-link" style="display:none">+링크</button>
         <button id="btn-open-blacklist" style="display:none">제외</button>
@@ -4544,6 +4547,26 @@
             <div style="font-size:1.15em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
             <div style="font-size:0.85em;color:#059669;margin-bottom:4px">${escHtml(entry.xlit || '')}</div>
             <div style="font-size:0.85em;line-height:1.4;color:#334155">${escHtml(entry.gloss || '')}</div>
+            ${(function(){ /* 한글 원어사전이 등록돼 있으면 함께 보인다(2026-09-12) */
+              const k = (typeof hebKoLookup === 'function') ? hebKoLookup(code) : null;
+              if (!k) return '';
+              const m = String(k.m || '').trim(), t = String(k.t || '').trim();
+              if (!m && !t && !String(k.d || '').trim()) return '';
+              const dtl = String(k.d || '').trim();
+              const det = dtl
+                ? '<details style="margin-top:5px">'
+                  + '<summary style="cursor:pointer;font-size:0.72em;color:#A8336A;list-style:none;outline:none">자세히</summary>'
+                  + '<div style="margin-top:4px;max-height:170px;overflow-y:auto;padding-right:6px;'
+                  +      'font-size:0.8em;line-height:1.6;color:#475569;white-space:pre-wrap;overflow-wrap:anywhere">'
+                  + escHtml(dtl) + '</div></details>'
+                : '';
+              return '<div style="margin-top:6px;padding-top:5px;border-top:1px dashed #a7f3d0">'
+                + '<div style="font-size:0.7em;color:#A8336A;margin-bottom:1px">한글 원어사전</div>'
+                + (t ? '<div style="font-size:0.8em;color:#64748b">' + escHtml(t) + '</div>' : '')
+                + (m ? '<div style="font-size:0.88em;line-height:1.5;color:#1e293b">' + escHtml(m) + '</div>' : '')
+                + det
+                + '</div>';
+            })()}
             ${trBtn}
             ${detailBtn}
           </div>
@@ -6278,10 +6301,25 @@
         filtered = filtered.filter(e => e.category === rawdictCatFilter);
       }
       if (nq) {
-        filtered = filtered.filter(e =>
-          ns(e.term).includes(nq) ||
-          (e.definition_ko && e.definition_ko.toLowerCase().includes(q))
-        );
+        /* 영문은 낱말 경계에서만 걸리게 한다(2026-09-12).
+         * 전에는 글자만 견주어 'wife' 로 찾으면 'Midwife' 가, 'ark' 로 찾으면
+         * 'Darkness'·'Bulwarks' 가 29개나 나왔다.
+         * 다만 괄호 안 한글은 떼고 보아야 'Pharaoh, The Wife Of(바로의 아내)' 가 살아난다.
+         * 한글 표제어와 뜻풀이는 그대로 글자 견줌 — 「아내」로 「아내됨」을 찾는 것은 쓸모가 있다. */
+        const enOnly = t => String(t || '').replace(/\([^)]*\)/g, '').toLowerCase();
+        const isEn = /^[a-z]+$/.test(nq);
+        const wordRe = isEn ? new RegExp('(?:^|[^a-z])' + nq.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) : null;
+        filtered = filtered.filter(e => {
+          const koPart = String(e.term || '').match(/\(([^)]*)\)/);
+          const koHead = koPart ? ns(koPart[1]) : '';
+          if (isEn) {
+            if (wordRe.test(enOnly(e.term))) return true;      // 영문 표제어 — 낱말 경계
+          } else {
+            if (ns(e.term).includes(nq)) return true;          // 한글·숫자 따위 — 글자 견줌
+          }
+          if (koHead.includes(nq)) return true;                // 표제어 괄호 안 한글
+          return !!(e.definition_ko && e.definition_ko.toLowerCase().includes(q));
+        });
         const rank = e => {
           const t = ns(e.term);
           if (t === nq) return 0;
@@ -6774,6 +6812,64 @@
       loadRawDictionaries();
     });
 
+    /* ── 한글 원어사전 (2026-09-12) ──
+     * 베들레헴에 딸린 HebGrkKo.dct 를 1.2MB JSON 으로 줄여 kjm 이 손수 올린다.
+     * **상용 사전이라 GitHub 에 올리지 않는다.** 원전분해.sdb 와 같은 방식 —
+     * 브라우저(IndexedDB)에만 두고 kjm 컴퓨터에서만 돈다. 배포가 아니므로 저작권에 걸리지 않는다.
+     * 꼴: { "H2088": {"l":"זֶה", "t":"제 zeh", "m":"이것 this, 이러한 such"}, ... } */
+    var hebKoDict = null;
+
+    function hebKoNorm(code) {
+      var m = String(code || '').trim().toUpperCase().match(/^([HG])0*(\d+)/);
+      return m ? m[1] + String(parseInt(m[2], 10)) : '';
+    }
+    function hebKoLookup(code) {
+      if (!hebKoDict) return null;
+      var k = hebKoNorm(code);
+      return k ? (hebKoDict[k] || null) : null;
+    }
+    async function loadHebKoDict() {
+      try {
+        var raw = await getLocalItem('saved_hebko_dict');
+        if (raw && typeof raw === 'object') {
+          hebKoDict = raw;
+          console.log('한글 원어사전 ' + Object.keys(hebKoDict).length + '항목 불러옴');
+        }
+      } catch (err) { console.warn('한글 원어사전 불러오기 실패', err); }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      loadHebKoDict();
+      var inp = document.getElementById('hebko-file-input');
+      if (!inp) return;
+      inp.onchange = async function (ev) {
+        var f = ev.target.files && ev.target.files[0];
+        if (!f) return;
+        // 세부까지 담으면 21MB 라 읽는 동안 잠깐 멎는다. 미리 알린다(2026-09-12)
+        showToast('📕 한글 원어사전을 읽는 중… (' + Math.round(f.size / 1048576) + 'MB)', 'info');
+        await new Promise(function (r) { setTimeout(r, 30); });   // 알림이 뜨고 나서 읽는다
+        try {
+          var obj = JSON.parse(await f.text());
+          var keys = Object.keys(obj);
+          // 꼴 확인 — H/G 로 시작하는 열쇠에 l·t·m 이 든 객체여야 한다
+          var ok = keys.length > 100 && keys.slice(0, 20).every(function (k) {
+            return /^[HG]\d+$/.test(k) && obj[k] && typeof obj[k] === 'object';
+          });
+          if (!ok) { showToast('한글 원어사전 꼴이 아닙니다', 'warn'); return; }
+          // 열쇠를 채움 없는 꼴로 맞춰 둔다
+          var norm = {};
+          keys.forEach(function (k) { var n = hebKoNorm(k); if (n) norm[n] = obj[k]; });
+          hebKoDict = norm;
+          await setLocalItem('saved_hebko_dict', norm);
+          var nd = Object.keys(norm).filter(function (k) { return norm[k] && norm[k].d; }).length;
+          showToast('📕 한글 원어사전 ' + Object.keys(norm).length + '항목 등록 완료'
+                  + (nd ? ' (세부 풀이 ' + nd + ')' : ''), 'success');
+        } catch (err) {
+          console.error(err);
+          showToast('한글 원어사전을 읽지 못했습니다', 'warn');
+        } finally { ev.target.value = ''; }
+      };
+    });
+
     /* ⋯ 차림표의 파일 항목 (2026-09-12).
      * 딱지(.upload-badge)를 대신 누르는 방식은 먹지 않았다.
      * 딱지가 하는 일은 결국 숨은 file input 을 누르는 것뿐이므로 곧바로 부른다. */
@@ -6785,6 +6881,7 @@
         document.getElementById('interlinear-file-input')?.click();
         return;
       }
+      if (kind === 'hebko') { document.getElementById('hebko-file-input')?.click(); return; }
     }
 
     /* ── 시작 화면 항목 수 새로 그리기 (2026-09-12) ──
@@ -12276,11 +12373,38 @@
         + '</div>'
         + '<div style="margin-top:7px;color:#475569">' + escHtml(w.morph) + '</div>'
         + '<div style="margin-top:3px;font-weight:600">' + escHtml(w.gloss) + '</div>'
+        + hebKoBlock(w.code)
         + '<div id="word-panel-strong" style="margin-top:6px"></div>'
         + '<div style="margin-top:8px">'
         + '<button onclick="StrongEngine.handleClick(\'' + w.code + '\',\'word-panel-strong\')"'
         + ' style="font-size:0.8em;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;padding:2px 9px;cursor:pointer">📜 원어 사전</button>'
         + '</div></div>';
+
+      /* 한글 원어사전이 등록돼 있으면 원어형·음역·뜻을 보인다(2026-09-12).
+       * 안 올렸으면 아무것도 그리지 않는다 — 상용 사전이라 GitHub 에 없다. */
+      const hebKoBlock = code => {
+        const e = (typeof hebKoLookup === 'function') ? hebKoLookup(code) : null;
+        if (!e) return '';
+        const m = String(e.m || '').trim();
+        const t = String(e.t || '').trim();
+        const dtl = String(e.d || '').trim();
+        if (!m && !t && !dtl) return '';
+        /* 세부는 접어 둔다. H1961 이 3,238자라 그냥 펴면 팝업이 화면을 넘친다.
+         * 펼쳐도 상자 안에서만 넘겨 읽게 높이를 막는다(2026-09-12). */
+        const det = dtl
+          ? '<details style="margin-top:7px">'
+            + '<summary style="cursor:pointer;font-size:0.78em;color:#A8336A;list-style:none;outline:none">자세히</summary>'
+            + '<div style="margin-top:5px;max-height:190px;overflow-y:auto;padding:7px 8px 0 0;'
+            +      'border-top:1px dashed #e2e8f0;font-size:0.92em;line-height:1.7;color:#475569;'
+            +      'white-space:pre-wrap;overflow-wrap:anywhere">' + escHtml(dtl) + '</div></details>'
+          : '';
+        return '<div style="margin-top:8px;border-left:2px solid #E5A3C0;padding-left:11px">'
+          + '<div style="font-size:0.72em;color:#A8336A;margin-bottom:2px">한글 원어사전</div>'
+          + (t ? '<div style="color:#64748b;font-size:0.92em">' + escHtml(t) + '</div>' : '')
+          + (m ? '<div style="color:#1e293b;line-height:1.6">' + escHtml(m) + '</div>' : '')
+          + det
+          + '</div>';
+      };
 
       const fold = (key, label, count, inner) =>
         '<details class="wp-fold"' + (_wpOpen[key] ? ' open' : '') + ' data-k="' + key + '"'
