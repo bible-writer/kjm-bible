@@ -1795,8 +1795,11 @@
       <input type="file" id="file-input-any"   accept=".bdb,.db,.sdb,.sqlite,.xlsx,.xls,.csv,.json" style="display:none" multiple>
 
       <!-- ══ 통합 드래그앤드롭 업로드 존 ══ -->
-      <!-- 2026-09-12: ⋯ 차림표로 옮겼다. 끌어다 놓기는 살아 있어야 하므로 지우지 않고 감춘다 -->
-      <div id="upload-zone" title="클릭하거나 파일을 여기에 끌어다 놓으세요" style="display:none">
+      <!-- 2026-09-12: ⋯ 차림표로 옮겼다. 끌어다 놓기와 딱지 누름이 살아 있어야 하므로
+           display:none 이 아니라 자리만 없애고 눈에서 치운다.
+           display:none 이면 브라우저가 .click() 을 받지 않아 파일 창이 안 열린다. -->
+      <div id="upload-zone" title="클릭하거나 파일을 여기에 끌어다 놓으세요"
+           style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;left:-9999px">
         <div class="upload-compact-row">
           <span class="upload-icon-inline">📂</span>
           <span class="upload-title-inline">파일 열기 / 끌어다 놓기</span>
@@ -1854,7 +1857,9 @@
         개역개정
       </button>
       <div id="extra-trans-buttons"></div>
-      <span style="position:relative;">
+      <!-- 2026-09-12: kjm 지시로 뺐다. ⋯ 차림표의 「추가번역 등록」과 겹친다.
+           JS 가 이 id 로 손질을 붙이므로 지우지 않고 자리만 없앤다. -->
+      <span style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;left:-9999px">
         <button id="btn-add-trans" title="다른 번역본 추가">＋ 번역 추가</button>
         <div id="add-trans-dropdown"></div>
       </span>
