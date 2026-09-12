@@ -168,6 +168,8 @@
       min-width: 210px; padding: 5px; white-space: nowrap;
     }
     .menu-group.open .menu-panel { display: block; }
+    /* 오른쪽 끝에 있는 차림표는 왼쪽으로 연다 — 안 그러면 판 밖으로 넘쳐 지도를 가린다(2026-09-12) */
+    .menu-group.align-right .menu-panel { left: auto; right: 0; }
     .menu-group .menu-panel button {
       display: block; width: 100%; text-align: left;
       padding: 8px 11px; border: none; background: none; cursor: pointer;
@@ -944,6 +946,32 @@
     .lb-close { position: absolute; top: 16px; right: 20px; font-size: 28px; color: #fff; background: none; border: none; cursor: pointer; z-index: 10000; }
     .lb-info { color: #e2e8f0; font-size: 12px; margin-top: 8px; text-align: center; }
 
+    /* 읽을 자리 한 줄 (2026-09-12) */
+    .read-bar {
+      display: flex; align-items: center; gap: 5px;
+      padding: 7px 10px; border-bottom: 1px solid #e2e8f0; background: #fff;
+      flex-wrap: nowrap; overflow-x: auto;
+    }
+    .rb-sel {
+      font-size: 12.5px; color: #1e293b; background: #fff;
+      border: 1px solid #cbd5e1; border-radius: 5px;
+      padding: 4px 6px; cursor: pointer; max-width: 130px;
+    }
+    .rb-chap { max-width: 82px; }
+    .rb-icon {
+      font-size: 12px; color: #475569; background: #fff;
+      border: 1px solid #cbd5e1; border-radius: 5px;
+      padding: 4px 8px; cursor: pointer; white-space: nowrap;
+    }
+    .rb-icon:hover { background: #f8fafc; }
+    .rb-go {
+      font-size: 12.5px; color: #fff; background: #1e293b;
+      border: none; border-radius: 5px; padding: 5px 12px; cursor: pointer;
+    }
+    .rb-right { margin-left: auto; display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .rb-sep { width: 1px; height: 16px; background: #e2e8f0; margin: 0 3px; }
+    .rb-fs { font-size: 11px; color: #94a3b8; min-width: 30px; text-align: center; }
+
     /* 상태·도구 한 줄 (2026-09-12) — 색을 걷고 회색 한 결로 */
     .tb-btn {
       font-size: 12px; color: #334155; background: #fff;
@@ -1708,7 +1736,7 @@
           </div>
         </div>
 
-        <div class="menu-group">
+        <div class="menu-group align-right">
           <button class="tb-btn menu-trigger">동기화 ▾</button>
           <div class="menu-panel">
             <button id="btn-update-db" onclick="updateFromGitHub()">🔄 지명 DB 받기 (GitHub)</button>
@@ -1718,7 +1746,7 @@
           </div>
         </div>
 
-        <div class="menu-group">
+        <div class="menu-group align-right">
           <button class="tb-btn menu-trigger" title="그 밖의 것">⋯</button>
           <div class="menu-panel menu-panel-wide">
             <div class="menu-sect">파일</div>
@@ -1798,36 +1826,28 @@
       <!-- 업로드된 파일 목록 -->
       <div id="uploaded-files-list"></div>
 
-      <!-- 글자 크기 조절 컨트롤 -->
-      <div class="font-control-row">
-        <span class="font-control-label">본문 글자 크기:</span>
-        <div class="font-btn-group">
-          <button class="btn-font-size" id="btn-font-dec" title="글자 축소">A -</button>
-          <span id="font-size-display">15px</span>
-          <button class="btn-font-size" id="btn-font-inc" title="글자 확대">A +</button>
-        </div>
-      </div>
-
-      <!-- 2단 성경 선택 인터페이스 -->
-      <div class="select-row">
-        <select id="testament-select">
-          <option value="OT">구약 (39권)</option>
-          <option value="NT">신약 (27권)</option>
+      <!-- ── 읽을 자리 한 줄 (2026-09-12 정리) ──
+           전에는 글자 크기 · 구약/책 · ◀장▶조회 · 책선택/장선택 넉 줄이었다.
+           id 는 그대로 두어 붙어 있던 손질이 다 살아난다. -->
+      <div class="read-bar">
+        <select id="testament-select" class="rb-sel">
+          <option value="OT">구약</option>
+          <option value="NT">신약</option>
         </select>
-        <select id="book-select"></select>
-      </div>
+        <select id="book-select" class="rb-sel"></select>
+        <button class="rb-icon" id="btn-prev-chap" title="이전 장">◀</button>
+        <select id="chapter-select" class="rb-sel rb-chap"></select>
+        <button class="rb-icon" id="btn-next-chap" title="다음 장">▶</button>
+        <button class="rb-go" id="read-btn">조회</button>
 
-      <div class="select-row">
-        <button class="nav-step-btn" id="btn-prev-chap" title="이전 장">◀</button>
-        <select id="chapter-select"></select>
-        <button class="nav-step-btn" id="btn-next-chap" title="다음 장">▶</button>
-        <button class="action-btn" id="read-btn">조회</button>
-      </div>
-
-      <!-- [그리드] 책/장 선택 그리드 토글 -->
-      <div class="grid-toggle-row">
-        <button class="grid-toggle-btn" id="btn-book-grid">📖 책 선택</button>
-        <button class="grid-toggle-btn" id="btn-chap-grid">🔢 장 선택</button>
+        <span class="rb-right">
+          <button class="rb-icon" id="btn-book-grid" title="책 고르기">📖</button>
+          <button class="rb-icon" id="btn-chap-grid" title="장 고르기">🔢</button>
+          <span class="rb-sep"></span>
+          <button class="rb-icon" id="btn-font-dec" title="글자 줄이기">A−</button>
+          <span id="font-size-display" class="rb-fs">15px</span>
+          <button class="rb-icon" id="btn-font-inc" title="글자 키우기">A+</button>
+        </span>
       </div>
       <div class="grid-section" id="book-grid-section"></div>
       <div class="grid-section" id="chap-grid-section"></div>
