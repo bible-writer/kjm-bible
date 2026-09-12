@@ -944,6 +944,19 @@
     .lb-close { position: absolute; top: 16px; right: 20px; font-size: 28px; color: #fff; background: none; border: none; cursor: pointer; z-index: 10000; }
     .lb-info { color: #e2e8f0; font-size: 12px; margin-top: 8px; text-align: center; }
 
+    /* 시작 화면 (2026-09-12) */
+    .welcome-quick {
+      border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;
+      background: #fff; color: #334155; font-size: 13px; cursor: pointer;
+      text-align: left; transition: background .12s;
+    }
+    .welcome-quick:hover { background: #f8fafc; }
+    .welcome-link {
+      border: none; background: none; color: #94a3b8; font-size: 12px;
+      cursor: pointer; padding: 2px 0;
+    }
+    .welcome-link:hover { color: #475569; text-decoration: underline; }
+
     .popup-content {
       /* 2026-09-12: 바깥 팝업 폭을 넓히고 끌어 늘릴 수 있게 하면서
          이 max-width 350px 가 안쪽을 붙들어 오른쪽 절반이 비었다.
@@ -1819,29 +1832,22 @@
     <!-- 본문 + 비교패널 래퍼 -->
     <div id="bible-content-wrapper">
         <div id="bible-content">
-        <div id="welcome-screen" style="max-width:520px;margin:20px auto;text-align:center;">
-          <div style="font-size:48px;line-height:1;margin-bottom:10px;">📖🗺️</div>
-          <div class="chapter-title" style="margin-bottom:6px;">성경 66권 인터랙티브 독서 지도</div>
-          <p style="color:#64748b;font-size:13px;margin:0 0 20px;">개역개정 본문과 지명·인명·용어 사전이 함께 연동되는 성경 읽기 도구입니다.</p>
-
-          <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-            <span class="start-count" data-db="place" style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 사전</span>
-            <span class="start-count" data-db="person" style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
-            <span class="start-count" data-db="term" style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
+        <div id="welcome-screen" style="max-width:440px;margin:40px auto 20px;">
+          <div style="text-align:center;margin-bottom:30px">
+            <div style="font-size:20px;font-weight:600;color:#1e293b;margin-bottom:6px">성경 66권 독서 지도</div>
+            <div style="font-size:12px;color:#94a3b8">성경 DB를 등록하면 시작합니다</div>
           </div>
 
-          <button onclick="document.getElementById('bdb-file-input').click()" style="display:block;width:100%;padding:14px;margin-bottom:10px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,0.3);">
-            📂 성경 DB(.bdb) 열기
-          </button>
-          <button onclick="document.getElementById('btn-import-backup-trigger')?.click()" style="display:block;width:100%;padding:12px;background:#fff;color:#334155;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">
-            🔄 이전 백업(.json) 복원하기
+          <button onclick="document.getElementById('bdb-file-input').click()" style="display:block;width:100%;padding:13px;margin-bottom:24px;background:#1e293b;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;">
+            성경 DB(.bdb) 열기
           </button>
 
-          <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e2e8f0;text-align:left;font-size:12px;color:#94a3b8;line-height:1.7;">
-            <strong style="color:#64748b;">시작하는 방법</strong><br>
-            1. 개역개정 성경 <code>.bdb</code> 파일을 위 버튼으로 등록하세요.<br>
-            2. 한 번 등록하면 브라우저에 자동 저장되어 다음부터는 바로 이어볼 수 있습니다.<br>
-            3. 본문 속 지명·인명·용어를 클릭하면 지도와 사전이 함께 열립니다.
+          <div style="display:flex;gap:18px;justify-content:center;font-size:12px">
+            <button onclick="document.getElementById('btn-import-backup-trigger')?.click()" class="welcome-link">백업 복원</button>
+          </div>
+
+          <div style="margin-top:30px;font-size:11px;color:#cbd5e1;line-height:1.8;text-align:center">
+            한 번 등록하면 브라우저에 저장되어 다음부터는 바로 이어 읽습니다.
           </div>
         </div>
       </div>
@@ -6719,18 +6725,21 @@
       loadRawDictionaries();
     });
 
-    // ── 시작 화면 딱지에 실제 DB 수 표시 ──
+    /* ── 시작 화면 항목 수 새로 그리기 (2026-09-12) ──
+     * 전에는 딱지 셋(.start-count)을 1.5초마다 갈아 끼웠다.
+     * 이제 숫자가 한 줄이므로, 사전이 다 실린 뒤 화면을 한 번만 다시 그린다. */
+    let _welcomeCountSig = '';
     function updateStartCounts() {
-      const n = {
-        place:  Array.isArray(window.placeDatabase)  ? placeDatabase.length  : 0,
-        person: Array.isArray(window.personDatabase) ? personDatabase.length : 0,
-        term:   Array.isArray(window.termDatabase)   ? termDatabase.length   : 0
-      };
-      const label = { place: '📍 지명', person: '👤 인명', term: '📖 용어' };
-      document.querySelectorAll('.start-count').forEach(el => {
-        const k = el.dataset.db;
-        el.textContent = n[k] ? `${label[k]} ${n[k].toLocaleString()}개` : `${label[k]} 사전`;
-      });
+      const el = document.getElementById('welcome-screen');
+      if (!el) return;                       // 본문을 읽는 중이면 할 일이 없다
+      const sig = [
+        Array.isArray(window.placeDatabase)  ? placeDatabase.length  : 0,
+        Array.isArray(window.personDatabase) ? personDatabase.length : 0,
+        Array.isArray(window.termDatabase)   ? termDatabase.length   : 0
+      ].join(':');
+      if (sig === _welcomeCountSig) return;  // 안 바뀌었으면 그대로 둔다
+      _welcomeCountSig = sig;
+      if (typeof renderWelcomeScreen === 'function') renderWelcomeScreen();
     }
     setInterval(updateStartCounts, 1500);
     document.addEventListener('DOMContentLoaded', updateStartCounts);
@@ -9709,8 +9718,8 @@
         const targetBook = bookObj ? bookObj.id : 1;
         const targetChapter = bookObj ? saved.chapter : 1;
         continueBtn = `
-          <button onclick="navigateToBibleVerse(${targetBook},${targetChapter},1)" style="display:block;width:100%;padding:14px;margin-bottom:10px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,0.3);">
-            📖 ${escHtml(label)}
+          <button onclick="navigateToBibleVerse(${targetBook},${targetChapter},1)" style="display:block;width:100%;padding:13px;margin-bottom:24px;background:#1e293b;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;">
+            ${escHtml(label)}
           </button>
         `;
       }
@@ -9720,29 +9729,46 @@
         </button>
       `;
 
-      container.innerHTML = `
-        <div id="welcome-screen" style="max-width:520px;margin:20px auto;text-align:center;">
-          <div style="font-size:48px;line-height:1;margin-bottom:10px;">📖🗺️</div>
-          <div class="chapter-title" style="margin-bottom:6px;">성경 66권 인터랙티브 독서 지도</div>
-          <p style="color:#64748b;font-size:13px;margin:0 0 20px;">개역개정 본문과 지명·인명·용어 사전이 함께 연동되는 성경 읽기 도구입니다.</p>
+      /* ── 시작 화면 (2026-09-12 간소화) ──
+       * 큰 이모지 · 설명 한 줄 · 알약 딱지 셋 · 이용 안내 네 줄을 걷어냈다.
+       * 매일 쓰는 화면이라 처음 안내보다 바로 가는 길이 값지다.
+       * 알약 딱지 자리에는 실제 항목 수를 한 줄로 — DB 가 제대로 실렸는지도 함께 보인다. */
+      const nPlace = (typeof placeDatabase !== 'undefined' && placeDatabase.length) || 0;
+      const nPerson = (typeof personDatabase !== 'undefined' && personDatabase.length) || 0;
+      const nTerm = (typeof termDatabase !== 'undefined' && termDatabase.length) || 0;
+      const fmt = n => n.toLocaleString('ko-KR');
+      const allReady = nPlace && nPerson && nTerm;
+      const counts = allReady
+        ? `<span style="display:inline-flex;align-items:center;gap:5px">
+             <span style="width:5px;height:5px;border-radius:50%;background:#16a34a"></span>
+             지명 ${fmt(nPlace)} · 인명 ${fmt(nPerson)} · 용어 ${fmt(nTerm)}
+           </span>`
+        : '<span style="color:#b45309">사전을 아직 다 읽지 못했습니다</span>';
 
-          <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-            <span class="start-count" data-db="place" style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 사전</span>
-            <span class="start-count" data-db="person" style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
-            <span class="start-count" data-db="term" style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
+      const quick = dbReady ? `
+        <div style="font-size:11px;color:#94a3b8;margin:0 0 9px">바로 가기</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:26px">
+          <button onclick="document.getElementById('btn-toggle-map')?.click()" class="welcome-quick">🗺 지도</button>
+          <button onclick="openDictModal()" class="welcome-quick">📚 통합 사전</button>
+          <button onclick="openRawDictModal()" class="welcome-quick">📜 원문사전</button>
+          <button onclick="document.getElementById('btn-open-proof')?.click()" class="welcome-quick">🖉 교정</button>
+        </div>` : '';
+
+      container.innerHTML = `
+        <div id="welcome-screen" style="max-width:440px;margin:40px auto 20px;">
+          <div style="text-align:center;margin-bottom:30px">
+            <div style="font-size:20px;font-weight:600;color:#1e293b;margin-bottom:6px">성경 66권 독서 지도</div>
+            <div style="font-size:12px;color:#94a3b8">${counts}</div>
           </div>
 
           ${continueBtn}
-          ${openBtn}
-          <button onclick="document.getElementById('btn-import-backup-trigger')?.click()" style="display:block;width:100%;padding:12px;background:#fff;color:#334155;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">
-            🔄 이전 백업(.json) 복원하기
-          </button>
+          ${dbReady ? '' : openBtn}
 
-          <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e2e8f0;text-align:left;font-size:12px;color:#94a3b8;line-height:1.7;">
-            <strong style="color:#64748b;">${dbReady ? '이용 안내' : '시작하는 방법'}</strong><br>
-            ${dbReady
-              ? '위 버튼으로 이어서 읽거나, 왼쪽 상단에서 책·장을 직접 선택해 읽으실 수 있습니다.<br>본문 속 지명·인명·용어를 클릭하면 지도와 사전이 함께 열립니다.'
-              : '1. 개역개정 성경 <code>.bdb</code> 파일을 위 버튼으로 등록하세요.<br>2. 한 번 등록하면 브라우저에 자동 저장되어 다음부터는 바로 이어볼 수 있습니다.<br>3. 본문 속 지명·인명·용어를 클릭하면 지도와 사전이 함께 열립니다.'}
+          ${quick}
+
+          <div style="display:flex;gap:18px;justify-content:center;font-size:12px">
+            ${dbReady ? `<button onclick="document.getElementById('bdb-file-input').click()" class="welcome-link">다른 성경 DB 열기</button>` : ''}
+            <button onclick="document.getElementById('btn-import-backup-trigger')?.click()" class="welcome-link">백업 복원</button>
           </div>
         </div>
       `;
@@ -13092,30 +13118,8 @@
       }
 
       if (verses.length === 0) {
-        container.innerHTML = `
-          <div id="welcome-screen" style="max-width:520px;margin:20px auto;text-align:center;">
-            <div style="font-size:48px;line-height:1;margin-bottom:10px;">📖🗺️</div>
-            <div class="chapter-title" style="margin-bottom:6px;">성경 66권 인터랙티브 독서 지도</div>
-            <p style="color:#64748b;font-size:13px;margin:0 0 20px;">개역개정 본문과 지명·인명·용어 사전이 함께 연동되는 성경 읽기 도구입니다.</p>
-            <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-              <span class="start-count" data-db="place" style="background:#eff6ff;color:#2563eb;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📍 지명 사전</span>
-              <span style="background:#f5f3ff;color:#7c3aed;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">👤 인명 사전</span>
-              <span style="background:#fffbeb;color:#b45309;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;">📖 용어 사전</span>
-            </div>
-            <button onclick="document.getElementById('bdb-file-input').click()" style="display:block;width:100%;padding:14px;margin-bottom:10px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,0.3);">
-              📂 성경 DB(.bdb) 열기
-            </button>
-            <button onclick="document.getElementById('btn-import-backup-trigger')?.click()" style="display:block;width:100%;padding:12px;background:#fff;color:#334155;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">
-              🔄 이전 백업(.json) 복원하기
-            </button>
-            <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e2e8f0;text-align:left;font-size:12px;color:#94a3b8;line-height:1.7;">
-              <strong style="color:#64748b;">시작하는 방법</strong><br>
-              1. 개역개정 성경 <code>.bdb</code> 파일을 위 버튼으로 등록하세요.<br>
-              2. 한 번 등록하면 브라우저에 자동 저장되어 다음부터는 바로 이어볼 수 있습니다.<br>
-              3. 본문 속 지명·인명·용어를 클릭하면 지도와 사전이 함께 열립니다.
-            </div>
-          </div>
-        `;
+        // 같은 화면을 세 군데서 그리던 것을 한 곳으로 모았다(2026-09-12)
+        renderWelcomeScreen();
         return;
       }
 
