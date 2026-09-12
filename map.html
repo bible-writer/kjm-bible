@@ -6697,6 +6697,45 @@
         btn.textContent = `${label} (${counts[type]})`;
       });
     }
+    /* ── 통합 사전에서 표제어 고치기 (2026-09-12) ──
+     * 통합 사전은 용어·인명·지명 셋을 합쳐 보이므로 고치는 칸도 갈래마다 다르다.
+     *   용어 → term_ko · 인명 → name_ko · 지명 → name
+     * 원문사전(📜)의 RawDict.editMeta 는 사전 파일(easton/smith)을 고치는 것이고
+     * 이것은 앱DB 를 고치는 것이라 서로 다른 일이다.
+     *
+     * 한글 표제어 꼴은 세 갈래가 섞여 있는데 셋 다 까닭이 있어 통일하지 않는다.
+     *   괄호 뒤   643  「대속(속죄)」    괄호 안이 딴이름
+     *   괄호 앞     9  「(신발) 끈」     괄호 안이 꾸미는 말 — 빼면 무슨 끈인지 모른다
+     *   괄호 가운데 13  「잔치(연회) A」  끝의 A·B 는 같은 이름의 다른 항목을 가르는 표
+     */
+    function dictEditName(it) {
+      var cur, label;
+      if (it.type === 'TERM')        { cur = it.ref.term_ko || ''; label = '용어'; }
+      else if (it.type === 'PERSON') { cur = it.ref.name_ko || ''; label = '인물'; }
+      else                           { cur = it.ref.name    || ''; label = '지명'; }
+      var en = it.nameEn || '';
+      var v = window.prompt(
+        '[' + label + '] 표제어 수정' + (en ? '  (' + en + ')' : '') + '\n\n' +
+        '비워 두고 확인하면 고치지 않습니다.', cur);
+      if (v === null) return;
+      v = v.trim();
+      if (!v || v === cur) return;
+
+      if (it.type === 'TERM') {
+        it.ref.term_ko = v;
+        setLocalItem('saved_term_database', termDatabase);
+      } else if (it.type === 'PERSON') {
+        it.ref.name_ko = v;
+        setLocalItem('saved_person_database', personDatabase);
+      } else {
+        it.ref.name = v;
+        setLocalItem('saved_place_database', placeDatabase);
+      }
+      dictCombinedCache = null;          // 합친 목록을 다시 만든다
+      renderDictResults(true);
+      showToast(label + ' 표제어를 「' + v + '」로 고쳤습니다', 'success');
+    }
+
     function renderDictResults(reset) {
       const container = document.getElementById('dict-results');
       const loadMoreWrap = document.getElementById('dict-load-more-wrap');
@@ -6738,11 +6777,18 @@
         const defPreview = it.def ? escHtml(it.def.slice(0, 70)) + (it.def.length > 70 ? '…' : '') : '';
         row.innerHTML = `
           <div style="min-width:0">
-            <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}</div>
+            <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}<button class="dict-edit-btn" title="표제어 수정" style="margin-left:6px;font-size:0.7em;font-weight:400;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button></div>
             ${defPreview ? `<div style="font-size:0.82em;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${defPreview}</div>` : ''}
           </div>
           <span class="dict-result-tag ${it.type}" title="${escHtml(it.strong || '')}">${it.strong ? escHtml(it.strong) : { PERSON: '인물', PLACE: '지명', TERM: '용어' }[it.type]}</span>
         `;
+        var editBtn = row.querySelector('.dict-edit-btn');
+        if (editBtn) {
+          editBtn.onclick = function (ev) {
+            ev.stopPropagation();          // 줄 누름(항목 열기)과 부딪히지 않게
+            dictEditName(it);
+          };
+        }
         row.onclick = () => {
           closeDictModal();
           if (it.type === 'TERM') TermEngine.showPopup(it.ref);
