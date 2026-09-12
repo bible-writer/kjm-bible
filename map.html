@@ -1759,6 +1759,7 @@
             <button id="btn-name-overrides" onclick="openNameOverrideManager()">✏️ 지명 수정 이력</button>
             <button id="menu-open-add-link">🔗 수동 링크 추가</button>
             <button id="menu-open-blacklist">🚫 제외 단어 관리</button>
+            <button onclick="openStrongOverrideManager()">🔤 스트롱 코드 보정 이력</button>
 
             <div class="menu-sect">보기</div>
             <label class="menu-check"><input type="checkbox" id="chk-term-highlight"> 본문에 용어 표시</label>
@@ -9533,6 +9534,8 @@
         savedFontSize: currentFontSize,
         coordOverrides: coordOverrides,
         nameOverrides: nameOverrides,
+        strongOverrides: strongOverrides,   // 2026-09-12
+
         termDatabase: termDatabase,
         termDatabaseMeta: termDatabaseMeta,
         personDatabase: personDatabase,
@@ -9641,6 +9644,10 @@
           if (pkg.termDatabase) {
             termDatabase = pkg.termDatabase;
             await setLocalItem('saved_term_database', termDatabase);
+            if (pkg.strongOverrides && typeof pkg.strongOverrides === 'object') {
+              strongOverrides = pkg.strongOverrides;
+              await setLocalItem('saved_strong_overrides', strongOverrides);
+            }
             if (pkg.termDatabaseMeta) {
               termDatabaseMeta = pkg.termDatabaseMeta;
               await setLocalItem('saved_term_database_meta', termDatabaseMeta);
@@ -12219,6 +12226,91 @@
 
     // 원전분해 DB에서 해당 절의 단어별 상세 정보(원어형, 코드, 기본형, 음역, 품사분석, 번역)를 순서대로 반환
     // 절별 원어분해 줄 표시(베들레헴 소프트웨어 스타일)에 사용 — 본문 텍스트를 건드리지 않으므로 표기 불일치 문제가 없다
+    /* ── 원전분해 스트롱 코드 덮어쓰기 (2026-09-12) ──
+     * 원전분해.sdb 는 읽기만 하는 자료라 그 안의 코드를 고칠 수 없다.
+     * 틀린 코드를 만나면 「이 절 이 낱말은 H0000 이 아니라 H1111」로 따로 적어 둔다.
+     * 좌표 보정 이력과 같은 방식 — 원본은 그대로 두고 덮어쓸 것만 모은다.
+     * 열쇠: 책-장-절-낱말차례  →  { code, was, at }
+     * IndexedDB 의 saved_strong_overrides 에 둔다. 백업에도 함께 실린다. */
+    var strongOverrides = {};
+    function soKey(b, c, v, i) { return b + '-' + c + '-' + v + '-' + i; }
+    async function loadStrongOverrides() {
+      try {
+        const raw = await getLocalItem('saved_strong_overrides');
+        if (raw && typeof raw === 'object') strongOverrides = raw;
+        const n = Object.keys(strongOverrides).length;
+        if (n) console.log('스트롱 코드 보정 ' + n + '자리 불러옴');
+      } catch (err) { console.warn('스트롱 보정 불러오기 실패', err); }
+    }
+    document.addEventListener('DOMContentLoaded', loadStrongOverrides);
+
+    async function saveStrongOverride(b, c, v, i, code, was) {
+      const k = soKey(b, c, v, i);
+      const t = String(code || '').trim().toUpperCase();
+      if (!t) {                      // 비우면 보정을 걷어낸다
+        delete strongOverrides[k];
+      } else {
+        if (!/^[HG]\d{1,5}$/.test(t)) { showToast('H1234 또는 G5678 꼴로 적어 주세요', 'warn'); return false; }
+        strongOverrides[k] = { code: t, was: was || '', at: new Date().toISOString().slice(0, 10) };
+      }
+      await setLocalItem('saved_strong_overrides', strongOverrides);
+      return true;
+    }
+
+    function openStrongOverrideManager() {
+      const ks = Object.keys(strongOverrides).sort();
+      const old = document.getElementById('strong-ov-modal');
+      if (old) old.remove();
+      let rows = '';
+      if (!ks.length) {
+        rows = '<tr><td colspan="5" style="text-align:center;padding:30px;color:#64748b;">고쳐 둔 스트롱 코드가 없습니다.</td></tr>';
+      } else {
+        ks.forEach(function (k) {
+          const p = k.split('-');
+          const bk = BIBLE_BOOKS.find(b => b.id === parseInt(p[0], 10));
+          const o = strongOverrides[k];
+          rows += '<tr style="border-bottom:1px solid #e2e8f0;">'
+            + '<td style="padding:6px 8px;font-weight:700;white-space:nowrap;">' + (bk ? escHtml(bk.name) : p[0])
+            + ' ' + p[1] + ':' + p[2] + '</td>'
+            + '<td style="padding:6px 8px;color:#64748b;">' + (parseInt(p[3], 10) + 1) + '번째</td>'
+            + '<td style="padding:6px 8px;color:#94a3b8;text-decoration:line-through;">' + escHtml(o.was || '-') + '</td>'
+            + '<td style="padding:6px 8px;color:#059669;font-weight:700;">' + escHtml(o.code) + '</td>'
+            + '<td style="padding:6px 8px;color:#64748b;">' + escHtml(o.at || '')
+            + ' <button onclick="removeStrongOverride(\'' + k + '\')" style="margin-left:8px;font-size:11px;'
+            + 'color:#dc2626;background:#fff;border:1px solid #fecaca;border-radius:4px;padding:1px 7px;cursor:pointer;">되돌림</button></td></tr>';
+        });
+      }
+      const html = '<div id="strong-ov-modal" style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;">'
+        + '<div style="background:#fff;border-radius:12px;width:min(760px,92vw);max-height:82vh;display:flex;flex-direction:column;overflow:hidden;">'
+        + '<div style="padding:14px 18px;border-bottom:1px solid #e2e8f0;">'
+        + '<h3 style="margin:0;font-size:16px;">🔤 스트롱 코드 보정 이력 (' + ks.length + '건)</h3>'
+        + '<div style="font-size:11px;color:#64748b;margin-top:6px;line-height:1.6;">'
+        + '원전분해 자료는 읽기만 하므로 그 안의 코드를 고칠 수 없습니다.<br>'
+        + '여기 적힌 보정은 원본 위에 덮어씌워 보이며, 백업에 함께 실립니다.</div></div>'
+        + '<div style="overflow:auto;flex:1;padding:0 18px;">'
+        + '<table style="width:100%;border-collapse:collapse;font-size:12px;">'
+        + '<thead><tr style="position:sticky;top:0;background:#f1f5f9;">'
+        + '<th style="padding:8px;text-align:left;">절</th><th style="padding:8px;text-align:left;">낱말</th>'
+        + '<th style="padding:8px;text-align:left;">원본</th><th style="padding:8px;text-align:left;">고침</th>'
+        + '<th style="padding:8px;text-align:left;">일자</th></tr></thead>'
+        + '<tbody>' + rows + '</tbody></table></div>'
+        + '<div style="padding:12px 18px;border-top:1px solid #e2e8f0;display:flex;gap:8px;justify-content:center;">'
+        + '<button onclick="document.getElementById(\'strong-ov-modal\').remove()" style="padding:6px 16px;border:1px solid #cbd5e1;border-radius:6px;cursor:pointer;font-size:12px;background:#fff;">닫기</button>'
+        + '</div></div></div>';
+      document.body.insertAdjacentHTML('beforeend', html);
+    }
+    async function removeStrongOverride(k) {
+      delete strongOverrides[k];
+      await setLocalItem('saved_strong_overrides', strongOverrides);
+      showToast('되돌렸습니다', 'success');
+      openStrongOverrideManager();
+      if (typeof _wpState !== 'undefined' && _wpState && typeof openWordPanel === 'function') {
+        openWordPanel(_wpState.bookId, _wpState.chapter, _wpState.vNum, _wpState.idx);
+      }
+    }
+    window.openStrongOverrideManager = openStrongOverrideManager;
+    window.removeStrongOverride = removeStrongOverride;
+
     function getInterlinearWordsFull(bookId, chapter, verse) {
       if (!interlinearDbInstance) return [];
       try {
@@ -12240,6 +12332,11 @@
             gloss: m[6].trim()
           });
         }
+        // 고쳐 둔 코드가 있으면 얹는다. 원본은 origCode 에 남겨 둔다(2026-09-12)
+        words.forEach((w, i) => {
+          const o = strongOverrides[soKey(bookId, chapter, verse, i)];
+          if (o && o.code) { w.origCode = w.code; w.code = o.code; }
+        });
         return words;
       } catch (e) {
         console.warn('원전분해 상세 조회 오류:', e);
@@ -12394,6 +12491,12 @@
         + '<div style="font-size:1.5em;font-weight:700;direction:rtl;unicode-bidi:isolate;margin-bottom:2px">'
         + escHtml(w.surface) + '</div>'
         + '<div><span style="color:#4338ca;font-weight:700">' + escHtml(w.code) + '</span> '
+        /* 원전분해 자료는 읽기만 하므로, 코드가 틀렸으면 여기서 덮어쓴다(2026-09-12) */
+        + '<button onclick="wpEditCode()" title="스트롱 코드 고치기" '
+        +   'style="font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;'
+        +   'border-radius:4px;padding:0 6px;margin-left:4px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button> '
+        + (w.origCode ? '<span style="font-size:0.72em;color:#94a3b8;text-decoration:line-through;margin-left:2px">'
+             + escHtml(w.origCode) + '</span> ' : '')
         + '<span style="color:#64748b">' + escHtml(w.xlit) + '</span>'
         + (w.root ? ' <span style="direction:rtl;unicode-bidi:isolate;color:#64748b">' + escHtml(w.root) + '</span>' : '')
         + '</div>'
@@ -12475,6 +12578,24 @@
       if (typeof navigateToBibleVerse === 'function') navigateToBibleVerse(b, c, v);
       else showToast('본문 이동을 쓸 수 없습니다.', 'info');
     };
+    /* 원어분해 창에서 스트롱 코드를 고친다(2026-09-12).
+     * 원전분해.sdb 는 안 건드리고 strongOverrides 에만 적어 둔다. */
+    async function wpEditCode() {
+      const st = _wpState; if (!st) return;
+      const w = st.words[st.idx]; if (!w) return;
+      const orig = w.origCode || w.code;
+      const v = window.prompt(
+        '스트롱 코드 고치기\n\n' + w.surface + '  (' + w.xlit + ')\n'
+        + '원전분해 값: ' + orig + '\n\n'
+        + 'H1234 또는 G5678 꼴로 적으세요. 비우고 확인하면 원래대로 돌아갑니다.',
+        w.code);
+      if (v === null) return;
+      const ok = await saveStrongOverride(st.bookId, st.chapter, st.vNum, st.idx, v, orig);
+      if (ok === false) return;
+      showToast(v.trim() ? '코드를 ' + v.trim().toUpperCase() + ' 로 고쳤습니다' : '원래 코드로 되돌렸습니다', 'success');
+      openWordPanel(st.bookId, st.chapter, st.vNum, st.idx);
+    }
+    window.wpEditCode = wpEditCode;
     window.openWordPanel = openWordPanel;
 
     /* ══════════════════════════════════════════════════════════════
