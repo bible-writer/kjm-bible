@@ -11212,7 +11212,7 @@
             <a class="link-btn" href="https://www.google.com/maps?layer=c&cbll=${item.lat},${item.lng}" target="_blank" rel="noopener">📷 거리뷰</a>
             <a class="link-btn" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('성경 ' + (item.name||'') + ' ' + englishName + ' ' + modernName + ' 고고학 성지')}" target="_blank" rel="noopener">🖼 구글 이미지 더보기</a>
           </div>
-          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">좌표 출처: OpenBible.info Bible Geocoding Data (CC BY 4.0)${(item.eastonKo||item.eastonEn||item.smithKo||item.smithEn) ? ' · 해설: Easton/Smith Bible Dictionary 참조' : ''}</div>
+          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">좌표 출처: OpenBible.info Bible Geocoding Data (CC BY 4.0)${(item.eastonId||item.smithId||item.eastonKo||item.eastonEn||item.smithKo||item.smithEn) ? ' · 해설: Easton/Smith Bible Dictionary 참조' : ''}</div>
         </div>
       `;
     }
@@ -11284,11 +11284,49 @@
       sendToGemini(buildGeminiQuestion(term, label, body, strong));
     }
 
+    /* ── 지명DB ↔ 원문사전 잇기 (2026-09-12) ──
+     * 전에는 지명DB가 사전 글을 제 안에 베껴 두고 있었다(eastonKo·smithKo).
+     * 사전을 정비해도 따라오지 않아 2,078자리 가운데 사전과 같은 것이 1자리뿐이었고,
+     * 32자리는 101자에서 잘려 있었다. 그래서 베낀 글을 버리고 id 로 사전에서 꺼내 온다.
+     * 열쇠는 eastonId·smithId — 음역이 바뀌어도 끊기지 않는다.
+     * 옛 파일(eastonId 가 없는 판)도 열리도록 베낀 칸을 여벌로 남겨 둔다. */
+    var _placeDictIdx = null, _placeDictSig = '';
+    function placeDictIndex() {
+      const eL = (typeof eastonFullDict !== 'undefined' && eastonFullDict) || [];
+      const sL = (typeof smithFullDict  !== 'undefined' && smithFullDict)  || [];
+      const sig = eL.length + ':' + sL.length;
+      if (_placeDictIdx && _placeDictSig === sig) return _placeDictIdx;
+      const idx = { easton: {}, smith: {} };
+      eL.forEach(e => { if (e && e.id != null) idx.easton[e.id] = e; });
+      sL.forEach(e => { if (e && e.id != null) idx.smith[e.id]  = e; });
+      _placeDictIdx = idx; _placeDictSig = sig;
+      return idx;
+    }
+    // 사전에서 꺼낸다. 못 꺼내면(사전이 아직 안 읽혔거나 옛 지명DB면) 베낀 칸으로 물러선다.
+    function placeDictText(item, which) {
+      const idKey = which === 'easton' ? 'eastonId' : 'smithId';
+      const koKey = which === 'easton' ? 'eastonKo' : 'smithKo';
+      const enKey = which === 'easton' ? 'eastonEn' : 'smithEn';
+      const id = item && item[idKey];
+      if (id != null) {
+        const e = placeDictIndex()[which][id];
+        if (e) {
+          const ko = String(e.definition_ko || '').trim();
+          const en = String(e.definition    || '').trim();
+          if (ko || en) return { ko: ko, en: en };
+        }
+      }
+      return { ko: String((item && item[koKey]) || '').trim(),
+               en: String((item && item[enKey]) || '').trim() };
+    }
+
     function buildDictHtml(item) {
-      const eKo = (item.eastonKo || '').trim();
-      const eEn = (item.eastonEn || '').trim();
-      const sKo = (item.smithKo  || '').trim();
-      const sEn = (item.smithEn  || '').trim();
+      const _e = placeDictText(item, 'easton');
+      const _s = placeDictText(item, 'smith');
+      const eKo = _e.ko;
+      const eEn = _e.en;
+      const sKo = _s.ko;
+      const sEn = _s.en;
       const dv  = (item.dictVerse || '').trim();
       const warn = (item.dictWarn || '').trim();
       if (!eKo && !eEn && !sKo && !sEn && !dv && !(item.cdbKo || '').trim()) return '';
