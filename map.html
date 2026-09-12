@@ -2608,6 +2608,8 @@
             // placeDatabase.json 직접 로드 (places 배열이 있는 경우)
             if (pkg.places && Array.isArray(pkg.places)) {
               placeDatabase = pkg.places;
+              // 내보낼 때 판 번호를 올리려면 지금 판을 알아야 한다(2026-09-12)
+              await setLocalItem('saved_place_database_version', pkg.version || '');
               await loadCoordOverrides();
               await reapplyCoordOverrides(placeDatabase, 'JSON');
               await reapplyNameOverrides(placeDatabase, 'JSON');
@@ -11175,6 +11177,7 @@
         await reapplyNameOverrides(db.places, 'GitHub 원본');
         placeDatabase = db.places;
         await setLocalItem('saved_place_database', placeDatabase);
+        await setLocalItem('saved_place_database_version', db.version || '');
         buildKeywordIndex(placeDatabase);
         renderMapMarkers();
         updateAppTitle();
@@ -11259,6 +11262,36 @@
     }
 
 
+    /* ── 내보낼 때 판 번호 올리기 (2026-09-12) ──
+     * 전에는 지명이 '5.1.0' 으로 박혀 있고(실제는 6.1.0 — 옛 판으로 덮어쓸 뻔했다)
+     * 용어는 version 을 날짜로 덮어썼다('1.5.0' → '2026.09.12').
+     * 둘 다 「고칠 때마다 판 번호와 날짜를 올린다」는 규칙을 어긴다.
+     * termDB 망가짐 사고(1,838 표제어가 v1.0.0 에 묶여 덮어써진 일)가 이것 때문이었다.
+     * 이제 지금 불러온 판을 읽어 끝자리만 올린다. 못 읽으면 멈추고 사람에게 묻는다. */
+    function bumpVersion(cur, fallback) {
+      const v = String(cur || '').trim();
+      // '2026.09.12' 같은 날짜 꼴은 판 번호가 아니다. 옛 내보내기가 이런 값을 남겼다.
+      if (/^(19|20)\d\d\.\d\d?\.\d\d?$/.test(v)) return fallback;
+      const m = v.match(/^(\d+)\.(\d+)\.(\d+)$/);
+      if (m && parseInt(m[1], 10) < 100) {
+        return m[1] + '.' + m[2] + '.' + (parseInt(m[3], 10) + 1);
+      }
+      return fallback;   // 꼴이 다르면 부르는 쪽이 정한 값을 쓴다
+    }
+    async function askVersion(label, cur, fallback) {
+      const next = bumpVersion(cur, fallback);
+      const v = window.prompt(
+        label + ' 판 번호\n\n지금: ' + (cur || '(모름)') + '\n\n'
+        + '확인을 누르면 아래 번호로 내보냅니다. 고치려면 여기서 바꾸세요.', next);
+      if (v === null) return null;
+      const t = v.trim();
+      if (!/^\d+\.\d+\.\d+$/.test(t)) {
+        showToast('판 번호는 1.2.3 꼴이어야 합니다', 'warn');
+        return null;
+      }
+      return t;
+    }
+
     async function exportPlaceDatabaseJson() {
       if (placeDatabase.length === 0) {
         showToast('내보낼 지명 데이터가 없습니다.', 'warn'); return;
@@ -11266,8 +11299,11 @@
       let password;
       try { password = await EncryptedDB.askPasswordForExport(); }
       catch (e) { showToast('비밀번호를 입력하지 않아 내보내기가 취소되었습니다.', 'info'); return; }
+      const curV = (await getLocalItem('saved_place_database_version')) || '';
+      const newV = await askVersion('지명DB', curV, '6.1.1');
+      if (!newV) { showToast('내보내기를 그만두었습니다', 'info'); return; }
       const db = {
-        version: '5.1.0',
+        version: newV,
         date: new Date().toISOString().slice(0, 10),
         count: placeDatabase.length,
         source: 'OpenBible.info + IAA + Satellite Bible Atlas',
@@ -11291,8 +11327,11 @@
       let password;
       try { password = await EncryptedDB.askPasswordForExport(); }
       catch (e) { showToast('비밀번호를 입력하지 않아 내보내기가 취소되었습니다.', 'info'); return; }
+      const curV = (await getLocalItem('saved_term_database_version')) || '';
+      const newV = await askVersion('용어DB', curV, '1.5.1');
+      if (!newV) { showToast('내보내기를 그만두었습니다', 'info'); return; }
       const db = {
-        version: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+        version: newV,
         date: new Date().toISOString().slice(0, 10),
         count: termDatabase.length,
         source: "Easton's Bible Dictionary (1897, Public Domain) + Smith's/ISBE (1915)",
