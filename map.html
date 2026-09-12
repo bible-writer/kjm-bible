@@ -944,6 +944,27 @@
     .lb-close { position: absolute; top: 16px; right: 20px; font-size: 28px; color: #fff; background: none; border: none; cursor: pointer; z-index: 10000; }
     .lb-info { color: #e2e8f0; font-size: 12px; margin-top: 8px; text-align: center; }
 
+    /* 상태·도구 한 줄 (2026-09-12) — 색을 걷고 회색 한 결로 */
+    .tb-btn {
+      font-size: 12px; color: #334155; background: #fff;
+      border: 1px solid #cbd5e1; border-radius: 5px;
+      padding: 3px 10px; cursor: pointer; white-space: nowrap;
+    }
+    .tb-btn:hover { background: #f8fafc; }
+    .menu-panel-wide { min-width: 220px; }
+    .menu-sect {
+      font-size: 10px; color: #94a3b8; padding: 7px 10px 3px;
+      border-top: 1px solid #f1f5f9; margin-top: 2px;
+    }
+    .menu-panel .menu-sect:first-child { border-top: none; margin-top: 0; }
+    .menu-sect.danger-sect { color: #f87171; }
+    .menu-check {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: #475569; padding: 6px 10px; cursor: pointer;
+    }
+    .menu-check:hover { background: #f8fafc; }
+    .menu-danger { color: #dc2626 !important; }
+
     /* 시작 화면 (2026-09-12) */
     .welcome-quick {
       border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;
@@ -1665,23 +1686,21 @@
       </div>
       <button id="btn-toggle-map" class="btn-header-map-toggle" title="지도 패널 표시/숨김">🗺 지도</button>
     </div>
-    <div id="header-toggle-bar" onclick="toggleHeaderCollapse()">▲ 접기</div>
+    <!-- 2026-09-12: 상태줄이 한 줄로 줄어 접을 게 없어졌다. JS 가 이 id 를 쓰므로 감춘다 -->
+    <div id="header-toggle-bar" onclick="toggleHeaderCollapse()" style="display:none">▲ 접기</div>
 
 
-    <!-- DB 연결 및 백업/복원 제어 바 -->
+    <!-- ── 상태·도구 한 줄 (2026-09-12 정리) ──
+         전에는 초록 줄 + 파일 줄 두 줄에 색이 여덟 가지였다. kjm 말: 「어수선해」.
+         자주 쓰는 넷만 밖에 두고 나머지 열둘을 ⋯ 안으로 넣었다.
+         단추 id 는 그대로 두어 붙어 있던 함수가 다 살아난다. -->
     <div id="db-status-bar">
       <span id="db-status-text" style="white-space:nowrap;flex-shrink:0">준비 중...</span>
       <div class="status-btn-group">
-        <!-- 자주 쓰는 것만 밖으로, 나머지는 성격별 묶음 메뉴 안으로 정리 -->
-        <button class="btn-status-action success" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
-        <button class="btn-status-action success" id="btn-import-backup-trigger" title="백업 파일 가져와서 복원하기">복원</button>
-        <button class="btn-status-action" id="btn-drive-connect" title="Google 계정 연결/해제 (Drive)" style="background:#4285F4;">🔗 연동안됨</button>
-        <label style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#475569;margin-left:6px;" title="체크 시 10분마다 자동으로 Google Drive에 백업합니다">
-          <input type="checkbox" id="chk-drive-autobackup" style="cursor:pointer;"> 자동백업
-        </label>
+        <button class="tb-btn" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
 
         <div class="menu-group">
-          <button class="btn-status-action menu-trigger" style="background:#2563eb">📤 내보내기 ▾</button>
+          <button class="tb-btn menu-trigger">내보내기 ▾</button>
           <div class="menu-panel">
             <button id="btn-export-xlsx" onclick="exportPlaceDatabaseToXlsx()">📊 지명 DB → XLSX</button>
             <button id="btn-export-json" onclick="exportPlaceDatabaseJson()">📦 placeDatabase.json</button>
@@ -1690,7 +1709,7 @@
         </div>
 
         <div class="menu-group">
-          <button class="btn-status-action menu-trigger" style="background:#7c3aed">🔄 동기화 ▾</button>
+          <button class="tb-btn menu-trigger">동기화 ▾</button>
           <div class="menu-panel">
             <button id="btn-update-db" onclick="updateFromGitHub()">🔄 지명 DB 받기 (GitHub)</button>
             <button id="btn-update-person" onclick="updatePersonFromGitHub()">👤 인명 DB 받기 (GitHub)</button>
@@ -1700,25 +1719,37 @@
         </div>
 
         <div class="menu-group">
-          <button class="btn-status-action menu-trigger" style="background:#0891b2">✏️ 편집이력 ▾</button>
-          <div class="menu-panel">
+          <button class="tb-btn menu-trigger" title="그 밖의 것">⋯</button>
+          <div class="menu-panel menu-panel-wide">
+            <div class="menu-sect">파일</div>
+            <button id="menu-open-bdb">📖 성경DB 열기</button>
+            <button id="menu-open-xlsx">📊 지명시트 열기</button>
+            <button id="menu-open-extra">🌐 추가번역 등록</button>
+            <button id="menu-open-interlinear">🔤 스트롱코드 DB 등록</button>
+
+            <div class="menu-sect">백업</div>
+            <button id="btn-import-backup-trigger">💾 백업에서 복원</button>
+            <button id="btn-drive-connect">🔗 Google Drive 연동</button>
+            <label class="menu-check"><input type="checkbox" id="chk-drive-autobackup"> 10분마다 Drive 자동백업</label>
+
+            <div class="menu-sect">편집 이력</div>
             <button id="btn-coord-overrides" onclick="openCoordOverrideManager()">📍 좌표 보정 이력</button>
             <button id="btn-name-overrides" onclick="openNameOverrideManager()">✏️ 지명 수정 이력</button>
             <button id="menu-open-add-link">🔗 수동 링크 추가</button>
             <button id="menu-open-blacklist">🚫 제외 단어 관리</button>
+
+            <div class="menu-sect">보기</div>
+            <label class="menu-check"><input type="checkbox" id="chk-term-highlight"> 본문에 용어 표시</label>
+
+            <div class="menu-sect danger-sect">위험</div>
+            <button id="btn-clear-db" class="menu-danger" title="저장소 초기화">저장소 초기화</button>
           </div>
         </div>
 
         <input type="file" id="backup-file-input" accept=".json" style="display:none;" />
-        <!-- JS 호환용 숨김 버튼 (기존 코드가 이 id로 이벤트를 연결함) -->
-        <button class="btn-status-action primary" id="btn-open-add-link" style="display:none">+링크</button>
-        <button class="btn-status-action" id="btn-open-blacklist" style="display:none">제외</button>
-
-        <label class="label-toggle-group" style="margin-left:6px;">
-          <input type="checkbox" id="chk-term-highlight">
-          <span>용어 표시</span>
-        </label>
-        <button class="btn-status-action danger" id="btn-clear-db" title="저장소 초기화" style="margin-left:auto">초기화</button>
+        <!-- JS 호환용 숨김 단추 (기존 코드가 이 id 로 이벤트를 붙인다) -->
+        <button id="btn-open-add-link" style="display:none">+링크</button>
+        <button id="btn-open-blacklist" style="display:none">제외</button>
       </div>
     </div>
 
@@ -1742,7 +1773,8 @@
       <input type="file" id="file-input-any"   accept=".bdb,.db,.sdb,.sqlite,.xlsx,.xls,.csv,.json" style="display:none" multiple>
 
       <!-- ══ 통합 드래그앤드롭 업로드 존 ══ -->
-      <div id="upload-zone" title="클릭하거나 파일을 여기에 끌어다 놓으세요">
+      <!-- 2026-09-12: ⋯ 차림표로 옮겼다. 끌어다 놓기는 살아 있어야 하므로 지우지 않고 감춘다 -->
+      <div id="upload-zone" title="클릭하거나 파일을 여기에 끌어다 놓으세요" style="display:none">
         <div class="upload-compact-row">
           <span class="upload-icon-inline">📂</span>
           <span class="upload-title-inline">파일 열기 / 끌어다 놓기</span>
@@ -1757,9 +1789,8 @@
         </div>
       </div>
 
-      <div id="interlinear-status" style="display:none;margin:4px 0 0;padding:6px 10px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;font-size:11px;color:#047857;">
-        🔤 스트롱 DB 연결됨 — 본문 단어를 클릭하면 원어 뜻이 표시됩니다
-      </div>
+      <!-- 늘 켜져 있는 알림이라 줄을 차지할 값이 없다. 상태줄 글월에 담긴다(2026-09-12) -->
+      <div id="interlinear-status" style="display:none"></div>
 
       <!-- 업로드 진행 바 -->
       <div id="upload-progress"><div id="upload-progress-bar"></div></div>
