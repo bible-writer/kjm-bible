@@ -11302,6 +11302,16 @@
       _placeDictIdx = idx; _placeDictSig = sig;
       return idx;
     }
+    // 본문 대신 넘김표만 든 항목이 있다 — 스미스에 30자리(다윗성은 '[Jerusalem]' 한 줄뿐).
+    // 그대로 보이면 대괄호 한 줄만 나오므로 가리키는 항목까지 따라간다.
+    // TermEngine.followRef 와 같은 규칙: 한 번만 따라가고, 가리킨 데가 또 넘김표면 멈춘다.
+    function placeFollowRef(entry, which) {
+      if (!entry || typeof TermEngine === 'undefined' || !TermEngine.followRef) return entry;
+      try {
+        const to = TermEngine.followRef(entry, which);
+        return to || entry;
+      } catch (err) { return entry; }
+    }
     // 사전에서 꺼낸다. 못 꺼내면(사전이 아직 안 읽혔거나 옛 지명DB면) 베낀 칸으로 물러선다.
     function placeDictText(item, which) {
       const idKey = which === 'easton' ? 'eastonId' : 'smithId';
@@ -11309,7 +11319,8 @@
       const enKey = which === 'easton' ? 'eastonEn' : 'smithEn';
       const id = item && item[idKey];
       if (id != null) {
-        const e = placeDictIndex()[which][id];
+        const e0 = placeDictIndex()[which][id];
+        const e = placeFollowRef(e0, which);
         if (e) {
           const ko = String(e.definition_ko || '').trim();
           const en = String(e.definition    || '').trim();
