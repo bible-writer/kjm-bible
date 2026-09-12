@@ -1744,10 +1744,10 @@
           <button class="tb-btn menu-trigger" title="그 밖의 것">⋯</button>
           <div class="menu-panel menu-panel-wide">
             <div class="menu-sect">파일</div>
-            <button id="menu-open-bdb">📖 성경DB 열기</button>
-            <button id="menu-open-xlsx">📊 지명시트 열기</button>
-            <button id="menu-open-extra">🌐 추가번역 등록</button>
-            <button id="menu-open-interlinear">🔤 스트롱코드 DB 등록</button>
+            <button id="menu-open-bdb" onclick="menuPickFile('bdb')">📖 성경DB 열기</button>
+            <button id="menu-open-xlsx" onclick="menuPickFile('xlsx')">📊 지명시트 열기</button>
+            <button id="menu-open-extra" onclick="menuPickFile('extra')">🌐 추가번역 등록</button>
+            <button id="menu-open-interlinear" onclick="menuPickFile('interlinear')">🔤 스트롱코드 DB 등록</button>
 
             <div class="menu-sect">백업</div>
             <button id="btn-import-backup-trigger">💾 백업에서 복원</button>
@@ -6774,6 +6774,24 @@
       });
       loadRawDictionaries();
     });
+
+    /* ⋯ 차림표의 파일 항목 (2026-09-12).
+     * 딱지(.upload-badge)를 대신 누르는 방식은 먹지 않았다.
+     * 딱지가 하는 일은 결국 숨은 file input 을 누르는 것뿐이므로 곧바로 부른다. */
+    function menuPickFile(kind) {
+      if (kind === 'bdb')  { document.getElementById('file-input-bdb')?.click();  return; }
+      if (kind === 'xlsx') { document.getElementById('file-input-xlsx')?.click(); return; }
+      if (kind === 'json') { document.getElementById('file-input-json')?.click(); return; }
+      if (kind === 'extra') {
+        if (typeof toggleAddTransDropdown === 'function') toggleAddTransDropdown();
+        else showToast('추가번역 차림표를 찾지 못했습니다', 'warn');
+        return;
+      }
+      if (kind === 'interlinear') {
+        document.getElementById('interlinear-file-input')?.click();
+        return;
+      }
+    }
 
     /* ── 시작 화면 항목 수 새로 그리기 (2026-09-12) ──
      * 전에는 딱지 셋(.start-count)을 1.5초마다 갈아 끼웠다.
