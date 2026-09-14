@@ -4226,7 +4226,6 @@
             <span style="display:flex;align-items:baseline;gap:9px;min-width:0">
               ${refLabel ? `<span style="font-size:0.72em;color:#94a3b8">${refLabel}</span>` : ''}
               <span onclick="TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="font-size:1.2em;font-weight:500;color:#1e293b;cursor:pointer">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
-              ${t.dict ? `<span class="dict-src-pill dict-src-${escHtml(t.dict)}" title="이 뜻풀이가 온 사전">${escHtml(t.dict)}</span>` : ''}
               <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사" style="font-size:0.8em;color:#94a3b8;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.term_en || '')}</span>
               <button onclick="TermEngine.editTermKo(${t.id})" title="한글 표제어 수정" style="margin-left:auto;flex-shrink:0;border:none;background:none;font-size:0.85em;color:#94a3b8;cursor:pointer;padding:0 2px">\u270f\ufe0f</button>
             </span>
