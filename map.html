@@ -7109,7 +7109,7 @@
             <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}${it.srcDict ? `<span class="dict-src-pill dict-src-${escHtml(it.srcDict)}">${escHtml(it.srcDict)}</span>` : ''}<button class="dict-edit-btn" title="표제어 수정" style="margin-left:6px;font-size:0.7em;font-weight:400;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button></div>
             ${defPreview ? `<div style="font-size:0.82em;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${defPreview}</div>` : ''}
           </div>
-          <span class="dict-result-tag ${it.type}" title="${escHtml(it.strong || '')}">${it.strong ? escHtml(it.strong) : { PERSON: '인물', PLACE: '지명', TERM: '용어' }[it.type]}</span>
+          ${it.strong ? `<span class="dict-result-tag ${it.type}" title="${escHtml(it.strong)}">${escHtml(it.strong)}</span>` : ''}
         `;
         var editBtn = row.querySelector('.dict-edit-btn');
         if (editBtn) {
