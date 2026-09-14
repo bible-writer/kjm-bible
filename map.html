@@ -7287,7 +7287,7 @@
         p.books.forEach(function(b){ cnt[b] = (cnt[b] || 0) + 1; });
       });
       sel.innerHTML = '<option value="">전체 성경</option>';
-      varavail = [];
+      var avail = [];
       CATALOG_BOOK_ORDER.forEach(function(b){
         if (!cnt[b]) return;
         avail.push(b);
