@@ -1445,6 +1445,15 @@
       background: #eff6ff;
       border-color: #93c5fd;
     }
+    .dict-src-pill {
+      display: inline-block; margin-left: 6px; padding: 1px 7px;
+      font-size: 0.68em; font-weight: 700; line-height: 1.5;
+      border-radius: 9px; vertical-align: middle; white-space: nowrap;
+    }
+    .dict-src-이스턴 { background: #dbeafe; color: #1d4ed8; }
+    .dict-src-스미스 { background: #dcfce7; color: #15803d; }
+    .dict-src-샤프   { background: #fef3c7; color: #b45309; }
+    .dict-src-히치콕 { background: #fae8ff; color: #a21caf; }
     .cpc-header { font-size: 13px; font-weight: 800; color: #0f172a; }
     .cpc-sub { font-size: 11px; color: #64748b; margin-top: 2px; overflow-wrap: anywhere; }
     .cpc-verse { font-size: 10.5px; color: #2563eb; font-weight: 600; margin-top: 2px;
@@ -4217,6 +4226,7 @@
             <span style="display:flex;align-items:baseline;gap:9px;min-width:0">
               ${refLabel ? `<span style="font-size:0.72em;color:#94a3b8">${refLabel}</span>` : ''}
               <span onclick="TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="font-size:1.2em;font-weight:500;color:#1e293b;cursor:pointer">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
+              ${t.dict ? `<span class="dict-src-pill dict-src-${escHtml(t.dict)}" title="이 뜻풀이가 온 사전">${escHtml(t.dict)}</span>` : ''}
               <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사" style="font-size:0.8em;color:#94a3b8;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.term_en || '')}</span>
               <button onclick="TermEngine.editTermKo(${t.id})" title="한글 표제어 수정" style="margin-left:auto;flex-shrink:0;border:none;background:none;font-size:0.85em;color:#94a3b8;cursor:pointer;padding:0 2px">\u270f\ufe0f</button>
             </span>
@@ -6960,6 +6970,7 @@
           type: 'TERM', sortKey: ko || en,
           nameKo: ko || en, nameEn: ko ? en : '',
           def: t.definition_ko || '', strong: t.hebrew_greek || t.original_note || '',
+          srcDict: t.dict || '',
           ref: t
         });
       });
@@ -7096,7 +7107,7 @@
         const defPreview = it.def ? escHtml(it.def.slice(0, 70)) + (it.def.length > 70 ? '…' : '') : '';
         row.innerHTML = `
           <div style="min-width:0">
-            <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}<button class="dict-edit-btn" title="표제어 수정" style="margin-left:6px;font-size:0.7em;font-weight:400;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button></div>
+            <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}${it.srcDict ? `<span class="dict-src-pill dict-src-${escHtml(it.srcDict)}">${escHtml(it.srcDict)}</span>` : ''}<button class="dict-edit-btn" title="표제어 수정" style="margin-left:6px;font-size:0.7em;font-weight:400;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button></div>
             ${defPreview ? `<div style="font-size:0.82em;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${defPreview}</div>` : ''}
           </div>
           <span class="dict-result-tag ${it.type}" title="${escHtml(it.strong || '')}">${it.strong ? escHtml(it.strong) : { PERSON: '인물', PLACE: '지명', TERM: '용어' }[it.type]}</span>
