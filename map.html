@@ -1428,11 +1428,12 @@
       flex: 1;
       overflow-y: auto;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 6px;
       padding-right: 4px;
     }
     .catalog-place-card {
+      min-width: 0;
       padding: 8px 10px;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -1445,8 +1446,11 @@
       border-color: #93c5fd;
     }
     .cpc-header { font-size: 13px; font-weight: 800; color: #0f172a; }
-    .cpc-sub { font-size: 11px; color: #64748b; margin-top: 2px; }
-    .cpc-verse { font-size: 10.5px; color: #2563eb; font-weight: 600; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cpc-sub { font-size: 11px; color: #64748b; margin-top: 2px; overflow-wrap: anywhere; }
+    .cpc-verse { font-size: 10.5px; color: #2563eb; font-weight: 600; margin-top: 2px;
+      line-height: 1.35; overflow-wrap: anywhere;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
 
     /* 우클릭 컨텍스트 메뉴 스타일 */
     #custom-context-menu {
@@ -5976,14 +5980,42 @@
     let currentCatalogEra = "ALL";
 
     // [버그4 수정] 카탈로그 탭 실제 데이터 수 동적 업데이트
+    // 시대(탭)를 뺀 나머지 거르개만 건 목록 — 탭 숫자를 재는 바탕
+    function catalogBaseFiltered() {
+      const g = id => (document.getElementById(id) || {}).value || "";
+      const searchQ = g("catalog-search-input").trim().toLowerCase();
+      const countryQ = g("catalog-country-filter");
+      const regionQ  = g("catalog-region-filter");
+      const testamentQ = g("catalog-testament-filter");
+      const OT = ["1","2","3","4","5"], NT = ["6","7"];
+      let f = placeDatabase;
+      if (testamentQ === "OT") f = f.filter(p => p.era && OT.some(e => p.era.startsWith(e)));
+      else if (testamentQ === "NT") f = f.filter(p => p.era && NT.some(e => p.era.startsWith(e)));
+      if (countryQ) f = f.filter(p => (p.country || "") === countryQ);
+      if (regionQ)  f = f.filter(p => (p.region  || "") === regionQ);
+      if (searchQ) {
+        f = f.filter(p =>
+          (p.name && p.name.toLowerCase().includes(searchQ)) ||
+          (p.modern && p.modern.toLowerCase().includes(searchQ)) ||
+          (p.orig && p.orig.toLowerCase().includes(searchQ)) ||
+          (p.country && p.country.toLowerCase().includes(searchQ)) ||
+          (p.region && p.region.toLowerCase().includes(searchQ)) ||
+          (p.verse && p.verse.toLowerCase().includes(searchQ)) ||
+          (p.desc && p.desc.toLowerCase().includes(searchQ))
+        );
+      }
+      return f;
+    }
+
     function updateCatalogTabCounts() {
+      const base = catalogBaseFiltered();
       const tabButtons = document.querySelectorAll(".catalog-tab-btn");
       tabButtons.forEach(btn => {
         const era = btn.getAttribute("data-era");
         if (era === "ALL") {
-          btn.textContent = `전체 (${placeDatabase.length})`;
+          btn.textContent = `전체 (${base.length})`;
         } else {
-          const count = placeDatabase.filter(p => p.era && p.era.startsWith(era)).length;
+          const count = base.filter(p => p.era && p.era.startsWith(era)).length;
           const eraNames = {
             "1": "족장시대", "2": "출애굽·정복", "3": "사사·통일왕국",
             "4": "분열왕국·선지자", "5": "포로·귀환",
@@ -7180,7 +7212,7 @@
         card.innerHTML = `
           <div class="cpc-header">[${originalIndex}] ${escHtml(p.name)}</div>
           <div class="cpc-sub">${escHtml(p.modern || '-')}${p.country ? ' · ' + escHtml(p.country) : ''}${p.region ? ' · ' + escHtml(p.region) : ''}</div>
-          ${p.verse ? `<div class="cpc-verse">구절: ${escHtml(p.verse)}</div>` : ''}
+          ${p.verse ? `<div class="cpc-verse" title="${escHtml(p.verse)}">구절: ${escHtml(p.verse)}</div>` : ''}
         `;
         card.onclick = () => {
           BibleGeoEngine.flyToPlace(p);
