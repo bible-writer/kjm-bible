@@ -1389,7 +1389,7 @@
       background: #f8fafc;
     }
     #catalog-search-input:focus { border-color: #2563eb; background: #fff; }
-    #catalog-country-filter, #catalog-region-filter, #catalog-testament-filter {
+    #catalog-country-filter, #catalog-region-filter, #catalog-book-filter, #catalog-testament-filter {
       padding: 5px 8px;
       font-size: 11px;
       border: 1px solid #cbd5e1;
@@ -2181,6 +2181,7 @@
       <input type="text" id="catalog-search-input" placeholder="지명, 현대지명, 원어, 구절 검색..." autocomplete="off">
       <select id="catalog-country-filter"><option value="">전체 국가</option></select>
       <select id="catalog-region-filter"><option value="">전체 지역</option></select>
+      <select id="catalog-book-filter" title="그 책에 나오는 지명만"><option value="">전체 성경</option></select>
       <select id="catalog-testament-filter">
         <option value="">구약+신약</option>
         <option value="OT">구약만</option>
@@ -5986,6 +5987,7 @@
       const searchQ = g("catalog-search-input").trim().toLowerCase();
       const countryQ = g("catalog-country-filter");
       const regionQ  = g("catalog-region-filter");
+      const bookQ    = g("catalog-book-filter");
       const testamentQ = g("catalog-testament-filter");
       const OT = ["1","2","3","4","5"], NT = ["6","7"];
       let f = placeDatabase;
@@ -5993,6 +5995,7 @@
       else if (testamentQ === "NT") f = f.filter(p => p.era && NT.some(e => p.era.startsWith(e)));
       if (countryQ) f = f.filter(p => (p.country || "") === countryQ);
       if (regionQ)  f = f.filter(p => (p.region  || "") === regionQ);
+      if (bookQ)    f = f.filter(p => Array.isArray(p.books) && p.books.indexOf(bookQ) >= 0);
       if (searchQ) {
         f = f.filter(p =>
           (p.name && p.name.toLowerCase().includes(searchQ)) ||
@@ -7153,6 +7156,7 @@
       const searchQ = (document.getElementById("catalog-search-input").value || "").trim().toLowerCase();
       const countryQ = document.getElementById("catalog-country-filter").value;
       const regionQ = (document.getElementById("catalog-region-filter")||{}).value || "";
+      const bookQ = (document.getElementById("catalog-book-filter")||{}).value || "";
       const testamentQ = document.getElementById("catalog-testament-filter").value;
 
       // 구약/신약 시대 분류: 1~5 구약, 6~7 신약
@@ -7181,6 +7185,11 @@
       // 지역 필터
       if (regionQ) {
         filtered = filtered.filter(p => (p.region || "") === regionQ);
+      }
+
+      // 성경 책 필터 — 그 책에 나오는 지명만
+      if (bookQ) {
+        filtered = filtered.filter(p => Array.isArray(p.books) && p.books.indexOf(bookQ) >= 0);
       }
 
       // 텍스트 검색
@@ -7257,15 +7266,54 @@
       if (prev && regions.indexOf(prev) >= 0) sel.value = prev;
     }
 
+    // 성경 66권 차례 — books 칸의 약어와 같다
+    var CATALOG_BOOK_ORDER = ("창 출 레 민 신 수 삿 룻 삼상 삼하 왕상 왕하 대상 대하 스 느 에 욥 시 잠 전 아 " +
+      "사 렘 애 겔 단 호 욜 암 옵 욘 미 나 합 습 학 슥 말 마 막 눅 요 행 롬 고전 고후 " +
+      "갈 엡 빌 골 살전 살후 딤전 딤후 딛 몬 히 약 벧전 벧후 요일 요이 요삼 유 계").split(" ");
+
+    // 성경 책 드롭다운 — 나라·지역 거르개를 따른다
+    function populateBookFilter() {
+      var sel = document.getElementById("catalog-book-filter");
+      if (!sel) return;
+      var countryQ = document.getElementById("catalog-country-filter").value;
+      var regionQ = (document.getElementById("catalog-region-filter")||{}).value || "";
+      var prev = sel.value;
+      var pool = placeDatabase;
+      if (countryQ) pool = pool.filter(function(p){ return (p.country || "") === countryQ; });
+      if (regionQ)  pool = pool.filter(function(p){ return (p.region  || "") === regionQ; });
+      var cnt = {};
+      pool.forEach(function(p){
+        if (!Array.isArray(p.books)) return;
+        p.books.forEach(function(b){ cnt[b] = (cnt[b] || 0) + 1; });
+      });
+      sel.innerHTML = '<option value="">전체 성경</option>';
+      varavail = [];
+      CATALOG_BOOK_ORDER.forEach(function(b){
+        if (!cnt[b]) return;
+        avail.push(b);
+        var opt = document.createElement("option");
+        opt.value = b;
+        opt.textContent = b + " (" + cnt[b] + ")";
+        sel.appendChild(opt);
+      });
+      sel.style.display = avail.length ? "" : "none";
+      if (prev && avail.indexOf(prev) >= 0) sel.value = prev;
+    }
+
     // 필터 이벤트 바인딩
     document.getElementById("catalog-search-input").addEventListener("input", function() {
       renderCatalogList();
     });
     document.getElementById("catalog-country-filter").addEventListener("change", function() {
       populateRegionFilter();
+      populateBookFilter();
       renderCatalogList();
     });
     document.getElementById("catalog-region-filter").addEventListener("change", function() {
+      populateBookFilter();
+      renderCatalogList();
+    });
+    document.getElementById("catalog-book-filter").addEventListener("change", function() {
       renderCatalogList();
     });
     document.getElementById("catalog-testament-filter").addEventListener("change", function() {
@@ -7282,6 +7330,7 @@
       var searchQ = (document.getElementById("catalog-search-input").value || "").trim().toLowerCase();
       var countryQ = document.getElementById("catalog-country-filter").value;
       var regionQ = (document.getElementById("catalog-region-filter")||{}).value || "";
+      var bookQ = (document.getElementById("catalog-book-filter")||{}).value || "";
       var testamentQ = document.getElementById("catalog-testament-filter").value;
       var OT_ERAS = ["1","2","3","4","5"];
       var NT_ERAS = ["6","7"];
@@ -7292,6 +7341,7 @@
       else if (testamentQ === "NT") filtered = filtered.filter(function(p){ return p.era && NT_ERAS.some(function(e){ return p.era.startsWith(e); }); });
       if (countryQ) filtered = filtered.filter(function(p){ return (p.country || "") === countryQ; });
       if (regionQ) filtered = filtered.filter(function(p){ return (p.region || "") === regionQ; });
+      if (bookQ) filtered = filtered.filter(function(p){ return Array.isArray(p.books) && p.books.indexOf(bookQ) >= 0; });
       if (searchQ) filtered = filtered.filter(function(p){
         return (p.name && p.name.toLowerCase().indexOf(searchQ)>=0) ||
           (p.modern && p.modern.toLowerCase().indexOf(searchQ)>=0) ||
@@ -7334,6 +7384,7 @@
     document.getElementById("btn-open-catalog").onclick = function() {
       populateCountryFilter();
       populateRegionFilter();
+      populateBookFilter();
       document.getElementById("catalog-search-input").value = "";
       document.getElementById("catalog-testament-filter").value = "";
       renderCatalogList();
