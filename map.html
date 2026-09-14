@@ -919,7 +919,11 @@
       font-size: 12px;
     }
     .pqp-title { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 6px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; }
-    .pqp-info { font-size: 11px; color: #64748b; margin-bottom: 6px; }
+    .pqp-info { font-size: 11px; color: #64748b; margin-bottom: 3px; }
+    .pqp-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+    .pqp-tag { font-size: 10px; padding: 1px 7px; border-radius: 9px;
+      background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+    .pqp-tag-c { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
     .pqp-verse-btn {
       display: block; width: 100%; text-align: left;
       padding: 5px 8px; margin-bottom: 3px;
@@ -1385,7 +1389,7 @@
       background: #f8fafc;
     }
     #catalog-search-input:focus { border-color: #2563eb; background: #fff; }
-    #catalog-country-filter, #catalog-testament-filter {
+    #catalog-country-filter, #catalog-region-filter, #catalog-testament-filter {
       padding: 5px 8px;
       font-size: 11px;
       border: 1px solid #cbd5e1;
@@ -2172,6 +2176,7 @@
     <div id="catalog-filter-bar">
       <input type="text" id="catalog-search-input" placeholder="지명, 현대지명, 원어, 구절 검색..." autocomplete="off">
       <select id="catalog-country-filter"><option value="">전체 국가</option></select>
+      <select id="catalog-region-filter"><option value="">전체 지역</option></select>
       <select id="catalog-testament-filter">
         <option value="">구약+신약</option>
         <option value="OT">구약만</option>
@@ -7115,6 +7120,7 @@
 
       const searchQ = (document.getElementById("catalog-search-input").value || "").trim().toLowerCase();
       const countryQ = document.getElementById("catalog-country-filter").value;
+      const regionQ = (document.getElementById("catalog-region-filter")||{}).value || "";
       const testamentQ = document.getElementById("catalog-testament-filter").value;
 
       // 구약/신약 시대 분류: 1~5 구약, 6~7 신약
@@ -7140,6 +7146,11 @@
         filtered = filtered.filter(p => (p.country || "") === countryQ);
       }
 
+      // 지역 필터
+      if (regionQ) {
+        filtered = filtered.filter(p => (p.region || "") === regionQ);
+      }
+
       // 텍스트 검색
       if (searchQ) {
         filtered = filtered.filter(p =>
@@ -7147,6 +7158,7 @@
           (p.modern && p.modern.toLowerCase().includes(searchQ)) ||
           (p.orig && p.orig.toLowerCase().includes(searchQ)) ||
           (p.country && p.country.toLowerCase().includes(searchQ)) ||
+          (p.region && p.region.toLowerCase().includes(searchQ)) ||
           (p.verse && p.verse.toLowerCase().includes(searchQ)) ||
           (p.desc && p.desc.toLowerCase().includes(searchQ))
         );
@@ -7167,7 +7179,7 @@
         card.className = "catalog-place-card";
         card.innerHTML = `
           <div class="cpc-header">[${originalIndex}] ${escHtml(p.name)}</div>
-          <div class="cpc-sub">현대: ${escHtml(p.modern || '-')} (${escHtml(p.country || '-')})</div>
+          <div class="cpc-sub">${escHtml(p.modern || '-')}${p.country ? ' · ' + escHtml(p.country) : ''}${p.region ? ' · ' + escHtml(p.region) : ''}</div>
           ${p.verse ? `<div class="cpc-verse">구절: ${escHtml(p.verse)}</div>` : ''}
         `;
         card.onclick = () => {
@@ -7193,11 +7205,35 @@
       if (prev) sel.value = prev;
     }
 
+    // 지역 드롭다운 동적 구성 — 고른 나라에 매인다
+    function populateRegionFilter() {
+      const sel = document.getElementById("catalog-region-filter");
+      if (!sel) return;
+      const countryQ = document.getElementById("catalog-country-filter").value;
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">전체 지역</option>';
+      const pool = countryQ ? placeDatabase.filter(p => (p.country || "") === countryQ) : placeDatabase;
+      const regions = [...new Set(pool.map(p => p.region).filter(Boolean))].sort();
+      regions.forEach(r => {
+        const count = pool.filter(p => p.region === r).length;
+        const opt = document.createElement("option");
+        opt.value = r;
+        opt.textContent = `${r} (${count})`;
+        sel.appendChild(opt);
+      });
+      sel.style.display = regions.length ? "" : "none";
+      if (prev && regions.indexOf(prev) >= 0) sel.value = prev;
+    }
+
     // 필터 이벤트 바인딩
     document.getElementById("catalog-search-input").addEventListener("input", function() {
       renderCatalogList();
     });
     document.getElementById("catalog-country-filter").addEventListener("change", function() {
+      populateRegionFilter();
+      renderCatalogList();
+    });
+    document.getElementById("catalog-region-filter").addEventListener("change", function() {
       renderCatalogList();
     });
     document.getElementById("catalog-testament-filter").addEventListener("change", function() {
@@ -7213,6 +7249,7 @@
     document.getElementById("btn-catalog-show-map").onclick = function() {
       var searchQ = (document.getElementById("catalog-search-input").value || "").trim().toLowerCase();
       var countryQ = document.getElementById("catalog-country-filter").value;
+      var regionQ = (document.getElementById("catalog-region-filter")||{}).value || "";
       var testamentQ = document.getElementById("catalog-testament-filter").value;
       var OT_ERAS = ["1","2","3","4","5"];
       var NT_ERAS = ["6","7"];
@@ -7222,6 +7259,7 @@
       if (testamentQ === "OT") filtered = filtered.filter(function(p){ return p.era && OT_ERAS.some(function(e){ return p.era.startsWith(e); }); });
       else if (testamentQ === "NT") filtered = filtered.filter(function(p){ return p.era && NT_ERAS.some(function(e){ return p.era.startsWith(e); }); });
       if (countryQ) filtered = filtered.filter(function(p){ return (p.country || "") === countryQ; });
+      if (regionQ) filtered = filtered.filter(function(p){ return (p.region || "") === regionQ; });
       if (searchQ) filtered = filtered.filter(function(p){
         return (p.name && p.name.toLowerCase().indexOf(searchQ)>=0) ||
           (p.modern && p.modern.toLowerCase().indexOf(searchQ)>=0) ||
@@ -7263,6 +7301,7 @@
 
     document.getElementById("btn-open-catalog").onclick = function() {
       populateCountryFilter();
+      populateRegionFilter();
       document.getElementById("catalog-search-input").value = "";
       document.getElementById("catalog-testament-filter").value = "";
       renderCatalogList();
@@ -7298,7 +7337,13 @@
         <div class="pqp-title" style="flex:1;">${escHtml(place.label || place.name)}</div>
         <button onclick="document.getElementById('place-quick-panel').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:14px;color:#94a3b8;padding:0 0 0 6px;line-height:1;flex-shrink:0;" title="닫기">✕</button>
       </div>`;
-      html += `<div class="pqp-info">${escHtml(place.modern || '')} ${place.country ? '(' + escHtml(place.country) + ')' : ''}</div>`;
+      html += `<div class="pqp-info">${escHtml(place.modern || '')}</div>`;
+      if (place.country || place.region) {
+        let tg = '';
+        if (place.country) tg += `<span class="pqp-tag pqp-tag-c">${escHtml(place.country)}</span>`;
+        if (place.region) tg += `<span class="pqp-tag">${escHtml(place.region)}</span>`;
+        html += `<div class="pqp-tags">${tg}</div>`;
+      }
       if (place.ustrong && /^[HG]\d{1,5}[A-Za-z]?$/.test(place.ustrong)) {
         const safeUstrong = place.ustrong.replace(/'/g,"\\'");
         html += `<div><span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${safeUstrong}','pqp-strong-inline')" title="원어 뜻 보기">[${escHtml(place.ustrong)}]</span></div><div id="pqp-strong-inline"></div>`;
@@ -11890,7 +11935,11 @@
       const eEn = _e.en;
       const sKo = _s.ko;
       const sEn = _s.en;
-      const dv  = (item.dictVerse || '').trim();
+      /* dictVerse(사전 인용 구절) 는 2026-09-13 에 뺐다.
+       * 1,468 전부 비어 한 번도 나온 적이 없고, 사전 글 안의 절이
+       * 이미 파란 링크(linkifyVerseRefs)로 눌러 갈 수 있어 겹친다.
+       * 「관련 성경 구절」(verse 칸, OpenBible 기준)과는 다른 칸이다 — 그쪽은 그대로 둔다. */
+      const dv  = '';
       const warn = (item.dictWarn || '').trim();
       if (!eKo && !eEn && !sKo && !sEn && !dv && !(item.cdbKo || '').trim()) return '';
 
@@ -11955,21 +12004,6 @@
 
       html += section('eas', '\ud83d\udcd6 이스턴 성경사전', eKo, eEn);
       html += section('smi', '\ud83d\udcd6 스미스 성경사전', sKo, sEn);
-
-      if (dv) {
-        const cnt = dv.split(',').filter(function(x){ return x.trim(); }).length;
-        const bid = 'dict-ref-' + item.id;
-        html += '<div style="' + dim + '">'
-             +   '<div onclick="toggleDictSection(\'' + bid + '\', this)" '
-             +        'style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:11px;'
-             +        'font-weight:700;color:#475569;margin-top:6px;">'
-             +     '<span class="dict-arrow">\u25b8</span><span>\ud83d\udcda 사전 인용 구절</span>'
-             +     '<span style="margin-left:auto;font-size:9px;color:#94a3b8;">' + cnt + '절</span>'
-             +   '</div>'
-             +   '<div id="' + bid + '" style="display:none;font-size:11px;line-height:1.7;'
-             +        'color:#475569;margin-top:4px;padding-left:14px;">' + escHtml(dv) + '</div>'
-             + '</div>';
-      }
 
       html += '</div>';
       return html;
