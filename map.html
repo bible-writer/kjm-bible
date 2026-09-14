@@ -7446,6 +7446,7 @@
                (p.modern && ns(p.modern).includes(nq)) ||
                (p.orig && ns(p.orig).includes(nq)) ||
                (p.country && ns(p.country).includes(nq)) ||
+               (p.region && ns(p.region).includes(nq)) ||
                (p.verse && p.verse.toLowerCase().includes(q)) ||
                (p.era && p.era.toLowerCase().includes(q));
       });
@@ -7637,6 +7638,7 @@
           return (p.name && p.name.toLowerCase().includes(q)) ||
                  (p.modern && p.modern.toLowerCase().includes(q)) ||
                  (p.country && p.country.toLowerCase().includes(q)) ||
+                 (p.region && p.region.toLowerCase().includes(q)) ||
                  (p.verse && p.verse.toLowerCase().includes(q));
         });
       }
@@ -7653,7 +7655,7 @@
         itemDiv.className = "link-candidate-item" + (currentSelectedTargetIndex === originalIdx ? " selected" : "");
         itemDiv.innerHTML = `
           <div class="lc-main">[${dispId}] ${p.name}</div>
-          <div class="lc-sub">${p.modern || '-'} (${p.country || '-'})</div>
+          <div class="lc-sub">${p.modern || '-'}${p.country ? ' · ' + p.country : ''}${p.region ? ' · ' + p.region : ''}</div>
         `;
         itemDiv.onclick = () => {
           currentSelectedTargetIndex = originalIdx;
@@ -11678,6 +11680,7 @@
         '현대지명': p.modern || '',
         '원어및영문': p.orig || '',
         '현재국가': p.country || '',
+        '지역': p.region || '',
         '위도': p.lat || '',
         '경도': p.lng || '',
         '시대구분': p.era || '',
@@ -11749,7 +11752,8 @@
               <button onclick="document.getElementById('name-edit-${item.id}').style.display='none';document.getElementById('name-display-${item.id}').style.display='inline';" style="font-size:11px;padding:2px 8px;background:#94a3b8;color:#fff;border:none;border-radius:4px;cursor:pointer;">취소</button>
             </span>
           </div>
-          <div><b>현대지명:</b> ${escHtml(item.modern || '-')} (${escHtml(item.country || '-')})</div>
+          <div><b>현대지명:</b> ${escHtml(item.modern || '-')}</div>
+          ${(item.country || item.region) ? `<div class="pqp-tags" style="margin:3px 0 5px;">${item.country ? `<span class="pqp-tag pqp-tag-c">${escHtml(item.country)}</span>` : ''}${item.region ? `<span class="pqp-tag">${escHtml(item.region)}</span>` : ''}</div>` : ''}
           <div><b>원어/영문:</b> ${escHtml(item.orig || '-')}${(item.ustrong && /^[HG]\d{1,5}[A-Za-z]?$/.test(item.ustrong)) ? ` <span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${item.ustrong.replace(/'/g,"\\'")}','place-strong-inline-${item.id}')" title="원어 뜻 보기">[${escHtml(item.ustrong)}]</span>` : ''}</div>
           <div id="place-strong-inline-${item.id}"></div>
           <div class="popup-coord-row" style="margin-top:4px;font-size:11px;color:#475569;">
@@ -12954,6 +12958,7 @@
           orig: row['원어및영문'] || row['원어'] || row['English'] || '',
           modern: row['현대지명'] || row['Modern'] || '',
           country: row['현재국가'] || row['국가'] || row['Country'] || '',
+          region: row['지역'] || row['Region'] || '',
           era: row['시대구분'] || row['시대'] || '',
           lat: lat, lng: lng,
           verse: row['관련성경구절'] || row['대표성경구절'] || row['성경구절'] || row['Verse'] || '',
