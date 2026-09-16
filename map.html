@@ -6986,7 +6986,7 @@
         list.push({
           type: 'PLACE', sortKey: p.name || '',
           nameKo: p.name || '', nameEn: p.modern || p.orig || '',
-          def: p.desc || '', strong: '',
+          def: p.desc || '', strong: p.hebrew_greek || p.ustrong || '',  // 지명에도 스트롱 표(초록)를 단다
           ref: p
         });
       });
