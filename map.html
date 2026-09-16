@@ -2199,13 +2199,13 @@
     </div>
     <div class="catalog-tab-bar" id="catalog-tabs">
       <button class="catalog-tab-btn active" data-era="ALL">전체</button>
-      <button class="catalog-tab-btn" data-era="1">1. 족장시대</button>
-      <button class="catalog-tab-btn" data-era="2">2. 출애굽·정복</button>
-      <button class="catalog-tab-btn" data-era="3">3. 사사·통일왕국</button>
-      <button class="catalog-tab-btn" data-era="4">4. 분열왕국·선지자</button>
-      <button class="catalog-tab-btn" data-era="5">5. 포로·귀환</button>
-      <button class="catalog-tab-btn" data-era="6">6. 예수님 공생애</button>
-      <button class="catalog-tab-btn" data-era="7">7. 바울전도·계시록</button>
+      <button class="catalog-tab-btn" data-era="1">1. 창세기·족장시대</button>
+      <button class="catalog-tab-btn" data-era="2">2. 출애굽·광야시대</button>
+      <button class="catalog-tab-btn" data-era="3">3. 정복·사사시대</button>
+      <button class="catalog-tab-btn" data-era="4">4. 통일왕국시대</button>
+      <button class="catalog-tab-btn" data-era="5">5. 분열·포로·귀환시대</button>
+      <button class="catalog-tab-btn" data-era="6">6. 사복음서·예수님 공생애</button>
+      <button class="catalog-tab-btn" data-era="7">7. 바울전도여행·계시록</button>
     </div>
     <div id="catalog-places-container"></div>
   </div>
@@ -6028,12 +6028,15 @@
           btn.textContent = `전체 (${base.length})`;
         } else {
           const count = base.filter(p => p.era && p.era.startsWith(era)).length;
+          // 탭 이름은 DB 의 시대 이름에서 읽는다 (「3. 정복·사사시대 (총 402개 …)」 → 「정복·사사시대」)
           const eraNames = {
-            "1": "족장시대", "2": "출애굽·정복", "3": "사사·통일왕국",
-            "4": "분열왕국·선지자", "5": "포로·귀환",
-            "6": "예수님공생애", "7": "바울전도·계시록"
+            "1": "창세기·족장시대", "2": "출애굽·광야시대", "3": "정복·사사시대",
+            "4": "통일왕국시대", "5": "분열·포로·귀환시대",
+            "6": "사복음서·예수님 공생애", "7": "바울전도여행·계시록"
           };
-          btn.textContent = `${era}. ${eraNames[era] || era} (${count})`;
+          const sample = (placeDatabase || []).find(p => p.era && p.era.startsWith(era + "."));
+          const dbName = sample ? sample.era.replace(/^\d+\.\s*/, "").replace(/\s*\(총[^)]*\)\s*$/, "").trim() : "";
+          btn.textContent = `${era}. ${dbName || eraNames[era] || era} (${count})`;
         }
       });
     }
@@ -13854,7 +13857,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260910-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260916-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
