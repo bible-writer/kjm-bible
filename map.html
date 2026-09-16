@@ -2202,7 +2202,7 @@
       <b>용어 부분 제외</b> — 본문 우클릭 「이 자리만 / 이 책에서 제외」로 쌓인 목록입니다. 줄을 지우고 저장하면 되돌아갑니다.<br>
       꼴: <code>창4:24 벌이#1</code> (그 절의 그 낱말 몇 번째) · <code>창세기: 나도</code> (그 책 전체)
     </div>
-    <textarea id="term-skip-textarea" placeholder="(비어 있음)" style="min-height:90px;"></textarea>
+    <textarea id="term-skip-textarea" placeholder="(비어 있음)" style="display:block;width:100%;box-sizing:border-box;min-height:90px;padding:8px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;font-family:inherit;"></textarea>
     <div class="modal-btn-row">
       <button class="btn-status-action" style="padding:6px 12px;" id="btn-reset-default-blacklist">기본값 복원</button>
       <button class="action-btn" id="btn-save-blacklist">저장 및 적용</button>
@@ -14040,7 +14040,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260916-12`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260916-13`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
