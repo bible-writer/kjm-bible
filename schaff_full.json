@@ -1,6 +1,6 @@
 {
- "version": "3.384.0",
- "date": "2026-09-15",
+ "version": "3.386.0",
+ "date": "2026-09-16",
  "count": 4960,
  "source": "Schaff's Bible Dictionary (Philip Schaff, 1880) — CCEL 전자본, Public Domain",
  "note": "Schaff's Bible Dictionary (Philip Schaff, 1880, Public Domain). 영문 원문은 고치지 않고, 한글 번역과 ※ 소견(원문 오류·판정 근거·원문 대조)을 붙였다.",
@@ -3121,10 +3121,10 @@
   },
   {
    "id": 262,
-   "term": "AMMON-NO(암몬노)",
+   "term": "AMMON-NO(노아몬)",
    "definition": "AM'MON-NO. See Na",
    "category": "지명",
-   "definition_ko": "본문 추출 과정에서 발생한 표기 오류로 보이는 항목이며 암몬(AMMON) 참조.",
+   "definition_ko": "노 참조.\n\n「※ 원문 대조: 한글이 「본문 추출 과정에서 발생한 표기 오류로 보이는 항목이며 암몬 참조」로 되어 있었으나, 인쇄면(PDF 53면, 인쇄 47쪽)은 「AM'MON-NO. See No.」로 애굽의 성읍 노아몬(나훔 3:8)을 가리키는 온전한 항목이다. CCEL 영문의 「See Na」는 「See No」가 깨진 것이다. 표제어 한글도 개역개정을 따라 「암몬노」에서 「노아몬」으로 고쳤다. 영문은 고치지 않았다.」",
    "origin": "Schaff",
    "hebrew_greek": "H4996",
    "pdf_page": 53
@@ -8726,7 +8726,7 @@
    "term": "BIRDS",
    "definition": "BIRDS are mentioned as articles of food in Deut 14:11, and lists of birds not to be eaten are given. Lev 11:13-19; Deut 14:12-19. In general, the ravenous kinds feeding on flesh are forbidden. From Job 6:6; Luke 11:12 we learn that the eggs of birds were also eaten. In the cleansing of the leper birds were used in a peculiar way. Lev 14:4-7. There was a humane law in the Jewish code which forbade the taking a",
    "category": "용어",
-   "definition_ko": "새는 신명기 14:11에서 식품으로 언급되며, 먹지 못할 새의 목록이 제시된다(레위기 11:13-19). 대체로 고기를 먹는 맹금류가 금지되었다. 새의 알도 먹었으며(욥기 6:6, 누가복음 11:12), 나병환자를 정결케 하는 의식에도 새가 특별한 방식으로 쓰였다(레위기 14:4-7). 어미 새는 잡지 못하게 하는 인도적인 율법도 있었다.",
+   "definition_ko": "새는 신명기 14:11에서 식품으로 언급되며, 먹지 못할 새의 목록이 제시된다(레위기 11:13-19). 대체로 고기를 먹는 맹금류가 금지되었다. 새의 알도 먹었으며(욥기 6:6, 누가복음 11:12), 나병환자를 정결케 하는 의식에도 새가 특별한 방식으로 쓰였다(레위기 14:4-7). 어미 새는 잡지 못하게 하되 그 새끼는 잡아도 되게 한 인도적인 율법도 있었다. 새를 잡는 흔한 방법은 올무였다(시편 124:7; 잠언 7:23; 아모스 3:5). 예레미야 12:9의 「무늬 있는 매」는 히브리어로 보아 아마 썩은 고기를 먹는 수리를 뜻할 것이니, 잘 알려진 대로 다른 새들이 이런 새를 뒤쫓아 덤비곤 한다. 어떤 이들은 어원을 들어 예레미야 12:9의 「무늬 있는 새」를 「하이에나」로 읽기도 한다. 팔레스타인의 새 가운데 많은 것이 우리 나라(미국)의 새와 비슷하나, 엄밀히 말하면 두 나라에 함께 사는 종은 하나뿐이다. 영국에서 들여온 집참새(Passer domesticus)가 그것으로, 해안의 성읍들에서 볼 수 있다. 트리스트럼이 성지에서 얻은 322종 가운데 172종은 영국에도, 260종은 유럽에도 있고, 26종은 팔레스타인에만 있다.\n\n「※ 원문 대조: CCEL 전자본 영문이 「forbade the taking a」에서 끊겨 있다. 인쇄면(PDF 141면, 인쇄 135쪽)에 이어지는 대목이 있어 한글에 옮겨 넣었다. 원본 OCR 은 잠언 인용을 「7 : 2;}」, 고유종 수를 「2()」로 깨뜨렸으나 인쇄면은 7:23과 26이다. 영문은 고치지 않았다.」",
    "hebrew_greek": "H5775,H5861,H6833,H6853",
    "origin": "Schaff",
    "pdf_page": 140
