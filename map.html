@@ -3641,13 +3641,23 @@
     let termDatabaseMeta = {}; // termDatabase.json 최상위 메타(note 등) 보관 — 내보내기 시 원본과 동일하게 유지
     let termIndex = {}; // key: "표시용어(term_ko)" -> term레코드 (구절 무관, 전역 사전)
 
+    // 본문 용어 연결에서 뺄 한 글자 키 (2026-09-16 kjm) — 조사·어간·낱말 조각으로 더 자주 쓰이는 것.
+    // 개역개정S 본문은 「거 기」「사 람」「조 상」처럼 띄어 쓴 조각이 많아, 이 글자들이 엉뚱하게 걸린다.
+    const TERM_STOP_KEYS = new Set([
+      '은', '년', '기', '알', '줄', '불', '말', '배',             // kjm 지정
+      '이', '들', '수', '해', '면', '못', '매', '야', '간', '새',   // 조사·어미·의존명사·어간
+      '죽', '삼', '상', '실', '홀', '재', '초', '경', '권', '절',   // 낱말 조각(죽은·삼 년·조 상·실 족·홀로 …)
+      '체', '겨', '람', '장', '관', '신', '벧', '엔', '엣', '엘', '벨'
+    ]);
+    function _termKeyOk(k) { return k && !userBlacklist.has(k) && !TERM_STOP_KEYS.has(k); }
+
     function buildTermIndex(termList) {
       termIndex = {};
       if (!Array.isArray(termList)) return;
       termList.forEach(t => {
         if (!t.term_ko) return;
         const raw = t.term_ko.trim();
-        if (!userBlacklist.has(raw)) termIndex[raw] = t;
+        if (_termKeyOk(raw)) termIndex[raw] = t;
         // "흑암(어둠)" 형태 → "흑암"과 "어둠" 둘 다 별도 하이라이트 키로 등록 (본문엔 괄호 없이 단독으로 나오므로)
         // 단, "우리(가축 우리)"처럼 괄호 앞부분이 본문에서 흔히 다른 뜻(대명사 등)으로 훨씬 자주 쓰이는
         // 단어일 경우 오매칭이 나므로, userBlacklist에 등록된 단어는 하이라이트 키로 쓰지 않는다.
@@ -3655,8 +3665,8 @@
         if (m) {
           const main = m[1].trim();
           const alt = m[2].trim();
-          if (main && !termIndex[main] && !userBlacklist.has(main)) termIndex[main] = t;
-          if (alt && !termIndex[alt] && !userBlacklist.has(alt)) termIndex[alt] = t;
+          if (_termKeyOk(main) && !termIndex[main]) termIndex[main] = t;
+          if (_termKeyOk(alt) && !termIndex[alt]) termIndex[alt] = t;
         }
       });
       TermEngine._enIndexCache = null; // 목록이 바뀌었으니 영어(NIV 등) 인덱스도 다음 사용 시 재생성
@@ -13901,7 +13911,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260916-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260916-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
