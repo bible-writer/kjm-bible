@@ -1389,7 +1389,7 @@
       background: #f8fafc;
     }
     #catalog-search-input:focus { border-color: #2563eb; background: #fff; }
-    #catalog-country-filter, #catalog-region-filter, #catalog-book-filter, #catalog-testament-filter {
+    #catalog-country-filter, #catalog-region-filter, #catalog-book-filter, #catalog-terrain-filter, #catalog-testament-filter {
       padding: 5px 8px;
       font-size: 11px;
       border: 1px solid #cbd5e1;
@@ -2191,6 +2191,7 @@
       <select id="catalog-country-filter"><option value="">전체 국가</option></select>
       <select id="catalog-region-filter"><option value="">전체 지역</option></select>
       <select id="catalog-book-filter" title="그 책에 나오는 지명만"><option value="">전체 성경</option></select>
+      <select id="catalog-terrain-filter" title="산·강·섬 같은 지형 갈래만"><option value="">전체 지형</option></select>
       <select id="catalog-testament-filter">
         <option value="">구약+신약</option>
         <option value="OT">구약만</option>
@@ -6005,6 +6006,8 @@
       if (countryQ) f = f.filter(p => (p.country || "") === countryQ);
       if (regionQ)  f = f.filter(p => (p.region  || "") === regionQ);
       if (bookQ)    f = f.filter(p => Array.isArray(p.books) && p.books.indexOf(bookQ) >= 0);
+      const terrainQ = g("catalog-terrain-filter");
+      if (terrainQ) f = f.filter(p => (p.terrainType || "") === terrainQ);
       if (searchQ) {
         f = f.filter(p =>
           (p.name && p.name.toLowerCase().includes(searchQ)) ||
@@ -7205,6 +7208,12 @@
         filtered = filtered.filter(p => Array.isArray(p.books) && p.books.indexOf(bookQ) >= 0);
       }
 
+      // 지형 필터 — terrainType (산·골짜기·강·섬 …)
+      const terrainQ = (document.getElementById("catalog-terrain-filter")||{}).value || "";
+      if (terrainQ) {
+        filtered = filtered.filter(p => (p.terrainType || "") === terrainQ);
+      }
+
       // 텍스트 검색
       if (searchQ) {
         filtered = filtered.filter(p =>
@@ -7313,6 +7322,32 @@
       if (prev && avail.indexOf(prev) >= 0) sel.value = prev;
     }
 
+    // 지형 드롭다운 — 나라·지역·성경 거르개를 따른다. 많은 갈래부터
+    function populateTerrainFilter() {
+      var sel = document.getElementById("catalog-terrain-filter");
+      if (!sel) return;
+      var countryQ = document.getElementById("catalog-country-filter").value;
+      var regionQ = (document.getElementById("catalog-region-filter")||{}).value || "";
+      var bookQ = (document.getElementById("catalog-book-filter")||{}).value || "";
+      var prev = sel.value;
+      var pool = placeDatabase;
+      if (countryQ) pool = pool.filter(function(p){ return (p.country || "") === countryQ; });
+      if (regionQ)  pool = pool.filter(function(p){ return (p.region  || "") === regionQ; });
+      if (bookQ)    pool = pool.filter(function(p){ return Array.isArray(p.books) && p.books.indexOf(bookQ) >= 0; });
+      var cnt = {};
+      pool.forEach(function(p){ if (p.terrainType) cnt[p.terrainType] = (cnt[p.terrainType] || 0) + 1; });
+      var kinds = Object.keys(cnt).sort(function(a, b){ return cnt[b] - cnt[a] || a.localeCompare(b); });
+      sel.innerHTML = '<option value="">전체 지형</option>';
+      kinds.forEach(function(k){
+        var opt = document.createElement("option");
+        opt.value = k;
+        opt.textContent = k + " (" + cnt[k] + ")";
+        sel.appendChild(opt);
+      });
+      sel.style.display = kinds.length > 1 ? "" : "none";
+      if (prev && kinds.indexOf(prev) >= 0) sel.value = prev;
+    }
+
     // 필터 이벤트 바인딩
     document.getElementById("catalog-search-input").addEventListener("input", function() {
       renderCatalogList();
@@ -7320,13 +7355,19 @@
     document.getElementById("catalog-country-filter").addEventListener("change", function() {
       populateRegionFilter();
       populateBookFilter();
+      populateTerrainFilter();
       renderCatalogList();
     });
     document.getElementById("catalog-region-filter").addEventListener("change", function() {
       populateBookFilter();
+      populateTerrainFilter();
       renderCatalogList();
     });
     document.getElementById("catalog-book-filter").addEventListener("change", function() {
+      populateTerrainFilter();
+      renderCatalogList();
+    });
+    document.getElementById("catalog-terrain-filter").addEventListener("change", function() {
       renderCatalogList();
     });
     document.getElementById("catalog-testament-filter").addEventListener("change", function() {
@@ -7355,6 +7396,8 @@
       if (countryQ) filtered = filtered.filter(function(p){ return (p.country || "") === countryQ; });
       if (regionQ) filtered = filtered.filter(function(p){ return (p.region || "") === regionQ; });
       if (bookQ) filtered = filtered.filter(function(p){ return Array.isArray(p.books) && p.books.indexOf(bookQ) >= 0; });
+      var terrainQ = (document.getElementById("catalog-terrain-filter")||{}).value || "";
+      if (terrainQ) filtered = filtered.filter(function(p){ return (p.terrainType || "") === terrainQ; });
       if (searchQ) filtered = filtered.filter(function(p){
         return (p.name && p.name.toLowerCase().indexOf(searchQ)>=0) ||
           (p.modern && p.modern.toLowerCase().indexOf(searchQ)>=0) ||
@@ -7398,6 +7441,7 @@
       populateCountryFilter();
       populateRegionFilter();
       populateBookFilter();
+      populateTerrainFilter();
       document.getElementById("catalog-search-input").value = "";
       document.getElementById("catalog-testament-filter").value = "";
       renderCatalogList();
