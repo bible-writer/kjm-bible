@@ -3938,7 +3938,7 @@
       parseAndHighlightByNames: function(html, nameMap, book, chapter, verse) {
         const names = Object.keys(nameMap || {});
         if (!html || names.length === 0) return html;
-        const particlePattern = '(에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
+        const particlePattern = '(이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
         const sortedNames = names.sort((a, b) => b.length - a.length);
         const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).join('|');
         if (!escapedNames) return html;
@@ -4981,7 +4981,8 @@
 
       const escapedKeys = allKeys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
       // [버그9 수정] 복합 조사 추가 (에서는, 으로부터, 에게서, 로부터 등) — 긴 것 먼저 배치
-      const particlePattern = "(에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?";
+      // (2026-09-17) 서술 끝말(이더라·이니라·이요·이며·더라 …)도 — 「다윗 성이더라」 같은 곳이 걸리게. 용어 엔진은 동사와 헷갈려 넣지 않음
+      const particlePattern = "(이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?";
       
       compiledPlaceRegex = new RegExp(`(?<![가-힣])(${escapedKeys})${particlePattern}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
     }
@@ -5770,7 +5771,7 @@
       parseAndHighlightByNames: function(verseText, currentContext, nameSet) {
         if (!verseText || nameSet.size === 0) return String(verseText || '');
         const safeText = String(verseText);
-        const particlePattern = '(에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
+        const particlePattern = '(이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
 
         // nameSet을 길이 내림차순 정렬 (긴 지명 우선)
         const sortedNames = [...nameSet].sort((a, b) => b.length - a.length);
@@ -14695,7 +14696,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-12`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-13`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
