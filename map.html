@@ -4129,6 +4129,59 @@
         this.showPopup(t, refLabel);
       },
 
+      // 본문에서 이 용어로 실제 연결되는 절 (2026-09-17)
+      //  원어 코드로 찾으면 코드가 틀리거나 여럿일 때 엉뚱한 구절이 나온다(금 등잔대 → 레13장).
+      //  본문 화면과 같은 규칙(키+조사 · 제외 규칙 · 절별 표 · 기본 용어 · 사용자 제외)으로 가려 낸다.
+      linkedVerses: function(t, limit, scanMax) {
+        limit = limit || 60; scanMax = scanMax || 40000;   // 한 글자 키(주·손 …)는 LIKE 에 딴 낱말이 많이 걸려 끝까지 본다
+        const out = { rows: [], total: 0, capped: false };
+        if (!t || !sqliteDbInstance || !detectedSchema) return out;
+        const sc = detectedSchema;
+        const keys = new Set();
+        Object.keys(termIndex || {}).forEach(k => { if (termIndex[k] === t) keys.add(k); });
+        const raw = String(t.term_ko || '').trim();
+        if (raw) { keys.add(raw); const m = raw.match(/^([^()]+)\(([^()]+)\)$/); if (m) { keys.add(m[1].trim()); keys.add(m[2].trim()); } }
+        const part = '(에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
+        const seen = new Set();
+        let scanned = 0;
+        for (const k of keys) {
+          if (!k || !termIndex[k] || userBlacklist.has(k)) continue;
+          const esc = k.replace(/'/g, "''");
+          let res;
+          try {
+            res = sqliteDbInstance.exec(`SELECT "${sc.book}","${sc.chapter}","${sc.verse}","${sc.content}" FROM "${sc.table}" WHERE "${sc.content}" LIKE '%${esc}%' ORDER BY "${sc.book}","${sc.chapter}",CAST("${sc.verse}" AS INTEGER) LIMIT ${scanMax}`);
+          } catch (e) { continue; }
+          const rows = res && res[0] ? res[0].values : [];
+          if (rows.length >= scanMax) out.capped = true;
+          const rx = new RegExp(`(?<![가-힣])(${k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})${part}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
+          rows.forEach(([b, c, v, text]) => {
+            b = +b; c = +c; v = +v; scanned++;
+            const vk = `${b}-${c}-${v}`;
+            if (seen.has(vk)) return;
+            const txt = String(typeof stripVerseTags === 'function' ? stripVerseTags(text) : text);
+            const vt = TERM_VERSE_TABLE[vk] || null;
+            const cnt = {}; let hit = false; let m;
+            rx.lastIndex = 0;
+            while ((m = rx.exec(txt)) !== null) {
+              const p1 = m[1], particle = m[2] || '';
+              if (TERM_STOP_WORDS.has(p1 + particle)) continue;
+              if (TERM_COUNTER_KEYS.has(p1) && TERM_NUM_BEFORE.test(txt.slice(Math.max(0, m.index - 12), m.index))) continue;
+              const tok = p1 + particle; const nth = (cnt[tok] = (cnt[tok] || 0) + 1);
+              if (userTermSkip.book[b] && userTermSkip.book[b].indexOf(p1) >= 0) continue;
+              if (userTermSkip.verse[vk] && userTermSkip.verse[vk].indexOf(tok + '#' + nth) >= 0) continue;
+              const pick = vt ? vt[tok + '#' + nth] : undefined;
+              if (pick === 0) continue;
+              const owner = pick ? (termDatabase || []).find(x => x.id === pick) : termIndex[p1];
+              // 표제어가 같은 항목(이스턴·스미스·샤프 각각)은 같은 용어로 본다
+              if (owner && (owner === t || (owner.term_ko || '').trim() === (t.term_ko || '').trim())) { hit = true; break; }
+            }
+            if (hit) { seen.add(vk); out.total++; if (out.rows.length < limit) out.rows.push([b, c, v]); }
+          });
+        }
+        out.rows.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]);
+        return out;
+      },
+
       handleClickId: function(id, bookId, chapter, vNum) {
         if (typeof wpSetRef === 'function') wpSetRef(bookId, chapter, vNum);
         const t = (termDatabase || []).find(x => x.id === id);
@@ -4375,6 +4428,7 @@
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${source}</div>
         `;
         panel.style.display = 'block';
+        window._wpTerm = t;
         wpAttach('term-info-panel', t.hebrew_greek || '');
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#term-info-drag-handle');
@@ -13656,7 +13710,7 @@
       if (!panel) return;
       if (!bookId) { bookId = _wpRef.bookId; chapter = _wpRef.chapter; vNum = _wpRef.vNum; }
       const code = wpPickCode(rawCode, bookId, chapter, vNum);
-      if (!code) return;                    // 스트롱 코드가 없으면 아무것도 붙이지 않는다
+      if (!code && panelId !== 'term-info-panel') return;   // 스트롱 코드가 없으면 아무것도 붙이지 않는다(용어 창은 본문 연결 구절만이라도)
 
       let box = panel.querySelector('.wp-attach');
       if (!box) { box = document.createElement('div'); box.className = 'wp-attach'; panel.appendChild(box); }
@@ -13672,14 +13726,36 @@
       let h = '';
 
       /* 원어 뜻 */
-      h += fold('s', '📜 원어 ' + escHtml(code), '',
+      if (code) h += fold('s', '📜 원어 ' + escHtml(code), '',
         '<div id="' + panelId + '-wpstrong"></div>'
         + '<button onclick="StrongEngine.handleClick(\'' + code + '\',\'' + panelId + '-wpstrong\')"'
         + ' style="font-size:0.9em;color:#047857;background:#ecfdf5;border:1px solid #a7f3d0;'
         + 'border-radius:4px;padding:2px 9px;cursor:pointer">원어 사전 보기</button>');
 
+      /* (2026-09-17) 용어 창: 본문에서 이 용어로 연결되는 절을 먼저 */
+      if (panelId === 'term-info-panel' && window._wpTerm && typeof TermEngine !== 'undefined') {
+        const lv = TermEngine.linkedVerses(window._wpTerm, 60);
+        if (lv.total) {
+          const ll = lv.rows.map(r => {
+            const b2 = BIBLE_BOOKS.find(b => b.id === r[0]);
+            const lab = (b2 ? b2.abbr : '?') + r[1] + ':' + r[2];
+            const t = (typeof wpVerseText === 'function') ? wpVerseText(r[0], r[1], r[2]).slice(0, 42) : '';
+            return '<div style="padding:4px 0;border-bottom:1px dashed #e2e8f0">'
+              + '<span style="color:#b45309;font-weight:600">' + escHtml(lab) + '</span> '
+              + '<span style="color:#475569">' + escHtml(t) + '</span> '
+              + '<button onclick="wpGo(' + r[0] + ',' + r[1] + ',' + r[2] + ')"'
+              + ' style="font-size:0.8em;color:#64748b;background:none;border:1px solid #e2e8f0;'
+              + 'border-radius:3px;padding:0 5px;cursor:pointer">이동</button></div>';
+          }).join('')
+          + (lv.total > lv.rows.length ? '<div style="color:#94a3b8;padding-top:5px">앞의 ' + lv.rows.length + '건만 보입니다</div>' : '')
+          + (lv.capped ? '<div style="color:#94a3b8;padding-top:3px">자주 나오는 말이라 앞부분만 셌습니다</div>' : '');
+          if (_wpAtOpen.t === undefined) _wpAtOpen.t = true;
+          h += fold('t', '📖 본문에서 이 용어가 쓰인 곳', lv.total.toLocaleString() + (lv.capped ? '+' : ''), ll);
+        }
+      }
+
       /* 이 낱말이 쓰인 곳 — 본문을 옮기지 않는다 */
-      const u = (typeof wpUsages === 'function') ? wpUsages(code, 100) : { total: 0, rows: [] };
+      const u = (code && typeof wpUsages === 'function') ? wpUsages(code, 100) : { total: 0, rows: [] };
       if (u.total) {
         const ul = u.rows.map(r => {
           const b2 = BIBLE_BOOKS.find(b => b.id === r[0]);
@@ -13693,11 +13769,11 @@
             + 'border-radius:3px;padding:0 5px;cursor:pointer">이동</button></div>';
         }).join('')
         + (u.total > u.rows.length ? '<div style="color:#94a3b8;padding-top:5px">앞의 ' + u.rows.length + '건만 보입니다</div>' : '');
-        h += fold('u', '이 낱말이 쓰인 곳', u.total.toLocaleString(), ul);
+        h += fold('u', panelId === 'term-info-panel' ? '원어 ' + escHtml(code) + '가 쓰인 곳' : '이 낱말이 쓰인 곳', u.total.toLocaleString(), ul);
       }
 
       /* 다섯 사전에서 찾기 */
-      const dd = (typeof wpDicts === 'function') ? wpDicts(code) : [];
+      const dd = (code && typeof wpDicts === 'function') ? wpDicts(code) : [];
       if (dd.length) {
         const dl = dd.map(x => '<div style="padding:4px 0;border-bottom:1px dashed #e2e8f0">'
           + '<b>' + escHtml(x.label) + '</b> <span style="color:#334155">' + escHtml(x.term) + '</span><br>'
@@ -14734,7 +14810,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-17`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-19`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
