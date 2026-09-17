@@ -13006,7 +13006,7 @@
         while (e0 < text.length && isH(text[e0])) e0++;
         const word = text.slice(s0, e0);
         const kt = krvnTokenAt(b, c, v, text, s0);
-        if (kt) { this.showKrvn(b, c, v, kt, x, y); return; }
+        if (kt) { this._last = { b, c, v, text, x, y }; this.showKrvn(b, c, v, kt, x, y); return; }
         const src = this.source();
         if (!src) { showToast('원어 보기는 「개역개정S」(스트롱 본문)를 비교 번역으로 등록하면 쓸 수 있습니다.', 'info'); return; }
         const sdb = this.sdbVerse(b, c, v);
@@ -13017,9 +13017,56 @@
         this.show(b, c, v, word, seen, x, y, src.label);
       },
 
+
+      // 이 절 전체 어절 → 원어 (2026-09-17) — 어절을 누르면 그 어절 창으로
+      showVerse: function(b, c, v) {
+        const L = this._last && this._last.b === b && this._last.c === c && this._last.v === v ? this._last : null;
+        const text = L ? L.text : '';
+        const kt = krvnTokenAt(b, c, v, text, 0);
+        if (!kt) { showToast('이 절의 어절 원어 분석이 없습니다', 'info'); return; }
+        const bk = BIBLE_BOOKS.find(q => q.id === b);
+        const pop = this._pop();
+        const lmOf = (t, i) => { const j = t[1][i]; return (j != null && j >= 0) ? krvnMorph.lm[j] : ''; };
+        const moOf = (t, i) => { const j = t[2][i]; return (j != null && j >= 0) ? krvnMorph.mo[j] : ''; };
+        const rows = kt.arr.map((t, k) => {
+          const codes = t[0] ? t[0].split(',') : [];
+          const hw = (t[8] != null && t[8] >= 0 && krvnMorph.hw) ? krvnMorph.hw[t[8]] : '';
+          const orig = codes.map((cd, i) => {
+            const lem = lmOf(t, i), mor = moOf(t, i);
+            return `<div style="display:flex;gap:6px;align-items:baseline;flex-wrap:wrap">
+                <span style="font-size:1.2em;direction:rtl;unicode-bidi:isolate;color:#065f46">${escHtml(lem)}</span>
+                <span style="font-size:0.72em;color:#047857">${escHtml(cd)}</span>
+                ${mor ? `<span style="font-size:0.72em;color:#64748b">${escHtml(mor)}</span>` : ''}</div>`;
+          }).join('') || '<span style="font-size:0.75em;color:#cbd5e1">—</span>';
+          const grp = (t[4] === 'N' || t[4] === 'M') ? '<span title="여러 어절이 한 원어" style="color:#b45309">⌒</span>' : '';
+          return `<div class="wo-verse-row" data-k="${k}" style="display:grid;grid-template-columns:minmax(4.5em,auto) 1fr;gap:4px 10px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer">
+              <div><b style="color:#0f172a">${escHtml(kt.words[k])}</b>${grp}${hw ? `<div style="font-size:0.7em;color:#94a3b8">${escHtml(hw)}</div>` : ''}</div>
+              <div>${orig}</div></div>`;
+        }).join('');
+        pop.innerHTML = `<div id="word-orig-handle" style="display:flex;align-items:center;gap:6px;margin:-10px -12px 6px;padding:8px 12px 6px;cursor:move;user-select:none;position:sticky;top:-10px;z-index:3;background:#fff;border-bottom:1px solid #e2e8f0">
+            <b style="font-size:1.05em;color:#065f46;white-space:nowrap">📜 ${bk ? bk.abbr : ''}${c}:${v} 원어</b>
+            <span style="font-size:0.75em;color:#94a3b8;white-space:nowrap">${kt.arr.length}어절</span>
+            <span style="flex:1"></span>
+            <button onclick="WordOrig.zoom(-2)" title="글자 작게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가−</button><button onclick="WordOrig.zoom(2)" title="글자 크게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:15px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가+</button>
+            <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="flex-shrink:0;border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
+          <div style="font-size:0.72em;color:#94a3b8;margin-bottom:4px">어절을 누르면 그 어절의 원어 창 · ⌒ 여러 어절이 한 원어</div>
+          ${rows}
+          <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N) · 원어는 번호 차례</div>`;
+        pop.querySelectorAll('.wo-verse-row').forEach(el => {
+          el.onclick = () => {
+            const k = +el.dataset.k;
+            const off = kt.words.slice(0, k).join(' ').length + (k ? 1 : 0);
+            const kk = krvnTokenAt(b, c, v, text, off);
+            if (kk) this.showKrvn(b, c, v, kk, parseFloat(pop.style.left) + 20, parseFloat(pop.style.top) - 14);
+          };
+        });
+        this._place(pop, parseFloat(pop.style.left) + 20 || 60, parseFloat(pop.style.top) - 14 || 60);
+        pop.scrollTop = 0;
+      },
       showKrvn: async function(b, c, v, kt, x, y) {
         const t = kt.arr[kt.k] || ['', [], [], '', ''];
         const word = kt.words[kt.k];
+        if (!this._last || this._last.b !== b || this._last.c !== c || this._last.v !== v) this._last = { b, c, v, text: kt.words.join(' ') };
         let codes = t[0] ? t[0].split(',') : [];
         let fromSdb = false;
         if (!codes.length) {   // (2026-09-17) 어절 원어 분석에 번호가 없으면 개역개정S 글자 맞춤으로
@@ -13073,7 +13120,7 @@
             <b style="font-size:1.15em;color:#065f46;white-space:nowrap">${escHtml(word)}</b><span style="flex:1"></span>
             <button onclick="WordOrig.zoom(-2)" title="글자 작게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가−</button><button onclick="WordOrig.zoom(2)" title="글자 크게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:15px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가+</button>
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="flex-shrink:0;border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
-          <div style="display:flex;gap:4px;flex-wrap:wrap">${chips}</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">${chips}<button onclick="WordOrig.showVerse(${b},${c},${v})" style="margin-left:auto;font-size:0.75em;padding:2px 8px;border:1px solid #a7f3d0;background:#ecfdf5;color:#047857;border-radius:5px;cursor:pointer;white-space:nowrap">📜 절 전체</button></div>
           ${codes.length ? rows : '<div style="font-size:0.85em;color:#64748b;margin-top:8px">이 어절에는 원어 번호가 없습니다.</div>'}
           <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N)${fromSdb ? ' · 원어 번호는 개역개정S 에서 채움' : ''} · 뜻: 원어 사전·한글 원어사전</div>`;
         this._place(pop, x, y);
@@ -14643,7 +14690,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-9`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-10`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
