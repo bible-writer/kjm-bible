@@ -12710,6 +12710,263 @@
 
     // 절 번호 옆 "▼ 원어" 토글 클릭 시 — 해당 절의 원어분해 줄을 펼치거나 접는다
     // 절 아래 인라인으로 펼치는 대신, 인명/용어/스트롱 팝업과 같은 방식의 띄운 창(드래그·크기조절 가능)으로 원어분해 목록을 보여준다
+
+    /* ══════════════════════════════════════════════════════════════
+       본문 낱말 → 원어 (2026-09-16)
+       본문(개역개정) 낱말을 두 번 누르면 그 낱말의 원어 번호와 뜻을 띄운다.
+       원어 번호는 비교 번역으로 등록된 「개역개정S」(낱말<WH1234> 꼴)에서 그 자리를 찾아 가져온다.
+       두 본문은 띄어쓰기가 달라 글자만 맞춘다(90%는 글자열이 같고, 나머지는 공통 부분열로 맞춤).
+       본문·원어 자료를 앱에 새로 싣지 않는다 — 사용자가 올린 sdb 를 그 자리에서 읽는다.
+       ══════════════════════════════════════════════════════════════ */
+    const WordOrig = {
+      _src: undefined,
+      _FUNC: /^(H0000|H9\d{3}|G0000|G3588)$/,
+      source: function() {
+        if (this._src !== undefined && (this._src === null || this._src.db)) {
+          if (this._src && translationRegistry[this._src.key] && translationRegistry[this._src.key].db === this._src.db) return this._src;
+          if (this._src === null && this._checkedAt && Date.now() - this._checkedAt < 3000) return null;
+        }
+        this._src = null; this._checkedAt = Date.now();
+        for (const k in translationRegistry) {
+          if (k === 'master') continue;
+          const tr = translationRegistry[k];
+          if (!tr || !tr.db || !tr.schema) continue;
+          try {
+            const sc = tr.schema;
+            const q = `SELECT "${sc.content}" FROM "${sc.table}" WHERE "${sc.content}" LIKE '%<W%>%' LIMIT 1`;
+            const r = tr.db.exec(q);
+            const t = r && r[0] && r[0].values && r[0].values[0] ? String(r[0].values[0][0] || '') : '';
+            if (t && t.indexOf('(기본') < 0) { this._src = { key: k, db: tr.db, schema: sc, label: tr.label || k }; break; }
+          } catch (e) {}
+        }
+        return this._src;
+      },
+      sdbVerse: function(b, c, v) {
+        const src = this.source(); if (!src) return null;
+        const sc = src.schema;
+        try {
+          const r = src.db.exec(`SELECT "${sc.content}" FROM "${sc.table}" WHERE "${sc.book}"=${b} AND "${sc.chapter}"=${c} AND "${sc.verse}"=${v} LIMIT 1`);
+          return r && r[0] && r[0].values && r[0].values[0] ? String(r[0].values[0][0] || '') : null;
+        } catch (e) { return null; }
+      },
+      // sdb 절 → 한글·숫자 글자 줄과 글자마다 원어 번호 묶음 (태그는 앞 덩어리에 붙는다)
+      splitSdb: function(t) {
+        const chars = [], codes = [];
+        const isK = ch => /[가-힣0-9]/.test(ch);
+        let pos = 0; const re = /((?:<W[HG]\d+>)+)/g; let m;
+        while ((m = re.exec(t)) !== null) {
+          const seg = t.slice(pos, m.index).replace(/<[^>]*>/g, '');
+          const cs = [];
+          m[1].replace(/W([HG])(\d+)/g, (_, a, n) => { const x = a + String(parseInt(n, 10)).padStart(4, '0'); if (!this._FUNC.test(x)) cs.push(x); });
+          for (const ch of seg) if (isK(ch)) { chars.push(ch); codes.push(cs); }
+          pos = re.lastIndex;
+        }
+        for (const ch of t.slice(pos).replace(/<[^>]*>/g, '')) if (isK(ch)) { chars.push(ch); codes.push([]); }
+        return { str: chars.join(''), codes };
+      },
+      // 본문 글자 위치 → 원어 번호 묶음
+      align: function(text, sdb) {
+        const isK = ch => /[가-힣0-9]/.test(ch);
+        const pos = []; let bstr = '';
+        for (let i = 0; i < text.length; i++) if (isK(text[i])) { pos.push(i); bstr += text[i]; }
+        const S = this.splitSdb(sdb);
+        const out = {};
+        if (bstr === S.str) { pos.forEach((p, j) => { out[p] = S.codes[j]; }); return out; }
+        const n = bstr.length, m = S.str.length;
+        if (!n || !m || n * m > 400000) return out;
+        const dp = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+        for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+          dp[i][j] = bstr[i] === S.str[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+        let i = 0, j = 0;
+        while (i < n && j < m) {
+          if (bstr[i] === S.str[j]) { out[pos[i]] = S.codes[j]; i++; j++; }
+          else if (dp[i + 1][j] >= dp[i][j + 1]) i++; else j++;
+        }
+        return out;
+      },
+      open: async function(b, c, v, text, offset, x, y) {
+        // 누른 자리의 한글 낱말 범위
+        const isH = ch => /[가-힣]/.test(ch || '');
+        let s0 = offset, e0 = offset;
+        if (!isH(text[s0]) && isH(text[s0 - 1])) { s0--; e0--; }
+        if (!isH(text[s0])) return;
+        while (s0 > 0 && isH(text[s0 - 1])) s0--;
+        while (e0 < text.length && isH(text[e0])) e0++;
+        const word = text.slice(s0, e0);
+        const src = this.source();
+        if (!src) { showToast('원어 보기는 「개역개정S」(스트롱 본문)를 비교 번역으로 등록하면 쓸 수 있습니다.', 'info'); return; }
+        const sdb = this.sdbVerse(b, c, v);
+        if (!sdb) { showToast('개역개정S 에 이 절이 없습니다.', 'info'); return; }
+        const map = this.align(text, sdb);
+        const seen = [];
+        for (let k = s0; k < e0; k++) (map[k] || []).forEach(x => { if (seen.indexOf(x) < 0) seen.push(x); });
+        this.show(b, c, v, word, seen, x, y, src.label);
+      },
+      show: async function(b, c, v, word, codes, x, y, label) {
+        let pop = document.getElementById('word-orig-pop');
+        if (!pop) {
+          pop = document.createElement('div');
+          pop.id = 'word-orig-pop';
+          pop.style.cssText = 'position:fixed;z-index:3000;width:340px;max-width:92vw;max-height:70vh;overflow-y:auto;background:#fff;border:1px solid #a7f3d0;border-radius:10px;box-shadow:0 8px 28px rgba(15,23,42,.18);padding:10px 12px;font-size:14px;';
+          document.body.appendChild(pop);
+          document.addEventListener('mousedown', ev => { if (pop.style.display !== 'none' && !pop.contains(ev.target)) pop.style.display = 'none'; });
+          document.addEventListener('keydown', ev => { if (ev.key === 'Escape') pop.style.display = 'none'; });
+        }
+        const bk = BIBLE_BOOKS.find(q => q.id === b);
+        const head = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+            <span style="font-size:0.8em;color:#94a3b8">${bk ? bk.abbr : ''}${c}:${v}</span>
+            <b style="font-size:1.15em;color:#065f46">${escHtml(word)}</b>
+            <span style="flex:1"></span>
+            <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>`;
+        if (!codes.length) {
+          pop.innerHTML = head + `<div style="font-size:0.85em;color:#64748b;line-height:1.6">이 낱말에는 원어 번호가 붙어 있지 않습니다.<br><span style="color:#94a3b8">(조사·어미이거나, ${escHtml(label)} 에서 번호가 앞뒤 낱말에 붙어 있는 자리)</span></div>`;
+        } else {
+          pop.innerHTML = head + codes.map((cd, i) => `<div id="word-orig-slot-${i}"></div>`).join('')
+            + `<div style="margin-top:6px;font-size:0.72em;color:#94a3b8">원어 번호: ${escHtml(label)} · 본문과 글자로 맞춤</div>`;
+        }
+        pop.style.display = 'block';
+        const W = Math.min(340, window.innerWidth * 0.92);
+        pop.style.left = Math.max(8, Math.min(x - 20, window.innerWidth - W - 8)) + 'px';
+        pop.style.top = Math.max(8, Math.min(y + 14, window.innerHeight - 260)) + 'px';
+        if (!codes.length) return;
+        await StrongEngine.ensureLoaded();
+        codes.forEach((cd, i) => {
+          const el = document.getElementById('word-orig-slot-' + i);
+          if (!el) return;
+          const entry = StrongEngine.lookup(cd);
+          if (entry) StrongEngine.renderInline(el, cd, entry);
+          else el.innerHTML = `<div style="font-size:0.8em;color:#94a3b8;margin:4px 0">${escHtml(cd)} — 원어 사전에 없음</div>`;
+        });
+      }
+    };
+
+    // 본문 낱말 두 번 누르기 → 원어
+    document.getElementById('bible-content').addEventListener('dblclick', function(ev) {
+      const vt = ev.target.closest('.verse-text');
+      if (!vt) return;
+      const row = vt.closest('.verse-row');
+      if (!row || !row.id || !row.id.startsWith('verse-row-') || !row.dataset.bc) return;   // 본문(비교 창 아님)만
+      if (ev.target.closest('.bible-place-tag, .bible-person-tag, .bible-term-tag, .strong-tag')) return; // 딱지는 제 창이 있음
+      let range = null;
+      if (document.caretRangeFromPoint) range = document.caretRangeFromPoint(ev.clientX, ev.clientY);
+      else if (document.caretPositionFromPoint) {
+        const cp = document.caretPositionFromPoint(ev.clientX, ev.clientY);
+        if (cp) { range = document.createRange(); range.setStart(cp.offsetNode, cp.offset); }
+      }
+      if (!range || !vt.contains(range.startContainer)) return;
+      const pre = document.createRange();
+      pre.setStart(vt, 0);
+      pre.setEnd(range.startContainer, range.startOffset);
+      const offset = pre.toString().length;
+      const [b, c] = row.dataset.bc.split('-').map(Number);
+      const v = Number(row.id.slice('verse-row-'.length));
+      const sel = window.getSelection && window.getSelection(); if (sel) sel.removeAllRanges();
+      WordOrig.open(b, c, v, vt.textContent, offset, ev.clientX, ev.clientY);
+    });
+
+
+    /* ── 딱지 누를 때 원어 대조 (2026-09-16) ──
+       지명·인명·용어 딱지를 누르면, 그 자리 본문 원어 번호(개역개정S)와 항목의 스트롱 코드를 견주어
+       딱지 곁에 작은 알림을 띄운다:  ✓ 일치 · ⚠ 다름 · ? 견줄 수 없음.  항목 창은 그대로 뜬다. */
+    const TagOrigCheck = {
+      enabled: true,
+      norm: function(x) { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2].padStart(4, '0') : ''; },
+      codesOf: function(str) {
+        const out = [];
+        String(str || '').split(/[,\s;/]+/).forEach(x => { const n = this.norm(x); if (n && out.indexOf(n) < 0) out.push(n); });
+        return out;
+      },
+      itemCodes: function(tag, b, c, v) {
+        const oc = tag.getAttribute('onclick') || '';
+        let m;
+        if (tag.classList.contains('bible-term-tag')) {
+          let t = null;
+          if ((m = oc.match(/handleClickId\((\d+)/))) t = (termDatabase || []).find(x => x.id === Number(m[1]));
+          else if ((m = oc.match(/handleClick\('((?:[^'\\]|\\.)*)'/))) t = termIndex[m[1].replace(/\\'/g, "'")];
+          return t ? { kind: '용어', name: t.term_ko || t.term_en, codes: this.codesOf(t.hebrew_greek) } : null;
+        }
+        if (tag.classList.contains('bible-person-tag')) {
+          if (!(m = oc.match(/handleClickAt\('((?:[^'\\]|\\.)*)'/))) return null;
+          const nm = m[1].replace(/\\'/g, "'");
+          const p = personVerseIndex[`${b}-${c}-${v}`] && personVerseIndex[`${b}-${c}-${v}`][nm];
+          return p ? { kind: '인명', name: p.name_ko, codes: this.codesOf([p.ustrong, p.strong].join(',')) } : null;
+        }
+        if (tag.classList.contains('bible-place-tag')) {
+          if (!(m = oc.match(/handleClick\('((?:[^'\\]|\\.)*)'/))) return null;
+          const nm = m[1].replace(/\\'/g, "'");
+          let cands = (placeKeywordMap[nm] || []).slice();
+          const bk = BIBLE_BOOKS.find(x => x.id === b);
+          const ref = bk ? `${bk.abbr}${c}:${v}` : '';
+          const here = cands.filter(pl => ref && String(pl.verse || '').split(/;\s*/).some(r => r === ref || r.startsWith(ref + '-') || r.startsWith(ref + ',')));
+          if (here.length) cands = here;
+          const codes = [];
+          cands.forEach(pl => this.codesOf([pl.ustrong, pl.hebrew_greek].join(',')).forEach(x => { if (codes.indexOf(x) < 0) codes.push(x); }));
+          return { kind: '지명', name: nm, codes };
+        }
+        return null;
+      },
+      run: function(tag, ev) {
+        if (!this.enabled) return;
+        const vt = tag.closest('.verse-text'); const row = vt && vt.closest('.verse-row');
+        if (!row || !row.dataset.bc || !row.id.startsWith('verse-row-')) return;
+        const [b, c] = row.dataset.bc.split('-').map(Number);
+        const v = Number(row.id.slice('verse-row-'.length));
+        const item = this.itemCodes(tag, b, c, v);
+        if (!item) return;
+        const word = tag.textContent;
+        const pre = document.createRange(); pre.setStart(vt, 0); pre.setEndBefore(tag);
+        const offset = pre.toString().length;
+        let textCodes = null, why = '';
+        const src = WordOrig.source();
+        if (!src) why = '개역개정S(스트롱 본문)를 비교 번역으로 등록하면 대조합니다';
+        else {
+          const sdb = WordOrig.sdbVerse(b, c, v);
+          if (!sdb) why = '개역개정S 에 이 절이 없음';
+          else {
+            const map = WordOrig.align(vt.textContent, sdb);
+            textCodes = [];
+            for (let k = offset; k < offset + word.length; k++) (map[k] || []).forEach(x => { if (textCodes.indexOf(x) < 0) textCodes.push(x); });
+            if (!textCodes.length) why = '이 자리에 원어 번호가 없음';
+          }
+        }
+        let state, msg;
+        if (why) { state = 'unknown'; msg = why; }
+        else if (!item.codes.length) { state = 'unknown'; msg = `${item.kind} 항목에 스트롱 코드가 없음 · 본문 ${textCodes.join(', ')}`; }
+        else if (textCodes.some(x => item.codes.indexOf(x) >= 0)) { state = 'ok'; msg = `원어 일치 ${textCodes.filter(x => item.codes.indexOf(x) >= 0).join(', ')}`; }
+        else { state = 'bad'; msg = `본문 ${textCodes.join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}`; }
+        this.chip(tag, state, msg, { b, c, v, word, textCodes: textCodes || [], label: src ? src.label : '' });
+      },
+      chip: function(tag, state, msg, info) {
+        let el = document.getElementById('tag-orig-chip');
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'tag-orig-chip';
+          el.style.cssText = 'position:fixed;z-index:2999;max-width:360px;padding:4px 8px;border-radius:6px;font-size:12px;line-height:1.4;box-shadow:0 2px 8px rgba(15,23,42,.15);display:none;align-items:center;gap:6px;';
+          document.body.appendChild(el);
+        }
+        clearTimeout(this._t);
+        const col = state === 'ok' ? ['#ecfdf5', '#047857', '#a7f3d0', '✓']
+                  : state === 'bad' ? ['#fef2f2', '#b91c1c', '#fecaca', '⚠']
+                  : ['#f8fafc', '#64748b', '#e2e8f0', '?'];
+        el.style.background = col[0]; el.style.color = col[1]; el.style.border = '1px solid ' + col[2];
+        const more = info.textCodes.length ? `<button id="tag-orig-more" style="white-space:nowrap;flex-shrink:0;border:1px solid ${col[2]};background:#fff;color:${col[1]};border-radius:4px;font-size:11px;padding:0 5px;cursor:pointer">본문 원어</button>` : '';
+        el.innerHTML = `<b>${col[3]}</b><span>${escHtml(msg)}</span>${more}<button onclick="this.parentNode.style.display='none'" style="border:none;background:none;color:${col[1]};cursor:pointer;font-size:12px">✕</button>`;
+        const r = tag.getBoundingClientRect();
+        el.style.display = 'flex';
+        el.style.left = Math.max(6, Math.min(r.left, window.innerWidth - 370)) + 'px';
+        const hgt = el.offsetHeight || 26;
+        el.style.top = (r.top - hgt - 6 >= 6 ? r.top - hgt - 6 : r.bottom + 6) + 'px';   // 딱지 위, 모자라면 아래
+        const btn = document.getElementById('tag-orig-more');
+        if (btn) btn.onclick = (e) => { e.stopPropagation(); WordOrig.show(info.b, info.c, info.v, info.word, info.textCodes, r.left, r.bottom, info.label); };
+        if (state !== 'bad') this._t = setTimeout(() => { el.style.display = 'none'; }, 6000);
+      }
+    };
+    document.getElementById('bible-content').addEventListener('click', function(ev) {
+      const tag = ev.target.closest('.bible-place-tag, .bible-person-tag, .bible-term-tag');
+      if (!tag) return;
+      try { TagOrigCheck.run(tag, ev); } catch (e) { console.warn('원어 대조 실패', e); }
+    }, true);
+
     function toggleInterlinearRow(vNum) {
       /* 같은 절을 다시 누르면 닫기(토글) */
       const p = document.getElementById('word-panel');
@@ -13850,7 +14107,7 @@
           ? `<button class="commentary-feature-btn" onclick="Commentary.jumpToVerse(${bookId},${chapter},${vNum})" style="margin-left:6px;font-size:0.7em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle;" title="이 절 주석 보기">📖 주석</button>`
           : '';
         html += `
-          <div class="verse-row" id="verse-row-${vNum}">
+          <div class="verse-row" id="verse-row-${vNum}" data-bc="${bookId}-${chapter}">
             <span class="verse-num">${vNum}</span>
             <span class="verse-text">${highlightedText}</span>${interlinearToggle}${commentaryToggle}
             ${interlinearRow}
@@ -14040,7 +14297,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260916-13`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260916-15`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
