@@ -13008,7 +13008,7 @@
         const kt = krvnTokenAt(b, c, v, text, s0);
         if (kt) { this._last = { b, c, v, text, x, y }; this.showKrvn(b, c, v, kt, x, y); return; }
         const src = this.source();
-        if (!src) { showToast('원어 보기는 「개역개정S」(스트롱 본문)를 비교 번역으로 등록하면 쓸 수 있습니다.', 'info'); return; }
+        if (!src) { showToast(krvnMorph ? '이 절은 어절 원어 분석과 본문 어절 수가 달라, 「개역개정S」(스트롱 본문)를 비교 번역으로 등록해야 원어를 볼 수 있습니다.' : '원어 보기: ⋯ 메뉴 → 「📘 어절 원어 분석 등록」, 또는 「개역개정S」(스트롱 본문)를 비교 번역으로 등록하세요.', 'info', 6000); return; }
         const sdb = this.sdbVerse(b, c, v);
         if (!sdb) { showToast('개역개정S 에 이 절이 없습니다.', 'info'); return; }
         const map = this.align(text, sdb);
@@ -13049,9 +13049,10 @@
             <span style="flex:1"></span>
             <button onclick="WordOrig.zoom(-2)" title="글자 작게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가−</button><button onclick="WordOrig.zoom(2)" title="글자 크게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:15px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가+</button>
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="flex-shrink:0;border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
-          <div style="font-size:0.72em;color:#94a3b8;margin-bottom:4px">어절을 누르면 그 어절의 원어 창 · ⌒ 여러 어절이 한 원어</div>
+          <div style="font-size:0.72em;color:#64748b;margin-bottom:4px;line-height:1.5">출처: 어절 원어 분석(KRV_N) — 원어·형태·기본형 · <b>뜻은 어절을 눌러</b> 원어 사전·한글 원어사전에서<br>
+            어절을 누르면 그 어절의 원어 창 · ⌒ 여러 어절이 한 원어 · ${+(krvnMorph.meta && krvnMorph.meta.version || 0) >= 6 ? '한 어절에 원어가 여럿이면 원문 차례' : '원어는 번호 차례'}</div>
           ${rows}
-          <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N) · 원어는 번호 차례</div>`;
+          <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N)${+(krvnMorph.meta && krvnMorph.meta.version || 0) >= 6 ? ' · 원문 차례: 공개 원문(OSHB·비잔틴) 기준, 알 수 없으면 번호 차례' : ' · 원어는 번호 차례'}</div>`;
         pop.querySelectorAll('.wo-verse-row').forEach(el => {
           el.onclick = () => {
             const k = +el.dataset.k;
@@ -13191,7 +13192,8 @@
           pop.innerHTML = head + `<div style="font-size:0.85em;color:#64748b;line-height:1.6">이 낱말에는 원어 번호가 붙어 있지 않습니다.<br><span style="color:#94a3b8">(조사·어미이거나, ${escHtml(label)} 에서 번호가 앞뒤 낱말에 붙어 있는 자리)</span></div>`;
         } else {
           pop.innerHTML = head + codes.map((cd, i) => `<div id="word-orig-slot-${i}"></div>`).join('')
-            + `<div style="margin-top:6px;font-size:0.72em;color:#94a3b8">원어 번호: ${escHtml(label)} · 본문과 글자로 맞춤</div>`;
+            + `<div style="margin-top:6px;font-size:0.72em;color:#94a3b8">원어 번호: ${escHtml(label)} · 본문과 글자로 맞춤</div>`
+            + (krvnMorph ? '' : `<div style="margin-top:4px;font-size:0.72em;color:#0369a1;background:#f0f9ff;border:1px solid #bae6fd;border-radius:5px;padding:3px 6px">📘 이 기기에 「어절 원어 분석」이 없습니다 — ⋯ 메뉴 → 📘 어절 원어 분석 등록 하면 원어·형태·절 전체 보기가 더해집니다</div>`);
         }
         this._place(pop, x, y);
         if (!codes.length) return;
@@ -14457,17 +14459,20 @@
                 if (mainName.includes('와 ')) {
                   mainName.split('와 ').forEach(n => { if(n.trim()) verseNames.add(n.trim()); });
                 }
-                // 첫 단어 별칭 (요단 평야 → 요단)
+                // 첫 단어 별칭 (요단 평야 → 요단) — (2026-09-17) 그 낱말이 실제 지명 키일 때만.
+                //  「다윗 성」→「다윗」, 「하나님의 산」→「하나님의」 처럼 사람·일반 낱말이 지명으로 걸리던 것을 막음
                 const words = mainName.split(' ');
-                if (words.length >= 2) verseNames.add(words[0]);
-                // 괄호 안 한글 지명 (헤브론 (마므레) → 마므레)
-                const bracketMatches = name.match(/[\(（]([가-힣]+)/g);
-                if (bracketMatches) {
-                  bracketMatches.forEach(bm => {
-                    const bn = bm.replace(/[\(（]/, '').trim();
-                    if (bn && bn.length >= 2) verseNames.add(bn);
+                if (words.length >= 2 && placeKeywordMap[words[0]]) verseNames.add(words[0]);
+                // 괄호 안 한글 지명 (헤브론 (마므레) → 마므레) — (2026-09-17) 괄호 안이 한 낱말뿐일 때만(설명 괄호 제외).
+                //  「아스돗 (다곤 신전)」「아라비아 (바울이 간 곳)」「기브아 (사울의 기브아)」 같은 설명 괄호는 별칭이 아니다
+                const GENERIC = /^(광야|바위|북방|남방|동방|서방|성|강|산|시내|골짜기|바다|평지|들|땅|성읍|성전|성막)$/;
+                (name.match(/[\(（][^\)）]*[\)）]/g) || []).forEach(bm => {
+                  bm.replace(/[\(（\)）]/g, '').split(/\s*[\/·,]\s*/).forEach(part => {
+                    const bn = part.trim();
+                    // 한 낱말(띄어쓰기 없음)인 한글만 — 「다곤 신전」「바울이 간 곳」 같은 설명은 빠진다
+                    if (/^[가-힣]{2,}$/.test(bn) && (placeKeywordMap[bn] || !GENERIC.test(bn))) verseNames.add(bn);
                   });
-                }
+                });
               }
             }
           });
@@ -14690,7 +14695,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-10`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-12`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
