@@ -14360,6 +14360,71 @@
       renderMapMarkers();
     }
 
+    // 한 절의 본문 → 지명·인명·용어 딱지를 입힌 HTML (2026-09-17 — 본문 화면과 본문 검색 결과가 함께 씀)
+    function highlightVerseHtml(bookId, chapter, vNum, text) {
+      const bookObj = BIBLE_BOOKS.find(b => b.id === bookId);
+      if (!bookObj) return String(text || '');
+      const currentContext = `${bookObj.abbr}${chapter}`;
+      const currentOsis = bookObj.osis ? `${bookObj.osis}.${chapter}.` : null;
+        const safeText = String(text || "");
+      // OB 구절 단위 정확 매칭
+      let highlightedText;
+      if (currentOsis && placeDatabase.length > 0) {
+        // 이 구절(Gen.14.1 등)에 해당하는 지명만 추출
+        const verseOsis = `${currentOsis}${vNum}`;
+        const verseNames = new Set();
+        placeDatabase.forEach(p => {
+          const osis = p.verse_osis || '';
+          if (osis.includes(verseOsis)) {
+            const name = p.name || '';
+            const mainName = name.split(/[\(\[]/)[0].replace(/\s+\d+$/, '').trim();
+            if (mainName) {
+              verseNames.add(mainName);
+              // "과/와" 복합지명 분리 (소돔과 고모라 → 소돔, 고모라 단독도 추가)
+              if (mainName.includes('과 ')) {
+                mainName.split('과 ').forEach(n => { if(n.trim()) verseNames.add(n.trim()); });
+              }
+              if (mainName.includes('와 ')) {
+                mainName.split('와 ').forEach(n => { if(n.trim()) verseNames.add(n.trim()); });
+              }
+              // 첫 단어 별칭 (요단 평야 → 요단) — (2026-09-17) 그 낱말이 실제 지명 키일 때만.
+              //  「다윗 성」→「다윗」, 「하나님의 산」→「하나님의」 처럼 사람·일반 낱말이 지명으로 걸리던 것을 막음
+              const words = mainName.split(' ');
+              if (words.length >= 2 && placeKeywordMap[words[0]]) verseNames.add(words[0]);
+              // 괄호 안 한글 지명 (헤브론 (마므레) → 마므레) — (2026-09-17) 괄호 안이 한 낱말뿐일 때만(설명 괄호 제외).
+              //  「아스돗 (다곤 신전)」「아라비아 (바울이 간 곳)」「기브아 (사울의 기브아)」 같은 설명 괄호는 별칭이 아니다
+              const GENERIC = /^(광야|바위|북방|남방|동방|서방|성|강|산|시내|골짜기|바다|평지|들|땅|성읍|성전|성막)$/;
+              (name.match(/[\(（][^\)）]*[\)）]/g) || []).forEach(bm => {
+                bm.replace(/[\(（\)）]/g, '').split(/\s*[\/·,]\s*/).forEach(part => {
+                  const bn = part.trim();
+                  // 한 낱말(띄어쓰기 없음)인 한글만 — 「다곤 신전」「바울이 간 곳」 같은 설명은 빠진다
+                  if (/^[가-힣]{2,}$/.test(bn) && (placeKeywordMap[bn] || !GENERIC.test(bn))) verseNames.add(bn);
+                });
+              });
+            }
+          }
+        });
+        if (verseNames.size > 0) {
+          highlightedText = BibleGeoEngine.parseAndHighlightByNames(safeText, currentContext, verseNames);
+        } else {
+          highlightedText = safeText; // 해당 구절 지명 없으면 하이라이트 없음
+        }
+      } else {
+        highlightedText = BibleGeoEngine.parseAndHighlight(safeText, currentContext);
+      }
+      // 인명 하이라이트 (지명 하이라이트 이후, 정확한 구절 매칭만)
+      const personKey = `${bookId}-${chapter}-${vNum}`;
+      const personNameMap = personVerseIndex[personKey];
+      if (personNameMap && Object.keys(personNameMap).length > 0) {
+        highlightedText = PersonEngine.parseAndHighlightByNames(highlightedText, personNameMap, bookId, chapter, vNum);
+      }
+      // 용어사전 하이라이트 (인명/지명 하이라이트 이후, 전역 사전 매칭)
+      if (termHighlightEnabled && termDatabase.length > 0) {
+        highlightedText = TermEngine.parseAndHighlight(highlightedText, bookId, chapter, vNum);
+      }
+      return highlightedText;
+    }
+
     function loadBibleText(forceBookId, forceChapter) {
       const bookId = forceBookId || parseInt(document.getElementById('book-select').value);
       const chapter = forceChapter || parseInt(document.getElementById('chapter-select').value);
@@ -14439,62 +14504,7 @@
       }
       let html = `<div class="chapter-title">${bookObj.name} ${chapter}장</div><div id="interlinear-inline"></div>`;
       verses.forEach(([vNum, text]) => {
-        const safeText = String(text || "");
-        // OB 구절 단위 정확 매칭
-        let highlightedText;
-        if (currentOsis && placeDatabase.length > 0) {
-          // 이 구절(Gen.14.1 등)에 해당하는 지명만 추출
-          const verseOsis = `${currentOsis}${vNum}`;
-          const verseNames = new Set();
-          placeDatabase.forEach(p => {
-            const osis = p.verse_osis || '';
-            if (osis.includes(verseOsis)) {
-              const name = p.name || '';
-              const mainName = name.split(/[\(\[]/)[0].replace(/\s+\d+$/, '').trim();
-              if (mainName) {
-                verseNames.add(mainName);
-                // "과/와" 복합지명 분리 (소돔과 고모라 → 소돔, 고모라 단독도 추가)
-                if (mainName.includes('과 ')) {
-                  mainName.split('과 ').forEach(n => { if(n.trim()) verseNames.add(n.trim()); });
-                }
-                if (mainName.includes('와 ')) {
-                  mainName.split('와 ').forEach(n => { if(n.trim()) verseNames.add(n.trim()); });
-                }
-                // 첫 단어 별칭 (요단 평야 → 요단) — (2026-09-17) 그 낱말이 실제 지명 키일 때만.
-                //  「다윗 성」→「다윗」, 「하나님의 산」→「하나님의」 처럼 사람·일반 낱말이 지명으로 걸리던 것을 막음
-                const words = mainName.split(' ');
-                if (words.length >= 2 && placeKeywordMap[words[0]]) verseNames.add(words[0]);
-                // 괄호 안 한글 지명 (헤브론 (마므레) → 마므레) — (2026-09-17) 괄호 안이 한 낱말뿐일 때만(설명 괄호 제외).
-                //  「아스돗 (다곤 신전)」「아라비아 (바울이 간 곳)」「기브아 (사울의 기브아)」 같은 설명 괄호는 별칭이 아니다
-                const GENERIC = /^(광야|바위|북방|남방|동방|서방|성|강|산|시내|골짜기|바다|평지|들|땅|성읍|성전|성막)$/;
-                (name.match(/[\(（][^\)）]*[\)）]/g) || []).forEach(bm => {
-                  bm.replace(/[\(（\)）]/g, '').split(/\s*[\/·,]\s*/).forEach(part => {
-                    const bn = part.trim();
-                    // 한 낱말(띄어쓰기 없음)인 한글만 — 「다곤 신전」「바울이 간 곳」 같은 설명은 빠진다
-                    if (/^[가-힣]{2,}$/.test(bn) && (placeKeywordMap[bn] || !GENERIC.test(bn))) verseNames.add(bn);
-                  });
-                });
-              }
-            }
-          });
-          if (verseNames.size > 0) {
-            highlightedText = BibleGeoEngine.parseAndHighlightByNames(safeText, currentContext, verseNames);
-          } else {
-            highlightedText = safeText; // 해당 구절 지명 없으면 하이라이트 없음
-          }
-        } else {
-          highlightedText = BibleGeoEngine.parseAndHighlight(safeText, currentContext);
-        }
-        // 인명 하이라이트 (지명 하이라이트 이후, 정확한 구절 매칭만)
-        const personKey = `${bookId}-${chapter}-${vNum}`;
-        const personNameMap = personVerseIndex[personKey];
-        if (personNameMap && Object.keys(personNameMap).length > 0) {
-          highlightedText = PersonEngine.parseAndHighlightByNames(highlightedText, personNameMap, bookId, chapter, vNum);
-        }
-        // 용어사전 하이라이트 (인명/지명 하이라이트 이후, 전역 사전 매칭)
-        if (termHighlightEnabled && termDatabase.length > 0) {
-          highlightedText = TermEngine.parseAndHighlight(highlightedText, bookId, chapter, vNum);
-        }
+        const highlightedText = highlightVerseHtml(bookId, chapter, vNum, text);
         // 원전분해 원어분해 토글 버튼 — 본문 텍스트는 건드리지 않고, 절 아래 별도 줄로 펼쳐 보여준다
         const interlinearToggle = interlinearDbInstance
           ? `<button id="interlinear-toggle-${vNum}" onclick="toggleInterlinearRow(${vNum})" style="margin-left:6px;font-size:0.7em;color:#059669;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle;">🔤 원어</button>`
@@ -14696,7 +14706,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-13`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-14`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -16210,8 +16220,15 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           const bookObj = BIBLE_BOOKS.find(b => b.id === r.bookId);
           const bookName = bookObj ? bookObj.abbr : '?';
           const ref = bookName + r.chapter + ':' + r.verse;
-          let dt = escHtml(stripVerseTags(r.text));
-          if (re && !isRef) dt = dt.replace(re, '<mark>$1</mark>');
+          let dt;
+          if (window._searchLinkTags) {
+            // (2026-09-17) 개역개정 본문 검색이면 본문 화면처럼 지명·인명·용어 딱지를 입힌다. 검색어 노란 칠은 글자 조각에만
+            dt = highlightVerseHtml(r.bookId, r.chapter, r.verse, escHtml(stripVerseTags(r.text)));
+            if (re && !isRef) dt = dt.split(/(<[^>]+>)/).map((x, k) => (k % 2 === 0 && x) ? x.replace(re, '<mark>$1</mark>') : x).join('');
+          } else {
+            dt = escHtml(stripVerseTags(r.text));
+            if (re && !isRef) dt = dt.replace(re, '<mark>$1</mark>');
+          }
 
           const places = findRelatedPlaces(r.bookId, r.chapter, r.verse, query);
           let pt = '';
@@ -16219,7 +16236,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
             pt += ' <span class="bsr-place-tag" onclick="event.stopPropagation();BibleGeoEngine.flyToPlace(placeDatabase.find(x=>x.id===' + p.id + '))" title="\uc9c0\ub3c4\uc5d0\uc11c \ubcf4\uae30">\ud83d\udccd' + escHtml(p.name) + '</span>';
           });
 
-          h += '<div class="bsr-item" onclick="closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
+          h += '<div class="bsr-item" onclick="if(event.target.closest(\'.bible-place-tag,.bible-person-tag,.bible-term-tag\'))return;closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
             '<span class="bsr-ref">' + escHtml(ref) + '</span>' +
             '<span class="bsr-text">' + dt + pt + '</span></div>';
         });
@@ -16283,7 +16300,9 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           showToast('"' + (transObj.label || transKey) + '" \ubcf8\ubb38\uc774 \uc544\uc9c1 \ub85c\ub4dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \ubc88\uc5ed\uc744 \uba3c\uc800 \ub4f1\ub85d\ud558\uc138\uc694.', 'warn', 3000);
           return;
         }
-        renderSearchResults(results, raw, false, transObj.label || transKey);
+        window._searchLinkTags = (transKey === 'master');
+        try { renderSearchResults(results, raw, false, transObj.label || transKey); }
+        finally { window._searchLinkTags = false; }
       }
 
       /* ── 검색 닫기 ── */
