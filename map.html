@@ -1742,6 +1742,7 @@
             <button id="menu-open-xlsx" onclick="menuPickFile('xlsx')">📊 지명시트 열기</button>
             <button id="menu-open-interlinear" onclick="menuPickFile('interlinear')">🔤 스트롱코드 DB 등록</button>
             <button id="menu-open-hebko" onclick="menuPickFile('hebko')">📕 한글 원어사전 등록</button>
+            <button id="menu-open-krvn" onclick="menuPickFile('krvn')">📘 어절 원어 분석 등록</button>
 
             <div class="menu-sect">백업</div>
             <button id="btn-import-backup-trigger">💾 백업에서 복원</button>
@@ -1766,6 +1767,8 @@
         <input type="file" id="backup-file-input" accept=".json" style="display:none;" />
         <!-- 한글 원어사전 (2026-09-12). 상용 사전이라 GitHub 에 올리지 않고 kjm 이 손수 올린다 -->
         <input type="file" id="hebko-file-input" accept=".json" style="display:none;" />
+        <!-- 어절 원어 분석 (2026-09-17). 출처 불명확 연구 DB 에서 뽑은 것이라 GitHub 에 올리지 않고 kjm 이 손수 올린다 -->
+        <input type="file" id="krvn-file-input" accept=".json" style="display:none;" />
         <!-- JS 호환용 숨김 단추 (기존 코드가 이 id 로 이벤트를 붙인다) -->
         <button id="btn-open-add-link" style="display:none">+링크</button>
         <button id="btn-open-blacklist" style="display:none">제외</button>
@@ -3749,7 +3752,7 @@
       }
       window.addEventListener('mousemove', e => _dragMove(e.clientX, e.clientY));
       window.addEventListener('mouseup', () => { _dragState = null; });
-      window.addEventListener('touchmove', e => { if (_dragState) { const t = e.touches[0]; _dragMove(t.clientX, t.clientY); } }, { passive: true });
+      window.addEventListener('touchmove', e => { if (_dragState) { const t = e.touches[0]; _dragMove(t.clientX, t.clientY); if (e.cancelable) e.preventDefault(); } }, { passive: false });
       window.addEventListener('touchend', () => { _dragState = null; });
     }
     function makeDraggable(panelEl, handleSelector) {
@@ -3768,7 +3771,15 @@
         _dragState = { panelEl, startX: clientX, startY: clientY, startLeft: rect.left, startTop: rect.top };
       }
       handle.onmousedown = e => { onDown(e.clientX, e.clientY, e.target); e.preventDefault(); };
-      handle.ontouchstart = e => { const t = e.touches[0]; onDown(t.clientX, t.clientY, e.target); };
+      // (2026-09-17) 폰: 손잡이에서 시작한 손가락 움직임을 브라우저가 스크롤로 가져가지 않게 한다.
+      //  창(overflow:auto) 안에 손잡이가 있어 전에는 창 안이 스크롤될 뿐 창이 움직이지 않았다.
+      handle.style.touchAction = 'none';
+      handle.ontouchstart = e => {
+        const t = e.touches[0];
+        if (e.target && e.target.closest && e.target.closest('button, input, select, a')) return;
+        onDown(t.clientX, t.clientY, e.target);
+        if (e.cancelable) e.preventDefault();
+      };
     }
 
     /* 팝업창을 마우스로 드래그해서 크기 확대/축소 가능하게 만들고,
@@ -7016,6 +7027,67 @@
       };
     });
 
+
+    /* ── 어절 원어 분석 (2026-09-17) ──
+     * KRV_N 연구 DB(390MB)에서 뽑은 krvn_morph.json(약 14MB)을 kjm 이 손수 올린다. **GitHub 금지.**
+     * 어절(절 본문을 띄어쓰기로 나눈 차례)마다 원어 번호·원어 낱말·형태·갈래·정렬, 번호마다 개역개정 번역 분포.
+     * 이 파일이 있으면 원어 창·원어 대조가 글자 맞춤(개역개정S) 대신 이것을 쓴다. */
+    var krvnMorph = null;
+    const KRVN_DOM = { V: '동사', N: '일반명사', P: '고유명사', F: '기능어', A: '형용사', L: '낱말', C: '복합 번역', X: '대응 불확실', Z: '원어 번호 없음', O: '원어 낱말' };
+    const KRVN_AL = { '1': '정렬 1:1', N: '여러 어절이 한 원어', M: '여러 어절 ↔ 여러 원어', S: '한 어절에 여러 원어' };
+    const KRVN_FS = {
+      N1_VERBAL_PERIPHRASTIC_TRANSLATION: '동사를 풀어 옮김', N1_NOMINAL_EXPLICATION: '명사를 풀어 옮김', N1_GENERAL_PERIPHRASTIC_TRANSLATION: '풀어 옮김',
+      N1_FUNCTION_WORD_EXPANSION: '기능어를 풀어 옮김', N1_ADJECTIVAL_EXPLICATION: '형용어를 풀어 옮김', N1_PROPER_NAME_EXPLICATION: '이름을 풀어 옮김',
+      N1_PRONOMINAL_DEICTIC_EXPANSION: '대명사를 풀어 옮김', N1_NUMERAL_EXPANSION: '수를 풀어 옮김', N1_GENTILIC_OR_ETHNIC_EXPANSION: '족속 이름을 풀어 옮김',
+      NM_FUNCTIONAL_PHRASE: '기능 구문', NM_VERBAL_CLAUSAL_PARAPHRASE: '동사절 의역', NM_NOMINAL_ADJECTIVAL_PHRASE: '명사·형용 구문',
+      NM_NAME_NOMINAL_PHRASE: '이름 구문', NM_GENEALOGICAL_KINSHIP_FORMULA: '족보·친족 표현', NM_NUMERAL_PHRASE: '수 표현',
+      NM_COPULAR_CLAUSAL_PARAPHRASE: '이다·있다 절 의역', NM_PRONOMINAL_PHRASE: '대명사 구문', NM_MIXED_CLAUSAL_TRANSLATION: '섞인 절 번역',
+      '1N_FUNCTIONAL_FUSION': '기능어가 합쳐짐', '1N_VERBAL_LOGICAL_FUSION': '동사가 합쳐짐', '1N_NOMINAL_COMPOUND_FUSION': '명사가 합쳐짐',
+      '1N_COPULAR_EXISTENTIAL_BUNDLE': '이다·있다가 합쳐짐', '1N_MULTI_LEXEME_VERBAL_FUSION': '여러 동사가 합쳐짐', '1N_NUMERAL_COMPOSITION': '수가 합쳐짐',
+      '1N_PROPER_NAME_WITH_FUNCTION_FUSION': '이름과 기능어가 합쳐짐', '1N_PROPER_NAME_COMPOSITION': '이름이 합쳐짐', '1N_ZERO_MIXED_FUSION': '번호 없는 말이 섞임',
+      REPEATED_GROUP_CANDIDATE_ONLY: '자주 나오는 묶음', ADPOSITION_RENDERING: '전치사를 옮김', ARTICLE_OR_DETERMINER: '관사·한정사',
+      CONJUNCTION: '접속사', NEGATION: '부정어', INTERROGATIVE: '의문사', RELATIVE: '관계사', DEMONSTRATIVE: '지시사', PERSONAL_PRONOUN: '인칭대명사',
+      REFLEXIVE_PRONOUN: '재귀대명사', ADVERBIAL: '부사', CARDINAL: '기수', ORDINAL: '서수', PARTICLE_INTERJECTION: '불변화사·감탄사',
+      KOREAN_HEADWORD_RECOVERED_NO_STRONG: '원어 번호 없는 한국어', DIVERGENT_N1_TRANSLATION: '번역이 원문과 어긋남', DIVERGENT_1N_TRANSLATION: '번역이 원문과 어긋남',
+      UNIQUE_STRONG_BUT_ORIGINAL_TOKEN_UNRESOLVED: '원어 자리 미확정', AMBIGUOUS_MULTI_HEADWORD: '기본형 여럿', S_MISSING_VERSE: '원문 절 없음'
+    };
+    async function loadKrvnMorph() {
+      try {
+        const raw = await getLocalItem('saved_krvn_morph');
+        if (raw && raw.meta && raw.meta.kind === 'krvn_morph') { krvnMorph = raw; console.log('어절 원어 분석 ' + raw.meta.verses + '절 불러옴'); }
+      } catch (e) { console.warn('어절 원어 분석 불러오기 실패', e); }
+    }
+    // 절 본문과 글자 위치 → 그 절 어절 목록과 몇 번째 어절 (본문 어절 수가 다르면 null)
+    function krvnTokenAt(b, c, v, text, offset) {
+      if (!krvnMorph) return null;
+      const arr = krvnMorph.v[`${b}-${c}-${v}`];
+      if (!arr) return null;
+      const words = String(text).trim().split(/\s+/);
+      if (words.length !== arr.length) return null;
+      const head = String(text).slice(0, offset).replace(/\S+$/, '');   // 누른 어절 앞부분(따옴표·괄호 따위)은 떼고 셈
+      const k = head.trim() === '' ? 0 : head.trim().split(/\s+/).length;
+      if (k < 0 || k >= arr.length) return null;
+      return { arr, k, words };
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      loadKrvnMorph();
+      const inp = document.getElementById('krvn-file-input');
+      if (!inp) return;
+      inp.onchange = async function (ev) {
+        const f = ev.target.files && ev.target.files[0];
+        if (!f) return;
+        showToast('📘 어절 원어 분석을 읽는 중… (' + Math.round(f.size / 1048576) + 'MB)', 'info');
+        await new Promise(r => setTimeout(r, 30));
+        try {
+          const obj = JSON.parse(await f.text());
+          if (!obj || !obj.meta || obj.meta.kind !== 'krvn_morph' || !obj.v || !obj.lm || !obj.mo) { showToast('어절 원어 분석 파일 꼴이 아닙니다', 'warn'); return; }
+          krvnMorph = obj;
+          await setLocalItem('saved_krvn_morph', obj);
+          showToast('📘 어절 원어 분석 ' + Object.keys(obj.v).length + '절 등록 완료', 'success');
+        } catch (err) { console.error(err); showToast('어절 원어 분석 파일을 읽지 못했습니다', 'warn'); }
+        finally { ev.target.value = ''; }
+      };
+    });
     /* ⋯ 차림표의 파일 항목 (2026-09-12).
      * 딱지(.upload-badge)를 대신 누르는 방식은 먹지 않았다.
      * 딱지가 하는 일은 결국 숨은 file input 을 누르는 것뿐이므로 곧바로 부른다. */
@@ -7028,6 +7100,7 @@
         return;
       }
       if (kind === 'hebko') { document.getElementById('hebko-file-input')?.click(); return; }
+      if (kind === 'krvn')  { document.getElementById('krvn-file-input')?.click();  return; }
     }
 
     /* ── 시작 화면 항목 수 새로 그리기 (2026-09-12) ──
@@ -12793,6 +12866,8 @@
         while (s0 > 0 && isH(text[s0 - 1])) s0--;
         while (e0 < text.length && isH(text[e0])) e0++;
         const word = text.slice(s0, e0);
+        const kt = krvnTokenAt(b, c, v, text, s0);
+        if (kt) { this.showKrvn(b, c, v, kt, x, y); return; }
         const src = this.source();
         if (!src) { showToast('원어 보기는 「개역개정S」(스트롱 본문)를 비교 번역으로 등록하면 쓸 수 있습니다.', 'info'); return; }
         const sdb = this.sdbVerse(b, c, v);
@@ -12802,18 +12877,99 @@
         for (let k = s0; k < e0; k++) (map[k] || []).forEach(x => { if (seen.indexOf(x) < 0) seen.push(x); });
         this.show(b, c, v, word, seen, x, y, src.label);
       },
-      show: async function(b, c, v, word, codes, x, y, label) {
+
+      showKrvn: async function(b, c, v, kt, x, y) {
+        const t = kt.arr[kt.k] || ['', [], [], '', ''];
+        const word = kt.words[kt.k];
+        const codes = t[0] ? t[0].split(',') : [];
+        // 같은 원어를 나눠 가진 이웃 어절
+        let g0 = kt.k, g1 = kt.k;
+        if (t[0] && (t[4] === 'N' || t[4] === 'M')) {
+          while (g0 > 0 && kt.arr[g0 - 1][0] === t[0] && kt.arr[g0 - 1][4] === t[4]) g0--;
+          while (g1 < kt.arr.length - 1 && kt.arr[g1 + 1][0] === t[0] && kt.arr[g1 + 1][4] === t[4]) g1++;
+        }
+        const group = g1 > g0 ? kt.words.slice(g0, g1 + 1).join(' ') : '';
+        const chip = (txt, strong) => `<span style="font-size:0.75em;padding:1px 7px;border-radius:5px;${strong ? 'background:#ecfdf5;color:#047857;border:1px solid #a7f3d0' : 'background:#f1f5f9;color:#475569;border:1px solid #e2e8f0'}">${escHtml(txt)}</span>`;
+        const warn = txt => `<span style="font-size:0.75em;padding:1px 7px;border-radius:5px;background:#fffbeb;color:#b45309;border:1px solid #fde68a">${escHtml(txt)}</span>`;
+        let chips = '';
+        if (t[3] && KRVN_DOM[t[3]]) chips += chip(KRVN_DOM[t[3]], true) + ' ';
+        if (t[4] && KRVN_AL[t[4]]) chips += (t[4] === '1' ? chip(KRVN_AL[t[4]]) : warn(KRVN_AL[t[4]])) + ' ';
+        if (group) chips += chip('묶임: ' + group) + ' ';
+        const fsName = (t[7] != null && t[7] >= 0 && krvnMorph.fs) ? krvnMorph.fs[t[7]] : '';
+        if (fsName && KRVN_FS[fsName]) chips += chip(KRVN_FS[fsName]) + ' ';
+        const hwName = (t[8] != null && t[8] >= 0 && krvnMorph.hw) ? krvnMorph.hw[t[8]] : '';
+        if (hwName) chips += chip('기본형 ' + hwName) + ' ';
+        if (t[5] != null && t[5] >= 0) chips += chip('신뢰 ' + (t[5] / 100).toFixed(2)) + ' ';
+        if (t[6] === 1) chips += warn('검토 필요') + ' ';
+        const rows = codes.map((cd, i) => {
+          // 원어 낱말·형태는 관계 표 차례대로 — 번호 수와 같을 때만 짝지음
+          const lem = (t[1].length === codes.length) ? krvnMorph.lm[t[1][i]] : '';
+          const mor = (t[2].length === codes.length) ? krvnMorph.mo[t[2][i]] : (t[2].length === 1 && codes.length === 1 ? krvnMorph.mo[t[2][0]] : '');
+          const trs = (krvnMorph.tr[cd] || []).map(p => `${escHtml(p[0])} <span style="color:#94a3b8">${p[1]}</span>`).join(' · ');
+          return `<div style="margin-top:8px">
+              ${mor ? `<div style="font-size:0.8em;color:#047857;margin-bottom:2px">${escHtml(cd)}${lem ? ' <span style="font-size:1.15em;direction:rtl;unicode-bidi:isolate">' + escHtml(lem) + '</span>' : ''} · ${escHtml(mor)}</div>` : ''}
+              <div id="word-orig-slot-${i}"></div>
+              ${trs ? `<div style="font-size:0.75em;color:#64748b;margin-top:2px">개역개정 번역: ${trs}</div>` : ''}
+            </div>`;
+        }).join('');
+        const bk = BIBLE_BOOKS.find(q => q.id === b);
+        let pop = this._pop();
+        pop.innerHTML = `<div id="word-orig-handle" style="display:flex;align-items:center;gap:6px;margin-bottom:6px;cursor:move;user-select:none">
+            <span style="font-size:0.8em;color:#94a3b8">${bk ? bk.abbr : ''}${c}:${v} · ${kt.k + 1}번째 어절</span>
+            <b style="font-size:1.15em;color:#065f46">${escHtml(word)}</b><span style="flex:1"></span>
+            <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap">${chips}</div>
+          ${codes.length ? rows : '<div style="font-size:0.85em;color:#64748b;margin-top:8px">이 어절에는 원어 번호가 없습니다.</div>'}
+          <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N) · 뜻: 원어 사전·한글 원어사전</div>`;
+        this._place(pop, x, y);
+        if (!codes.length) return;
+        await StrongEngine.ensureLoaded();
+        codes.forEach((cd, i) => {
+          const el = document.getElementById('word-orig-slot-' + i);
+          if (!el) return;
+          const entry = StrongEngine.lookup(cd);
+          if (entry) StrongEngine.renderInline(el, cd, entry);
+          else {
+            const k = (typeof hebKoLookup === 'function') ? hebKoLookup(cd) : null;
+            el.innerHTML = k ? `<div style="font-size:0.85em;padding:6px 8px;border:1px solid #a7f3d0;border-radius:6px">${escHtml(cd)} · ${escHtml(k.l || '')} · ${escHtml(k.t || '')}<br>${escHtml(k.m || '')}</div>`
+                             : `<div style="font-size:0.8em;color:#94a3b8">${escHtml(cd)} — 원어 사전에 없음</div>`;
+          }
+        });
+      },
+      _pop: function() {
         let pop = document.getElementById('word-orig-pop');
         if (!pop) {
           pop = document.createElement('div');
           pop.id = 'word-orig-pop';
-          pop.style.cssText = 'position:fixed;z-index:3000;width:340px;max-width:92vw;max-height:70vh;overflow-y:auto;background:#fff;border:1px solid #a7f3d0;border-radius:10px;box-shadow:0 8px 28px rgba(15,23,42,.18);padding:10px 12px;font-size:14px;';
+          pop.style.cssText = 'position:fixed;z-index:3000;width:360px;max-width:92vw;max-height:72vh;overflow-y:auto;background:#fff;border:1px solid #a7f3d0;border-radius:10px;box-shadow:0 8px 28px rgba(15,23,42,.18);padding:10px 12px;font-size:14px;';
           document.body.appendChild(pop);
-          document.addEventListener('mousedown', ev => { if (pop.style.display !== 'none' && !pop.contains(ev.target)) pop.style.display = 'none'; });
-          document.addEventListener('keydown', ev => { if (ev.key === 'Escape') pop.style.display = 'none'; });
+          const outside = ev => {
+            if (pop.style.display === 'none' || pop.contains(ev.target)) return;
+            if (pop._touchResizeGrip && pop._touchResizeGrip.contains(ev.target)) return;
+            if (Date.now() - (pop._openedAt || 0) < 400) return;          // 두 번 누르기의 뒤쪽 손가락으로 곧바로 닫히지 않게
+            pop.style.display = 'none';
+            if (pop._touchResizeGrip) pop._touchResizeGrip.style.display = 'none';
+          };
+          document.addEventListener('mousedown', outside);
+          document.addEventListener('touchstart', outside, { passive: true });
+          document.addEventListener('keydown', ev => { if (ev.key === 'Escape') { pop.style.display = 'none'; if (pop._touchResizeGrip) pop._touchResizeGrip.style.display = 'none'; } });
         }
+        return pop;
+      },
+      _place: function(pop, x, y) {
+        pop.style.display = 'block';
+        pop._openedAt = Date.now();
+        pop.style.transform = 'none'; pop.style.right = 'auto'; pop.style.bottom = 'auto';
+        if (typeof makeDraggable === 'function') makeDraggable(pop, '#word-orig-handle');
+        if (typeof ensureTouchResizeGrip === 'function') ensureTouchResizeGrip(pop);
+        const W = Math.min(360, window.innerWidth * 0.92);
+        pop.style.left = Math.max(8, Math.min(x - 20, window.innerWidth - W - 8)) + 'px';
+        pop.style.top = Math.max(8, Math.min(y + 14, window.innerHeight - 280)) + 'px';
+      },
+      show: async function(b, c, v, word, codes, x, y, label) {
+        const pop = this._pop();
         const bk = BIBLE_BOOKS.find(q => q.id === b);
-        const head = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+        const head = `<div id="word-orig-handle" style="display:flex;align-items:center;gap:6px;margin-bottom:6px;cursor:move;user-select:none">
             <span style="font-size:0.8em;color:#94a3b8">${bk ? bk.abbr : ''}${c}:${v}</span>
             <b style="font-size:1.15em;color:#065f46">${escHtml(word)}</b>
             <span style="flex:1"></span>
@@ -12824,10 +12980,7 @@
           pop.innerHTML = head + codes.map((cd, i) => `<div id="word-orig-slot-${i}"></div>`).join('')
             + `<div style="margin-top:6px;font-size:0.72em;color:#94a3b8">원어 번호: ${escHtml(label)} · 본문과 글자로 맞춤</div>`;
         }
-        pop.style.display = 'block';
-        const W = Math.min(340, window.innerWidth * 0.92);
-        pop.style.left = Math.max(8, Math.min(x - 20, window.innerWidth - W - 8)) + 'px';
-        pop.style.top = Math.max(8, Math.min(y + 14, window.innerHeight - 260)) + 'px';
+        this._place(pop, x, y);
         if (!codes.length) return;
         await StrongEngine.ensureLoaded();
         codes.forEach((cd, i) => {
@@ -12841,6 +12994,21 @@
     };
 
     // 본문 낱말 두 번 누르기 → 원어
+    // (2026-09-17) 폰: dblclick 이 오지 않는 브라우저가 있어, 350ms 안에 같은 자리를 두 번 누르면 같은 일을 한다
+    (function () {
+      let last = null;
+      document.getElementById('bible-content').addEventListener('touchend', function (ev) {
+        const t = ev.changedTouches && ev.changedTouches[0];
+        if (!t) return;
+        const now = Date.now();
+        if (last && now - last.at < 350 && Math.abs(t.clientX - last.x) < 24 && Math.abs(t.clientY - last.y) < 24) {
+          last = null;
+          const target = document.elementFromPoint(t.clientX, t.clientY);
+          if (target) target.dispatchEvent(new MouseEvent('dblclick', { bubbles: true, clientX: t.clientX, clientY: t.clientY }));
+          if (ev.cancelable) ev.preventDefault();
+        } else last = { at: now, x: t.clientX, y: t.clientY };
+      }, { passive: false });
+    })();
     document.getElementById('bible-content').addEventListener('dblclick', function(ev) {
       const vt = ev.target.closest('.verse-text');
       if (!vt) return;
@@ -12918,7 +13086,13 @@
         const offset = pre.toString().length;
         let textCodes = null, why = '';
         const src = WordOrig.source();
-        if (!src) why = '개역개정S(스트롱 본문)를 비교 번역으로 등록하면 대조합니다';
+        const kt = krvnTokenAt(b, c, v, vt.textContent, offset);
+        if (kt) {
+          const tk = kt.arr[kt.k];
+          textCodes = tk && tk[0] ? tk[0].split(',') : [];
+          if (!textCodes.length) why = '이 어절에 원어 번호가 없음(어절 원어 분석)';
+        }
+        else if (!src) why = '개역개정S(스트롱 본문)를 비교 번역으로 등록하면 대조합니다';
         else {
           const sdb = WordOrig.sdbVerse(b, c, v);
           if (!sdb) why = '개역개정S 에 이 절이 없음';
@@ -12934,7 +13108,7 @@
         else if (!item.codes.length) { state = 'unknown'; msg = `${item.kind} 항목에 스트롱 코드가 없음 · 본문 ${textCodes.join(', ')}`; }
         else if (textCodes.some(x => item.codes.indexOf(x) >= 0)) { state = 'ok'; msg = `원어 일치 ${textCodes.filter(x => item.codes.indexOf(x) >= 0).join(', ')}`; }
         else { state = 'bad'; msg = `본문 ${textCodes.join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}`; }
-        this.chip(tag, state, msg, { b, c, v, word, textCodes: textCodes || [], label: src ? src.label : '' });
+        this.chip(tag, state, msg, { b, c, v, word, textCodes: textCodes || [], label: kt ? '어절 원어 분석' : (src ? src.label : ''), kt, offset, text: vt.textContent });
       },
       chip: function(tag, state, msg, info) {
         let el = document.getElementById('tag-orig-chip');
@@ -12957,7 +13131,9 @@
         const hgt = el.offsetHeight || 26;
         el.style.top = (r.top - hgt - 6 >= 6 ? r.top - hgt - 6 : r.bottom + 6) + 'px';   // 딱지 위, 모자라면 아래
         const btn = document.getElementById('tag-orig-more');
-        if (btn) btn.onclick = (e) => { e.stopPropagation(); WordOrig.show(info.b, info.c, info.v, info.word, info.textCodes, r.left, r.bottom, info.label); };
+        if (btn) btn.onclick = (e) => { e.stopPropagation();
+          if (info.kt) WordOrig.showKrvn(info.b, info.c, info.v, info.kt, r.left, r.bottom);
+          else WordOrig.show(info.b, info.c, info.v, info.word, info.textCodes, r.left, r.bottom, info.label); };
         if (state !== 'bad') this._t = setTimeout(() => { el.style.display = 'none'; }, 6000);
       }
     };
@@ -14297,7 +14473,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-3`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
