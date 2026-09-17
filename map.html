@@ -13054,12 +13054,14 @@
         if (t[5] != null && t[5] >= 0) chips += chip('신뢰 ' + (t[5] / 100).toFixed(2)) + ' ';
         if (t[6] === 1) chips += warn('검토 필요') + ' ';
         const rows = codes.map((cd, i) => {
-          // 원어 낱말·형태는 관계 표 차례대로 — 번호 수와 같을 때만 짝지음
-          const lem = (t[1].length === codes.length) ? krvnMorph.lm[t[1][i]] : '';
-          const mor = (t[2].length === codes.length) ? krvnMorph.mo[t[2][i]] : (t[2].length === 1 && codes.length === 1 ? krvnMorph.mo[t[2][0]] : '');
+          // 원어 낱말·형태: v5 부터 번호와 같은 차례(-1 = 없음). v4 이하는 개수가 같을 때만 짝지음
+          const v5 = +(krvnMorph.meta && krvnMorph.meta.version || 0) >= 5;
+          const pick = (arr, tab) => { if (fromSdb) return ''; if (v5 || arr.length === codes.length) { const j = arr[i]; return (j != null && j >= 0) ? tab[j] : ''; } return ''; };
+          const lem = pick(t[1], krvnMorph.lm);
+          const mor = pick(t[2], krvnMorph.mo);
           const trs = (krvnMorph.tr[cd] || []).map(p => `${escHtml(p[0])} <span style="color:#94a3b8">${p[1]}</span>`).join(' · ');
           return `<div style="margin-top:8px">
-              ${mor ? `<div style="font-size:0.8em;color:#047857;margin-bottom:2px">${escHtml(cd)}${lem ? ' <span style="font-size:1.15em;direction:rtl;unicode-bidi:isolate">' + escHtml(lem) + '</span>' : ''} · ${escHtml(mor)}</div>` : ''}
+              ${(mor || lem) ? `<div style="font-size:0.8em;color:#047857;margin-bottom:2px">${escHtml(cd)}${lem ? ' <span style="font-size:1.15em;direction:rtl;unicode-bidi:isolate">' + escHtml(lem) + '</span>' : ''}${mor ? ' · ' + escHtml(mor) : ' · <span style="color:#94a3b8">형태 정보 없음</span>'}</div>` : ''}
               <div id="word-orig-slot-${i}"></div>
               ${trs ? `<div style="font-size:0.75em;color:#64748b;margin-top:2px">개역개정 번역: ${trs}</div>` : ''}
             </div>`;
@@ -14641,7 +14643,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-8`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-9`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
