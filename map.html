@@ -7062,7 +7062,8 @@
       CONJUNCTION: '접속사', NEGATION: '부정어', INTERROGATIVE: '의문사', RELATIVE: '관계사', DEMONSTRATIVE: '지시사', PERSONAL_PRONOUN: '인칭대명사',
       REFLEXIVE_PRONOUN: '재귀대명사', ADVERBIAL: '부사', CARDINAL: '기수', ORDINAL: '서수', PARTICLE_INTERJECTION: '불변화사·감탄사',
       KOREAN_HEADWORD_RECOVERED_NO_STRONG: '원어 번호 없는 한국어', DIVERGENT_N1_TRANSLATION: '번역이 원문과 어긋남', DIVERGENT_1N_TRANSLATION: '번역이 원문과 어긋남',
-      UNIQUE_STRONG_BUT_ORIGINAL_TOKEN_UNRESOLVED: '원어 자리 미확정', AMBIGUOUS_MULTI_HEADWORD: '기본형 여럿', S_MISSING_VERSE: '원문 절 없음'
+      UNIQUE_STRONG_BUT_ORIGINAL_TOKEN_UNRESOLVED: '원어 자리 미확정',
+      LOCAL_EXACT_1TO1_STRONG_CANDIDATE: '1:1 대응(후보)', TOKENIZATION_SPLIT_EXACT: '어절 나눔 대응', LOCAL_EXACT_1TO1_STRONG_ZERO: '원어 번호 없는 말', AMBIGUOUS_MULTI_HEADWORD: '기본형 여럿', S_MISSING_VERSE: '원문 절 없음'
     };
     async function loadKrvnMorph() {
       try {
@@ -13019,7 +13020,18 @@
       showKrvn: async function(b, c, v, kt, x, y) {
         const t = kt.arr[kt.k] || ['', [], [], '', ''];
         const word = kt.words[kt.k];
-        const codes = t[0] ? t[0].split(',') : [];
+        let codes = t[0] ? t[0].split(',') : [];
+        let fromSdb = false;
+        if (!codes.length) {   // (2026-09-17) 어절 원어 분석에 번호가 없으면 개역개정S 글자 맞춤으로
+          const src = this.source(); const sdb = src ? this.sdbVerse(b, c, v) : null;
+          if (sdb) {
+            const text = kt.words.join(' ');
+            const st = kt.words.slice(0, kt.k).join(' ').length + (kt.k ? 1 : 0);
+            const map = this.align(text, sdb);
+            for (let q = st; q < st + word.length; q++) (map[q] || []).forEach(x => { if (codes.indexOf(x) < 0) codes.push(x); });
+            fromSdb = codes.length > 0;
+          }
+        }
         // 같은 원어를 나눠 가진 이웃 어절
         let g0 = kt.k, g1 = kt.k;
         if (t[0] && (t[4] === 'N' || t[4] === 'M')) {
@@ -13030,7 +13042,9 @@
         const chip = (txt, strong) => `<span style="font-size:0.75em;padding:1px 7px;border-radius:5px;${strong ? 'background:#ecfdf5;color:#047857;border:1px solid #a7f3d0' : 'background:#f1f5f9;color:#475569;border:1px solid #e2e8f0'}">${escHtml(txt)}</span>`;
         const warn = txt => `<span style="font-size:0.75em;padding:1px 7px;border-radius:5px;background:#fffbeb;color:#b45309;border:1px solid #fde68a">${escHtml(txt)}</span>`;
         let chips = '';
-        if (t[3] && KRVN_DOM[t[3]]) chips += chip(KRVN_DOM[t[3]], true) + ' ';
+        const fsName0 = (t[7] != null && t[7] >= 0 && krvnMorph.fs) ? krvnMorph.fs[t[7]] : '';
+        // 「대응 불확실(X)」이라도 세부분류가 1:1 후보·어절 나눔이면 갈래 꼬리표는 빼고 세부분류로 보인다
+        if (t[3] && KRVN_DOM[t[3]] && !(t[3] === 'X' && /^(LOCAL_EXACT|TOKENIZATION_SPLIT)/.test(fsName0))) chips += chip(KRVN_DOM[t[3]], true) + ' ';
         if (t[4] && KRVN_AL[t[4]]) chips += (t[4] === '1' ? chip(KRVN_AL[t[4]]) : warn(KRVN_AL[t[4]])) + ' ';
         if (group) chips += chip('묶임: ' + group) + ' ';
         const fsName = (t[7] != null && t[7] >= 0 && krvnMorph.fs) ? krvnMorph.fs[t[7]] : '';
@@ -13059,7 +13073,7 @@
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="flex-shrink:0;border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
           <div style="display:flex;gap:4px;flex-wrap:wrap">${chips}</div>
           ${codes.length ? rows : '<div style="font-size:0.85em;color:#64748b;margin-top:8px">이 어절에는 원어 번호가 없습니다.</div>'}
-          <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N) · 뜻: 원어 사전·한글 원어사전</div>`;
+          <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N)${fromSdb ? ' · 원어 번호는 개역개정S 에서 채움' : ''} · 뜻: 원어 사전·한글 원어사전</div>`;
         this._place(pop, x, y);
         if (!codes.length) return;
         await StrongEngine.ensureLoaded();
@@ -13237,20 +13251,24 @@
         let textCodes = null, why = '';
         const src = WordOrig.source();
         const kt = krvnTokenAt(b, c, v, vt.textContent, offset);
+        let usedKrvn = false;
         if (kt) {
           const tk = kt.arr[kt.k];
           textCodes = tk && tk[0] ? tk[0].split(',') : [];
-          if (!textCodes.length) why = '이 어절에 원어 번호가 없음(어절 원어 분석)';
+          usedKrvn = textCodes.length > 0;
         }
-        else if (!src) why = '개역개정S(스트롱 본문)를 비교 번역으로 등록하면 대조합니다';
-        else {
-          const sdb = WordOrig.sdbVerse(b, c, v);
-          if (!sdb) why = '개역개정S 에 이 절이 없음';
+        // (2026-09-17) 어절 원어 분석에 번호가 없는 어절은 개역개정S 글자 맞춤으로 채운다
+        if (!usedKrvn) {
+          if (!src) why = kt ? '이 어절에 원어 번호가 없음(어절 원어 분석)' : '개역개정S(스트롱 본문)를 비교 번역으로 등록하면 대조합니다';
           else {
-            const map = WordOrig.align(vt.textContent, sdb);
-            textCodes = [];
-            for (let k = offset; k < offset + word.length; k++) (map[k] || []).forEach(x => { if (textCodes.indexOf(x) < 0) textCodes.push(x); });
-            if (!textCodes.length) why = '이 자리에 원어 번호가 없음';
+            const sdb = WordOrig.sdbVerse(b, c, v);
+            if (!sdb) why = '개역개정S 에 이 절이 없음';
+            else {
+              const map = WordOrig.align(vt.textContent, sdb);
+              textCodes = [];
+              for (let k = offset; k < offset + word.length; k++) (map[k] || []).forEach(x => { if (textCodes.indexOf(x) < 0) textCodes.push(x); });
+              if (!textCodes.length) why = '이 자리에 원어 번호가 없음';
+            }
           }
         }
         let state, msg;
@@ -13258,7 +13276,7 @@
         else if (!item.codes.length) { state = 'unknown'; msg = `${item.kind} 항목에 스트롱 코드가 없음 · 본문 ${textCodes.join(', ')}`; }
         else if (textCodes.some(x => item.codes.indexOf(x) >= 0)) { state = 'ok'; msg = `원어 일치 ${textCodes.filter(x => item.codes.indexOf(x) >= 0).join(', ')}`; }
         else { state = 'bad'; msg = `본문 ${textCodes.join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}`; }
-        this.chip(tag, state, msg, { b, c, v, word, textCodes: textCodes || [], label: kt ? '어절 원어 분석' : (src ? src.label : ''), kt, offset, text: vt.textContent });
+        this.chip(tag, state, msg, { b, c, v, word, textCodes: textCodes || [], label: usedKrvn ? '어절 원어 분석' : (src ? src.label : ''), kt: usedKrvn ? kt : null, offset, text: vt.textContent });
       },
       chip: function(tag, state, msg, info) {
         let el = document.getElementById('tag-orig-chip');
@@ -14623,7 +14641,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-7`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-8`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
