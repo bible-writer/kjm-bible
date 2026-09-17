@@ -12917,6 +12917,7 @@
         pop.innerHTML = `<div id="word-orig-handle" style="display:flex;align-items:center;gap:6px;margin-bottom:6px;cursor:move;user-select:none">
             <span style="font-size:0.8em;color:#94a3b8">${bk ? bk.abbr : ''}${c}:${v} · ${kt.k + 1}번째 어절</span>
             <b style="font-size:1.15em;color:#065f46">${escHtml(word)}</b><span style="flex:1"></span>
+            <button onclick="WordOrig.zoom(-2)" title="글자 작게" style="border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가−</button><button onclick="WordOrig.zoom(2)" title="글자 크게" style="border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:15px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가+</button>
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
           <div style="display:flex;gap:4px;flex-wrap:wrap">${chips}</div>
           ${codes.length ? rows : '<div style="font-size:0.85em;color:#64748b;margin-top:8px">이 어절에는 원어 번호가 없습니다.</div>'}
@@ -12941,7 +12942,7 @@
         if (!pop) {
           pop = document.createElement('div');
           pop.id = 'word-orig-pop';
-          pop.style.cssText = 'position:fixed;z-index:3000;width:360px;max-width:92vw;max-height:72vh;overflow-y:auto;background:#fff;border:1px solid #a7f3d0;border-radius:10px;box-shadow:0 8px 28px rgba(15,23,42,.18);padding:10px 12px;font-size:14px;';
+          pop.style.cssText = 'position:fixed;z-index:3000;width:360px;max-width:92vw;max-height:72vh;overflow-y:auto;background:#fff;border:1px solid #a7f3d0;border-radius:10px;box-shadow:0 8px 28px rgba(15,23,42,.18);padding:10px 12px;';
           document.body.appendChild(pop);
           const outside = ev => {
             if (pop.style.display === 'none' || pop.contains(ev.target)) return;
@@ -12956,7 +12957,17 @@
         }
         return pop;
       },
+      // 글자 크기 (2026-09-17) — 창 안 글자는 대부분 em 이라 창 글자 크기 하나로 함께 커진다. 기억해 둔다.
+      _font: function() { const n = parseInt(localStorage.getItem('word_orig_font') || '14', 10); return Math.max(11, Math.min(30, isNaN(n) ? 14 : n)); },
+      zoom: function(d) {
+        const n = Math.max(11, Math.min(30, this._font() + d));
+        try { localStorage.setItem('word_orig_font', String(n)); } catch (e) {}
+        const pop = document.getElementById('word-orig-pop');
+        if (pop) pop.style.fontSize = n + 'px';
+        showToast('원어 창 글자 ' + n + 'px', 'info', 900);
+      },
       _place: function(pop, x, y) {
+        pop.style.fontSize = this._font() + 'px';
         pop.style.display = 'block';
         pop._openedAt = Date.now();
         pop.style.transform = 'none'; pop.style.right = 'auto'; pop.style.bottom = 'auto';
@@ -12973,6 +12984,7 @@
             <span style="font-size:0.8em;color:#94a3b8">${bk ? bk.abbr : ''}${c}:${v}</span>
             <b style="font-size:1.15em;color:#065f46">${escHtml(word)}</b>
             <span style="flex:1"></span>
+            <button onclick="WordOrig.zoom(-2)" title="글자 작게" style="border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가−</button><button onclick="WordOrig.zoom(2)" title="글자 크게" style="border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:15px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가+</button>
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>`;
         if (!codes.length) {
           pop.innerHTML = head + `<div style="font-size:0.85em;color:#64748b;line-height:1.6">이 낱말에는 원어 번호가 붙어 있지 않습니다.<br><span style="color:#94a3b8">(조사·어미이거나, ${escHtml(label)} 에서 번호가 앞뒤 낱말에 붙어 있는 자리)</span></div>`;
@@ -14473,7 +14485,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-4`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
