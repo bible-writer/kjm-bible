@@ -2694,7 +2694,7 @@
               resolve();
               return;
             }
-            if (!pkg.app || !pkg.placeDatabase) throw new Error('유효한 성경지도 백업/DB 파일이 아닙니다.');
+            if (!pkg.app || (!pkg.placeDatabase && pkg.backupFormat !== 'delta')) throw new Error('유효한 성경지도 백업/DB 파일이 아닙니다.');
             showProgress(60);
             // 기존 백업 복원 로직 실행
             if (pkg.userBlacklist)      { userBlacklist = new Set(pkg.userBlacklist); await setLocalItem('saved_user_blacklist', pkg.userBlacklist); }
@@ -2712,11 +2712,19 @@
               nameOverrides = pkg.nameOverrides;
               await saveNameOverrides();
             }
-            placeDatabase = pkg.placeDatabase;
-            await setLocalItem('saved_place_database', placeDatabase);
+            let deltaInfo = null;
+            if (pkg.backupFormat === 'delta') {
+              if (pkg.strongOverrides) { strongOverrides = pkg.strongOverrides; await setLocalItem('saved_strong_overrides', strongOverrides); }
+              deltaInfo = await BackupDelta.restore(pkg);
+              buildTermIndex(termDatabase); buildPersonVerseIndex(personDatabase);
+            } else {
+              placeDatabase = pkg.placeDatabase;
+              await setLocalItem('saved_place_database', placeDatabase);
+            }
             buildKeywordIndex(placeDatabase);
             renderMapMarkers();
             updateAppTitle();
+            if (deltaInfo) BackupRestoreReport(deltaInfo);
             if (pkg.bdbBinaryBase64 && window.SQL) {
               const buf = base64ToArrayBuffer(pkg.bdbBinaryBase64);
               sqliteDbInstance = new window.SQL.Database(new Uint8Array(buf));
@@ -3166,6 +3174,11 @@
     }
 
     async function setLocalItem(key, value) {
+      // (2026-09-17) DB 판이 바뀌어 저장되면, 잠시 뒤 「백업 원본」을 새 판으로 다시 잡는다(바뀐 것만 백업)
+      if (typeof BackupDelta !== 'undefined' && BackupDelta.VER_KEYS[key]) {
+        const kind = BackupDelta.VER_KEYS[key];
+        setTimeout(() => { BackupDelta.ensure(kind).catch(() => {}); }, 2500);
+      }
       // [수정] tx.oncomplete 대기 → 저장 완료 100% 보장
       try {
         const db = await openIndexedDB();
@@ -9961,49 +9974,165 @@
     });
     gdriveSetupAutoTimer();
 
+
+    /* ── 바뀐 것만 백업 (2026-09-17) ──
+     * 지명·용어·인명 DB 와 이스턴·스미스 사전은 GitHub 에서 다시 받을 수 있다.
+     * 받은 판마다 항목별 지문(해시)을 「원본」으로 기억해 두고, 백업에는 원본과 달라진 항목·새 항목·지운 번호만 담는다.
+     * 스트롱 사전(strongDict)은 늘 다시 받으므로 담지 않는다. 한글 원어사전·어절 원어 분석은 「등록 여부」만 적는다.
+     * 옛 백업(통째로 담긴 것)도 그대로 복원된다. */
+    const BackupDelta = {
+      VER_KEYS: { saved_place_database_version: 'place', saved_term_database_version: 'term', saved_person_database_version: 'person' },
+      kinds: {
+        place:  { get: () => placeDatabase,  set: v => { placeDatabase = v; },  store: 'saved_place_database',  ver: 'saved_place_database_version' },
+        term:   { get: () => termDatabase,   set: v => { termDatabase = v; },   store: 'saved_term_database',   ver: 'saved_term_database_version' },
+        person: { get: () => personDatabase, set: v => { personDatabase = v; }, store: 'saved_person_database', ver: 'saved_person_database_version' }
+      },
+      hash: function(o) {
+        const s = JSON.stringify(o);
+        let h = 0x811c9dc5;
+        for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+        return h.toString(36) + ':' + s.length.toString(36);
+      },
+      ensure: async function(kind) {
+        const k = this.kinds[kind];
+        const list = k.get();
+        const ver = (await getLocalItem(k.ver)) || '';
+        const base = await getLocalItem('backup_base_' + kind);
+        if (base && base.version === ver) return base;
+        if (!Array.isArray(list) || !list.length) return base || null;
+        const nb = { version: ver, at: new Date().toISOString(), h: {} };
+        list.forEach(x => { if (x && x.id != null) nb.h[x.id] = this.hash(x); });
+        await setLocalItem('backup_base_' + kind, nb);
+        return nb;
+      },
+      delta: async function(kind) {
+        const k = this.kinds[kind];
+        const list = k.get() || [];
+        const base = await this.ensure(kind);
+        const seen = {}; const changed = [];
+        list.forEach(x => {
+          if (!x || x.id == null) return;
+          seen[x.id] = 1;
+          if (!base || base.h[x.id] !== this.hash(x)) changed.push(x);
+        });
+        const deleted = base ? Object.keys(base.h).filter(id => !seen[id]) : [];
+        return { base: base ? base.version : '', count: list.length, changed, deleted };
+      },
+      apply: async function(kind, d) {
+        if (!d) return 0;
+        const k = this.kinds[kind];
+        const list = (k.get() || []).slice();
+        const pos = {};
+        list.forEach((x, i) => { if (x && x.id != null) pos[x.id] = i; });
+        (d.changed || []).forEach(x => {
+          if (x == null || x.id == null) return;
+          if (pos[x.id] != null) list[pos[x.id]] = x; else { pos[x.id] = list.length; list.push(x); }
+        });
+        const del = {}; (d.deleted || []).forEach(id => { del[id] = 1; });
+        const out = list.filter(x => !(x && del[x.id]));
+        k.set(out);
+        await setLocalItem(k.store, out);
+        return (d.changed || []).length + (d.deleted || []).length;
+      },
+      // 이스턴·스미스: 앱에서 고친 항목만
+      dictEdited: function(full, edits) {
+        const ids = edits ? Object.keys(edits) : [];
+        if (!ids.length || !full) return null;
+        const list = Array.isArray(full) ? full : (full.entries || []);
+        const want = {}; ids.forEach(i => { want[i] = 1; });
+        return { edits, entries: list.filter(e => e && want[e.id]) };
+      },
+      mergeDict: function(full, saved) {
+        if (!saved || !saved.entries || !full) return full;
+        const byId = {}; saved.entries.forEach(e => { byId[e.id] = e; });
+        if (Array.isArray(full)) return full.map(e => byId[e.id] || e);
+        return Object.assign({}, full, { entries: (full.entries || []).map(e => byId[e.id] || e) });
+      },
+      // 복원: 새 꼴(delta) 백업 적용. 돌려주는 값 = 덮어쓴 항목 수
+      restore: async function(pkg) {
+        let n = 0; const warn = [];
+        for (const kind of ['place', 'term', 'person']) {
+          const d = pkg.deltas && pkg.deltas[kind];
+          if (!d) continue;
+          const cur = (await getLocalItem(this.kinds[kind].ver)) || '';
+          if (d.base && cur && d.base !== cur) warn.push(`${kind} ${d.base}→${cur}`);
+          n += await this.apply(kind, d);
+        }
+        if (pkg.dictEdits) {
+          if (pkg.dictEdits.easton) {
+            eastonFullDict = this.mergeDict(eastonFullDict, pkg.dictEdits.easton);
+            eastonLocalEdits = pkg.dictEdits.easton.edits || {};
+            await setLocalItem('easton_full_dict', eastonFullDict); await setLocalItem('easton_local_edits', eastonLocalEdits);
+            n += pkg.dictEdits.easton.entries.length;
+          }
+          if (pkg.dictEdits.smith) {
+            smithFullDict = this.mergeDict(smithFullDict, pkg.dictEdits.smith);
+            smithLocalEdits = pkg.dictEdits.smith.edits || {};
+            await setLocalItem('smith_full_dict', smithFullDict); await setLocalItem('smith_local_edits', smithLocalEdits);
+            n += pkg.dictEdits.smith.entries.length;
+          }
+          rawDictData.easton = eastonFullDict; rawDictData.smith = smithFullDict;
+          rawDictEdits.easton = eastonLocalEdits; rawDictEdits.smith = smithLocalEdits;
+        }
+        const lf = pkg.localFiles || {};
+        const miss = [];
+        if (lf.krvn && !krvnMorph) miss.push('📘 어절 원어 분석');
+        if (lf.hebko && !(typeof hebKoDict !== 'undefined' && hebKoDict)) miss.push('📕 한글 원어사전');
+        return { n, warn, miss };
+      }
+    };
+    // 시작 뒤 한 번 — DB 가 다 실린 뒤 원본을 잡아 둔다(없을 때만 새로 만든다)
+    setTimeout(() => { ['place', 'term', 'person'].forEach(k => BackupDelta.ensure(k).catch(() => {})); }, 8000);
+
+    function BackupRestoreReport(info) {
+      let msg = `백업 복원 완료 — 바뀐 항목 ${info.n}개 적용`;
+      if (info.warn && info.warn.length) msg += ` · 백업 뒤 DB 판이 바뀜(${info.warn.join(', ')}) — 내가 고친 것이 우선`;
+      showToast(msg, 'success', 6000);
+      if (info.miss && info.miss.length) setTimeout(() => showToast(`이 기기에 ${info.miss.join(' · ')} 이(가) 없습니다 — ⋯ 메뉴에서 등록하세요`, 'info', 7000), 1500);
+    }
     async function buildAndUploadBackup(silent) {
       // [2026-08 변경] 성경 원문(.bdb)과 원전분해(.sdb)는 용량이 커서 백업 대상에서 제외.
       // 대신 용어DB/인명DB/스트롱사전/이스턴·스미스 사전 편집분을 포함해 실질 작업물을 보존.
       const backupPackage = {
         app: "BibleInteractiveMap3D",
-        version: "3.0",
+        version: "4.0",
+        backupFormat: "delta",          // 2026-09-17 — DB·사전은 바뀐 항목만
         exportDate: new Date().toISOString(),
         userBlacklist: Array.from(userBlacklist),
         userTermSkip: userTermSkip,
         userCustomKeywordMap: userCustomKeywordMap,
-        placeDatabase: placeDatabase,
         savedPaneWidth: leftPane.style.width,
         savedFontSize: currentFontSize,
         coordOverrides: coordOverrides,
         nameOverrides: nameOverrides,
-        strongOverrides: strongOverrides,   // 2026-09-12
-
-        termDatabase: termDatabase,
+        strongOverrides: strongOverrides,
         termDatabaseMeta: termDatabaseMeta,
-        personDatabase: personDatabase,
-        strongDict: strongDict,
-        eastonFullDict: eastonFullDict,
-        eastonLocalEdits: eastonLocalEdits,
-        smithFullDict: smithFullDict,
-        smithLocalEdits: smithLocalEdits,
-        // 새로 추가한 사전들(Schaff·Hitchcock 등)은 원문이 공개 자료라 다시 받을 수 있으므로,
-        // 백업 용량을 아끼기 위해 "내가 직접 고친 항목"만 담는다.
+        deltas: {
+          place: await BackupDelta.delta('place'),
+          term: await BackupDelta.delta('term'),
+          person: await BackupDelta.delta('person')
+        },
+        dictEdits: {
+          easton: BackupDelta.dictEdited(eastonFullDict, eastonLocalEdits),
+          smith: BackupDelta.dictEdited(smithFullDict, smithLocalEdits)
+        },
+        localFiles: {
+          krvn: krvnMorph && krvnMorph.meta ? krvnMorph.meta.version : null,
+          hebko: (typeof hebKoDict !== 'undefined' && hebKoDict) ? Object.keys(hebKoDict).length : null
+        },
         rawDictUserEdits: (function() {
           const out = {};
           RAWDICT_SOURCES.forEach(s => {
-            if (s.key === 'easton' || s.key === 'smith') return; // 위에서 이미 통째로 저장됨
+            if (s.key === 'easton' || s.key === 'smith') return; // 위 dictEdits 에 담음
             const edits = getRawDictEdits(s.key);
             const ids = Object.keys(edits || {});
             if (ids.length === 0) return;
             const list = getRawDictList(s.key);
-            out[s.key] = {
-              edits: edits,
-              entries: list.filter(e => edits[e.id]) // 고친 항목만
-            };
+            out[s.key] = { edits: edits, entries: list.filter(e => edits[e.id]) };
           });
           return out;
         })()
-        // bdbBinaryBase64, interlinearBinaryBase64: 의도적으로 제외 (성경DB·원어분해DB는 별도 파일로 관리)
+        // 성경DB(.bdb)·원어분해(.sdb)·스트롱 사전·어절 원어 분석·한글 원어사전은 담지 않음(다시 받거나 기기마다 등록)
       };
       const jsonStr = JSON.stringify(backupPackage);
 
@@ -10051,7 +10180,7 @@
       reader.onload = async function() {
         try {
           const pkg = JSON.parse(this.result);
-          if (!pkg.app || !pkg.placeDatabase) {
+          if (!pkg.app || (!pkg.placeDatabase && pkg.backupFormat !== 'delta')) {
             throw new Error("유효한 성경지도 백업 JSON 파일이 아닙니다.");
           }
 
@@ -10081,8 +10210,16 @@
             await saveCoordOverrides();
           }
 
-          placeDatabase = pkg.placeDatabase;
-          await setLocalItem("saved_place_database", placeDatabase);
+          if (pkg.backupFormat === 'delta') {
+            if (pkg.nameOverrides && typeof pkg.nameOverrides === 'object' && typeof saveNameOverrides === 'function') { nameOverrides = pkg.nameOverrides; await saveNameOverrides(); }
+            if (pkg.strongOverrides) { strongOverrides = pkg.strongOverrides; await setLocalItem('saved_strong_overrides', strongOverrides); }
+            if (pkg.termDatabaseMeta) { termDatabaseMeta = pkg.termDatabaseMeta; await setLocalItem('saved_term_database_meta', termDatabaseMeta); }
+            window._deltaRestoreInfo = await BackupDelta.restore(pkg);
+            buildTermIndex(termDatabase); buildPersonVerseIndex(personDatabase);
+          } else {
+            placeDatabase = pkg.placeDatabase;
+            await setLocalItem("saved_place_database", placeDatabase);
+          }
           buildKeywordIndex(placeDatabase);
           renderMapMarkers();
 
@@ -10160,7 +10297,8 @@
 
           loadBibleText();
           if (window.map) map.invalidateSize();
-          showToast(`백업 파일로부터 지명 ${placeDatabase.length}개 및 모든 설정이 완벽하게 복원되었습니다.`, 'success')
+          if (window._deltaRestoreInfo) { BackupRestoreReport(window._deltaRestoreInfo); window._deltaRestoreInfo = null; }
+          else showToast(`백업 파일로부터 지명 ${placeDatabase.length}개 및 모든 설정이 완벽하게 복원되었습니다.`, 'success')
         } catch (err) {
           showToast("백업 파일 복원 중 오류가 발생했습니다:\n" + err.message, 'warn')
           console.error(err);
@@ -14485,7 +14623,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-6`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-7`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
