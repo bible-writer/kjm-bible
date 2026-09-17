@@ -1740,9 +1740,10 @@
             <div class="menu-sect">파일</div>
             <button id="menu-open-bdb" onclick="menuPickFile('bdb')">📖 성경DB 열기</button>
             <button id="menu-open-xlsx" onclick="menuPickFile('xlsx')">📊 지명시트 열기</button>
-            <button id="menu-open-interlinear" onclick="menuPickFile('interlinear')">🔤 스트롱코드 DB 등록</button>
-            <button id="menu-open-hebko" onclick="menuPickFile('hebko')">📕 한글 원어사전 등록</button>
-            <button id="menu-open-krvn" onclick="menuPickFile('krvn')">📘 어절 원어 분석 등록</button>
+            <button id="menu-open-interlinear" onclick="menuPickFile('interlinear')">🔤 스트롱코드 DB 등록 <span id="menu-state-interlinear" style="color:#94a3b8;font-size:0.85em"></span></button>
+            <button id="menu-open-hebko" onclick="menuPickFile('hebko')">📕 한글 원어사전 등록 <span id="menu-state-hebko" style="color:#94a3b8;font-size:0.85em"></span></button>
+            <button id="menu-open-krvn" onclick="menuPickFile('krvn')">📘 어절 원어 분석 등록 <span id="menu-state-krvn" style="color:#94a3b8;font-size:0.85em"></span></button>
+            <button id="menu-drop-file" onclick="menuDropFile()">🗑️ 등록한 파일 지우기</button>
 
             <div class="menu-sect">백업</div>
             <button id="btn-import-backup-trigger">💾 백업에서 복원</button>
@@ -3199,6 +3200,19 @@
         console.error("IndexedDB setLocalItem 오류:", key, err);
         return false;
       }
+    }
+
+    async function delLocalItem(key) {
+      // 등록한 파일 지우기용 (2026-09-18)
+      try {
+        const db = await openIndexedDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction(IDB_STORE, "readwrite");
+          tx.objectStore(IDB_STORE).delete(key);
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => resolve(false);
+        });
+      } catch (e) { return false; }
     }
 
     async function getLocalItem(key) {
@@ -7144,6 +7158,44 @@
       UNIQUE_STRONG_BUT_ORIGINAL_TOKEN_UNRESOLVED: '원어 자리 미확정',
       LOCAL_EXACT_1TO1_STRONG_CANDIDATE: '1:1 대응(후보)', TOKENIZATION_SPLIT_EXACT: '어절 나눔 대응', LOCAL_EXACT_1TO1_STRONG_ZERO: '원어 번호 없는 말', AMBIGUOUS_MULTI_HEADWORD: '기본형 여럿', S_MISSING_VERSE: '원문 절 없음'
     };
+    /* ── 등록한 파일 지우기 · 상태 (2026-09-18) ──
+     * 한글 원어사전·어절 원어 분석·스트롱코드 DB 는 기기마다 따로 올리는 파일이라, 지우는 길도 있어야 한다. */
+    const LOCAL_FILES = {
+      hebko: { label: '📕 한글 원어사전', key: 'saved_hebko_dict',
+               state: () => (typeof hebKoDict !== 'undefined' && hebKoDict) ? Object.keys(hebKoDict).length.toLocaleString() + '항목' : '',
+               clear: () => { if (typeof hebKoDict !== 'undefined') hebKoDict = null; } },
+      krvn:  { label: '📘 어절 원어 분석', key: 'saved_krvn_morph',
+               state: () => (krvnMorph && krvnMorph.meta) ? 'v' + krvnMorph.meta.version + ' · ' + Object.keys(krvnMorph.v || {}).length.toLocaleString() + '절' : '',
+               clear: () => { krvnMorph = null; } },
+      interlinear: { label: '🔤 스트롱코드 DB', key: 'saved_interlinear_binary',
+               state: () => interlinearDbInstance ? '등록됨' : '',
+               clear: () => { try { interlinearDbInstance && interlinearDbInstance.close(); } catch (e) {} interlinearDbInstance = null; } }
+    };
+    function refreshLocalFileState() {
+      Object.keys(LOCAL_FILES).forEach(k => {
+        const el = document.getElementById('menu-state-' + k);
+        if (el) { const v = LOCAL_FILES[k].state(); el.textContent = v ? '(' + v + ')' : ''; }
+      });
+    }
+    async function menuDropFile() {
+      const have = Object.keys(LOCAL_FILES).filter(k => LOCAL_FILES[k].state());
+      if (!have.length) { showToast('이 기기에 등록된 파일이 없습니다.', 'info'); return; }
+      const list = have.map((k, i) => (i + 1) + '. ' + LOCAL_FILES[k].label + ' (' + LOCAL_FILES[k].state() + ')').join('\n');
+      const pick = prompt('지울 파일의 번호를 넣으세요.\n\n' + list + '\n\n(여러 개는 1,2 처럼 쉼표로)');
+      if (!pick) return;
+      const sel = String(pick).split(/[,\s]+/).map(x => have[parseInt(x, 10) - 1]).filter(Boolean);
+      if (!sel.length) { showToast('번호를 알아보지 못했습니다.', 'warn'); return; }
+      if (!confirm(sel.map(k => LOCAL_FILES[k].label).join(' · ') + '\n\n정말 지울까요? 다시 쓰려면 파일을 다시 등록해야 합니다.')) return;
+      for (const k of sel) {
+        try { await delLocalItem(LOCAL_FILES[k].key); } catch (e) {}
+        try { LOCAL_FILES[k].clear(); } catch (e) {}
+      }
+      refreshLocalFileState();
+      showToast(sel.map(k => LOCAL_FILES[k].label).join(' · ') + ' 을(를) 지웠습니다.', 'success');
+      if (typeof loadBibleText === 'function') loadBibleText();
+    }
+    window.menuDropFile = menuDropFile;
+
     async function loadKrvnMorph() {
       try {
         const raw = await getLocalItem('saved_krvn_morph');
@@ -14849,7 +14901,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-21`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -15931,7 +15983,7 @@ setTimeout(function() {
       var group = trigger.closest('.menu-group');
       var wasOpen = group.classList.contains('open');
       document.querySelectorAll('.menu-group.open').forEach(function(g) { g.classList.remove('open'); });
-      if (!wasOpen) group.classList.add('open');
+      if (!wasOpen) { group.classList.add('open'); if (typeof refreshLocalFileState === 'function') refreshLocalFileState(); }
     });
   });
   // 메뉴 항목을 고르면 메뉴를 닫는다
