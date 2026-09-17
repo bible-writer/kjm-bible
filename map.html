@@ -2202,8 +2202,8 @@
     </div>
     <textarea id="blacklist-textarea" placeholder="제외할 단어 목록..."></textarea>
     <div class="modal-desc" style="margin-top:10px;">
-      <b>용어 부분 제외</b> — 본문 우클릭 「이 자리만 / 이 책에서 제외」로 쌓인 목록입니다. 줄을 지우고 저장하면 되돌아갑니다.<br>
-      꼴: <code>창4:24 벌이#1</code> (그 절의 그 낱말 몇 번째) · <code>창세기: 나도</code> (그 책 전체)
+      <b>부분 제외 (용어·인명·지명)</b> — 본문 우클릭 「이 자리만 / 이 책에서 제외」로 쌓인 목록입니다. 줄을 지우고 저장하면 되돌아갑니다.<br>
+      꼴: <code>창4:24 벌이#1</code> · <code>창세기: 나도</code> (용어) · <code>삼하5:7 @지명:다윗 성#1</code> · <code>창세기: @인명:라반</code> (인명·지명)
     </div>
     <textarea id="term-skip-textarea" placeholder="(비어 있음)" style="display:block;width:100%;box-sizing:border-box;min-height:90px;padding:8px;font-size:13px;border:1px solid #cbd5e1;border-radius:6px;font-family:inherit;"></textarea>
     <div class="modal-btn-row">
@@ -3655,13 +3655,20 @@
         let m = line.match(/^(\S+?)\s*:\s*(.+)$/);
         const bm = m && BIBLE_BOOKS.find(x => x.name === m[1] || x.abbr === m[1]);
         if (bm && !/^\d/.test(m[2])) { (out.book[bm.id] = out.book[bm.id] || []).push(m[2].trim()); return; }
-        m = line.match(/^([^\d\s]+)\s*(\d+)\s*:\s*(\d+)\s+(\S+#\d+)$/);
+        m = line.match(/^([^\d\s]+)\s*(\d+)\s*:\s*(\d+)\s+(.+#\d+)$/);
         const vb = m && BIBLE_BOOKS.find(x => x.abbr === m[1] || x.name === m[1]);
         if (vb) { const vk = `${vb.id}-${Number(m[2])}-${Number(m[3])}`; (out.verse[vk] = out.verse[vk] || []).push(m[4]); }
       });
       return out;
     }
     async function _saveTermSkip() { await setLocalItem('saved_user_term_skip', userTermSkip); }
+    // 인명·지명 부분 제외 (2026-09-17) — 용어와 같은 저장소에 「@인명:이름#n」(자리) · 「@지명:이름」(책)
+    function nameSkipHit(kind, name, nth, b, c, v) {
+      const bk = userTermSkip.book && userTermSkip.book[b];
+      if (bk && bk.indexOf('@' + kind + ':' + name) >= 0) return true;
+      const vs = userTermSkip.verse && userTermSkip.verse[`${b}-${c}-${v}`];
+      return !!(vs && vs.indexOf('@' + kind + ':' + name + '#' + nth) >= 0);
+    }
     let userCustomKeywordMap = {};
 
     /**
@@ -3943,10 +3950,13 @@
         const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).join('|');
         if (!escapedNames) return html;
         const regex = new RegExp(`(?<![가-힣])(${escapedNames})${particlePattern}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
+        const seen = {};
         return this.highlightOutsideTags(html, regex, (match, p1, p2) => {
           const particle = p2 || '';
           const safeName = p1.replace(/'/g, "\\'");
-          return `<span class="bible-person-tag" onclick="PersonEngine.handleClickAt('${safeName}', ${book}, ${chapter}, ${verse})" oncontextmenu="handleTagContextMenu(event, '${safeName}')" title="${p1}">${p1}</span>${particle}`;
+          const nth = (seen[p1] = (seen[p1] || 0) + 1);
+          if (nameSkipHit('인명', p1, nth, book, chapter, verse)) return match;   // (2026-09-17) 사용자 부분 제외
+          return `<span class="bible-person-tag" onclick="PersonEngine.handleClickAt('${safeName}', ${book}, ${chapter}, ${verse})" oncontextmenu="handleNameContextMenu(event, '인명', '${safeName}', ${book}, ${chapter}, ${verse}, ${nth})" title="${p1}">${p1}</span>${particle}`;
         });
       },
 
@@ -4083,6 +4093,13 @@
         (termDatabase || []).forEach(t => {
           if (t.term_en && t.term_en.trim()) {
             idx[t.term_en.trim().toLowerCase()] = t;
+          }
+          // (2026-09-17) 요즘 영어(term_en_modern)도 — NIV 는 lampstand · tax collector 처럼 요즘 말을 쓴다. 비어 있을 때만
+          if (t.term_en_modern) {
+            String(t.term_en_modern).split(/\s*,\s*/).forEach(m => {
+              const k = m.replace(/\s*\(.*\)\s*/g, '').trim().toLowerCase();
+              if (k && k.length >= 3 && !idx[k]) idx[k] = t;
+            });
           }
         });
         this._enIndexCache = idx;
@@ -4341,7 +4358,7 @@
             <span style="display:flex;align-items:baseline;gap:9px;min-width:0">
               ${refLabel ? `<span style="font-size:0.72em;color:#94a3b8">${refLabel}</span>` : ''}
               <span onclick="TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="font-size:1.2em;font-weight:500;color:#1e293b;cursor:pointer">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
-              <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사" style="font-size:0.8em;color:#94a3b8;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.term_en || '')}</span>
+              <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사${t.term_en_modern ? ' · 옛 영어(KJV) 표제어 → 요즘 영어' : ''}" style="font-size:0.8em;color:#94a3b8;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.term_en || '')}${t.term_en_modern ? ` <span style="color:#0f766e">→ ${escHtml(t.term_en_modern)}</span>` : ''}</span>
               <button onclick="TermEngine.editTermKo(${t.id})" title="한글 표제어 수정" style="margin-left:auto;flex-shrink:0;border:none;background:none;font-size:0.85em;color:#94a3b8;cursor:pointer;padding:0 2px">\u270f\ufe0f</button>
             </span>
             <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
@@ -5768,7 +5785,7 @@
       },
 
       // OB 구절 기반 정확 매칭 하이라이트
-      parseAndHighlightByNames: function(verseText, currentContext, nameSet) {
+      parseAndHighlightByNames: function(verseText, currentContext, nameSet, bookId, chapter, vNum) {
         if (!verseText || nameSet.size === 0) return String(verseText || '');
         const safeText = String(verseText);
         const particlePattern = '(이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
@@ -5780,9 +5797,15 @@
 
         const regex = new RegExp(`(?<![가-힣])(${escapedNames})${particlePattern}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
 
+        const seen = {};
         return safeText.replace(regex, (match, p1, p2) => {
           const particle = p2 || '';
           const safeName = p1.replace(/'/g, "\'");
+          if (bookId) {   // (2026-09-17) 사용자 부분 제외 — 「@지명:이름」
+            const nth = (seen[p1] = (seen[p1] || 0) + 1);
+            if (nameSkipHit('지명', p1, nth, bookId, chapter, vNum)) return match;
+            return `<span class="bible-place-tag" onclick="BibleGeoEngine.handleClick('${safeName}', '${currentContext}')" oncontextmenu="handleNameContextMenu(event, '지명', '${safeName}', ${bookId}, ${chapter}, ${vNum}, ${nth})" title="${p1}">${p1}</span>${particle}`;
+          }
           return `<span class="bible-place-tag" onclick="BibleGeoEngine.handleClick('${safeName}', '${currentContext}')" title="${p1}">${p1}</span>${particle}`;
         });
       },
@@ -7854,6 +7877,10 @@
     let selectedTextForAdd = "";
 
     let currentTermSkipCtx = null;
+    function handleNameContextMenu(event, kind, word, bookId, chapter, vNum, nth) {
+      handleTermContextMenu(event, word, bookId, chapter, vNum, '@' + kind + ':' + word, nth);
+      currentTermSkipCtx.kind = kind;
+    }
     function handleTermContextMenu(event, word, bookId, chapter, vNum, tok, nth) {
       handleTagContextMenu(event, word);
       currentTermSkipCtx = { word, bookId, chapter, vNum, tok, nth };
@@ -7928,16 +7955,17 @@
       if (arr.indexOf(key) < 0) arr.push(key);
       await _saveTermSkip();
       loadBibleText();
-      showToast(`'${c.word}' — 이 자리만 용어 연결을 뺐습니다. (설정 › 제외 관리에서 되돌릴 수 있음)`, 'success');
+      showToast(`'${c.word}' — 이 자리만 ${c.kind || '용어'} 연결을 뺐습니다. (제외 단어 관리에서 되돌릴 수 있음)`, 'success');
     });
     document.getElementById("menu-skip-book").addEventListener("click", async function() {
       const c = currentTermSkipCtx; if (!c) return;
       const arr = (userTermSkip.book[c.bookId] = userTermSkip.book[c.bookId] || []);
-      if (arr.indexOf(c.word) < 0) arr.push(c.word);
+      const key = c.kind ? ('@' + c.kind + ':' + c.word) : c.word;
+      if (arr.indexOf(key) < 0) arr.push(key);
       await _saveTermSkip();
       loadBibleText();
       const bk = BIBLE_BOOKS.find(x => x.id === c.bookId);
-      showToast(`'${c.word}' — ${bk ? bk.name : '이 책'}에서 용어 연결을 뺐습니다.`, 'success');
+      showToast(`'${c.word}' — ${bk ? bk.name : '이 책'}에서 ${c.kind || '용어'} 연결을 뺐습니다.`, 'success');
     });
 
     document.getElementById("menu-add-selected-link").addEventListener("click", function() {
@@ -14405,7 +14433,7 @@
           }
         });
         if (verseNames.size > 0) {
-          highlightedText = BibleGeoEngine.parseAndHighlightByNames(safeText, currentContext, verseNames);
+          highlightedText = BibleGeoEngine.parseAndHighlightByNames(safeText, currentContext, verseNames, bookId, chapter, vNum);
         } else {
           highlightedText = safeText; // 해당 구절 지명 없으면 하이라이트 없음
         }
@@ -14706,7 +14734,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-14`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260917-15`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -16192,6 +16220,18 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
       }
 
       /* ── 검색 결과를 본문 영역에 렌더링 ── */
+      // 검색 결과 줄의 「📜 원어」 — 그 절 전체 원어 창 (2026-09-17)
+      window.bsrShowOrig = function(b, c, v, ev) {
+        const text = (window._bsrTexts || {})[b + '-' + c + '-' + v];
+        if (!text) return;
+        WordOrig._last = { b, c, v, text };
+        const pop = WordOrig._pop();
+        if (pop.style.display === 'none' || !pop.style.left) {
+          pop.style.left = Math.max(8, Math.min((ev && ev.clientX || 80) - 20, window.innerWidth - 380)) + 'px';
+          pop.style.top = Math.max(8, Math.min((ev && ev.clientY || 80) + 12, window.innerHeight - 300)) + 'px';
+        }
+        WordOrig.showVerse(b, c, v);
+      };
       function renderSearchResults(results, query, isRef, transLabel) {
         if (!isSearchMode) {
           savedContentHtml = contentEl.innerHTML;
@@ -16236,7 +16276,12 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
             pt += ' <span class="bsr-place-tag" onclick="event.stopPropagation();BibleGeoEngine.flyToPlace(placeDatabase.find(x=>x.id===' + p.id + '))" title="\uc9c0\ub3c4\uc5d0\uc11c \ubcf4\uae30">\ud83d\udccd' + escHtml(p.name) + '</span>';
           });
 
-          h += '<div class="bsr-item" onclick="if(event.target.closest(\'.bible-place-tag,.bible-person-tag,.bible-term-tag\'))return;closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
+          if (window._searchLinkTags && typeof krvnMorph !== 'undefined' && krvnMorph) {
+            window._bsrTexts = window._bsrTexts || {};
+            window._bsrTexts[r.bookId + '-' + r.chapter + '-' + r.verse] = stripVerseTags(r.text);
+            pt += ' <button class="bsr-orig-btn" onclick="event.stopPropagation();bsrShowOrig(' + r.bookId + ',' + r.chapter + ',' + r.verse + ',event)" title="이 절의 원어 보기" style="font-size:0.72em;padding:0 6px;margin-left:4px;border:1px solid #a7f3d0;background:#ecfdf5;color:#047857;border-radius:4px;cursor:pointer;vertical-align:middle">📜 원어</button>';
+          }
+          h += '<div class="bsr-item" onclick="if(event.target.closest(\'.bible-place-tag,.bible-person-tag,.bible-term-tag,.bsr-orig-btn\'))return;closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
             '<span class="bsr-ref">' + escHtml(ref) + '</span>' +
             '<span class="bsr-text">' + dt + pt + '</span></div>';
         });
