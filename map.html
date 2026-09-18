@@ -13326,7 +13326,7 @@
           const orig = codes.map((cd, i) => {
             const lem = lmOf(t, i), mor = moOf(t, i);
             const rd = origReadingKo(cd);
-            return `<div style="display:flex;gap:6px;align-items:baseline;flex-wrap:wrap">
+            return `<div class="wo-orig-one" data-code="${escHtml(cd)}" title="이 원어의 뜻" style="display:flex;gap:6px;align-items:baseline;flex-wrap:wrap">
                 <span style="font-size:1.2em;direction:rtl;unicode-bidi:isolate;color:#065f46">${escHtml(lem)}</span>
                 ${rd ? `<span style="font-size:0.8em;color:#334155" title="읽는 법(원어명)">${escHtml(rd)}</span>` : ''}
                 <span style="font-size:0.72em;color:#047857">${escHtml(cd)}</span>
@@ -13348,17 +13348,19 @@
           ${rows}
           <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N)${+(krvnMorph.meta && krvnMorph.meta.version || 0) >= 6 ? ' · 원문 차례: 공개 원문(OSHB·비잔틴) 기준, 알 수 없으면 번호 차례' : ' · 원어는 번호 차례'}</div>`;
         pop.querySelectorAll('.wo-verse-row').forEach(el => {
-          el.onclick = () => {
+          el.onclick = (ev) => {
             const k = +el.dataset.k;
             const off = kt.words.slice(0, k).join(' ').length + (k ? 1 : 0);
             const kk = krvnTokenAt(b, c, v, text, off);
-            if (kk) this.showKrvn(b, c, v, kk, parseFloat(pop.style.left) + 20, parseFloat(pop.style.top) - 14);
+            // (2026-09-18) 원어 낱말을 누르면 그 원어 하나의 뜻만 — 「공허하며」의 하야·보후를 따로
+            const one = ev && ev.target && ev.target.closest ? ev.target.closest('.wo-orig-one') : null;
+            if (kk) this.showKrvn(b, c, v, kk, parseFloat(pop.style.left) + 20, parseFloat(pop.style.top) - 14, one ? one.dataset.code : null);
           };
         });
         this._place(pop, parseFloat(pop.style.left) + 20 || 60, parseFloat(pop.style.top) - 14 || 60);
         pop.scrollTop = 0;
       },
-      showKrvn: async function(b, c, v, kt, x, y) {
+      showKrvn: async function(b, c, v, kt, x, y, focus) {
         const t = kt.arr[kt.k] || ['', [], [], '', ''];
         const word = kt.words[kt.k];
         if (!this._last || this._last.b !== b || this._last.c !== c || this._last.v !== v) this._last = { b, c, v, text: kt.words.join(' ') };
@@ -13395,7 +13397,10 @@
         if (hwName) chips += chip('기본형 ' + hwName) + ' ';
         if (t[5] != null && t[5] >= 0) chips += chip('신뢰 ' + (t[5] / 100).toFixed(2)) + ' ';
         if (t[6] === 1) chips += warn('검토 필요') + ' ';
-        const rows = codes.map((cd, i) => {
+        // (2026-09-18) 절 전체 창에서 원어 하나를 눌렀으면 그 원어만 (i 는 어절 안 원래 자리 그대로)
+        const showIdx = (focus && codes.indexOf(focus) >= 0 && codes.length > 1) ? [codes.indexOf(focus)] : codes.map((_, i) => i);
+        const rows = showIdx.map(i => {
+          const cd = codes[i];
           // 원어 낱말·형태: v5 부터 번호와 같은 차례(-1 = 없음). v4 이하는 개수가 같을 때만 짝지음
           const v5 = +(krvnMorph.meta && krvnMorph.meta.version || 0) >= 5;
           const pick = (arr, tab) => { if (fromSdb) return ''; if (v5 || arr.length === codes.length) { const j = arr[i]; return (j != null && j >= 0) ? tab[j] : ''; } return ''; };
@@ -13417,11 +13422,13 @@
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="flex-shrink:0;border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
           <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">${chips}<button onclick="WordOrig.showVerse(${b},${c},${v})" style="margin-left:auto;font-size:0.75em;padding:2px 8px;border:1px solid #a7f3d0;background:#ecfdf5;color:#047857;border-radius:5px;cursor:pointer;white-space:nowrap">📜 절 전체</button></div>
           ${codes.length ? rows : '<div style="font-size:0.85em;color:#64748b;margin-top:8px">이 어절에는 원어 번호가 없습니다.</div>'}
+          ${showIdx.length < codes.length ? `<div style="margin-top:8px"><button onclick="WordOrig.showKrvn(${b},${c},${v},WordOrig._kt,parseFloat(document.getElementById('word-orig-pop').style.left),parseFloat(document.getElementById('word-orig-pop').style.top))" style="font-size:0.75em;padding:2px 8px;border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:5px;cursor:pointer">이 어절의 원어 모두 (${codes.length})</button></div>` : ''}
           <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N)${fromSdb ? ' · 원어 번호는 개역개정S 에서 채움' : ''} · 뜻: 원어 사전·한글 원어사전</div>`;
+        this._kt = kt;
         this._place(pop, x, y);
         if (!codes.length) return;
         await StrongEngine.ensureLoaded();
-        codes.forEach((cd, i) => {
+        showIdx.forEach(i => { const cd = codes[i];
           const el = document.getElementById('word-orig-slot-' + i);
           if (!el) return;
           const entry = StrongEngine.lookup(cd);
@@ -15073,7 +15080,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-14`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-15`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
