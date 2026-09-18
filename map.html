@@ -3647,6 +3647,8 @@
       '하와', '룻', '에스더', '드보라', '라합', '사라', '리브가', '라헬', '레아'
     ];
 
+    /* (2026-09-18) 위 기본 불용어 가운데 사람 이름 — 지명 엔진만 막고 인명 엔진(구절 목록으로 이미 정확히 매칭)은 막지 않는다 */
+    const DEFAULT_PERSON_NAMES = new Set(['가인', '아벨', '노아', '아담', '에서', '모세', '아론', '갈렙', '삼손', '기드온', '보아스', '나오미', '한나', '압살롬', '사울', '엘리야', '엘리사', '호세아', '요나', '미가', '나훔', '학개', '말라기', '베드로', '바울', '마태', '마가', '누가', '디모데', '디도', '빌레몬', '하와', '룻', '에스더', '드보라', '라합', '사라', '리브가', '라헬', '레아']);
     let userBlacklist = new Set(DEFAULT_BLACKLIST);
     // 용어 부분 제외 (2026-09-16) — verse: {"책-장-절": ["낱말#n", …]} · book: {"책id": ["키", …]}. 절별 표보다 우선.
     let userTermSkip = { verse: {}, book: {} };
@@ -3754,15 +3756,22 @@
     function buildPersonVerseIndex(personList) {
       personVerseIndex = {};
       if (!Array.isArray(personList)) return;
+      const okName = n => n && !(userBlacklist.has(n) && !DEFAULT_PERSON_NAMES.has(n));   // (2026-09-18) 기본 불용어의 사람 이름은 인명 엔진에서는 막지 않음
+      // 1) 본이름 — 같은 구절 안에서는 이름이 유일하다고 가정(뒤 인물이 이김, 예전과 같음)
       personList.forEach(p => {
         if (p.pending_review || !p.name_ko) return; // 미확정 인물은 하이라이트 대상에서 제외
-        const names = [p.name_ko, ...(p.aliases_ko || [])];
         (p.verses || []).forEach(v => {
           const key = `${v.book}-${v.chapter}-${v.verse}`;
           if (!personVerseIndex[key]) personVerseIndex[key] = {};
-          names.forEach(n => {
-            if (n && !userBlacklist.has(n)) personVerseIndex[key][n] = p; // 같은 구절 안에서는 이름이 유일하다고 가정
-          });
+          if (okName(p.name_ko)) personVerseIndex[key][p.name_ko] = p;
+        });
+      });
+      // 2) 별칭(aliases_ko — 개역개정이 책마다 달리 적은 이름) — 그 구절에서 다른 인물이 이미 쓰는 이름이면 건드리지 않음 (2026-09-18)
+      personList.forEach(p => {
+        if (p.pending_review || !p.name_ko || !(p.aliases_ko || []).length) return;
+        (p.verses || []).forEach(v => {
+          const m = personVerseIndex[`${v.book}-${v.chapter}-${v.verse}`];
+          (p.aliases_ko || []).forEach(n => { if (okName(n) && !m[n]) m[n] = p; });
         });
       });
     }
@@ -14914,7 +14923,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-5`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-7`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
