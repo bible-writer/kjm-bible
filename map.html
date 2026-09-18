@@ -13299,6 +13299,7 @@
         const word = text.slice(s0, e0);
         const kt = krvnTokenAt(b, c, v, text, s0);
         if (kt) { this._last = { b, c, v, text, x, y }; this.showKrvn(b, c, v, kt, x, y); return; }
+        if (krvnMorph) { showToast('이 절은 어절 원어 분석(KRV_N)과 본문 어절 수가 달라 원어를 보일 수 없습니다.', 'info', 5000); return; }   // KRV_N 단독(2026-09-18)
         const src = this.source();
         if (!src) { showToast(krvnMorph ? '이 절은 어절 원어 분석과 본문 어절 수가 달라, 「개역개정S」(스트롱 본문)를 비교 번역으로 등록해야 원어를 볼 수 있습니다.' : '원어 보기: ⋯ 메뉴 → 「📘 어절 원어 분석 등록」, 또는 「개역개정S」(스트롱 본문)를 비교 번역으로 등록하세요.', 'info', 6000); return; }
         const sdb = this.sdbVerse(b, c, v);
@@ -13364,7 +13365,7 @@
         if (!this._last || this._last.b !== b || this._last.c !== c || this._last.v !== v) this._last = { b, c, v, text: kt.words.join(' ') };
         let codes = t[0] ? t[0].split(',') : [];
         let fromSdb = false;
-        if (!codes.length) {   // (2026-09-17) 어절 원어 분석에 번호가 없으면 개역개정S 글자 맞춤으로
+        if (false && !codes.length) {   // (2026-09-18 kjm 「KRV_N 단독」) 개역개정S 로 채우지 않는다 — 예전: 번호가 없으면 개역개정S 글자 맞춤으로
           const src = this.source(); const sdb = src ? this.sdbVerse(b, c, v) : null;
           if (sdb) {
             const text = kt.words.join(' ');
@@ -13419,7 +13420,7 @@
             <button onclick="WordOrig.zoom(-2)" title="글자 작게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가−</button><button onclick="WordOrig.zoom(2)" title="글자 크게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:15px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가+</button>
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="flex-shrink:0;border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
           <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">${chips}<button onclick="WordOrig.showVerse(${b},${c},${v})" style="margin-left:auto;font-size:0.75em;padding:2px 8px;border:1px solid #a7f3d0;background:#ecfdf5;color:#047857;border-radius:5px;cursor:pointer;white-space:nowrap">📜 절 전체</button></div>
-          ${codes.length ? rows : '<div style="font-size:0.85em;color:#64748b;margin-top:8px">이 어절에는 원어 번호가 없습니다.</div>'}
+          ${codes.length ? rows : '<div style="font-size:0.85em;color:#64748b;margin-top:8px">이 어절에는 어절 원어 분석(KRV_N)의 원어 번호가 없습니다 — 동사 어미에 든 주어(내가·그가)나 우리말로 풀어 쓴 말.</div>'}
           ${showIdx.length < codes.length ? `<div style="margin-top:8px"><button onclick="WordOrig.showKrvn(${b},${c},${v},WordOrig._kt,parseFloat(document.getElementById('word-orig-pop').style.left),parseFloat(document.getElementById('word-orig-pop').style.top))" style="font-size:0.75em;padding:2px 8px;border:1px solid #cbd5e1;background:#fff;color:#475569;border-radius:5px;cursor:pointer">이 어절의 원어 모두 (${codes.length})</button></div>` : ''}
           <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N)${fromSdb ? ' · 원어 번호는 개역개정S 에서 채움' : ''} · 뜻: 원어 사전·한글 원어사전</div>`;
         this._kt = kt;
@@ -15078,7 +15079,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-16`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-17`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
