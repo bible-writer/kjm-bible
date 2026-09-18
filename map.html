@@ -7104,6 +7104,19 @@
       var k = hebKoNorm(code);
       return k ? (hebKoDict[k] || null) : null;
     }
+    // 원어 읽는 법(원어명) — 한글 원어사전의 t(「데오필로스 Theophilos」)에서 한글만, 없으면 원어 사전의 로마자(2026-09-18)
+    function origReadingKo(code) {
+      const k = hebKoLookup(code);
+      const t = k ? String(k.t || '').trim() : '';
+      const ko = t.split(/\s+/).filter(x => /[가-힣]/.test(x)).join(' ');
+      if (ko) return ko;
+      try {
+        const n = String(code || '').toUpperCase().match(/^([HG])0*(\d+)/);
+        const key = n ? n[1] + n[2].padStart(4, '0') : '';
+        const e = (typeof strongDict !== 'undefined' && strongDict) ? strongDict[key] : null;
+        return e && e.xlit ? String(e.xlit) : '';
+      } catch (err) { return ''; }
+    }
     async function loadHebKoDict() {
       try {
         var raw = await getLocalItem('saved_hebko_dict');
@@ -13302,11 +13315,13 @@
           const hw = (t[8] != null && t[8] >= 0 && krvnMorph.hw) ? krvnMorph.hw[t[8]] : '';
           const orig = codes.map((cd, i) => {
             const lem = lmOf(t, i), mor = moOf(t, i);
+            const rd = origReadingKo(cd);
             return `<div style="display:flex;gap:6px;align-items:baseline;flex-wrap:wrap">
                 <span style="font-size:1.2em;direction:rtl;unicode-bidi:isolate;color:#065f46">${escHtml(lem)}</span>
+                ${rd ? `<span style="font-size:0.8em;color:#334155" title="읽는 법(원어명)">${escHtml(rd)}</span>` : ''}
                 <span style="font-size:0.72em;color:#047857">${escHtml(cd)}</span>
                 ${mor ? `<span style="font-size:0.72em;color:#64748b">${escHtml(mor)}</span>` : ''}</div>`;
-          }).join('') || '<span style="font-size:0.75em;color:#cbd5e1">—</span>';
+          }).join('') || '<span style="font-size:0.75em;color:#94a3b8" title="이 어절에 이어진 원어 낱말이 없음 — 동사 어미에 든 주어(내가·그가)나 우리말로 풀어 쓴 말">원어 짝 없음 · 우리말로 풀어 쓴 말</span>';
           const grp = (t[4] === 'N' || t[4] === 'M') ? '<span title="여러 어절이 한 원어" style="color:#b45309">⌒</span>' : '';
           return `<div class="wo-verse-row" data-k="${k}" style="display:grid;grid-template-columns:minmax(4.5em,auto) 1fr;gap:4px 10px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer">
               <div><b style="color:#0f172a">${escHtml(kt.words[k])}</b>${grp}${hw ? `<div style="font-size:0.7em;color:#94a3b8">${escHtml(hw)}</div>` : ''}</div>
@@ -13378,7 +13393,7 @@
           const mor = pick(t[2], krvnMorph.mo);
           const trs = (krvnMorph.tr[cd] || []).map(p => `${escHtml(p[0])} <span style="color:#94a3b8">${p[1]}</span>`).join(' · ');
           return `<div style="margin-top:8px">
-              ${(mor || lem) ? `<div style="font-size:0.8em;color:#047857;margin-bottom:2px">${escHtml(cd)}${lem ? ' <span style="font-size:1.15em;direction:rtl;unicode-bidi:isolate">' + escHtml(lem) + '</span>' : ''}${mor ? ' · ' + escHtml(mor) : ' · <span style="color:#94a3b8">형태 정보 없음</span>'}</div>` : ''}
+              ${(mor || lem) ? `<div style="font-size:0.8em;color:#047857;margin-bottom:2px">${escHtml(cd)}${lem ? ' <span style="font-size:1.15em;direction:rtl;unicode-bidi:isolate">' + escHtml(lem) + '</span>' : ''}${origReadingKo(cd) ? ' <span style="color:#334155">' + escHtml(origReadingKo(cd)) + '</span>' : ''}${mor ? ' · ' + escHtml(mor) : ' · <span style="color:#94a3b8">형태 정보 없음</span>'}</div>` : ''}
               <div id="word-orig-slot-${i}"></div>
               ${trs ? `<div style="font-size:0.75em;color:#64748b;margin-top:2px">개역개정 번역: ${trs}</div>` : ''}
             </div>`;
@@ -15048,7 +15063,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-8`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-9`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
