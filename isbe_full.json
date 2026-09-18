@@ -1,5 +1,5 @@
 {
- "version": "1.13.0",
+ "version": "1.15.0",
  "date": "2026-09-18",
  "count": 864,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
@@ -2701,7 +2701,7 @@
    "id": 3177,
    "term": "Eshan(에산)",
    "definition": "e'-shan ('esh`an; Esan; the King James Version Eshean):\n\nA town of Judah in the uplands of Hebron (Jos 15:52). No satisfactory identification has yet been suggested. Some think the name may be a corruption of Beersheba (Encyclopaedia Biblica, which see).",
-   "definition_ko": "",
+   "definition_ko": "에산(히브리어 '에샨'; 칠십인역 에산; 흠정역 에셴). 헤브론 고지대에 있는 유다의 성읍이다(여호수아 15:52). 만족스러운 동일시는 아직 제안되지 않았다. 어떤 이들은 이 이름이 브엘세바가 잘못 적힌 것일지 모른다고 본다(『비블리카 백과사전』 해당 항목을 보라).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ESHAN"
@@ -2746,7 +2746,7 @@
    "id": 3207,
    "term": "Eth-Kazin(엣가신)",
    "definition": "eth-ka'-zin (`ittah qatsin; the King James Version Ittah Kazin):\n\nA town on the eastern border of Zebulun, mentioned between Gath-hepher and Rimmon (Jos 19:13). The site is not identified. \"Ittah\" of the King James Version is due to misunderstanding of the Hebrew letter \"he\" locale.",
-   "definition_ko": "",
+   "definition_ko": "엣 가신(히브리어 '잇타 카친'; 흠정역 잇다 가신). 스불론의 동쪽 경계에 있는 성읍으로, 가드 헤벨과 림몬 사이에 이름이 나온다(여호수아 19:13). 자리는 밝혀지지 않았다. 흠정역의 「잇다」는 방향을 나타내는 히브리어 글자 「헤」를 잘못 이해한 데서 나왔다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ETH-KAZIN"
@@ -2764,7 +2764,7 @@
    "id": 3213,
    "term": "Ether(에델)",
    "definition": "e'-ther (`ether; Ather):\n\nA town in Judah (Jos 15:42), near Libnah, assigned to Simeon (Jos 19:7). Kh. el `Atr (identical in spelling with Ether) is possibly the site.\n\nIt is near Beit Jibrin and is described as \"an ancient site: cisterns, foundations, quarried rock and terraces\" (PEF, III, 261, 279).",
-   "definition_ko": "",
+   "definition_ko": "에델(히브리어 '에테르'; 칠십인역 아테르). 립나 근처에 있는 유다의 성읍으로(여호수아 15:42), 시므온에게 주어졌다(여호수아 19:7). 에델과 철자가 똑같은 키르베트 엘아트르가 그 자리일 수 있다. 이곳은 베이트 지브린 근처에 있으며 「옛 유적: 물웅덩이, 기초, 채석한 바위, 계단식 밭」으로 묘사된다(팔레스타인 탐사 기금 조사 보고 3권 261, 279쪽).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ETHER"
@@ -2791,7 +2791,7 @@
    "id": 3306,
    "term": "Ezel(에셀)",
    "definition": "e'-zel (ha-'azel; Septuagint para to ergab ekeino):\n\nAs it stands, the narrative in 1Sa 20:19 records the tryst of Jonathan with David at the stone Ezel. The name occurs only here. There is general agreement that the text is corrupt, but there is no agreement as to how it should be restored. The Septuagint reads \"this mound\" (the Revised Version (British and American), margin), or \"yonder cairn\"; and in 1Sa 20:41 instead of \"out of a place toward the South\" it reads \"from beside the mound\" or \"cairn.\" Dr. Cheyne suggests \"yonder juniper tree\" (Encyclopaedia Biblica, under the word).",
-   "definition_ko": "",
+   "definition_ko": "에셀(히브리어 '하에젤'; 칠십인역 「저 흙더미 곁에」). 지금 본문대로라면 사무엘상 20:19의 이야기는 요나단이 에셀 바위 곁에서 다윗과 만나기로 한 약속을 적는다. 이 이름은 여기에만 나온다. 본문이 훼손되었다는 데에는 의견이 모이지만, 어떻게 되살려야 할지는 의견이 갈린다. 칠십인역은 「이 흙더미」(영국·미국 개역판 난외주) 또는 「저 돌무더기」로 읽고, 사무엘상 20:41에서는 「남쪽의 한 곳에서」 대신 「흙더미 곁에서」 또는 「돌무더기 곁에서」로 읽는다. 체인 박사는 「저 로뎀나무」로 읽기를 제안한다(『비블리카 백과사전』 해당 항목).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EZEL"
@@ -2800,7 +2800,7 @@
    "id": 3307,
    "term": "Ezem(에셈)",
    "definition": "e'-zem (`etsem, \"bone\"; Boosal, Boasom):\n\nA city in the extreme South of Judah, assigned to Simeon.\n\nSome identify it with Azmon (Jos 15:29; 19:3; 1Ch 4:29).",
-   "definition_ko": "",
+   "definition_ko": "에셈(히브리어 '에첸', 「뼈」; 칠십인역 보오살, 보아솜). 유다 남쪽 끝에 있는 성읍으로, 시므온에게 주어졌다. 어떤 이들은 이곳을 아스몬과 같은 곳으로 본다(여호수아 15:29; 19:3; 역대상 4:29).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EZEM"
@@ -2827,7 +2827,7 @@
    "id": 3586,
    "term": "Gaash(가아스)",
    "definition": "ga'-ash (ga`-ash): First mentioned in connection with the burial place of Joshua \"in the border of his inheritance in Timnath-serah, which is in the hill-country of Ephraim, on the north (side) of the mountain of Gaash\" (Jos 24:30; compare Jud 2:9); see TIMNATH-HERES. The \"brooks,\" or rather the wadies or \"watercourses\" of Gaash are mentioned as the native place of Hiddai (2Sa 23:30), or Hurai (1Ch 11:32), one of David's heroes. No likely identification has been suggested.\n\nSee EPHRAIM, MOUNT.",
-   "definition_ko": "",
+   "definition_ko": "가아스(히브리어 '가아쉬'). 여호수아가 묻힌 곳과 관련하여 처음 나온다. 「그의 기업의 경내 딤낫 세라에 장사하였으니 딤낫 세라는 에브라임 산지 가아스 산 북쪽이었더라」(여호수아 24:30; 사사기 2:9 참조). 딤낫 헤레스 항목을 보라. 가아스의 「시냇가」, 곧 와디나 「물길」은 다윗의 용사 가운데 하나인 힛대(사무엘하 23:30) 또는 후래(역대상 11:32)의 고향으로 나온다. 그럴듯한 동일시는 아직 제안되지 않았다.\n\n에브라임 산 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GAASH"
@@ -2878,19 +2878,19 @@
    "isbe_key": "GALLIM"
   },
   {
-   "id": 3644,
-   "term": "Gareb(가렙)",
-   "definition": "ga'-reb (garebh):\n\nOne of David's \"mighty men of the armies\" (2Sa 23:38; 1Ch 11:40), an \"Ithrite,\" i.e. a member of one of the families of Kiriath-jearim (1Ch 2:53). Some, however, read ha-yattiri for ha- yithri, thus making him a native of Jattir.\n\nSee IRA.",
-   "definition_ko": "",
+   "id": 3645,
+   "term": "Gareb, the Hill of(가렙)",
+   "definition": "ga'-reb, (garebh):\n\nA hill in the neighborhood of Jerusalem, which was one of the landmarks to which the prophet Jeremiah (31:39) foresaw that the city should extend. The site is unknown. Cheyne (Encyclopedia Biblica) would connect this with the \"mountain that lieth before the valley of Hinnom westward\" (Jos 15:8), but this is too far South; it is inconceivable that the prophet could have imagined the city extending so far in this direction; most probably the hill was to the North--the one natural direction for the city's extension--and is now incorporated in the modern suburbs.\n\nE. W. G. Masterman",
+   "definition_ko": "가렙 언덕(히브리어 '가레브'). 예루살렘 근처의 언덕으로, 선지자 예레미야가 성읍이 그곳까지 넓어지리라고 내다본 경계표 가운데 하나다(예레미야 31:39). 자리는 알 수 없다. 체인(『비블리카 백과사전』)은 이곳을 「힌놈의 골짜기 앞 서쪽에 있는 산」(여호수아 15:8)과 이으려 하지만, 이는 너무 남쪽이다. 선지자가 성읍이 그쪽으로 그렇게 멀리 넓어지리라고 상상했다고는 생각할 수 없다. 이 언덕은 아마 북쪽 — 성읍이 자연스럽게 넓어질 수 있는 유일한 방향 — 에 있었을 것이며, 지금은 근대의 교외에 들어가 있을 것이다.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
-   "isbe_key": "GAREB"
+   "isbe_key": "GAREB, THE HILL OF"
   },
   {
    "id": 3659,
    "term": "Gate, East(동문)",
    "definition": "The expressions are found in Ezekiel: \"Even the gate that looketh toward the east\" (43:1); \"The gate whose prospect is toward the east\" (43:4); but the idea of a gate on the eastern side as the principal entrance to the court of the sanctuary goes back to the days of the tabernacle (Ex 27:13-16). In addition to its use as admitting to the sanctuary enclosure, it may be presumed, in analogy with the general mode of the administration of justice, to have been the place where in earlier times cases were tried which were referred to the jurisdiction of the sanctuary (compare Ex 18:19-22; De 17:8; 19:16,18; Nu 27:2,3, etc.).\n\n1. The Tabernacle:\n\nIn Ex 27:13-16 the \"gate\" by which the congregation entered the tabernacle is carefully described. An embroidered screen of the three sacred colors (blue, purple and scarlet), 20 cubits in width, hung from 4 pillars (really 5 pillars, 5 cubits apart; on the reckoning see TABERNACLE), in the center of the East side of the tabernacle court. This is further alluded to in Nu 4:26, \"the screen for the door of the gate of the court.\"\n\n2. Solomon's Temple:\n\nNothing is said of the position of gates in connection with Solomon's temple, but there was an \"inner\" (1Ki 6:36), and also an \"outer\" or \"great\" court (2Ch 4:9), the latter with doors overlaid with brass, and analogy makes it certain that here also the chief gate (inner or outer court? see COURT) was on the East side. Provision was made by Solomon in his adjoining palace for the administration of justice in a hall or \"porch of judgment\" (1Ki 7:7), but graver cases were still, apparently, referred for decision to the sanctuary (Jer 26:10). The trial in Jeremiah's case, however, took place, not at the East gate, but at \"the entry of the new gate of Yahweh's house\" (Jer 26:10; compare 36:10), probably Jotham's \"upper gate\" (2Ki 15:35).\n\n3. Ezekiel's Temple:\n\nIn Ezekiel's ideal temple, \"the gate whose prospect was toward the east\" was that by which the glory of Yahweh went up from the city (Eze 11:23), and by which the prophet in vision saw it return (Eze 43:4).\n\n4. Second Temple:\n\nNothing is told of an East gate in the temple of Zerubbabel, but it may be assumed that there was one as in the other cases.\n\n5. Herod's Temple:\n\nThe great East gate of the Herodian temple, which followed those above mentioned, was that \"Beautiful Gate of the temple\" where the miracle of the healing of the lame man was performed (Ac 3:1-10).\n\nSee GATE, THE BEAUTIFUL; HARSITH; SHECANIAH.\n\nW. Shaw Caldecott",
-   "definition_ko": "",
+   "definition_ko": "동문(성전의 동쪽 문). 이 표현은 에스겔에 나온다. 「동쪽을 향한 문」(에스겔 43:1), 「동쪽을 향한 문」(43:4). 그러나 성소 뜰의 주된 입구로 동쪽에 문을 둔다는 생각은 성막 시대로 거슬러 올라간다(출애굽기 27:13~16). 이 문은 성소 울안으로 들어가게 하는 쓰임 말고도, 재판을 하던 일반적인 방식에 비추어 보면, 옛날에는 성소의 관할로 넘겨진 사건을 재판하던 곳이었다고 볼 수 있다(출애굽기 18:19~22; 신명기 17:8; 19:16, 18; 민수기 27:2, 3 등 참조).\n\n1. 성막\n\n출애굽기 27:13~16에는 회중이 성막으로 들어가던 「문」이 자세히 적혀 있다. 거룩한 세 빛깔(청색, 자색, 홍색)로 수놓은 너비 20규빗의 휘장이 성막 뜰 동쪽 한가운데, 네 기둥(실제로는 5규빗 간격의 기둥 다섯 — 셈법은 성막 항목을 보라)에 걸려 있었다. 민수기 4:26의 「뜰 문의 휘장」도 이것을 가리킨다.\n\n2. 솔로몬의 성전\n\n솔로몬의 성전과 관련해서는 문들의 위치에 대해 아무 말이 없지만, 「안뜰」(열왕기상 6:36)이 있었고 놋으로 입힌 문짝을 단 「바깥뜰」 또는 「큰 뜰」(역대하 4:9)도 있었으며, 다른 경우에 비추어 보면 여기서도 주된 문(안뜰의 문인지 바깥뜰의 문인지는 뜰 항목을 보라)은 분명히 동쪽에 있었다. 솔로몬은 이웃한 궁궐에 재판을 위한 「재판하는 주랑」(열왕기상 7:7)을 두었으나, 더 무거운 사건은 여전히 성소에 넘겨 판결받은 듯하다(예레미야 26:10). 그러나 예레미야의 재판은 동문이 아니라 「여호와의 집 새 대문 어귀」(예레미야 26:10; 36:10 참조)에서 열렸는데, 이는 아마 요담이 세운 「윗문」(열왕기하 15:35)일 것이다.\n\n3. 에스겔의 성전\n\n에스겔이 그린 이상적인 성전에서 「동쪽을 향한 문」은 여호와의 영광이 성읍에서 올라간 문이며(에스겔 11:23), 선지자는 환상 가운데 그 영광이 이 문으로 돌아오는 것을 보았다(에스겔 43:4).\n\n4. 둘째 성전\n\n스룹바벨의 성전에 동문이 있었다는 말은 없으나, 다른 경우처럼 있었다고 볼 수 있다.\n\n5. 헤롯의 성전\n\n위의 것들을 뒤이은 헤롯 성전의 큰 동문은 앉은뱅이를 고친 기적이 일어난 「성전 미문」이었다(사도행전 3:1~10).\n\n미문, 하르싯, 스가냐 항목을 보라.\n\n(집필: W. Shaw Caldecott)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GATE, EAST"
@@ -2935,7 +2935,7 @@
    "id": 3678,
    "term": "Ge-Harashim(게하라심)",
    "definition": "ge-ha-ra'-shim (ge'charashim): In 1Ch 4:14, the King James Version renders \"valley of Charashim.\" In Ne 11:35, English Versions of the Bible renders \"valley of craftsmen\"; here it is named with Lod and Ono. Something of the name perhaps survives in Khirbet Hirsa, East of Lydda.",
-   "definition_ko": "",
+   "definition_ko": "게하라심(히브리어 '게 하라심'). 역대상 4:14에서 흠정역은 「하라심 골짜기」로 옮긴다. 느헤미야 11:35에서 영역본들은 「장인들의 골짜기」로 옮기며, 이곳은 로드, 오노와 함께 이름이 나온다. 이 이름의 일부가 룻다 동쪽의 키르베트 히르사에 남아 있는지도 모른다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GE-HARASHIM"
@@ -2971,7 +2971,7 @@
    "id": 3688,
    "term": "Geder(게델)",
    "definition": "ge'-der (gedher): A royal city of the Canaanites taken by Joshua along with Lachish, Eglon, Gezer, Debir and Hormah (Jos 12:13 f). It may be the city called \"Beth-gader\" in 1Ch 2:51, and the birthplace of Baal-hanan, who had charge of David's olives and sycamores (27:28); unidentified.",
-   "definition_ko": "",
+   "definition_ko": "게델(히브리어 '게데르'). 여호수아가 라기스, 에글론, 게셀, 드빌, 호르마와 함께 빼앗은 가나안의 왕도다(여호수아 12:13 이하). 역대상 2:51에서 「벧가델」이라 부르는 성읍일 수 있으며, 다윗의 감람나무와 뽕나무를 맡은 바알하난의 고향이기도 하다(역대상 27:28). 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GEDER"
@@ -2980,7 +2980,7 @@
    "id": 3691,
    "term": "Gederoth(그데롯)",
    "definition": "ged'-e-roth, ge-de'-roth (gedheroth): A town in the Shephelah of Judah, named with Kithlish, Beth-dagon, Naamah and Makkedah (Jos 15:41). It is mentioned along with Bethshemesh and Aijalon as taken by the Philistines in the reign of Ahaz (2Ch 28:18). It possibly corresponds with the \"Kidron\" of 1 Macc 15:39,41; 16:9. Eusebius, Onomasticon places a very large village named Gedrom 10 Roman miles from Lydda on the road to Eleutheropolis. This points to Katrah, Southeast of Yebnah.",
-   "definition_ko": "",
+   "definition_ko": "그데롯(히브리어 '게데로트'). 유다 세벨라의 성읍으로, 기들리스, 벧다곤, 나아마, 막게다와 함께 이름이 나온다(여호수아 15:41). 아하스 때에 블레셋 사람들이 벧세메스, 아얄론과 함께 빼앗은 곳으로 나온다(역대하 28:18). 마카베오상 15:39, 41; 16:9의 「기드론」에 해당할 수도 있다. 유세비우스의 『오노마스티콘』은 룻다에서 엘류테로폴리스로 가는 길로 로마 마일 10마일 되는 곳에 게드롬이라는 매우 큰 마을을 둔다. 이는 야브네 남동쪽의 카트라를 가리킨다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GEDEROTH"
@@ -2989,7 +2989,7 @@
    "id": 3692,
    "term": "Gederothaim(그데로다임)",
    "definition": "ged-e-ro-tha'-im (gedherathayim, \"place of enclosures\"): Stands as the 15th in a list which professes to give only the names of 14 cities in the Judean Shephelah (Jos 15:36). the King James Version margin suggests that we might read \"or\" for \"and\" after Gederah, but this is impossible. Septuagint reads, \"and its cattle shelters.\" Probably, however, the name has arisen by dittography from the preceding GEDERAH (which see).",
-   "definition_ko": "",
+   "definition_ko": "그데로다임(히브리어 '게데로타임', 「울타리들의 곳」). 유대 세벨라의 성읍 열네 개만 적는다고 하는 목록에서 열다섯째로 나온다(여호수아 15:36). 흠정역 난외주는 그데라 뒤의 「과」를 「또는」으로 읽을 수 있다고 하지만, 그럴 수 없다. 칠십인역은 「그리고 그 가축 우리들」로 읽는다. 그러나 이 이름은 아마 바로 앞의 그데라(해당 항목을 보라)를 겹쳐 적은 데서 생겼을 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GEDEROTHAIM"
@@ -3007,7 +3007,7 @@
    "id": 3696,
    "term": "Geliloth(글릴롯)",
    "definition": "ge-li'-loth (geliloth): This word is used for \"districts\" or \"circuits\" perhaps indicating the different parts subject to the several lords of the Philistines (Jos 13:2, the King James Version \"borders,\" the Revised Version (British and American) \"regions\"); for the quarter of the Jordan valley where the eastern tribes built the altar of Ed (Jos 22:10 f; the King James Version \"border of,\" the Revised Version (British and American) \"region about,\" Jordan); and apparently, for the whole of Philistia (Joe 3:4, the King James Version \"coasts of Palestine,\" the Revised Version (British and American) \"regions of Philistia\"). But in Jos 18:17, it is clearly used as a place-name. Geliloth lay on the boundary between Judah and Benjamin which passed En-shemesh (probably `Ain el-Chod, about 2 miles East of Jerusalem), \"and went out to Geliloth, which is over against the ascent of Adummim.\" From this point it \"went down\" toward the plain. The place cannot therefore be identified with Gilgal in the Jordan valley. Some point on the road leading from Jericho to Tal`at ed-Dumm, about 6 miles from Jerusalem, was probably intended, but no identification is possible.\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "글릴롯(히브리어 '겔릴로트'). 이 말은 「구역」 또는 「둘레」를 뜻하며, 블레셋 방백들이 저마다 다스리던 여러 지역을 가리키는 데 쓰였고(여호수아 13:2; 흠정역 「경계」, 영국·미국 개역판 「지역」), 동쪽 지파들이 엣 제단을 쌓은 요단 골짜기의 한 구역에도 쓰였으며(여호수아 22:10 이하; 흠정역 「요단의 경계」, 영국·미국 개역판 「요단 근처 지역」), 블레셋 전체를 가리키는 데에도 쓰인 듯하다(요엘 3:4; 흠정역 「팔레스타인의 해안」, 영국·미국 개역판 「블레셋의 지역」). 그러나 여호수아 18:17에서는 분명히 땅 이름으로 쓰였다. 글릴롯은 유다와 베냐민의 경계에 있었는데, 이 경계는 엔 세메스(아마 예루살렘 동쪽 2마일쯤의 아인 엘호드)를 지나 「아둠밈 비탈 맞은편 글릴롯으로 나아가」고, 거기서 평야 쪽으로 「내려갔다」. 그러므로 이곳을 요단 골짜기의 길갈과 같은 곳으로 볼 수 없다. 여리고에서 예루살렘에서 6마일쯤 되는 탈아트 에드둠으로 가는 길의 어느 지점이었을 것이나, 자리를 밝힐 수는 없다.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GELILOTH"
@@ -3025,7 +3025,7 @@
    "id": 3731,
    "term": "Geruth Chimham(게롯 김함)",
    "definition": "ge'-rooth kim'-ham (geruth kimham): If the reading geruth is correct, a \"lodging-place\" or \"khan\" on the highway to Egypt, may be meant (Jer 41:17). It may have been built by Chimham son of Barzillai; or it may have been named from him as owner of the land on which it stood. But probably with Josephus we should read gidhroth, \"hurdles\" or \"sheep pens\" (Ant., X, ix, 5).",
-   "definition_ko": "",
+   "definition_ko": "게롯김함(히브리어 '게루트 킴함'). '게루트'라는 읽기가 맞다면, 애굽으로 가는 큰길에 있는 「머무는 곳」, 곧 대상 숙소를 뜻할 것이다(예레미야 41:17). 바르실래의 아들 김함이 지었거나, 그것이 선 땅의 주인인 그의 이름을 딴 것일 수 있다. 그러나 아마 요세푸스를 따라 「울타리」 또는 「양 우리」를 뜻하는 '기드로트'로 읽어야 할 것이다(『유대 고대사』 10권 9장 5절).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GERUTH CHIMHAM"
@@ -3061,7 +3061,7 @@
    "id": 3746,
    "term": "Giah(기아)",
    "definition": "gi'-a (giach): An unidentified place on the route followed by Abner in his flight, pursued by Joab (2Sa 2:24). Septuagint renders Gai, corresponding to the Hebrew ge, \"valley.\" The form giach may be due to corruption of the text.",
-   "definition_ko": "",
+   "definition_ko": "기아(히브리어 '기아흐'). 아브넬이 요압에게 쫓겨 도망한 길에 있는 곳으로, 자리는 밝혀지지 않았다(사무엘하 2:24). 칠십인역은 「골짜기」를 뜻하는 히브리어 '게'에 해당하는 「가이」로 옮긴다. '기아흐'라는 꼴은 본문이 훼손된 데서 생겼을 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GIAH"
@@ -3070,7 +3070,7 @@
    "id": 3749,
    "term": "Gibbar(깁발)",
    "definition": "gib'-ar (gibbar, \"hero\"):, In Ezr 2:20 the \"children of Gibbar\" are mentioned among those who returned with Zerubbabel. The parallel passage (Ne 7:25) has \"children of Gibeon.\"",
-   "definition_ko": "",
+   "definition_ko": "깁발(히브리어 '깁바르', 「용사」). 에스라 2:20에서 스룹바벨과 함께 돌아온 이들 가운데 「깁발 자손」이 나온다. 짝을 이루는 대목(느헤미야 7:25)에는 「기브온 사람」이 나온다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GIBBAR"
@@ -3115,7 +3115,7 @@
    "id": 3763,
    "term": "Gidom(기돔)",
    "definition": "gi'-dom (gidh`om): The limit eastward, from Gibeah toward the wilderness, of the pursuit of Benjamin by Israel (Jud 20:45). No name suggesting this has yet been recovered. It is not mentioned elsewhere.",
-   "definition_ko": "",
+   "definition_ko": "기돔(히브리어 '기돔'). 이스라엘이 기브아에서 광야 쪽으로 베냐민을 뒤쫓은 동쪽 끝이다(사사기 20:45). 이 이름을 떠올리게 하는 이름은 아직 되찾지 못했다. 다른 데에는 나오지 않는다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GIDOM"
@@ -3169,7 +3169,7 @@
    "id": 3792,
    "term": "Gittaim(깃다임)",
    "definition": "git'-a-im (gittayim): The town to which the Beerothites tied, and where they lived as gerim, or protected strangers (2Sa 4:3). The place need not have been beyond the boundaries of Benjamin, so it may be identical with Gittaim of Ne 11:33, which was occupied by Benjamites after the exile. It is named with Hazor and Ramah; but so far the site has not been discovered.",
-   "definition_ko": "",
+   "definition_ko": "깃다임(히브리어 '깃타임'). 브에롯 사람들이 도망하여 우거하는 나그네, 곧 보호받는 이방인으로 살던 성읍이다(사무엘하 4:3). 이곳이 베냐민 경계 밖에 있을 필요는 없으므로, 포로 뒤에 베냐민 사람들이 차지한 느헤미야 11:33의 깃다임과 같은 곳일 수 있다. 하솔, 라마와 함께 이름이 나오지만, 아직 자리를 찾지 못했다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GITTAIM"
@@ -3178,7 +3178,7 @@
    "id": 3819,
    "term": "Gob(곱)",
    "definition": "gob (gobh): A place mentioned in 2Sa 21:18 f as the scene of two of David's battles with the Philistines. The name appears here only. In the parallel passage, 1Ch 20:4, it is called Gezer (compare Ant, VII, xii, 2). Certain texts read \"Nob\" for \"Gob,\" while Syriac and Septuagint read \"Gath.\" The latter is probably correct.",
-   "definition_ko": "",
+   "definition_ko": "곱(히브리어 '고브'). 사무엘하 21:18 이하에서 다윗과 블레셋 사람들이 두 번 싸운 곳으로 나온다. 이 이름은 여기에만 나온다. 짝을 이루는 대목인 역대상 20:4에서는 게셀이라 한다(요세푸스 『유대 고대사』 7권 12장 2절 참조). 어떤 본문은 「곱」 대신 「놉」으로, 시리아어역과 칠십인역은 「가드」로 읽는다. 뒤의 것이 아마 옳을 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GOB"
@@ -3196,7 +3196,7 @@
    "id": 3837,
    "term": "Goiim(고임)",
    "definition": "goi'-yim (goyim): This word, rendered in the King James Version \"nations,\" \"heathen,\" \"Gentiles,\" is commonly translated simply \"nations\" in the Revised Version (British and American). In Ge 14:1 where the King James Version has \"Tidal, king of nations,\" the Revised Version (British and American) retains in the text the Hebrew \"Goiim\" as a proper name. Some identify with Gutium. The Hebrew word is similarly retained in Jos 12:23.",
-   "definition_ko": "",
+   "definition_ko": "고임(히브리어 '고임'). 흠정역이 「민족들」, 「이방」, 「이방인」으로 옮긴 이 말을 영국·미국 개역판은 흔히 그냥 「민족들」로 옮긴다. 흠정역이 「민족들의 왕 디달」로 옮긴 창세기 14:1에서 영국·미국 개역판은 히브리어 「고임」을 고유명사로 본문에 남긴다. 어떤 이들은 이를 구티움과 같은 것으로 본다. 여호수아 12:23에서도 히브리어 낱말이 그대로 남아 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GOIIM"
@@ -3250,7 +3250,7 @@
    "id": 3936,
    "term": "Gur-Baal(구르바알)",
    "definition": "gur-ba'-al (gur ba`-al): The residence of certain Arabs against whom God helped Uzziah, king of Judah (2Ch 26:7). Its mention immediately after the Philistines may have suggested the \"Gerar\" of the Targum. Association with the Meunim points to the East. It may be taken as certain that Jebel Neby Harun, near Petra, has always been crowned by a sanctuary. This may have been \"the dwelling place of Baal\"; or, accepting Kittel's emendation (Tur ba`al), \"the rock\" or \"mountain of Baal.\" The Arabs probably dwelt in the region before the days of Petra (EB, under the word)\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "구르바알(히브리어 '구르 바알'). 하나님이 유다 왕 웃시야를 도와 치게 하신 아라비아 사람들이 살던 곳이다(역대하 26:7). 블레셋 사람 바로 뒤에 나오므로 탈굼은 「그랄」을 떠올렸을 것이다. 마온 사람(므우님)과 함께 나오는 것은 동쪽을 가리킨다. 페트라 근처의 제벨 네비 하룬 꼭대기에 늘 성소가 있었음은 확실하다고 볼 수 있다. 이것이 「바알의 거처」였을 수 있고, 또는 키텔의 본문 고침(투르 바알)을 받아들이면 「바알의 바위」 또는 「바알의 산」일 수 있다. 그 아라비아 사람들은 아마 페트라 시대 이전부터 그 지역에 살았을 것이다(『비블리카 백과사전』 해당 항목).\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GUR-BAAL"
@@ -3277,7 +3277,7 @@
    "id": 3959,
    "term": "Hadashah(하다사)",
    "definition": "ha-da'-sha, had'-a-sha (chadhashah, \"new\"): A town in the Shephelah of Judah, named with Zenan and Migdal-gad (Jos 15:37). According to the Mishna (`Erubhin, v. 6), it was the smallest town in Judah. It is not identified.",
-   "definition_ko": "",
+   "definition_ko": "하다사(히브리어 '하다샤', 「새로운」). 유다 세벨라의 성읍으로, 스난, 믹달갓과 함께 이름이 나온다(여호수아 15:37). 미쉬나(『에루빈』 5장 6절)에 따르면 유다에서 가장 작은 성읍이었다. 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HADASHAH"
@@ -3322,7 +3322,7 @@
    "id": 3998,
    "term": "Hali(할리)",
    "definition": "ha'-li (chali): A town named with Helkath, Beten and Achshaph on the border of Asher (Jos 19:25). No certain identification is possible; but it may be represented by the modern Khirbet `Alia, circa 13 miles Northeast of Acre.",
-   "definition_ko": "",
+   "definition_ko": "할리(히브리어 '할리'). 아셀의 경계에 있는 성읍으로, 헬갓, 베덴, 악삽과 함께 이름이 나온다(여호수아 19:25). 확실한 동일시는 불가능하나, 악고 북동쪽 13마일쯤의 오늘날 키르베트 알리아일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HALI"
@@ -3349,7 +3349,7 @@
    "id": 4011,
    "term": "Hamath-Zobah(하맛)",
    "definition": "ha'-math-zo'-ba (chamath tsobhah; Baisoba) : Mentioned only in 2Ch 8:3. Apart from Great Hamath no site answering to this name is known. It does not seem to be implied that Solomon took possession of Hamath itself, but rather that he \"confirmed\" his dominion over parts of the kingdom of Zobah, which on its fall may have been annexed by Hamath. The Septuagint's Codex Vaticanus suggests a reading--Bethzobah--omitting all reference to Hamath. On the other hand, the geographical distinctions between Zobah and Hamath having passed away long before Chronicles was written, the double name may have been used to indicate generally the extent of Solomon's conquests, as also to avoid confusion with the Zobah in the Hauran (2Sa 23:36).\n\nW. M. Christie",
-   "definition_ko": "",
+   "definition_ko": "하맛소바(히브리어 '하마트 초바'; 칠십인역 바이소바). 역대하 8:3에만 나온다. 큰 하맛 말고는 이 이름에 맞는 곳이 알려져 있지 않다. 솔로몬이 하맛 자체를 차지했다는 뜻이라기보다는, 소바가 무너진 뒤 하맛에 병합되었을 소바 왕국의 여러 지역에 대한 자기 지배를 「굳혔다」는 뜻으로 보인다. 칠십인역 바티칸 사본은 하맛을 아예 빼고 벧소바로 읽는다. 한편 역대기가 기록되기 훨씬 전에 소바와 하맛의 지리적 구분이 사라졌으므로, 이 두 겹 이름은 솔로몬이 정복한 범위를 대략 나타내고 하우란의 소바(사무엘하 23:36)와 헷갈리지 않게 하려고 쓰였을 수도 있다.\n\n(집필: W. M. Christie)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HAMATH-ZOBAH"
@@ -3376,7 +3376,7 @@
    "id": 4020,
    "term": "Hammoth-Dor(함못돌)",
    "definition": "ham-oth-dor' (chammoth do'r; Emathdor, as also several corrupt forms): A fenced, Levitical city of Naphtali (Jos 19:35; 21:32); also named Hammen (1Ch 6:61 Hebrew). Probably the hammatu of the Karnak lists, and the hamatam of WAI, II, 53; certainly the Emmaus of Josephus, Ant, XVIII, ii, 3; BJ, IV, i, 3; Hamata of `Erubhin v. 5; Meghillah 2b, and the modern el-Hammam, 1 1/2 miles South of Tiberias. The name signifies \"hot springs,\" and these, 4 in number, still exist. They have a temperature of 144 degree F., are salt and bitter in taste and sulfurous in smell. Considered invaluable for rheumatism, they are crowded in June and July. This health-giving reputation is of ancient date. It is mentioned in Josephus, BJ, IV, i, 3; and a coin of Tiberias of the reign of Trajan depicts Hygeia sitting on a rock beside the springs, feeding the serpent of Aesculapius. Being used for pleasure also, they were permitted to the Jew on the Sabbath, whereas had they been used only medicinally, they would have been forbidden (Babylonian Talmud, Shab 109a; compare Mt 12:10).\n\nW. M. Christie",
-   "definition_ko": "",
+   "definition_ko": "함못 돌(히브리어 '함모트 도르'; 칠십인역 에마트도르, 그 밖에 훼손된 여러 꼴). 납달리에 있는 견고한 레위 사람의 성읍이다(여호수아 19:35; 21:32). 함몬이라고도 불린다(역대상 6:76, 히브리어 본문 6:61). 아마 카르나크 목록의 「하마투」, 『서아시아 설형 비문집』 2권 53의 「하마탐」일 것이며, 요세푸스의 엠마오(『유대 고대사』 18권 2장 3절; 『유대 전쟁사』 4권 1장 3절), 『에루빈』 5장 5절과 『메길라』 2b의 하마타, 그리고 디베랴 남쪽 1.5마일의 오늘날 엘함맘임은 확실하다. 이 이름은 「온천」을 뜻하며, 그 온천 넷이 지금도 있다. 물 온도는 화씨 144도이고, 맛은 짜고 쓰며 유황 냄새가 난다. 류머티즘에 매우 좋다고 여겨져 6월과 7월에는 사람들로 붐빈다. 몸에 좋다는 이 평판은 오래되었다. 요세푸스(『유대 전쟁사』 4권 1장 3절)도 이를 말하며, 트라야누스 황제 때의 디베랴 동전에는 건강의 여신 히기에이아가 온천 곁 바위에 앉아 아스클레피오스의 뱀에게 먹이를 주는 모습이 새겨져 있다. 이 온천은 즐기는 데에도 쓰였으므로 유대 사람이 안식일에 이용하는 것이 허락되었다. 오직 치료에만 쓰였다면 금지되었을 것이다(바벨론 탈무드 『샤바트』 109a; 마태복음 12:10 참조).\n\n(집필: W. M. Christie)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HAMMOTH-DOR"
@@ -3385,7 +3385,7 @@
    "id": 4025,
    "term": "Hamonah(하모나)",
    "definition": "ha-mo'-na (hamonah): The name of a city which stood apparently near HAMON-GOG (which see) (Eze 39:16).",
-   "definition_ko": "",
+   "definition_ko": "하모나(히브리어 '하모나'). 하몬곡(해당 항목을 보라) 근처에 있었던 듯한 성읍의 이름이다(에스겔 39:16).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HAMONAH"
@@ -3403,7 +3403,7 @@
    "id": 4052,
    "term": "Hannathon(한나돈)",
    "definition": "han'-a-thon (channathon): A city on the northern boundary of Zebulun (Jos 19:14). It is probably identical with Kefar Hananyah, which the Mishna gives as marking the northern limit of lower Galilee (Neubauer, Geog. du Talmud, 179). It is represented by the modern Kefr 'Anan, about 3 miles Southeast of er-Rameh.",
-   "definition_ko": "",
+   "definition_ko": "한나돈(히브리어 '한나톤'). 스불론의 북쪽 경계에 있는 성읍이다(여호수아 19:14). 아마 미쉬나가 아랫갈릴리의 북쪽 끝으로 드는 케파르 하난야와 같은 곳일 것이다(노이바우어, 『탈무드의 지리』 179쪽). 에르라메 남동쪽 3마일쯤의 오늘날 케프르 아난이 그 자리다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HANNATHON"
@@ -3412,7 +3412,7 @@
    "id": 4056,
    "term": "Hapharaim(하바라임)",
    "definition": "haf-a'-ra'-im (chapharayim; the King James Version Haphraim, haf-ra'im, possibly \"place of a moat\"): A town in the territory of Issachar, named with Shunem and Anaharath (Jos 19:19). Eusebius, Onomasticon identifies it with \"Affarea,\" and places it 6 miles North of Legio-Megiddo. This position corresponds with that of the modern el-Ferriyeh, an ancient site with remarkable tombs Northwest of el-Lejjun.",
-   "definition_ko": "",
+   "definition_ko": "하바라임(히브리어 '하파라임'; 흠정역 하프라임, 아마 「해자가 있는 곳」). 잇사갈 지파 땅에 있는 성읍으로, 수넴, 아나하랏과 함께 이름이 나온다(여호수아 19:19). 유세비우스의 『오노마스티콘』은 이곳을 「아파레아」와 같은 곳으로 보고 레기오(므깃도) 북쪽 6마일에 둔다. 이 위치는 엘레준 북서쪽의, 눈에 띄는 무덤들이 있는 옛 유적 오늘날의 엘페리예와 맞는다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HAPHARAIM"
@@ -3430,7 +3430,7 @@
    "id": 4062,
    "term": "Haradah(하라다)",
    "definition": "ha-ra'-da, har'-a-da (charadhah, \"fearful\"): A desert station of the Israelites between Mt. Shepher and Makheloth (Nu 33:24:25).\n\nSee WANDERINGS OF ISRAEL.",
-   "definition_ko": "",
+   "definition_ko": "하라다(히브리어 '하라다', 「두려운」). 세벨 산과 막헬롯 사이에 있는 이스라엘의 광야 진영이다(민수기 33:24, 25). 이스라엘의 광야 여정 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HARADAH"
@@ -3457,7 +3457,7 @@
    "id": 4107,
    "term": "Hashmonah(하스모나)",
    "definition": "hash'-mo-na (chashmonah, \"fatness\"): A desert camp of the Israelites between Mithkah and Moseroth (Nu 33:29,30).\n\nSee WANDERINGS OF ISRAEL.",
-   "definition_ko": "",
+   "definition_ko": "하스모나(히브리어 '하쉬모나', 「기름짐」). 밋가와 모세롯 사이에 있는 이스라엘의 광야 진영이다(민수기 33:29, 30). 이스라엘의 광야 여정 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HASHMONAH"
@@ -3493,7 +3493,7 @@
    "id": 4145,
    "term": "Hazazon-Tamar(하사손다말)",
    "definition": "haz'-a-zan-ta'-mar (chatsatson tamar; the King James Version Hazezon Tamar): \"Hazazon of the palm trees,\" mentioned (Ge 14:7) as a place of the Amorites, conquered, together with En-mishpat and the country of the Amalekites, by Chedorlaomer; in 2Ch 20:2 it is identified with EN-GEDI (which see); and if so, it must have been its older name. If this identification be accepted, then Hazazon may survive in the name Wady Husasah, Northwest of `Ain Jidy. Another suggestion, which certainly meets the needs of the narrative better, is that Hazazon-tamar is the Thamara of Eusebius, Onomasticon (85 3; 210 86), the Thamaro, of Ptol. xvi.3. The ruin Kurnub, 20 miles West-Southwest of the South end of the Dead Sea--on the road from Hebron to Elath--is supposed to mark this site.\n\nE. W. G. Masterman",
-   "definition_ko": "",
+   "definition_ko": "하사손다말(히브리어 '하차촌 타마르'; 흠정역 하세손다말, 「종려나무의 하사손」). 그돌라오멜이 엔미스밧, 아말렉 족속의 땅과 함께 정복한 아모리 족속의 땅으로 나온다(창세기 14:7). 역대하 20:2에서는 엔게디(해당 항목을 보라)와 같은 곳이라 하는데, 그렇다면 이것이 엔게디의 옛 이름이었을 것이다. 이 동일시를 받아들이면 하사손이라는 이름은 아인 지디 북서쪽의 와디 후사사에 남아 있을지 모른다. 이야기의 흐름에 확실히 더 잘 맞는 다른 제안은, 하사손다말이 유세비우스 『오노마스티콘』(85,3; 210,86)의 타마라, 프톨레마이오스(16장 3절)의 타마로라는 것이다. 사해 남쪽 끝에서 서남서쪽 20마일, 헤브론에서 엘랏으로 가는 길에 있는 폐허 쿠르누브가 이 자리를 가리킨다고 여겨진다.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HAZAZON-TAMAR"
@@ -3520,7 +3520,7 @@
    "id": 4155,
    "term": "Hazor-Hadattah(하솔하닷다)",
    "definition": "ha'-zor-ha-dat'-a (Aramaic chatsor chadhattah, \"New Hazor\"): \"An Aramaic adjective, however, in this region is so strange that the reading must be questioned\" (Di). One of the \"uttermost cities .... of Judah toward the border of Edom\" (Jos 15:25). Eusebius and Jerome describe a \"New Hazor\" to the East of Ascalon, but this is too far North.",
-   "definition_ko": "",
+   "definition_ko": "하솔 하닷다(아람어 '하초르 하닷타', 「새 하솔」). 「그러나 이 지역에서 아람어 형용사는 너무 이상하여 이 읽기를 의심할 수밖에 없다」(딜만). 「유다 자손의 지파의 남쪽 끝 에돔 경계에 접근한 성읍들」 가운데 하나다(여호수아 15:25). 유세비우스와 히에로니무스는 아스글론 동쪽의 「새 하솔」을 말하지만, 그곳은 너무 북쪽이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HAZOR-HADATTAH"
@@ -3547,7 +3547,7 @@
    "id": 4207,
    "term": "Helbah(헬바)",
    "definition": "hel'-ba (chelbah): A place in the territory assigned to Asher (Jud 1:31). It may be identical with Mahalliba of Sennacherib's prism inscription. The site, however, has not been recovered.",
-   "definition_ko": "",
+   "definition_ko": "헬바(히브리어 '헬바'). 아셀에게 준 땅에 있는 곳이다(사사기 1:31). 산헤립의 각기둥 비문에 나오는 마할리바와 같은 곳일 수 있다. 그러나 자리는 되찾지 못했다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HELBAH"
@@ -3565,7 +3565,7 @@
    "id": 4215,
    "term": "Heleph(헬렙)",
    "definition": "he'-lef (cheleph): A place on the southern border of Naphtali (Jos 19:33); unidentified.",
-   "definition_ko": "",
+   "definition_ko": "헬렙(히브리어 '헬레프'). 납달리의 남쪽 경계에 있는 곳으로(여호수아 19:33), 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HELEPH"
@@ -3583,7 +3583,7 @@
    "id": 4221,
    "term": "Helkath(헬갓)",
    "definition": "hel'-kath (chelqath (Jos 19:25); chelqath (Jos 21:31); by a scribal error chuqoq (1Ch 6:75)): A town or district on the border of Asher, assigned to the Levites; unidentified.",
-   "definition_ko": "",
+   "definition_ko": "헬갓(히브리어 '헬카트'(여호수아 19:25; 21:31); 필사자의 잘못으로 '후코크'(역대상 6:75)). 아셀의 경계에 있는 성읍 또는 지역으로, 레위 사람에게 주어졌다. 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HELKATH"
@@ -3646,7 +3646,7 @@
    "id": 4283,
    "term": "Heshmon(헤스몬)",
    "definition": "hesh'-mon (cheshmon): An unidentified place on the border of Judah toward Edom (Jos 15:27). This may have been the original home of the Hasmoneans.",
-   "definition_ko": "",
+   "definition_ko": "헤스몬(히브리어 '헤쉬몬'). 에돔 쪽 유다의 경계에 있는 곳으로, 자리는 밝혀지지 않았다(여호수아 15:27). 이곳이 하스몬 가문(마카베오 가문)의 본디 고향이었을지 모른다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HESHMON"
@@ -3682,7 +3682,7 @@
    "id": 4345,
    "term": "Hobah(호바)",
    "definition": "ho'-ba (chobhah): A place \"on the left hand,\" i.e. to the North of \"Damascus,\" to which Abraham pursued the defeated army of Chedorlaomer (Ge 14:15). It is probably identical with the modern Choba, about 60 miles Northwest of Damascus.",
-   "definition_ko": "",
+   "definition_ko": "호바(히브리어 '호바'). 「다메섹 왼편」, 곧 다메섹 북쪽에 있는 곳으로, 아브라함이 패한 그돌라오멜의 군대를 여기까지 쫓아갔다(창세기 14:15). 아마 다메섹 북서쪽 60마일쯤의 오늘날 호바와 같은 곳일 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HOBAH"
@@ -3691,7 +3691,7 @@
    "id": 4363,
    "term": "Holon(홀론)",
    "definition": "ho'-lon (cholon or chowlon):\n\n(1) One of the towns in the hill country of Judah (Jos 15:51) assigned to the Levites 21:15). In 1Ch 6:58 (Hebrew 43), it is HILEN (which see). The site may be the important ruins of Beit`Alam (see PEF, III, 313, 321, Sh XXI).\n\n(2) Probably once an important town in the \"plain,\" i.e. plateau, of Moab (Jer 48:21); the site is unknown.",
-   "definition_ko": "",
+   "definition_ko": "홀론(히브리어 '홀론').\n\n(1) 유다 산지의 성읍 가운데 하나로(여호수아 15:51), 레위 사람에게 주어졌다(여호수아 21:15). 역대상 6:58(히브리어 본문 43절)에서는 힐렌(해당 항목을 보라)이다. 그 자리는 베이트 알람의 중요한 폐허일 수 있다(팔레스타인 탐사 기금 조사 보고 3권 313, 321쪽, 지도 21 참조).\n\n(2) 모압의 「평지」, 곧 고원에 있던, 아마 한때 중요했던 성읍이다(예레미야 48:21). 자리는 알 수 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HOLON"
@@ -3727,7 +3727,7 @@
    "id": 4390,
    "term": "Horem(호렘)",
    "definition": "ho'-rem (chorem, \"consecrated\"): One of the fenced cities in the territory of Naphtali (Jos 19:38), named with Iron and Migdal-el. It may possibly be identified with the modern Hurah, which lies on a mound at the South end of Wady el-`Ain, to the West of Qedes.",
-   "definition_ko": "",
+   "definition_ko": "호렘(히브리어 '호렘', 「바쳐진」). 납달리 지파 땅에 있는 견고한 성읍 가운데 하나로, 이론, 믹다렐과 함께 이름이 나온다(여호수아 19:38). 게데스 서쪽, 와디 엘아인 남쪽 끝의 둔덕 위에 있는 오늘날 후라와 같은 곳일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HOREM"
@@ -3736,7 +3736,7 @@
    "id": 4391,
    "term": "Horesh(호레스)",
    "definition": "ho'-resh (choreshah, 1Sa 23:15,18, margin only; Septuagint en Te Kaine, \"in the New\"; English Versions of the Bible \"in the wood\" (ba-choreshdh), the particle \"in\" being combined with the article): Choresh in other passages is translated \"forest\" (compare 2Ch 27:4; Isa 17:9; Eze 31:3) and it is most probable that it should be so translated here.",
-   "definition_ko": "",
+   "definition_ko": "호레스(히브리어 '호레샤' — 사무엘상 23:15, 18 난외주에만; 칠십인역 「새것 안에」; 영역본들은 「수풀에」(바호레샤) — 「안에」라는 전치사가 관사와 붙은 꼴). '호레쉬'는 다른 대목에서 「숲」으로 옮겨지며(역대하 27:4; 이사야 17:9; 에스겔 31:3 참조), 여기서도 그렇게 옮기는 것이 가장 그럴듯하다(개역개정 「십 광야 수풀」).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HORESH"
@@ -3754,7 +3754,7 @@
    "id": 4399,
    "term": "Horonaim(호로나임 · 호로나임) (압살롬 이야기의 언덕 길)",
    "definition": "hor-o-na'-im (~choronayim]; Aronieim; in Jeremiah Oronaim, \"the two hollows\"): an unidentified place in the South of Moab. It is named in Jer 48:5. Isaiah (15:5) and Jeremiah (48:3) speak of \"the way to Horanaim\"; and Jeremiah (48:5) of the , \"descent,\" or \"going down\" of Horonaim. Mesha (MS) says he was bidden by Chemosh to \"go down\" and fight against Choronem. Probably, therefore, it lay on one of the roads leading down from the Moabite plateau to the Arabah. It is mentioned by Josephus as having been taken by Alexander Janneus (Ant., XIII, xv, 4). Hyrcanus promised to restore it and the rest to Aretas (XIV, i, 4). There is no indication that in early times it was ever possessed by Israel. Buhl (GAP 272 f) thinks it may be represented by some significant ruins near Wady ed-Dera`a (Wady Kerak).\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "호로나임(히브리어 '호로나임'; 칠십인역 아로니에임, 예레미야에서는 오로나임, 「두 우묵한 곳」). 모압 남쪽에 있는 곳으로, 자리는 밝혀지지 않았다. 예레미야 48:5에 이름이 나온다. 이사야(15:5)와 예레미야(48:3)는 「호로나임 길」을, 예레미야(48:5)는 호로나임의 「내리막」을 말한다. 메사(모압 비석)는 그모스가 자기에게 「내려가서」 호로넴과 싸우라고 명하였다고 말한다. 그러므로 이곳은 아마 모압 고원에서 아라바로 내려가는 길 가운데 하나에 있었을 것이다. 요세푸스는 알렉산드로스 얀나이오스가 이곳을 빼앗았다고 말한다(『유대 고대사』 13권 15장 4절). 히르카노스는 이곳과 나머지 곳들을 아레다에게 돌려주겠다고 약속하였다(14권 1장 4절). 이른 시기에 이스라엘이 이곳을 차지한 적이 있다는 흔적은 없다. 불(『고대 팔레스타인 지리』 272쪽 이하)은 와디 에드데라아(와디 케라크) 근처의 눈에 띄는 폐허들이 이곳일 수 있다고 본다.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HORONAIM"
@@ -3772,7 +3772,7 @@
    "id": 4438,
    "term": "Hukkok(훅곡)",
    "definition": "huk'-ok (chuqqoq): A town on the border of Naphtali named with Aznoth-tabor (Jos 19:34). It is usually identified with the village of yaquq, which stands on the West of Wady el-`Amud, to the Northwest of Gennesaret, about 4 miles from the sea. This would fall on the boundary of Zebulun and Naphtali, between Tabor and Hannathon (Jos 19:14). The identification may be correct; but it seems too far from Tabor.",
-   "definition_ko": "",
+   "definition_ko": "훅곡(히브리어 '후코크'). 납달리 경계에 있는 성읍으로, 아스놋 다볼과 함께 이름이 나온다(여호수아 19:34). 흔히 게네사렛 북서쪽, 와디 엘아무드 서쪽에 있어 바다(호수)에서 4마일쯤 되는 야쿠크 마을과 같은 곳으로 본다. 그러면 이곳은 다볼과 한나돈(여호수아 19:14) 사이, 스불론과 납달리의 경계에 놓이게 된다. 이 동일시가 맞을 수도 있지만, 다볼에서 너무 멀어 보인다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HUKKOK"
@@ -3781,7 +3781,7 @@
    "id": 4439,
    "term": "Hukok(후곡)",
    "definition": "hu'-kok.\n\nSee HELKATH.",
-   "definition_ko": "",
+   "definition_ko": "후곡. 헬갓 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HUKOK"
@@ -3790,7 +3790,7 @@
    "id": 4446,
    "term": "Humtah(훔다)",
    "definition": "hum'-ta (chumTah): An unidentified place mentioned between Aphekah and Hebron in the mountain of Judah (Jos 15:54).",
-   "definition_ko": "",
+   "definition_ko": "훔다(히브리어 '훔타'). 유다 산지에서 아베가와 헤브론 사이에 이름이 나오는 곳으로, 자리는 밝혀지지 않았다(여호수아 15:54).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HUMTAH"
@@ -3799,7 +3799,7 @@
    "id": 4461,
    "term": "Hushah(후사)",
    "definition": "hu'-sha (chushah, \"haste\"): Mentioned in 1Ch 4:4 as probably an individual, a Judahite, or a family name; but may possibly be a place.",
-   "definition_ko": "",
+   "definition_ko": "후사(히브리어 '후샤', 「서두름」). 역대상 4:4에 아마 사람 — 유다 사람 — 이나 집안 이름으로 나오지만, 땅 이름일 가능성도 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HUSHAH"
@@ -3826,7 +3826,7 @@
    "id": 4495,
    "term": "Idalah(이달라)",
    "definition": "id'-a-la, i-da'-la (yidh'alah): A town in the territory of Zebulun, named with Shimron and Beth-lehem (Jos 19:15). The Talmud identifies it with Churyeh (Talm Jerusalem on Megh., I, 1). This, Conder thinks, may be represented by the modern Khirbet el-Chuwara to the South of Beit Lachm.",
-   "definition_ko": "",
+   "definition_ko": "이달라(히브리어 '이드알라'). 스불론 지파 땅에 있는 성읍으로, 시므론, 베들레헴과 함께 이름이 나온다(여호수아 19:15). 탈무드는 이곳을 후르예와 같은 곳으로 본다(예루살렘 탈무드 『메길라』 1장 1절). 콘더는 이것이 베이트 라흠 남쪽의 오늘날 키르베트 엘후와라일 수 있다고 본다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IDALAH"
@@ -3835,7 +3835,7 @@
    "id": 4508,
    "term": "Iim(이임)",
    "definition": "i'-im (`iyim): Same as IYIM (which see).",
-   "definition_ko": "",
+   "definition_ko": "이임(히브리어 '이임'). 이임(IYIM, 해당 항목을 보라)과 같다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IIM"
@@ -3880,7 +3880,7 @@
    "id": 4609,
    "term": "Iphtah(입다)",
    "definition": "if'-ta (yiphtach; the King James Version Jiphtah): An unidentified town in the Shephelah of Judah, named with Libnab, Ether and Ashan (Jos 15:43).",
-   "definition_ko": "",
+   "definition_ko": "입다(히브리어 '입타흐'; 흠정역 지프다). 유다 세벨라의 성읍으로, 립나, 에델, 아산과 함께 이름이 나오며, 자리는 밝혀지지 않았다(여호수아 15:43).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IPHTAH"
@@ -3889,7 +3889,7 @@
    "id": 4613,
    "term": "Ir-Nahash(이르나하스)",
    "definition": "ur-na'-hash, ir-na'-hash (`ir nachash): A town of Judah of which Tehinnah is called the \"father,\" probably meaning \"founder\" (1Ch 4:12). English Versions of the Bible margin suggests the translation \"city of Nahash.\"",
-   "definition_ko": "",
+   "definition_ko": "이르나하스(히브리어 '이르 나하쉬'). 드힌나가 그 「아버지」, 곧 아마 「세운 자」로 불리는 유다의 성읍이다(역대상 4:12). 영역본 난외주는 「나하스의 성읍」으로 옮길 것을 제안한다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IR-NAHASH"
@@ -3898,7 +3898,7 @@
    "id": 4614,
    "term": "Ir-Shemesh(이르세메스)",
    "definition": "ur-she'-mesh, ir-she'-mesh (`ir shemesh, \"city of the sun\").\n\nSee BETH-SHEMESH; HERES.",
-   "definition_ko": "",
+   "definition_ko": "이르세메스(히브리어 '이르 셰메쉬', 「해의 성읍」). 벧세메스, 헤레스 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IR-SHEMESH"
@@ -3907,7 +3907,7 @@
    "id": 4621,
    "term": "Iron (2)(이론)",
    "definition": "i'-ron (yir'on): One of the fenced cities in the territory of Naphtali, named with Migdal-el and En-hazor (Jos 19:38). It is represented by the modern Yarun, a village with the ruins of a synagogue, at one time used as a monastery, fully 6 miles West of Qedes.",
-   "definition_ko": "",
+   "definition_ko": "이론(히브리어 '이르온'). 납달리 지파 땅에 있는 견고한 성읍 가운데 하나로, 믹다렐, 엔 하솔과 함께 이름이 나온다(여호수아 19:38). 게데스 서쪽으로 족히 6마일 되는 오늘날의 마을 야룬이 그 자리인데, 한때 수도원으로 쓰인 회당 폐허가 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IRON (2)"
@@ -3916,7 +3916,7 @@
    "id": 4622,
    "term": "Irpeel(이르브엘)",
    "definition": "ur'-pe-el, ir'-pe-el (yirpe'el): An unidentified city in Benjamin (Jos 18:27). It may possibly be represented by Rafat, a ruin to the North of el-Jib, the ancient Gibeon.",
-   "definition_ko": "",
+   "definition_ko": "이르브엘(히브리어 '이르페엘'). 베냐민의 성읍으로, 자리는 밝혀지지 않았다(여호수아 18:27). 옛 기브온인 엘지브 북쪽의 폐허 라파트일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IRPEEL"
@@ -3934,7 +3934,7 @@
    "id": 4691,
    "term": "Ithnan(잇난)",
    "definition": "ith'-nan (yithnan): A town in the South of Judah mentioned along with Hazor and Ziph (Jos 15:23), apparently the \"Ethnan\" of Jerome (Onom 118 13). Not identified.",
-   "definition_ko": "",
+   "definition_ko": "잇난(히브리어 '이트난'). 유다 남쪽의 성읍으로, 하솔, 십과 함께 나오며(여호수아 15:23), 히에로니무스의 「에트난」(『오노마스티콘』 118,13)인 듯하다. 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ITHNAN"
@@ -3961,7 +3961,7 @@
    "id": 4705,
    "term": "Iye-Abarim(이예아바림)",
    "definition": "i-ye-ab'-a-rim (`iye ha-`abharim, \"the heaps of the Abarim\"; the King James Version Ije-abarim; in Nu 21:11 the Septuagint reads Codex Vaticanus, Chalglei): A place in the journeyings of Israel named after Oboth, said to be \"in the wilderness which is before Moab, toward the sunrising\" (Nu 21:11), \"in the border of Moab\" (Nu 33:44). The indications of position here given are not sufficient to guide to any identification, and, so far, nothing has been discovered in the district to help us. Called simply \"Iyim\" (the King James Version \"Iim\") in Nu 33:45.",
-   "definition_ko": "",
+   "definition_ko": "이예아바림(히브리어 '이예 하아바림', 「아바림의 무더기들」; 흠정역 이제아바림; 민수기 21:11에서 칠십인역 바티칸 사본은 칼글레이). 이스라엘의 여정에서 오봇 다음에 나오는 곳으로, 「모압 앞쪽 해 돋는 쪽 광야」(민수기 21:11), 「모압 경계」(민수기 33:44)에 있다고 한다. 여기 주어진 위치 표시는 자리를 밝히기에 넉넉하지 않고, 지금까지 그 지역에서 도움이 될 만한 것도 발견되지 않았다. 민수기 33:45에서는 그냥 「이임」이라 한다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IYE-ABARIM"
@@ -3970,7 +3970,7 @@
    "id": 4721,
    "term": "Jaar(나무 밭)",
    "definition": "ja'-ar (ya`ar, \"forest\" or \"wood\"): Is only once taken as a proper name (Ps 132:6 the Revised Version margin), \"We found it in the field of Jaar.\" It may be a shortened form of the name Kiriath-jearim, where the ark had rested 20 years.\n\nSee KIRIATH-JEARIM.",
-   "definition_ko": "",
+   "definition_ko": "나무 밭(야알; 히브리어 '야아르', 「숲」 또는 「수풀」). 땅 이름으로 보는 것은 한 번뿐이다(시편 132:6, 영국 개역판 난외주 「야알의 들에서 그것을 찾았도다」). 언약궤가 20년 동안 머물렀던 기럇여아림의 줄인 꼴일 수 있다. 기럇여아림 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JAAR"
@@ -4006,7 +4006,7 @@
    "id": 4744,
    "term": "Jackal's Well(용정)",
    "definition": "(`en ha-tannin; Septuagint has pege ton sukon, \"fountain of the figs\"; the King James Version dragon well): A well or spring in the valley of Hinnom between the \"Gate of the Gai\" and the Dung Gate (Ne 2:13). No such source exists in the Wady er Rababi (see HINNOM, VALLEY OF) today, although it is very probable that a well sunk to the rock in the lower parts of this valley might strike a certain amount of water trickling down the valley-bottom. G.A. Smith suggests (Jerusalem, I, chapter iv) that this source may have arisen as the result of an earthquake, hence, the name \"dragon,\" and have subsequently disappeared; but it is at least as likely that it received its name from the jackals which haunted this valley, as the pariah dogs do today, to consume the dead bodies which were thrown there.\n\nSee HINNOM, VALLEY OF; JACKAL.\n\nE. W. G. Masterman",
-   "definition_ko": "",
+   "definition_ko": "용정(히브리어 '엔 핫탄닌'; 칠십인역 「무화과의 샘」; 흠정역 「용의 우물」 — ISBE 표제는 「자칼의 우물」). 힌놈 골짜기에서 「골짜기 문」과 분문 사이에 있던 우물 또는 샘이다(느헤미야 2:13). 오늘날 와디 에르라바비(힌놈 골짜기 항목을 보라)에는 그런 샘이 없다. 다만 이 골짜기 아래쪽에서 바위까지 우물을 파면 골짜기 바닥으로 스며 흐르는 얼마쯤의 물을 얻을 가능성은 매우 크다. G. A. 스미스는 이 샘이 지진으로 생겼다가 나중에 사라졌을 수 있으며 그래서 「용」이라는 이름이 붙었다고 본다(『예루살렘』 1권 4장). 그러나 오늘날 떠돌이 개들이 그러하듯, 그곳에 버려진 시체를 먹으려고 이 골짜기를 드나들던 자칼 때문에 그런 이름을 얻었을 가능성도 적어도 그만큼은 있다.\n\n힌놈 골짜기, 자칼 항목을 보라.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JACKAL'S WELL"
@@ -4015,7 +4015,7 @@
    "id": 4757,
    "term": "Jagur(야굴)",
    "definition": "ja'-gur (yaghur): An unidentified town on the Edomite frontier of Judah in the South (Jos 15:21).",
-   "definition_ko": "",
+   "definition_ko": "야굴(히브리어 '야구르'). 남쪽 에돔 경계 쪽 유다의 성읍으로, 자리는 밝혀지지 않았다(여호수아 15:21).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JAGUR"
@@ -4033,7 +4033,7 @@
    "id": 4798,
    "term": "Janim(야님)",
    "definition": "ja'-nim (yanim; the King James Version Janum): A place in the Hebron uplands named with Eshan and Beth-tappuah (Jos 15:53); unidentified.",
-   "definition_ko": "",
+   "definition_ko": "야님(히브리어 '야님'; 흠정역 야눔). 헤브론 고지대에서 에산, 벧 답부아와 함께 이름이 나오는 곳으로, 자리는 밝혀지지 않았다(여호수아 15:53).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JANIM"
@@ -4105,7 +4105,7 @@
    "id": 4908,
    "term": "Jehud(여훗)",
    "definition": "je'-hud (yehudh): A town in the lot of Da named between Baalath and Bene-berak (Jos 19:45). The only possible identification seems to be with el-Yehudiyeh, which lies about 8 miles East of Jaffa.",
-   "definition_ko": "",
+   "definition_ko": "여훗(히브리어 '예후드'). 단의 몫에 든 성읍으로, 바알랏과 브네브락 사이에 이름이 나온다(여호수아 19:45). 가능한 동일시는 욥바 동쪽 8마일쯤의 엘예후디예뿐인 듯하다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JEHUD"
@@ -4141,7 +4141,7 @@
    "id": 4954,
    "term": "Jeshanah(여사나)",
    "definition": "jesh'-a-na, je-sha'-na (yeshanah): A town named with Bethel and Ephron among the places taken by Abijah from Jeroboam (2Ch 13:19). Most scholars are agreed that the same name should be read instead of ha-shen, in 1Sa 7:12. It is probably identical with the Isanas, of Josephus (Ant., XIV, xv, 12). It is represented by the modern `Ain Sinia, 3 1/4 miles North of Bethel, with a spring and interesting ancient remains.",
-   "definition_ko": "",
+   "definition_ko": "여사나(히브리어 '예샤나'). 아비야가 여로보암에게서 빼앗은 곳 가운데 벧엘, 에브론과 함께 이름이 나오는 성읍이다(역대하 13:19). 대부분의 학자들은 사무엘상 7:12의 '하셴'(개역개정 「센」) 대신 이 이름으로 읽어야 한다는 데 의견을 같이한다. 아마 요세푸스의 이사나스(『유대 고대사』 14권 15장 12절)와 같은 곳일 것이다. 벧엘 북쪽 3.25마일에 있어 샘과 흥미로운 옛 유적이 있는 오늘날의 아인 시니아가 그 자리다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JESHANAH"
@@ -4177,7 +4177,7 @@
    "id": 5036,
    "term": "Jogbehah(욕브하)",
    "definition": "jog'-be-ha (yoghbechah): A city in Gilead assigned to Gad and fortified by that tribe (Nu 32:35). It lay on the line along which Gideon chased the Midianites (Jud 8:11), and the indication there leaves no doubt that it is represented today by Ajbeihat. The name attaches to 3 groups of ruins which date from Roman times. The position is about 7 miles Northwest of `Amman, and about midway between that city and the town of es-SalT. It stands 3,468 ft. above the level of the Mediterranean.\n\nLITERATURE.\n\nOliphant, Land of Gilead, 232; Baedeker-Socin, Palestine.",
-   "definition_ko": "",
+   "definition_ko": "욕브하(히브리어 '요그베하'). 갓에게 주어지고 그 지파가 요새로 쌓은 길르앗의 성읍이다(민수기 32:35). 기드온이 미디안 사람들을 쫓아간 길에 있었으며(사사기 8:11), 그 대목의 표시로 보아 오늘날의 아즈베이하트임이 의심할 여지가 없다. 이 이름은 로마 시대의 폐허 세 무리에 붙어 있다. 암만 북서쪽 7마일쯤, 그 도성과 에스살트 성읍 사이 한가운데쯤에 있으며, 지중해 해수면보다 3,468피트 높다.\n\n참고 문헌: 올리펀트, 『길르앗 땅』 232쪽; 베데커·조친, 『팔레스타인』.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JOGBEHAH"
@@ -4186,7 +4186,7 @@
    "id": 5054,
    "term": "Jokdeam(욕드암)",
    "definition": "jok'-de-am (yoqedhe`am): An unidentified city of Judah, named with Maon, Carmel and Ziph (Jos 15:56). It probably lay to the South of Hebron.",
-   "definition_ko": "",
+   "definition_ko": "욕드암(히브리어 '요케데암'). 유다의 성읍으로, 마온, 갈멜, 십과 함께 이름이 나오며, 자리는 밝혀지지 않았다(여호수아 15:56). 아마 헤브론 남쪽에 있었을 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JOKDEAM"
