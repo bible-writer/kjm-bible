@@ -1,5 +1,5 @@
 {
- "version": "1.8.0",
+ "version": "1.13.0",
  "date": "2026-09-18",
  "count": 864,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
@@ -16,13 +16,13 @@
    "isbe_key": "ABARIM"
   },
   {
-   "id": 23,
-   "term": "Abdon (1)(압돈)",
-   "definition": "ab'-don (`abhdon, perhaps \"service\"; Abdon):\n\n(1) A judge of Israel for eight years (Jud 12:13-15). The account says that he was the son of Hillel the Pirathonite, and that he was buried in Pirathon in the land of Ephraim. No mention is made of great public services rendered by him, but it is said that he had seventy well-mounted sons and grandsons. So far as we can judge, he was placed in office as a wealthy elderly man, and performed the routine duties acceptably. Very likely his two next predecessors Ibzan and Elon were men of the same type. An effort has been made to identify Abdon with the Bedan mentioned in 1Sa 12:11, but the identification is precarious.\n\nA certain importance attaches to Abdon from the fact that he is the last judge mentioned in the continuous account (Jud 2:6-13:1) in the Book of Jgs. After the account of him follows the statement that Israel was delivered into the hands of the Philistines forty years, and with that statement the continuous account closes and the series of personal stories begins--the stories of Samson, of Micah and his Levite, of the Benjamite civil war, followed in our English Bibles by the stories of Ru and of the childhood of Samuel. With the close of this last story (1Sa 4:18) the narrative of public affairs is resumed, at a point when Israel is making a desperate effort, at the close of the forty years of Eli, to throw off the Philistine yoke. A large part of one's views of the history of the period of the Judges will depend on the way in which he combines these events. My own view is that the forty years of Jud 13:1 and of 1Sa 4:18 are the same; that at the death of Abdon the Philistines asserted themselves as overlords of Israel; that it was a part of their policy to suppress nationality in Israel; that they abolished the office of judge, and changed the high-priesthood to another family, making Eli high priest; that Eli was sufficiently competent so that many of the functions of national judge drifted into his hands. It should be noted that the regaining of independence was signalized by the reestablishment of the office of judge, with Samuel as incumbent (1Sa 7:6 and context). This view takes into the account that the narrative concerning Samson is detachable, like the narratives that follow, Samson belonging to an earlier period. See SAMSON.\n\n(2) The son of Jeiel and his wife Maacah (1Ch 8:30; 9:36). Jeiel is described as the \"father of Gibeon,\" perhaps the founder of the Israelirish community there. This Abdon is described as brother to Ner, the grandfather of King Saul.\n\n(3) One of the messengers sent by King Josiah to Huldah the prophetess (2Ch 34:20); called Achbor in 2Ki 22:12.\n\n(4) One of many men of Benjamin mentioned as dwelling in Jerusalem (1Ch 8:23), possibly in Nehemiah's time, though the date is not clear.\n\nWillis J. Beecher",
-   "definition_ko": "",
+   "id": 24,
+   "term": "Abdon (2)(압돈)",
+   "definition": "ab'-don (`abhdon, perhaps \"service\"): One of the four Levitical cities in the tribe of Asher (Jos 21:30; 1Ch 6:74). Probably the same with Ebron (in the King James Version \"Hebron\") in Jos 19:28, where some copies have the reading Abdon. Now called Abdeh, a few miles from the Mediterranean and about fifteen miles south of Tyre.",
+   "definition_ko": "압돈(히브리어 '압돈', 아마 「섬김」). 아셀 지파에 있는 레위 사람의 네 성읍 가운데 하나다(여호수아 21:30; 역대상 6:74). 아마 여호수아 19:28의 에브론(흠정역은 「헤브론」)과 같은 곳일 것인데, 그 대목의 어떤 사본에는 압돈으로 되어 있다. 지금은 압데라 불리며, 지중해에서 몇 마일, 두로 남쪽 15마일쯤에 있다.",
    "category": "지명",
    "hebrew_greek": "",
-   "isbe_key": "ABDON (1)"
+   "isbe_key": "ABDON (2)"
   },
   {
    "id": 28,
@@ -955,7 +955,7 @@
    "id": 1032,
    "term": "Baal-Hazor(바알 하솔)",
    "definition": "ba-al-ha'-zor ba`al chatsor; Bailasor, Bel-la-sor: A place on the property of Absalom where his sheep-shearers were gathered, beside Ephraim (2Sa 13:23). The sheep-shearing was evidently the occasion of a festival which was attended by Absalom's brethren. Here he compassed the death of Amnon in revenge for the outrage upon his sister. The place may be identified with Tell `Asur, a mountain which rises 3,318 ft. above the sea, 4 miles Northeast of Bethel. rine Kubbet el Baul may retain the old name.",
-   "definition_ko": "",
+   "definition_ko": "바알하솔(히브리어 '바알 하초르'; 칠십인역 바일라소르). 압살롬의 땅에 있던 곳으로, 에브라임 곁에서 그의 양 털 깎는 자들이 모인 곳이다(사무엘하 13:23). 양 털 깎는 일은 분명히 잔치를 벌이는 때였고, 압살롬의 형제들도 거기에 참석하였다. 그는 이곳에서 누이가 당한 욕을 갚으려고 암논을 죽일 꾀를 이루었다. 이곳은 벧엘 북동쪽 4마일, 해발 3,318피트로 솟은 산 텔 아수르와 같은 곳으로 볼 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAAL-HAZOR"
@@ -964,7 +964,7 @@
    "id": 1033,
    "term": "Baal-Hermon(바알 헤르몬)",
    "definition": "ba'-al-hur'-mon ba`al chermon; Baal Ermon: Baalgad under Mount Hermon is described as \"toward the sunrising\" in Jos 13:5. If Mount Lebanon proper is here intended the reading may be taken as correct. But in Jud 3:3 Baal-gad is replaced by Baal-hermon. One or the other must be due to a scribal error. The Baal-hermon of 1Ch 5:23 lay somewhere East of the Jordan, near to Mount Hermon. It may possibly be identical with Banias.",
-   "definition_ko": "",
+   "definition_ko": "바알 헤르몬(히브리어 '바알 헤르몬'). 여호수아 13:5에서 헤르몬 산 아래 바알갓이 「해 뜨는 곳」으로 묘사된다. 여기서 본디의 레바논 산을 뜻한다면 이 읽기가 맞다고 볼 수 있다. 그러나 사사기 3:3에서는 바알갓 대신 바알 헤르몬이 나온다. 둘 가운데 하나는 필사자의 잘못일 것이다. 역대상 5:23의 바알헤르몬은 요단 동쪽 헤르몬 산 가까이 어딘가에 있었다. 바니아스와 같은 곳일 가능성이 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAAL-HERMON"
@@ -973,7 +973,7 @@
    "id": 1034,
    "term": "Baal-Meon(바알 므온)",
    "definition": "ba'-al-me'-on ba`al me`on; Beelmeon: A town built by the children of Reuben along with Nebo, \"their names being changed\" (Nu 32:38), identical with Beon of Nu 32:3. As Beth-baal-meon it was given by Moses to the tribe of Reuben (Jos 13:17). Mesha names it as fortified by him (MS, L. 9). It appears in Jer 48:23 as Beth-meon, one of the cities of Moab. Eusebius, Onomasticon speaks of it as a large village near the hot springs, i.e. Callirrhoe, in Wady Zerka Ma`in, 9 miles from Heshbon. This points to the ruined site of Ma`in, about 4 miles Southwest of Madeba. The ruins now visible however are not older than Roman times.\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "바알므온(히브리어 '바알 메온'; 칠십인역 베엘메온). 르우벤 자손이 느보와 함께 건축하고 「그 이름을 바꾼」 성읍으로(민수기 32:38), 민수기 32:3의 브온과 같은 곳이다. 모세는 벧 바알 므온이라는 이름으로 이곳을 르우벤 지파에게 주었다(여호수아 13:17). 메사는 이곳을 자기가 요새로 쌓았다고 적는다(메사 비문 9행). 예레미야 48:23에는 모압의 성읍 가운데 하나인 벧므온으로 나온다. 유세비우스의 『오노마스티콘』은 이곳을 헤스본에서 9마일 떨어진 와디 제르카 마인의 온천, 곧 칼리로에 근처의 큰 마을이라고 말한다. 이는 메드바 남서쪽 4마일쯤의 폐허 마인을 가리킨다. 그러나 지금 보이는 폐허는 로마 시대보다 오래된 것이 아니다.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAAL-MEON"
@@ -982,7 +982,7 @@
    "id": 1035,
    "term": "Baal-Peor(바알브올)",
    "definition": "ba-al-pe'-or. See BAAL. (1).",
-   "definition_ko": "",
+   "definition_ko": "바알브올. 바알 (1) 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAAL-PEOR"
@@ -991,7 +991,7 @@
    "id": 1036,
    "term": "Baal-Perazim(바알브라심)",
    "definition": "ba-al-pe-ra'-zim, ba-al-per'-azim ba`al peratsim; Baal'pharasein, (\"the lord of breakings through\"): The spot in or near the Valley of Rephaim where David obtained a signal victory over the Philistines; it was higher than Jerusalem for David asked, \"Shall I go up against the Philis?\" (2Sa 5:20; 1Ch 14:11). The exact site is unknown, but if the Vale of Rephaim is el Beka`a, the open valley between Jerusalem and Mar Elias, then Baal-perazim would probably be the mountains to the East near what is called the \"Mount of Evil Counsel\" (see JERUSALEM). The Mount Perazim of Isa 28:21 would appear to be the same spot.\n\nE. W. G. Masterman",
-   "definition_ko": "",
+   "definition_ko": "바알브라심(히브리어 '바알 페라침', 「터뜨리는 주」). 르바임 골짜기 안이나 그 근처에서 다윗이 블레셋 사람을 크게 이긴 곳으로, 예루살렘보다 높은 곳이었다. 다윗이 「내가 블레셋 사람에게로 올라가리이까」 하고 물었기 때문이다(사무엘하 5:20; 역대상 14:11). 정확한 자리는 알 수 없으나, 르바임 골짜기가 예루살렘과 마르 엘리아스 사이의 트인 골짜기 엘부케아라면, 바알브라심은 이른바 「악한 모의의 산」 근처 동쪽의 산들일 것이다(예루살렘 항목을 보라). 이사야 28:21의 브라심 산도 같은 곳으로 보인다.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAAL-PERAZIM"
@@ -1000,7 +1000,7 @@
    "id": 1037,
    "term": "Baal-Shalishah(바알살리사)",
    "definition": "ba-al-shal'-i-sha, ba-al-shale-'sha ba`al shalishah; Baithsarisa: Whence a man came to Gilgal with first-fruits (2Ki 4:42) was probably not far from the latter place. According to the Talmud (Sanh. 12a) the fruits of the earth nowhere ripened so quickly. It is called by Eusebius Baithsarith (Jerome \"Bethsalisa\"), and located 15 miles North of Diospolis (Lydda). Khirbet Sirisia almost exactly fits this description. Gilgal (Jiljulieh) lies in the plain about 4 1/2 miles to the Northwest Khirbet Kefr Thilth, 3 1/2 miles farther north, has also been suggested. The Arabic Thilth exactly corresponds to the Hebrew Shalishah.\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "바알 살리사(히브리어 '바알 샬리샤'; 칠십인역 바이트사리사). 한 사람이 처음 익은 것을 가지고 길갈로 온 곳으로(열왕기하 4:42), 아마 길갈에서 멀지 않았을 것이다. 탈무드(『산헤드린』 12a)에 따르면 땅의 열매가 이곳보다 빨리 익는 데가 없었다. 유세비우스는 이곳을 바이트사리트(히에로니무스는 「벳살리사」)라 부르며 디오스폴리스(룻다) 북쪽 15마일에 둔다. 키르베트 시리시아가 이 묘사에 거의 꼭 맞는다. 길갈(질줄리에)은 그 북서쪽 4.5마일쯤 평야에 있다. 3.5마일 더 북쪽의 키르베트 케프르 틸트도 제안되었는데, 아랍어 「틸트」는 히브리어 「샬리샤」와 정확히 대응한다.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAAL-SHALISHAH"
@@ -1009,7 +1009,7 @@
    "id": 1038,
    "term": "Baal-Tamar(바알다말)",
    "definition": "ba-al-ta'-mar ba`al tamar; Baal Thamar, (\"Baal of the palm tree\"): Evidently a seat of heathen worship (Jud 20:33) between Bethel and Gibeah (compare Jud 20:18,31). The place was known to Eusebius (Onomasticon, which see), but trace of the name is now lost. Conder suggests that it may be connected with the palm tree of Deborah (Jud 4:5) which was between Bethel and Ramah (HDB, under the word).",
-   "definition_ko": "",
+   "definition_ko": "바알다말(히브리어 '바알 타마르', 「종려나무의 바알」). 벧엘과 기브아 사이에 있던 이방 예배처임이 분명하다(사사기 20:33; 20:18, 31 참조). 유세비우스는 이곳을 알고 있었으나(『오노마스티콘』), 지금은 이름의 흔적이 사라졌다. 콘더는 이곳이 라마와 벧엘 사이에 있던 드보라의 종려나무(사사기 4:5)와 이어져 있을 수 있다고 본다(『헤이스팅스 성경사전』 해당 항목).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAAL-TAMAR"
@@ -1036,7 +1036,7 @@
    "id": 1041,
    "term": "Baalath(바알랏)",
    "definition": "ba'-a-lath ba`alath; (A, Baalon): between Shikkeron (Ekron) and Jabnoel unless, as seems probable, the suggestion of M. Clermont-Ganneau (Rev. Crit, 1897, 902) is correct that for har ( = \"mount\"), we should read nahar (\"river\"). In this case the border in question would be the Nahr rubin. Here there is an annual feast held--attended by all classes and famous all over Syria--which appears to be a real survival of \"Baal worship.\"\n\n(1) A town on the border of Da (Jos 19:44) associated with Eltekeh and Gibbethon--possibly Bela`in.\n\n(2) (\"Mistress-ship\"): A store city of Solomon, mentioned with Beth-horon (1Ki 9:18; 2Ch 8:6) and possibly the same as (1).",
-   "definition_ko": "",
+   "definition_ko": "바알랏(히브리어 '바알라트'; 알렉산드리아 사본 바알론). (이 항목 첫머리는 원문에서 앞 항목 「바알라」의 끝부분이 섞여 들어온 것으로 보인다:) 식그론(에그론)과 얍느엘 사이 — 다만 클레르몽가노가 제안한 대로(『비평 평론』 1897, 902쪽) '하르'(「산」) 대신 '나하르'(「강」)로 읽어야 할 가능성이 커 보이는데, 그렇다면 이 경계는 나흐르 루빈일 것이다. 이곳에서는 해마다 온갖 계층이 모이고 수리아 전역에 이름난 축제가 열리는데, 참으로 「바알 숭배」가 살아남은 것으로 보인다.\n\n(1) 단 지파 경계의 성읍으로(여호수아 19:44), 엘드게와 깁브돈과 함께 나온다. 벨라인일 가능성이 있다.\n\n(2) (「여주인 됨」) 솔로몬의 국고성으로, 벧호론과 함께 나오며(열왕기상 9:18; 역대하 8:6), (1)과 같은 곳일 수도 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAALATH"
@@ -1045,7 +1045,7 @@
    "id": 1042,
    "term": "Baalath-Beer(바알)",
    "definition": "ba'-a-lath-be'-er ba`alath be'er \"lady (mistress) of the well\"; (Jos 19:8 (in 1Ch 4:33, Baal)): In Jos this place is designated \"Ramah of the South,\" i.e. of the Negeb, while in 1Sa 30:27 it is described as Ramoth of the Negeb. It must have been a prominent hill (ramah = \"height\") in the far south of the Negeb and near a well be'er. The site is unknown though Conder suggests that the shrine Kubbet el Baul may retain the old name.",
-   "definition_ko": "",
+   "definition_ko": "바알랏 브엘(히브리어 '바알라트 베에르', 「우물의 여주인」; 여호수아 19:8, 역대상 4:33에서는 바알). 여호수아서에서는 이곳을 「네겝의 라마」라 하고, 사무엘상 30:27에서는 「남방 라못」이라 한다. 네겝의 먼 남쪽, 우물(베에르) 가까이 있는 두드러진 언덕(라마 = 「높은 곳」)이었을 것이다. 자리는 알 수 없으나, 콘더는 쿠베트 엘바울이라는 성소에 옛 이름이 남아 있을 수 있다고 본다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAALATH-BEER"
@@ -1099,7 +1099,7 @@
    "id": 1102,
    "term": "Balah(발라)",
    "definition": "ba'la balah; Bola: A place, unidentified, in the territory of Simeon (Jos 19:3), called Bilhah in 1Ch 4:29. It may be identical with Baalah in Judah (Jos 15:29).",
-   "definition_ko": "",
+   "definition_ko": "발라(히브리어 '발라'; 칠십인역 볼라). 시므온 지파 땅에 있는 곳으로 자리는 밝혀지지 않았다(여호수아 19:3). 역대상 4:29에서는 빌하라 한다. 유다의 바알라(여호수아 15:29)와 같은 곳일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BALAH"
@@ -1108,7 +1108,7 @@
    "id": 1116,
    "term": "Bamah(바마)",
    "definition": "ba'-ma, ba'-ma (bamah, \"high place\"): The word appears in Eze 20:29 where reference is made to former \"high-place worship,\" the prophet speaking with contempt of such manner of worship. Ewald suggests a play of words, ba', \"come\" and mah, \"what,\" \"what (mah) is the high place (ba-mah) whereunto ye come (ba')?\" It is possible that reference is made to a prominent high place like the one at Gibeon (compare 1Ki 3:4; 1Ch 16:39; 21:29;#2Ch 13) for which the name \"Bamah\" was retained after the reform mentioned by the prophet.",
-   "definition_ko": "",
+   "definition_ko": "바마(히브리어 '바마', 「산당」). 이 말은 에스겔 20:29에 나오는데, 선지자는 예전의 「산당 예배」를 두고 그런 예배를 멸시하며 말한다. 에발트는 여기에 말놀이가 있다고 본다. '바'(「오다」)와 '마'(「무엇」)로, 「너희가 다니는(바) 산당(바마)이 무엇(마)이냐」라는 것이다. 선지자가 말하는 개혁 뒤에도 「바마」라는 이름이 남아 있던, 기브온에 있던 것 같은 이름난 산당을 가리키는 것일 수도 있다(열왕기상 3:4; 역대상 16:39; 21:29; 역대하 1:3, 13 참조 — 원문 표기가 깨져 있음).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAMAH"
@@ -1126,7 +1126,7 @@
    "id": 1221,
    "term": "Bealoth(브알롯 · 아롯)",
    "definition": "be'-a-loth (be`aloth; Baloth): An unidentified city of Judah in the Negeb (Jos 15:24).",
-   "definition_ko": "",
+   "definition_ko": "브알롯(히브리어 '베알로트'; 칠십인역 발로트). 유다 네겝에 있는 성읍으로, 자리는 밝혀지지 않았다(여호수아 15:24).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BEALOTH"
@@ -1135,7 +1135,7 @@
    "id": 1236,
    "term": "Beautiful Gate(성전 미문)",
    "definition": "bu'-ti-fool, gat.\n\nSee TEMPLE.",
-   "definition_ko": "",
+   "definition_ko": "미문(아름다운 문). 성전 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BEAUTIFUL GATE"
@@ -1153,7 +1153,7 @@
    "id": 1260,
    "term": "Beer-Elim(브엘엘림)",
    "definition": "be-er-e'-lim (be'er 'elim; phrear tou Aileim, literally \"well of Elim\"): Probably lay to the North of Moab, answering to Eglaim in the South (Isa 15:8). It may possibly be identical with BEER (1); but there is no certainty.",
-   "definition_ko": "",
+   "definition_ko": "브엘엘림(히브리어 '베에르 엘림'; 칠십인역 「아일레임의 우물」, 곧 「엘림의 우물」). 아마 모압 북쪽에 있어 남쪽의 에글라임과 짝을 이루었을 것이다(이사야 15:8). 브엘 (1)과 같은 곳일 수도 있으나 확실하지 않다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BEER-ELIM"
@@ -1198,7 +1198,7 @@
    "id": 1268,
    "term": "Beeshterah(브에스드라)",
    "definition": "be-esh'-te-ra (Jos 21:27).\n\nSee ASHTAROTH.",
-   "definition_ko": "",
+   "definition_ko": "브에스드라(여호수아 21:27). 아스다롯 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BEESHTERAH"
@@ -1207,7 +1207,7 @@
    "id": 1324,
    "term": "Bene-Berak(브네브락)",
    "definition": "ben-e-be'-rak (bene beraq; Banebarak): A town in the territory of Da (Jos 19:45), represented by the modern village Ibn Ibraq, about an hour Southeast of Jaffa.",
-   "definition_ko": "",
+   "definition_ko": "브네브락(히브리어 '베네 베라크'; 칠십인역 바네바라크). 단 지파 땅에 있는 성읍으로(여호수아 19:45), 욥바 남동쪽으로 한 시간쯤 거리에 있는 오늘날의 마을 이븐 이브라크가 그 자리다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BENE-BERAK"
@@ -1216,7 +1216,7 @@
    "id": 1325,
    "term": "Bene-Jaakan(브네야아간)",
    "definition": "ben-e-ja'-a-kan, be-ne-ja'-a-kan (bene ya`aqan: Nu 33:31,32).\n\nSee BEEROTH BENE-JAAKAN.",
-   "definition_ko": "",
+   "definition_ko": "브네야아간(히브리어 '베네 야아칸', 민수기 33:31, 32). 브에롯 브네야아간 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BENE-JAAKAN"
@@ -1225,7 +1225,7 @@
    "id": 1337,
    "term": "Beon(브온)",
    "definition": "be'-on (Nu 32:3).\n\nSee BAAL-MEON.",
-   "definition_ko": "",
+   "definition_ko": "브온(민수기 32:3). 바알므온 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BEON"
@@ -1261,7 +1261,7 @@
    "id": 1377,
    "term": "Beten(베덴)",
    "definition": "be'-ten (beTen; Batne): A city of Asher mentioned between Hall and Achshaph (Jos 19:25). Eusebius, Onomasticon places it 8 Roman miles East of Ptolemais, giving it the name Bethseten. It may be identical with the modern village el-B`aneh, but no certainty is possible.",
-   "definition_ko": "",
+   "definition_ko": "베덴(히브리어 '베텐'; 칠십인역 바트네). 아셀의 성읍으로, 할리와 악삽 사이에 이름이 나온다(여호수아 19:25). 유세비우스의 『오노마스티콘』은 이곳을 벳세텐이라 부르며 프톨레마이스(악고) 동쪽 로마 마일로 8마일에 둔다. 오늘날의 마을 엘바네와 같은 곳일 수 있으나 확실하지 않다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETEN"
@@ -1297,7 +1297,7 @@
    "id": 1383,
    "term": "Beth-Arbel(벧아벨)",
    "definition": "beth-ar'-bel (beth 'arbe'l): The scene of a terrific disaster inflicted on the inhabitants by Shalman (Ho 10:14). If the place intended was in Palestine, and was not the famous city of that name on the Euphrates, then probably it should be identified either with Irbid (or Irbil) in Galilee, or with Irbid, which corresponds to Arbela of the Eusebius, Onomasticon, East of the Jordan, about 12 miles Southeast of Gadara. If, as Schrader thinks (COT, II, 140), Shalman stands for the Moabite king, Shalamanu, a tributary of Tiglath-pileser, the eastern town would be the more natural identification. Possibly however the reference is to Shalmaneser III or IV. For the Galilean site, see ARBELA; see also DB, under the word\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "벧아벨(히브리어 '베트 아르벨'). 살만이 그곳 주민에게 끔찍한 재앙을 내린 곳이다(호세아 10:14). 이곳이 유브라데 강가의 이름난 같은 이름의 도성이 아니라 팔레스타인에 있는 곳이라면, 아마 갈릴리의 이르비드(또는 이르빌)이거나, 요단 동쪽 가다라 남동쪽 12마일쯤에 있어 유세비우스 『오노마스티콘』의 아르벨라에 해당하는 이르비드일 것이다. 슈라더의 생각처럼(『설형 문자와 구약』 2권 140쪽) 살만이 디글랏 빌레셀에게 조공을 바친 모압 왕 살라마누를 가리킨다면, 동쪽의 성읍이 더 자연스러운 자리다. 그러나 살만에셀 3세나 4세를 가리킬 가능성도 있다. 갈릴리 쪽 자리에 대해서는 아르벨라 항목을 보라. 『성경사전』 해당 항목도 보라.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-ARBEL"
@@ -1324,7 +1324,7 @@
    "id": 1388,
    "term": "Beth-Biri(벧비리)",
    "definition": "beth-bir'-i (the King James Version Beth-birei, beth-bir'-e-i) beth bir'i; oikos Braoumseoreim; 1Ch 4:31 (called in Jos 19:6, Beth-lebaoth, \"abode of lions\"): A site belonging to Simeon in the Negeb--unidentified.",
-   "definition_ko": "",
+   "definition_ko": "벧비리(흠정역은 벧비레이; 히브리어 '베트 비르이'; 역대상 4:31 — 여호수아 19:6에서는 「암사자들의 거처」라는 뜻의 벧 르바옷이라 부름). 네겝에 있는 시므온의 땅으로, 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-BIRI"
@@ -1333,7 +1333,7 @@
    "id": 1389,
    "term": "Beth-Car(벧갈)",
    "definition": "beth'-kar (beth-kar; Baithchor, Belchor): \"And the men of Israel went out of Mizpah, and pursued the Philistines, and smote them, Until they came under Beth-car\" (1Sa 7:11). `Ain Karem has been suggested; if Mizpah is nebi Samwil then this identification is probable, as the pursuit would be along the deep Wady beit Hannineh--a natural line of retreat for the Philistines to take.\n\nSee BETH-HACCHEREM.",
-   "definition_ko": "",
+   "definition_ko": "벧갈(히브리어 '베트 카르'; 칠십인역 바이트코르, 벨코르). 「이스라엘 사람들이 미스바에서 나가서 블레셋 사람들을 추격하여 벧갈 아래에 이르기까지 쳤더라」(사무엘상 7:11). 아인 카림이 제안되었는데, 미스바가 네비 삼윌이라면 이 추정은 그럴듯하다. 추격이 깊은 와디 베이트 한니네를 따라 이어졌을 것이고, 이는 블레셋 사람들이 물러나기에 자연스러운 길이기 때문이다.\n\n벧학게렘 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-CAR"
@@ -1351,7 +1351,7 @@
    "id": 1391,
    "term": "Beth-Diblathaim(벧디불라다임)",
    "definition": "beth-dib-la-tha'-im (beth dibhlathayim; oikos Deblaithaim, literally, \"house of Diblathaim\"): A town in Moab mentioned with Dibon and Nebo (Jer 48:22). It is probably identical with Almondiblathaim (Nu 33:46 f). Mesha claims to have fortified it along with Mehedeba and Ba`al-me`on (see MOABITE STONE). The place is not yet identified.",
-   "definition_ko": "",
+   "definition_ko": "벧디블라다임(히브리어 '베트 디블라타임', 「디블라다임의 집」; 개역개정 예레미야 48:22 「벧디불라다임」). 디본, 느보와 함께 나오는 모압의 성읍이다(예레미야 48:22). 아마 알몬디블라다임(민수기 33:46 이하)과 같은 곳일 것이다. 메사는 메드바, 바알므온과 함께 이곳을 요새로 쌓았다고 주장한다(모압 비석 항목을 보라). 자리는 아직 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-DIBLATHAIM"
@@ -1360,7 +1360,7 @@
    "id": 1392,
    "term": "Beth-Eden(벧에던)",
    "definition": "beth-e'-den (Am 1:5 King James Version, margin; English Versions of the Bible \"house of Eden\").\n\nSee CHILDREN OF EDEN.",
-   "definition_ko": "",
+   "definition_ko": "벧에덴(아모스 1:5 흠정역 난외주; 영역본들은 「에덴의 집」). 에덴 자손 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-EDEN"
@@ -1369,7 +1369,7 @@
    "id": 1393,
    "term": "Beth-Emek(벧에멕)",
    "definition": "beth-e'-mek (beth ha-'emeq; Bethaemek, \"house of the valley\"): A town in the territory of Zebulun (Jos 19:27). It has not been identified, but must be sought somewhere East of Acre, not far from Kabul, the ancient Cabul.",
-   "definition_ko": "",
+   "definition_ko": "벧에멕(히브리어 '베트 하에메크', 「골짜기의 집」). 스불론 지파 땅에 있는 성읍이다(여호수아 19:27). 자리는 밝혀지지 않았으나, 악고 동쪽, 옛 가불인 카불에서 멀지 않은 어딘가에서 찾아야 한다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-EMEK"
@@ -1378,7 +1378,7 @@
    "id": 1394,
    "term": "Beth-Ezel(벧에셀)",
    "definition": "beth-e'-zel (beth ha-'etsel; oikos echomenous autes; literally, \"adjoining house\"): A place named along with other cities in the Philistine plain (Mic 1:11). The site has not been identified. By some it is thought to be the same as Azel of Zec 14:5; but see AZEL.",
-   "definition_ko": "",
+   "definition_ko": "벧에셀(히브리어 '베트 하에첼'; 칠십인역 「이웃한 집」). 블레셋 평야의 다른 성읍들과 함께 이름이 나오는 곳이다(미가 1:11). 자리는 밝혀지지 않았다. 어떤 이들은 스가랴 14:5의 아셀과 같은 곳으로 보지만, 아셀 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-EZEL"
@@ -1387,7 +1387,7 @@
    "id": 1395,
    "term": "Beth-Gader(벧가델)",
    "definition": "beth-ga'-der (bethgadher; Baithgedor, or (Codex Vaticanus) Baithgaidon): The name occurs between those of Bethlehem and Kiriath-jearim in 1Ch 2:51. It is possibly identical with Geder of Jos 12:13.",
-   "definition_ko": "",
+   "definition_ko": "벧가델(히브리어 '베트 가데르'; 칠십인역 바이트게도르, 바티칸 사본 바이트가이돈). 역대상 2:51에서 베들레헴과 기럇여아림 사이에 이름이 나온다. 여호수아 12:13의 게델과 같은 곳일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-GADER"
@@ -1396,7 +1396,7 @@
    "id": 1396,
    "term": "Beth-Gamul(벧가물)",
    "definition": "beth-ga'-mul (beth gamul; oikos Gaimol; Codex Sinaiticus, Gamola): A city in Moab named with Dibon, Kiriathaim and Beth-meon (Jer 48:23). Conder places it at Umm el-Jamal, toward East of the plateau, S. of Medeba (HDB, under the word). Others (Guthe, Kurz. bib. Worterbuch, under the word; Buhl, GAP, 268, etc.) favor Jemeil, a site 6 miles East of Dhiban. Since the town is not mentioned among the cities of Israel Buhl doubts if it should be sought North of the Arnon.",
-   "definition_ko": "",
+   "definition_ko": "벧가물(히브리어 '베트 가물'; 칠십인역 「가이몰의 집」; 시내 사본 가몰라). 디본, 기랴다임, 벧므온과 함께 나오는 모압의 성읍이다(예레미야 48:23). 콘더는 이곳을 메드바 남쪽, 고원 동쪽에 있는 움 엘자말에 둔다(『헤이스팅스 성경사전』 해당 항목). 다른 이들(구테, 『간추린 성서 사전』 해당 항목; 불, 『고대 팔레스타인 지리』 268쪽 등)은 디반 동쪽 6마일의 제메일을 지지한다. 이 성읍이 이스라엘의 성읍 목록에 나오지 않으므로, 불은 이곳을 아르논 강 북쪽에서 찾아야 할지 의심한다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-GAMUL"
@@ -1405,7 +1405,7 @@
    "id": 1397,
    "term": "Beth-Gilgal(벧길갈)",
    "definition": "beth-gil'-gal (beth ha-gilgal; Bethaggalgal; the King James Version house of Gilgal): The Gilgal which lay in the plain East of Jericho (Ne 12:29).\n\nSee GILGAL.",
-   "definition_ko": "",
+   "definition_ko": "벧길갈(히브리어 '베트 하길갈'; 흠정역 「길갈의 집」). 여리고 동쪽 평야에 있던 길갈이다(느헤미야 12:29). 길갈 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-GILGAL"
@@ -1423,7 +1423,7 @@
    "id": 1399,
    "term": "Beth-Haggan(벧하간) (아하시야 도주길)",
    "definition": "beth-hag'-an (beth-ha-gan, \"house of the garden\"). The place where Ahaziah was slain by Jehu (2Ki 9:27). The words are rendered in English Versions of the Bible \"the garden house,\" but some take them to be a proper name. The location is doubtful.",
-   "definition_ko": "",
+   "definition_ko": "벧하간(히브리어 '베트 한간', 「동산의 집」). 아하시야가 예후에게 죽임을 당한 곳이다(열왕기하 9:27). 영역본들은 이 말을 「동산의 집」(개역개정 「정원의 정자」)으로 옮기지만, 땅 이름으로 보는 이들도 있다. 자리는 확실하지 않다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-HAGGAN"
@@ -1441,7 +1441,7 @@
    "id": 1403,
    "term": "Beth-Hoglah(벧호글라)",
    "definition": "beth-hog'-la (beth-choghlah; Septuagint Baithaglaam, \"house of partridge\"): Mentioned in Jos 15:6; 18:19, identified with Ain Haijab (\"partridge spring\") lying between Jericho and the Jordan, where in 1874 there was still a ruined Greek monastery called Kasr Hajlah, dating from the 12th century. The ruins are now destroyed. In Jos 15:5; 18:19 it is said to be at the mouth of the Jordan on a Tongue (Lisan) of the Salt Sea. But it is now several miles inland, probably because the Jordan has silt edition up a delta to that extent.\n\nSee DEAD SEA.\n\nGeorge Frederick Wright",
-   "definition_ko": "",
+   "definition_ko": "벧호글라(히브리어 '베트 호글라'; 칠십인역 바이타글람, 「자고새의 집」). 여호수아 15:6; 18:19에 나오며, 여리고와 요단 강 사이에 있는 아인 하이자브(「자고새 샘」)와 같은 곳으로 본다. 1874년에도 그곳에는 12세기에 세운 카스르 하즐라라는 무너진 헬라 수도원이 남아 있었다. 지금은 그 폐허도 허물어졌다. 여호수아 15:5; 18:19에서는 이곳이 요단 강 어귀, 염해의 혀(리산)에 있다고 한다. 그러나 지금은 몇 마일 내륙에 있는데, 아마 요단 강이 그만큼 삼각주를 쌓아 올렸기 때문일 것이다.\n\n사해 항목을 보라.\n\n(집필: George Frederick Wright)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-HOGLAH"
@@ -1468,7 +1468,7 @@
    "id": 1407,
    "term": "Beth-Leaphrah(베들레아브라)",
    "definition": "beth-le-af'-ra (beth le`aphrah; Septuagint ex oikou kata gelota, \"house of dust\"): The name of a place found only in Mic 1:10. From the connection in which it is used it was probably in the Philistine plain. There seems to be a play upon the name in the sentence, \"at Beth le-`apharah have I rolled myself in the dust,\" `aphrah meaning \"dust,\" and possibly another on Philistine in rolled, hith-palldshithi (see G. A. Smith, The Book of the Twelve Prophets, called Minor, in the place cited.).",
-   "definition_ko": "",
+   "definition_ko": "베들레아브라(히브리어 '베트 레아프라'; 칠십인역 「웃음거리가 된 집에서」, 「티끌의 집」). 미가 1:10에만 나오는 땅 이름이다. 쓰인 문맥으로 보아 블레셋 평야에 있었을 것이다. 「내가 베들레아브라에서 티끌에 굴렀도다」라는 문장에는 이름을 두고 한 말놀이가 있는 듯한데, '아프라'가 「티끌」이라는 뜻이기 때문이다. 「굴렀도다」(히트팔라쉬티)라는 말에도 블레셋을 두고 한 또 다른 말놀이가 있을 수 있다(G. A. 스미스, 『열두 소선지서』 해당 대목을 보라).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-LEAPHRAH"
@@ -1477,7 +1477,7 @@
    "id": 1408,
    "term": "Beth-Lebaoth(벧르바옷)",
    "definition": "beth-le-ba'-oth, beth-leb'-aoth (beth lebha'oth; Baithalbath, \"house of lionesses\"): A town in the territory of Simeon (Jos 19:6). In 1Ch 4:31 the name is given as Beth-birei: the Revised Version (British and American) BETH-BIRI (which see).",
-   "definition_ko": "",
+   "definition_ko": "벧 르바옷(히브리어 '베트 레바오트', 「암사자들의 집」). 시므온 지파 땅에 있는 성읍이다(여호수아 19:6). 역대상 4:31에서는 그 이름이 벧비레이(영국·미국 개역판(RV)은 벧비리, 해당 항목을 보라)로 나온다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-LEBAOTH"
@@ -1486,7 +1486,7 @@
    "id": 1412,
    "term": "Beth-Marcaboth(벧말가봇)",
    "definition": "beth-mar'-ka-both (beth ha-markabhoth; Baithmachereb, \"the house of chariots\"): Mentioned along with Hazar-susah, \"the station of horses\" (Jos 19:5; 1Ch 4:31) as cities in the Negeb near Ziklag. It is tempting to connect these stations with \"the cities for his chariots, and the cities for his horsemen\" which Solomon built (1Ki 9:19; compare 1Ki 10:26). The site of Beth-marcaboth has not been identified, but Guerin (La Terre Sainte. Jerusalem et le Nord de la Judee, II, 230) suggests Khan Yunas , Southwest of Gaza, as a suitable chariot city.\n\nE. W. G. Masterman",
-   "definition_ko": "",
+   "definition_ko": "벧 말가봇(히브리어 '베트 함마르카보트', 「병거들의 집」). 「말들의 정거장」이라는 뜻의 하살수사와 함께 시글락 근처 네겝의 성읍으로 나온다(여호수아 19:5; 역대상 4:31). 이 정거장들을 솔로몬이 세운 「병거 성들과 마병의 성들」(열왕기상 9:19; 10:26 참조)과 이어 보고 싶은 마음이 든다. 벧 말가봇의 자리는 밝혀지지 않았으나, 게랭(『성지. 예루살렘과 유대 북부』 2권 230쪽)은 가사 남서쪽의 칸 유니스를 병거 성으로 알맞은 곳으로 제안한다.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-MARCABOTH"
@@ -1495,7 +1495,7 @@
    "id": 1413,
    "term": "Beth-Meon(벧므온)",
    "definition": "beth-me'-on: A city of Moab (Jer 48:23), identical with BAAL-MEON (which see).",
-   "definition_ko": "",
+   "definition_ko": "벧므온. 모압의 성읍으로(예레미야 48:23), 바알므온과 같은 곳이다(해당 항목을 보라).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-MEON"
@@ -1504,7 +1504,7 @@
    "id": 1415,
    "term": "Beth-Millo(밀로의 집)",
    "definition": "beth-mil'-o.\n\nSee JERUSALEM.",
-   "definition_ko": "",
+   "definition_ko": "밀로의 집. 예루살렘 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-MILLO"
@@ -1513,7 +1513,7 @@
    "id": 1416,
    "term": "Beth-Nimrah(벧니므라)",
    "definition": "beth-nim'-ra (beth nimrah, \"house of leopard,\" Nu 32:36, but in verse Nu 32:3 it is simply Nimrah): In Jos 13:27 the full name appears. In Isa 15:6 the name appears as Nimrim, identified as Tell Nimrim, between Jericho and the mountains on the east, where there is a fountain of large size. The city was assigned to Gad. In the 4th century AD it was located as five Roman miles North of Livias. Eusebius calls it Bethamnaram (SEP, I, Tell Nimrin).",
-   "definition_ko": "",
+   "definition_ko": "벧니므라(히브리어 '베트 니므라', 「표범의 집」; 민수기 32:36 — 32:3에서는 그냥 니므라). 여호수아 13:27에는 온전한 이름이 나온다. 이사야 15:6에서는 니므림이라는 이름으로 나오는데, 여리고와 동쪽 산지 사이에 있고 큰 샘이 있는 텔 니므림과 같은 곳으로 본다. 이 성읍은 갓 지파에게 주어졌다. 주후 4세기에는 리비아스 북쪽 로마 마일로 5마일에 있다고 했다. 유세비우스는 이곳을 베타므나람이라 부른다(『동팔레스타인 조사』 1권, 텔 니므린).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-NIMRAH"
@@ -1522,7 +1522,7 @@
    "id": 1418,
    "term": "Beth-Pazzez(벧바세스)",
    "definition": "beth-paz'-ez (beth patstsets; Bersaphes, Baithphrasee): A town in the territory of Issachar, named with En-gannim and En- haddah (Jos 19:21). The site has not been discovered; it probably lay near the modern Jenin.",
-   "definition_ko": "",
+   "definition_ko": "벧 바세스(히브리어 '베트 파체츠'; 칠십인역 베르사페스, 바이트프라세). 잇사갈 지파 땅에 있는 성읍으로, 엔 간님, 엔핫다와 함께 이름이 나온다(여호수아 19:21). 자리는 발견되지 않았으나, 아마 오늘날의 제닌 근처에 있었을 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-PAZZEZ"
@@ -1531,7 +1531,7 @@
    "id": 1419,
    "term": "Beth-Pelet(벧벨렛)",
    "definition": "beth-pe'-let (beth-peleT; Baithphaleth, \"house of escape\"; the King James Version Beth-palet; Jos 15:27, Beth-phelet, the King James Version Ne 11:26): One of \"the uttermost cities of the tribe of the children of Judah toward the border of Edom in the (Negeb) South\" (Jos 15:21,27). Site unknown.",
-   "definition_ko": "",
+   "definition_ko": "벧 벨렛(히브리어 '베트 펠레트', 「피난의 집」; 흠정역 여호수아 15:27은 벧팔렛, 흠정역 느헤미야 11:26은 벧펠렛). 「유다 자손의 지파의 남쪽 끝 에돔 경계에 접근한 성읍들」 가운데 하나다(여호수아 15:21, 27). 자리는 알 수 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-PELET"
@@ -1549,7 +1549,7 @@
    "id": 1423,
    "term": "Beth-Rehob(벧르홉)",
    "definition": "beth-re'-hob (beth-rechobh; ho oikos Rhaab) : An Aramean town and district which, along with Zobah and Maacah, assisted Ammon against David (2Sa 10:6,8, Rehob). It is probably identical with Rehob (Nu 13:21), the northern limit of the spies' journey. Laish-Da (probably Tell el-Kadi) was situated near it (Jud 18:28). The site of the town is unknown. It has been conjecturally identified with Hunin, West of Banias, and, more plausibly, with Banias itself (Thomson, The Land and the Book (2), 218; Buhl, Geog., 240; Moore, ICC, Jgs, 399).\n\nC. H. Thomson",
-   "definition_ko": "",
+   "definition_ko": "벧르홉(히브리어 '베트 레호브'; 칠십인역 「라압의 집」). 소바, 마아가와 함께 암몬을 도와 다윗과 싸운 아람의 성읍이자 지방이다(사무엘하 10:6, 8 — 8절에서는 르홉). 아마 정탐꾼들이 간 길의 북쪽 끝인 르홉(민수기 13:21)과 같은 곳일 것이다. 라이스, 곧 단(아마 텔 엘카디)이 그 근처에 있었다(사사기 18:28, 개역개정 「베드르홉」). 성읍의 자리는 알 수 없다. 바니아스 서쪽의 후닌으로 추정하기도 하고, 더 그럴듯하게는 바니아스 자체로 보기도 한다(톰슨, 『땅과 책』 2판 218쪽; 불, 『지리』 240쪽; 무어, 『국제 비평 주석 사사기』 399쪽).\n\n(집필: C. H. Thomson)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-REHOB"
@@ -1567,7 +1567,7 @@
    "id": 1427,
    "term": "Beth-Shittah(벧싯다)",
    "definition": "beth-shit'-a (beth ha-shiTTah, \"house of the acacia\"): A place on the route followed by the Midianites in their flight before Gideon (Jud 7:22). It is probably identical with the modern ShuTTa, a village in the Vale of Jezreel, about 6 miles Northwest of Beisan.",
-   "definition_ko": "",
+   "definition_ko": "벧 싯다(히브리어 '베트 하쉿타', 「아카시아의 집」). 미디안 사람들이 기드온 앞에서 도망할 때 지난 길에 있는 곳이다(사사기 7:22). 아마 베이산 북서쪽 6마일쯤, 이스르엘 골짜기에 있는 오늘날의 마을 슈타와 같은 곳일 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-SHITTAH"
@@ -1576,7 +1576,7 @@
    "id": 1428,
    "term": "Beth-Tappuah(벧답부아)",
    "definition": "beth-tap'-u-a (beth-tappuach; Beththapphoue, \"place of apples\" (see however APPLE)); A town in the hill country of Judah (Jos 15:53), probably near Hebron (el Tappuah, 1Ch 2:43), possibly the same as Tephon (1 Macc 9:50). The village of Tuffuch, 3 1/2 miles Northwest of Hebron, is the probable site; it stands on the edge of a high ridge, surrounded by very fruitful gardens; an ancient highroad runs through the village, and there are many old cisterns and caves. (See PEF, III, 310, 379, Sh XXI.)\n\nE. W. G. Masterman",
-   "definition_ko": "",
+   "definition_ko": "벧 답부아(히브리어 '베트 탑푸아'; 칠십인역 베트탑푸에, 「사과의 곳」 — 다만 사과 항목을 보라). 유다 산지의 성읍으로(여호수아 15:53), 아마 헤브론 근처였을 것이며(역대상 2:43의 답부아), 테폰(마카베오상 9:50)과 같은 곳일 수도 있다. 헤브론 북서쪽 3.5마일에 있는 투푸흐 마을이 그 자리로 보인다. 이 마을은 높은 산등성이 끝에 있고 매우 기름진 과수원에 둘러싸여 있으며, 옛 큰길이 마을을 지나고 오래된 물웅덩이와 굴이 많다(팔레스타인 탐사 기금 조사 보고, 3권 310, 379쪽, 지도 21 참조).\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-TAPPUAH"
@@ -1612,7 +1612,7 @@
    "id": 1439,
    "term": "Bether(베데르)",
    "definition": "be'-ther (bether): In So 2:17 mention is made of \"the mountains of Bether.\" It is doubtful if a proper name is intended. The Revised Version, margin has, \"perhaps, the spice malobathron.\" A Bether is prominent in late Jewish history as the place where the Jews resisted Hadrian under Bar Cochba in 135 AD. Its identity with Bittir, 7 miles Southwest of Jerusalem, is attested by an inscription.",
-   "definition_ko": "",
+   "definition_ko": "베데르(히브리어 '베테르'). 아가 2:17에 「베데르 산」이 나온다. 땅 이름을 뜻하는지는 의심스럽다. 영국·미국 개역판 난외주는 「아마 향료 말로바트론」이라 한다. 후대 유대 역사에서는 베데르가 주후 135년 바르 코크바 아래 유대 사람들이 하드리아누스에 맞선 곳으로 두드러진다. 이곳이 예루살렘 남서쪽 7마일의 비티르라는 것은 비문으로 확인된다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETHER"
@@ -1666,7 +1666,7 @@
    "id": 1450,
    "term": "Bethul(브둘)",
    "definition": "beth'-ul, be'-thul (bethul):\n\nSee BETHUEL; CHESIL.",
-   "definition_ko": "",
+   "definition_ko": "브둘(히브리어 '베툴'). 브두엘, 그실 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETHUL"
@@ -1675,7 +1675,7 @@
    "id": 1455,
    "term": "Betonim(브도님)",
    "definition": "bet'-o-nim, be-to'-nim (beTonim; Botanei or Botanin): A town East of the Jordan in the territory of Gad (Jos 13:26). It may be identical with BaTneh, about 3 miles Southwest of es-SalT.",
-   "definition_ko": "",
+   "definition_ko": "브도님(히브리어 '베토님'; 칠십인역 보타네이, 보타닌). 요단 동쪽 갓 지파 땅에 있는 성읍이다(여호수아 13:26). 에스살트 남서쪽 3마일쯤의 바트네와 같은 곳일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETONIM"
@@ -1702,7 +1702,7 @@
    "id": 1488,
    "term": "Bileam(빌르암)",
    "definition": "bil'-e-am (bil`am; Iblaam): A town in the territory of Manasseh assigned to the Kohathite Levites (1Ch 6:70), probably the same as Ibleam (Jos 17:11, etc.), and identical with the modern Bel`ameh, half a mile South of Jenin.",
-   "definition_ko": "",
+   "definition_ko": "빌르암(히브리어 '빌암'; 칠십인역 이블라암). 므낫세 지파 땅에서 그핫 자손 레위 사람에게 준 성읍으로(역대상 6:70), 아마 이블르암(여호수아 17:11 등)과 같은 곳이며, 제닌 남쪽 반 마일의 오늘날 벨라메가 그 자리다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BILEAM"
@@ -1711,7 +1711,7 @@
    "id": 1491,
    "term": "Bilhah (2)(빌하)",
    "definition": "bil'-ha (place) (bilhah; Codex Alexandrinus, Balaa; Codex Vaticanus, Abella): A city in Simeon (1Ch 4:29) = Baalah (Jos 15:29), Balah (Jos 19:3), and Baalath (Jos 19:44). Unidentified.",
-   "definition_ko": "",
+   "definition_ko": "빌하(땅 이름; 히브리어 '빌하'; 알렉산드리아 사본 발라아, 바티칸 사본 아벨라). 시므온의 성읍으로(역대상 4:29), 바알라(여호수아 15:29), 발라(여호수아 19:3), 바알랏(여호수아 19:44)과 같은 곳이다. 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BILHAH (2)"
@@ -1729,7 +1729,7 @@
    "id": 1529,
    "term": "Biziothiah(비스요댜)",
    "definition": "biz-yo-thi'-a, biz-joth'-ja (bizyotheyah; Septuagint hai komai auton, literally \"their villages\"; the King James Version Bizjothjah, \"place of Jah's olives\" (Young), or \"contempt of Jah\" (Strong)): According to Massoretic Text, a town in the south of Judah, near Beersheba (Jos 15:28). Septuagint reads \"and her daughters,\" only one consonant of Massoretic Text being read differently; and so We, Hollenberg, Di and others The Septuagint has probably preserved the original text (compare Ne 11:27).",
-   "definition_ko": "",
+   "definition_ko": "비스요댜(히브리어 '비즈요테야'; 칠십인역 「그들의 마을들」; 흠정역 비즈요댜 — 「야의 감람나무들의 곳」(영) 또는 「야를 업신여김」(스트롱)). 마소라 본문에 따르면 유다 남쪽, 브엘세바 근처의 성읍이다(여호수아 15:28). 칠십인역은 마소라 본문의 자음 하나만 달리 읽어 「그 딸들(마을들)」로 읽으며, 벨하우젠, 홀렌베르크, 딜만 등도 그렇게 본다. 칠십인역이 본디 본문을 간직했을 가능성이 크다(느헤미야 11:27 참조).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BIZIOTHIAH"
@@ -1747,7 +1747,7 @@
    "id": 1606,
    "term": "Bor-Ashan(고라산)",
    "definition": "bor-ash'-an: A correction of the Massoretic Text in the American Standard Revised Version in 1Sa 30:30 for the King James Version \"Chor-ashan\" and the English Revised Version \"Cor-ashan.\" Probably the same as ASHAN (Jos 15:42; 1Ch 4:32; 6:59), which see.",
-   "definition_ko": "",
+   "definition_ko": "보라산. 미국 표준역(ASV)이 사무엘상 30:30에서 마소라 본문을 고쳐 적은 이름으로, 흠정역은 「코라산」, 영국 개역판은 「고라산」으로 적었다(개역개정 「고라산」). 아마 아산(여호수아 15:42; 역대상 4:32; 6:59)과 같은 곳일 것이다. 아산 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BOR-ASHAN"
@@ -1756,7 +1756,7 @@
    "id": 1646,
    "term": "Bozez(보세스)",
    "definition": "bo'-zez (botsets; Bazes, probably from an obsolete root batsats, corresponding to the Arabic batstsa, \"to shine\" or \"to ooze\"): The name of the northern of the two cliffs that stand one on each side of the gorge of Michmash (1Sa 14:4). It catches the sun during most of the day, while the southern cliff is in the shade. To this circumstance it may owe its name, \"shining.\" \"The contrast is surprising and picturesque between the dark coal color of the south side, and the ruddy or tawny tints of the northern cliff, crowned with the gleaming white of the upper chalky strata. The picture is unchanged since the day when Jonathan looked over to the white camping ground of the Philistines, and Bozez must have then shone as brightly as it does now, in the full light of an eastern sun\" (Conder, Tent Work, 256).\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "보세스(히브리어 '보체츠'; 칠십인역 바제스 — 아마 「빛나다」 또는 「스며 나오다」라는 뜻의 아랍어 '밧사'에 해당하는 옛 어근 '바차츠'에서 온 말). 믹마스 협곡 양쪽에 하나씩 선 두 벼랑 가운데 북쪽 벼랑의 이름이다(사무엘상 14:4). 이 벼랑은 하루 대부분 햇빛을 받고 남쪽 벼랑은 그늘에 있다. 「빛나는」이라는 이름은 이 까닭에서 왔을 것이다. 「남쪽의 짙은 석탄빛과, 위쪽 백악층의 반짝이는 흰빛을 인 북쪽 벼랑의 붉거나 누런빛이 놀랍고 그림 같은 대조를 이룬다. 요나단이 블레셋 사람의 하얀 진지를 건너다보던 날 이후로 이 풍경은 변하지 않았으며, 그때도 보세스는 동방의 해를 한껏 받아 지금처럼 밝게 빛났을 것이다」(콘더, 『천막 생활』 256쪽).\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BOZEZ"
@@ -1765,7 +1765,7 @@
    "id": 1647,
    "term": "Bozkath(보스갓)",
    "definition": "boz'-kath (botsqath, \"stony\"; Septuagint Basedoth): A town in the Shephelah of Judah named between Lachish and Eglon (Jos 15:39). It was the birthplace of Adaiah the mother of King Josiah (2Ki 22:1; the King James Version \"Boscath\"). The site is not identified.",
-   "definition_ko": "",
+   "definition_ko": "보스갓(히브리어 '보츠카트', 「돌이 많은」; 칠십인역 바세도트). 유다 세벨라(평지)의 성읍으로, 라기스와 에글론 사이에 이름이 나온다(여호수아 15:39). 원문은 이곳을 요시야 왕의 어머니 아다야의 고향이라 하는데(열왕기하 22:1; 흠정역 「보스갓」), 열왕기하 22:1에 따르면 요시야의 어머니는 여디다이고 아다야는 그 아버지다. 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BOZKATH"
@@ -1783,7 +1783,7 @@
    "id": 1767,
    "term": "Cabbon(갑본)",
    "definition": "kab'-on (kabbon; Chabra): An unidentified place in the Shephelah of Judah near Eglon (Jos 15:40). It is possibly the same as MACHBENA, which see.",
-   "definition_ko": "",
+   "definition_ko": "갑본(히브리어 '캅본'; 칠십인역 카브라). 유다 세벨라에서 에글론 근처에 있는 곳으로, 자리는 밝혀지지 않았다(여호수아 15:40). 막베나와 같은 곳일 수 있다(해당 항목을 보라).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CABBON"
@@ -1819,7 +1819,7 @@
    "id": 1788,
    "term": "Caleb-Ephrathah(갈렙에브라다)",
    "definition": "ka'-leb ef'-ra-tha, -ef'-ra-ta (the King James Version Caleb-ephratah, kalebh 'ephrathah): The place where Hezron died (1Ch 2:24). Many scholars, however, read with the Septuagint \"after the death of Hezron, Caleb came unto Ephrath, the wife of Hezron, his father.\" The name does not occur elsewhere, and none resembling it has been recovered.",
-   "definition_ko": "",
+   "definition_ko": "갈렙 에브라다(흠정역은 갈렙에브라타; 히브리어 '칼렙 에프라타'). 헤스론이 죽은 곳이다(역대상 2:24). 그러나 많은 학자들은 칠십인역을 따라 「헤스론이 죽은 뒤에 갈렙이 그의 아버지 헤스론의 아내 에브랏에게 들어갔다」로 읽는다. 이 이름은 다른 데에는 나오지 않으며, 비슷한 이름도 발견되지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CALEB-EPHRATHAH"
@@ -1837,7 +1837,7 @@
    "id": 1820,
    "term": "Canneh(간네)",
    "definition": "kan'-e (kanneh; Chanaa): Mentioned in Eze 27:23 in connection with Haran and Eden as one of the places with which Tyre had commercial relations. This is the only reference to the place and the site is unknown. Gesenius and others think it is probably the same as Calneh of Am 6:2 or of Ge 10:10, and Calno of Isa 10:9. According to the Targums, Eusebius, and Jerome, this place is identical with Ctesiphon, which was situated on the Tigris. One codex of De Rossi has made this identification in the passage in Eze 27:23. Cornill thinks Canneh is the Calneh of Am 6:2, but Cheyne thinks the name is really non-existent. He says the words rendered \"and Canneh and Eden\" should rather be \"and the sons of Eden.\"\n\nA. W. Fortune",
-   "definition_ko": "",
+   "definition_ko": "간네(히브리어 '칸네'; 칠십인역 카나아). 에스겔 27:23에서 두로와 무역하던 곳들 가운데 하나로 하란, 에덴과 함께 나온다. 이곳이 나오는 유일한 대목이며 자리는 알 수 없다. 게세니우스 등은 아모스 6:2나 창세기 10:10의 갈레, 이사야 10:9의 갈로와 같은 곳일 것이라고 본다. 탈굼과 유세비우스와 히에로니무스에 따르면 이곳은 티그리스 강가에 있던 크테시폰과 같은 곳이다. 데 로시가 모은 사본 가운데 하나는 에스겔 27:23에서 그렇게 동일시하여 적었다. 코르닐은 간네를 아모스 6:2의 갈레로 보지만, 체인은 이 이름이 실제로는 없다고 생각하여 「간네와 에덴」으로 옮긴 말을 「에덴의 아들들」로 읽어야 한다고 말한다.\n\n(집필: A. W. Fortune)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CANNEH"
@@ -1882,7 +1882,7 @@
    "id": 1875,
    "term": "Casiphia(가시뱌)",
    "definition": "ka-sif'-i-a, ka-sif-e'-a (kaciphya'): An unidentified place in North Babylonia, near the river Ahava, to which Ezra sent for \"ministers for the house of our God\" (Ezr 8:17). Some have thought the name to be connected with keceph, \"silver\" or \"money.\" Septuagint renders argurio tou topou, as in 1 Esdras 8:45, \"the place of the treasury.\"",
-   "definition_ko": "",
+   "definition_ko": "가시뱌(히브리어 '카시프야'). 북바벨론 아하와 강 근처에 있는 곳으로 자리는 밝혀지지 않았으며, 에스라가 「우리 하나님의 성전을 위하여 섬길 자」를 데려오라고 사람을 보낸 곳이다(에스라 8:17). 어떤 이들은 이 이름이 「은」 또는 「돈」이라는 뜻의 '케셉'과 이어져 있다고 보았다. 칠십인역은 에스드라 1서 8:45처럼 「그곳의 은(창고)」으로 옮긴다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CASIPHIA"
@@ -1900,7 +1900,7 @@
    "id": 1906,
    "term": "Cenchreae(겐그레아)",
    "definition": "sen'-kre-e (Kegchreai, Westcott and Hort, The New Testament in Greek Kenchreai; the King James Version incorrectly Cenchrea): A seaport of Corinth on the eastern side of the isthmus (see CORINTH). Here according to Ac 18:18, Paul had his hair shorn before sailing for Syria, since he had a vow. A local church must have been established there by Paul, since Phoebe, the deaconess of Cenchrea, was entrusted with the Epistle to the Romans, and was commended to them in the highest terms by the apostle, who charged them to \"assist her in whatsoever matter she may have need\" (Ro 16:1,2).",
-   "definition_ko": "",
+   "definition_ko": "겐그레아(헬라어 '켕크레아이'; 웨스트코트·호트 『헬라어 신약』 켄크레아이; 흠정역은 잘못하여 켄크레아). 지협의 동쪽에 있는 고린도의 항구다(고린도 항목을 보라). 사도행전 18:18에 따르면 바울은 서원이 있어서 수리아로 배를 타기 전에 이곳에서 머리를 깎았다. 바울이 이곳에 지역 교회를 세웠음이 틀림없는데, 겐그레아 교회의 여집사 뵈뵈가 로마서를 맡아 전하였고, 사도는 그를 최고의 말로 추천하며 「무엇이든지 그에게 소용되는 바를 도와 줄지니」라고 당부하였기 때문이다(로마서 16:1, 2).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CENCHREAE"
@@ -1918,7 +1918,7 @@
    "id": 2001,
    "term": "Chephar-Ammoni(그발암모니)",
    "definition": "ke-far-am'-o-ni (the King James Version Chephar-haammoni; kephar ha`ammoni; Codex Vaticanus, Kepheira kai Monei; A, Kapherammin, \"village of the Ammonites\"): A place in the territory of Benjamin (Jos 18:24). It may be identical with Kefr `Ana, a ruined site about two miles to the Northeast of Bethel.",
-   "definition_ko": "",
+   "definition_ko": "그발 암모니(흠정역은 그발하암모니; 히브리어 '케파르 하암모니'; 바티칸 사본 「케페이라 카이 모네이」, 알렉산드리아 사본 카페람민, 「암몬 사람의 마을」). 베냐민 지파 땅에 있는 곳이다(여호수아 18:24). 벧엘 북동쪽 2마일쯤의 폐허 케프르 아나와 같은 곳일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CHEPHAR-AMMONI"
@@ -1945,7 +1945,7 @@
    "id": 2012,
    "term": "Chesalon(그살론)",
    "definition": "kes'-a-lon (kecalon; Chaslon, Chasalon): One of the cities on the Northern boundary of Judah (Jos 15:10). In the 4th century it was a \"very large village.\" It is now Kesla, 2,087 ft. above sea-level, a small village perched on a mountain ridge to the South of Wady el Humar. See Palestine Exploration Fund, III, 25, 26; Sh XVII.",
-   "definition_ko": "",
+   "definition_ko": "그살론(히브리어 '케살론'; 칠십인역 카슬론, 카살론). 유다의 북쪽 경계에 있는 성읍 가운데 하나다(여호수아 15:10). 4세기에는 「매우 큰 마을」이었다. 지금은 와디 엘후마르 남쪽 산등성이에 걸터앉은 해발 2,087피트의 작은 마을 케슬라다. 팔레스타인 탐사 기금 조사 보고 3권 25, 26쪽, 지도 17을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CHESALON"
@@ -1954,7 +1954,7 @@
    "id": 2014,
    "term": "Chesil(그실)",
    "definition": "ke'-sil, kes'-il (kecil; A, Chaseir): A town in the extreme South of Judah named with Eltolad, Hormah and Ziklag (Jos 15:30). The name does not occur again. In Jos 19:4 it is replaced by Bethul (Septuagint Baithel), and in 1Ch 4:30 by Bethuel. \"Chesil\" may have arisen from a misreading of the text.",
-   "definition_ko": "",
+   "definition_ko": "그실(히브리어 '케실'; 알렉산드리아 사본 카세이르). 유다 남쪽 끝에 있는 성읍으로, 엘돌랏, 홀마, 시글락과 함께 이름이 나온다(여호수아 15:30). 이 이름은 다시 나오지 않는다. 여호수아 19:4에서는 브둘(칠십인역 바이텔)로, 역대상 4:30에서는 브두엘로 바뀌어 있다. 「그실」은 본문을 잘못 읽은 데서 생겼을 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CHESIL"
@@ -1972,7 +1972,7 @@
    "id": 2022,
    "term": "Chezib(거십)",
    "definition": "ke'-zib.\n\nSee ACHZIB (1).",
-   "definition_ko": "",
+   "definition_ko": "거십. 악십 (1) 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CHEZIB"
@@ -1981,7 +1981,7 @@
    "id": 2040,
    "term": "Chilmad(길맛)",
    "definition": "kil'-mad (kilmadh; Charman): A city or district mentioned after Sheba and Asshur as supplying merchandise to Tyre (Eze 27:23). By changing \"m\" into \"w\" (common in Assytoprian-Babylonian) this has been compared with Kalwadha near Bagdad (G. Smith, Transactions of the Society of Biblical Archaeology, I, 61; Delitzsch, Paradies, 206), but the identification seems improbable. Though regarded as the name of a country in the Septuagint and the Vulgate (Jerome's Latin Bible, 390-405 A. D.) (Charman; Chelmad), there is some doubt whether this view of the word is correct. The Targum substitutes Madhai, \"Media,\" and on this account Mez (Stadt Harran, 24) amends to Kol Madhai, \"all Media.\" The absence of the copula \"and\" has caused others to further modify the vocalization, and by reading kelimmudh instead of Chilmad, the sense \"Asshur was as the apprentice of thy trading\" (Qimchi, Hitzig, Cornill) is obtained, but is not satisfactory. Probably both text and translation are susceptible of improvement.\n\nT. G. Pinches",
-   "definition_ko": "",
+   "definition_ko": "길맛(히브리어 '킬마드'; 칠십인역 카르만). 두로에 물건을 대던 곳으로 스바, 앗수르 다음에 나오는 성읍 또는 지방이다(에스겔 27:23). 앗수르·바벨론 말에서 흔한 대로 「m」을 「w」로 바꾸어 바그다드 근처의 칼와다와 견주기도 했으나(G. 스미스, 『성서 고고학회 회보』 1권 61쪽; 델리취, 『낙원은 어디에』 206쪽), 그럴 것 같지 않다. 칠십인역과 불가타역은 이것을 나라 이름으로 보았지만(카르만; 켈마드), 이 풀이가 옳은지는 의심스럽다. 탈굼은 「메대」를 뜻하는 마다이로 바꾸었고, 그래서 메츠(『하란 성』 24쪽)는 「온 메대」(콜 마다이)로 고쳐 읽는다. 「과」라는 접속사가 없어서 다른 이들은 모음을 더 바꾸어 길맛 대신 '켈림무드'로 읽고, 「앗수르는 네 장사의 견습생 같았다」(킴히, 히치히, 코르닐)는 뜻을 얻지만, 흡족하지 않다. 본문과 번역 모두 더 나아질 여지가 있을 것이다.\n\n(집필: T. G. Pinches)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CHILMAD"
@@ -1999,7 +1999,7 @@
    "id": 2048,
    "term": "Chisloth-Tabor(기슬롯다볼)",
    "definition": "kis-loth-ta'-bor, kiz'-loth.\n\nSee CHESULLOTH.",
-   "definition_ko": "",
+   "definition_ko": "기슬롯 다볼. 그술롯 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CHISLOTH-TABOR"
@@ -2008,7 +2008,7 @@
    "id": 2049,
    "term": "Chitlish(기들리스)",
    "definition": "kit'-lish (kithlish, \"separation\"; the King James Version Kithlish, the English Revised Version \"Chithlish,\" kith'lish): An unidentified town named with Lahman and Gederoth in the Shephelah of Judah (Jos 15:40).",
-   "definition_ko": "",
+   "definition_ko": "기들리스(히브리어 '키틀리시', 「갈라짐」; 흠정역 키틀리시, 영국 개역판 「기틀리시」). 유다 세벨라에서 라맘, 그데롯과 함께 이름이 나오는 성읍으로, 자리는 밝혀지지 않았다(여호수아 15:40).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CHITLISH"
@@ -2035,7 +2035,7 @@
    "id": 2119,
    "term": "City of Destruction(멸망의 성읍)",
    "definition": "de-struk'-shun `ir ha-herec; (Septuagint Base-dek): In his prediction of the future return of Egypt to Yahweh, Isaiah declares, \"In that day there shall be five cities in the land of Egypt that speak the language of Canaan, and swear to Yahweh of hosts; one shall be called The city of destruction\" (Isa 19:18). The name `ir ha-herec, \"the city of overthrow,\" is evidently a play upon `ir ha-cherec, \"city of the sun,\" a designation of Heliopolis (same meaning; compare the name for this city, Beth-shemesh, Jer 43:13), in Egyptian, On (Ge 41:45), which last name Ezekiel, by a similar play on sound, changes into Aven. See ON. Some codices, however, as the Revised Version, margin notes, read here `ir ha-cherec, the actual name of the city.\n\nJames Orr",
-   "definition_ko": "",
+   "definition_ko": "멸망의 성읍(히브리어 '이르 하헤레스'; 칠십인역 아세데크). 애굽이 장차 여호와께 돌아올 것을 예언하며 이사야는 「그 날에 애굽 땅에 가나안 방언을 말하며 만군의 여호와를 가리켜 맹세하는 다섯 성읍이 있을 것이며 그 중 하나를 멸망의 성읍이라 칭하리라」고 한다(이사야 19:18). 「무너뜨림의 성읍」인 '이르 하헤레스'는 분명히 헬리오폴리스를 가리키는 '이르 하케레스', 곧 「태양의 성읍」을 두고 한 말놀이다(같은 뜻의 이 성읍 이름 벧세메스, 예레미야 43:13 참조). 애굽 말로는 온(창세기 41:45)인데, 에스겔은 비슷한 소리의 말놀이로 이것을 아웬으로 바꾼다. 온 항목을 보라. 그러나 영국·미국 개역판 난외주가 적듯이, 어떤 사본들은 여기를 이 성읍의 실제 이름인 '이르 하케레스'(「태양의 성읍」)로 읽는다.\n\n(집필: James Orr)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CITY OF DESTRUCTION"
@@ -2044,7 +2044,7 @@
    "id": 2160,
    "term": "Cnidus(니도)",
    "definition": "ni'-dus, kni'-dus (Knidos, \"age\"): A city of Caria in the Roman province of Asia, past which, according to Ac 27:7, Paul sailed. At the Southwest corner of Asia Minor there projects for 90 miles into the sea a long, narrow peninsula, practically dividing the Aegean from the Mediterranean. It now bears the name of Cape Crio. Ships sailing along the southern coast of Asia Minor here turn northward as they round the point. Upon the very end of the peninsula, and also upon a small island off its point was the city of Cnidus. The island which in ancient times was connected with the mainland by a causeway is now joined to it by a sandy bar. Thus were formed two harbors, one of which could be closed by a chain. Though Cnidus was in Caria, it held the rank of a free city. There were Jews here as early as the 2nd century BC.\n\nThe ruins of Cnidus are the only objects of interest on the long peninsula, and as they may be reached by land only with great difficulty, few travelers have visited them; they may, however, be reached more easily by boat. The nearest modern village is Yazi Keui, 6 miles away. The ruins of Cnidus are unusually interesting, for the entire plan of the city may easily be traced. The sea-walls and piers remain. The acropolis was upon the hill in the western portion of the town; upon the terraces below stood the public buildings, among which were two theaters and the odeum still well preserved. The city was especially noted for its shrine of Venus and for the statue of that goddess by Praxiteles. Here in 1875-78 Sir C. Newton discovered the statue of Demeter, now in the British Museum. See also the Aphrodite of Cnidus in the South Kensington Museum, one of the loveliest statues in the world. From here also came the huge Cnidian lion. The vast necropolis West of the ruins contains tombs of every size and shape, and from various ages.\n\nE. J. Banks",
-   "definition_ko": "",
+   "definition_ko": "니도(헬라어 '크니도스', 「나이」). 로마의 아시아 속주에 속한 가리아의 성읍으로, 사도행전 27:7에 따르면 바울이 배를 타고 그 곁을 지나갔다. 소아시아 남서쪽 모퉁이에서 길고 좁은 반도가 바다 쪽으로 90마일이나 뻗어 나와, 에게 해와 지중해를 거의 가르고 있다. 지금은 크리오 곶이라 부른다. 소아시아 남쪽 해안을 따라 항해하는 배들은 이 끝을 돌며 북쪽으로 방향을 바꾼다. 반도의 맨 끝과 그 앞의 작은 섬 위에 니도 성읍이 있었다. 옛날에는 둑길로 뭍과 이어졌던 섬이 지금은 모래톱으로 이어져 있다. 그래서 항구가 둘 생겼고, 그 하나는 쇠사슬로 막을 수 있었다. 니도는 가리아에 있었으나 자유시의 지위를 지녔다. 이곳에는 이미 주전 2세기에 유대 사람들이 있었다.\n\n니도의 폐허는 이 긴 반도에서 유일하게 볼 만한 것인데, 뭍길로는 가기가 무척 어려워 찾아간 여행자가 적다. 그러나 배로는 더 쉽게 갈 수 있다. 가장 가까운 오늘날의 마을은 6마일 떨어진 야지 쾨이다. 니도의 폐허는 성읍의 전체 설계를 쉽게 따라가 볼 수 있어서 유난히 흥미롭다. 바다 쪽 성벽과 부두가 남아 있다. 아크로폴리스는 성읍 서쪽 언덕 위에 있었고, 그 아래 단들에는 공공건물이 서 있었는데, 그 가운데 극장 둘과 지금도 잘 보존된 오데움이 있다. 이 성읍은 특히 비너스의 신전과 프락시텔레스가 만든 그 여신상으로 이름났다. 1875~78년에 C. 뉴턴 경이 이곳에서 데메테르 상을 발견했는데, 지금 대영 박물관에 있다. 사우스켄싱턴 박물관에 있는, 세상에서 가장 아름다운 조각 가운데 하나인 「니도의 아프로디테」도 보라. 거대한 「니도의 사자」도 이곳에서 나왔다. 폐허 서쪽의 넓은 공동묘지에는 온갖 크기와 모양, 여러 시대의 무덤이 있다.\n\n(집필: E. J. Banks)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CNIDUS"
@@ -2071,7 +2071,7 @@
    "id": 2318,
    "term": "Corner Gate(모퉁이 문)",
    "definition": "kor'-ner gat.\n\nSee JERUSALEM.",
-   "definition_ko": "",
+   "definition_ko": "모퉁이 문. 예루살렘 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CORNER GATE"
@@ -2107,7 +2107,7 @@
    "id": 2432,
    "term": "Cun(군)",
    "definition": "kun (kun, A, ek ton eklekton poleon, \"from the chosen cities\"): One of the cities of Hadarezer, king of Syria, spoiled by David (1Ch 18:8, the King James Version \"Chun\"). In the parallel passage (2Sa 8:8) its place is taken by BEROTHAH, which see.",
-   "definition_ko": "",
+   "definition_ko": "군(히브리어 '쿤'; 알렉산드리아 사본 「뽑힌 성읍들에서」). 다윗이 노략한 수리아 왕 하닷에셀의 성읍 가운데 하나다(역대상 18:8; 흠정역 「춘」). 짝을 이루는 대목(사무엘하 8:8)에서는 그 자리에 베로대가 나온다. 베로대 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CUN"
@@ -2161,7 +2161,7 @@
    "id": 2474,
    "term": "Dabbesheth(답베셋)",
    "definition": "dab'-e-sheth (dabbesheth; Dabasthai; the King James Version Dabbasheth, dab'a-sheth): A town on the western boundary of Zebulun (Jos 19:11). It is probably identical with the modern Dabsheh, a ruined site to the East of Acre.",
-   "definition_ko": "",
+   "definition_ko": "답베셋(히브리어 '답베셰트'; 칠십인역 다바스타이; 흠정역 답바셋). 스불론 서쪽 경계에 있는 성읍이다(여호수아 19:11). 아마 악고 동쪽의 폐허 답셰와 같은 곳일 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "DABBESHETH"
@@ -2206,7 +2206,7 @@
    "id": 2512,
    "term": "Dannah(단나)",
    "definition": "dan'-a (dannah): One of the cities in the hill country of Judah (Jos 15:49) between Socoh and Kiriath-sannah (Debir), probably Idhna--the Iedna of the Onom--8 miles W. of Hebron. See PEF, III, 305, 330.",
-   "definition_ko": "",
+   "definition_ko": "단나(히브리어 '단나'). 유다 산지의 성읍 가운데 하나로(여호수아 15:49), 소고와 기럇 산나(드빌) 사이에 있다. 아마 헤브론 서쪽 8마일의 이드나 — 『오노마스티콘』의 이에드나 — 일 것이다. 팔레스타인 탐사 기금 조사 보고 3권 305, 330쪽을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "DANNAH"
@@ -2251,7 +2251,7 @@
    "id": 2685,
    "term": "Dilean(딜르안)",
    "definition": "dil'-e-an (dil`an, \"cucumber\"): A town in the Shephelah of Judah named with Migdal-gad and Mizpeh (Jos 15:38, the English Revised Version \"Dilan\"), which lay probably on the North of Lachish and Eglon. It has not been identified.",
-   "definition_ko": "",
+   "definition_ko": "딜르안(히브리어 '딜안', 「오이」). 유다 세벨라의 성읍으로, 믹달갓과 미스베와 함께 이름이 나오며(여호수아 15:38; 영국 개역판 「딜란」), 아마 라기스와 에글론 북쪽에 있었을 것이다. 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "DILEAN"
@@ -2260,7 +2260,7 @@
    "id": 2689,
    "term": "Dimnah(딤나)",
    "definition": "dim'-na (dimnah, \"dung\"; Damna): A city of the Merarite Levites in the territory of Zebulun (Jos 21:35). The name is probably a clerical error for Rimmon.",
-   "definition_ko": "",
+   "definition_ko": "딤나(히브리어 '딤나', 「거름」; 칠십인역 담나). 스불론 지파 땅에 있는 므라리 자손 레위 사람의 성읍이다(여호수아 21:35). 이 이름은 아마 림몬을 잘못 적은 것일 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "DIMNAH"
@@ -2269,7 +2269,7 @@
    "id": 2693,
    "term": "Dinhabah(딘하바)",
    "definition": "din'-ha-ba, din-ha'-ba (dinhabhah): The royal city of Bela, son of Beor; king of Edom (Ge 36:32; 1Ch 1:43). There may be a resemblance in the name of Hodbat et-Teneib. about 8 miles East of Heshbon; but this is in the land of Moab, and probably much too far to the North. No satisfactory identification has been proposed.",
-   "definition_ko": "",
+   "definition_ko": "딘하바(히브리어 '딘하바'). 에돔 왕 브올의 아들 벨라의 도성이다(창세기 36:32; 역대상 1:43). 헤스본 동쪽 8마일쯤의 호드바트 에트테네이브라는 이름과 비슷한 점이 있을지 모르지만, 그곳은 모압 땅이고 아마 너무 북쪽일 것이다. 만족스러운 동일시는 아직 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "DINHABAH"
@@ -2314,7 +2314,7 @@
    "id": 2851,
    "term": "Ebez(에베스)",
    "definition": "e'-bez ('ebhets, meaning unknown; Rhebes; the King James Version Abez):\n\nOne of the 16 cities in Issachar (Jos 19:20). The name seems to be cognate to that of the judge Ibzan (Jud 12:8-10). All else concerning it is conjecture.",
-   "definition_ko": "",
+   "definition_ko": "에베스(히브리어 '에베츠', 뜻은 알 수 없음; 칠십인역 레베스; 흠정역 아베스). 잇사갈의 열여섯 성읍 가운데 하나다(여호수아 19:20). 이 이름은 사사 입산(사사기 12:8~10)의 이름과 같은 뿌리인 듯하다. 그 밖의 모든 것은 추측이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EBEZ"
@@ -2368,7 +2368,7 @@
    "id": 2885,
    "term": "Eglaim(에글라임)",
    "definition": "eg'-la-im ('eghlayim; Agaleim):\n\nA place named in Isa 15:8, possibly in the South of Moab. Eusebius (Onomasticon) identifies it with Agallim, a village 8 Roman miles South of Areopolis. It cannot now be identified.",
-   "definition_ko": "",
+   "definition_ko": "에글라임(히브리어 '에글라임'; 칠십인역 아갈레임). 이사야 15:8에 나오는 곳으로, 아마 모압 남쪽에 있었을 것이다. 유세비우스(『오노마스티콘』)는 이곳을 아레오폴리스 남쪽 로마 마일로 8마일에 있는 마을 아갈림과 같은 곳으로 본다. 지금은 자리를 밝힐 수 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EGLAIM"
@@ -2377,19 +2377,19 @@
    "id": 2886,
    "term": "Eglath-Shelishiyah(에글랏슬리시야)",
    "definition": "eg'-lath-shel-i-shi'-ya (`eghlath shelishiyah):\n\nFound in Isa 15:5; Jer 48:34 (Hebrew) in oracles against Moab. the King James Version translates \"an heifer of three years old\"; the Revised Version (British and American) takes it as the name of a place, but the American Revised Version, margin has \"a heifer three years old,\" according to Septuagint. In the former case strong and unconquered cities, Zoar and Horonaim, are compared to the heifer not yet broken to the yoke. Such use of \"heifer\" is not infrequent (compare Jer 46:20; Ho 10:11, etc.). The majority of scholars, however, take it as a place-name. Some would read \"the third Eglath,\" as if there were three towns of that name. No probable identification has been suggested.\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "에글랏 슬리시야(히브리어 '에글라트 셸리시야'). 이사야 15:5; 예레미야 48:34(히브리어 본문)의 모압을 두고 한 신탁에 나온다. 흠정역은 「세 살 된 암송아지」로 옮기고, 영국·미국 개역판은 땅 이름으로 보지만, 미국 개역판 난외주는 칠십인역을 따라 「세 살 된 암송아지」라 한다. 앞의 경우라면 강하고 정복되지 않은 성읍들인 소알과 호로나임을 아직 멍에를 메지 않은 암송아지에 견준 것이다. 이렇게 「암송아지」를 쓰는 일은 드물지 않다(예레미야 46:20; 호세아 10:11 등 참조). 그러나 대부분의 학자는 이것을 땅 이름으로 본다. 어떤 이들은 같은 이름의 성읍이 셋 있었다는 듯이 「셋째 에글랏」으로 읽는다. 그럴듯한 동일시는 아직 제안되지 않았다.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EGLATH-SHELISHIYAH"
   },
   {
-   "id": 2887,
-   "term": "Eglon (1)(에글론)",
-   "definition": "eg'-lon (`eghlon, \"circle\"):\n\nA king of Moab in the period of the Judges who, in alliance with Ammon and Amalek, overcame Israel and made Jericho his capital, presumably driven across the Jordan by the turmoil in his own kingdom which at that time was probably being used as a battle ground by Edom and the desert tribes (compare Ge 36:35). After 18 years of servitude the children of Israel were delivered by Ehud the Benjamite, who like so many other Benjamites (compare Jud 20:16) was left-handed. Under the pretext of carrying a present to the tyrant, he secured a private interview and assassinated him with a two-edged sword which he had carried concealed on his right side (Jud 3:19-22). Ehud made his escape, rallied the children of Israel about him and returned to conquer the Moabites (Jud 3:30).\n\nElla Davis Isaacs",
-   "definition_ko": "",
+   "id": 2888,
+   "term": "Eglon (2)(에글론)",
+   "definition": "eg'-lon (`eghlon; Odollam):\n\nA royal Canaanite city whose king joined the league headed by Adonizedek of Jerusalem against the Gibeonites, which suffered overwhelming defeat at the hands of Joshua (Jos 10). Joshua passed from Libnah to Lachish, and from Lachish to Eglon on his way to Hebron (10:31 ff). It was in the Shephelah of Judah (15:39). The name seems to be preserved in that of Khirbet `Ajlan, about 10 miles West of Beit Jibrin. Professor Petrie, however, thinks that the site of Tell Nejileh better suits the requirements. While Khirbet `Ajlan is a comparatively modern site, the city at Tell Nejileh must have been contemporary with that at Tell el-Chesy (Lachish). It lies fully three miles Southeast of Tell el-Chesy.\n\nW. Ewing",
+   "definition_ko": "에글론(히브리어 '에글론'; 칠십인역 오돌람). 가나안의 왕도로, 그 왕은 예루살렘의 아도니세덱이 이끈 동맹에 가담하여 기브온 사람들을 쳤다가 여호수아에게 크게 패하였다(여호수아 10장). 여호수아는 헤브론으로 가는 길에 립나에서 라기스로, 라기스에서 에글론으로 나아갔다(여호수아 10:31 이하). 에글론은 유다 세벨라에 있었다(여호수아 15:39). 그 이름은 베이트 지브린 서쪽 10마일쯤의 키르베트 아즐란에 남아 있는 듯하다. 그러나 피트리 교수는 텔 네질레가 조건에 더 잘 맞는다고 본다. 키르베트 아즐란은 비교적 근대의 유적이지만, 텔 네질레의 성읍은 텔 엘헤시(라기스)의 성읍과 같은 시대였을 것이다. 텔 네질레는 텔 엘헤시 남동쪽으로 족히 3마일에 있다.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
-   "isbe_key": "EGLON (1)"
+   "isbe_key": "EGLON (2)"
   },
   {
    "id": 2889,
@@ -2404,7 +2404,7 @@
    "id": 2905,
    "term": "El-Beth-El(엘벧엘)",
    "definition": "el-beth'-el (el beth-'el, \"God of Bethel\"; Baithel):\n\nBy this name Jacob called the scene of his vision at Luz, when he returned from Paddan-aram (Ge 35:7).",
-   "definition_ko": "",
+   "definition_ko": "엘벧엘(히브리어 '엘 베트엘', 「벧엘의 하나님」; 칠십인역 바이텔). 야곱이 밧단아람에서 돌아와 전에 환상을 본 루스의 그곳을 이렇게 불렀다(창세기 35:7).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EL-BETH-EL"
@@ -2413,7 +2413,7 @@
    "id": 2907,
    "term": "El-Paran(엘바란)",
    "definition": "el-pa'-ran.\n\nSee PARAN.",
-   "definition_ko": "",
+   "definition_ko": "엘바란. 바란 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EL-PARAN"
@@ -2485,7 +2485,7 @@
    "id": 3021,
    "term": "Eltekon(엘드곤)",
    "definition": "el'-te-kon ('elteqon, \"founded by God\"):\n\nA city in the hill country of Judah (Jos 15:59) near BETH-ANOTH (which see) to be looked for, therefore, a little North of Hebron. Site unknown.",
-   "definition_ko": "",
+   "definition_ko": "엘드곤(히브리어 '엘테콘', 「하나님이 세우신」). 유다 산지의 성읍으로(여호수아 15:59), 벧 아놋(해당 항목을 보라) 근처에 있으므로 헤브론 조금 북쪽에서 찾아야 한다. 자리는 알 수 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ELTEKON"
@@ -2494,7 +2494,7 @@
    "id": 3022,
    "term": "Eltolad(엘돌랏)",
    "definition": "el-to'-lad ('eltoladh, \"kindred of God\"):\n\nA city of Judah in the Negeb near Edom (Jos 15:30); in Jos 19:4 ascribed to Simeon. Probably the same as Tolad (1Ch 4:29), the Arabic article \"el\" being omitted. Site unknown.",
-   "definition_ko": "",
+   "definition_ko": "엘돌랏(히브리어 '엘톨라드', 「하나님의 친족」). 에돔 가까운 네겝에 있는 유다의 성읍이다(여호수아 15:30). 여호수아 19:4에서는 시므온에게 속한다. 아마 아랍어 관사 「엘」이 빠진 돌랏(역대상 4:29)과 같은 곳일 것이다. 자리는 알 수 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ELTOLAD"
@@ -2503,7 +2503,7 @@
    "id": 3036,
    "term": "Emek-Keziz(에멕 그시스)",
    "definition": "e-mek-ke'-ziz (`emeq qetsits; the King James Version Valley of Keziz (Jos 18:21)):\n\nA town in Benjamin named between Beth-hoglah and Beth-arabah, and therefore to be sought in the plain, probably South of Jericho. The name has not been recovered.",
-   "definition_ko": "",
+   "definition_ko": "에멕 그시스(히브리어 '에메크 케치츠'; 흠정역 「그시스 골짜기」, 여호수아 18:21). 베냐민의 성읍으로, 벧 호글라와 벧 아라바 사이에 이름이 나오므로 평야에서, 아마 여리고 남쪽에서 찾아야 할 것이다. 이름은 되찾지 못했다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EMEK-KEZIZ"
@@ -2530,7 +2530,7 @@
    "id": 3052,
    "term": "En-Eglaim(에네글라임)",
    "definition": "en-eg'-la-im, en-eg-la'-im (`en `eghlayim, \"fountain of calves\"?):\n\nIn Ezekiel's vision of the waters it is one of the two points between which \"fishers shall stand\" (Eze 47:10).\n\nThe situation must be near the entrance of the Jordan into the Dead Sea (see EN-GEDI).\n\nTristram (Bible Places, 93) identifies it with `Ain Hajlah (compare BETH-HOGLAH);\n\nRobinson (BRP, II, 489), with `Ain Feshkah.",
-   "definition_ko": "",
+   "definition_ko": "에네글라임(히브리어 '엔 에글라임', 「송아지들의 샘」?). 에스겔이 본 물의 환상에서 「어부가 설」 두 지점 가운데 하나다(에스겔 47:10). 그 자리는 요단 강이 사해로 들어가는 어귀 근처일 것이다(엔게디 항목을 보라). 트리스트럼(『성경의 장소들』 93쪽)은 이곳을 아인 하즐라(벧 호글라 항목 참조)로, 로빈슨(『팔레스타인 성경 연구』 2권 489쪽)은 아인 페시카로 본다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EN-EGLAIM"
@@ -2557,7 +2557,7 @@
    "id": 3056,
    "term": "En-Haddah(엔핫다)",
    "definition": "en-had'-a (`en chaddah, \"swift fountain\"):\n\nA town in the lot of Issachar mentioned along with En-gannim (Jos 19:21).\n\nIt is probably identical with Kefr Adan, a village some 3 miles West of Jenin.",
-   "definition_ko": "",
+   "definition_ko": "엔핫다(히브리어 '엔 핫다', 「빠른 샘」). 잇사갈의 몫에 든 성읍으로, 엔 간님과 함께 나온다(여호수아 19:21). 아마 제닌 서쪽 3마일쯤의 마을 케프르 아단과 같은 곳일 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EN-HADDAH"
@@ -2566,7 +2566,7 @@
    "id": 3057,
    "term": "En-Hakkore(엔학고레)",
    "definition": "en-hak'-o-re, en-hak-o'-re (`en ha-qore', \"spring of the partridge\"):\n\nInterpreted (Jud 15:19) as meaning \"the spring of him that called.\" So the Septuagint: pege tou epikaloumenou. The spring was in Lehi but the site is unknown.",
-   "definition_ko": "",
+   "definition_ko": "엔학고레(히브리어 '엔 하코레', 「자고새의 샘」). 사사기 15:19에서는 「부르짖은 자의 샘」이라는 뜻으로 풀이한다. 칠십인역도 「부르는 자의 샘」이라 한다. 그 샘은 레히에 있었으나 자리는 알 수 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EN-HAKKORE"
@@ -2575,7 +2575,7 @@
    "id": 3058,
    "term": "En-Hazor(엔 하솔)",
    "definition": "en-ha'-zor (`en chatsor; pege Asor):\n\nA city in the territory of Naphtali mentioned along with Kedesh, Edrei and Iron (Jos 19:37). The ancient name probably survives in that of Hazireh, on the slopes West of Kedesh. \"En\" however points to a fountain. and no fountain has been found here.",
-   "definition_ko": "",
+   "definition_ko": "엔 하솔(히브리어 '엔 하초르'; 칠십인역 「아소르 샘」). 납달리 지파 땅에 있는 성읍으로, 게데스, 에드레이, 이론과 함께 나온다(여호수아 19:37). 옛 이름은 아마 게데스 서쪽 비탈의 하지레에 남아 있을 것이다. 그러나 「엔」은 샘을 가리키는데 이곳에서는 샘이 발견되지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EN-HAZOR"
@@ -2584,7 +2584,7 @@
    "id": 3060,
    "term": "En-Rimmon(에느림몬)",
    "definition": "en-rim'-on (`en-rimmon, \"the fountain of Rimmon\" (see RIMMON), or perhaps \"the spring of the pomegranate\"; Eromoth, Rhemmon):\n\nA city of Judah (Jos 15:32), \"Ain and Rimmon\"; ascribed to Simeon (Jos 19:7; 1Ch 4:32, \"Ain, Rimmon\"). In Ne 11:29 mentioned as reinhabited after the Captivity. Zec 14:10, runs: \"All the land shall be made like the Arabah, from Geba to Rimmon, south of Jerusalem.\" It must have been a very southerly place. In the Eusebius, Onomasticon, (\"Erimmon\") it is described as a \"very large village 16 miles South of Eleutheropolis.\" Kh. Umm er Rumamin, 9 miles North of Beersheba is the usually accepted site. See PEF, 398; Sh XXIV.\n\nE. W. G. Masterman",
-   "definition_ko": "",
+   "definition_ko": "에느림몬(히브리어 '엔 림몬', 「림몬의 샘」(림몬 항목을 보라) 또는 아마 「석류의 샘」; 칠십인역 에로모트, 렘몬). 유다의 성읍이다(여호수아 15:32, 「아인과 림몬」). 시므온에게 속하였다(여호수아 19:7; 역대상 4:32, 「아인, 림몬」). 느헤미야 11:29에서는 포로 뒤에 다시 사람이 살게 된 곳으로 나온다. 스가랴 14:10은 「온 땅이 아라바 같이 되되 게바에서 예루살렘 남쪽 림몬까지 이를 것이며」라고 한다. 매우 남쪽에 있던 곳이었음이 틀림없다. 유세비우스의 『오노마스티콘』(「에림몬」)은 이곳을 「엘류테로폴리스 남쪽 16마일에 있는 매우 큰 마을」이라고 한다. 흔히 브엘세바 북쪽 9마일의 키르베트 움 에르루마민을 그 자리로 받아들인다. 팔레스타인 탐사 기금 조사 보고 398쪽, 지도 24를 보라.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EN-RIMMON"
@@ -2611,7 +2611,7 @@
    "id": 3063,
    "term": "En-Tappuah(엔답부아)",
    "definition": "en-tap'-u-a, en-ta-pu'-a (`en tappuach; pege Thaphthoth, \"apple spring\"):\n\nProbably in the land of Tappuah which belonged to Manasseh, although Tappuah, on the border of Manasseh, belonged to Ephraim (Jos 17:7 f). It lay on the border of Ephraim which ran southward East of Shechem, and is probably to be identified with the spring at Yasuf, about 3 miles North of Lebonah.",
-   "definition_ko": "",
+   "definition_ko": "엔답부아(히브리어 '엔 탑푸아'; 칠십인역 「탑토트 샘」, 「사과 샘」). 아마 므낫세에 속한 답부아 땅에 있었을 것인데, 므낫세 경계에 있는 답부아 성읍은 에브라임에 속하였다(여호수아 17:7 이하). 세겜 동쪽으로 남쪽을 향해 뻗은 에브라임의 경계에 있었으며, 아마 르보나 북쪽 3마일쯤의 야수프에 있는 샘과 같은 곳일 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EN-TAPPUAH"
@@ -2620,7 +2620,7 @@
    "id": 3065,
    "term": "Enaim(에나임)",
    "definition": "e-na'-im (`enayim, \"place of a fountain\"; Ainan; Ge 38:14 (the King James Version \"in an open place\"; Ge 38:21 the King James Version \"openly\")):\n\nA place which lay between Adullam and Timnath; probably the same as Enam (Jos 15:34). Also mentioned in close connection with Adullam. It was in the Shephelah of Judah. The Talmud (Pesik. Rab. 23) mentions a Kephar Enaim. Conder proposes Khurbet Wady `Alin, which is an ancient site, evidently of great strength and importance, lying between Kh. `Ain Shems and the village of Deir Aban. The ruins crown a lofty and almost isolated hill; the greatest objection to the identification is that there is no fountain at all in the immediate neighborhood. There may have been one in earlier times. See PEF, III, 128.\n\nE. W. G. Masterman",
-   "definition_ko": "",
+   "definition_ko": "에나임(히브리어 '에나임', 「샘이 있는 곳」; 칠십인역 아이난; 창세기 38:14 — 흠정역 「트인 곳에」; 38:21 — 흠정역 「드러내 놓고」). 아둘람과 딤나 사이에 있던 곳으로, 아마 에남(여호수아 15:34)과 같은 곳일 것이다. 이 이름도 아둘람과 가깝게 이어져 나온다. 유다 세벨라에 있었다. 탈무드(『페식타 라바티』 23)에는 케파르 에나임이 나온다. 콘더는 키르베트 와디 알린을 제안하는데, 이곳은 키르베트 아인 셈스와 데이르 아반 마을 사이에 있는 옛 유적으로, 분명히 매우 견고하고 중요한 곳이었다. 폐허는 높고 거의 홀로 선 언덕 꼭대기에 있다. 이 동일시에 대한 가장 큰 반론은 바로 근처에 샘이 전혀 없다는 것이다. 이전 시대에는 샘이 있었을지 모른다. 팔레스타인 탐사 기금 조사 보고 3권 128쪽을 보라.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ENAIM"
@@ -2629,7 +2629,7 @@
    "id": 3066,
    "term": "Enam(에남)",
    "definition": "e'-nam.\n\nSee preceding article.",
-   "definition_ko": "",
+   "definition_ko": "에남. 앞 항목(에나임)을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ENAM"
@@ -2671,13 +2671,13 @@
    "isbe_key": "EPHRAIM (2)"
   },
   {
-   "id": 3137,
-   "term": "Ephron (1)(에브론)",
-   "definition": "e'-fron ('ephron, \"fawnlike\"):\n\nThe Hittite of whom Abraham bought the field and cave of Machpelah (Ge 23:8 ff; 25:9; 49:30). The transaction was conducted in true oriental fashion, with excessive courtesy; but the large sum of 400 shekels' weight of silver was in the end required (compare 33:19; 1Ki 16:24).\n\nSee also MONEY; MONEY, CURRENT.",
-   "definition_ko": "",
+   "id": 3138,
+   "term": "Ephron (2)(에브론)",
+   "definition": "e'-fron (`ephron; Ephron):\n\n(1) 2Ch 13:19: \"And Abijah pursued after Jeroboam, and took cities from him, Beth-el with the towns thereof, and Jeshanah with the towns thereof, and Ephron with the towns thereof.\" Another reading is \"Ephraim\" (Revised Version, margin). This is thought by many to be identical with Ophrah (`ophrah, Jos 18:23) and perhaps with Ephraim (`ephrayim, 2Sa 13:23) which both have been localized at the lofty town of eT Taiyibeh.\n\n(2) A city East of the Jordan between Carnion (Ashteroth-karnain) and Scythopolis (Beisan): \"Then Judas gathered together all the Israelites that were in the country. .... Now when they came unto Ephron (this was a great city in the way as they should go, very well fortified) they could not turn from it either on the right hand or on the left, but they must needs pass through the midst of it\" (1 Macc 5:45,46 the King James Version; Ant, XII, viii, 5; also 2 Macc 12:27). Buhl and Schumacher propose Kacr Wady el Ghafr, a ruined tower which completely commands the deep Wady el Ghafr, but the ruins appear to be scanty.\n\n(3) Mt. Ephron: The border of Judah is described (Jos 15:9): \"It went out to the cities of Mount Ephron.\" The position will depend on that of Nephtoah and of Kiriath-jearim.\n\nE. W. G. Masterman",
+   "definition_ko": "에브론(히브리어 '에프론').\n\n(1) 역대하 13:19: 「아비야가 여로보암을 쫓아가서 그의 성읍들을 빼앗았으니 곧 벧엘과 그 동네들과 여사나와 그 동네들과 에브론과 그 동네들이라.」 다른 읽기는 「에브라임」이다(영국 개역판 난외주). 많은 이들은 이곳을 오브라(여호수아 18:23)와 같은 곳으로 보고, 아마 에브라임(사무엘하 13:23)과도 같은 곳으로 보는데, 이 두 곳 모두 높은 성읍 에트타이이베에 비정되어 왔다.\n\n(2) 요단 동쪽, 가르니온(아스다롯 가르나임)과 스키토폴리스(베이산) 사이의 성읍: 「그때에 유다는 그 지방에 있는 모든 이스라엘 사람을 모았다 …. 그들이 에브론에 이르렀는데(이곳은 가는 길에 있는 큰 성읍으로 매우 견고하였다), 오른쪽으로도 왼쪽으로도 돌아갈 수 없어서 그 한가운데를 지나가야 했다」(마카베오상 5:45, 46; 요세푸스 『유대 고대사』 12권 8장 5절; 마카베오하 12:27도 보라). 불과 슈마허는 깊은 와디 엘가프르를 완전히 내려다보는 무너진 망대인 카스르 와디 엘가프르를 제안하지만, 폐허는 빈약해 보인다.\n\n(3) 에브론 산: 유다의 경계를 두고 「에브론 산 성읍들로 나아가고」라고 한다(여호수아 15:9). 그 자리는 넵도아와 기럇여아림의 자리에 달려 있다.\n\n(집필: E. W. G. Masterman)",
    "category": "지명",
    "hebrew_greek": "",
-   "isbe_key": "EPHRON (1)"
+   "isbe_key": "EPHRON (2)"
   },
   {
    "id": 3154,
@@ -2692,7 +2692,7 @@
    "id": 3175,
    "term": "Esek(에섹)",
    "definition": "e'-sek (eseq; Septuagint Adikia):\n\nThe name given by Isaac to a well dug by his servants, for the use of which the herdsmen of Gerar strove with them-- \"contention\" (Ge 26:20). It lay in the neighborhood of Rehoboth and Gerar: but the site is not identified.",
-   "definition_ko": "",
+   "definition_ko": "에섹(히브리어 '에세크'; 칠십인역 아디키아). 이삭의 종들이 판 우물에 이삭이 붙인 이름으로, 그랄 목자들이 그 우물을 두고 그들과 다투었으므로 「다툼」이라 하였다(창세기 26:20). 르호봇과 그랄 근처에 있었으나 자리는 밝혀지지 않았다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ESEK"
@@ -6994,7 +6994,7 @@
    "id": 8447,
    "term": "Syria (1)(아람 · 수리아)",
    "definition": "sir'-i-a (Suria (Mt 4:24; Lu 2:2)):\n\n1. Name and Its Origin\n\n2. Other Designations\n\n3. Physical\n\n(1) The Maritime Plain\n\n(2) First MoUntain Belt\n\n(3) Second Mountain Belt\n\n(4) Great Central Valley\n\n(5) The Eastern Belt\n\n(6) Rivers\n\n(7) Nature of Soil\n\n(8) Flora\n\n(9) Fauna\n\n(10) Minerals\n\n(11) Central Position\n\n4. History\n\n(1) Canaanitic Semites\n\n(2) Sargon of Agade\n\n(3) Babylonian Supremacy\n\n(4) Hittite and Aramean\n\n(5) Hittites and Egyptians\n\n(6) Amarna Period\n\n(7) Rameses II\n\n(8) Philistines\n\n(9) Tiglath-pileser I\n\n(10) Aramean States\n\n(11) Peaceful Development\n\n(12) Shalmaneser II\n\n(13) Tiglath-pileser III\n\n(14) Shalmaneser IV and Sargon\n\n(15) Pharaoh-necoh and Nebuchadnezzar\n\n1. Name and Its Origin:\n\nThe name does not occur in the Massoretic Text nor the Peshitta of the Old Testament, but is found in the Septuagint, in the Peshitta of the New Testament and in the Mishna In the Septuagint it represents \"Aram\" in all its combinations, as Aram-zobah, etc. The name itself first appears in Herodotus vii.63, where he says that \"Syrians\" and \"Assyrians\" were the Greek and barbarian designations of the same people. Otherwise he is quite vague in his use of the term. Xenophon is clearer when he (Anab; vii.8, 25) distinguishes between Syria and Phoenicia. Syria is undoubtedly an extension of the name \"Suri\" the ancient Babylonian designation of a district in North Mesopotamia, but later embracing regions beyond the Euphrates to the North and West, as far as the Taurus. Under the Seleucids, Syria was regarded as coextensive with their kingdom, and the name shrank with its dimensions. Strabo, Pliny and Ptolemy give its boundaries as the Taurus Mountains, the Euphrates, the Syro-Arabian desert and the Mediterranean, and the territory within these limits is still politically designated Syria, though popularly Palestine is generally named separately.\n\n2. Other Designations:\n\nHomer (Iliad ii.785) and Hesiod (Theog. 304) call the inhabitants of the district \"Arimoi,\" with which compare the cuneiform \"Arimu\" or \"Aramu\" for Arameans. The earliest Assyrian name was \"Martu,\" which Hommel regards as a contraction of \"Amartu,\" the land of the \"Amurru\" or Amorites. In Egyptian records the country is named \"Ruten\" or \"Luten,\" and divided into \"Lower\" and \"Upper,\" the former denoting Palestine and the latter Syria proper.\n\n3. Physical:\n\n(1) The Maritime Plain.\n\nSyria, within the boundaries given, consists of a series of belts of low and high land running North and South, parallel to the Mediterranean. The first of these is the maritime plain. It consists of a broad strip of sand dunes covered by short grass and low bushes, followed by a series of low undulating hills and wide valleys which gradually rise to a height of about 500 ft. This belt begins in North Syria with the narrow Plain of Issus, which extends to a few miles South of Alxandretta, but farther South almost disappears, being represented only by the broader valleys and the smaller plains occupied by such towns as Latakia, Tripolis and Beirut. South of the last named the maritime belt is continuous, being interrupted only where the Ladder of Tyre and Mt. Carmel descend abruptly into the sea. In the Plain of Akka it has a breadth of 8 miles, and from Carmel southward it again broadens out, till beyond Caesarea it has an average of 10 miles. Within the sand dunes the soil is a rich alluvium and readily yields to cultivation. In ancient times it was covered with palm trees, which, being thence introduced into Greece, were from their place of origin named phoinikes.\n\n(2) First Mountain Belt.\n\nFrom the maritime plain we rise to the first mountain belt. It begins with the Amanus, a branch of the Taurus in the North. Under that name it ceases with the Orontes valley, but is continued in the Nuseiriyeh range (Mt. Cassius, 5,750 ft.), till the Eleutherus valley is reached, and thence rising again in Lebanon (average 5,000 ft.), Jebel Sunnin (8,780 ft.), it continues to the Leontes or Quasmiyeh. The range then breaks down into the rounded hills of Upper Galilee (3,500 ft.), extends through the table-land of Western Palestine (2,500 ft.), and in the South of Judea broadens out into the arid Badiet et-Tih or Wilderness of Wandering.\n\n(3) Second Mountain Belt.\n\nAlong with this may be considered the parallel mountain range. Beginning in the neighborhood of Riblah, the chain of anti-Lebanon extends southward to Hermon (9,200 ft.), and thence stretches out into the plateau of the Jaulan and Hauran, where we meet with the truncated cones of extinct volcanoes and great sheets of basaltic lava, especially in el-Leja and Jebel ed-Druz. The same table-land continues southward, with deep ravines piercing its sides, over Gilead, Moab and Edom.\n\n(4) Great Central Valley.\n\nBetween Lebanon and Anti-Lebanon lies the great valley of Coele-Syria. It is continued northward along the Orontes and thence stretches away eastward to the Euphrates, while southward it merges into the valleys of the Jordan and the Arabah. From the sources of the Orontes and Leontes at Baalbek (4,000 ft.) it falls away gently to the North; but to the South the descent is rapid. In Merj `Ayun it has sunk to 1,800 ft., at Lake Huleh it is over 7 ft., at the Lake of Tiberias--682 ft., and at the Dead Sea--1,292 ft., and thence it rises again to the Gulf of Akabah. This great valley was caused by a line of fault or fracture of the earth's crust, with parallel and branching faults. In ancient times the whole valley formed an arm of the sea, and till the Glacial period at the end of the Tertiary (Pleistocene) Age, a lake extended along the whole Jordan valley as far as the Huleh. We can thus understand that the great plain and adjoining valleys consist mainly of alluvial deposits with terraces of gravel and sand on the enclosing slopes.\n\nSee LEBANON; NATURAL FEATURES; PALESTINE; PHOENICIA.\n\n(5) The Eastern Belt.\n\nTo the East of the Anti-Lebanon belt there is a narrow stretch of cultivated land which in some places attains a breadth of several miles, but this is always determined by the distance to which the eastern streams from Anti-Lebanon flow. Around Damascus the Abana (Barada) and neighboring streams have made the district an earthly paradise, but they soon lose themselves in the salt marshes about 10 miles East of the city. Elsewhere the fruitful strip gradually falls away into the sands and rocks of the Syrian desert, barren alike of vegetable and animal life.\n\n(6) Rivers.\n\nThe mountain ranges determine the course of the rivers and their length. The streams flowing westward are naturally short and little more than summer torrents. Those flowing to the desert are of the same character, the only one of importance being the Abana, to which Damascus owes its existence. Only the great central valley permits the formation of larger rivers, and there we find the Orontes and Leontes rising within a few feet of each other beside Baalbek, and draining Coele-Syria to the North and South, till breaking through the mountains they reach the sea. The Jordan is the only other stream of any size. In ancient, as also in modern times, the direction of these streams determined the direction of the great trade route from Mesopotamia to Egypt through Coele-Syria and across pal, as also the position of the larger towns, but, not being themselves navigable, they did not form a means of internal communication.\n\n(7) Nature of Soil.\n\nThe variation in altitude both above and below the sea-level is naturally conducive to a great variety of climate, while the nature of the disintegrating rocks and the alluvial soil render great productivity possible. Both of the mountain belts in their whole length consist chiefly of cretaceous limestone, mixed with friable limestone with basaltic intrusions and volcanic products. The limestone is highly porous, and during the rainy season absorbs the moisture which forms reservoirs and feeds the numerous springs on both the eastern and western slopes. The rocks too are soft and penetrable and can easily be turned into orchard land, a fact that explains how much that now appears as barren wastes was productive in ancient times as gardens and fruitful fields (Bab Talmud, Megh. 6a).\n\n(8) Flora.\n\nThe western valleys and the maritime plain have the flora of the Mediterranean, but the eastern slopes and the valleys facing the desert are poorer. On the southern coasts and in the deeper valleys the vegetation is tropical, and there we meet with the date-palm, the sugar-cane and the sycomore. Up to 1,600 ft., the products include the carob and the pine, after which the vine, the fig and the olive are met with amid great plantations of dwarf oak, till after 3,000 ft. is reached, then cypresses and cedars till the height of 6,200 ft., after which only Alpine plants are found. The once renowned \"cedars of Lebanon\" now exist only in the Qadisha and Baruk valleys. The walnut and mulberry are plentiful everywhere, and wheat, corn, barley, maize and lentils are widely cultivated. Pasture lands are to be found in the valleys and plains, and even during the dry season sheep, goats and cattle can glean sufficient pasturage among the low brushwood.\n\n(9) Fauna.\n\nThe animal world is almost as varied. The fox, jackal, hyena, bear, wolf and hog are met nearly everywhere, and small tigers are sometimes seen (compare 2Ki 14:9). The eagle, vulture, partridge and blue pigeon are plentiful, and gay birds chirp everywhere. The fish in the Jordan and its lakes are peculiar and interesting. There are in all 22 varieties, the largest being a kind of perch, the coracinus, which is known elsewhere also in the Nile (Josephus, Ant, III, x, 8), and a peculiar old-world variety locally named `Abu-musht.\n\n(10) Minerals.\n\nIn both the eastern and the western mountain belts there are abundant supplies of mineral wealth. They consist chiefly of coal, iron, bitumen, asphalt and mineral oil, but they are mostly unworked. In the Jordan valley all the springs below the level of the Mediterranean are brackish, and many of them are also hot and sulfurous, the best known being those Tiberias.\n\n(11) Central Position.\n\nThe country, being in virtue of its geographical configuration separated into small isolated districts, naturally tended to break up into a series of petty independent states. Still the central position between the Mesopotamian empires on the one hand and Egypt and Arabia on the other made it the highway through which the trade of the ancient world passed, gave it an importance far in excess of its size or productivity, and made it a subject of contention whenever East and West were ruled by different powers.\n\n4. History:\n\n(1) Canaanitic Semites.\n\nWhen history begins for us in the 3rd millennium BC, Syria was already occupied by a Semitic population belonging to the Canaanitic wave of immigration, i.e. such as spoke dialects akin to Hebrew or Phoenician. The Semites had been already settled for a considerable time, for a millennium earlier in Egypt we find Semitic names for Syrian articles of commerce as well as Semites depicted on the Egyptian monuments.\n\n(2) Sargon of Agade.\n\nOmitting as doubtful references to earlier relations between Babylonia and Syria, we may consider ourselves on solid ground in accepting the statements of the Omen Tablets which tell us that Sargon of Agade (2750 BC) four times visited the land of Martu and made the peoples of one accord. His son Naram-sin, while extending the empire in other directions maintained his authority here also. Commercial relations were continued, and Babylonia claimed at least a supremacy over Martu, and at times made it effective.\n\n(3) Babylonian Supremacy.\n\nHammurabi and also his great-grandson Ammisatana designate themselves in inscriptions as kings of Martu, and it is very likely that other kings maintained the traditional limits of the empire. The long-continued supremacy of Babylon not only made itself felt in imposing place-names, but it made Assyrian the language of diplomacy, even between Syria and Egypt, as we see in the Tell el-Amarna Letters.\n\n(4) Hittite and Aramean.\n\nBy the middle of the 2nd millennium BC we find considerable change in the population. The Mitanni, a Hittite people, the remains of whose language are to be found in the still undeciphered inscriptions at Carchemish, Marash, Aleppo and Hamath, are now masters of North Syria.\n\nSee HITTITES.\n\nThe great discoveries of Dr. H. Winckler at Boghazkeui have furnished a most important contribution to our knowledge. The preliminary account may be found in OLZ, December 15, 1906, and the Mitteilungen der deutschen orient. Gesellschaft, number 35, December, 1907.\n\nElsewhere the Aramean wave has become the predominant Semitic element of population, the Canaanitic now occupying the coast towns (Phoenicians) and the Canaan of the Old Testament.\n\n(5) Hittites and Egyptians.\n\nAt this time Babylonia was subject to the Kassites, an alien race of kings, and when they fell, about 1100 BC, they gave place to a number of dynasties of short duration. This gave the Egyptians, freed from the Hyksos rule, the opportunity to lay claim to Syria, and accordingly we find the struggle to be between the Hittites and the Egyptians. Thothmes I, about 1600 BCa overran Syria as far as the Euphrates and brought the country into subjection. Thothmes III did the same, and he has left us on the walls of Karnak an account of his campaigns and a list of the towns he conquered.\n\n(6) Amarna Period.\n\nIn the reign of Thothmes IV the Hittites began to leave their mountains more and more and to press forward into Central Syria. The Tell el-Amarna Letters show them to be the most serious opponents to the Egyptian authority in Syria and Palestine during the reign of Amenhotep IV (circa 1380 BC), and before Seti I came to the throne the power of the Pharaohs had greatly diminished in Syria. Then the Egyptian sphere only reached to Carmel, while a neutral zone extended thence to Kadesh, northward of which all belonged to the Hitites.\n\n(7) Rameses II.\n\nRameses II entered energetically into the war against Hatesar, king of the Hittites, and fought a battle near Kadesh. He claims a great victory, but the only result seems to have been that his authority was further extended into the neutral territory, and the sphere of Egyptian influence extended across Syria from the Lycus (Dog River) to the South of Damascus. The arrangement was confirmed by a treaty in which North Syria was formally recognized as the Hittite sphere of influence, and, on the part of the Assyrians who were soon to become the heirs of the Hittite pretensions, this treaty formed the basis of a claim against Egypt. About the year 1200 BC the Hittites, weakened by this war, were further encroached upon by the movements of northern races, and the empire broke up into a number of small separate independent states.\n\n(8) Philistines.\n\nAmong the moving races that helped to weaken and break up the Hittite influence in Syria were the Pulusati (or Purusati), a people whose origin is not yet definitely settled. They entered Syria from the North and overcame all who met them, after which they encamped within the Egyptian sphere of influence. Rameses III marched against them, and he claims a great victory. Later, however, we find them settled in Southeastern Palestine under the name of Philistines. Their settlement at that time is in harmony with the Tell el-Amarna Letters in which we find no trace of them, while in the 11th century BC they are there as the inveterate foes of Israel.\n\n(9) Tiglath-pileser I.\n\nAssyria was now slowly rising into power, but it had to settle with Babylon before it could do much in the West. Tiglath-pieser I, however, crossed the Euphrates, defeated the Hittite king of Carchemish, advanced to the coast of Arvad, hunted wild bulls in Lebanon and received gifts from the Pharaoh, who thus recognized him as the successor of the Hittites in North Syria.\n\n(10) Aramean States.\n\nWhen the Hittite empire broke up, the Arameans in Central Syria, now liberated, set up a number of separate Aramean states, which engaged in war with one another, except when they had to combine against a common enemy. Such states were established in Hamath, Hadrach, Zobah and Rehob. The exact position of Hadrach is still unknown, but Hamath was evidently met on its southern border by Rehob and Zobah, the former extending along the Biqa'a to the foot of Hermon, while the latter stretched ~along the eastern slopes of Anti-Lebanon and included Damascus, till Rezon broke away and there set up an independent kingdom, which soon rose to be the leading state; Southeast of Hermon were the two smaller Aramean states of Geshur and Maacah.\n\n(11) Peaceful Development.\n\nFor nearly three centuries now, Syria and Palestine were, except on rare occasions, left in peace by both Mesopotamia and Egypt. In the 12th century BC Babylonia was wasted by the Elamite invasion, and thereafter a prolonged war was carried on between Assyria and Babylonia, and although a lengthened period of peace succeeded, it was wisely used by the peaceful rulers of Assyria for the strengthening of their kingdom internally. In Egypt the successors of Rameses III were engaged against the aggressive Theban hierarchy. During the XXIst Dynasty the throne was usurped by the high priests of Amen, while the XXIId were Lybian usurpers, and the three following dynasties Ethiopian conquerors.\n\n(12) Shalmaneser II.\n\nIn the 9th century Asshur-nazirpal crossed the Euphrates and overran the recently established state of Patin in the Plain of Antioch. He besieged its capital and planted a colony in its territory, but the arrangement was not final, for his successor, Shalmaneser II, had again to invade the territory and break up the kingdom into a number of small principalities. Then in 854 BC he advanced into Central Syria, but was met at Karkar by a strong confederacy consisting of Ben-hadad of Damascus and his Syrian allies including Ahab of Israel. He claims a victory, but made no advance for 5 years. He then made three unsuccessful expeditions against Damascus, but in 842 received tribute from Tyre, Sidon and Jehu of Israel, as recorded and depicted on the Black Obelisk. It was not till the year 797 that Ramman-nirari, after subduing the coast of Phoenicia, was able to reduce Mari'a of Damascus to obedience at which time also he seems to have carried his conquests through Eastern Palestine as far as Edom. The Assyrian power now suffered a period of decline, during which risings took place at Hadrach and Damascus, and Jeroboam II of Israel was able (2Ki 14:25) to extend his boundaries northward to the old limits.\n\n(13) Tiglath-pileser III.\n\nIt thus happened that Tiglath-pileser III (745-728) had to reconquer the whole of Syria. He captured Arpad after two years' warfare (742-740). Then he divided the territory of Hamath among his generals. At this juncture Ahaz of Judah implored his aid against Rezin of Damascus and Remaliah of Israel. Ahaz was relieved, but was made subject to Assyria. Damascus fell in 732 BC and a Great Court was held there, which the tributary princes of Syria, including Ahaz (2Ki 16:10), attended. The Assyrian empire now possessed the whole of Syria as far as the River of Egypt. Sibahe, however, encouraged revolt in what had been the Egyptian sphere of infiuence and insurrections took place in Phoenicia and Samaria.\n\n(14) Shalmaneser IV and Sargon.\n\nAfter some difficulty Shalmaneser IV compelled Tyre and Sidon to submit and to pay tribute. Samaria, too, was besieged, but was not taken till Sargon came to the throne in 722. Hamath and Carchemish again rose, but were finally reduced in 720 and 717 respectively. Again in 711 Sargon overran Palestine and broke up a fresh confederacy consisting of Egypt, Moab, Edom, Judah and the Philistines. In 705 the Egyptians under Sibahe and their allies the Philistines under Hanun of Gaza were defeated at Raphia.\n\nThe last three rulers of Assyria were in constant difficulties with Babylonia and a great part of the empire was also overrun by the Scythians (circa 626 BC), and so nothing further was done in the West save the annexation of the mainland possessions of Phoenicia.\n\n(15) Pharaoh-necoh and Nebuchadnezzar.\n\nIn 609 when Assyria was in the death grapple with Babylonia, Pharaoh-necoh took advantage of the situation, invaded Syria, and, defeating Josiah en route, marched to Carchemish. In 605, however, he was there completely defeated by Nebuchadnezzar, and the whole of Syria became tributary to Babylonia. the former Syrian states now appear as Babylonian provinces, and revolts in Judah reduced it also to that position in 586 BC.\n\nUnder Persian rule these provinces remained as they were for a time, but ultimately \"Ebir nari\" or Syria was formed into a satrapy. The Greek conquest with the Ptolemies in Egypt and the Seleucids in Babylon brought back some of the old rivalry between East and West, and the same unsettled conditions. On the advent of Rome, Syria was separated from Babylonia and made into a province with Antioch as its capital, and then the Semitic civilization which had continued practically untouched till the beginning of the Christian era was brought more and more into contact with the West. With the advent of Islam, Syria fell into Arab hands and Damascus became for a short time (661-750 AD) the capital of the new empire, but the central authority was soon removed to Babylonia. Thenceforward Syria sank to the level of a province of the caliphate, first Abbasside (750-1258), then Fatimite (1258-1517), and finally Ottoman.\n\nW. M. Christie",
-   "definition_ko": "",
+   "definition_ko": "수리아(헬라어 '쉬리아', 마태복음 4:24; 누가복음 2:2).\n\n1. 이름과 그 유래\n2. 다른 이름들\n3. 자연 지리 — (1) 해안 평야 (2) 첫째 산맥 (3) 둘째 산맥 (4) 큰 가운데 골짜기 (5) 동쪽 지대 (6) 강 (7) 흙의 성질 (8) 식물 (9) 동물 (10) 광물 (11) 한가운데 자리\n4. 역사 — (1) 가나안계 셈족 (2) 아가데의 사르곤 (3) 바벨론의 패권 (4) 헷 족속과 아람 족속 (5) 헷 족속과 애굽 사람 (6) 아마르나 시대 (7) 람세스 2세 (8) 블레셋 사람 (9) 디글랏 빌레셀 1세 (10) 아람의 나라들 (11) 평화로운 발전 (12) 살만에셀 2세 (13) 디글랏 빌레셀 3세 (14) 살만에셀 4세와 사르곤 (15) 바로 느고와 느부갓네살\n\n1. 이름과 그 유래\n\n이 이름은 구약의 마소라 본문에도 시리아어 페시타역에도 나오지 않지만, 칠십인역과 신약의 페시타역, 그리고 미쉬나에는 나온다. 칠십인역에서 이 이름은 아람 소바 같은 모든 합성 이름에서 「아람」을 나타낸다. 이 이름은 헤로도토스(『역사』 7권 63)에 처음 나타나는데, 그는 「쉬리아 사람」과 「앗수르 사람」이 같은 민족을 가리키는 헬라식 이름과 이방식 이름이라고 말한다. 그 밖에서는 그가 이 말을 꽤 막연하게 쓴다. 크세노폰은 수리아와 페니키아를 구별하여 더 분명하다(『아나바시스』 7권 8장 25절). 수리아라는 이름은 틀림없이 옛 바벨론 사람들이 북메소보다미아의 한 지방을 가리키던 「수리」라는 이름이 넓어진 것인데, 이 이름은 나중에 유브라데 강 너머 북쪽과 서쪽으로 타우루스 산맥까지 이르는 지역을 아우르게 되었다. 셀레우코스 왕조 아래에서 수리아는 그 왕국과 같은 넓이로 여겨졌고, 왕국이 줄어들자 이름이 가리키는 범위도 함께 줄었다. 스트라본과 플리니우스와 프톨레마이오스는 그 경계를 타우루스 산맥, 유브라데 강, 수리아·아라비아 사막, 지중해로 잡는데, 이 경계 안의 땅은 지금도 정치적으로는 수리아라 불린다. 다만 흔히는 팔레스타인을 따로 부른다.\n\n2. 다른 이름들\n\n호메로스(『일리아스』 2권 785)와 헤시오도스(『신통기』 304)는 이 지방 사람들을 「아리모이」라고 부르는데, 쐐기문자에서 아람 사람을 가리키는 「아리무」 또는 「아라무」와 견주어 볼 만하다. 가장 이른 앗수르 이름은 「마르투」로, 홈멜은 이것을 「아마르투」, 곧 「아무루」 또는 아모리 족속의 땅이 줄어든 꼴로 본다. 애굽 기록에서는 이 나라를 「레테누」 또는 「루테누」라 부르며 「아랫」과 「윗」으로 나누는데, 앞의 것은 팔레스타인을, 뒤의 것은 본디의 수리아를 가리킨다.\n\n3. 자연 지리\n\n(1) 해안 평야\n\n위에 말한 경계 안의 수리아는 지중해와 나란히 남북으로 뻗은 낮은 땅과 높은 땅의 띠들이 잇달아 있는 꼴이다. 그 첫째가 해안 평야다. 짧은 풀과 낮은 덤불로 덮인 넓은 모래언덕 띠가 있고, 그 뒤로 낮게 굽이치는 언덕들과 넓은 골짜기들이 이어지며 차츰 500피트쯤 높이까지 올라간다. 이 띠는 북수리아에서 좁은 잇소스 평야로 시작하여 알렉산드레타 남쪽 몇 마일까지 이르지만, 더 남쪽에서는 거의 사라져 라타키아, 트리폴리, 베이루트 같은 성읍들이 자리한 넓은 골짜기와 작은 평야들로만 남는다. 베이루트 남쪽부터는 해안 지대가 끊이지 않고 이어지며, 「두로의 사다리」와 갈멜 산이 바다로 가파르게 떨어지는 곳에서만 끊긴다. 악고 평야에서는 폭이 8마일이고, 갈멜에서 남쪽으로 다시 넓어져 가이사랴 너머에서는 평균 10마일이 된다. 모래언덕 안쪽의 흙은 기름진 충적토라 쉽게 경작된다. 옛날에는 종려나무로 덮여 있었는데, 이 나무가 이곳에서 헬라로 들어가면서 그 원산지 이름을 따서 '포이닉스'(종려나무)라 불리게 되었다.\n\n(2) 첫째 산맥\n\n해안 평야에서 첫째 산맥 지대로 올라간다. 이 산맥은 북쪽에서 타우루스 산맥의 한 가지인 아마누스 산맥으로 시작한다. 그 이름은 오론테스 골짜기에서 끝나지만, 산줄기는 누세이리예 산맥(카시우스 산 5,750피트)으로 이어져 엘류테루스 골짜기에 이르고, 거기서 다시 레바논 산맥(평균 5,000피트)과 제벨 산닌(8,780피트)으로 솟아 레온테스 강, 곧 카스미예 강까지 이어진다. 그다음 산줄기는 윗갈릴리의 둥근 언덕들(3,500피트)로 낮아지고, 서팔레스타인의 고원(2,500피트)을 지나, 유대 남쪽에서는 메마른 바디에트 에트티흐, 곧 「방랑의 광야」로 넓게 퍼진다.\n\n(3) 둘째 산맥\n\n이와 함께 나란한 산맥을 살펴볼 수 있다. 리블라 근처에서 시작하는 안티레바논 산맥은 남쪽으로 헤르몬 산(9,200피트)까지 뻗고, 거기서 자울란과 하우란 고원으로 퍼지는데, 이곳에는 꺼진 화산의 잘린 원뿔들과 넓은 현무암 용암층이 있으며 특히 엘레자와 제벨 에드드루즈에 많다. 같은 고원은 남쪽으로 이어져, 옆구리를 깊은 협곡들이 가르는 길르앗과 모압과 에돔에 이른다.\n\n(4) 큰 가운데 골짜기\n\n레바논 산맥과 안티레바논 산맥 사이에는 코일레 수리아(「움푹 꺼진 수리아」)의 큰 골짜기가 있다. 이 골짜기는 북쪽으로 오론테스 강을 따라 이어지다가 동쪽으로 유브라데 강까지 뻗으며, 남쪽으로는 요단 골짜기와 아라바로 이어진다. 바알벡(4,000피트)에 있는 오론테스 강과 레온테스 강의 발원지에서 북쪽으로는 완만하게 내려가지만, 남쪽으로는 빠르게 내려간다. 메르즈 아윤에서는 1,800피트로 낮아지고, 훌레 호수에서는 7피트 남짓, 디베랴 호수에서는 해수면 아래 682피트, 사해에서는 해수면 아래 1,292피트가 되며, 거기서 아카바 만까지 다시 올라간다. 이 큰 골짜기는 땅껍질의 단층, 곧 갈라진 금을 따라 생겼고, 나란히 가거나 갈라져 나간 단층들이 함께 있다. 옛날에는 골짜기 전체가 바다의 팔을 이루었고, 제3기(홍적세) 끝의 빙하기까지는 요단 골짜기 전체를 따라 훌레까지 호수가 뻗어 있었다. 그래서 이 큰 평야와 이웃 골짜기들은 주로 충적층으로 되어 있고, 둘러싼 비탈에는 자갈과 모래의 단구가 있다.\n\n레바논, 자연 지형, 팔레스타인, 페니키아 항목을 보라.\n\n(5) 동쪽 지대\n\n안티레바논 지대 동쪽에는 경작지가 좁게 이어지며, 곳에 따라서는 폭이 몇 마일에 이르지만, 언제나 안티레바논에서 동쪽으로 흐르는 시내들이 얼마나 멀리까지 흐르느냐에 따라 정해진다. 다메섹 둘레에서는 아바나 강(바라다 강)과 이웃 시내들이 이 지방을 지상 낙원으로 만들었지만, 그 물은 도성 동쪽 10마일쯤의 소금 늪에서 곧 사라진다. 다른 곳에서는 기름진 띠가 차츰 수리아 사막의 모래와 바위로 바뀌는데, 이 사막에는 식물도 동물도 거의 살지 않는다.\n\n(6) 강\n\n산맥들이 강의 흐름과 길이를 정한다. 서쪽으로 흐르는 시내들은 당연히 짧아서 여름 급류에 지나지 않는다. 사막 쪽으로 흐르는 시내들도 마찬가지이며, 그 가운데 중요한 것은 다메섹이 그 덕분에 존재하는 아바나 강 하나뿐이다. 큰 가운데 골짜기만이 큰 강을 만들 수 있는데, 거기서 오론테스 강과 레온테스 강이 바알벡 곁에서 몇 피트 떨어지지 않은 곳에서 솟아 각각 북쪽과 남쪽으로 코일레 수리아의 물을 모아 흐르다가 산을 뚫고 바다에 이른다. 그 밖에 조금이라도 큰 강은 요단 강뿐이다. 옛날에도 오늘날처럼 이 강들의 방향이 메소보다미아에서 코일레 수리아를 지나 팔레스타인을 가로질러 애굽으로 가는 큰 무역로의 방향과 큰 성읍들의 자리를 정했지만, 강 자체는 배가 다닐 수 없어서 내륙을 오가는 길이 되지는 못했다.\n\n(7) 흙의 성질\n\n해수면 위아래로 높낮이가 크게 달라 자연히 기후가 매우 다양하고, 부서져 가는 바위의 성질과 충적토 덕분에 소출이 아주 많을 수 있다. 두 산맥 지대는 그 전체 길이에 걸쳐 주로 백악기 석회암으로 되어 있고, 부서지기 쉬운 석회암에 현무암 관입과 화산 분출물이 섞여 있다. 석회암은 구멍이 아주 많아 우기에 물기를 빨아들이고, 그 물이 땅속에 저수지를 이루어 동서 양쪽 비탈의 수많은 샘에 물을 댄다. 바위도 무르고 잘 파여서 쉽게 과수원으로 바꿀 수 있는데, 지금은 메마른 황무지로 보이는 많은 곳이 옛날에는 동산과 기름진 밭이었던 까닭이 이것으로 설명된다(바벨론 탈무드, 『메길라』 6a).\n\n(8) 식물\n\n서쪽 골짜기들과 해안 평야에는 지중해의 식물이 자라지만, 동쪽 비탈과 사막을 바라보는 골짜기들은 식물이 빈약하다. 남쪽 해안과 깊은 골짜기에는 열대 식물이 자라 대추야자, 사탕수수, 뽕나무 무화과를 볼 수 있다. 1,600피트까지는 쥐엄나무와 소나무가 나고, 그 위로 3,000피트에 이르기까지는 넓게 퍼진 난쟁이 떡갈나무 숲 사이로 포도나무, 무화과나무, 감람나무를 만나며, 그다음 6,200피트 높이까지는 삼나무와 백향목이 있고, 그 위로는 고산 식물만 자란다. 한때 이름 높던 「레바논의 백향목」은 이제 카디샤 골짜기와 바루크 골짜기에만 남아 있다. 호두나무와 뽕나무는 어디에나 흔하고, 밀, 곡식, 보리, 옥수수, 렌즈콩이 널리 재배된다. 골짜기와 평야에는 목초지가 있으며, 건기에도 양과 염소와 소가 낮은 덤불 사이에서 넉넉히 풀을 뜯을 수 있다.\n\n(9) 동물\n\n동물 세계도 거의 그만큼 다양하다. 여우, 자칼, 하이에나, 곰, 이리, 멧돼지는 거의 어디서나 만나고, 작은 표범도 가끔 보인다(열왕기하 14:9 참조). 독수리, 대머리수리, 자고새, 푸른 비둘기가 많고, 화려한 새들이 곳곳에서 지저귄다. 요단 강과 그 호수들의 물고기는 독특하고 흥미롭다. 모두 22종인데, 가장 큰 것은 농어의 일종인 코라키누스로 나일 강에서도 알려져 있으며(요세푸스 『유대 고대사』 3권 10장 8절), 그곳 사람들이 「아부 무쉬트」라 부르는 옛 세계의 독특한 종도 있다.\n\n(10) 광물\n\n동서 두 산맥 지대 모두에 광물 자원이 풍부하다. 주로 석탄, 철, 역청, 아스팔트, 석유이지만 대부분 캐내지 않고 있다. 요단 골짜기에서 지중해 해수면보다 낮은 곳의 샘은 모두 짠맛이 있고, 많은 샘이 뜨거우며 유황 냄새가 나는데, 가장 잘 알려진 것이 디베랴의 온천이다.\n\n(11) 한가운데 자리\n\n이 나라는 그 지형 때문에 작고 외딴 지방들로 나뉘어 있어서 자연히 작은 독립국들로 쪼개지는 경향이 있었다. 그러나 한편으로는 메소보다미아의 제국들, 다른 한편으로는 애굽과 아라비아 사이 한가운데에 놓인 자리 때문에, 옛 세계의 무역이 지나가는 큰길이 되었고, 그 크기나 소출보다 훨씬 큰 중요성을 지녔으며, 동방과 서방을 서로 다른 세력이 다스릴 때마다 다툼의 대상이 되었다.\n\n4. 역사\n\n(1) 가나안계 셈족\n\n우리에게 역사가 시작되는 주전 3천년기에 수리아에는 이미 가나안계 이주 물결에 속하는 셈족, 곧 히브리어나 페니키아어와 비슷한 방언을 쓰는 사람들이 살고 있었다. 셈족은 이미 꽤 오랫동안 정착해 있었는데, 그보다 천 년 앞서 애굽에서 수리아 상품을 가리키는 셈어 이름이 발견되고, 애굽의 기념비에도 셈족이 그려져 있기 때문이다.\n\n(2) 아가데의 사르곤\n\n바벨론과 수리아 사이의 더 이른 관계에 대한 언급들은 확실하지 않으므로 제쳐 두더라도, 아가데의 사르곤(주전 2750년)이 마르투 땅에 네 번 가서 그 백성들을 한마음이 되게 하였다는 징조 토판의 기록은 받아들여도 든든한 근거 위에 서 있다고 할 수 있다. 그의 아들 나람신도 다른 쪽으로 제국을 넓히면서 이곳에서도 권위를 유지하였다. 교역 관계가 이어졌고, 바벨론은 적어도 마르투에 대한 종주권을 주장하였으며 때로는 실제로 행사하였다.\n\n(3) 바벨론의 패권\n\n함무라비와 그의 증손자 암미사타나도 비문에서 자신들을 마르투의 왕이라 부르며, 다른 왕들도 제국의 전통적 경계를 지켰을 가능성이 크다. 바벨론의 오랜 패권은 땅 이름에 흔적을 남겼을 뿐 아니라, 텔 엘아마르나 편지들에서 보듯 수리아와 애굽 사이에서도 앗수르어(아카드어)를 외교 언어로 만들었다.\n\n(4) 헷 족속과 아람 족속\n\n주전 2천년기 중엽에 이르면 주민 구성이 크게 바뀐다. 헷 계통의 민족인 미탄니가 이제 북수리아의 주인인데, 그들의 언어는 갈그미스, 마라시, 알레포, 하맛에서 발견되었으나 아직 해독되지 않은 비문들에 남아 있다.\n\n헷 족속 항목을 보라.\n\nH. 빙클러 박사가 보가즈쾨이에서 이룬 큰 발견은 우리 지식에 매우 중요한 기여를 하였다. 그 첫 보고는 『동방 문헌 신문』(OLZ) 1906년 12월 15일 호와 『독일 동방 학회 보고』 35호(1907년 12월)에서 볼 수 있다.\n\n다른 곳에서는 아람계 물결이 주민 가운데 으뜸가는 셈족 요소가 되었고, 가나안계는 이제 해안 성읍들(페니키아 사람)과 구약의 가나안을 차지하고 있다.\n\n(5) 헷 족속과 애굽 사람\n\n이 무렵 바벨론은 이민족 왕조인 카시트 사람의 지배 아래 있었는데, 이들이 주전 1100년 무렵 무너지자 짧은 왕조들이 잇달아 들어섰다. 이것이 힉소스의 지배에서 벗어난 애굽 사람들에게 수리아를 차지하려 나설 기회를 주었고, 그래서 헷 족속과 애굽 사람 사이의 다툼이 벌어진다. 투트모세 1세는 주전 1600년 무렵 유브라데 강까지 수리아를 휩쓸어 그 땅을 굴복시켰다. 투트모세 3세도 같은 일을 하였고, 카르나크의 벽에 자신의 원정 기록과 정복한 성읍들의 목록을 남겼다.\n\n(6) 아마르나 시대\n\n투트모세 4세 때에 헷 족속이 점점 더 자기들의 산지를 떠나 수리아 한가운데로 밀고 들어오기 시작했다. 텔 엘아마르나 편지들은 아멘호텝 4세(주전 1380년 무렵) 때에 그들이 수리아와 팔레스타인에서 애굽의 권위에 가장 심각하게 맞선 자들이었음을 보여 주며, 세티 1세가 왕위에 오르기 전에 바로들의 세력은 수리아에서 크게 줄어 있었다. 그때 애굽의 세력권은 갈멜까지만 이르렀고, 거기서 가데스까지는 중립 지대였으며, 그 북쪽은 모두 헷 족속의 것이었다.\n\n(7) 람세스 2세\n\n람세스 2세는 헷 족속의 왕 하테사르를 치는 전쟁에 힘차게 나서 가데스 근처에서 싸웠다. 그는 큰 승리를 주장하지만, 결과는 그의 권위가 중립 지대로 더 넓어지고 애굽의 세력권이 리쿠스 강(개 강)에서 다메섹 남쪽까지 수리아를 가로질러 넓어진 것뿐이었던 듯하다. 이 합의는 조약으로 굳어져, 북수리아가 헷 족속의 세력권으로 공식 인정되었는데, 곧 헷 족속의 주장을 물려받게 될 앗수르 사람들에게는 이 조약이 애굽에 맞선 권리 주장의 근거가 되었다. 주전 1200년 무렵, 이 전쟁으로 약해진 헷 족속은 북방 민족들의 이동으로 더욱 침식되었고, 그 제국은 여러 작은 독립국으로 흩어졌다.\n\n(8) 블레셋 사람\n\n수리아에서 헷 족속의 세력을 약하게 하고 무너뜨린 이동 민족 가운데 풀루사티(또는 푸루사티)가 있었는데, 그들의 기원은 아직 확실히 밝혀지지 않았다. 그들은 북쪽에서 수리아로 들어와 마주치는 자를 모두 이긴 뒤 애굽의 세력권 안에 진을 쳤다. 람세스 3세가 그들을 치러 나가 큰 승리를 주장한다. 그러나 나중에 그들은 블레셋 사람이라는 이름으로 팔레스타인 남동쪽에 자리 잡고 있다. 그들이 그 무렵 정착하였다는 것은, 텔 엘아마르나 편지들에는 그들의 흔적이 없고 주전 11세기에는 그들이 이스라엘의 뿌리 깊은 원수로 그곳에 있다는 사실과 잘 맞는다.\n\n(9) 디글랏 빌레셀 1세\n\n앗수르는 이제 서서히 강성해지고 있었으나, 서쪽에서 무엇을 하려면 먼저 바벨론과 결판을 내야 했다. 그러나 디글랏 빌레셀 1세는 유브라데 강을 건너 갈그미스의 헷 왕을 치고, 아르왓 해안까지 나아가 레바논에서 들소를 사냥하였으며, 바로에게서 선물을 받았는데, 이로써 바로는 그를 북수리아에서 헷 족속의 뒤를 이은 자로 인정한 셈이었다.\n\n(10) 아람의 나라들\n\n헷 제국이 무너지자, 이제 풀려난 수리아 한가운데의 아람 사람들은 따로 된 여러 아람 나라를 세웠다. 이 나라들은 공동의 적에 맞서 힘을 합쳐야 할 때가 아니면 서로 싸웠다. 이런 나라들이 하맛, 하드락, 소바, 르홉에 세워졌다. 하드락의 정확한 위치는 아직 알 수 없으나, 하맛은 분명히 남쪽 경계에서 르홉과 소바와 맞닿아 있었다. 르홉은 비카 골짜기를 따라 헤르몬 산기슭까지 뻗었고, 소바는 안티레바논 산맥 동쪽 비탈을 따라 뻗어 다메섹을 포함했는데, 르손이 떨어져 나가 그곳에 독립 왕국을 세우자 그 나라가 곧 으뜸가는 나라가 되었다. 헤르몬 남동쪽에는 더 작은 아람 나라인 그술과 마아가가 있었다.\n\n(11) 평화로운 발전\n\n이제 거의 세 세기 동안 수리아와 팔레스타인은 드문 경우를 빼고는 메소보다미아와 애굽 양쪽에서 평화롭게 버려져 있었다. 주전 12세기에 바벨론은 엘람의 침략으로 황폐해졌고, 그 뒤 앗수르와 바벨론 사이에 긴 전쟁이 벌어졌으며, 이어서 긴 평화의 시기가 왔으나 앗수르의 평화로운 통치자들은 이를 지혜롭게 나라 안을 굳히는 데 썼다. 애굽에서는 람세스 3세의 후계자들이 공격적인 테베의 사제 세력과 싸우느라 바빴다. 제21왕조 때에는 아멘의 대제사장들이 왕위를 빼앗았고, 제22왕조는 리비아 출신의 찬탈자들이었으며, 그 뒤 세 왕조는 구스(에티오피아)의 정복자들이었다.\n\n(12) 살만에셀 2세\n\n9세기에 앗수르나시르팔이 유브라데 강을 건너 안디옥 평야에 새로 세워진 파틴이라는 나라를 휩쓸었다. 그는 그 도성을 에워싸고 그 땅에 식민지를 세웠으나, 이것으로 끝나지 않아서 그의 후계자 살만에셀 2세가 다시 그 땅을 쳐들어가 그 나라를 여러 작은 공국으로 쪼개야 했다. 그다음 주전 854년에 그는 수리아 한가운데로 나아갔으나, 카르카르에서 다메섹의 벤하닷과 이스라엘의 아합을 비롯한 그의 수리아 동맹국들로 이루어진 강한 연합군을 만났다. 그는 승리를 주장하지만 5년 동안 더 나아가지 못했다. 그 뒤 다메섹을 치는 원정을 세 번 했으나 이루지 못하였고, 842년에 두로와 시돈과 이스라엘의 예후에게서 조공을 받았는데, 이는 검은 오벨리스크에 기록되고 그려져 있다. 797년에 이르러서야 람만니라리가 페니키아 해안을 굴복시킨 뒤 다메섹의 마리아를 복종시킬 수 있었고, 이때 그는 동팔레스타인을 지나 에돔까지 정복을 넓힌 듯하다. 그 뒤 앗수르 세력은 쇠퇴기를 겪었고, 그동안 하드락과 다메섹에서 반란이 일어났으며, 이스라엘의 여로보암 2세는 북쪽으로 경계를 옛 한계까지 넓힐 수 있었다(열왕기하 14:25).\n\n(13) 디글랏 빌레셀 3세\n\n그래서 디글랏 빌레셀 3세(745~728년)는 수리아 전체를 다시 정복해야 했다. 그는 두 해의 전쟁(742~740년) 끝에 아르밧을 빼앗았다. 그다음 하맛의 땅을 그의 장군들에게 나누어 주었다. 이때 유다의 아하스가 다메섹의 르신과 이스라엘의 르말랴(르말랴의 아들 베가를 가리킨다)에 맞서 그에게 도움을 간청하였다. 아하스는 구원을 받았으나 앗수르에 종속되었다. 다메섹은 주전 732년에 무너졌고 그곳에서 큰 조회가 열렸는데, 아하스를 비롯한 수리아의 조공 군주들이 거기에 참석하였다(열왕기하 16:10). 앗수르 제국은 이제 애굽 시내까지 수리아 전체를 차지하였다. 그러나 시바헤가 전에 애굽의 세력권이던 곳에서 반란을 부추겨, 페니키아와 사마리아에서 반란이 일어났다.\n\n(14) 살만에셀 4세와 사르곤\n\n살만에셀 4세는 어렵사리 두로와 시돈을 굴복시켜 조공을 바치게 하였다. 사마리아도 에워쌌으나, 722년에 사르곤이 왕위에 오르고서야 함락되었다. 하맛과 갈그미스가 다시 일어났으나 각각 720년과 717년에 마침내 굴복하였다. 711년에 사르곤은 다시 팔레스타인을 휩쓸어 애굽, 모압, 에돔, 유다, 블레셋 사람으로 이루어진 새 연합을 깨뜨렸다. 705년에는 시바헤가 이끄는 애굽 사람들과 그 동맹인 가사의 하눈이 이끄는 블레셋 사람들이 라피아에서 패하였다.\n\n앗수르의 마지막 세 통치자는 끊임없이 바벨론 때문에 어려움을 겪었고, 제국의 큰 부분이 스구디아 사람들에게 휩쓸리기도 하였으므로(주전 626년 무렵), 서쪽에서는 페니키아의 본토 영토를 병합한 것 말고는 더 한 일이 없었다.\n\n(15) 바로 느고와 느부갓네살\n\n609년 앗수르가 바벨론과 죽기 살기로 싸우고 있을 때, 바로 느고가 이 틈을 타서 수리아를 침략하였고, 가는 길에 요시야를 쳐서 이기고 갈그미스로 나아갔다. 그러나 605년에 그는 그곳에서 느부갓네살에게 완전히 패하였고, 수리아 전체가 바벨론에 조공을 바치게 되었다. 예전의 수리아 나라들은 이제 바벨론의 주들로 나타나며, 유다도 반란 때문에 주전 586년에 그런 처지가 되었다.\n\n바사의 통치 아래에서 이 주들은 한동안 그대로 있었으나, 마침내 「에비르 나리」(「강 건너편」), 곧 수리아가 한 총독령으로 만들어졌다. 헬라의 정복으로 애굽에는 프톨레마이오스 왕조가, 바벨론에는 셀레우코스 왕조가 서면서 동방과 서방 사이의 옛 다툼과 같은 불안정한 형편이 되살아났다. 로마가 들어오자 수리아는 바벨론에서 떨어져 안디옥을 수도로 하는 속주가 되었고, 그리스도 시대가 시작될 때까지 거의 손대지 않은 채 이어지던 셈족 문명이 점점 더 서방과 맞닿게 되었다. 이슬람이 일어나자 수리아는 아랍 사람의 손에 넘어갔고, 다메섹은 잠시(주후 661~750년) 새 제국의 수도가 되었으나, 곧 중앙 권력이 바벨론 지방으로 옮겨 갔다. 그 뒤로 수리아는 칼리파국의 한 주로 떨어져, 처음에는 아바스 왕조(750~1258년), 그다음에는 파티마 왕조(1258~1517년 — 원문대로), 마지막으로 오스만 제국 아래 있었다.\n\n(집필: W. M. Christie)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SYRIA (1)"
