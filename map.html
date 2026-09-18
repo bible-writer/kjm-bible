@@ -13332,6 +13332,12 @@
                 ${mor ? `<span style="font-size:0.72em;color:#64748b">${escHtml(mor)}</span>` : ''}</div>`;
           }).join('') || '<span style="font-size:0.75em;color:#94a3b8" title="이 어절에 이어진 원어 낱말이 없음 — 동사 어미에 든 주어(내가·그가)나 우리말로 풀어 쓴 말">원어 짝 없음 · 우리말로 풀어 쓴 말</span>';
           const grp = (t[4] === 'N' || t[4] === 'M') ? '<span title="여러 어절이 한 원어" style="color:#b45309">⌒</span>' : '';
+          // (2026-09-18) 앞 어절과 한 원어(⌒ 묶음 · 번호 같음)면 원어를 되풀이하지 않는다 — 자료는 KRV_N 그대로, 보이는 방식만
+          if (k > 0 && t[0] && t[0] === kt.arr[k - 1][0] && (t[4] === 'N' || t[4] === 'M')) {
+            return `<div class="wo-verse-row" data-k="${k}" style="display:grid;grid-template-columns:minmax(4.5em,auto) 1fr;gap:4px 10px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer">
+              <div><b style="color:#0f172a">${escHtml(kt.words[k])}</b>${grp}${hw ? `<div style="font-size:0.7em;color:#94a3b8">${escHtml(hw)}</div>` : ''}</div>
+              <div style="font-size:0.78em;color:#b45309">⌒ 앞 어절 「${escHtml(kt.words[k - 1])}」에 이어짐 (한 원어)</div></div>`;
+          }
           return `<div class="wo-verse-row" data-k="${k}" style="display:grid;grid-template-columns:minmax(4.5em,auto) 1fr;gap:4px 10px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer">
               <div><b style="color:#0f172a">${escHtml(kt.words[k])}</b>${grp}${hw ? `<div style="font-size:0.7em;color:#94a3b8">${escHtml(hw)}</div>` : ''}</div>
               <div>${orig}</div></div>`;
@@ -15079,7 +15085,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-17`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-18`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
