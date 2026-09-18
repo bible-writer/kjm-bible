@@ -13325,10 +13325,8 @@
           const hw = (t[8] != null && t[8] >= 0 && krvnMorph.hw) ? krvnMorph.hw[t[8]] : '';
           const orig = codes.map((cd, i) => {
             const lem = lmOf(t, i), mor = moOf(t, i);
-            const rd = origReadingKo(cd);
             return `<div class="wo-orig-one" data-code="${escHtml(cd)}" title="이 원어의 뜻" style="display:flex;gap:6px;align-items:baseline;flex-wrap:wrap">
                 <span style="font-size:1.2em;direction:rtl;unicode-bidi:isolate;color:#065f46">${escHtml(lem)}</span>
-                ${rd ? `<span style="font-size:0.8em;color:#334155" title="읽는 법(원어명)">${escHtml(rd)}</span>` : ''}
                 <span style="font-size:0.72em;color:#047857">${escHtml(cd)}</span>
                 ${mor ? `<span style="font-size:0.72em;color:#64748b">${escHtml(mor)}</span>` : ''}</div>`;
           }).join('') || '<span style="font-size:0.75em;color:#94a3b8" title="이 어절에 이어진 원어 낱말이 없음 — 동사 어미에 든 주어(내가·그가)나 우리말로 풀어 쓴 말">원어 짝 없음 · 우리말로 풀어 쓴 말</span>';
@@ -13343,8 +13341,8 @@
             <span style="flex:1"></span>
             <button onclick="WordOrig.zoom(-2)" title="글자 작게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:13px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가−</button><button onclick="WordOrig.zoom(2)" title="글자 크게" style="white-space:nowrap;flex-shrink:0;border:1px solid #cbd5e1;background:#fff;border-radius:5px;font-size:15px;line-height:1;padding:3px 7px;cursor:pointer;color:#334155">가+</button>
             <button onclick="document.getElementById('word-orig-pop').style.display='none'" style="flex-shrink:0;border:none;background:none;font-size:1.1em;cursor:pointer;color:#64748b">✕</button></div>
-          <div style="font-size:0.72em;color:#64748b;margin-bottom:4px;line-height:1.5">출처: 어절 원어 분석(KRV_N) — 원어·형태·기본형 · <b>뜻은 어절을 눌러</b> 원어 사전·한글 원어사전에서<br>
-            어절을 누르면 그 어절의 원어 창 · ⌒ 여러 어절이 한 원어 · ${+(krvnMorph.meta && krvnMorph.meta.version || 0) >= 6 ? '한 어절에 원어가 여럿이면 원문 차례' : '원어는 번호 차례'}</div>
+          <div style="font-size:0.72em;color:#64748b;margin-bottom:4px;line-height:1.5">출처: 어절 원어 분석(KRV_N) 하나 — 짝·원어·형태·기본형 · <b>읽는 법과 뜻은 원어를 눌러</b> 원어 사전·한글 원어사전에서<br>
+            원어를 누르면 그 원어 하나 · 어절을 누르면 그 어절의 원어 모두 · ⌒ 여러 어절이 한 원어 · ${+(krvnMorph.meta && krvnMorph.meta.version || 0) >= 6 ? '한 어절에 원어가 여럿이면 원문 차례' : '원어는 번호 차례'}</div>
           ${rows}
           <div style="margin-top:8px;font-size:0.7em;color:#94a3b8">어절 원어 분석(KRV_N)${+(krvnMorph.meta && krvnMorph.meta.version || 0) >= 6 ? ' · 원문 차례: 공개 원문(OSHB·비잔틴) 기준, 알 수 없으면 번호 차례' : ' · 원어는 번호 차례'}</div>`;
         pop.querySelectorAll('.wo-verse-row').forEach(el => {
@@ -13408,7 +13406,7 @@
           const mor = pick(t[2], krvnMorph.mo);
           const trs = (krvnMorph.tr[cd] || []).map(p => `${escHtml(p[0])} <span style="color:#94a3b8">${p[1]}</span>`).join(' · ');
           return `<div style="margin-top:8px">
-              ${(mor || lem) ? `<div style="font-size:0.8em;color:#047857;margin-bottom:2px">${escHtml(cd)}${lem ? ' <span style="font-size:1.15em;direction:rtl;unicode-bidi:isolate">' + escHtml(lem) + '</span>' : ''}${origReadingKo(cd) ? ' <span style="color:#334155">' + escHtml(origReadingKo(cd)) + '</span>' : ''}${mor ? ' · ' + escHtml(mor) : ' · <span style="color:#94a3b8">형태 정보 없음</span>'}</div>` : ''}
+              ${(mor || lem) ? `<div style="font-size:0.8em;color:#047857;margin-bottom:2px">${escHtml(cd)}${lem ? ' <span style="font-size:1.15em;direction:rtl;unicode-bidi:isolate">' + escHtml(lem) + '</span>' : ''}${mor ? ' · ' + escHtml(mor) : ' · <span style="color:#94a3b8">형태 정보 없음</span>'}</div>` : ''}
               <div id="word-orig-slot-${i}"></div>
               ${trs ? `<div style="font-size:0.75em;color:#64748b;margin-top:2px">개역개정 번역: ${trs}</div>` : ''}
             </div>`;
@@ -15080,7 +15078,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-15`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-16`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
