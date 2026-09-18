@@ -13763,14 +13763,17 @@
         const byCode = {};
         kt.arr.forEach((t, k) => (t[0] ? t[0].split(',') : []).forEach(cd => {
           const n = nz(cd); if (!n) return;
-          (byCode[n] = byCode[n] || []).push(clean(kt.words[k]));
+          (byCode[n] = byCode[n] || []).push(k);
         }));
         const seen = {};
-        st._kw = st.words.map(w => {
+        const kIdx = st.words.map(w => {
           const n = nz(w.code), L = byCode[n];
           const i = seen[n] = (seen[n] == null ? 0 : seen[n] + 1);
           return L && L.length ? L[Math.min(i, L.length - 1)] : null;
         });
+        st._kw = kIdx.map(k => k == null ? null : clean(kt.words[k]));
+        st._kwIdx = kIdx;                                  // 원어 낱말 → 본문 어절 차례 (없으면 null)
+        st._kwWords = kt.words.map(clean);                 // 본문 어절 전부
       } catch (e) { st._kw = null; }
       return st._kw;
     }
@@ -13843,7 +13846,31 @@
         + (kw && kw[i] ? ' · <b style="color:#334155">' + escHtml(kw[i]) + '</b>'      // 개역개정 본문 어절(KRV_N)
              + (!bare(x.gloss) && x.gloss !== kw[i] ? ' <span style="color:#cbd5e1">' + escHtml(x.gloss) + '</span>' : '')
            : (bare(x.gloss) ? ' · 문법 표지' : ' · ' + escHtml(x.gloss))) + '</span></div>').join('');
-      h += fold('w', '이 절의 다른 낱말', st.words.length, others);
+      /* (2026-09-18) 본문 어절 차례로 — 왼쪽 개역개정 어절, 오른쪽 그 어절의 원어.
+         짝 없는 원어(אֵת 목적격 표지 따위)는 원문에서 바로 뒤에 오는 짝 있는 원어의 어절에 붙인다(없으면 앞) */
+      let othersK = null;
+      if (kw && st._kwIdx && st._kwWords) {
+        const at = st._kwIdx.slice();
+        for (let i = 0; i < at.length; i++) if (at[i] == null) {
+          let j = i + 1; while (j < at.length && st._kwIdx[j] == null) j++;
+          if (j < at.length) at[i] = st._kwIdx[j];
+          else { j = i - 1; while (j >= 0 && st._kwIdx[j] == null) j--; if (j >= 0) at[i] = st._kwIdx[j]; }
+        }
+        const rowsK = st._kwWords.map((kword, k) => {
+          const ws = st.words.map((x, i) => ({ x, i })).filter(o => at[o.i] === k);
+          const right = ws.map(o =>
+            '<div onclick="wpPick(' + o.i + ')" style="cursor:pointer;padding:1px 4px;border-radius:4px'
+            + (o.i === st.idx ? ';background:#d1fae5' : '') + ((bare(o.x.gloss) && st._kwIdx[o.i] == null) ? ';opacity:0.45' : '') + '">'
+            + '<span style="direction:rtl;unicode-bidi:isolate;font-weight:600">' + escHtml(o.x.surface) + '</span> '
+            + '<span style="color:#94a3b8;font-size:0.92em">' + escHtml(o.x.code)
+            + (st._kwIdx[o.i] == null ? (bare(o.x.gloss) ? ' · 문법 표지' : ' · ' + escHtml(o.x.gloss)) : (!bare(o.x.gloss) && o.x.gloss !== kword ? ' · ' + escHtml(o.x.gloss) : '')) + '</span></div>').join('')
+            || '<span style="font-size:0.85em;color:#cbd5e1">원어 짝 없음</span>';
+          return '<div style="display:grid;grid-template-columns:minmax(5em,auto) 1fr;gap:2px 10px;padding:4px 0;border-bottom:1px dashed #e2e8f0">'
+            + '<b style="color:#0f172a">' + escHtml(kword) + '</b><div>' + right + '</div></div>';
+        }).join('');
+        othersK = rowsK;
+      }
+      h += fold('w', othersK ? '이 절 — 본문 차례' : '이 절의 다른 낱말', othersK ? st._kwWords.length + '어절' : st.words.length, othersK || others);
 
       /* ── 접힘 2: 이 낱말이 쓰인 곳 (본문을 옮기지 않는다) ── */
       const u = wpUsages(w.code, 40);
@@ -15106,7 +15133,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-11`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-12`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
