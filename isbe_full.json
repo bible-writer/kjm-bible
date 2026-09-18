@@ -1,5 +1,5 @@
 {
- "version": "1.2.0",
+ "version": "1.4.0",
  "date": "2026-09-18",
  "count": 866,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
@@ -190,7 +190,7 @@
    "id": 189,
    "term": "Addon(앗돈)",
    "definition": "ad'-on.\n\nSee ADDAN.",
-   "definition_ko": "",
+   "definition_ko": "앗돈. 앗단 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ADDON"
@@ -199,7 +199,7 @@
    "id": 200,
    "term": "Adithaim(아디다임)",
    "definition": "ad-i-tha'-im (`adhithayim \"double ornament, passage, or prey\"): A city in \"the lowland\" (Shephelah, not as the King James Version \"valley\") of Judah (Jos 15:36). Site unknown, but possibly same as ADIDA (which see).",
-   "definition_ko": "",
+   "definition_ko": "아디다임(히브리어 '아디타임', 「두 겹 장식」 또는 「길목」, 「노획물」). 유다의 「평지」(세벨라 — 흠정역처럼 「골짜기」가 아님)에 있는 성읍이다(여호수아 15:36). 자리는 알 수 없으나, 아디다(해당 항목을 보라)와 같은 곳일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ADITHAIM"
@@ -217,7 +217,7 @@
    "id": 220,
    "term": "Adoraim(아도라임)",
    "definition": "ad-o-ra'-im ('adhorayim, \"a pair of knolls,\" perhaps): One of several cities in Judah that were fortified by Rehoboam (2Ch 11:9). The name appears in Josephus and in 1 Macc as Adora or Dora or Dor. Its location is indicated in general by that of the other cities which the record in Chronicles groups with it. Common consent identifies it with Dura, about five miles West by South of Hebron.",
-   "definition_ko": "",
+   "definition_ko": "아도라임(히브리어 '아도라임', 아마도 「한 쌍의 둔덕」). 르호보암이 요새로 쌓은 유다의 여러 성읍 가운데 하나다(역대하 11:9). 요세푸스와 마카베오서에는 아도라 또는 도라, 도르로 나온다. 역대기가 함께 묶어 적은 다른 성읍들의 자리로 보아 대략의 위치를 알 수 있으며, 헤브론 서남쪽 5마일쯤의 두라가 그 자리라는 데 대체로 의견이 모인다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ADORAIM"
@@ -280,7 +280,7 @@
    "id": 329,
    "term": "Ahlab(알랍)",
    "definition": "a'-lab ('achlabh, \"fat or fruitful\"): A town of Asher. It is clear, however, that the Israelites failed to drive away the original inhabitants (Jud 1:31). Some have identified Ahlab with Gush Halab or Geschila, Northwest of the Sea of Galilee.",
-   "definition_ko": "",
+   "definition_ko": "알랍(히브리어 '아흐랍', 「기름진」 또는 「열매 많은」). 아셀 지파의 성읍이다. 그러나 이스라엘 자손은 그곳의 원래 주민을 쫓아내지 못하였다(사사기 1:31). 어떤 이들은 알랍을 갈릴리 바다 북서쪽의 구쉬 할라브, 곧 기스칼라와 같은 곳으로 본다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "AHLAB"
@@ -298,7 +298,7 @@
    "id": 344,
    "term": "Aiath(아얏)",
    "definition": "a'-yath (`ayyath): Found in Isa 10:28; feminine form of the city AI (which see).",
-   "definition_ko": "",
+   "definition_ko": "아얏(히브리어 '아야트'). 이사야 10:28에 나오며, 성읍 아이의 여성형 이름이다(아이 항목을 보라).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "AIATH"
@@ -307,7 +307,7 @@
    "id": 346,
    "term": "Aija(아야)",
    "definition": "a-i'-ja (`ayya'): A form of name for city Ai, found in Ne 11:31. See AI; AIATH.",
-   "definition_ko": "",
+   "definition_ko": "아야(히브리어 '아야'). 느헤미야 11:31에 나오는 성읍 아이의 다른 이름 꼴이다. 아이, 아얏 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "AIJA"
@@ -343,7 +343,7 @@
    "id": 375,
    "term": "Alemeth(알레멧)",
    "definition": "al'-e-meth (`alemeth, \"concealment\"):\n\n(1) the Revised Version (British and American) for Alameth of the King James Version in 1Ch 7:8.\n\n(2) Descendant of Saul and Jonathan, and son of Jehoaddah, 1Ch 8:36, or of Jarah, 1Ch 9:42. The genealogies in the two chapters are identical, and he is the fifth generation after Jonathan.\n\n(3) In some Hebrew texts, Ginsburg and Baer, for ALLEMETH (which see); so in the King James Version.",
-   "definition_ko": "",
+   "definition_ko": "알레멧(히브리어 '알레메트', 「숨김」).\n\n(1) 역대상 7:8의 흠정역 「알라멧」을 영국·미국 개역판(RV)은 「알레멧」으로 적는다(개역개정도 알레멧).\n\n(2) 사울과 요나단의 자손으로, 역대상 8:36에서는 여호앗다의 아들, 역대상 9:42에서는 야라의 아들이다. 두 장의 족보는 같으며, 그는 요나단에게서 다섯째 대다.\n\n(3) 긴즈부르크와 베어의 히브리어 본문 등 일부 본문은 레위 사람의 성읍 알레멧(ALLEMETH, 해당 항목을 보라 — 역대상 6:60)을 이 꼴로 적으며, 흠정역도 그렇게 적는다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ALEMETH"
@@ -361,7 +361,7 @@
    "id": 389,
    "term": "Allammelech(알람멜렉)",
    "definition": "a-lam'-e-lek ('allammelekh, \"oak of a king\"): A town in the tribe of Asher, the location of which is not known (Jos 19:26; the King James Version Alammelech).",
-   "definition_ko": "",
+   "definition_ko": "알람멜렉(히브리어 '알람멜렉', 「왕의 상수리나무」). 아셀 지파에 속한 성읍으로, 자리는 알려지지 않았다(여호수아 19:26; 흠정역은 알라멜렉).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ALLAMMELECH"
@@ -379,7 +379,7 @@
    "id": 401,
    "term": "Allon-Bacuth(알론 바굿)",
    "definition": "al'-on-ba'-kuth ('allon bakhuth; the King James Version transliterates Allon-bachuth, al-on-bak'uth, \"oak of weeping\"): The burial place of Deborah, the nurse of Rebekah (Ge 35:8); it appears from the narrative that she made her home with Jacob, who had returned from Paddan-aram, and was sojourning at the time at Bethel, in the vicinity of which was the \"oak of weeping,\" under which she was buried.",
-   "definition_ko": "",
+   "definition_ko": "알론바굿(히브리어 '알론 바쿠트', 「통곡의 상수리나무」; 흠정역은 알론바구트로 음역). 리브가의 유모 드보라가 묻힌 곳이다(창세기 35:8). 이야기로 보아 드보라는 밧단아람에서 돌아온 야곱의 집에 살고 있었고, 야곱은 그때 벧엘에 머물고 있었는데, 그 근처에 있던 「통곡의 상수리나무」 아래에 드보라를 묻었다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ALLON-BACUTH"
@@ -388,7 +388,7 @@
    "id": 407,
    "term": "Almon(알몬)",
    "definition": "al'-mon (`almon, \"hidden\"): A Levitical city in the tribe of Benjamin (Jos 21:18), the same as \"Allemeth\" the Revised Version (British and American), \"Alemeth\" the King James Version, of 1Ch 6:60 (which see).",
-   "definition_ko": "",
+   "definition_ko": "알몬(히브리어 '알몬', 「숨겨진」). 베냐민 지파 안에 있는 레위 사람의 성읍이다(여호수아 21:18). 역대상 6:60의 알레멧(해당 항목을 보라)과 같은 곳이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ALMON"
@@ -397,7 +397,7 @@
    "id": 408,
    "term": "Almon-Diblathaim(알몬디블라다임)",
    "definition": "al'-mon-dib-la-tha'-im (`almon dibhlathayim, \"Almon of the double cake of figs\"): A station in the wilderness journeyings of the Israelites, located in Moab between Diban-gad and the mountains of Abarim (Nu 33:46,47). It was near the end of the forty years' wanderings. The name was probably given because the location was like two lumps of pressed figs. In both occurrences the word has the accusative ending of direction, and should properly be read: \"Almon toward Diblathaim.\" It was probably the same place as Beth-diblathaim of Jer 48:22, mentioned in the prophet's oracle against Moab.",
-   "definition_ko": "",
+   "definition_ko": "알몬디블라다임(히브리어 '알몬 디블라타임', 「두 덩이 무화과 뭉치의 알몬」). 이스라엘 자손이 광야를 떠돌 때 머문 진영 가운데 하나로, 모압 땅 디본갓과 아바림 산 사이에 있었다(민수기 33:46, 47). 사십 년 광야 생활이 거의 끝나 갈 무렵이다. 그곳의 생김새가 눌러 뭉친 무화과 두 덩이 같아서 이런 이름이 붙은 듯하다. 두 번 나오는 곳 모두 이 말에 방향을 나타내는 어미가 붙어 있어, 바르게는 「디블라다임 쪽의 알몬」으로 읽어야 한다. 예레미야가 모압을 두고 한 예언에 나오는 벧디블라다임(예레미야 48:22)과 같은 곳일 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ALMON-DIBLATHAIM"
@@ -406,7 +406,7 @@
    "id": 429,
    "term": "Amad(아맛)",
    "definition": "a'-mad (`am`adh): A town in northern Palestine, which fell to the tribe of Asher in the division of the land (Jos 19:26). The modern ruin `Amud near Accho may be the site.",
-   "definition_ko": "",
+   "definition_ko": "아맛(히브리어 '암아드'). 땅을 나눌 때 아셀 지파에게 돌아간 팔레스타인 북부의 성읍이다(여호수아 19:26). 악고 근처의 오늘날 폐허 아무드가 그 자리일 수 있다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "AMAD"
@@ -424,7 +424,7 @@
    "id": 435,
    "term": "Amam(아맘)",
    "definition": "a'-mam ('amam): An unidentified town in southern Palestine, which fell to Judah In the allotment of the land; occurs only in Jos 15:26.",
-   "definition_ko": "",
+   "definition_ko": "아맘(히브리어 '아맘'). 땅을 나눌 때 유다에게 돌아간 팔레스타인 남부의 성읍으로, 자리는 밝혀지지 않았고 여호수아 15:26에만 나온다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "AMAM"
@@ -442,7 +442,7 @@
    "id": 464,
    "term": "Ammah(암마)",
    "definition": "am'-a ('ammah, \"mother\" or \"beginning\"): A hill in the territory of Benjamin (2Sa 2:24), where Joab and Abishai halted at nightfall in their pursuit of Abner and his forces after their victory over him in the battle of Gibeon. It \"lieth before Giah by the way of the wilderness of Gibeon\"; but the exact location has not been identified. The same Hebrew word appears as the second part of Metheg-ammah in 2Sa 8:1 the King James Version, but rendered \"mother city\" in the Revised Version (British and American), probably however not the same place as in 2Sa 2:24.",
-   "definition_ko": "",
+   "definition_ko": "암마(히브리어 '암마', 「어머니」 또는 「시작」). 베냐민 지파 땅에 있는 산으로(사무엘하 2:24), 기브온 싸움에서 아브넬을 이긴 뒤 아브넬과 그 군사를 뒤쫓던 요압과 아비새가 해 질 무렵 멈춘 곳이다. 이 산은 「기브온 거친 땅의 길 가 기아 맞은쪽」에 있으나, 정확한 자리는 밝혀지지 않았다. 같은 히브리어 낱말이 사무엘하 8:1 흠정역의 메덱암마 뒷부분에도 나오는데, 영국·미국 개역판(RV)은 이를 「어머니 성읍」으로 옮겼다. 그러나 사무엘하 2:24의 암마와 같은 곳은 아닐 것이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "AMMAH"
@@ -469,7 +469,7 @@
    "id": 493,
    "term": "Anaharath(아나하랏)",
    "definition": "a-na'-ha-rath ('ana-charath, meaning unknown): A place which fell to the tribe of Issachar in the division of the land (Jos 19:19). Located in the valley of Jezreel toward the East, the name and site being preserved as the modern en-Na`-ura. BDB is wrong in assigning it to the tribe of Naphtali.",
-   "definition_ko": "",
+   "definition_ko": "아나하랏(히브리어 '아나하라트', 뜻은 알 수 없음). 땅을 나눌 때 잇사갈 지파에게 돌아간 곳이다(여호수아 19:19). 이스르엘 골짜기 동쪽에 있으며, 이름과 자리가 오늘날의 엔나우라에 남아 있다. BDB 사전이 이곳을 납달리 지파에 넣은 것은 잘못이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ANAHARATH"
@@ -496,7 +496,7 @@
    "id": 517,
    "term": "Anem(아넴)",
    "definition": "a'-nem (`anem, \"two springs\"; Anam): Anem is mentioned with Ramoth among the cities of Issachar assigned to the priests, the sons of Gershom (1Ch 6:73). In the parallel list (Jos 21:29), there are mentioned Jarmuth and En- gannim, corresponding to Ramoth and Anim, therefore Anim and En-gannim (Jenin) are identical. As the name denotes (Anem = \"two springs\"; En-gannim = \"the spring of gardens\"), it was well watered. Anem is identified by Eusebius with Aner, but Conder suggests the village of \"Anim,\" on the hills West of the plain of Esdraelon which represents the Anea of the 4th century AD (Onom under the word \"Aniel\" and \"Bethara\"), a city lying 15 Roman miles from Caesarea, which had good baths.\n\nM. O. Evans",
-   "definition_ko": "",
+   "definition_ko": "아넴(히브리어 '아넴', 「두 샘」; 헬라어 아남). 잇사갈의 성읍 가운데 제사장, 곧 게르솜 자손에게 준 곳으로 라못과 함께 나온다(역대상 6:73). 짝을 이루는 목록(여호수아 21:29)에는 야르뭇과 엔 간님이 나오는데, 이것이 라못과 아넴에 대응하므로 아넴과 엔 간님(오늘날 제닌)은 같은 곳이다. 이름이 뜻하는 대로(아넴 = 「두 샘」, 엔 간님 = 「동산의 샘」) 물이 넉넉한 곳이었다. 유세비우스는 아넴을 아넬과 같은 곳으로 보았으나, 콘더는 에스드라엘론 평야 서쪽 언덕에 있는 「아님」 마을을 제안한다. 이 마을은 4세기의 아네아에 해당하며(『오노마스티콘』의 「아니엘」, 「베다라」 항목), 가이사랴에서 로마 마일로 15마일 떨어진, 좋은 목욕탕이 있던 성읍이었다.\n\n(집필: M. O. Evans)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ANEM"
@@ -514,7 +514,7 @@
    "id": 527,
    "term": "Angle(성 굽이)",
    "definition": "an'-g'-l: Used in Isa 19:8 for a Hebrew noun that is rendered \"hook\" in Job 41:1: \"The fishers shall lament, and all they that cast angle (hook) into the Nile shall mourn.\" For a striking figurative use of it see Hab 1:15 where, speaking of the wicked devouring the righteous, \"making men as the fishes of the sea,\" the prophet says: \"They take up all of them with the angle, they catch them in their net\" (the Revised Version (British and American) uses singular).",
-   "definition_ko": "",
+   "definition_ko": "낚시(흠정역 'angle'). 이사야 19:8에서 쓰인 히브리어 명사로, 욥기 41:1에서는 「갈고리」로 옮겨진 말이다. 「어부들은 탄식하며 나일 강에 낚시를 던지는 자마다 슬퍼하며.」 이 말의 두드러진 비유적 쓰임은 하박국 1:15에 있다. 악인이 의인을 삼키며 「사람을 바다의 고기 같게」 하는 것을 두고 선지자는 「그가 낚시로 모두 낚으며 그물로 잡으며」라고 말한다(영국·미국 개역판(RV)은 단수로 옮김).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ANGLE"
@@ -523,7 +523,7 @@
    "id": 532,
    "term": "Anim(아님)",
    "definition": "a'-nim (`anim, \"springs\"): One of the cities of the hill country of Judah mentioned immediately after Eshtemoa (Jos 15:50). It is probably represented by the double ruin of el Ghuwein situated South of es Semu`a. The surface remains are Byzantine--a Christian town called Anem was here in the 4th century, but it is clearly an ancient site of importance (PEF, III, 408, Sh, XXV).",
-   "definition_ko": "",
+   "definition_ko": "아님(히브리어 '아님', 「샘들」). 유다 산지의 성읍 가운데 하나로, 에스드모 바로 다음에 나온다(여호수아 15:50). 아마도 에스세무아 남쪽에 있는 쌍둥이 폐허 엘구웨인이 그 자리일 것이다. 겉에 드러난 유적은 비잔틴 시대의 것으로 — 4세기에 이곳에 아넴이라는 그리스도인 마을이 있었다 — 분명히 오래되고 중요한 곳이었다(팔레스타인 탐사 기금 조사 보고, 3권 408쪽, 지도 25).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ANIM"
@@ -550,7 +550,7 @@
    "id": 592,
    "term": "Aphekah(아베가)",
    "definition": "a-fe'-ka ('apheqah, \"force\" or \"strength\"): An unidentified city in the hill country of Judah (Jos 15:53).",
-   "definition_ko": "",
+   "definition_ko": "아베가(히브리어 '아페카', 「힘」 또는 「세력」). 유다 산지의 성읍으로, 자리는 밝혀지지 않았다(여호수아 15:53).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "APHEKAH"
@@ -631,7 +631,7 @@
    "id": 683,
    "term": "Arbela(아르벨라)",
    "definition": "ar-be'-la (en Arbelois): This place is mentioned in 1 Macc 9:1 ff, and in Ant, XII, xi, 1, describing the march and encampment of Bacchides. The former says that \"Demetrius sent Bacchides and Alcimus into the land of Judea .... who went forth by the way that leadeth to Galgala, and pitched their tents before Masaloth, which is in Arbela, and after they had won it they slew much people.\" Josephus says that Bacchides \"marched out of Antioch and came into Judea and pitched his camp at Arbela, a city of Galilee, and having besieged and taken those that were there in caves (for many people fled into such places) he removed and made all the haste he could to Jerusalem.\" It was from the caves near the village of Arbela in Galilee that Herod dislodged the robbers (Ant., XIV, xv, 4 f; BJ, I, xvi, 2 ff). Josephus fortified the caves of Arbela in lower Galilee (Vita, 37), \"near the lake of Gennesar\" (BJ, II, xx, 6). The references in Josephus point plainly to the caves in the cliff forming the south wall of the tremendous gorge of Wady el-Chamam which opens on the plain of Gennesaret, west of the village el-Mejdel. A series of these caves, skillfully adapted to purposes of refuge and defense, is still known as Qal`at ibn Ma`an, \"fortress of the son of Ma`an.\" On the height above stand the ruins of Irbid or Irbil (both forms are heard today), which unquestionably represent the Arbela of Josephus. The army from Antioch may quite well have come this way. No name however in the least resembling Masaloth has been recovered in this district. We may mention Robinson's suggestion (BR, II, 398, note), that it may stand for the Hebrew mecilloth, \"steps, stories, terraces,\" and may apply to the fortress in the rocks.\n\nOn the other hand the writer of 1 Macc is an earlier authority than Josephus. If we accept his guidance, Bacchides must have crossed the plain of Esdraelon and followed the main highway southward through Samaria. Galgala may then be identified with Jiljilia, about 8 miles North of Bethel, and Masaloth with Meselieh, about 3 miles Southeast of Dothan. Onomasticon mentions an Arbela in the great plain, 9 miles from Legio (Lejun), but it is now unknown. The phrase en arbelois might mean that Masaloth was in the district of Arbela; but there is no trace of this name as attaching to any tract in this neighborhood.\n\nOne or other of these routes must have been taken. While no certain decision can be reached, special weight attaches to the statement of Josephus, on account of his acquaintance with the localities in the region, and his unquestionable familiarity with the history. See also BETH-ARBEL.\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "아르벨라(헬라어 '엔 아르벨로이스'). 마카베오상 9:1 이하와 요세푸스 『유대 고대사』 12권 11장 1절에서 바키데스의 행군과 진 친 곳을 말할 때 나온다. 앞의 책은 「데메드리오는 바키데스와 알키무스를 유다 땅으로 보냈다 …. 그들은 길갈로 가는 길을 따라 나아가 아르벨라에 있는 메살롯 앞에 진을 치고, 그곳을 점령하여 많은 사람을 죽였다」고 한다. 요세푸스는 바키데스가 「안디옥에서 나와 유대로 들어와 갈릴리의 성읍 아르벨라에 진을 치고, 그곳 동굴에 있던 자들을 에워싸 사로잡은 뒤(많은 사람이 그런 곳으로 피하였다) 그곳을 떠나 할 수 있는 한 서둘러 예루살렘으로 갔다」고 말한다. 헤롯이 도적 떼를 몰아낸 곳도 갈릴리의 아르벨라 마을 근처 동굴들이었다(『유대 고대사』 14권 15장 4절 이하; 『유대 전쟁사』 1권 16장 2절 이하). 요세푸스는 아랫갈릴리의 아르벨라 동굴들을 요새로 삼았는데(『자서전』 37), 그곳은 「게네사렛 호수 근처」였다(『유대 전쟁사』 2권 20장 6절). 요세푸스의 말은 분명히 엘메즈델 마을 서쪽에서 게네사렛 평야로 트이는 와디 엘하맘의 거대한 협곡, 그 남쪽 벽을 이루는 벼랑의 동굴들을 가리킨다. 피난과 방어에 쓰도록 솜씨 있게 다듬은 이 동굴들은 지금도 칼라트 이븐 마안, 곧 「마안의 아들의 요새」라고 불린다. 그 위 높은 곳에는 이르비드 또는 이르빌(두 꼴 모두 오늘날 쓰인다)의 폐허가 있는데, 이것이 요세푸스의 아르벨라임이 틀림없다. 안디옥에서 온 군대가 이 길로 왔을 수도 충분히 있다. 그러나 이 지역에서는 메살롯과 조금이라도 비슷한 이름이 발견되지 않았다. 로빈슨은 메살롯이 히브리어 '므실롯'(「계단, 층, 단」)을 나타내며 바위 속 요새를 가리킬 수 있다고 제안한 바 있다(『성지 연구』 2권 398쪽 주).\n\n한편 마카베오상의 저자는 요세푸스보다 앞선 전거다. 그를 따른다면 바키데스는 에스드라엘론 평야를 건너 사마리아를 지나 남쪽으로 가는 큰길을 따랐을 것이다. 그렇다면 길갈은 벧엘 북쪽 8마일쯤의 질질리아, 메살롯은 도단 남동쪽 3마일쯤의 메셀리에로 볼 수 있다. 『오노마스티콘』은 큰 평야에 레기오(레준)에서 9마일 떨어진 아르벨라를 언급하지만, 지금은 알 수 없다. '엔 아르벨로이스'라는 말은 메살롯이 아르벨라 지방에 있었다는 뜻일 수 있으나, 이 근처 어느 땅에도 이 이름이 붙어 있던 흔적은 없다.\n\n이 두 길 가운데 하나를 택했을 것이다. 확실히 판가름할 수는 없지만, 그 지방을 잘 알고 역사에도 틀림없이 밝았던 요세푸스의 말에 특히 무게가 실린다. 벧아벨 항목도 보라.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ARBELA"
@@ -694,7 +694,7 @@
    "id": 776,
    "term": "Arumah(아루마)",
    "definition": "a-roo'-ma (arumah, \"lofty\"): The town in which Abimelech, the son of Jerubbaal (Gideon), dwelt when driven from Shechem (Jud 9:41). The ruins El-Ormeh, 6 miles Southeast of Shechem, may be on the site, though its position is not known with certainty.",
-   "definition_ko": "",
+   "definition_ko": "아루마(히브리어 '아루마', 「높은」). 여룹바알(기드온)의 아들 아비멜렉이 세겜에서 쫓겨났을 때 살던 성읍이다(사사기 9:41). 세겜 남동쪽 6마일의 폐허 엘오르메가 그 자리일 수 있으나, 확실한 위치는 알려져 있지 않다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ARUMAH"
@@ -703,7 +703,7 @@
    "id": 811,
    "term": "Ashan(아산)",
    "definition": "a'-shan (`ashan): An unknown site in the domain of Judah (Jos 15:42), possessed by Simeon (Jos 19:7), and mentioned among the priests' cities in 1Ch 6:59. (44) = Jos 21:16 (`ayin is a corruption of `ashan). Chorashan (or Borashan), which was probably the site of some reservoir in the Southwest part of Judah (1Sa 30:30), is the same as Ashan.",
-   "definition_ko": "",
+   "definition_ko": "아산(히브리어 '아산'). 유다 영토에 있는 곳으로(여호수아 15:42) 시므온이 차지하였고(여호수아 19:7), 역대상 6:59에 제사장의 성읍 가운데 하나로 나오는데, 이는 여호수아 21:16에 해당한다(여호수아 21:16의 「아인」은 「아산」이 잘못 옮겨진 것이다). 자리는 알 수 없다. 유다 남서쪽에 있던 어떤 저수지 자리였을 고라산(또는 보라산, 사무엘상 30:30)이 아산과 같은 곳이다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ASHAN"
@@ -739,7 +739,7 @@
    "id": 828,
    "term": "Ashnah(아스나)",
    "definition": "ash'-na ('ashnah): Two sites,\n\n(1) Jos 15:33, a site in the lowlands of Judah, probably near Estaol and Zorah. The small ruin Aslin between those two places may retain an echo of the old name;\n\n(2) Jos 15:43 an unknown site farther south.",
-   "definition_ko": "",
+   "definition_ko": "아스나(히브리어 '아스나'). 두 곳이 있다.\n\n(1) 여호수아 15:33 — 유다의 평지에 있는 곳으로, 아마 에스다올과 소라 근처일 것이다. 두 곳 사이에 있는 작은 폐허 아슬린에 옛 이름이 희미하게 남아 있는지도 모른다.\n\n(2) 여호수아 15:43 — 더 남쪽에 있는 곳으로, 자리는 알 수 없다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ASHNAH"
@@ -793,7 +793,7 @@
    "id": 914,
    "term": "Ataroth(아다롯 · 아다롯 앗달)",
    "definition": "at'-a-roth, a-ta'-roth (`aTaroth, \"crowns\" or \"wreaths\"; Ataroth):\n\n(1) A city East of the Jordan, apparently in the territory given to Reuben, but built, or fortified, by the children of Gad (Nu 32:3,34). It is named along with Dibon, which is identified with Dhiban. Eight miles Northeast by North of Dibon, on the South of Wady Zerqa Ma`in, stands Jebel `Attarus, in which the ancient name is preserved. The city is doubtless represented by Khirbet `Attarus, about 4 miles West of the mountain.\n\n(2) A place on the boundary between Ephraim and Benjamin, toward the West (Jos 16:2). It seems to be the same as Ataroth- addar of Jos 16:5, 18:13. It is probably to be identified with the modern ed-Dariyeh South of nether Bethhoron, and about 12 1/2 miles West of Jerusalem.\n\n(3) A place on the eastern frontier of Ephraim (Jos 16:7). This town has not been identified. Conder thinks it may be identified with et-Truneh in the Jordan valley, or with Khirbet et-Taiyereh.\n\nW. Ewing",
-   "definition_ko": "",
+   "definition_ko": "아다롯(히브리어 '아타로트', 「면류관들」 또는 「화관들」).\n\n(1) 요단 동쪽의 성읍으로, 르우벤에게 준 땅에 있었던 듯하나 갓 자손이 세웠거나 요새로 쌓았다(민수기 32:3, 34). 디본과 함께 나오는데, 디본은 오늘날의 디반이다. 디본에서 북북동쪽으로 8마일, 와디 제르카 마인 남쪽에 제벨 아타루스가 있어 옛 이름이 남아 있다. 성읍 자리는 그 산 서쪽 4마일쯤의 키르베트 아타루스임이 틀림없다.\n\n(2) 에브라임과 베냐민 경계의 서쪽 끝에 있는 곳이다(여호수아 16:2). 여호수아 16:5와 18:13의 아다롯 앗달과 같은 곳으로 보인다. 아마 아랫 벧호론 남쪽, 예루살렘 서쪽 12.5마일쯤에 있는 오늘날의 에드다리예일 것이다.\n\n(3) 에브라임의 동쪽 경계에 있는 곳이다(여호수아 16:7). 자리는 밝혀지지 않았다. 콘더는 요단 골짜기의 에트트루네나 키르베트 에트타이예레일 수 있다고 본다.\n\n(집필: W. Ewing)",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ATAROTH"
@@ -802,7 +802,7 @@
    "id": 920,
    "term": "Athach(아닥)",
    "definition": "a'-thak (`athakh, \"lodging-place\"): One of the cities of Judah to which David sent from Ziklag the spoil of the Amalekites (1Sa 30:30). Its site is unknown. Driver, Budde, and Wellhausen identify it with Ether (Jos 15:42).",
-   "definition_ko": "",
+   "definition_ko": "아닥(히브리어 '아타크', 「머무는 곳」). 다윗이 시글락에서 아말렉 사람에게서 빼앗은 물건을 보낸 유다의 성읍 가운데 하나다(사무엘상 30:30). 자리는 알 수 없다. 드라이버, 부데, 벨하우젠은 이곳을 에델(여호수아 15:42)과 같은 곳으로 본다.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ATHACH"
@@ -811,7 +811,7 @@
    "id": 925,
    "term": "Atharim(아다림)",
    "definition": "ath'-a-rim (`atharim): the Revised Version (British and American) \"The way of Atharim\"; the King James Version \"The way of the spies.\" the Revised Version (British and American) regards Atharim as a place (so Septuagint). the King James Version follows Syriac and Targum, rendering Atharim as if Tarim = spies. Dillmann translates \"the caravan path,\" connecting it with Arabic athar, \"a track or footprint.\" Here the king of Arad fought against Israel, taking some captives (Nu 21:1).all official records and legal documents of the time of Charles II of England from the death of Charles I. See HORMAH.",
-   "definition_ko": "",
+   "definition_ko": "아다림(히브리어 '아타림'). 영국·미국 개역판(RV)은 「아다림 길」, 흠정역은 「정탐꾼의 길」로 옮겼다. 영국·미국 개역판은 칠십인역처럼 아다림을 땅 이름으로 보았고, 흠정역은 시리아어역과 탈굼을 따라 아다림을 「타림」(정탐꾼)처럼 옮겼다. 딜만은 아랍어 '아타르'(「발자국, 자취」)와 이어 「대상(隊商)의 길」로 옮긴다. 이곳에서 아랏의 왕이 이스라엘과 싸워 몇 사람을 사로잡았다(민수기 21:1). 호르마 항목을 보라.",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ATHARIM"
@@ -829,7 +829,7 @@
    "id": 934,
    "term": "Atroth-Beth-Joab(아다롯벳요압)",
    "definition": "at-roth-beth-jo'-ab `aTroth beth yo'abh (\"crowns of the house of Joab\"): the King James Version \"Ataroth,\" the house of Joab. Probably a family in Judah (1Ch 2:54).",
-   "definition_ko": "",
+   "definition_ko": "아다롯벳요압(히브리어 '아트로트 베트 요아브', 「요압 집안의 면류관들」). 흠정역은 「아다롯, 요압의 집」으로 옮겼다. 아마 유다의 한 집안일 것이다(역대상 2:54).",
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ATROTH-BETH-JOAB"

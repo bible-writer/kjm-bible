@@ -12761,7 +12761,7 @@
           +     '<span style="margin-left:auto;">' + badge + '</span>'
           +   '</div>'
           +   '<div id="' + bid + '" class="popup-dict-body" style="display:none;font-size:' + placeDictFontSize() + 'px;line-height:1.75;'
-          +        'color:#334155;margin-top:4px;padding-left:14px;' + (key === 'isb' ? 'white-space:pre-wrap;max-height:420px;overflow-y:auto;' : '') + '">' + escHtml(body)
+          +        'color:#334155;margin-top:4px;padding-left:14px;' + (key === 'isb' ? 'white-space:pre-wrap;max-height:420px;overflow-y:auto;' : '') + '">' + (typeof linkifyVerseRefs === 'function' ? linkifyVerseRefs(escHtml(body)) : escHtml(body))   // (2026-09-18) 사전 글의 성경 구절을 눌러 갈 수 있게
           +     (ko ? '' : '<div style="margin-top:7px;"><button onclick="event.stopPropagation();placeDictDraft(this)" data-bid="' + bid + '" '
           +            'title="구글 번역 초안 — 저장되지 않음. 바른 번역은 하나씩 사전에 채워 넣는다" '
           +            'style="font-size:10px;padding:3px 9px;border:1px solid #bfdbfe;border-radius:4px;background:#2563eb;color:#fff;cursor:pointer;">\ud83c\udf10 번역 초안</button>'
@@ -15108,7 +15108,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-19`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-20`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
