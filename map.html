@@ -2686,6 +2686,7 @@
               await loadCoordOverrides();
               await reapplyCoordOverrides(placeDatabase, 'JSON');
               await reapplyNameOverrides(placeDatabase, 'JSON');
+              await reapplyPlaceStrongOverrides(placeDatabase, 'JSON');
               await setLocalItem('saved_place_database', placeDatabase);
               buildKeywordIndex(placeDatabase);
               renderMapMarkers();
@@ -2712,6 +2713,9 @@
             if (pkg.nameOverrides && typeof pkg.nameOverrides === 'object') {
               nameOverrides = pkg.nameOverrides;
               await saveNameOverrides();
+            }
+            if (pkg.placeStrongOverrides && typeof pkg.placeStrongOverrides === 'object') {
+              placeStrongOverrides = pkg.placeStrongOverrides; await savePlaceStrongOverrides();
             }
             let deltaInfo = null;
             if (pkg.backupFormat === 'delta') {
@@ -7805,6 +7809,7 @@
         const safeUstrong = place.ustrong.replace(/'/g,"\\'");
         html += `<div><span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${safeUstrong}','pqp-strong-inline')" title="원어 뜻 보기">[${escHtml(place.ustrong)}]</span></div><div id="pqp-strong-inline"></div>`;
       }
+      html += placeStrongLine(place, 'pqp-strong-edit');   // (2026-09-18) 지명 원어 번호 보기·고치기
       // 지도보기 버튼 최상단 배치
       html += `<button class="pqp-map-btn" style="margin-bottom:6px;" onclick="document.getElementById('place-quick-panel').style.display='none'; BibleGeoEngine.flyToPlace(placeDatabase.find(p=>p.id===${place.id}) || placeDatabase.find(p=>p.name==='${safeName}'))">🗺 지도에서 보기</button>`;
 
@@ -10252,6 +10257,7 @@
         savedFontSize: currentFontSize,
         coordOverrides: coordOverrides,
         nameOverrides: nameOverrides,
+        placeStrongOverrides: placeStrongOverrides,
         strongOverrides: strongOverrides,
         termDatabaseMeta: termDatabaseMeta,
         deltas: {
@@ -10359,6 +10365,7 @@
 
           if (pkg.backupFormat === 'delta') {
             if (pkg.nameOverrides && typeof pkg.nameOverrides === 'object' && typeof saveNameOverrides === 'function') { nameOverrides = pkg.nameOverrides; await saveNameOverrides(); }
+            if (pkg.placeStrongOverrides && typeof pkg.placeStrongOverrides === 'object') { placeStrongOverrides = pkg.placeStrongOverrides; await savePlaceStrongOverrides(); }
             if (pkg.strongOverrides) { strongOverrides = pkg.strongOverrides; await setLocalItem('saved_strong_overrides', strongOverrides); }
             if (pkg.termDatabaseMeta) { termDatabaseMeta = pkg.termDatabaseMeta; await setLocalItem('saved_term_database_meta', termDatabaseMeta); }
             window._deltaRestoreInfo = await BackupDelta.restore(pkg);
@@ -11113,6 +11120,120 @@
       let msg = `지명 수정 완료: '${oldName}' → '${newName}' — 재업로드해도 유지됩니다`;
       if (dup > 0) msg += ` (같은 이름 ${dup}건 존재)`;
       showToast(msg, 'success', 4500);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+     * [지명 원어] 지명 스트롱 코드 수정값 영속 저장소 (2026-09-18)
+     *   지명 이름 수정(nameOverrides)과 같은 원리. 지명DB 를 GitHub·파일에서 새로 받아도
+     *   고친 코드가 다시 입혀진다. 원본이 제3의 값으로 바뀌었으면 원본 우선 → 수정 이력 해제.
+     *   두 칸을 함께 고친다: hebrew_greek(목록·원어 대조 알림) · ustrong(지명 창 [H1234] 단추 — 대표 코드 하나)
+     * ═══════════════════════════════════════════════════════════════ */
+    let placeStrongOverrides = {};
+    async function loadPlaceStrongOverrides() {
+      const saved = await getLocalItem('saved_place_strong_overrides');
+      if (saved && typeof saved === 'object') placeStrongOverrides = saved;
+      return placeStrongOverrides;
+    }
+    async function savePlaceStrongOverrides() {
+      try { await setLocalItem('saved_place_strong_overrides', placeStrongOverrides); }
+      catch (e) { console.error('지명 원어 코드 수정 저장 실패:', e); }
+    }
+    function normStrongList(txt) {
+      const out = [];
+      String(txt || '').split(/[\s,;/]+/).forEach(x => {
+        const m = x.trim().toUpperCase().match(/^([HG])0*(\d{1,5})([A-Z]?)$/);
+        if (m) { const c = m[1] + m[2].padStart(4, '0') + m[3]; if (out.indexOf(c) < 0) out.push(c); }
+        else if (x.trim()) out.push('!' + x.trim());
+      });
+      return out;
+    }
+    function applyPlaceStrongOverrides(list) {
+      const r = { applied: 0, retired: 0 };
+      if (!list || !list.length) return r;
+      Object.keys(placeStrongOverrides).forEach(k => {
+        const ov = placeStrongOverrides[k];
+        const t = list.find(p => p.id === ov.id);
+        if (!t) return;
+        const curU = t.ustrong || '', curH = t.hebrew_greek || '';
+        if (curU === ov.ustrong && curH === ov.hebrew_greek) { r.applied++; return; }
+        if (curU === (ov.baseU || '') && curH === (ov.baseH || '')) {
+          if (ov.ustrong) t.ustrong = ov.ustrong; else delete t.ustrong;
+          if (ov.hebrew_greek) t.hebrew_greek = ov.hebrew_greek; else delete t.hebrew_greek;
+          r.applied++;
+        } else { delete placeStrongOverrides[k]; r.retired++; }   // 원본이 새 값으로 바뀜 → 원본 우선
+      });
+      return r;
+    }
+    async function reapplyPlaceStrongOverrides(list, label) {
+      const r = applyPlaceStrongOverrides(list);
+      if (r.retired > 0) await savePlaceStrongOverrides();
+      if (r.retired > 0) showToast(`지명 원어 코드 수정 ${r.retired}개는 ${label || '원본'}이 갱신되어 해제`, 'info', 5000);
+      return r;
+    }
+    // 지명 창의 ✏️ — 입력 칸 열기
+    function editPlaceStrong(placeId, boxId) {
+      const place = placeDatabase.find(p => p.id === placeId);
+      const box = document.getElementById(boxId);
+      if (!place || !box) return;
+      const cur = [place.ustrong || '', place.hebrew_greek || ''].join(',');
+      const val = normStrongList(cur).filter(c => c[0] !== '!').join(', ');
+      box.innerHTML = `<div style="margin:4px 0;font-size:12px;color:#475569">원어 번호 — 쉼표로 여럿 (첫 번호가 대표)</div>
+        <input type="text" id="${boxId}-in" value="${escHtml(val)}" placeholder="예: H3731, H3732, G2914" style="width:100%;box-sizing:border-box;font-size:13px;padding:3px 6px;border:1px solid #94a3b8;border-radius:4px"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();savePlaceStrong(${placeId},'${boxId}');}">
+        <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+          <button onclick="savePlaceStrong(${placeId},'${boxId}')" style="font-size:11px;padding:2px 8px;background:#3b82f6;color:#fff;border:none;border-radius:4px;cursor:pointer">저장</button>
+          <button onclick="document.getElementById('${boxId}').innerHTML=''" style="font-size:11px;padding:2px 8px;background:#94a3b8;color:#fff;border:none;border-radius:4px;cursor:pointer">취소</button>
+          ${placeStrongOverrides['ID' + placeId] ? `<button onclick="resetPlaceStrong(${placeId},'${boxId}')" style="font-size:11px;padding:2px 8px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;border-radius:4px;cursor:pointer">원래대로</button>` : ''}
+        </div>`;
+      const el = document.getElementById(boxId + '-in'); if (el) { el.focus(); el.select(); }
+    }
+    async function savePlaceStrong(placeId, boxId) {
+      const place = placeDatabase.find(p => p.id === placeId);
+      const el = document.getElementById(boxId + '-in');
+      if (!place || !el) return;
+      const codes = normStrongList(el.value);
+      const bad = codes.filter(c => c[0] === '!');
+      if (bad.length) { showToast('번호 꼴이 아닙니다: ' + bad.map(b => b.slice(1)).join(', ') + ' — H3731 · G2914 꼴로', 'warn'); return; }
+      const key = 'ID' + placeId, prev = placeStrongOverrides[key];
+      const baseU = prev ? prev.baseU : (place.ustrong || ''), baseH = prev ? prev.baseH : (place.hebrew_greek || '');
+      const newH = codes.slice().sort().join(',');
+      const newU = codes.length ? (codes.indexOf(place.ustrong) >= 0 ? place.ustrong : codes[0]) : '';
+      if (newU === baseU && newH === baseH) delete placeStrongOverrides[key];
+      else placeStrongOverrides[key] = { id: placeId, name: place.name, baseU, baseH, ustrong: newU, hebrew_greek: newH, ts: new Date().toISOString() };
+      if (newU) place.ustrong = newU; else delete place.ustrong;
+      if (newH) place.hebrew_greek = newH; else delete place.hebrew_greek;
+      await savePlaceStrongOverrides();
+      await setLocalItem('saved_place_database', placeDatabase);
+      showToast(`지명 원어 코드 저장: ${place.name} — ${newH || '(비움)'} · 다시 받아도 유지됩니다`, 'success', 4000);
+      refreshPlacePanelsAfterStrongEdit(place);
+    }
+    async function resetPlaceStrong(placeId, boxId) {
+      const place = placeDatabase.find(p => p.id === placeId);
+      const ov = placeStrongOverrides['ID' + placeId];
+      if (!place || !ov) return;
+      if (ov.baseU) place.ustrong = ov.baseU; else delete place.ustrong;
+      if (ov.baseH) place.hebrew_greek = ov.baseH; else delete place.hebrew_greek;
+      delete placeStrongOverrides['ID' + placeId];
+      await savePlaceStrongOverrides();
+      await setLocalItem('saved_place_database', placeDatabase);
+      showToast(`지명 원어 코드 원래대로: ${place.name}`, 'info');
+      refreshPlacePanelsAfterStrongEdit(place);
+    }
+    function refreshPlacePanelsAfterStrongEdit(place) {
+      const q = document.getElementById('place-quick-panel');
+      if (q && q.style.display !== 'none' && typeof showPlaceQuickPanel === 'function') {
+        const keep = { left: q.style.left, top: q.style.top };   // 창 자리 그대로 (showPlaceQuickPanel 은 누른 딱지 자리로 옮기려 함)
+        try { showPlaceQuickPanel(place); } catch (e) {}
+        q.style.left = keep.left; q.style.top = keep.top; q.style.display = 'block';
+      }
+      try { if (map && map.closePopup) map.closePopup(); } catch (e) {}
+    }
+    // 지명 창에 붙일 원어 줄 (대표 [H1234] + 전체 번호 + ✏️)
+    function placeStrongLine(place, boxId) {
+      const all = String(place.hebrew_greek || '').split(',').filter(Boolean);
+      const edited = placeStrongOverrides['ID' + place.id] ? ' <span style="font-size:10px;color:#b45309" title="이 기기에서 고친 값">(고침)</span>' : '';
+      const list = all.length ? `<span style="font-size:11px;color:#64748b">${all.map(c => escHtml(c)).join(', ')}</span>` : '<span style="font-size:11px;color:#94a3b8">원어 번호 없음</span>';
+      return `<div style="font-size:12px;margin:2px 0">${list}${edited} <button onclick="editPlaceStrong(${place.id},'${boxId}')" title="지명 원어 번호 고치기" style="font-size:10px;padding:0 5px;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer">✏️</button></div><div id="${boxId}"></div>`;
     }
 
     // 지명 수정 이력 관리 모달
@@ -12100,6 +12221,7 @@
         // [보정A] 저장된 좌표 보정값 재적용
         await reapplyCoordOverrides(db.places, 'GitHub 원본');
         await reapplyNameOverrides(db.places, 'GitHub 원본');
+        await reapplyPlaceStrongOverrides(db.places, 'GitHub 원본');
         placeDatabase = db.places;
         await setLocalItem('saved_place_database', placeDatabase);
         await setLocalItem('saved_place_database_version', db.version || '');
@@ -12389,6 +12511,7 @@
           ${(item.country || item.region) ? `<div class="pqp-tags" style="margin:3px 0 5px;">${item.country ? `<span class="pqp-tag pqp-tag-c">${escHtml(item.country)}</span>` : ''}${item.region ? `<span class="pqp-tag">${escHtml(item.region)}</span>` : ''}</div>` : ''}
           <div><b>원어/영문:</b> ${escHtml(item.orig || '-')}${(item.ustrong && /^[HG]\d{1,5}[A-Za-z]?$/.test(item.ustrong)) ? ` <span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${item.ustrong.replace(/'/g,"\\'")}','place-strong-inline-${item.id}')" title="원어 뜻 보기">[${escHtml(item.ustrong)}]</span>` : ''}</div>
           <div id="place-strong-inline-${item.id}"></div>
+          ${placeStrongLine(item, 'place-strong-edit-' + item.id)}
           <div class="popup-coord-row" style="margin-top:4px;font-size:11px;color:#475569;">
             <b>좌표:</b> 
             <span id="coord-display-${item.id}" style="cursor:pointer;border-bottom:1px dashed #94a3b8;" onclick="this.style.display='none';document.getElementById('coord-edit-${item.id}').style.display='inline';" title="클릭하여 수정">${item.lat}, ${item.lng}</span>
@@ -14128,6 +14251,7 @@
         // [보정A] 저장된 좌표 보정값 재적용 (엑셀이 갱신된 항목은 자동 해제)
         await reapplyCoordOverrides(parsedList, '엑셀 원본');
         await reapplyNameOverrides(parsedList, '엑셀 원본');
+        await reapplyPlaceStrongOverrides(parsedList, '엑셀 원본');
 
         placeDatabase = parsedList;
         buildKeywordIndex(parsedList);
@@ -14190,6 +14314,7 @@
       updateCoordOverrideBadge();
       await loadNameOverrides();
       updateNameOverrideBadge();
+      await loadPlaceStrongOverrides();
 
       const savedPlaces = await getLocalItem("saved_place_database");
       if (savedPlaces && savedPlaces.length > 0) {
@@ -14923,7 +15048,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-7`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-8`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
