@@ -13333,6 +13333,12 @@
                 ${mor ? `<span style="font-size:0.72em;color:#64748b">${escHtml(mor)}</span>` : ''}</div>`;
           }).join('') || '<span style="font-size:0.75em;color:#94a3b8" title="이 어절에 이어진 원어 낱말이 없음 — 동사 어미에 든 주어(내가·그가)나 우리말로 풀어 쓴 말">원어 짝 없음 · 우리말로 풀어 쓴 말</span>';
           const grp = (t[4] === 'N' || t[4] === 'M') ? '<span title="여러 어절이 한 원어" style="color:#b45309">⌒</span>' : '';
+          // (2026-09-18) 앞 어절과 한 원어면 원어를 되풀이하지 않는다 — 창1:2 「위에⌒ 있고⌒」가 עַל 을 두 번 보이던 것
+          if (k > 0 && t[0] && t[0] === kt.arr[k - 1][0] && (t[4] === 'N' || t[4] === 'M')) {
+            return `<div class="wo-verse-row" data-k="${k}" style="display:grid;grid-template-columns:minmax(4.5em,auto) 1fr;gap:4px 10px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer">
+              <div><b style="color:#0f172a">${escHtml(kt.words[k])}</b>${grp}${hw ? `<div style="font-size:0.7em;color:#94a3b8">${escHtml(hw)}</div>` : ''}</div>
+              <div style="font-size:0.78em;color:#b45309">⌒ 앞 어절 「${escHtml(kt.words[k - 1])}」에 이어짐 (한 원어)</div></div>`;
+          }
           return `<div class="wo-verse-row" data-k="${k}" style="display:grid;grid-template-columns:minmax(4.5em,auto) 1fr;gap:4px 10px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer">
               <div><b style="color:#0f172a">${escHtml(kt.words[k])}</b>${grp}${hw ? `<div style="font-size:0.7em;color:#94a3b8">${escHtml(hw)}</div>` : ''}</div>
               <div>${orig}</div></div>`;
@@ -13760,17 +13766,33 @@
         if (!kt) return null;
         const nz = c => { const m = String(c || '').toUpperCase().match(/^([HG])0*(\d+)/); return m ? m[1] + parseInt(m[2], 10) : ''; };
         const clean = w => String(w || '').replace(/^[^가-힣0-9]+|[^가-힣0-9]+$/g, '');
+        /* 여러 어절이 한 원어(⌒, 갈래 N·M 이고 앞 어절과 번호가 같음)는 앞 어절 하나로 센다 — 창1:2 「위에⌒있고」 */
+        const cont = kt.arr.map((t, k) => k > 0 && t[0] && t[0] === kt.arr[k - 1][0] && (t[4] === 'N' || t[4] === 'M'));
         const byCode = {};
-        kt.arr.forEach((t, k) => (t[0] ? t[0].split(',') : []).forEach(cd => {
+        kt.arr.forEach((t, k) => { if (cont[k]) return; (t[0] ? t[0].split(',') : []).forEach(cd => {
           const n = nz(cd); if (!n) return;
           (byCode[n] = byCode[n] || []).push(k);
-        }));
-        const seen = {};
-        const kIdx = st.words.map(w => {
-          const n = nz(w.code), L = byCode[n];
-          const i = seen[n] = (seen[n] == null ? 0 : seen[n] + 1);
-          return L && L.length ? L[Math.min(i, L.length - 1)] : null;
+        }); });
+        /* 같은 번호가 원문에 어절보다 많으면(창1:2 פְּנֵי 둘 ↔ 「수면」 하나) 절 안 상대 자리가 가장 가까운 원어끼리 짝 — 차례는 지킴 */
+        const srcBy = {};
+        st.words.forEach((w, i) => { const n = nz(w.code); if (n) (srcBy[n] = srcBy[n] || []).push(i); });
+        const kIdx = st.words.map(() => null);
+        const NW = st.words.length, NK = kt.arr.length;
+        Object.keys(srcBy).forEach(n => {
+          const S = srcBy[n], E = byCode[n] || [];
+          if (!E.length) return;
+          if (S.length <= E.length) { S.forEach((i, j) => { kIdx[i] = E[j]; }); return; }
+          let from = 0;
+          E.forEach((k, j) => {
+            let best = -1, bd = 1e9;
+            for (let x = from; x <= S.length - (E.length - j); x++) {
+              const d = Math.abs(S[x] / Math.max(1, NW - 1) - k / Math.max(1, NK - 1));
+              if (d < bd) { bd = d; best = x; }
+            }
+            if (best >= 0) { kIdx[S[best]] = k; from = best + 1; }
+          });
         });
+        st._kwCont = cont;                                 // ⌒ 앞 어절과 한 원어인 어절
         st._kw = kIdx.map(k => k == null ? null : clean(kt.words[k]));
         st._kwIdx = kIdx;                                  // 원어 낱말 → 본문 어절 차례 (없으면 null)
         st._kwWords = kt.words.map(clean);                 // 본문 어절 전부
@@ -13864,7 +13886,7 @@
             + '<span style="direction:rtl;unicode-bidi:isolate;font-weight:600">' + escHtml(o.x.surface) + '</span> '
             + '<span style="color:#94a3b8;font-size:0.92em">' + escHtml(o.x.code)
             + (st._kwIdx[o.i] == null ? (bare(o.x.gloss) ? ' · 문법 표지' : ' · ' + escHtml(o.x.gloss)) : (!bare(o.x.gloss) && o.x.gloss !== kword ? ' · ' + escHtml(o.x.gloss) : '')) + '</span></div>').join('')
-            || '<span style="font-size:0.85em;color:#cbd5e1">원어 짝 없음</span>';
+            || (st._kwCont && st._kwCont[k] ? '<span style="font-size:0.85em;color:#b45309">⌒ 앞 어절에 이어짐 (한 원어)</span>' : '<span style="font-size:0.85em;color:#cbd5e1">원어 짝 없음</span>');
           return '<div style="display:grid;grid-template-columns:minmax(5em,auto) 1fr;gap:2px 10px;padding:4px 0;border-bottom:1px dashed #e2e8f0">'
             + '<b style="color:#0f172a">' + escHtml(kword) + '</b><div>' + right + '</div></div>';
         }).join('');
@@ -15133,7 +15155,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-12`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-13`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
