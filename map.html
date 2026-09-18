@@ -13738,10 +13738,39 @@
     /* 접힌 것을 열고 닫아도 다시 그리지 않게, 펼침 상태를 기억한다 */
     const _wpOpen = { w: false, u: false, d: false };
 
+    /* 원전분해 낱말마다 개역개정 본문 어절(어절 원어 분석 KRV_N 으로 짝) — 2026-09-18
+       같은 번호가 절에 여러 번이면 차례대로 짝. 짝이 없으면 null(예전처럼 원전분해 뜻을 보인다) */
+    function wpKrvnWords(st) {
+      if (st._kw !== undefined) return st._kw;
+      st._kw = null;
+      try {
+        if (typeof krvnMorph === 'undefined' || !krvnMorph) return null;
+        const text = wpVerseText(st.bookId, st.chapter, st.vNum);
+        const kt = text ? krvnTokenAt(st.bookId, st.chapter, st.vNum, text, 0) : null;
+        if (!kt) return null;
+        const nz = c => { const m = String(c || '').toUpperCase().match(/^([HG])0*(\d+)/); return m ? m[1] + parseInt(m[2], 10) : ''; };
+        const clean = w => String(w || '').replace(/^[^가-힣0-9]+|[^가-힣0-9]+$/g, '');
+        const byCode = {};
+        kt.arr.forEach((t, k) => (t[0] ? t[0].split(',') : []).forEach(cd => {
+          const n = nz(cd); if (!n) return;
+          (byCode[n] = byCode[n] || []).push(clean(kt.words[k]));
+        }));
+        const seen = {};
+        st._kw = st.words.map(w => {
+          const n = nz(w.code), L = byCode[n];
+          const i = seen[n] = (seen[n] == null ? 0 : seen[n] + 1);
+          return L && L.length ? L[Math.min(i, L.length - 1)] : null;
+        });
+      } catch (e) { st._kw = null; }
+      return st._kw;
+    }
+
     function wpDraw() {
 
       const st = _wpState; if (!st) return;
       const w = st.words[st.idx];
+      const kw = wpKrvnWords(st);                      // 개역개정 본문 어절 (없으면 null)
+      const kwHere = kw ? kw[st.idx] : null;
       const bk = BIBLE_BOOKS.find(b => b.id === st.bookId);
       const ref = (bk ? bk.abbr : '') + st.chapter + ':' + st.vNum;
 
@@ -13759,7 +13788,7 @@
       let h = ''
         + '<div id="word-panel-handle" style="display:flex;justify-content:space-between;align-items:center;'
         + 'padding:9px 12px;background:#ecfdf5;border-bottom:1px solid #a7f3d0;cursor:move;user-select:none">'
-        + '<b style="color:#047857;font-size:0.95em">' + escHtml(ref) + ' 「' + escHtml(w.gloss || w.surface) + '」</b>'
+        + '<b style="color:#047857;font-size:0.95em">' + escHtml(ref) + ' 「' + escHtml(kwHere || w.gloss || w.surface) + '」</b>'
         + '<button onclick="document.getElementById(\'word-panel\').style.display=\'none\'"'
         + ' style="border:none;background:none;font-size:1.1em;cursor:pointer;color:#94a3b8">✕</button></div>'
         + '<div style="padding:12px">'
@@ -13776,7 +13805,9 @@
         + (w.root ? ' <span style="direction:rtl;unicode-bidi:isolate;color:#64748b">' + escHtml(w.root) + '</span>' : '')
         + '</div>'
         + '<div style="margin-top:7px;color:#475569">' + escHtml(w.morph) + '</div>'
-        + '<div style="margin-top:3px;font-weight:600">' + escHtml(w.gloss) + '</div>'
+        + (kwHere ? '<div style="margin-top:3px"><span style="font-size:0.78em;color:#94a3b8">본문</span> <b>' + escHtml(kwHere) + '</b>'
+                     + (w.gloss && w.gloss !== kwHere ? ' <span style="font-size:0.78em;color:#94a3b8;margin-left:6px">원전분해 뜻</span> <span style="color:#64748b">' + escHtml(w.gloss) + '</span>' : '') + '</div>'
+                  : '<div style="margin-top:3px;font-weight:600">' + escHtml(w.gloss) + '</div>')
         + '<div id="word-panel-strong" style="margin-top:6px"></div>'
         + '<div style="margin-top:8px">'
         + '<button onclick="StrongEngine.handleClick(\'' + w.code + '\',\'word-panel-strong\')"'
@@ -13799,7 +13830,9 @@
         + (i === st.idx ? ';background:#d1fae5' : '') + (bare(x.gloss) ? ';opacity:0.45' : '') + '">'
         + '<span style="direction:rtl;unicode-bidi:isolate;font-weight:600">' + escHtml(x.surface) + '</span> '
         + '<span style="color:#94a3b8;font-size:0.92em">' + escHtml(x.code)
-        + (bare(x.gloss) ? ' · 문법 표지' : ' · ' + escHtml(x.gloss)) + '</span></div>').join('');
+        + (kw && kw[i] ? ' · <b style="color:#334155">' + escHtml(kw[i]) + '</b>'      // 개역개정 본문 어절(KRV_N)
+             + (!bare(x.gloss) && x.gloss !== kw[i] ? ' <span style="color:#cbd5e1">' + escHtml(x.gloss) + '</span>' : '')
+           : (bare(x.gloss) ? ' · 문법 표지' : ' · ' + escHtml(x.gloss))) + '</span></div>').join('');
       h += fold('w', '이 절의 다른 낱말', st.words.length, others);
 
       /* ── 접힘 2: 이 낱말이 쓰인 곳 (본문을 옮기지 않는다) ── */
@@ -15063,7 +15096,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-9`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-10`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
