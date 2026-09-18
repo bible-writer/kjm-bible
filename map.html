@@ -6273,7 +6273,9 @@
       { key: 'easton',    label: 'Easton',    file: './easton_full.json',    storeKey: 'easton_full_dict',    editsKey: 'easton_local_edits' },
       { key: 'smith',     label: 'Smith',     file: './smith_full.json',     storeKey: 'smith_full_dict',     editsKey: 'smith_local_edits' },
       { key: 'hastschaff', label: 'Schaff', file: './schaff_full.json', storeKey: 'hastings_schaff_full_dict', editsKey: 'hastings_schaff_local_edits' },
-      { key: 'hitchcock', label: 'Hitchcock', file: './hitchcock_full.json', storeKey: 'hitchcock_full_dict', editsKey: 'hitchcock_local_edits' }
+      { key: 'hitchcock', label: 'Hitchcock', file: './hitchcock_full.json', storeKey: 'hitchcock_full_dict', editsKey: 'hitchcock_local_edits' },
+      // (2026-09-18) ISBE 1915 — 지명에 이어지는 항목만. 영문 원문, 한글(definition_ko)은 하나씩 번역해 채운다
+      { key: 'isbe', label: 'ISBE', file: './isbe_full.json', storeKey: 'isbe_full_dict', editsKey: 'isbe_local_edits' }
     ];
     // ── 잠시 가리는 사전 (2026-09-10 kjm) ──
     // 샤프는 한글이 초벌 번역(검수 전)이라 재번역을 마칠 때까지 화면에서 가린다.
@@ -12567,7 +12569,7 @@
             <a class="link-btn" href="https://www.google.com/maps?layer=c&cbll=${item.lat},${item.lng}" target="_blank" rel="noopener">📷 거리뷰</a>
             <a class="link-btn" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('성경 ' + (item.name||'') + ' ' + englishName + ' ' + modernName + ' 고고학 성지')}" target="_blank" rel="noopener">🖼 구글 이미지 더보기</a>
           </div>
-          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">좌표 출처: OpenBible.info Bible Geocoding Data (CC BY 4.0)${(item.eastonId||item.smithId||item.eastonKo||item.eastonEn||item.smithKo||item.smithEn) ? ' · 해설: Easton/Smith Bible Dictionary 참조' : ''}</div>
+          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">좌표 출처: OpenBible.info Bible Geocoding Data (CC BY 4.0)${(item.eastonId||item.smithId||item.eastonKo||item.eastonEn||item.smithKo||item.smithEn) ? ' · 해설: Easton/Smith Bible Dictionary 참조' : ''}${item.isbeId != null ? ' · ISBE(1915, Public Domain — CrossWire)' : ''}</div>
         </div>
       `;
     }
@@ -12649,11 +12651,13 @@
     function placeDictIndex() {
       const eL = (typeof eastonFullDict !== 'undefined' && eastonFullDict) || [];
       const sL = (typeof smithFullDict  !== 'undefined' && smithFullDict)  || [];
-      const sig = eL.length + ':' + sL.length;
+      const iL = (typeof rawDictData !== 'undefined' && rawDictData.isbe) || [];
+      const sig = eL.length + ':' + sL.length + ':' + iL.length;
       if (_placeDictIdx && _placeDictSig === sig) return _placeDictIdx;
-      const idx = { easton: {}, smith: {} };
+      const idx = { easton: {}, smith: {}, isbe: {} };
       eL.forEach(e => { if (e && e.id != null) idx.easton[e.id] = e; });
       sL.forEach(e => { if (e && e.id != null) idx.smith[e.id]  = e; });
+      iL.forEach(e => { if (e && e.id != null) idx.isbe[e.id]   = e; });
       _placeDictIdx = idx; _placeDictSig = sig;
       return idx;
     }
@@ -12669,13 +12673,13 @@
     }
     // 사전에서 꺼낸다. 못 꺼내면(사전이 아직 안 읽혔거나 옛 지명DB면) 베낀 칸으로 물러선다.
     function placeDictText(item, which) {
-      const idKey = which === 'easton' ? 'eastonId' : 'smithId';
+      const idKey = which === 'easton' ? 'eastonId' : which === 'isbe' ? 'isbeId' : 'smithId';
       const koKey = which === 'easton' ? 'eastonKo' : 'smithKo';
       const enKey = which === 'easton' ? 'eastonEn' : 'smithEn';
       const id = item && item[idKey];
       if (id != null) {
         const e0 = placeDictIndex()[which][id];
-        const e = placeFollowRef(e0, which);
+        const e = which === 'isbe' ? e0 : placeFollowRef(e0, which);
         if (e) {
           const ko = String(e.definition_ko || '').trim();
           const en = String(e.definition    || '').trim();
@@ -12718,13 +12722,14 @@
       const eEn = _e.en;
       const sKo = _s.ko;
       const sEn = _s.en;
+      const _i = item && item.isbeId != null ? placeDictText(item, 'isbe') : { ko: '', en: '' };   // (2026-09-18) ISBE
       /* dictVerse(사전 인용 구절) 는 2026-09-13 에 뺐다.
        * 1,468 전부 비어 한 번도 나온 적이 없고, 사전 글 안의 절이
        * 이미 파란 링크(linkifyVerseRefs)로 눌러 갈 수 있어 겹친다.
        * 「관련 성경 구절」(verse 칸, OpenBible 기준)과는 다른 칸이다 — 그쪽은 그대로 둔다. */
       const dv  = '';
       const warn = (item.dictWarn || '').trim();
-      if (!eKo && !eEn && !sKo && !sEn && !dv && !(item.cdbKo || '').trim()) return '';
+      if (!eKo && !eEn && !sKo && !sEn && !_i.ko && !_i.en && !dv && !(item.cdbKo || '').trim()) return '';
 
       const dim = warn ? 'opacity:.72;' : '';
       let html = '<div class="popup-dict-box" style="margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">'
@@ -12756,7 +12761,11 @@
           +     '<span style="margin-left:auto;">' + badge + '</span>'
           +   '</div>'
           +   '<div id="' + bid + '" class="popup-dict-body" style="display:none;font-size:' + placeDictFontSize() + 'px;line-height:1.75;'
-          +        'color:#334155;margin-top:4px;padding-left:14px;">' + escHtml(body)
+          +        'color:#334155;margin-top:4px;padding-left:14px;' + (key === 'isb' ? 'white-space:pre-wrap;max-height:420px;overflow-y:auto;' : '') + '">' + escHtml(body)
+          +     (ko ? '' : '<div style="margin-top:7px;"><button onclick="event.stopPropagation();placeDictDraft(this)" data-bid="' + bid + '" '
+          +            'title="구글 번역 초안 — 저장되지 않음. 바른 번역은 하나씩 사전에 채워 넣는다" '
+          +            'style="font-size:10px;padding:3px 9px;border:1px solid #bfdbfe;border-radius:4px;background:#2563eb;color:#fff;cursor:pointer;">\ud83c\udf10 번역 초안</button>'
+          +            '<div class="pdd-out" style="display:none;margin-top:6px;padding:6px 8px;background:#eff6ff;border-radius:5px;color:#1e3a8a;white-space:pre-wrap;"></div></div>')
           +     '<div style="margin-top:7px;">'
           +       '<button onclick="event.stopPropagation();askGemini(' + escHtml(JSON.stringify(item.name || '')) + ',&#39;' + key + '&#39;,' + escHtml(JSON.stringify(body)) + ',' + escHtml(JSON.stringify(item.ustrong || '')) + ')" '
           +            'title="제미나이 웹으로 질문을 넘깁니다 (API 키·비용 없음)" '
@@ -12787,9 +12796,23 @@
 
       html += section('eas', '\ud83d\udcd6 이스턴 성경사전', eKo, eEn);
       html += section('smi', '\ud83d\udcd6 스미스 성경사전', sKo, sEn);
+      html += section('isb', '\ud83d\udcd8 ISBE 성경백과(1915)', _i.ko, _i.en);
 
       html += '</div>';
       return html;
+    }
+
+    // 영문뿐인 사전 칸 → 구글 번역 초안(저장 안 함) · 2026-09-18
+    async function placeDictDraft(btn) {
+      const box = document.getElementById(btn.dataset.bid);
+      const out = btn.parentNode.querySelector('.pdd-out');
+      if (!box || !out) return;
+      const en = (box.firstChild && box.firstChild.nodeType === 3) ? box.firstChild.nodeValue : box.innerText;
+      btn.disabled = true; btn.textContent = '번역 중…';
+      try {
+        const ko = await fetchGoogleTranslateDraft(applyBibleTermsBeforeTranslate(en));
+        out.textContent = '[기계 번역 초안] ' + ko; out.style.display = 'block'; btn.style.display = 'none';
+      } catch (e) { btn.disabled = false; btn.textContent = '\ud83c\udf10 번역 초안'; showToast('번역 실패: ' + (e.message || e), 'warn'); }
     }
 
     function toggleDictSection(id, head) {
@@ -15085,7 +15108,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-18`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-19`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
