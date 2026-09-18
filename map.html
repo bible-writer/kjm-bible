@@ -7108,7 +7108,8 @@
     function origReadingKo(code) {
       const k = hebKoLookup(code);
       const t = k ? String(k.t || '').trim() : '';
-      const ko = t.split(/\s+/).filter(x => /[가-힣]/.test(x)).join(' ');
+      // 「쉬르 shir, 쉬라 shirah」처럼 꼴이 여럿이면 쉼표로 나눠 꼴마다 한글만 → 「쉬르, 쉬라」 · 「베에르 엘림 be'êr 'êlı̂ym」은 「베에르 엘림」
+      const ko = t.split(',').map(part => part.split(/\s+/).map(x => x.replace(/[^가-힣]/g, '')).filter(Boolean).join(' ')).filter(Boolean).join(', ');
       if (ko) return ko;
       try {
         const n = String(code || '').toUpperCase().match(/^([HG])0*(\d+)/);
@@ -7123,6 +7124,9 @@
         if (raw && typeof raw === 'object') {
           hebKoDict = raw;
           console.log('한글 원어사전 ' + Object.keys(hebKoDict).length + '항목 불러옴');
+          if (!raw.__v) setTimeout(function () {
+            if (typeof showToast === 'function') showToast('📕 한글 원어사전을 한 번 다시 등록해 주세요 — 예전 등록 방식에서 헬라어 137개 번호가 다른 항목으로 덮여 있었습니다(⋯ 메뉴 → 한글 원어사전 등록)', 'warn', 12000);
+          }, 4000);
         }
       } catch (err) { console.warn('한글 원어사전 불러오기 실패', err); }
     }
@@ -7145,12 +7149,18 @@
           });
           if (!ok) { showToast('한글 원어사전 꼴이 아닙니다', 'warn'); return; }
           // 열쇠를 채움 없는 꼴로 맞춰 둔다
-          var norm = {};
-          keys.forEach(function (k) { var n = hebKoNorm(k); if (n) norm[n] = obj[k]; });
+          // 끝에 글자가 붙은 열쇠(G1160b 따위 137개)는 본 번호를 덮지 않게 따로 둔다(2026-09-18 — 예전엔 G1160 비용이 G1160b 다위드로 덮였다)
+          var norm = { __v: 2 };
+          keys.forEach(function (k) {
+            var n = hebKoNorm(k); if (!n) return;
+            var suf = String(k).trim().match(/[A-Za-z]$/);
+            if (suf) norm[n + suf[0].toLowerCase()] = obj[k];
+            else norm[n] = obj[k];
+          });
           hebKoDict = norm;
           await setLocalItem('saved_hebko_dict', norm);
           var nd = Object.keys(norm).filter(function (k) { return norm[k] && norm[k].d; }).length;
-          showToast('📕 한글 원어사전 ' + Object.keys(norm).length + '항목 등록 완료'
+          showToast('📕 한글 원어사전 ' + (Object.keys(norm).length - 1) + '항목 등록 완료'
                   + (nd ? ' (세부 풀이 ' + nd + ')' : ''), 'success');
         } catch (err) {
           console.error(err);
@@ -7188,7 +7198,7 @@
      * 한글 원어사전·어절 원어 분석·스트롱코드 DB 는 기기마다 따로 올리는 파일이라, 지우는 길도 있어야 한다. */
     const LOCAL_FILES = {
       hebko: { label: '📕 한글 원어사전', key: 'saved_hebko_dict',
-               state: () => (typeof hebKoDict !== 'undefined' && hebKoDict) ? Object.keys(hebKoDict).length.toLocaleString() + '항목' : '',
+               state: () => (typeof hebKoDict !== 'undefined' && hebKoDict) ? Object.keys(hebKoDict).filter(k => k !== '__v').length.toLocaleString() + '항목' : '',
                clear: () => { if (typeof hebKoDict !== 'undefined') hebKoDict = null; } },
       krvn:  { label: '📘 어절 원어 분석', key: 'saved_krvn_morph',
                state: () => (krvnMorph && krvnMorph.meta) ? 'v' + krvnMorph.meta.version + ' · ' + Object.keys(krvnMorph.v || {}).length.toLocaleString() + '절' : '',
@@ -15096,7 +15106,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-10`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-11`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
