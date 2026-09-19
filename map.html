@@ -3894,6 +3894,9 @@
         if (panelEl.style.display === 'none') { grip.style.display = 'none'; return; }
         const rect = panelEl.getBoundingClientRect();
         grip.style.display = 'flex';
+        // (2026-09-19) 손잡이는 늘 그 창보다 한 칸 위에 — 사전 창(z 20001)에서는 손잡이(10060)가 창 뒤에 가려 안 보였다
+        const pz = parseInt(getComputedStyle(panelEl).zIndex, 10);
+        grip.style.zIndex = String(Math.max(10060, (isNaN(pz) ? 0 : pz) + 1));
         grip.style.left = Math.max(0, rect.right - 32) + 'px';
         grip.style.top = Math.max(0, rect.bottom - 32) + 'px';
       }
@@ -3927,7 +3930,11 @@
       let dragState = null;
       grip.addEventListener('pointerdown', e => {
         const rect = panelEl.getBoundingClientRect();
-        dragState = { startX: e.clientX, startY: e.clientY, startW: rect.width, startH: rect.height };
+        // 가운데 정렬(translateX(-50%))인 창은 너비를 바꾸면 양쪽으로 벌어져 손잡이가 손가락을 못 따라간다 — 절대좌표로 바꿔 둔다
+        if (getComputedStyle(panelEl).transform !== 'none') {
+          panelEl.style.left = rect.left + 'px'; panelEl.style.top = rect.top + 'px'; panelEl.style.transform = 'none';
+        }
+        dragState = { startX: e.clientX, startY: e.clientY, startW: rect.width, startH: rect.height, left: rect.left, top: rect.top };
         grip.setPointerCapture(e.pointerId);
         e.preventDefault();
         e.stopPropagation();
@@ -3935,7 +3942,8 @@
       grip.addEventListener('pointermove', e => {
         if (!dragState) return;
         const minW = 260, minH = 160;
-        const maxW = window.innerWidth * 0.9, maxH = window.innerHeight * 0.85;
+        // 창이 화면 밖으로 나가지 않는 데까지 — 사전 창은 기본이 95vw·92vh 라 예전 한도(90%·85%)면 손대자마자 줄어들었다
+        const maxW = Math.max(minW, window.innerWidth - dragState.left - 4), maxH = Math.max(minH, window.innerHeight - dragState.top - 4);
         const newW = Math.max(minW, Math.min(maxW, dragState.startW + (e.clientX - dragState.startX)));
         const newH = Math.max(minH, Math.min(maxH, dragState.startH + (e.clientY - dragState.startY)));
         panelEl.style.width = newW + 'px';
@@ -15112,7 +15120,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260919-2`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260919-3`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
