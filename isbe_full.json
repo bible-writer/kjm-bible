@@ -1,7 +1,7 @@
 {
- "version": "1.124.0",
+ "version": "1.125.0",
  "date": "2026-09-19",
- "count": 952,
+ "count": 953,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
  "total_entries": 9349,
  "note": "지명DB·용어DB(isbeId)에 이어지는 항목만 담음(용어는 번역된 것부터 더함). id 는 ISBE 전체(total_entries, 넘겨주기 포함) 표제어 차례 번호 — 나중에 full 을 만들면 빠진 id 만 채운다. definition 은 영문 원문(본문 HTML 을 글로 — 문단은 빈 줄). definition_ko 는 하나씩 번역해 채운다(2026-09-18 kjm).",
@@ -215,10 +215,10 @@
   },
   {
    "id": 191,
-   "term": "Ader(아델)",
+   "term": "Ader(에델)",
    "definition": "a'-der: Used in 1Ch 8:15 the King James Version for EDER, which see.",
-   "definition_ko": "아델. 역대상 8:15에서 흠정역이 에델(해당 항목을 보라)을 이렇게 적는다.",
-   "category": "용어",
+   "definition_ko": "에델(흠정역 Ader). 역대상 8:15에서 흠정역이 에델(EDER, 해당 항목을 보라)을 Ader로 적는다. 개역개정도 「에델」이다(에스라 2:16 등의 「아델」과는 다른 사람).",
+   "category": "인명",
    "hebrew_greek": "",
    "isbe_key": "ADER"
   },
@@ -2489,6 +2489,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "EDER (1)"
+  },
+  {
+   "id": 2872,
+   "term": "Eder (2)(에델)",
+   "definition": "e'-der (`edher, \"flock\").\n\n(1) A Merarite Levite in the days of David (1Ch 23:23; 24:30); son of Mushi.\n\n(2) A Benjamite (1Ch 8:15, the King James Version \"Ader\").",
+   "definition_ko": "에델(히브리어 '에데르', 「양 떼」).\n\n(1) 다윗 시대의 므라리 레위인으로 무시의 아들(역대상 23:23; 24:30).\n\n(2) 베냐민 사람(역대상 8:15, 흠정역 「Ader」).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "EDER (2)"
   },
   {
    "id": 2879,
