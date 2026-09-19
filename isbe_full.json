@@ -1,10 +1,10 @@
 {
- "version": "1.123.1",
+ "version": "1.124.0",
  "date": "2026-09-19",
- "count": 844,
+ "count": 952,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
  "total_entries": 9349,
- "note": "지명DB(isbeId)에 이어지는 항목만 담음. id 는 ISBE 전체(total_entries, 넘겨주기 포함) 표제어 차례 번호 — 나중에 full 을 만들면 빠진 id 만 채운다. definition 은 영문 원문(본문 HTML 을 글로 — 문단은 빈 줄). definition_ko 는 하나씩 번역해 채운다(2026-09-18 kjm).",
+ "note": "지명DB·용어DB(isbeId)에 이어지는 항목만 담음(용어는 번역된 것부터 더함). id 는 ISBE 전체(total_entries, 넘겨주기 포함) 표제어 차례 번호 — 나중에 full 을 만들면 빠진 id 만 채운다. definition 은 영문 원문(본문 HTML 을 글로 — 문단은 빈 줄). definition_ko 는 하나씩 번역해 채운다(2026-09-18 kjm).",
  "entries": [
   {
    "id": 14,
@@ -68,6 +68,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ABEL-SHITTIM"
+  },
+  {
+   "id": 40,
+   "term": "Abia; Abiah(아비야)",
+   "definition": "a-bi'-a, a-bi'-ah: Variants for ABIJAH; which see.",
+   "definition_ko": "아비야. 아비야(ABIJAH)의 다른 꼴(해당 항목을 보라).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "ABIA; ABIAH"
   },
   {
    "id": 49,
@@ -205,6 +214,15 @@
    "isbe_key": "ADDAR"
   },
   {
+   "id": 191,
+   "term": "Ader(아델)",
+   "definition": "a'-der: Used in 1Ch 8:15 the King James Version for EDER, which see.",
+   "definition_ko": "아델. 역대상 8:15에서 흠정역이 에델(해당 항목을 보라)을 이렇게 적는다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ADER"
+  },
+  {
    "id": 200,
    "term": "Adithaim(아디다임)",
    "definition": "ad-i-tha'-im (`adhithayim \"double ornament, passage, or prey\"): A city in \"the lowland\" (Shephelah, not as the King James Version \"valley\") of Judah (Jos 15:36). Site unknown, but possibly same as ADIDA (which see).",
@@ -259,6 +277,15 @@
    "isbe_key": "ADULLAM"
   },
   {
+   "id": 231,
+   "term": "Adullamite(아둘람 사람)",
+   "definition": "a-dul'-am-it: The gentilic adjective of ADULLAM, which see. It is used only of Judah's friend Hirah (Ge 38:1,12,20).",
+   "definition_ko": "아둘람 사람. 아둘람(해당 항목을 보라)의 형용사꼴 부족 이름. 유다의 친구 히라에게만 쓰였다(창세기 38:1, 12, 20).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "ADULLAMITE"
+  },
+  {
    "id": 233,
    "term": "Adummim(아둠밈 비탈)",
    "definition": "a-dum'-im ('adhummim, perhaps \"red spots\"): \"The ascent of Adummim\" is one of the numerous landmarks mentioned in defining the northern border of Judah westward from the mouth of the Jordan to Jerusalem, and in defining the southern border of Benjamin eastward from Jerusalem to the mouth of the Jordan (Jos 15:7; 18:17). It is identified with the gorge part of the road from Jericho up to Jerusalem. Its present name is Tala`at-ed-Dumm, \"ascent of blood.\" The stone is marked by \"curious red streaks,\" a phenomenon which probably accounts for both the ancient and the modern names, and for other similar names which have been applied to the locality. It is the scene of our Saviour's story of the Good Samaritan, and tradition of course locates the inn to which the Samaritan brought the wounded man (see HGHL, 265).\n\nWillis J. Beecher",
@@ -266,6 +293,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ADUMMIM"
+  },
+  {
+   "id": 245,
+   "term": "Aeneas(애니아)",
+   "definition": "e-ne'-as ('Aineas): A paralytic at Lydda, who, after he \"had kept his bed eight years,\" was miraculously healed by Peter (Ac 9:33,34).",
+   "definition_ko": "애니아(헬라어 '아이네아스'). 룻다에 사는 중풍병자로, 「침상에 누운 지 여덟 해」 만에 베드로에게 기적으로 고침을 받았다(사도행전 9:33, 34).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "AENEAS"
   },
   {
    "id": 246,
@@ -365,6 +401,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ALEXANDRIA"
+  },
+  {
+   "id": 382,
+   "term": "Alexandrians(알렉산드리아 사람)",
+   "definition": "al-eg-zan'-dri-ans (Alexandreis): Jews of Alexandria, who had, with the Libertines and Cyrenians, a synagogue in Jerusalem. They were among those who disputed with Stephen (Ac 6:9).",
+   "definition_ko": "알렉산드리아 사람(헬라어 '알렉산드레이스'). 알렉산드리아의 유대인으로, 자유민, 구레네 사람과 함께 예루살렘에 회당을 가졌다. 스데반과 논쟁한 이들 가운데 있었다(사도행전 6:9).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ALEXANDRIANS"
   },
   {
    "id": 389,
@@ -538,6 +583,15 @@
    "isbe_key": "ANTIPATRIS"
   },
   {
+   "id": 579,
+   "term": "Antothite(아나돗 사람)",
+   "definition": "an'-toth-it: the King James Version form of ANATHOTHITE (which see) (thus the Revised Version (British and American)) (1Ch 11:28; 12:3).",
+   "definition_ko": "아나돗 사람. 흠정역에서 아나돗 사람(ANATHOTHITE, 해당 항목을 보라)을 이렇게 적는다(역대상 11:28; 12:3).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "ANTOTHITE"
+  },
+  {
    "id": 591,
    "term": "Aphek(아벡)",
    "definition": "a'-fek ('apheq, \"fortress\"; Aphek):\n\n(1) In Jos 12:18 we should probably read with the Septuagint \"the king of Aphek in Sharon.\" This may correspond to Aphek in 1Sa 4:1. It was a royal city of the Canaanites whose king was slain by Josh. Probably it is the Aphek mentioned by Josephus as being near to Antipatris (BJ, II, xix, 1). Kakon, a strong position commanding the main entrance to Samaria might suit; but the name has perished.\n\n(2) (Greek Taphek or Apheka): A city in the lot of Asher (Jos 13:4). The inhabitants were not ejected by Asher, nor is it said that they became tributary (Jud 1:31). In this passage it is written 'aphiq (Hebrew). It may be represented by 'Afqa on Nahr Ibrahim, although this is probably farther north than we should expect.\n\n(3) To this place the Philistines gathered their hosts, while the Israelites pitched by the fountain which is in Jezreel (1Sa 29:1). It has been generally supposed that these two positions were over against each other, and that therefore Aphek must be sought in the plain of Esdraelon. No place answering this description has been found here. Fuqu`ah on Mount Gilboa is plainly impossible. If, however, this was only the rallying point of the Philistines from which they went up to Jezreel (1Sa 29:11), it may be identical with the Aphek in the plain of Sharon (compare 1Sa 29:1 above).\n\n(4) A city on the plateau east of the Jordan, where disaster befell Benhadad (1Ki 20:26,30). The same place may be intended in 2Ki 13:17. The modern Fiq or Afiq (for both forms are heard) on the brow of the hill beyond Qal`at el-Chucn, east of the Sea of Galilee, probably represents this ancient city.\n\nW. Ewing",
@@ -563,6 +617,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "APHIK"
+  },
+  {
+   "id": 598,
+   "term": "Aphses(합비세스)",
+   "definition": "af'-sez: the King James Version form for the Revised Version (British and American) HAPPIZZEZ (1Ch 24:15).",
+   "definition_ko": "합비세스. 흠정역의 표기로, 영국·미국 개역판의 합비세스(HAPPIZZEZ)를 가리킨다(역대상 24:15).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "APHSES"
   },
   {
    "id": 606,
@@ -763,6 +826,15 @@
    "isbe_key": "ASIA"
   },
   {
+   "id": 849,
+   "term": "Askelon(아스글론)",
+   "definition": "as'-ke-lon: the King James Version form in Jud 1:18; 1Sa 6:17; 2Sa 1:20, for ASHKELON (which see).",
+   "definition_ko": "아스글론. 사사기 1:18; 사무엘상 6:17; 사무엘하 1:20에서 흠정역이 아스글론(ASHKELON, 해당 항목을 보라)을 이렇게 적는다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ASKELON"
+  },
+  {
    "id": 885,
    "term": "Assos(앗소)",
    "definition": "as'-os (Assos): An ancient city of Mysia in the Roman province of Asia, at which, according to Ac 20:13, Paul and Luke rested while on their way from Troas to Mitylene. Standing upon a conical-shaped rock on the southern coast of the Troad, it occupied one of the finest sites in Asia. The rock is about 700 ft. high; its sides are covered with terraces, both natural and artificial, and so steep is it that Stratoricus wrote of it: \"If you wish to hasten your death, try and climb Assos.\" The view from the summit is extensive and magnificent.\n\nThe city, which is very ancient, is said to have been rounded by the Aeolians, and to have always been singularly Greek. As early as the 5th century BC it struck its own coins, and its coinage system continued until 235 AD. One of its early rulers or tyrants was Hermeas, a eunuch, once a slave, who gave his niece in marriage to Aristotle. There the great Greek philosopher lived three years, from 348 to 345 BC. During the time of the kings of Pergamus, the city bore the name of Apollonia. To the Byzantines it was known as Machramion, and at present the town, which has dwindled in importance under Turkish rule, is called Bekhram, a Turkish corruption of the Byzantine name.\n\nThe ruins of Assos are among the most imposing in Asia Minor, and yet they have long served as a quarry; from its public buildings the stones for the Constantinople docks were taken. The Turkish sultan Murad II presented the many beautiful bas-reliefs of the Doric temple of Athene to the French government, which are now preserved in the Louvre. The ruins were carefully explored and partially excavated in 1882-83 by Mr. Clarke for the Archaeological Institute of America, and the entire plan of the ancient city is clear. Upon the very summit of the hill stood the temple of Athena which is said to have been erected about 470 BC. Among its ruins Clarke found eight other bas-reliefs which are now in the Boston Museum and which possess a special interest because of their connection between the art of the Orient and of Greece.\n\nUpon the several natural terraces of the hill which have been enlarged by artificial means, stood the many public buildings, as the gymnasium, the public treasury, the baths, the market place and theater, of which but little now remains. The city was surrounded by a double wall which in places is still well preserved. The inner wall of dressed stones laid without mortar, and filled with loose stones, is 8 ft. thick, and the larger outer wall was protected with towers at intervals of 60 ft. The ancient road leading to Troas was well paved. The harbor from which Paul sailed has now been filled up and is covered with gardens, but at its side is the modern harbor protected by an artificial mole, about which are clustered the few houses bearing the name of Bekhram. Upon the summit of the hill, by the ruins of the temple, are cisterns, a Turkish fortress and a Byzantine church which has been converted into a mosque. Without the city walls is a necropolis. Its many sarcophagi of all ages and sizes and shapes are made of the native trachyte stone which, so the ancients believed, possessed the quality of consuming the bodies buried in it. The stone is the famous \"Lapis Assius,\" or the flesh-eating, hence the word sarcophagus. In former times wheat was raised extensively in the fields about Assos, but now valonia, or acorn cups, form the chief article for export.\n\nE. J. Banks",
@@ -905,6 +977,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "AZEL"
+  },
+  {
+   "id": 1009,
+   "term": "Aziel(아시엘)",
+   "definition": "a'-zi-el (`aziel, \"God is power\"); (compare Gray, Studies in Hebrew Proper Names, 210, 309): A Levite singer who played the psalteries (1Ch 15:20); compare Jaaziel (1Ch 15:18).",
+   "definition_ko": "아시엘(히브리어 '아지엘', 「하나님은 능력이시다」; 그레이, 『히브리 고유명사 연구』 210, 309쪽과 비교하라). 비파를 탄 레위인 노래하는 자(역대상 15:20). 야아시엘(역대상 15:18)과 비교하라.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "AZIEL"
   },
   {
    "id": 1012,
@@ -1051,6 +1132,15 @@
    "isbe_key": "BAALATH-BEER"
   },
   {
+   "id": 1046,
+   "term": "Baalim(바알들)",
+   "definition": "ba'-a-lim ha-be`alim: Plur. of BAAL (which see).",
+   "definition_ko": "바알들(히브리어 '합베알림'). 바알(해당 항목을 보라)의 복수.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BAALIM"
+  },
+  {
    "id": 1062,
    "term": "Babel, Tower of(바벨)",
    "definition": "This expression does not occur in the Old Testament, but is used popularly for the tower mighdol built by the inhabitants of the world who, traveling in the East, built a city on the Plain of Shinar, with a tower \"whose top may reach unto heaven\"-- an expression which is regarded as meaning \"a very high tower.\"\n\n1. General Form of Babylonian Temple-Towers:\n\nThere was a great difference, however, between a Canaanite mighdol or watchtower, and the great Tower at Babylon. The watchtower was simply a high structure, probably without any special shape or form, which depended upon the will of the architect and the nature of the ground upon which it was erected. The Tower of Babel or Babylon, however, was a structure peculiar to Babylonia and Assyria. According to all accounts, and judging from the ruins of the various erections extant in those countries, Babylonian towers were always rectangular, built in stages, and provided with an inclined ascent continued along each side to the top. As religious ceremonies were performed thereon, they were generally surmounted by a chapel in which sacred objects or images were kept.\n\n2. Their Babylonian Name:\n\nThese erections had, with the Babylonians, a special name: ziqquratu, meaning, apparently, \"peak,\" or the highest point of a mountain, this word being applied to the mountain-height upon which Ut-napishtim, the Babylonian Noah, offered sacrifices on coming forth from the ark (or ship) when the waters of the great Flood had sufficiently subsided. It has also been thought that they were used as observatories when the Babylonians studied the starry heavens. This is probable, but as these structures were of no great height, it is possible that, in the clear atmosphere of the Babylonian plains, there was no real necessity to go above the surface of the earth when making their observations.\n\n3. Whereabouts of the Tower of Babel:\n\nThere has been much difference of opinion as to the geographical position of the Tower of Babel. Most writers upon the subject, following the tradition handed down by the Jews and Arabs, have identified it with the great Temple of Nebo in the city of Borsippa, now called the Birs-Nimroud (explained as a corruption of Birj Nimroud, \"Tower of Nimrod\"). This building, however, notwithstanding its importance, was to all appearance never regarded by the Babylonians as the Tower of Babel, for the very good reason that it was not situated in Babylon, but in Borsippa, which, though called, in later times, \"the second Babylon,\" was naturally not the original city of that name. The erection regarded by the Babylonians as the great Tower of their ancient city was E-temen-ana-ki, \"the Temple of the foundation of heaven and earth,\" called by Nabopolassar and Nebuchadrezzar ziqqurat Babili, \"the Tower of Babylon\"--the world-renowned temple dedicated to Merodach and his consort Zer- panitum, Babylon's chief deities.\n\n4. Its Position at Babylon:\n\nThis structure was situated in the southern portion of the city, not far from the right bank of the Euphrates, and according to Weissbach, is now represented by a depression within which is the original rectangular core of unbaked brick. From its shape, the Arabs have made this site Sahan, \"the dish.\" These remains of the great temple-tower of Babylon, within the memory of men not so very old, towered, even in its ruined state, high above the surrounding plain. The burnt bricks of the ancient Babylonians, however, who \"had brick for stone, and slime (bitumen) for mortar\" (Ge 11:3), are still good and have a commercial value, so they were all cleared out, with whatever precious material in the way of antiquities they may have contained, to repair, it is said, the banks of the Hindiyeh Canal. Certain records in the shape of conical \"cylinders,\" however, came into the market, and were acquired by the museums of Europe and America. As these refer to the restoration of the building by Nabopolassar, and the part taken by his sons Nebuchadrezzar and Nabu-sum-lisir in the ceremonies attending the rebuilding, it is very probable that they formed part of the spoils acquired.\n\n5. A Babylonian Description of the Tower:\n\nE-temen-ana-ki, to give the Babylonian (Sumerian) name, consisted of six stages built upon a platform, and provided with a sanctuary at the top. A tablet seemingly giving a detailed description of this building was for a time in the hands of the late George Smith in the year 1876. Unfortunately he had not time to give a translation of the document, or to publish the text, but his detailed account of it (Athenaeum, February 12, 1876) is exceedingly interesting. First there was the outer court called the \"grand court,\" measuring, according to G. Smith's estimate, 1,156 ft. by 900 ft., and a smaller one, called \"the court of Ishtar and Zagaga,\" 1,056 ft. by 450 ft. Round the court were six gates admitting to the temples:\n\n(1) the grand gate;\n\n(2) the gate of the rising sun (east);\n\n(3) the great gate;\n\n(4) the gate of the colossi;\n\n(5) the gate of the canal; and\n\n(6) the gate of the tower-view.\n\n6. The Platform:\n\nAfter this came a space or platform apparently walled--a ki-gallu square in form, and measuring 3 ku each way. Its size is doubtful, as the value of the ku is unknown. The sides of this enclosure faced the cardinal points. In its walls were four gates, one on each side, and named from the points toward which they looked. Within this enclosure stood a large building measuring 10 gar (Smith: 200 ft.) each way. Unfortunately, the name of this erection was damaged, so that its nature and use are uncertain.\n\n7. The Chapels and Shrines:\n\nRound the base of the Tower were small temples or chapels dedicated to the various gods of the Babylonians. On the East were 16 shrines, the principal of them being dedicated to Nebo and Tasmetu, his spouse; on thee North were two temples dedicated to Ea. (Ae) and Nusku respectively; on the South was a single temple to the two great gods, Anu and Bel (Enlil?). It was on the West, however, that the principal buildings lay--a double house with a court between the wings 35 cubits (Smith: 58 ft.) wide. These two wings were not alike in dimensions, the erection on one side being 100 cubits by 20 (166 ft. by 34 ft.) and on the other 100 cubits by 65 (166 ft. by 108 ft.). In these western chambers stood the couch of the god, and the golden throne mentioned by Herodotus, with other objects of great value. The couch was stated to have measured 9 cubits by 4 (15 ft. by 6 feet 8 inches).\n\n8. The Tower in Its First Stage:\n\nIn the center of these groups of buildings stood the great Tower in stages, called by the Babylonians \"the Tower of Babel\" (ziqqurat Babili). The stages decreased from the lowest upward, but each was square in plan. The first or foundation-stage was 15 gar each way by 5 1/2 gar high (300 ft. by 110 ft. high), and seems to have been decorated with the usual double recesses which are a characteristic of Assyr-Bab architecture.\n\n9. The Remaining Stages:\n\nThe second stage was 13 gar square and 3 gar high (260 ft. by 60 ft.). A term was applied to it which G. Smith did not understand, but he notes that it probably had sloping sides. The stages from the 3rd to the 5th were all of equal height, namely, 1 gar (20 ft.), and were respectively 10 gar (200 ft.), 8 1/3 gar (170 ft.) and 7 gar (140 ft.) square. The dimensions of the 6th stage were omitted, but may be restored in accordance with the others, namely, 5 1/2 gar square (110 ft.) by 1 gar (20 ft.) high.\n\n10. The Chapel at the Top:\n\nOn this was raised what Smith calls the 7th stage, namely, the upper temple or sanctuary of the god Bel-Merodach, 4 gar long, 3 1/2 gar broad and 2 1/2 gar high (80 ft., 60 ft., and 50 ft., respectively). He does not mention the statue of the god, but it may be supposed that it was set up in this topmost erection. The total height of the tower above its foundation was therefore 15 gar (300 ft.), the same as the breadth of its base. It cannot be said that it was by any means a beautiful erection, but there was probably some symbolism in its measurements, and in appearance it probably resembled (except the decoration) the temple tower of Calah as restored in the frontispiece to Layard's Monuments of Nineveh, 1st series, in which a step-pyramid with a similarly highbasement stage is shown.\n\n11. Herodotus' Description:\n\nWith this detailed description, which is quite what would be expected in a Babylonian account of such a celebrated temple, the description in Herodotus (i.181 ff) agrees. He states that it was a temple square in form, two furlongs (1,213 ft.) each way, in the midst of which was built a solid tower a furlong square (nearly 607 ft.). This, however, must have been the platform, which, with the six stages and the chapel on the top, would make up the total of eight stages of which Herodotus speaks. The ascent by which the top was reached he describes as running \"outside round about all the towers\"--wording which suggests, though not necessarily, that it was spiral--i.e. one had to walk round the structure 7 times to reach the top. Representations on Babylonian boundary-stones suggest that this view would be correct, though a symmetrical arrangement of inclined paths might have been constructed which would have greatly improved the design. At the middle of the ascent, Herodotus says, there was a stopping-place with seats to rest upon, which rather favors this idea. At the top of the last tower there was a large cell, and in the cell a large couch was laid, well covered; and by it a golden table. There was no image there, nor did any human being spend the night there, except only a woman of the natives of the place chosen by the god, \"as say the Chaldeans who are the priests of this god.\" These men told Herodotus that the god often came to the cell, and rested upon the couch, \"but,\" he adds, \"I do not believe them.\" After mentioning parallels to this at Egyptian Thebes and Patam in Lycia, he goes on to speak of another cell below (that referred to in G. Smith's tablet) wherein was a great image of Zeus (Bel-Merodach) sitting, with a footstool and a large table, all of gold, and weighing no less than 800 talents. Outside of this cell was an altar to the god, made of gold; and also another altar, whereon full-grown animals were sacrificed, the golden altar being for sucklings only. The Chaldeans also told him that there was, in the precincts of the building, a statue 12 cubits high, and of solid gold. Darius Hystaspis desired to take possession of this valuable object, but did not venture. His son Xerxes, however, was not so considerate of the feelings of the people and the priesthood, for he also killed the priest when he forbade him to meddle with it.\n\n12. The Builders of the Tower:\n\nThe Bible record does not state who the people were who journeyed in the East and built the city and the Tower. The indefinite \"they\" might be taken to mean whatever people were there at the time the record was written, and probably presupposes that the reader would certainly know. As the Tower of Babel bears, in the native inscriptions, a Sumero-Akkadian name, it may be supposed that the builders referred to belonged to that race.\n\n13. Traditions Concerning Its Destruction:\n\nIt is noteworthy that nothing is said in Ge concerning the stoppage of the erection, though they ceased to build the city. Bochart records a Jewish tradition which makes the tower to have been split through to its foundation by fire which fell from heaven--suggested probably by the condition of the tower at \"the second Babylon,\" i.e. the Birs Nimroud. Another tradition, recorded by Eusebius (Prep. Evang., ix; Chronicon, 13; Syncel. Chron., 44) makes it to have been blown down by the winds; \"but when it approached the heavens, the winds assisted the gods, and overturned the work upon its contrivers: and the gods introduced a diversity of tongues among men, who, until that time, had all spoken the same language.\"\n\n14. The Meaning of \"Babel\":\n\nThe place where they built the Tower was called Babylon, on account of the confusion of languages. Here we have again the statement as in Ge that the meaning of Babel is \"confusion.\" This, as is well known, is based upon the purely Hebrew etymological law, which makes balal, \"to confuse,\" or \"mingle,\" assume a reduplicate form; but as far as the cuneiform inscriptions, which are now very numerous, give us information, Babel, from baldlu, \"to mingle\" (the root in question), was an impossibility. But on the Babylonian side, that the rendering of the name as Bab-ili (-ilani), \"gate of god\" (\"of the gods\") was a folk-etymology, is undoubted, notwithstanding that the Sumero-Akkadian form Ka-dingira, with the same meaning, is far from rare. It is noteworthy, however, that one of the forms used by Nebuchadrezzar is Babilam, with the mimmation or \"emming,\" which is a characteristic of the Babylonian language; moreover, a place-name Babalam also occurs, which may be a still earlier, and perhaps the original, form. Notwithstanding that one would like to see in Babalam, \"the place of bringing together,\" and in Babilam, \"the bringer together,\" the termination -am would seem to be an insurmountable difficulty.\n\n15. The Ultimate Destruction of the Tower:\n\nThat the building of the city would have been stopped when the confusion of tongues took place is natural--the departure of the greater part of the inhabitants made this inevitable. When the population increased again, the building of the city was continued, with the result that Babylon ultimately became the greatest city of then known world. The Tower, notwithstanding what had been said as to its destruction, remained, and when, as happened from time to time, its condition became ruinous, some energetic Babylonian king would restore it. Alexander and Philip of Macedon began clearing away the rubbish to rebuild the great temple of Bclus (Bel-Merodach) connected with it and there is hardly any doubt that the Tower would have been restored likewise, but the untimely death of the former, and the deficient mental caliber of the latter for the ruling of a great empire, put an end to the work. The Tower therefore remained unrepaired--\"The tower was exceedingly tall. The third part of it sank down into the ground, a second third was burned down, and the remaining third was standing until the time of the destruction of Babylon\" (Rabbi Yehanan, Sanhedhrin, 109, 1).\n\n16. No Idea of Reaching Heaven:\n\nConcerning the reputed intention of the builders of the Tower, to carry it as high as the heavens, that, notwithstanding the Talmud and other writings, may be dismissed at once. The intention was to build a very high tower, and that is all that is implied by the words employed. That the Babylonians would have liked their tower to reach heaven may be conceded, and the idea may be taken as symbolical of Babylon's pride, the more especially as they regarded it as \"the house of the foundation of heaven and earth.\" Though at present brought lower than the other temple-towers of Babylonia, its renown remains as one of the great glories of that renowned capital. Dedicated as it was to the gods whom they worshipped, and chiefly to the glory of Merodach, the representative of Babylonian monotheism, the Babylonians' descendants, the native Christians, have no reason to remember this erection of their forefathers with shame, but rather with pride. The rallyingpoint of nations, Babylon, while it existed, was always a great commercial center, and many are the languages which have resounded in the Tower's vicinity. The confusion of tongues led to the Jewish fiction that the air of Babylon and Borsippa caused forgetfulness, and was therefore injurious to students of the Law, causing them to forget it as the builders of the Tower had of old forgotten their speech (Rashi, Sanhedhrin, 109, 1). This, however, did not prevent the rabbis of Babylon from being more celebrated than those of the Holy Land, and even of Jerusalem itself.\n\nSee also ASTRONOMY.\n\nT. G. Pinches",
@@ -1067,6 +1157,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BABYLONIA"
+  },
+  {
+   "id": 1070,
+   "term": "Babylonish Garment(시날 산 외투)",
+   "definition": "bab-i-lo'-nish gar'ment: In the King James Version, Jos 7:21, for BABYLONISH MANTLE, which see.",
+   "definition_ko": "바벨론 옷(개역개정 「시날 산의 아름다운 외투」). 흠정역 여호수아 7:21의 표기로, 「바벨론 외투」(해당 항목을 보라)를 가리킨다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BABYLONISH GARMENT"
   },
   {
    "id": 1072,
@@ -1121,6 +1220,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BAYITH"
+  },
+  {
+   "id": 1216,
+   "term": "Bazlith; Bazluth(바슬릿)",
+   "definition": "baz'-lith, baz'-luth (batslith, Ne 7:54; batsluth, Ezr 2:52; Basaloth, 1 Esdras 5:31, \"asking\"): The descendants of Bazlith (temple-servants) returned with Zerubbabel to Jerusalem.",
+   "definition_ko": "바슬릿; 바슬룻(히브리어 '바츨릿', 느헤미야 7:54; '바츨룻', 에스라 2:52; 바살롯, 에스드라 1서 5:31, 「구함」). 바슬릿(성전 일꾼)의 자손으로 스룹바벨과 함께 예루살렘에 돌아왔다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "BAZLITH; BAZLUTH"
   },
   {
    "id": 1221,
@@ -1391,6 +1499,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BETH-HARAM"
+  },
+  {
+   "id": 1402,
+   "term": "Beth-Haran(벧하란)",
+   "definition": "beth-ha'-ran (beth haran): A fenced city East of the Jordan (Nu 32:36) identical with BETH-HARAM, which see.",
+   "definition_ko": "벧하란(히브리어 '벳 하란'). 요단 동쪽의 견고한 성읍(민수기 32:36). 벧하람(해당 항목을 보라)과 같다.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "BETH-HARAN"
   },
   {
    "id": 1403,
@@ -1681,6 +1798,24 @@
    "isbe_key": "BOCHIM"
   },
   {
+   "id": 1583,
+   "term": "Bolled(꽃이 핌)",
+   "definition": "bold (gibh`ol, \"the calyx of flowers\"): Hence, \"in bloom,\" and so rendered, in the Revised Version (British and American), of flowering flax (Ex 9:31).",
+   "definition_ko": "꽃이 핌(히브리어 '기브올', 「꽃받침」). 그래서 「꽃이 핀」이라는 뜻이며, 영국·미국 개역판은 꽃이 핀 삼에 대해 그렇게 옮긴다(출애굽기 9:31).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BOLLED"
+  },
+  {
+   "id": 1605,
+   "term": "Booz(보아스)",
+   "definition": "bo'-oz (TR, Booz; Westcott and Hort, The New Testament in Greek, Boes): the King James Version, Greek form of Boaz (thus, the Revised Version (British and American)) (Mt 1:5; Lu 3:32).",
+   "definition_ko": "보아스(헬라어 '보오즈'; 웨스트콧·호트 '보에스'). 흠정역의 표기. 보아스의 헬라어 꼴(마태복음 1:5; 누가복음 3:32).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "BOOZ"
+  },
+  {
    "id": 1606,
    "term": "Bor-Ashan(고라산)",
    "definition": "bor-ash'-an: A correction of the Massoretic Text in the American Standard Revised Version in 1Sa 30:30 for the King James Version \"Chor-ashan\" and the English Revised Version \"Cor-ashan.\" Probably the same as ASHAN (Jos 15:42; 1Ch 4:32; 6:59), which see.",
@@ -1724,6 +1859,24 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BROOK OF EGYPT, THE"
+  },
+  {
+   "id": 1723,
+   "term": "Buckler(방패(작은 방패))",
+   "definition": "buk'-ler: God is called a \"buckler\" (the Revised Version (British and American) \"shield\") to them that trust Him (Ps 18:2,30; 2Sa 22:31; Pr 2:7).\n\nSee ARMOR.",
+   "definition_ko": "작은 방패. 하나님은 자기를 의지하는 이들에게 「방패」(영국·미국 개역판 「방패」)라 불리신다(시편 18:2, 30; 사무엘하 22:31; 잠언 2:7). 갑옷 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BUCKLER"
+  },
+  {
+   "id": 1732,
+   "term": "Bul(불월)",
+   "definition": "bul (bul): Name of the 8th month of the Jewish year (1Ki 6:38). It is of Phoenician origin and signifies the month of rain, the beginning of the rainy season.\n\nSee CALENDAR.",
+   "definition_ko": "불월(히브리어 '불'). 유대력 여덟째 달의 이름(열왕기상 6:38). 페니키아에서 온 이름으로 비의 달, 곧 우기의 시작을 뜻한다. 달력 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BUL"
   },
   {
    "id": 1767,
@@ -1778,6 +1931,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CALNEH"
+  },
+  {
+   "id": 1818,
+   "term": "Canker-Worm(느치(핥는메뚜기) · 느치)",
+   "definition": "kan'-ker-wurm (yeleq, (Joe 1:4; 2:25; Na 3:15,16)): The name given to a larval stage of the LOCUST (which see).\n\nSee also CATERPILLAR.",
+   "definition_ko": "느치(히브리어 '옐레크', 요엘 1:4; 2:25; 나훔 3:15, 16). 메뚜기(해당 항목을 보라)의 애벌레 단계에 붙인 이름. 모충 항목도 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "CANKER-WORM"
   },
   {
    "id": 1820,
@@ -1987,6 +2149,15 @@
    "isbe_key": "CNIDUS"
   },
   {
+   "id": 2172,
+   "term": "Coffer(궤(작은 상자))",
+   "definition": "kof'-er ('argaz): A small box such as that in which the Philistines placed their golden mice and other offerings in returning the Ark (1Sa 6:8,11,15).",
+   "definition_ko": "궤(작은 상자; 히브리어 '아르가즈'). 블레셋 사람들이 궤를 돌려보낼 때 금 쥐와 다른 예물을 담은 것 같은 작은 상자(사무엘상 6:8, 11, 15).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "COFFER"
+  },
+  {
    "id": 2187,
    "term": "Colossae(골로새)",
    "definition": "ko-los'-e (Kolossai, \"punishment\"; the King James Version Colosse): A city of Phrygia on the Lycus River, one of the branches of the Meander, and 3 miles from Mt. Cadmus, 8,013 ft. high. It stood at the head of a gorge where the two streams unite, and on the great highway traversing the country from Ephesus to the Euphrates valley, 13 miles from Hierapolis and 10 from Laodicea. Its history is chiefly associated with that of these two cities. Early, according to both Herodotus and Xenophon, it was a place of great importance. There Xerxes stopped 481 BC (Herodotus vii.30) and Cyrus the Younger marched 401 BC (Xen. Anab. i.2,6). From Col 2:1 it is not likely that Paul visited the place in person; but its Christianization was due to the efforts of Epaphras and Timothy (Col 1:1,7), and it was the home of Philemon and Epaphras. That a church was established there early is evident from Col 4:12,13; Re 1:11; 3:14. As the neighboring cities, Hierapolis and Laodicea, increased in importance, Colosse declined. There were many Jews living there, and a chief article of commerce, for which the place was renowned, was the collossinus, a peculiar wool, probably of a purple color. In religion the people were specially lax, worshipping angels. Of them, Michael was the chief, and the protecting saint of the city. It is said that once he appeared to the people, saving the city in time of a flood. It was this belief in angels which called forth Paul's epistle (Col 2:18). During the 7th and 8th centuries the place was overrun by the Saracens; in the 12th century the church was destroyed by the Turks and the city disappeared. Its site was explored by Mr. Hamilton. The ruins of the church, the stone foundation of a large theater, and a necropolis with stones of a peculiar shape are still to be seen. During the Middle Ages the place bore the name of Chonae; it is now called Chonas.\n\nE. J. Banks",
@@ -1994,6 +2165,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "COLOSSAE"
+  },
+  {
+   "id": 2302,
+   "term": "Cor-Ashan(고라산)",
+   "definition": "kor-ash'-an, ko-ra'-shan (English Revised Version, the King James Version Chor-ashan; kor `ashan, 1Sa 30:30): The original reading was probably Bor- ashan, \"well of Ashan.\"\n\nSee ASHAN.",
+   "definition_ko": "고라산(영국 개역판; 흠정역 초라산; 히브리어 '코르 아샨', 사무엘상 30:30). 본래 읽기는 아마 「보라산」, 곧 「아산의 우물」이었을 것이다. 아산 항목을 보라.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "COR-ASHAN"
   },
   {
    "id": 2310,
@@ -2131,6 +2311,24 @@
    "isbe_key": "DANNAH"
   },
   {
+   "id": 2523,
+   "term": "Darling(유일한 것)",
+   "definition": "dar'-ling (yachidh, \"only,\" the King James Version margin, \"only one\"; the American Revised Version, margin, \"dear life\"): Used poetically for the life or soul (Ps 22:20; 35:17).",
+   "definition_ko": "유일한 것(히브리어 '야히드', 「유일한」; 흠정역 난외 「유일한 것」; 미국 개역판 난외 「소중한 생명」). 시에서 생명이나 영혼을 가리켜 쓰였다(시편 22:20; 35:17).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DARLING"
+  },
+  {
+   "id": 2527,
+   "term": "Dates(대추야자)",
+   "definition": "dats (debhash): Arabic, dibbs (2Ch 31:5, King James Version margin); English Versions of the Bible HONEY (which see). See also PALM TREE.",
+   "definition_ko": "대추야자(히브리어 '데바쉬'). 아랍어 '딥스'(역대하 31:5 흠정역 난외). 영역 성경은 「꿀」(해당 항목을 보라). 종려나무 항목도 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DATES"
+  },
+  {
    "id": 2559,
    "term": "Dead Sea, the(염해)",
    "definition": "I. PRESENT AREAII. FORMER ENLARGEMENTIII. LEVEL OF THE DEAD SEA IN EARLY HISTORIC TIMESIV. CONSTITUTION OF THE WATERV. CLIMATEVI. ROADSVII. MISCELLANEOUS ITEMS1. The Plain of the Jordan\n\n2. Ain Jidi (En-gedi)\n\n3. The Fortress of Masada\n\n4. Jebel Usdum (Mount of Sodom)\n\n5. Vale of Siddim\n\n6. El-LisanVIII. HISTORYLITERATUREThe name given by Greek and Latin writers to the remarkable inland lake occupying the deepest part of the depression of the ARABAH (which see). In the Bible it is called the Salt Sea (Ge 14:3; De 3:17); the Sea of the Plain (`Ardbhah). (Jos 3:16); and the (East) Eastern Sea (Eze 47:18; Joe 2:20). Among the Arabs it is still called Bahr Lut (Sea of Lot). By the time of Josephus it was called Lake Asphaltires (Ant., I, ix) from the quantities of bitumen or asphalt occasionally washed upon its shores and found in some of the tributary wadies.\n\nI. Present Area.\n\nThe length of the lake from North to South is 47 miles; its greatest width is 10 miles narrowing down to less than 2 miles opposite Point Molyneux on el-Lisan. Its area is approximately 300 square miles. From various levelings its surface is found to be 1,292 ft. below that of the Mediterranean, while its greatest depth, near the eastern shore 10 miles South of the mouth of the Jordan is 1,278 ft. But the level varies from 10 to 15 ft. semiannually, and more at longer intervals; and we are not sure from which one of these levels the above figures have been derived. Throughout the northern half of the lake on the East side the descent to the extreme depth is very rapid; while from the western side the depth increases more gradually, especially at the extreme northern end, where the lake has been filled in by the delta of the Jordan.\n\nAbout two-thirds of the distance to the southern end, the peninsula, el-Lisan (\"the Tongue\"), projects from the East more than half-way across the lake, being in the shape, however, of a boot rather than a tongue, with the toe to the North, forming a bay between it and the eastern mainland. The head of this bay has been largely filled in by the debris brought down by Wady Kerak, and Wady Ben Hamid, and shoals very gradually down to the greatest depths to the North. The toe of this peninsula is named Point Costigan, and the heel, Point Molyneux, after two travelers who lost their lives about the middle of the 19th century in pioneer attempts to explore the lake. Over the entire area South of Point Molyneux, the water is shallow, being nowhere more than 15 ft. deep, and for the most part not over 10 ft., and in some places less than 6 ft. In high water, the lake extends a mile or more beyond low-water mark, over the Mud Flat (Sebkah) at the south end.\n\nFrom the history of the crossing of the Jordan by Joshua and the expedition of Chedorlaomer when Lot was captured, it is evident that the outlines of the sea were essentially the same 3,500 years ago as they are now, showing that there has been no radical change in climatic conditions since then.\n\nII. Former Enlargement.\n\nBut if we go back a few thousand years into prehistoric times the evidence is abundant that the valley has witnessed remarkable climatic changes (see ARABAH). At Ain Abu Werideh, about 40 miles beyond the south end of the lake, Hull in 1883 discovered deposits of an abandoned shore line 1,400 ft. above its level (see ARABAH). A pronounced abandoned shore line at the 650 ft. level had been observed first by Tristram, and noted afterward by many travelers. But from the more detailed examination made by Professor Ellsworth Huntington in 1909 (see Palestine and Its Transformation) five abandoned shore lines of marked size have been determined, surrounding the valley at the following approximate heights above the present level of the lake: 1,430, 640, 430, 300 and 250 ft. He writes that \"at its greatest extent the sea stretched at least 30 miles south of its present termination, while northward it probably covered the Sea of Galilee and the Waters of Merom, and sent an arm into the Vale of Jezreel. .... Lacustrine deposits exist in the Jordan valley shortly south of the Sea of Galilee. A mile north of Jisr el-Mujamiyeh, as the modern railroad bridge is called, a tilted series of clays, apparently lacustrine, lies under some untilted whitish clays, also apparently lacustrine. The elevation here is about 840 ft. below that of the Mediterranean Sea, or 450 above the Dead Sea. .... So far as can be detected by the aneroid the highest deposits (about the Dead Sea) lie at the same elevation on all sides of the lake.\"\n\nThere are also numerous minor strands below the 250 ft. major strand. These are estimated by Huntington as 210, 170, 145, 115, 90, 70, 56, 40, 30 and 12 ft. above the lake successively, It is noted, also, that the lower beaches all show less erosion than those above them. This certainly points to a gradual diminution of the water in the basin during the prehistoric period, while on the other hand there is much evidence that there has been a considerable rise in the water within the historic period. Date palms and tamarisks are seen standing out from the water in numerous places some little distance from the present shore where the water is several feet deep. These are of such size as to show that for many years the soil in which they grew was not subject to overflow. As long ago as 1876 Merrill noticed such trees standing in the water 40 ft. from the shore, near the Northeast corner of the lake (East, of the Jordan, 224). Numerous trunks of date palms and tamarisks can now be seen submerged to a similar extent along the western shore. In 1818 Irby and Mangles (Travels, 454) saw a company of Arabs ford the lake from Point Molyneux to the west side, and noted that the line of the ford was marked by branches of trees which had been stuck into the bottom. In 1838 Robinson found the water at such a stage that the ford was impracticable and so it has been reported by all travelers since that time. But Mr. A. Forder, having recently examined the evidence for the Palestine Exploration Fund, learns from the older Arabs that formerly there was a well-known causeway leading from el-Lisan opposite Wady Kerak to Wady Umm Baghek, across which sheep, goats and men could pass, while camels and mules could be driven across anywhere in the water. Moreover the Arab guide said that the channel \"was so narrow that the people of his tribe used to sit on the edge of the Lisan and parley with Arabs from the west as to the return of cattle that had been stolen by one or other of the parties.\" (See PEFS (April, 1910), 112.)\n\nIII. Level of, in Early Historic Times.\n\nNumerous general considerations indicate that in the early historic period the level of the water was so much lower than now that much of the bay South of Point Molyneux was dry land. In Jos 15:2,5 f the south border of Judah is said to extend from \"the bay (tongue, Lisan) that looketh southward\"; while the \"border of the north quarter was from the bay (tongue, Lisan) of the sea at the end of the Jordan; and the border went up to Beth-hoglah, and passed along by the north of Beth-arabah.\" If the limits of the north end of the Dead Sea were the same then as now the boundary must have turned down to the mouth of the Jordan by a sharp angle. But according to the description it runs almost exactly East and West from beyond Jerusalem to Beth-hoglah, and nothing is said about any change in direction, while elsewhere, any such abrupt change in direction as is here supposed is carefully noted. Furthermore, in detailing the boundary of Benjamin (Jos 18:19) we are told that \"the border passed along to the side of Beth-hoglah northward; and the goings out of the border were at the north bay (tongue, Lisan) of the Salt Sea, at the south end of the Jordan: this was the south border.\" This can hardly have any other meaning than that the north end of the Dead Sea was at Beth-hoglah. From these data Mr. Clermont-Ganneau (see Recueil d'archeologie orientale, V (1902), 267-80) inferred that in the time of Joshua the level of the sea was so much higher than now that a tongue-like extension reached the vicinity of Beth- hoglah, while the underlying topography was essentially the same as now. On the contrary, our present knowledge of the geologic forces in operation would indicate that at that time the Dead Sea was considerably lower than now, and that its rise to its present level has been partly caused by the silting up of a bay which formerly extended to Beth-hoglah.\n\nThe geological evidence concerning this point is so interesting, and of so much importance in its bearing upon our interpretation of various historical statements concerning the region, that it is worth while to present it somewhat in detail. As already stated (see ARABAH), the present level of the Dead Sea is determined by the equilibrium established between the evaporation (estimated at 20,000,000 cubic ft. per diem) over the area and the amount of water brought into the valley by the tributary streams. The present area of the sea is, in round numbers, 300 square miles. The historical evidence shows that this evaporating surface has not varied appreciably since the time of Abraham. But the encroachments of the delta of the Jordan upon this area, as well as of the deltas of several other streams, must have been very great since that period. The effect of this would be to limit the evaporating surface, which would cause the water to rise until it overflowed enough of the low land at the south end to restore the equilibrium.\n\nIt is easy to make an approximate calculation of the extent to which these encroachments have tended to narrow the limits of the original lake. The sediment deposited by the Jordan, at the north end of the Dead Sea, is practically all derived from the portion of the drainage basin between it and the Sea of Galilee--the latter serving as a catch-basin to retain the sediment brought down from the upper part of the valley. The Zor, or narrow channel which the Jordan has eroded in the sedimentary plain through which it flows (see JORDAN, VALLEY OF), is approximately half a mile wide, 100 feet deep, and 60 miles long. All the sediment which formerly filled this has been swept into the head of the sea, while the Jarmuk, the Jabbok, and a score of smaller tributaries descending rapidly from the bordering heights of Gilead, three or four thousand ft. above the valley, bring an abnormal amount of debris into the river, as do a large number of shorter tributaries which descend an equal amount from the mountains of Galilee, Samaria, and Judah. The entire area thus contributing to this part of the Jordan is not less than 3,000 square miles.\n\nAll writers are impressed by the evidence of the torrential floods which fill these water courses after severe storms. The descent being so rapid, permits the water after each rainfall to run off without delay, and so intensifies its eroding power. The well-known figure of our Lord (Mt 7:26 ff) in describing the destruction of the house which is built upon the sand, when the rains descend and the winds beat upon it, is drawn from Nature. The delta terraces at the mouths of such mountain streams where they debouch on the lowlands are formed and re-formed with extreme rapidity, each succeeding storm tending to wash the previous delta down to lower levels and carry away whatever was built upon it.\n\nThe storms which descend upon the plains of Gilead, as well as those upon the Judean hills, are exceedingly destructive. For though the rainfall at Jerusalem, according to the observations of Chaplin (see J. Glaisher, \"On the Fall of Rain at Jerusalem,\" PEFS (January, 1894), 39) averages but 20 inches annually, ranging from 32,21 inches in 1878 to 13,19 inches in 1870, nearly all occurs in the three winter months, and therefore in quantities to be most effective in erosive capacity. And this is effective upon both sides of the Jordan valley, in which the rainfall is very slight. \"Day after day,\" Tristram remarks, \"we have seen the clouds, after pouring their fatness on Samaria and Judea, pass over the valley, and then descend in torrents on the hills of Gilead and Moab,\" a phenomenon naturally resulting from the rising column of heated air coming up from the torrid conditions of the depressed Jordan valley.\n\nTristram (The Land of Moab, 23, 24) gives a vivid description of the effect of a storm near Jerusalem. As his party was encamped during the night the whole slope upon which they pitched became a shallow stream, while \"the deep ravines of the wilderness of Judah (were) covered with torrents, and tiny cascades rolling down from every rock. .... So easily disintegrated is the soft limestone of these wadies, that the rain of a few hours .... did more to deepen and widen the channels than the storms of several years could effect on a Northumbrian hillside. No geologist could watch the effect of this storm without being convinced that in calculating the progress of denudation, other factors than that of time must be taken into account, and that denudation may proceed most rapidly where rains are most uncertain.\" Lieutenant Lynch writes that while ascending the Kerak \"there came a shout of thunder from the dense cloud which had gathered at the summit of the gorge, followed by a rain, compared to which the gentle showers of our more favored clime are as dew drops to the overflowing cistern. .... The black and threatening cloud soon enveloped the mountain tops, the lightning playing across it in incessant flashes, while the loud thunder reverberated from side to side of the appalling chasm. Between the peals we soon heard a roaring and continuous sound. It was the torrent from the rain cloud, sweeping in a long line of foam down the steep declivity, bearing along huge fragments of rocks, which, striking against each other, sounded like mimic thunder.\"\n\nI can bear similar testimony from observations when traveling in Turkestan where the annual rainfall is only about 4 inches. At one time a storm was seen raging upon the mountains 20 miles away, where it spent its entire force without shedding a drop upon the plain. Upon skirting the base of the mountain the next day, however, the railroad track was covered for a long distance 2 or 3 ft. deep with debris which had been washed down by the cloudburst. No one can have any proper comprehension of the erosive power of the showers of Palestine without duly taking into account the extent and the steepness of the descent from the highlands on either side, and the irregularity of the rainfall. These form what in the Rocky Mountains would be called arroyos. After the debris has been brought into the Jordan by these torrents, and the rise of water makes it \"overflow all its banks,\" the sediment is then swept on to the Dead Sea with great rapidity.\n\nAll these considerations indicate that the deltas of the streams coming into the valley of the Jordan and the Dead Sea must be increasing at an unusually rapid rate. It will be profitable, therefore, to compare it with other deltas upon which direct observations have been made. The Mississippi River is sweeping into the Gulf of Mexico sediment at a rate which represents one foot of surface soil over the whole drainage basin, extending from the Rocky Mountains to the Alleghenies, in a little less than 5,000 years. The Hoang-Ho is lowering its drainage basin a foot in 1,464 years, while the river Po is reducing its level a foot in 729 years. So rapidly has the river Po filled up its valley that the city of Adria, which was a seaport 2,000 years ago, is now 14 miles from the mouth of the river. The Tigris and Euphrates rivers have silted up the head of the Persian Gulf nearly 100 miles. (See Croll, Climate and Time, 332, 333; Darwin, Formation of Vegetable Mould through the Action of Worms, 233.) From these considerations it is a conservative estimate that the tributaries of the Jordan valley between the Lake of Galilee and the Dead Sea bring down sediment enough to lower the basin one foot in 2,000 years, so that since the time of Abraham 167,270,400,000 cubic feet of solid matter have been added to its delta. This would cover 25 square miles 250 ft. deep. Taking into consideration the probable depth of water at the north end of the sea, it is, therefore, not an extravagant supposition that the Jordan delta has encroached upon the sea to the extent of 15 or 20 square miles, limiting the evaporating surface to that extent and causing the level of the water to rise, and extend an equal amount over the low lands at the south end.\n\nAt the same time the other streams coming directly into the lake have been contributing deltas to narrow its margin at various points. The Kerak, the Amen and the Zerka Ma'ain bring in an immense amount of sediment from the East; el-Hessi, el-Jeib and el-Fikri from the South; and Wady el. Muhauwdt, el-Areyeh and the Kedron, with numerous smaller intermediate streams, from the West. A detailed examination of these deposits will serve the double purpose of establishing the point in question and of giving a vivid conception of the sea and its surroundings.\n\nThroughout the lower part of its course the river Jordan flows as has been already said, through a narrow gorge called the Zor, which the river has eroded in the soft sedimentary deposits which cover the bottom of the valley (or Ghor) from side to side. Opposite Jericho the Ghor is about 15 miles wide. The Zor, however, does not average more than one-half mile in width and is about 100 ft. lower than the general level of the Ghor, But at \"the Jews' Castle.\" about 8 miles from the mouth of the Jordan, the Zor begins to enlarge and merge into a true delta. The embankment of the Zor slopes away in a Southwest direction till it reaches the Judean mountains at Khurbet Kumran. 10 miles distant, leaving a triangle of low land between it and the Dead Sea averaging fully one mile in width and being nearly 3 miles wide opposite the mouth of the Jordan. The face of the embankment separating the Zor from the Ghor has in several places been deeply cut into by the small wadies which come down from the western mountains, and the wash from these wadies as well as that from more temporary streams after every shower has-considerably raised the western border of the Zor throughout this distance. But it can safely be estimated that the original boundary of the Dead Sea has here been encroached upon to the extent of 10 or 15 square miles. Again, upon the eastern side of the Jordan the other limb of the delta, though smaller, is equally in evidence. Merrill (East of the Jordan, 223, 224), in describing his survey of the region, says he was compelled to walk for some hours along the shore and then north to reach his horses, which evidently had been coming over the harder and more elevated surface of the Ghor. \"The plain.\" he says, \"for many square miles north of the sea is like ashes in which we often. sank over shoe.\"\n\nReturning to the Northwest corner of the lake we find the delta deposit which we left at Khurbet Kumran extending 2 miles farther south with an average width of one-half mile to Ras Feshkah, which rises abruptly from the water's edge, and renders it impossible for travelers to follow along the shore. But just beyond Ras Feshkah a delta half a mile or more in length and width is projected into the sea at the mouth of Wady en Nar, which comes down from Jerusalem and is known in its upper portions as Kedron. This is the wady which passes the convent of Mar Saba and is referred to in such a striking manner in Eze 47. Like most of the other wadies coming into the Dead Sea, this courses the most of its way through inaccessible defiles and has built up a delta at its mouth covered with \"fragments of rock or boulders swept along by the torrent in its periodical overflows\" (De Saulcy, I, 137, 138).\n\nFrom Ras Feshkah to Ras Mersid, a distance of 15 miles, the shore is bordered with a deposit of sand and gravel averaging a half a mile in width, while opposite Wady edition Derajeh and Wady Husasa (which descend from Bethlehem and the wilderness of Tekoah) the width is, fully one mile. At the mouth of one of the smaller gorges De Saulcy noted what geologists call a \"cone of dejection\" where \"the gravel washed down from the heights was heaped up to the extent of nearly 250 yards\" (I, 44).\n\nRas Mersid, again, obstructs the passage along the shore almost as effectually as did Ras Feshkah, but farther south there is no other obstruction. The plain of En-gedi, connected in such an interesting manner with the history of David and with numerous other events of national importance, is described by the Palestine Exploration Fund as \"about half a mile broad and a mile in length.\" This consists of material brought down for the most part by Wady el-'Areijeh, which descends from the vicinity of Hebron with one branch passing through Tekoah. The principal path leading from the west side of the Dead Sea to the hills of Judea follows the direction of this wady.\n\nBetween En-gedi and Sebbeh (Masada), a distance of 10 miles, the limestone cliffs retreat till they are fully 2 miles from the shore. Across this space numerous wadies course their way bringing down an immense amount of debris and depositing it as deltas at the water's edge. These projecting deltas were noticed by Robinson as he looked southward from the height above En-gedi, but their significance was not understood.\n\n\"One feature of the sea,\" he says, \"struck us immediately, which was unexpected to us, namely, the number of shoal-like points and peninsulas which run into its southern part, appearing at first sight like flat sand-banks or islands. Below us on the South were two such projecting banks on the western shore, composed probably of pebbles and gravel, extending out into the sea for a considerable distance. The larger and more important of these is on the South of the spot called Birket el-Khulil, a little bay or indentation in the western precipice, where the water, flowing into shallow basins when it is high, evaporates, and deposits salt. This spot is just South of the mouth of Wady el-Khubarah\" (BR, I, 501). One of these deltas is described by De Saulcy as 500 yds. in breadth and another as indefinitely larger.\n\nSix miles South of Masada, probably at the mouth of Wady Umm Baghek, Lynch notes a delta extending \"half a mile out into the sea.\" Still farther South the combined delta of the Wady Zuweirah and Wady Muhauwat covers an area of 2 or 3 square miles, and is dotted with boulders and fragments of rock a foot or more in diameter, which have been washed over the area by the torrential floods. Beyond Jebel Usdum, Wady el-Fikreh, draining an area of 200 or 300 square miles, has deposited an immense amount of coarse sediment on the West side of the Sebkah (a mud flat which was formerly occupied, probably by a projection of the Dead Sea). Into the South end of the depression, extending from the Sebkah to the Ascent of Akrabbim, deltas of Wady el-Jeib, Wady el-Khanzireh and Wady Tufileh have in connection with Wady Fikreh encroached upon the valley to the extent of 12 or 15 square miles. Although these wadies drain an area of more than 3,000 sq. miles, and the granitic formations over which they pass have been so disintegrated by atmospheric influences that an excessive amount of coarse sediment is carried along by them (see Hull, Mount Seir, etc., 104-106). In ascending them, one encounters every indication of occasional destructive floods.\n\nFollowing up the eastern shore, Wady el-Hessi coming down from the mountains of Edom has built up the plain of Safieh which pushes out into the neck of the Sebkah and covers an area of 3 or 4 square miles. Farther North, Wady Kerak and Wady Beni Hamid have with their deltas encroached to the extent of 2 or 3 square miles upon the head of the bay, projecting into the Lisan east of Point Costigan. Still farther North, Wady Mojib (the Arnon) and Wady Zerka Ma'ain (coming down from the hot springs of Callirrhoe) have built up less pronounced deltas because of the greater depth of the water on the East side, but even so they are by no means inconsiderable, in each case projecting a half-mile or more into the lake. Putting all these items together, there can be little doubt that the area of the Dead Sea has been encroached upon to the extent of 25 or 30 square miles since the time of Abraham and that this has resulted in a rise of the general level of the water sufficient to overflow a considerable portion of the lagoon at the South end, thus keeping the evaporating area constant. The only escape from this conclusion is the supposition that the rainfall of the region is less than it was at the dawn of history, and so the smaller evaporating area would be sufficient to maintain the former level. But of this we have no adequate evidence. On the contrary there is abundant evidence that the climatic conditions connected with the production of the Glacial Period had passed away long before the conquest of the Vale of Siddim by Amraphel and his confederates (Ge 14). The consequences of this rise of water are various and significant. It lends credibility to the persistent tradition that the sites of Sodom and Gomorrah are covered by the shallow water at the South end of the sea, and also to the statement of Scripture that the region about these cities (on the supposition that they were at the South end of the sea) was like the garden of the Lord; for that plain was then much larger than it is now, and was well watered, and possessed greater elements of fertility than are now apparent. Furthermore, this supposed lower level of the lake in early times may have greatly facilitated the passage of armies and caravans from one end to the other, thus rendering it more easy to understand the historical statements relating to the earliest periods of occupation. Even now the road at the base of Jebel Usdum which is open at low water is impassable at high water. On the last of December, 1883, Professor Hull (Mount Seir, etc., 133) traversed the shore at the base of the salt cliffs along a gravel terrace 100 ft. wide, which \"abruptly terminated in a descent of about 5 ft. to the line of driftwood which marked the upper limit of the waters.\" On the 1st of January, 1901, the water along the base of the salt cliffs was so deep that it was impossible for my party to pass along the shore. It is easy to believe that the level might have been lowered sufficiently to expose a margin of shore which could be traversed on the West side from one end to the other.\n\nIV. Constitution of the Water.\n\nAs in the case of all enclosed basins, the waters of the Dead Sea are impregnated to an excessive degree with saline matter. \"The salt which they contain,\" however, \"is not wholly or even principally common salt, but is mostly the chloride and bromide of magnesium and calcium, so that they are not merely a strong brine, but rather resemble the mother liquors of a saltpan left after the common salt has crystallized out\" (Dawson, Egypt and Syria, 123). The following analysis is given by Booth and Muckle of water brought by Commander Lynch and taken by him May 5 from 195 fathoms deep opposite the mouth of Wady Zerka Ma'ain. Other analyses vary from this more or less, owing doubtless to the different localities and depths from which the specimens had been obtained. Specific gravity at 60 degrees ......... 1,22742 Chloride of magnesium ................... 145,8971 Chloride of calcium ..................... 31.0746 Chloride of sodium ...................... 78,5537 Chloride of potassium ................... 6,5860 Bromide of potassium .................... 1,3741 Sulphate of lime ........................ 0,7012 -------- sub-total: 264,1867 Water ................................... 735,8133 -------- Total: 1000.0000 Total amount of solid matter found\n\nby direct experiment .................. 264.0000 What is here labeled bromide of potassium, however, is called by most other analysts bromide of magnesium, it being difficult to separate and distinguish these elements in composition. The large percentage of bromide, of which but a trace is found in the ocean, is supposed to have been derived from volcanic emanations. As compared with sea water, it is worthy of note that that of the Dead Sea yields 26 lbs. of salts to 100 lbs. of water, whereas that of the Atlantic yields only 6 lbs. in the same quantity. Lake Urumiah is as salty as the Dead Sea.\n\nAs results of this salinity the water is excessively buoyant and is destructive of all forms of animal life. Lynch found that his metal boats sank an inch deeper in the Jordan when equally heavily laden than they did in the Dead Sea. All travelers who bathe in it relate that when they throw themselves upon their backs their bodies will be half out of the water. Josephus (BJ, IV, viii, 4) relates that the emperor Vespasian caused certain men who could not swim to be thrown into the water with their hands tied behind them, and they floated on the surface. Dead fish and various shells are indeed often found upon the shore, but they have evidently been brought in by the tributary fresh-water streams, or belong to species which live in the brackish pools of the bordering lagoons, which are abundantly supplied with fresh water.\n\nThe report extensively circulated in earlier times that birds did not fly over the lake has no foundation in fact, since some species of birds are known even to light upon the surface and frolick upon the waters. The whole depression is subject to frequent storms of wind blowing through its length. These produce waves whose force is very destructive of boats encountering them because of the high specific gravity of the water; but for the same reason the waves rapidly subside after a storm, so that the general appearance of the lake is placid in the extreme.\n\nThe source from which these saline matters have been derived has been a subject of much speculation--some having supposed that it was derived from the dissolution of the salt cliffs in Jebel Usdum. But this theory is disproved by the fact that common salt forms but a small portion of the material held in solution by the water. It is more correct to regard this salt mountain as a deposit precipitated from the saturated brine which had accumulated, as we have supposed, during the Cretaceous age. Probably salt is now being deposited at the bottom of the lake from the present saturated solution to appear in some future age in the wreck of progressive geological changes. The salts of the Dead Sea, like those in all similarly enclosed basins, have been brought in by the streams of water from all over the drainage basin. Such streams always contain more or less solid matter in solution, which becomes concentrated through the evaporation which takes. place over enclosed basins. The ocean is the great reservoir of such deposits, but is too large to be affected to the extent noticeable in smaller basins. The extreme salinity of the Dead Sea water shows both the long continuance of the isolation of the basin and the abundance of soluble matter contained in the rocks of the inscribed area. The great extent of recent volcanic rocks, especially in the region East of the Jordan, accounts for the large relative proportion of some of the ingredients.\n\nV. Climate.\n\nBecause of the great depression below sea level, the climate is excessively warm, so that palms and other tropical trees flourish on the borders of the rivers wherever fresh water finds soil on which to spread itself. Snow never falls upon the lake, though it frequently covers the hills of Judea and the plateau of Moab. As already explained the rainfall in the Jordan valley is less than on the bordering mountains. During the winter season the Arab tribes go down to the valley with their flocks of sheep and goats and camp upon the surrounding plains. But the excessive heat of the summer, rising sometimes to 130 degrees F., drives them back to the hills again.\n\nVI. Roads.\n\nExcept at the North end, the approaches to the Dead Sea are few and very difficult to travel. On the West side the nearest approach is at En-gedi, and this down a winding descent of 2,000 ft. where a few men at the top of the cliff could hold an army at bay below. The path up Wady Zuweirah from the North end of Jebel Usdum is scarcely better. Upon the South end the path leads up Wady Fikreh for a considerable distance on the West side of the Mud Flat, and then crosses over to the Wady el-Jeib, up whose torrential bed during the dry season caravans can find their way through the Arabah to Akabah. More difficult paths lead up from the East of the Mud Flat into the Arabah, and through the mountains of Moab to Petra into the plains beyond and the Pilgrim route from Damascus to Mecca. From the Lisan a difficult path leads up Wady Kerak to the fortress of the same name 20 miles distant and 5,000 ft. above the lake. Another path a little farther north leads up the Wady Beni Hamid to Ar of Moab. From the Arnon to the North end of the Dead Sea the mountains are so precipitous that travel along the shore is now practically impossible. But there are, according to Tristram (The Land of Moab, 355), remnants of an \"old and well-engineered road of ancient times\" extending as far South at least as the Zerka Ma'ain.\n\nVII. Miscellaneous Items.\n\nThere are numerous points around the border of the lake of special interest:\n\n1. The Plain of the Jordan:\n\nWhen Lot and Abraham looked down from the heights of Bethel (Ge 13:10 ff) they are said to have beheld \"all the Plain of the Jordan, that it was well watered every where, before Yahweh destroyed Sodom and Gomorrah, like the garden of Yahweh, like the land of Egypt, as thou goest unto Zoar. So Lot chose him all the Plain of the Jordan; and Lot journeyed east: .... and Lot dwelt in the cities of the Plain, and moved his tent as far as Sodom.\" The word here translated \"Plain\" is kikkar (Ciccar), meaning \"circle,\" and indicating the appearance from Bethel of the Jordan valley surrounding the North end of the Dead Sea. From this fact, many recent writers have located Sodom and Gomorrah at that end of the sea (see CITIES OF THE PLAIN). But it is by no means certain that it is necessary thus to narrow down the meaning of the phrase. Though the South end. of the Dead Sea is not visible from the heights of Bethel, it is so connected with the general depression that it may well have been in the minds of Abraham and Lot as they were dividing the country between them, one choosing the plain, a part of which was visible, the other remaining on the bordering mountainous area, so different in all its natural resources and conditions. The extent of the region chosen by Lot may therefore be left to be determined by other considerations.\n\n2. Ain Jidi (En-gedi):\n\nAin Jidi, \"fountain of the kid\" (?) (see EN-GEDI) is an oasis at the base of the western cliffs about half-way between the North and the South ends of the lake, fed by springs of warm water which burst from beneath the overhanging cliffs. The 650 ft. shore line composed of shingle and calcareous marl is here prominent, and, as already remarked, there is an extensive gravel terrace at the present water level. Palms and vines formerly flourished here (So 1:14), but now only a few bushes of acacia and tamarisk are to be found. From time immemorial, however, it has been the terminus of the principal trail which zig-zags up the cliffs to the plateau, across which paths lead to Hebron and Bethlehem.\n\n3. The Fortress of Masada:\n\nThe Fortress of Masada was the last stronghold held by the fanatical Jews (Zealots) after the destruction of Jerusalem by the Romans, and offers a bird's-eye view of the Dead Sea, which is as instructive as it is interesting. It is situated half-way between Jebel Usdum and En-gedi, directly opposite the northern promontory of el-Lisan. Here on a precipitous height, 2,000 ft. above the sea, is a plateau about 700 yds. long, and 200 wide, adorned with ruins of dwellings, palaces and temples of the Herodian age. Standing upon this height one sees the outlines of the Roman camp, near the shore of the sea, and those of another camp in a depression several hundred yards to the West, from which the final attack of the besiegers was made over a pathway constructed along a sloping ridge. Here many miles away from their base of supplies the Romans slowly but irresistibly drew in their besieging lines to the final tragic consummation when the last remnant of the defenders committed suicide (BJ, VII, ix, 1). The view gives one a profound impression of the difficulties attending military campaigns in all that region. Upon lifting up one's eyes to take in the broader view, he sees the Dead Sea in its whole length with the low ridge of Jebel Usdum, the Valley of Salt, the Ascent of Akrabbim, the depression of the Arabah, and Mt. Hor, to the South, while across the whole horizon to the East is the long wall of Moab dissected by Wady Kerak and the river Arnon, leading up to the strongholds of Ker, Aroer and Dibon, of Moab; while immediately in the front are the white cliffs of el-Lisan, and to the North, near by, the green oasis of En-gedi, and, dimmed by distance, the plains of Jericho, and the cluster of peaks surrounding Mt. Pisgah; while the sea itself sparkles like a gem of brilliant azure in the midst of its desolate surroundings, giving no token of the deadly elements which permeate its water.\n\n4. Jebel Usdum (Mount of Sodom):\n\nJebel Usdum (Mount of Sodom) is a salt mountain extending 7 or 8 miles along the Southwest shore of the lake and on the West side of the Valley of Salt to its southern boundary. Its name is derived from the traditional belief that Sodom was located at the South end of the sea; but, on the other hand, it is not unlikely that the name would become attached to it because of its seeming to contain the pillar of salt, which, according to the ordinary translation, marked the place where Lot's wife was overwhelmed. The mountain rises 600 ft. above the lake, and has a general level surface except where streams have worn furrows and gullies in it. The eastern face presents a precipitous wall of rock salt, which, as said above, at the time of my visit (January, 1901), was washed by the waves of the lake making it impossible to pass along its base. At other times. when the water is low, travelers can pass along the whole length of the shore. This wall of salt presents much the appearance of a glacier, the salt being as transparent as ice, while the action of the waves has hollowed out extensive and picturesque caverns and left isolated towers and connected pinnacles of salt often resembling a Gothic cathedral. These towers and pinnacles are, of course, being displaced from time to time, while others are formed to continue the illusion. Any pillar of salt known to the ancients must be entirely different from those which meet the eye of the modern traveler. It follows also as a matter of course that the gradual dissolution of this salt must partly account for the excessive salinity of the Dead Sea.\n\nIt is uncertain how deep the deposit extends below the surface. It rises upward 200 or 300 ft., where it is capped by consolidated strata of sedimentary material, consisting of sand and loam, which most geologists think was deposited at the time of the formation of the 650 ft. terrace already described, and which they connect with the climatic conditions of the Glacial period.\n\nThis view is presented as follows by Professor B. K. Emerson: \"In the earlier portion of the post-glacial stadium, a final sinking of a fraction of the bottom of the trough, near the South end of the lake, dissected the low salt plateau, sinking its central parts beneath the salt waters, while fragments remain buttressed against the great walls of the trench forming the plains of Jebel Usdum and the peninsula el-Lisan with the swampy Sebkah between. .... It exposed the wonderful eastern wall of Jebel Usdum: 7 miles long, with 30-45 m. of clear blue salt at the base, capped by 125-140 m. of gypsum-bearing marls impregnated with sulphur, and conglomerates at times cemented by bitumen\" (\"Geological Myths,\" Proc. Am. Assoc. for Adv. of Sci. (1896), 110, 111). If this was the case there has been a depression of the South end of the Dead Sea to the extent of several hundred feet within a comparatively few thousand years, in which case the traditional view that Sodom and Gomorrah were overwhelmed by Dead Sea water at the time of their destruction would refer to an occurrence exactly in line with movements that have been practically continuous during Tertiary, Glacial, and post- Glacial times.\n\nWith more reason, Lartet contends that this salt is a Cretaceous or Tertiary deposit covered with late Tertiary strata, in which case the sinking of the block between Jebel Usdum and el-Lisan, for the most part, took place at a much earlier date than the formation of the 650 ft. terrace. A striking corollary of this supposition would be that the climatic conditions have been practically the same during all of the post-Carboniferous times, there having been cycles of moist and dry climate in that region succeeding each other during all these geological periods.\n\nThe Vale of Siddim (Ge 14:3,8,10) is probably the same as the Valley of Salt (2Ki 14:7; 1Ch 18:12; 2Ch 25:11).\n\n5. Vale of Siddim:\n\nThis is in all probability the plain extending from the southern end of the Dead Sea to the \"Ascent of Akrabbim\" which crosses the valley from side to side, and forms the southern margin of the Ghor. At present the area of the vale is about 50 square miles; but if our theory concerning the lower level of the Dead Sea in the time of Abraham is correct, it may then have included a considerable portion of the lagoon South of el-Lisan and so have been a third larger than now. In Ge 14:10 the vale is said to have been full of slime (that is, of bitumen or asphalt) pits. In modern times masses of asphalt are occasionally found floating in the southern part of the Dead Sea. After the earthquake of 1834 a large quantity was cast upon the shore near the Southwest corner of the lake, 3 tons of which were brought to market by the Arab natives. After the earthquake of January, 1837, a mass of asphalt was driven aground on the West side not far from Jebel Usdum. The neighboring Arabs swam off to it, cut it up with axes and carried it to market by the camel load, and sold it to the value of several thousand dollars. At earlier times such occurrences seem to have been still more frequent. Josephus affirms that \"the sea in many places sends up black masses of asphalt having the form and size of headless oxen\"; while Diodorus Siculus relates that the bitumen (asphalt) was thrown up in masses covering sometimes two or three acres and having the appearance of islands (Josephus, BJ, IV, viii, 4; Diod. Sic. ii.48; Pliny, NH, vii.13; Tac. Hist. verse 6; Dioscor., De re Med., i.99).\n\nSince asphalt is a product of petroleum from which the volatile elements have been evaporated, the ultimate source of these masses is doubtless to be found in the extensive beds of bituminous limestone which appear in numerous places on both sides of the Dead Sea. An outcrop of it can be observed at Neby Mousa, on the road from Jerusalem to Jericho, which Dawson describes as resembling dry chalk saturated with coal tar. When long weathered this becomes white and chalky at the surface, so that a mass of it, quite white externally, reveals an intense blackness when broken. It is this that the people of Bethlehem call \"Dead Sea stone,\" and which they carve into various ornamental articles and expose for sale. Some specimens of it are sufficiently bituminous to burn with flame like cannel-coal. These beds are still more abundant around the South end of the lake and doubtless underlie the whole region, and for all time must have been exuding bituminous and gaseous matter, but much more abundantly in former times than now.\n\nIn these accumulations of bitumen at the South end of the Ghor we probably have the incentive which led the Babylonians under Amraphel and Chedorlaomer to make such long expeditions for the sake of conquering the region and holding it under their power. Bitumen was much in demand in Babylonia.\n\n6. El-Lisan:\n\nEl-Lisan (the Tongue), which projects half-way across the lake from the mouth of Wady Kerak, is, like Jebel Usdum, a promontory of white calcareous sediment containing beds of salt and gypsum, and breaking off on its western side in a cliff 300 ft. high. Its upper surface rises in terraces to the 600 ft. level on the East, as Jebel Usdum does on the West. The length of the promontory from North to South is 9 miles. This corresponds so closely in general structure and appearance to Jebel Usdum on the opposite side of the lake that we find it difficult to doubt theory of Professor Emerson, stated above, that the formation originally extended across and that a block of the original bottom of the lake has dropped down, leaving these remnants upon the sides. Frequent occurrences similar to this are noted by the United States geologists in the Rocky Mountain region.\n\nVIII. History.\n\nDifficulty of access has prevented the Dead Sea from playing any important part in history except as an obstruction both to commerce and to military movements. Boats have never been used upon it to any considerable extent. From earliest times salt has been gathered on its western shores and carried up to market over the difficult paths leading to Jerusalem. A similar commerce has been carried on in bitumen; that from the Dead Sea being specially prized in Egypt, while as already remarked, it is by no means improbable that the pits of bitumen which abounded in the \"Vale of Siddim\" were the chief attraction leading the kings of Babylonia to undertake long expeditions for the conquest of the region. Productive as may have been the plain at the South end of the sea, it was too far outside the caravan route leading through Petra to the South end of the Arabah and the mines of the Sinaitic Peninsula to divert the course of travel. Still the settlements on the eastern border of the Vale of Siddim were of sufficient importance in medieval times to induce the Crusaders to visit the region and leave their marks upon it. The Arabian town of Zoghar, probably the Biblical Zoar, appears at one time to have been a most important place, and was the center of considerable commercial activity. Indigo was grown there, and the oasis was noted for its fine species of dates. The country round about abounded in springs and there was much arable land (see Le Strange, Palestine under the Moslems, 286 ff). The hot springs upon the eastern shore of the Dead Sea at Callirrhoe some distance up the Wady Zerka Ma'ain were much resorted to for their medicinal properties. Here Herod came as a last resort, to secure relief from his loathsome malady, but failed of help. The fortress of Macherus, where John the Baptist was imprisoned, is situated but a few miles South of the Zerka Ma'ain, but access to this region is possible only through a difficult road leading over the mountains a few miles East of the sea.\n\nOn four occasions important military expeditions were conducted along the narrow defiles which border the Southwest end of the Dead Sea:\n\n(1) That of Amraphel and his confederates from Babylonia, who seem first to have opened the way past Petra to the mines of the Sinaitic Peninsula, and then to have swept northward through the land of the Amalekites and Amorites and come down to the Dead Sea at En-gedi, and then to have turned to subdue the Cities of the Plain, where Lot was dwelling. This accomplished, they probably retreated along the west shore of the lake, which very likely afforded at that time a complete passageway to the valley of the Jordan. Or they may have gone on eastward to the line of the present pilgrim route from Damascus to Mecca and followed it northward.\n\n(2) In the early part of the reign of Jehoshaphat (2Ch 20), the Moabites, Ammonites and some other tribes joined together, forming a large army, and, following around the South end of the Dead Sea, marched along the West shore to En-gedi, and having ascended the zigzag path leading up the precipitous heights to the wilderness of Tekoa, were there thrown into confusion and utterly annihilated.\n\n(3) Not many years later Jehoram and Jehoshaphat \"fetched a compass (the Revised Version (British and American) \"made a circuit\") of seven days' journey\" (2Ki 3:9) around the South end of the Dead Sea and attacked the Moabites in their own country, but returned without completing the conquest. The particulars of this expedition are given in 2Ki 3 and in the inscription on the Moabite Stone.\n\n(4) The Romans shortly after the destruction of Jerusalem conducted a long siege of the fortress of Masada, of which an account has already been given in a previous section (VII, 3). All their supplies must have come down the tortuous path to En-gedi and thence been brought along the western shore to the camp, the remains of which are still to be seen at the base of the fortress.\n\nFor many centuries, indeed for nearly 1,800 years, the Dead Sea remained a mystery, and its geology and physical characteristics were practically unknown. The first intimation of the depression of the lake below sea level was furnished in 1837 by Moore and Beke, who made some imperfect experiments with boiling water from which they inferred a depression of 500 ft. In 1841 Lieutenant Simmons of the British navy, by trigonometrical observations, estimated the depression to be 1,312 ft. In 1835. Costigan, and again in 1847 Lieutenant Molyneux ventured upon the sea in boats; but the early death of both, consequent upon their exposures, prevented their making any full reports. Appropriately, however, their names have been attached to prominent points on the Lisan. In 1848 Lieutenant Lynch, of the United States navy, was dispatched to explore the Jordan and the Dead Sea. The results of this expedition were most important. Soundings of the depths were carefully and systematically conducted, and levels were run from the Dead Sea by Jerusalem to the Mediterranean, giving the depression at the surface of the Dead Sea as 1,316,7 ft., and its greatest depth 1,278 ft. More recently Sir C. W. Wilson in connection with the Ordinance Survey of Palestine carried levels over the same route with the result of reducing the depression to 1,292 ft., which is now generally accepted to be correct. But as already stated the stage of water in the lake is not given, and that is known to vary at least 15 ft. annually, and still more at longer intervals.\n\nLITERATURE.\n\nHull, Mount Seir, Sinai and Western Palestine, 1889; Huntington, Palestine and Its Transformation, 1911; Lartet, Voyage d'exploration de la Mer Morte, 1880; Lynch, Report of U. S. Expedition to the Jordan and Dead Sea, 1852; Robinson, BR, 1841; De Saulcy, Voyage dans la Syrie, 1853; Tristram, Land of Israel, 2nd edition, 1872, The Land of Moab, 1873; G. A. Smith, HGHL; Wright; Scientific Confirmations of Old Testament Hist, 1906, and Journal of Biblical Lit., 1911.\n\nGeorge Frederick Wright",
@@ -2212,6 +2410,15 @@
    "isbe_key": "DOTHAN"
   },
   {
+   "id": 2796,
+   "term": "Dross(찌끼(광재, 불순물))",
+   "definition": "dros (sigh): The refuse of smelting of precious metal (Pr 25:4; 26:23); used figuratively of what is base or worthless (Isa 1:22,25; Eze 22:18,19; Ps 119:119).",
+   "definition_ko": "찌끼(히브리어 '시그'). 귀금속을 제련할 때 나오는 찌꺼기(잠언 25:4; 26:23). 비유로 천하거나 쓸모없는 것에 쓰인다(이사야 1:22, 25; 에스겔 22:18, 19; 시편 119:119).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DROSS"
+  },
+  {
    "id": 2806,
    "term": "Dumah(두마)",
    "definition": "du'-ma (dumah, \"silence\"): This word occurs in the Old Testament with the following significations:\n\n(1) the land of silence or death, the grave (Ps 94:17; 115:17);\n\n(2) a town in the highlands of Judah between Hebron and Beersheba, now ed-Daume (Jos 15:52);\n\n(3) an emblematical designation of Edom in the obscure oracle (Isa 21:11,12);\n\n(4) an Ishmaelite tribe in Arabia (Ge 25:14; 1Ch 1:30). According to the Arabic geographies this son of Ishmael rounded the town of Dumat-el-Jandal, the stone-built Dumah, so called to distinguish it from another Dumah near the Euphrates. The former now bears the name of the Jauf (\"belly\"), being a depression situated half-way between the head of the Persian Gulf and the head of the gulf of Akaba. Its people in the time of Mohammed were Christians of the tribe of Kelb. It contained a great well from which the palms and crops were irrigated. It has often been visited by European travelers in recent times. See Jour. Royal Geog. Soc., XXIV (1854), 138-58; W. G. Palgrave, Central and Eastern Arabia, chapter ii. It is possible that the oracle in Isa (number 3 above) concerns this place.\n\nThomas Hunter Weir",
@@ -2228,6 +2435,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "DURA"
+  },
+  {
+   "id": 2812,
+   "term": "Dure(잠깐)",
+   "definition": "dur (proskairos): Used for \"endure\" (which see), the King James Version Mt 13:21 (the Revised Version (British and American) \"endureth\").",
+   "definition_ko": "잠깐(헬라어 '프로스카이로스'). 흠정역 마태복음 13:21에서 「견디다」(해당 항목을 보라)의 뜻으로 쓰였다(영국·미국 개역판 「견디다」).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DURE"
   },
   {
    "id": 2849,
@@ -2356,6 +2572,15 @@
    "isbe_key": "ELAM; ELAMITES"
   },
   {
+   "id": 2927,
+   "term": "Eleadah; Eladah(엘르아다)",
+   "definition": "el-e-a'-da, (the King James Version) ('el`adhah, \"God has adorned\"):\n\nAn Ephraimite (1Ch 7:20).",
+   "definition_ko": "엘르아다(흠정역 엘라다; 히브리어 '엘아다', 「하나님이 꾸미셨다」). 에브라임 사람(역대상 7:20).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ELEADAH; ELADAH"
+  },
+  {
    "id": 2928,
    "term": "Elealeh(엘르알레)",
    "definition": "e-le-a'-le ('el`aleh, \"God has ascended\"):\n\nLay in the country taken from Sihon and within the lot given to Reuben (Nu 32:3,17 f). \"Their names being changed\" seems to apply to all the towns mentioned. There is no indication of the other names. Elealeh is noticed with Heshbon in the oracles against Moab in Isa 15:4; 16:9; Jer 48:34. Eusebius (Onomasticon) locates it one Roman mile from Heshbon. It is represented today by el'Al, a mound crowned with ruins, about a mile North of Chesban.",
@@ -2392,6 +2617,15 @@
    "isbe_key": "ELLASAR"
   },
   {
+   "id": 3004,
+   "term": "Elm(느릅나무)",
+   "definition": "elm:\n\nHo 4:13 the King James Version, but in the Revised Version (British and American)\n\nTEREBINTH (which see).",
+   "definition_ko": "느릅나무. 흠정역 호세아 4:13의 표기이지만, 영국·미국 개역판은 테레빈나무(해당 항목을 보라).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ELM"
+  },
+  {
    "id": 3013,
    "term": "Elon (2)(엘론)",
    "definition": "e'-lon ('elon, a \"terebinth\"; Ailon):\n\nAn unidentified town in the territory of Da named between Ithlah and Timnah (Jos 19:43). It is possibly identical with Elon-beth-Hanan which, along with Shaalbim and Bethshemesh, formed one of Solomon's commissariat districts (1Ki 4:9).\n\nConder has suggested Beit' Anan, about 4 miles Northwest of Neby Samwil: it is quite uncertain.",
@@ -2417,6 +2651,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ELTOLAD"
+  },
+  {
+   "id": 3023,
+   "term": "Elul(엘룰월)",
+   "definition": "e'-lul, e-lool' ('elul, Ne 6:15; Eloul, /APC 1Macc 14:27):\n\nThe 6th month of the Hebrew year, corresponding to August-September. The derivation is uncertain.\n\nSee TIME.",
+   "definition_ko": "엘룰월(히브리어 '엘룰', 느헤미야 6:15; 헬라어 '엘룰', 마카베오상 14:27). 히브리력의 여섯째 달로, 8~9월에 해당한다. 어원은 확실하지 않다. 때 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ELUL"
   },
   {
    "id": 3036,
@@ -2581,6 +2824,15 @@
    "isbe_key": "EPHESUS"
   },
   {
+   "id": 3123,
+   "term": "Ephlal(에블랄)",
+   "definition": "ef'-lal ('ephlal, \"judgment\"):\n\nA descendant of Judah (1Ch 2:37).",
+   "definition_ko": "에블랄(히브리어 '에플랄', 「심판」). 유다의 자손(역대상 2:37).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "EPHLAL"
+  },
+  {
    "id": 3128,
    "term": "Ephraim (2)(에브라임)",
    "definition": "(1) A position apparently of some importance, since the position of Baal-hazor (probably = Tell `Asur) where Abraham's sheep- farm was located, is determined by relation to it (2Sa 13:23). That it lay North of Jerusalem seems to be indicated in 2Sa 13:34. It may be identical with the Ephraim of Eusebius, Onomasticon, 20 Roman miles North of Jerusalem, and therefore to be sought somewhere in the neighborhood of Sinjil and el- Lubban. Connected with this may have been the name Aphaerema, a district in Samaria mentioned in 1 Macc 11:34; Ant, XIII, iv, 9.\n\n(2) The town near the wilderness to which Jesus retired after the raising of Lazarus (Joh 11:54). This probably corresponds to Ephrem of Eusebius, Onomasticon (s .v. \"Afra\") 5 Roman miles East of Bethel. This may be the place named along with Bethel by Josephus (BJ, IV, ix, 9). It probably answers to eT-Taiyebeh, a large village about 4 miles North of Beitin. The antiquity of the site is attested by the cisterns and rock tombs. It stands on a high hill with a wide outlook including the plains of Jericho and the Dead Sea.\n\nSee EPHRON.\n\nW. Ewing",
@@ -2642,6 +2894,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ESHAN"
+  },
+  {
+   "id": 3179,
+   "term": "Eshban(에스반)",
+   "definition": "esh'-ban ('eshban; perhaps \"thoughtful,\" \"intelligent\"; Asban):\n\nName of a chief of the Horites (Ge 36:26; 1Ch 1:41).",
+   "definition_ko": "에스반(히브리어 '에쉬반'; 아마 「사려 깊은」, 「슬기로운」; 아스반). 호리 족속의 한 족장의 이름(창세기 36:26; 역대상 1:41).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "ESHBAN"
   },
   {
    "id": 3181,
@@ -2761,6 +3022,24 @@
    "isbe_key": "FAIR HAVENS"
   },
   {
+   "id": 3367,
+   "term": "Fathom(발(길이 단위))",
+   "definition": "fath'-um (~orguia): The literal meaning is the length of the outstretched arms, and it was regarded as equal to 4 cubits, or about 6 feet. (Ac 27:28).\n\nSee WEIGHTS AND MEASURES.",
+   "definition_ko": "길(헬라어 '오르귀이아'). 문자적 뜻은 두 팔을 벌린 길이로, 4규빗, 곧 6피트쯤으로 여겨졌다(사도행전 27:28). 도량형 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FATHOM"
+  },
+  {
+   "id": 3404,
+   "term": "File(줄칼)",
+   "definition": "fil:\n\nFound only in 1Sa 13:21, but the text here is obscure.\n\nThe Hebrew (petsirah phim) signifies \"bluntness of edge,\" and is so rendered in the Revised Version, margin.\n\nSee TOOLS.",
+   "definition_ko": "줄. 사무엘상 13:21에만 나오지만 본문이 모호하다. 히브리어('페치라 핌')는 「날이 무딤」을 뜻하며, 개역판 난외가 그렇게 옮긴다. 연장 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FILE"
+  },
+  {
    "id": 3586,
    "term": "Gaash(가아스)",
    "definition": "ga'-ash (ga`-ash): First mentioned in connection with the burial place of Joshua \"in the border of his inheritance in Timnath-serah, which is in the hill-country of Ephraim, on the north (side) of the mountain of Gaash\" (Jos 24:30; compare Jud 2:9); see TIMNATH-HERES. The \"brooks,\" or rather the wadies or \"watercourses\" of Gaash are mentioned as the native place of Hiddai (2Sa 23:30), or Hurai (1Ch 11:32), one of David's heroes. No likely identification has been suggested.\n\nSee EPHRAIM, MOUNT.",
@@ -2831,6 +3110,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GAREB, THE HILL OF"
+  },
+  {
+   "id": 3650,
+   "term": "Garmite(가르미 사람 · 가미 사람)",
+   "definition": "gar'-mit (garmi):\n\nA gentilic name applied to Keilah in 1Ch 4:19.\n\nThe reason for this is not known.",
+   "definition_ko": "가미 사람(히브리어 '가르미'). 역대상 4:19에서 그일라에 붙인 부족 이름. 그 까닭은 알려져 있지 않다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "GARMITE"
   },
   {
    "id": 3659,
@@ -3058,6 +3346,15 @@
    "isbe_key": "GIBEON"
   },
   {
+   "id": 3757,
+   "term": "Gibeonites(기브온 사람)",
+   "definition": "gib'-e-un-its. Inhabitants of GIBEON (which see).",
+   "definition_ko": "기브온 사람. 기브온(해당 항목을 보라)의 주민.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "GIBEONITES"
+  },
+  {
    "id": 3763,
    "term": "Gidom(기돔)",
    "definition": "gi'-dom (gidh`om): The limit eastward, from Gibeah toward the wilderness, of the pursuit of Benjamin by Israel (Jud 20:45). No name suggesting this has yet been recovered. It is not mentioned elsewhere.",
@@ -3112,6 +3409,15 @@
    "isbe_key": "GIMZO"
   },
   {
+   "id": 3791,
+   "term": "Gittah-Hepher(깃다헤벨)",
+   "definition": "git-a-he'-fer (gittah chepher): the King James Version (Jos 19:13) for Gath-hepher. Gittah is correctly Gath with the Hebrew letter, he (\"h\") locale, meaning \"toward Gath.\"",
+   "definition_ko": "깃다헤벨(히브리어 '깃타 헤페르'). 여호수아 19:13 흠정역에서 가드헤벨을 이렇게 적는다. 깃타는 바르게는 히브리어 방향 어미 '헤'가 붙은 가드로, 「가드 쪽으로」라는 뜻이다.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "GITTAH-HEPHER"
+  },
+  {
    "id": 3792,
    "term": "Gittaim(깃다임)",
    "definition": "git'-a-im (gittayim): The town to which the Beerothites tied, and where they lived as gerim, or protected strangers (2Sa 4:3). The place need not have been beyond the boundaries of Benjamin, so it may be identical with Gittaim of Ne 11:33, which was occupied by Benjamites after the exile. It is named with Hazor and Ramah; but so far the site has not been discovered.",
@@ -3119,6 +3425,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GITTAIM"
+  },
+  {
+   "id": 3797,
+   "term": "Gizrites(기르스 사람)",
+   "definition": "giz'-rits (gizri (Kethibh); the King James Version Gezrites): Inhabitants of GEZER, (which see). The Qere reads girzi, Girzites (1Sa 27:8).",
+   "definition_ko": "기르스 사람(히브리어 '기즈리'(케티브); 흠정역 게셀 사람). 게셀(해당 항목을 보라)의 주민. 케레는 '기르지', 곧 기르스 사람으로 읽는다(사무엘상 27:8).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "GIZRITES"
   },
   {
    "id": 3819,
@@ -3191,6 +3506,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "GOZAN"
+  },
+  {
+   "id": 3921,
+   "term": "Grove(수풀(신성한 숲))",
+   "definition": "grov:\n\n(1) 'asherah.\n\nSee ASHERAH.\n\n(2) 'eshel (Ge 21:33 the King James Version, the Revised Version (British and American) \"a tamarisk tree\").\n\nSee TAMARISK.",
+   "definition_ko": "수풀(신성한 숲). (1) '아셰라'. 아세라 항목을 보라. (2) '에셸'(창세기 21:33 흠정역; 영국·미국 개역판 「에셀 나무」). 에셀 나무 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "GROVE"
   },
   {
    "id": 3936,
@@ -3328,6 +3652,15 @@
    "isbe_key": "HAMMOTH-DOR"
   },
   {
+   "id": 4021,
+   "term": "Hammuel(함무엘)",
+   "definition": "ham'-u-el (chammu'el, \"wrath of God\"): A son of Mishma, a Simeonite, of the family of Shaul (1Ch 4:26).",
+   "definition_ko": "함무엘(히브리어 '함무엘', 「하나님의 진노」). 미스마의 아들로 시므온 사람이며 사울의 가문에 속한다(역대상 4:26).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "HAMMUEL"
+  },
+  {
    "id": 4025,
    "term": "Hamonah(하모나)",
    "definition": "ha-mo'-na (hamonah): The name of a city which stood apparently near HAMON-GOG (which see) (Eze 39:16).",
@@ -3400,6 +3733,15 @@
    "isbe_key": "HARIM"
   },
   {
+   "id": 4092,
+   "term": "Harsha(하르사)",
+   "definition": "har'-sha (charsha'): Head of one of the families of the Nethinim (Ezr 2:52; Ne 7:54); 1 Esdras 5:32, \"Charea.\"",
+   "definition_ko": "하르사(히브리어 '하르샤'). 느디님 사람의 한 가문의 우두머리(에스라 2:52; 느헤미야 7:54). 에스드라 1서 5:32에서는 「카레아」.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "HARSHA"
+  },
+  {
    "id": 4093,
    "term": "Harsith(하시드 문)",
    "definition": "har'-sith (charcith): One of the gates of Jerusalem (Jer 19:2 the Revised Version (British and American)); margin suggests \"gate of the potsherds\"; the King James Version has \"east gate\" and the King James Version margin \"sun gate,\" both deriving the name from cherec, \"sun.\" The gate opened into the valley of Hinnom.\n\nSee JERUSALEM; POTSHERD.",
@@ -3416,6 +3758,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HASHMONAH"
+  },
+  {
+   "id": 4128,
+   "term": "Hattil(핫딜)",
+   "definition": "hat'-il (chaTTil): A company of servants of Solomon appearing in the post-exilic literature (Ezr 2:57; Ne 7:59). Same called \"Agia\" in 1 Esdras 5:34.",
+   "definition_ko": "하딜(느헤미야 7:59 「핫딜」; 히브리어 '핫틸'). 포로 뒤 문헌에 나오는 솔로몬의 신하들의 한 무리(에스라 2:57; 느헤미야 7:59). 에스드라 1서 5:34에서는 「아기아」라 부른다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "HATTIL"
   },
   {
    "id": 4131,
@@ -3490,6 +3841,15 @@
    "isbe_key": "HEBRON (1)"
   },
   {
+   "id": 4194,
+   "term": "Hebronites(헤브론 자손)",
+   "definition": "he'-brun-its (chebhroni): A family of Levites, descendants of Hebron, third son of Kohath (Nu 3:27; 26:58, etc.).",
+   "definition_ko": "헤브론 종족(히브리어 '헤브로니'). 고핫의 셋째 아들 헤브론의 자손인 레위인 가문(민수기 3:27; 26:58 등).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "HEBRONITES"
+  },
+  {
    "id": 4206,
    "term": "Helam(헬람)",
    "definition": "he'-lam (chelam, 2Sa 10:16 f; in 16:17 with the he of locale; Septuagint Hailam): A place near which David is said to have defeated the Aramean world under Hadarezer (2Sa 10:16). Its site is unknown. Cornill and others introduce it into the text of Eze 47:16 from the Septuagint Heliam). This would place it between the territories of Damascus and Hamath, which is not unreasonable. Some scholars identify it with Aleppo, which seems too far north.",
@@ -3553,6 +3913,15 @@
    "isbe_key": "HENA"
   },
   {
+   "id": 4243,
+   "term": "Henna(고벨화)",
+   "definition": "hen'-a (So 1:14; 4:13): An aromatic plant.",
+   "definition_ko": "고벨화(헤나)(아가 1:14; 4:13). 향기로운 식물.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "HENNA"
+  },
+  {
    "id": 4245,
    "term": "Hepher(헤벨)",
    "definition": "(chepher):\n\n(1) Septuagint Hopher (Jos 12:17), a Canaanitish town mentioned between Tappuah and Aphek, unidentified.\n\n(2) In 1Ki 4:10 a district connected with Socoh, and placed by Solomon under the direction of Benhesed of Arubboth, unidentified.",
@@ -3560,6 +3929,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HEPHER"
+  },
+  {
+   "id": 4249,
+   "term": "Herald(전파하는 자)",
+   "definition": "her'-ald: The word occurs once (Da 3:4) as the translation of the Aramaic word karoz (compare kerux): \"Then the herald cried aloud.\"\n\nSee also GAMES.",
+   "definition_ko": "전령(개역개정 「선포하는 자」). 이 낱말은 다니엘 3:4에 한 번 나오며, 아람어 '카로즈'(헬라어 '케뤽스'와 비교하라)를 옮긴 것이다. 「선포하는 자가 크게 외쳐」. 경기 항목도 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "HERALD"
   },
   {
    "id": 4260,
@@ -3623,6 +4001,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HIERAPOLIS"
+  },
+  {
+   "id": 4340,
+   "term": "Hizki(히스기)",
+   "definition": "hiz'-ki (chizqi; Septuagint Azaki; the King James Version Hezeki): A son of Elpaal, a descendant of Benjamin (1Ch 8:17).",
+   "definition_ko": "히스기(히브리어 '히즈키'; 칠십인역 아자키; 흠정역 헤스기). 엘바알의 아들로 베냐민의 자손(역대상 8:17).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "HIZKI"
   },
   {
    "id": 4345,
@@ -3695,6 +4082,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HORONAIM"
+  },
+  {
+   "id": 4400,
+   "term": "Horonite(호론 사람)",
+   "definition": "hor'-o-nit, ho'-ro-nit (ha-choroni): an appellation of Sanballat (Ne 2:10,19; 13:28), as an inhabitant of BETH-HORON (which see).",
+   "definition_ko": "호론 사람(히브리어 '하호로니'). 산발랏을 부르는 이름(느헤미야 2:10, 19; 13:28). 벧호론(해당 항목을 보라)의 주민이라는 뜻이다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "HORONITE"
   },
   {
    "id": 4411,
@@ -3841,6 +4237,15 @@
    "isbe_key": "IRPEEL"
   },
   {
+   "id": 4655,
+   "term": "Ishpan(이스반)",
+   "definition": "ish'-pan (yishpan, literally, \"he will hide\"): Descendant of Benjamin, son of Shashak, one of \"the chief men, heads of fathers' houses\"; lived at Jerusalem (1Ch 8:22).",
+   "definition_ko": "이스반(히브리어 '이쉬판', 문자적으로 「그가 숨기리라」). 베냐민의 자손으로 사삭의 아들이며, 예루살렘에 산 「족장들, 우두머리」 가운데 하나(역대상 8:22).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "ISHPAN"
+  },
+  {
    "id": 4684,
    "term": "Italy(이달리야)",
    "definition": "it'-a-li (Italia): At first confined as a name to the extreme southern part of the Italian peninsula in the region now called Calabria, whence its application was gradually extended. In Greek usage of the 5th century BC, the name was applied to the coasts as far as Metapontum and Posidonia, being synonymous with Oenotria. The Oenotrians are represented as having assumed the name of Italians (Itali) from a legendary ruler Italus (Dionysius, i.12,35; Vergil, Aen. i.533). The extension of Roman authority seems to have given this name an ever-widening application, since it was used to designate their allies generally. As early as the time of Polybius the name Italy was sometimes employed as an appellation for all the country between the two seas (Tyrrhenian and Adriatic) and from the foot of the Alps to the Sicilian Straits (Polyb. i.6; ii.14; iii.39,54), although Cisalpine Gaul was not placed on a footing of complete equality with the peninsula as regards administration until shortly after the death of Julius Caesar. From the time of Augustus the term was used in practically its modern sense (Nissen, Italische Landeskunde, I, 57-87).\n\nThe name Italy occurs 3 times in the New Testament: Ac 18:2, Aquila \"lately come from Italy,\" because of the expulsion of the Jews from Rome under Claudius; Ac 27:1, the decision that Paul be sent to Italy; Heb 13:24, salutation from those \"of Italy.\" The adjective form is found in the appellation, \"Italian band\" (cobors Italica, Ac 10:1).\n\nThe history of ancient Italy, in so far as it falls within the scope of the present work, is treated under ROME (which see).\n\nGeorge H. Allen",
@@ -3857,6 +4262,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ITHNAN"
+  },
+  {
+   "id": 4696,
+   "term": "Ittah-Kazin(엣가신)",
+   "definition": "it-a-ka'-zin (`ittah qatsin): Jos 19:13 the King James Version for Eth-kazin. Ittah is correctly Eth with He locale, meaning \"toward Eth.\"",
+   "definition_ko": "엣가신(히브리어 '잇타 카친'). 여호수아 19:13 흠정역에서 엣가신을 이렇게 적는다. 잇타는 바르게는 방향 어미가 붙은 엣으로, 「엣 쪽으로」라는 뜻이다.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "ITTAH-KAZIN"
   },
   {
    "id": 4698,
@@ -3884,6 +4298,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "IYE-ABARIM"
+  },
+  {
+   "id": 4711,
+   "term": "Izliah; Jezliah(이슬리아)",
+   "definition": "iz-li'-a (yizli'ah, \"Yah delivers\"; the King James Version): A son of Elpaal, of the tribe of Benjamin (1Ch 8:18).",
+   "definition_ko": "이슬리아(흠정역 예슬리아; 히브리어 '이즐리아', 「야가 건지신다」). 베냐민 지파 엘바알의 아들(역대상 8:18).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "IZLIAH; JEZLIAH"
   },
   {
    "id": 4721,
@@ -3949,6 +4372,15 @@
    "isbe_key": "JAHAZ"
   },
   {
+   "id": 4761,
+   "term": "Jahaziah(야스야)",
+   "definition": "ja-ha-zi'-a: the King James Version for JAHZEIAH (which see).",
+   "definition_ko": "야스야. 흠정역에서 야스야(JAHZEIAH)를 이렇게 적는다(해당 항목을 보라).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "JAHAZIAH"
+  },
+  {
    "id": 4798,
    "term": "Janim(야님)",
    "definition": "ja'-nim (yanim; the King James Version Janum): A place in the Hebron uplands named with Eshan and Beth-tappuah (Jos 15:53); unidentified.",
@@ -3983,6 +4415,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JARMUTH"
+  },
+  {
+   "id": 4827,
+   "term": "Jashubi-Lehem(야수비레헴)",
+   "definition": "ja-shoo-bi-le'-hem (yashubhi-lechem): A name in 1Ch 4:22 where commentators insert beth, between the two words and translate \"(and) returned to Bethlehem.\"",
+   "definition_ko": "야수비네헴(히브리어 '야슈비 레헴'). 역대상 4:22의 이름. 주석가들은 두 낱말 사이에 '벳'을 넣어 「(그리고) 베들레헴으로 돌아왔다」로 옮긴다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "JASHUBI-LEHEM"
   },
   {
    "id": 4838,
@@ -4183,6 +4624,24 @@
    "isbe_key": "JORKEAM"
   },
   {
+   "id": 5084,
+   "term": "Josaphat(요사밧)",
+   "definition": "jos'-a-fat (Iosaphat, the King James Version in Mt 1:8 for JEHOSHAPHAT (which see)): A king of Judah, mentioned in Matthew's genealogy of Christ.",
+   "definition_ko": "요사밧(헬라어 '요사파트'). 마태복음 1:8 흠정역에서 여호사밧(해당 항목을 보라)을 이렇게 적는다. 마태복음의 그리스도 족보에 나오는 유다 왕.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "JOSAPHAT"
+  },
+  {
+   "id": 5086,
+   "term": "Jose(요세)",
+   "definition": "jo'-se (Iose): the King James Version form for \"Jesus\" (Iesous) in Luke's genealogy (Lu 3:29), the Revised Version (British and American) Greek",
+   "definition_ko": "요세(헬라어 '요세'). 누가복음 족보(누가복음 3:29)에서 흠정역이 「예수」('이에수스')를 이렇게 적는다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "JOSE"
+  },
+  {
    "id": 5116,
    "term": "Jotbah(욧바)",
    "definition": "jot'-ba (yoTbah, \"pleasantness\"): The home of Meshullemeth, the mother of King Amon, daughter of Haruz (2Ki 21:19). It may be the same as JOTBATHAH (which see).",
@@ -4208,6 +4667,24 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JUDEA"
+  },
+  {
+   "id": 5178,
+   "term": "Jushab-Hesed(유삽헤셋)",
+   "definition": "joo'-shab-he'-sed (yushabh checedh, \"loving-kindness is returned\"): Son of Zerubbabel. The name is probably symbolical (1Ch 3:20); compare SHEAR-JASHUB.",
+   "definition_ko": "유삽헤셋(히브리어 '유샤브 헤세드', 「인자가 돌아온다」). 스룹바벨의 아들. 이 이름은 아마 상징적일 것이다(역대상 3:20). 스알야숩과 비교하라.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "JUSHAB-HESED"
+  },
+  {
+   "id": 5184,
+   "term": "Kab(갑 · 갑（샤프）)",
+   "definition": "kab (qabh, \"something hollowed out,\" 2Ki 6:25; the King James Version Cab): A Hebrew dry measure and liquid measure equal to about 2 quarts.\n\nSee WEIGHTS AND MEASURES.",
+   "definition_ko": "갑(히브리어 '카브', 「속을 판 것」, 열왕기하 6:25; 흠정역 캡). 약 2쿼트에 해당하는 히브리 사람의 곡물·액체 단위. 도량형 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "KAB"
   },
   {
    "id": 5185,
@@ -4399,6 +4876,15 @@
    "isbe_key": "KINAH"
   },
   {
+   "id": 5261,
+   "term": "King's Pool(왕의 못)",
+   "definition": "berekhath hamelekh): This is possibly the Pool of Siloam (Ne 2:14), and may have been so named as being near to the \"king's garden.\"",
+   "definition_ko": "왕의 못(히브리어 '베레캇 함멜레크'). 아마 실로암 못일 것이며(느헤미야 2:14), 「왕의 동산」 가까이 있어 이렇게 불렸을 수 있다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "KING'S POOL"
+  },
+  {
    "id": 5272,
    "term": "Kir(기르)",
    "definition": "kur, kir (kir):\n\n1. Meaning:\n\nThe meaning of Kir is \"inclosure\" or \"walled place,\" and it is therefore doubtful whether it is a place-name in the true sense of the word. In 2Ki 16:9 it is mentioned as the place whither Tiglath-pileser IV carried the Syrian (Aramean) captives which he deported from Damascus after he had taken that city. In Am 1:5 the prophet announces that the people of Syria (Aram) shall go into captivity unto Kir, and in 9:7 it is again referred to as the place whence the Lord had brought the Syrians (Arameans) as Israel had been brought out of Egypt, and the Philistines from Caphtor.\n\n2. How Rendered in the Septuagint:\n\nExcept in one manuscript (Septuagint, Codex Alexandrinus), where it appears as the Libyan Cyrene (2Ki 16:9), it is never rendered in the Septuagint as a place-name. Thus the place whence the Syrians were brought (Am 9:7) is not Kir, but \"the deep\" or \"the ditch\" Septuagint ek bothrou, \"pit\"), probably a translation of some variant rather than of the word \"Kit\" itself. Comparing the Assyrian-Babylonian kiru (for qiru), \"wall,\" \"inclosure,\" \"interior,\" or the like, Kir might have the general meaning of a place parted off for the reception of exiled captives. Parallels would be Kir Moab, \"the enclosure of Moab,\" Kir Heres or Kir Chareseth, \"the enclosure of brick\" Septuagint hoi lithoi toni toichou). It seems probable that there was more than one place to which the Assyrians transported captives or exiles, and if their practice was to place them as far as they could from their native land, one would expect, for Palestinian exiles, a site or sites on the eastern side of the Tigris and Euphrates.\n\n3. An Emendation of Isaiah 22:5:\n\nIn Isa 22:5 occurs the phrase, \"a breaking down of the walls, and a crying to the mountains\" (meqarqar qir we-shoa` 'el ha-har--\"a surrounding of the wall,\" etc., would be better), and the mention of qir and shoa` here has caused Fried. Delitzsch to suggest that we have to read, instead of qir, qoa`, combined with shoa`, as in Eze 23:23. Following this, but retaining qir, Cheyne translates \"Kir undermineth, and Shoa is at the mount,\" but others accept Delitzsch's emendation, Winckler conjecturing that the rendering should be \"Who stirreth up Koa` and Shoa` against the mountain\" (Alttest. Untersuchungen, 177). In the next verse (Isa 22:6) Kir is mentioned with Elam--a position which a city for western exiles would require.\n\n4. Soldiers of Kir in Assyrian Army:\n\nThe mention of Elam as taking the quiver, and Kir as uncovering the shield, apparently against \"the valley of the vision\" (in or close to Jerusalem), implies that soldiers from these two places, though one might expect them to be hostile to the Assyrians in general, were to be found in their armies, probably as mercenaries. See Fried. Delitzsch, Wo lag das Paradies? 233; Schrader, COT, 425.\n\nT. G. Pinches",
@@ -4487,6 +4973,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "LABAN"
+  },
+  {
+   "id": 5321,
+   "term": "Labana(르바나)",
+   "definition": "lab'-a-na (Labana, 1 Esdras 5:29): Called Lebanah in Ezr 2:45.",
+   "definition_ko": "르바나(에스드라 1서 5:29). 에스라 2:45에서는 르바나(Lebanah)라 부른다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "LABANA"
   },
   {
    "id": 5326,
@@ -4597,6 +5092,24 @@
    "isbe_key": "LO-DEBAR"
   },
   {
+   "id": 5509,
+   "term": "Log(로그(액체 단위))",
+   "definition": "log, logh, \"deepened,\" \"hollowed out\" (Le 14:10-24)): The smallest liquid or dry measure of the Hebrews, equal to about 1 pint.\n\nSee WEIGHTS AND MEASURES.",
+   "definition_ko": "록(히브리어 '로그', 「깊게 된」, 「속을 판」, 레위기 14:10~24). 히브리 사람의 가장 작은 액체 또는 곡물 단위로, 약 1파인트에 해당한다. 도량형 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "LOG"
+  },
+  {
+   "id": 5545,
+   "term": "Lucas(누가)",
+   "definition": "lu'-kas, loo'-kas. In Phm 1:24 the King James Version, for \"Luke\" (Revised Version).",
+   "definition_ko": "누가(루가스). 빌레몬서 1:24에서 흠정역이 「누가」(개역판)를 이렇게 적는다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "LUCAS"
+  },
+  {
    "id": 5558,
    "term": "Luz(루스)",
    "definition": "(luz):The Hebrew word means \"almond tree\" or \"almond wood\" (OHL, under the word). It may also mean \"bone,\" particularly a bone of the spine, and might be applied to a rocky height supposed to resemble a backbone (Lagarde, Uebersicht., 157 f). Winckler explains it by Aramaic laudh, \"asylum,\" which might be suitably applied to a sanctuary (Geschichte Israels). Cheyne (EB, under the word) would derive it by corruption from chalutsah, \"strong (city).\"\n\n(1) This was the ancient name of Bethel (Ge 28:19; Jud 1:23; compare Ge 35:6; 48:3; Jos 16:2; 18:13). It has been thought that Jos 16:2 contradicts this, and that the two places were distinct. Referring to Ge 28:19, we find that the name Bethel was given to \"the place,\" ha-maqom, i.e. \"the sanctuary,\" probably \"the place\" (28:11, Hebrew) associated with the sacrifice of Abraham (12:8), which lay to the East of Bethel. The name of the city as distinguished from \"the place\" was Luz. As the fame of the sanctuary grew, we may suppose, its name overshadowed, and finally superseded, that of the neighboring town. The memory of the ancient nomenclature persisting among the people sufficiently explains the allusions in the passages cited.\n\n(2) A Bethelite, the man who betrayed the city into the hands of the children of Joseph, went into the land of the Hittites, and there founded a city which he called Luz, after the ancient name of his native place (Jud 1:26). No satisfactory identification has been suggested.\n\nW. Ewing",
@@ -4649,6 +5162,24 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "MAACAH"
+  },
+  {
+   "id": 5574,
+   "term": "Maadai(마아대)",
+   "definition": "ma-a-da'-i, ma'-a-di (ma`adhay): Son of Bani; one of those who married foreign wives (Ezr 10:34).",
+   "definition_ko": "마아대(히브리어 '마아다이'). 바니의 아들로, 이방 여인을 아내로 맞은 사람 가운데 하나(에스라 10:34).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "MAADAI"
+  },
+  {
+   "id": 5575,
+   "term": "Maadiah(모아댜)",
+   "definition": "ma-a-di'-a (ma`adhyah, \"whose ornament is Jah\"): A priest who returned with Zerubbabel (Ne 12:5). The name also occurs in the form \"Moadiah\" (Ne 12:17).",
+   "definition_ko": "마아댜(히브리어 '마아드야', 「그 꾸밈이 야이신 이」). 스룹바벨과 함께 돌아온 제사장(느헤미야 12:5). 「모아댜」라는 꼴로도 나온다(느헤미야 12:17).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MAADIAH"
   },
   {
    "id": 5579,
@@ -4795,6 +5326,15 @@
    "isbe_key": "MAKKEDAH"
   },
   {
+   "id": 5674,
+   "term": "Maleleel(마할랄렐)",
+   "definition": "ma-le'-le-el, mal'-e-lel (Maleleel, the King James Version): Greek form of \"Mahalalel\" (Lu 3:37); the Revised Version (British and American) \"Mahalaleel.\"",
+   "definition_ko": "마할랄렐(헬라어 '말렐레엘', 흠정역). 「마할랄렐」의 헬라어 꼴(누가복음 3:37).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "MALELEEL"
+  },
+  {
    "id": 5688,
    "term": "Mamre(마므레)",
    "definition": "mam'-re (mamre'; Septuagint Mambre):\n\n(1) In Ge 14:24 Mamre is mentioned as the name of one of Abraham's allies, who in 14:13 is described as the Amorite, brother of Eschcol and Aner.\n\n1. Biblical Data:\n\nThe name of the grove of trees is evidently considered as derived from this sheikh or chieftain. The \"oaks\" (\"terebinths\") of Mamre where Abram pitched his tent (Ge 14:13; 18:1) are described (Ge 13:18) as \"in Hebron.\" Later on MACHPELAH (which see) is described as \"before,\" i.e. \"to the East of Mamre\" (Ge 23:17; 25:9; 49:30; 50:13), and Mamre is identified with Hebron itself (Ge 23:19).\n\n2. Traditional Sites:\n\nWhile Mamre has always been looked for in the vicinity of Hebron, the traditions have varied greatly, determined apparently by the presence of a suitable tree. The one site which has a claim on grounds other than tradition is that called Khirbet and `Ain Nimreh (literally, the \"ruin\" and \"spring\" of \"the leopard\"), about 1/2 mile North-Northwest of modern Hebron. The word Nimreh may be a survival of the ancient Mamre, the name, as often happens, being assimilated by a familiar word. The site is a possible one, but, beyond this, the name has not much to commend it.\n\nTradition has centered round three different sites at various periods:\n\n(1) The modern tradition points to a magnificent oak (Quercus ilex, Arabic Sindian), 1 1/2 miles West-Northwest of the modern city, as the terebinth of Abraham; its trunk has a girth of 32 ft. It is now in a dying condition, but when Robinson visited it (BR, II, 72, 81) it was in fine condition; he mentions a Mohammedan tradition that this was \"Abraham's oak.\" Since then the site had been bought by the Russians, a hospice and church have been erected, and the tradition, though of no antiquity, has become crystallized.\n\n(2) The second tradition, which flourished from the 16th century down to the commencement of the 19th century, pointed to the hill of Deir el Arba`in (see HEBRON) as that of Mamre, relying especially, no doubt, in its inception on the identity of Mamre and Hebron (Ge 23:19). A magnificent terebinth which stood there was pointed out as that of Abraham. The site agrees well with the statement that the cave of Machpelah was \"before,\" i.e. to the East of Mamre (Ge 23:17, etc.).\n\n(3) The third and much older tradition, mentioned in several Christian writers, refers to a great terebinth which once stood in an enclosure some 2 miles North of Hebron, near the road to Jerusalem. It is practically certain that the site of this enclosure is the strange Ramet el-Khalil. This is an enclosure some 214 ft. long and 162 ft. wide. The enclosing walls are made of extremely fine and massive masonry and are 6 ft. thick; the stones are very well laid and the jointing is very fine, but the building was evidently never completed. In one corner is a well--Bir el-Khalil--lined with beautiful ashlar masonry, cut to the curve of the circumference.\n\nIt is probable that this enclosure surrounded a magnificent terebinth; if so, it was at this spot that before the days of Constantine a great annual fair was held, attended by Jews, Christians and heathen who united a pay honor to the sacred tree, while the well was on the same occasion illuminated, and offerings were made to it. Similar customs survive today at several shrines in Palestine. Constantine suppressed these \"superstitions,\" and built a church in the neighborhood, probably the so-called \"Abraham's house,\" Beit Ibrahim of today. The tree which stood here is apparently that mentioned by Josephus (BJ, IV, ix, 7) as having continued \"since the creation of the world.\" At this enclosure, too, Jewish women and children were sold at auction after the suppression of the revolt of Bar Cochba. Whatever the origin of the veneration paid to this terebinth--now long centuries dead and gone--early Christian tradition associated it with Abraham and located Mamre here. This tradition is mentioned by Jerome (4th century), by Eucherius (6th century), by Areulphus (700 AD) and by Benjamin of Tudela (1163 AD). Among the modern Jews it is looked upon as the site of \"Abraham's oak.\" It is probable that the view that Abraham was connected with this tree is one attached to it much later than its original sanctity; it was originally one of the many \"holy trees\" of the land venerated by primitive Semitic religions feeling, and the nearness of Hebron caused the Bible story to be attached to it. Judging from the Bible data, it appears to be too far from Hebron and Machpelah to suit the conditions; the site of Mamre must have been nearer to Deir el Arba`in, but it has probably been entirely lost since very early times.\n\nFor a very good discussion about Mamre see Mambre by Le R. P. Abel des Freres Precheurs in the Conferences de Saint Etienne, 1909-10 (Paris).\n\n(2) An Amorite chief, owner of the \"oaks\" mentioned above (Ge 14:13,14).\n\nE. W. G. Masterman",
@@ -4867,6 +5407,15 @@
    "isbe_key": "MASSAH AND MERIBAH"
   },
   {
+   "id": 5787,
+   "term": "Mathusala(므두셀라)",
+   "definition": "ma-thu'-sa-la (Mathousala): Greek form of \"Methuselah,\" the Revised Version (British and American) (Lu 3:37 the King James Version).",
+   "definition_ko": "므두셀라(헬라어 '마투살라'). 「므두셀라」의 헬라어 꼴(누가복음 3:37 흠정역).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "MATHUSALA"
+  },
+  {
    "id": 5792,
    "term": "Mattanah(맛다나)",
    "definition": "mat'-a-na (mattanah; Codex Vaticanus, Manthanaein; Codex Alexandrinus, Manthanein): A station of the Israelites which seems to have lain between Beer and Nahaliel (Nu 21:18 f). The name means \"gift,\" and might not inappropriately be applied to a well in the wilderness (Budde translates \"Out of the desert a gift\"; see The Expository Times, VI, 482). Some would therefore identify it with Beer. This is improbable. There is now no clue to the place, but it must have lain Southwest of the Dead Sea.",
@@ -4930,6 +5479,15 @@
    "isbe_key": "MEDIA"
   },
   {
+   "id": 5866,
+   "term": "Melicu(멜리구)",
+   "definition": "mel'-i-ku (melikhu, also melukhi, \"regnant\"): Same as MALLUCHI (which see).",
+   "definition_ko": "멜리구(히브리어 '멜리쿠', 또는 '멜루키', 「다스리는 자」). 말루기(해당 항목을 보라)와 같은 사람.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MELICU"
+  },
+  {
    "id": 5876,
    "term": "Memphis(놉)",
    "definition": "mem'-fis:\n\n1. Name:\n\nThe ancient capital of Egypt, 12 miles South of the modern Cairo. This Greek and Roman form of the name was derived from the Coptic form Menfi (now Arabic Menf), the abbreviation of the Egyptian name Men-nofer, \"the good haven.\" This name was applied to the pyramid of Pepy I, in the cemetery above the city; some have thought the city name to have been derived from the pyramid, but this is unlikely, as the city must have had a regular name before that. It may perhaps mean \"the excellence of Mena,\" its founder. It appears still more shortened in Ho (9:6) as Moph (moph), and in Isa (19:13), Jer (2:16), and Eze (30:13) as Noph (noph).\n\n2. Political Position:\n\nThe classical statements show that the city in Roman times was about 8 miles long and 4 miles wide, and the indications of the site agree with this. It was the sole capital of Position Egypt from the Ist to the XVIIth Dynasty; it shared supremacy with Thebes during the XVIIIth to XXVth Dynasties, and with Sais to the XXXth Dynasty. Alexandria then gradually obscured it, but the governor of Egypt signed the final capitulation to the Arabs in the old capital. While other cities assumed a political equality, yet commercially Memphis probably remained supreme until the Ptolemies.\n\n3. The Founders and the City:\n\nThe oldest center of settlement was probably the shrine of the sacred bull, Apis or Hapy, which was in the South of the city. This worship was doubtless prehistoric, so that when the first king of all Egypt, Mena, founded his capital, there was already a nucleus. His great work was taking in land to the North, and founding the temple of the dynastic god Ptah, which was extended until its enclosure included as much as the great temple of Amon at Thebes, about 3 furlongs long and 2 furlongs wide. To the North of this was the sacred lake; beyond that, the palace and camp. Gradually the fashionable quarters moved northward in Egypt, in search of fresher air; the rulers had moved 10 miles North to Babylon by Roman times, then to Fostat, then Cairo, and lastly now to Abbasiyeh and Kubkeh, altogether a shift of 18 miles in 8,000 years.\n\n4. Archaeological Results:\n\nAfter the shrine of Apis the next oldest center is that of Ptah, founded by Mena. This was recently cleared in yearly sections by the British School, finding principally sculptures of the XVIIIth and XIXth Dynasties. The account of the north gate given by Herodotus, that it was built by Amenemhat III, has been verified by finding his name on the lintel. An immense sphinx of alabaster 26 ft. long has also been found. To the East of this was the temple of the foreign quarter, the temple of King Proteus in Greek accounts, where foreign pottery and terra cotta heads have been found. Other temples that are known to have existed in Memphis are those of Hathor, Neit, Amen, Imhotep, Isis, Osiris-Sokar, Khnumu, Bastel, Tahuti, Anubis and Sebek.\n\nA large building of King Siamen (XXIst Dynasty) has been found South of the Ptah temple. To the North of the great temple lay the fortress, and in it the palace mound of the XXVIth Dynasty covered two acres. It has been completely cleared, but the lower part is still to be examined. The north end of it was at least 90 ft. high, of brickwork, filled up to half the height by a flooring raised on cellular brickwork. The great court was about 110 ft. square, and its roof was supported by 16 columns 45 ft. high.\n\nThe principal sights of Memphis now are the great colossus of Rameses II, the lesser colossus of the same, and the immense alabaster sphinx. The cemetery of the city is the most important in Egypt; it lies 2 miles to the West on the desert, and is known as Saqqareh, from So-kar, the god of the dead.\n\nSee SAQQAREH.\n\nW. M. Flinders Petrie",
@@ -4991,6 +5549,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "METHEG-AMMAH"
+  },
+  {
+   "id": 5946,
+   "term": "Mezobaite(므소바 사람)",
+   "definition": "me-zo'-ba-it (ha-metsbhayah): The designation of Jaasiel, one of David's heroes (1Ch 11:47).",
+   "definition_ko": "므소바 사람(히브리어 '함므초바야'). 다윗의 용사 가운데 하나인 야아시엘을 가리키는 이름(역대상 11:47).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "MEZOBAITE"
   },
   {
    "id": 5963,
@@ -5128,6 +5695,15 @@
    "isbe_key": "MOLADAH"
   },
   {
+   "id": 6067,
+   "term": "Moloch(몰록)",
+   "definition": "mo'-lok: A deity of the Ammonites, like the planet Saturn, a representative of the sun-god in the particular aspect of a god of time.\n\nSee ASTROLOGY, 8; MOLECH.",
+   "definition_ko": "몰록. 암몬 사람의 신으로, 토성처럼 시간의 신이라는 특별한 면에서 태양신을 대표한다. 점성술 8; 몰렉 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MOLOCH"
+  },
+  {
    "id": 6091,
    "term": "Moresheth-Gath(모레셋)",
    "definition": "mo'-resh-eth-gath, mo-resh'-eth-gath (moresheth gath, \"inheritance or possession of Gath\"; Septuagint kleronomias Geth): A place mentioned only in Mic 1:14. It must have been in the vicinity of Gath as the meaning of the name would indicate, and was the home of the prophet Micah (Mic 1:1; Jer 26:18). It was probably in the vicinity of Mareshah (Mic 1:15). Jerome, in his preface to his work on Micah, places it a little to the East of Eleutheropolis (Beit Jibrin), and it would be natural to find it there if the latter place was Gath as some think. Robinson (BR, II, 68) found ruins of a village between one and two miles East of Beit Jibrin. It must have been among the foot-hills of Judah between the hill country and the Philistine plain on the route from Jerusalem to Lachish, Gaza and Egypt. Mareshah was certainly in that region, and the prophecy of Micah mentions towns and villages in the Shephelah and the Philistine country as though they were familiar to him (see HGHL and G. A. Smith, \"Micah,\" in his Minor Prophets).\n\nH. Porter",
@@ -5254,6 +5830,15 @@
    "isbe_key": "NAPHOTH-DOR"
   },
   {
+   "id": 6233,
+   "term": "Naum(나훔)",
+   "definition": "na'-um: the King James Version form, NAHUM (which see), the name of an ancestor of Jesus (Lu 3:25).",
+   "definition_ko": "나훔(나움). 흠정역의 표기로 나훔(해당 항목을 보라)을 가리키며, 예수의 조상의 이름이다(누가복음 3:25).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "NAUM"
+  },
+  {
    "id": 6239,
    "term": "Nazareth(나사렛)",
    "definition": "naz'-a-reth (Nazaret, Nazareth, and other forms):\n\n1. Notice Confined to the New Testament:\n\nA town in Galilee, the home of Joseph. and the Virgin Mary, and for about 30 years the scene of the Saviour's life (Mt 2:23; Mr 1:9; Lu 2:39,51; 4:16, etc.). He was therefore called Jesus of Nazareth, although His birthplace was Bethlehem; and those who became His disciples were known as Nazarenes. This is the name, with slight modification, used to this day by Moslems for Christians, Nacara--the singular being Nacrany.\n\nThe town is not named in the Old Testament, although the presence of a spring and the convenience of the site make it probable that the place was occupied in old times. Quaresimus learned that the ancient name was Medina Abiat, in which we may recognize the Arabic el-Medinat el-baidtah, \"the white town.\" Built of the white stone supplied by the limestone rocks around, the description is quite accurate. There is a reference in Mishna (Menachoth viii.6) to the \"white house of the hill\" whence wine for the drink offering was brought. An elegy for the 9th of Abib speaks of a \"course\" of priests settled in Nazareth. This, however, is based upon an ancient midhrash now lost (Neubauer, Geogr. du Talmud, 82, 85, 190; Delitzsch, Ein Tag in Capernaum, 142). But all this leaves us still in a state of uncertainty.\n\n2. Position and Physical Features:\n\nThe ancient town is represented by the modern en-Nacirah, which is built mainly on the western and northwestern slopes of a hollow among the lower hills of Galilee, just before they sink into the plain of Esdraelon. It lies about midway between the Sea of Galilee and the Mediterranean at Haifa. The road to the plain and the coast goes over the southwestern lip of the hollow; that to Tiberias and Damascus over the heights to the Northeast. A rocky gorge breaks down southward, issuing on the plain between two craggy hills. That to the West is the traditional Hill of Precipitation (Lu 4:29). This, however, is too far from the city as it must have been in the days of Christ. It is probable that the present town occupies pretty nearly the ancient site; and the scene of that attempt on Jesus' life may have been the cliff, many feet in height, not far from the old synagogue, traces of which are still seen in the western part of the town. There is a good spring under the Greek Orthodox church at the foot of the hill on the North. The water is led in a conduit to the fountain, whither the women and their children go as in old times, to carry home in their jars supplies for domestic use. There is also a tiny spring in the face of the western hill. To the Northwest rises the height on which stands the sanctuary, now in ruins, of Neby Sa`in. From this point a most beautiful and extensive view is obtained, ranging on a clear day from the Mediterranean on the West to the Mountain of Bashan on the East; from Upper Galilee and Mt. Hermon on the North to the uplands of Gilead and Samaria on the South The whole extent of Esdraelon is seen, that great battlefield, associated with so many heroic exploits in Israel's history, from Carmel and Megiddo to Tabor and Mt. Gilboa.\n\n3. Present Inhabitants:\n\nThere are now some 7,000 inhabitants, mainly Christian, of whom the Greek Orthodox church claims about 3,000. Moslems number about 1,600. There are no Jews. It is the chief market town for the pastoral and agricultural district that lies around it.\n\n4. Labors of Jesus:\n\nIn Nazareth, Jesus preached His first recorded sermon (Lu 4:16), when His plainness of speech aroused the homicidal fury of His hearers. \"He did not many mighty works there because of their unbelief\" (Mt 13:58). Finding no rest or security in Nazareth, He made His home in Capernaum. The reproach implied in Nathanael's question, \"Can any good thing come out of Nazareth?\" (Joh 1:46), has led to much speculation. By ingenious emendation of the text Cheyne would read, \"Can the Holy One proceed from Nazareth?\" (EB, under the word). Perhaps, however, we should see no more in this than the acquiescence of Nathanael's humble spirit in the lowly estimate of his native province entertained by the leaders of his people in Judea.\n\n5. Later History:\n\nChristians are said to have first settled here in the time of Constantine (Epiphanius), whose mother Helena built the Church of the Annunciation. In crusading times it was the seat of the bishop of Bethscan. It passed into Moslem hands after the disaster to the Crusaders at Chattin] (1183). It was destroyed by Sultan Bibars in 1263. In 1620 the Franciscans rebuilt the Church of the Annunciation, and the town rose again from its ruins. Here in 1799 the French general Junot was assailed by the Turks. After his brilliant victory over the Turks at Tabor, Napoleon visited Nazareth. The place suffered some damage in the earthquake of 1837.\n\nProtestant Missions are now represented in Nazareth by agents of the Church Missionary Society, and of the Edinburgh Medical Missionary Society.\n\nW. Ewing",
@@ -5335,6 +5920,15 @@
    "isbe_key": "NEPHTOAH"
   },
   {
+   "id": 6298,
+   "term": "Nergal(네르갈)",
+   "definition": "nar'-gal (nereghal): A Babylonian deity, identified with the planet Mars, and worshipped at Cutha (compare 2Ki 17:30).\n\nSee BABYLONIA AND ASSYRIA, RELIGION OF.",
+   "definition_ko": "네르갈(히브리어 '네레갈'). 바벨론의 신으로, 화성과 같게 여겨졌고 구다에서 섬겨졌다(열왕기하 17:30과 비교하라). 바벨로니아와 앗수르의 종교 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "NERGAL"
+  },
+  {
    "id": 6306,
    "term": "Netaim(느다임)",
    "definition": "na'-ta-im, ne'-ta-im, ne-ta'-im neTa`im; Codex Vaticanus Azaeim; Codex Alexandrinus Ataeim): In 1Ch 4:23 the King James Version reads \"those that dwell among plants and hedges,\" the Revised Version (British and American) \"the inhabitants of Netaim and Gederah.\" The latter may be taken as correct. Gederah was in the Judean Shephelah. Here also we should seek for Netaim; but no likely identification has yet been suggested.",
@@ -5360,6 +5954,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "NEZIB"
+  },
+  {
+   "id": 6331,
+   "term": "Nibhaz(닙하스)",
+   "definition": "nib'-haz (nibhchaz): Given as the name of an idol of the Avvites, introduced by them into Samaria (2Ki 17:31), but otherwise unknown. The text is supposed to be corrupt.",
+   "definition_ko": "닙하스(히브리어 '니브하즈'). 아와 사람들의 우상 이름으로, 그들이 사마리아에 들여왔다고 한다(열왕기하 17:31). 그 밖에는 알려져 있지 않다. 본문이 변질되었다고 여겨진다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "NIBHAZ"
   },
   {
    "id": 6332,
@@ -5414,6 +6017,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "NINEVEH"
+  },
+  {
+   "id": 6353,
+   "term": "Ninevites(니느웨 사람들)",
+   "definition": "nin'-e-vits (Nineu(e)itai): Only in Lu 11:30. The parallel passage (Mt 12:41), with Lu 11:32, has the fuller form, \"men of Nineveh,\" which gives the meaning.",
+   "definition_ko": "니느웨 사람들(헬라어 '니네우이타이'). 누가복음 11:30에만 나온다. 나란한 대목(마태복음 12:41)과 누가복음 11:32에는 뜻을 드러내는 더 온전한 꼴인 「니느웨 사람들」이 있다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "NINEVITES"
   },
   {
    "id": 6359,
@@ -5542,6 +6154,33 @@
    "isbe_key": "OPHRAH"
   },
   {
+   "id": 6528,
+   "term": "Oreb(스엡)",
+   "definition": "In 2 Esdras 2:33 the King James Version for Mt. HOREB (which see; so the Revised Version (British and American)).",
+   "definition_ko": "호렙. 에스드라 2서 2:33에서 흠정역이 호렙 산(해당 항목을 보라)을 이렇게 적는다(영국·미국 개역판도 호렙).",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "OREB"
+  },
+  {
+   "id": 6541,
+   "term": "Osee(호세아)",
+   "definition": "o'-ze, o'-se (Hosee): the King James Version in Ro 9:25; the prophet Hosea (thus the Revised Version (British and American)).",
+   "definition_ko": "호세아(오세). 로마서 9:25 흠정역의 표기. 선지자 호세아(영국·미국 개역판도 이렇게 적는다).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "OSEE"
+  },
+  {
+   "id": 6575,
+   "term": "Ozni(오스니 족속)",
+   "definition": "oz'-ni ('ozni, \"my hearing,\" or \"my ear\"): A \"son\" of Gad (Nu 26:16) equals \"Ezbon\" of Ge 46:16 (compare 1Ch 7:7).",
+   "definition_ko": "오스니(히브리어 '오즈니', 「나의 들음」 또는 「나의 귀」). 갓의 「아들」(민수기 26:16). 창세기 46:16의 「에스본」과 같다(역대상 7:7과 비교하라).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "OZNI"
+  },
+  {
    "id": 6583,
    "term": "Paddan-Aram(밧단아람)",
    "definition": "pad'-an-a'-ram or p.-ar'-am (paddan 'aram; Septuagint Mesopotamia tes Surias; the King James Version Padan-aram): In Ge 48:7, Paddan stands alone, but as the Septuagint, Sam, and Peshitta read \"Aram\" also, it must in this verse have dropped out of the Massoretic Text. In the time of Abraham, padanu occurs on the Babylonian contract-tablets as a land measure, to which we may compare the Arabic feddan or \"ox-gang.\" In the Assyrian syllabaries it is the equivalent of iklu, \"a field,\" so that Paddan-aram would mean \"the field of Aram,\" and with this we may compare Ho 12:12 (Hebrew 12:13) and the use of the Hebrew sadheh in connection with Moab and Edom (Jud 5:4; Ru 1:6).\n\nFurthermore, [`padanu] and harranu are given as synonyms with the meaning of \"road.\"\n\nPaddan-aram occurs only in the Priestly Code (P), but it corresponds to the \"Haran\" of the older documents. The versions agree in translating both as Mesopotamia, and identify with the home of the patriarchs and the scene of Jacob's exile the district of Haran to the East of the Upper Euphrates valley. More in harmony with the length of Jacob's flight, as indicated by the time given (Ge 31:22,23), is Harran-el-`Awamid, an ancient site 10 miles to the East of Damascus, which satisfies all the demands of history.\n\nSee ARAM.\n\nW .M. Christie",
@@ -5551,6 +6190,15 @@
    "isbe_key": "PADDAN-ARAM"
   },
   {
+   "id": 6584,
+   "term": "Paddle(삽)",
+   "definition": "pad'-'-l (yathedh): De 23:13 (Hebrew 14), the Revised Version margin \"shovel.\"",
+   "definition_ko": "삽(히브리어 '야테드'). 신명기 23:13(히브리어 성경 14절). 개역판 난외는 「삽」.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PADDLE"
+  },
+  {
    "id": 6588,
    "term": "Pai(바우)",
    "definition": "pa'-i (pa`i; Phogor): The royal city of Hadad or Hadar, king of Edom (1Ch 1:50). The name is given as \"Pau\" (pa`u) in Ge 36:39. There is no indication of its position. It is not identified.",
@@ -5558,6 +6206,24 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "PAI"
+  },
+  {
+   "id": 6598,
+   "term": "Palestina(블레셋 땅)",
+   "definition": "pal-es-ti'-na (pelesheth): Ex 15:14; Isa 14:29,31 the King James Version; changed in the Revised Version (British and American) to PHILISTIA (which see).",
+   "definition_ko": "블레셋(팔레스티나; 히브리어 '펠레셋'). 출애굽기 15:14; 이사야 14:29, 31 흠정역. 영국·미국 개역판은 「블레셋」(해당 항목을 보라)으로 바꾸었다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PALESTINA"
+  },
+  {
+   "id": 6604,
+   "term": "Palmer-Worm(순례벌레(메뚜기 유충) · 자벌레)",
+   "definition": "pam'-er-wurm (gazam; Septuagint kampe (Am 4:9; Joe 1:4; 2:25)): \"Palmer-worm\" means \"caterpillar,\" but the insect meant is probably a kind of locust.\n\nSee INSECTS; LOCUST.",
+   "definition_ko": "팥중이(자벌레; 히브리어 '가잠'; 칠십인역 '캄페', 아모스 4:9; 요엘 1:4; 2:25). 「팔머벌레」는 「애벌레」를 뜻하지만, 가리키는 곤충은 아마 메뚜기의 한 종류일 것이다. 곤충; 메뚜기 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PALMER-WORM"
   },
   {
    "id": 6609,
@@ -5713,6 +6379,15 @@
    "isbe_key": "PETHOR"
   },
   {
+   "id": 6790,
+   "term": "Phares(베레스)",
+   "definition": "fa'-rez (Phares): the King James Version; Greek form of \"Perez\" (thus the Revised Version (British and American)) (Mt 1:3; Lu 3:33).",
+   "definition_ko": "베레스(헬라어 '파레스'). 흠정역의 표기. 「베레스」의 헬라어 꼴(마태복음 1:3; 누가복음 3:33).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "PHARES"
+  },
+  {
    "id": 6796,
    "term": "Pharpar(바르발)",
    "definition": "far'-par (parpar; Septuagint: Codex Vaticanus Apharpha; Codex Alexandrinus Pharphara): A river of Damascus, mentioned in 2Ki 5:12, along with the Abana or Amana.e and James, Psalms of Solomon. xliv ff; Nicolas. Doctrines religieuses des juifs, 48 ff. See ABANAH.",
@@ -5785,6 +6460,15 @@
    "isbe_key": "PI-HAHIROTH"
   },
   {
+   "id": 6854,
+   "term": "Piece of Gold(금 조각)",
+   "definition": "The word \"pieces\" is supplied in 2Ki 5:5 (story of Naaman), \"6,000 pieces of gold,\" where the Revised Version margin more correctly suggests \"shekels\" (compare 1Ki 10:16).\n\nSee MONEY.",
+   "definition_ko": "금 조각. 「조각」이라는 말은 열왕기하 5:5(나아만 이야기)의 「금 육천 개」에서 덧붙인 것이며, 개역판 난외는 더 바르게 「세겔」을 제안한다(열왕기상 10:16과 비교하라). 돈 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PIECE OF GOLD"
+  },
+  {
    "id": 6885,
    "term": "Pisgah(비스가)",
    "definition": "piz'-ga (ha-picgah; Phasga, to lelaxeumenon, he laxeute): This name, which has always the definite article, appears only in combination either with ro'sh, \"head,\" \"top,\" or 'ashdoth, not translated in the King James Version save in De 4:49, where it is rendered \"springs\" the Revised Version (British and American) uniformly \"slopes,\" the Revised Version margin \"springs.\"\n\nPisgah is identified with Nebo in De 34:1; compare 3:27. \"The top of Pisgah, which looketh down upon the desert\" marks a stage in the march of the host of Israel (Nu 21:20). Hither Balak brought Balaam to the field of Zophim (Nu 23:14). Here Moses obtained his view of the Promised Land, and died. See NEBO. Many scholars (e.g. Buhl, GAP, 122; Gray, \"Numbers,\" ICC, 291) take Pisgah as the name applying to the mountain range in which the Moab plateau terminates to the West, the \"top\" or \"head\" of Pisgah being the point in which the ridge running out westward from the main mass culminates. The summit commands a wide view, and looks down upon the desert. The identification is made surer by the name Tal'at es-Sufa found here, which seems to correspond with the field of Zophim.\n\n'Ashdoth is the construct plural of 'ashedhah (singular form not found), from 'eshedh, \"foundation,\" \"bottom,\" \"lower part\" (slope); compare Assyrian ishdu, \"foundation.\" Some would, derive it from Aramaic 'ashadh, \"to pour,\" whence \"fall\" or \"slope\" (OHL, under the word). Ashdoth-pisgah overlooked the Dead Sea from the East (De 3:17; 4:49; Jos 12:3; 13:20). There can be no reasonable doubt that Ashdoth-pisgah signifies the steep slopes of the mountain descending into the contiguous valleys.\n\nIt is worthy of note that Septuagint does not uniformly render Pisgah by a proper name, but sometimes by a derivative of laxeuo, \"to hew\" or \"to dress stone\" (Nu 21:20; 23:14; De 3:27; 4:49). Jerome (Onomasticon, under the word Asedoth) gives abscisum as the Latin equivalent of Fasga. He derives Pisgah from pacagh, which, in new Hebrew, means \"to split,\" \"to cut off.\" This suggests a mountain the steep sides of which give it the appearance of having been \"cut out.\" This description applies perfectly to Jebel Neba as viewed from the Dead Sea.\n\nW. Ewing",
@@ -5839,6 +6523,15 @@
    "isbe_key": "PTOLEMAIS"
   },
   {
+   "id": 7081,
+   "term": "Punites(부니 종족)",
+   "definition": "pu'-nits (puni, probably \"dark\"): Descendants of Puvah, of the tribe of Issachar (Nu 26:23; compare Ge 46:13; Jud 10:1; 1Ch 7:1).",
+   "definition_ko": "부니 종족(히브리어 '푸니', 아마 「어두운」). 잇사갈 지파 부와의 자손(민수기 26:23; 창세기 46:13; 사사기 10:1; 역대상 7:1과 비교하라).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "PUNITES"
+  },
+  {
    "id": 7082,
    "term": "Punon(부논)",
    "definition": "pu'-non (punon): A desert camp of the Israelites, the second after leaving Mt. Hor (Nu 33:42,43). Eusebius (Onom 299 85; 123 9) mentions an Idumean village, North of Petra, in the desert, where convicts were mining copper, called Phinon or Phainon. These are doubtless identical.\n\nSee WANDERINGS OF ISRAEL.",
@@ -5864,6 +6557,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "PUTEOLI"
+  },
+  {
+   "id": 7099,
+   "term": "Puthites(붓 종족)",
+   "definition": "pu'-thits (puthi, \"simple\"; the King James Version Puhites): One of the families of Kiriath-jearim, grandchildren of Caleb (1Ch 2:50,53).",
+   "definition_ko": "붓 종족(히브리어 '푸티', 「단순한」; 흠정역 부히 종족). 기럇여아림 족속 가운데 하나로 갈렙의 손자들(역대상 2:50, 53).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "PUTHITES"
   },
   {
    "id": 7133,
@@ -5893,6 +6595,15 @@
    "isbe_key": "RACAL"
   },
   {
+   "id": 7152,
+   "term": "Ragau(르우)",
+   "definition": "ra'-go (Rhagau (Westcott-Hort): the King James Version; Greek form of \"Reu\" (thus, the Revised Version (British and American)) (Lu 3:35).",
+   "definition_ko": "르우(헬라어 '라가우'). 흠정역의 표기. 「르우」의 헬라어 꼴(누가복음 3:35).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "RAGAU"
+  },
+  {
    "id": 7170,
    "term": "Rakkath(락갓)",
    "definition": "rak'-ath (raqqath; Codex Vaticanus Omathadaketh; Codex Alexandrinus Rhekkath): The Greek is obviously the result of confusing the two names Rakkath and Hammath, taking \"r\" in the former for \"d\". Rakkath was one of the fortified cities in Naphtali (Jos 19:35). It is named between Hammath and Chinnereth. Hammath is identified with the hot baths to the South of Tiberias. There are traces of ancient fortifications here. The rabbis think that Tiberias was built on the site of Rakkath. Certain it is that Herod's town was built upon an ancient site, the graves of the old inhabitants being disturbed in digging the new foundations (Neubauer, Geog. du Talmud, 208).\n\nW. Ewing",
@@ -5900,6 +6611,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "RAKKATH"
+  },
+  {
+   "id": 7176,
+   "term": "Rama(라마)",
+   "definition": "ra'-ma (Rhama): the King James Version; Greek form of RAMAH (which see) (Mt 2:18).",
+   "definition_ko": "라마(헬라어 '라마'). 흠정역의 표기. 라마(해당 항목을 보라)의 헬라어 꼴(마태복음 2:18).",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "RAMA"
   },
   {
    "id": 7177,
@@ -6172,6 +6892,15 @@
    "isbe_key": "SALIM"
   },
   {
+   "id": 7496,
+   "term": "Salmanasar(살만에셀)",
+   "definition": "sal-ma-na'-sar (2 Esdras 13:40) = SHALMANESER (which see).",
+   "definition_ko": "살만에셀(에스드라 2서 13:40). 살만에셀(해당 항목을 보라)과 같다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SALMANASAR"
+  },
+  {
    "id": 7504,
    "term": "Salt, City of(소금 성읍)",
    "definition": "(`ir ha-melach; Codex Alexandrinus hai pol(e)is halon): One of the six cities in the wilderness of Judah mentioned between Nibshan and Engedi (Jos 15:62). The site is very uncertain. The large and important Tell el-Milch (i.e. \"the salt hill\"), on the route from Hebron to Akaba, is possible.",
@@ -6242,6 +6971,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SARID"
+  },
+  {
+   "id": 7572,
+   "term": "Saron(사론)",
+   "definition": "sa'-ron, (Saron): the King James Version; Greek form of Sharon (Ac 9:35).",
+   "definition_ko": "사론(헬라어 '사론'). 흠정역의 표기. 사론의 헬라어 꼴(사도행전 9:35).",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "SARON"
   },
   {
    "id": 7635,
@@ -6406,6 +7144,15 @@
    "isbe_key": "SHAHAZUMAH"
   },
   {
+   "id": 7809,
+   "term": "Shambles(시장)",
+   "definition": "sham'-b'-lz (makellon): A slaughter-house; then a butcher's stall, meat-market. The word is once used in the New Testament in 1Co 10:25.",
+   "definition_ko": "시장(헬라어 '마켈론'). 도살장, 이어 푸줏간, 고기 시장. 신약에는 고린도전서 10:25에 한 번 나온다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SHAMBLES"
+  },
+  {
    "id": 7817,
    "term": "Shamir (1)(사밀)",
    "definition": "sha'-mer (shamir; Sameir):\n\n(1) Mentioned along with Jattir and Socoh (Jos 15:48) as one of the cities of Judah in the hill country. Possibly it is Khirbet (or Umm) Somerah, 2,000 ft. above sea-level, a site with ancient walls, caves, cisterns and tombs not far West of Debir (edh Dhatheriyeh) and 2 miles North of Anab (`Anab) (Palestine Exploration Fund, III, 262, 286, Sh XX).\n\n(2) A place in the hill country of Ephraim (Jud 10:1) from which came \"Tola, the son of Pual, a man of Issachar,\" who judged Israel 23 years; he died and was buried there. It is an attractive theory (Schwartz) which would identify the place with the semi-fortified and strongly-placed town of Sanur on the road from Nablus to Jenin. A local chieftain in the early part of the last century fortified Sanur and from there dominated the whole district. That Sanur could hardly have been within the bounds of Issachar is an objection, but not necessarily a fatal one. It is noticeable that the Septuagint's Codex Alexandrinus has Samareia, for Shamir (Palestine Exploration Fund, II, Sh XI).\n\nE. W. G. Masterman",
@@ -6478,6 +7225,15 @@
    "isbe_key": "SHECHEM"
   },
   {
+   "id": 7869,
+   "term": "Shechemites(세겜 자손)",
+   "definition": "she'-kem-its (hashikhmi; Suchemei): The descendants of Shechem the son of Gilead, a clan of Eastern Manasseh (Nu 26:31; Jos 17:2).",
+   "definition_ko": "세겜 종족(히브리어 '핫쉬크미'; 쉬케메이). 길르앗의 아들 세겜의 자손으로, 동쪽 므낫세의 한 가문(민수기 26:31; 여호수아 17:2).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SHECHEMITES"
+  },
+  {
    "id": 7873,
    "term": "Sheep Gate(양문)",
    "definition": "(sha`ar ha-tso'-n (Ne 3:1,32; 12:39)): One of the gates of Jerusalem, probably near the northeast corner. See JERUSALEM. For the \"sheep gate\" of Joh 5:2, see BETHESDA; SHEEP MARKET.",
@@ -6485,6 +7241,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SHEEP GATE"
+  },
+  {
+   "id": 7874,
+   "term": "Sheep Market(양문)",
+   "definition": "(Joh 5:2, the Revised Version (British and American) \"sheep gate\"): The Greek (he probatike) means simply something that pertains to sheep.\n\nSee BETHESDA; SHEEP GATE.",
+   "definition_ko": "양 시장(요한복음 5:2, 영국·미국 개역판 「양문」). 헬라어('헤 프로바티케')는 그저 양에 관련된 무엇을 뜻한다. 베데스다; 양문 항목을 보라.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "SHEEP MARKET"
   },
   {
    "id": 7897,
@@ -6503,6 +7268,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SHEN"
+  },
+  {
+   "id": 7911,
+   "term": "Shenazar(스나살)",
+   "definition": "she-na'-zar: the King James Version = the Revised Version (British and American) SHENAZZAR (which see).",
+   "definition_ko": "스나살. 흠정역의 표기로 영국·미국 개역판의 스낫살(SHENAZZAR, 해당 항목을 보라)과 같다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SHENAZAR"
   },
   {
    "id": 7915,
@@ -6613,6 +7387,15 @@
    "isbe_key": "SHION"
   },
   {
+   "id": 7990,
+   "term": "Shitrai(시드래)",
+   "definition": "shit'-ri, shit-ra'-i, shit'-ra-i (shiTray): A Sharonite, David's chief shepherd (1Ch 27:29).",
+   "definition_ko": "시드래(히브리어 '쉬트라이'). 사론 사람으로 다윗의 목자장(역대상 27:29).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SHITRAI"
+  },
+  {
    "id": 7992,
    "term": "Shittim(싯딤)",
    "definition": "shit'-im (ha-shiTTim, \"the acacias\"; Sattein):\n\n(1) This marked the last camping-ground of Israel before they crossed the Jordan to begin the conquest of Western Palestine. Here it was that the people fell into the snare set for them by the satanic counsel of Balaam, who thus brought upon them greater evil than all his prohibited curses could have done (Nu 25:1 ff; 31:16). In Nu 33:49 it is called Abel-shittim. It was from Shittim that Joshua sent the spies to view out the land and Jericho (Jos 2:1); and from this point the host moved forward to the river (Jos 3:1). The place is mentioned by Micah in a passage of some difficulty (Jos 6:5): after \"what Balaam the son of Beor answered,\" perhaps some such phrase as \"remember what I did\" has fallen out. This would then be a reference to the display of divine power in arresting the flow of Jordan until the host had safely crossed. Josephus places the camp \"near Jordan where the city Abila now stands, a place full of palm trees\" (Ant., IV, viii, 1). Eusebius, Onomasticon says Shittim was near to Mt. Peor (Fogor). It may possibly be identical with Khirbet el-Kefrain, about 6 miles South of the Jordan, on the lip of Wady Seiseban, where there are many acacias.\n\n(2) In Joe 3:18 we read of the valley of Shittim which is to be watered by a fountain coming forth of the house of the Lord. It must therefore be sought on the West of the Jordan. The waters from the Jerusalem district are carried to the Dead Sea down the Wady which continues the Brook Kidron: Wady en-Nar. The acacia is found plentifully in the lower reaches of this valley, which may possibly be intended by the prophet.\n\nW. Ewing",
@@ -6631,6 +7414,15 @@
    "isbe_key": "SHOA"
   },
   {
+   "id": 8018,
+   "term": "Shrine(신당)",
+   "definition": "shrin (@naos]): In Ac 19:24 small models of temples for Diana.",
+   "definition_ko": "신당(헬라어 '나오스'). 사도행전 19:24에서 아데미(다이아나)를 위한 작은 신전 모형.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SHRINE"
+  },
+  {
    "id": 8023,
    "term": "Shual, Land of(수알)",
    "definition": "('erets shu`al; he Sogal): From their encampment at Michmash the Philistines sent out marauding bands, one going westward toward Beth-horon, another eastward, \"the way of the border that looketh down upon the valley of Zeboim.\" The pass to the South was held against them by Israel. The third party therefore went northward, turning \"unto the way that leadeth to Ophrah, unto the land of Shual\" (1Sa 13:17 f). Ophrah is probably identical with et-taiyibeh, a village which lies some 5 miles East of Beitin (Bethel). It is in this district therefore that the land of Shual must be sought, but no definite identification is possible.\n\nW. Ewing",
@@ -6638,6 +7430,24 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SHUAL, LAND OF"
+  },
+  {
+   "id": 8027,
+   "term": "Shuhite(수아 사람)",
+   "definition": "shoo'-hit (shuchi): Cognomen of Bildad, one of Job's friends (Job 2:11; 8:1; 18:1; 25:1; 42:9). The place referred to cannot be definitely located.\n\nSee BILDAD; SHUAH.",
+   "definition_ko": "수아 사람(히브리어 '슈히'). 욥의 친구 가운데 하나인 빌닷의 별칭(욥기 2:11; 8:1; 18:1; 25:1; 42:9). 가리키는 곳은 확실히 정할 수 없다. 빌닷; 수아 항목을 보라.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SHUHITE"
+  },
+  {
+   "id": 8029,
+   "term": "Shumathites(수맛 종족)",
+   "definition": "shoo'-math-its (~shumathi]): One of the families of Kiriath-jearim (1Ch 2:53).",
+   "definition_ko": "수맛 종족(히브리어 '슈마티'). 기럇여아림 족속 가운데 하나(역대상 2:53).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SHUMATHITES"
   },
   {
    "id": 8031,
@@ -6667,6 +7477,33 @@
    "isbe_key": "SHUSHAN"
   },
   {
+   "id": 8040,
+   "term": "Shuthelah; Shuthelahites(수델라 족속)",
+   "definition": "shoo-the'-la, shoo'-the-la, shoo-the'-la-hits, shoo'-the-la-hits (shuthalchi): A son of Ephraim (Nu 26:35,36; compare 1Ch 7:20,21), and his descendants.\n\nSee GENEALOGY.",
+   "definition_ko": "수델라; 수델라 종족(히브리어 '슈탈히'). 에브라임의 아들(민수기 26:35, 36; 역대상 7:20, 21과 비교하라)과 그 자손. 족보 항목을 보라.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SHUTHELAH; SHUTHELAHITES"
+  },
+  {
+   "id": 8042,
+   "term": "Sia; Siaha(시아)",
+   "definition": "si'-a, si'-a-ha (ci'a'): One of the remnant which returned from captivity (Ne 7:47; Ezr 2:44).T+>shuthalchi): A son of Ephraim (Nu 26:35,36; compare 1Ch 7:20,21), and his descendants.",
+   "definition_ko": "시아; 시아하(히브리어 '시아'). 포로에서 돌아온 남은 자 가운데 하나(느헤미야 7:47; 에스라 2:44). [원문 끝에 수델라 항목의 한 줄이 잘못 섞여 있어 옮기지 않았다.]",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SIA; SIAHA"
+  },
+  {
+   "id": 8043,
+   "term": "Sibbecai, Sibbechai(십브개)",
+   "definition": "sib'-e-ki, sib-e-ka'-i (cibbekhay): One of the valiant men in David's army (2Sa 21:18; 1Ch 11:29; 20:4; 27:11).",
+   "definition_ko": "십브개(히브리어 '십베카이'). 다윗 군대의 용사 가운데 하나(사무엘하 21:18; 역대상 11:29; 20:4; 27:11).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SIBBECAI, SIBBECHAI"
+  },
+  {
    "id": 8046,
    "term": "Sibraim(시브라임 · 시브론)",
    "definition": "sib-ra'-im, sib'-ra-im (cibhrayim; Codex Vaticanus Sebram; Codex Alexandrinus Sephram): A place named as on the boundary of Palestine in Ezekiel's ideal delineation, \"between the border of Damascus and the border of Hamath\" (Eze 47:16). It may possibly be represented by the modern Khirbet Sanbariyeh on the west bank of Nahr el-Chasbany, about 3 miles Southeast of `Abil.",
@@ -6683,6 +7520,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SIDON (2)"
+  },
+  {
+   "id": 8058,
+   "term": "Sidonians(시돈 사람들)",
+   "definition": "si-do'-ni-anz: Natives or inhabitants of Sidon (De 3:9; Jos 13:4,6; Jud 3:3; 1Ki 5:6).",
+   "definition_ko": "시돈 사람들. 시돈의 원주민 또는 주민(신명기 3:9; 여호수아 13:4, 6; 사사기 3:3; 열왕기상 5:6).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SIDONIANS"
   },
   {
    "id": 8072,
@@ -6712,6 +7558,15 @@
    "isbe_key": "SIN (2)"
   },
   {
+   "id": 8100,
+   "term": "Sina(시내)",
+   "definition": "si'-na: In Ac 7:38 the King James Version, the Revised Version (British and American) \"Sinai\" (which see).",
+   "definition_ko": "시내(시나). 사도행전 7:38 흠정역의 표기. 영국·미국 개역판은 「시내」(해당 항목을 보라).",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "SINA"
+  },
+  {
    "id": 8101,
    "term": "Sinai(호렙 산 · 시내 산)",
    "definition": "si'-ni, si'-na-i (cinay; Codex Alexandrinus Sina, Codex Vaticanus Seina):\n\n1. The Name:\n\nThe name comes probably from a root meaning \"to shine,\" which occurs in Syriac, and which in Babylonian is found in the name sinu for \"the moon.\" The old explanation, \"clayey,\" is inappropriate to any place in the Sinaitic desert, though it might apply to Sin (Eze 30:15,16) or Pelusium; even there, however, the applicability is doubtful. The desert of Sin (Ex 16:1; 17:1; Nu 33:11 f) lay between Sinai and the Gulf of Suez, and may have been named from the \"glare\" of its white chalk. But at Sinai \"the glory of Yahweh was like devouring fire on the top of the mount in the eyes of the children of Israel\" (Ex 24:17); and, indeed, the glory of the Lord still dyes the crags of Jebel Musa (the \"mountain of Moses\") with fiery red, reflected from its red granite and pink gneiss rocks, long after the shadows have fallen on the plain beneath. Sinai is mentioned, as a desert and a mountain, in 35 passages of the Old Testament. In 17 passages the same desert and mountain are called \"Horeb,\" or \"the waste.\" This term is chiefly used in Deuteronomy, though Sinai also occurs (De 33:2). In the other books of the Pentateuch, Sinai is the usual name, though Horeb also occurs (Ex 3:1; 17:6; 33:6), applying both to the \"Mount of God\" and to the desert of Rephidim, some 20 miles to the Northwest.\n\n2. Traditional Site:\n\nThe indications of position, in various passages of the Pentateuch, favor the identification with the traditional site, which has become generally accepted by all those explorers who have carefully considered the subject, though two other theories may need notice. Moses fled to the land of Midian (or \"empty land\"), which lay East of the Sinaitic peninsula (Nu 22:4,7; 25; 31), and when he wandered with his flocks to Horeb (Ex 3:1) he is said to have reached the west side of the desert. In another note (De 1:2) we read that the distance was \"eleven days' journey from Horeb by the way of Mount Seir unto Kadesh-barnea\" or Petra (see WANDERINGS OF ISRAEL), the distance being about 145 miles, or 14 miles of daily march, though Israel--with its flocks, women and children--made 16 marches between these points. Sinai again is described as being distant from Egypt \"three days' journey into the wilderness\" (Ex 5:3), the actual route being 117 miles, which Israel accomplished in 10 journeys. But, for Arabs not encumbered with families and herds, this distance could still be covered by an average march of 39 miles daily, on riding camels, or even, if necessary, on foot.\n\n3. Identification with Jebel Musa:\n\nThese distances will not, however, allow of our placing Sinai farther East than Jebel Musa. Lofty mountains, in all parts of the world, have always been sacred and regarded as the mysterious abode of God; and Josephus says that Sinai is \"the highest of all the mountains thereabout,\" and again is \"the highest of all the mountains that are in that country, and is not only very difficult to be ascended by men, on account of its vast. altitude but because of the sharpness of its precipices: nay, indeed, it cannot be looked at without pain of the eyes, and besides this it was terrible and inaccessible, on account of the rumor that passed about, that God dwelt there\" (Ant., II, xii, 1; III, v, 1). Evidently in his time Sinai was supposed to be one of the peaks of the great granitic block called et Tur--a term applying to any lofty mountain. This block has its highest peak in Jebel Katarin (so named from a legend of Catherine of Egypt), rising 8,550 ft. above the sea. Northeast of this is Jebel Musa (7,370 ft.), which, though less high, is more conspicuous because of the open plain called er Rachah (\"the wide\") to its Northwest. This plain is about 4 miles long and has a width of over a mile, so that it forms, as Dr. E. Robinson (Biblical Researches, 1838, I, 89) seems to have been the first to note, a natural camp at the foot of the mountain, large enough for the probable numbers (see EXODUS, 3) of Israel.\n\n4. Description of Jebel Musu:\n\nJebel Musa has two main tops, that to the Southeast being crowned by a chapel. The other, divided by gorges into three precipitous crags, has the Convent to its North, and is called Ras-es-Cafcafeh, or \"the willow top.\" North of the Convent is the lower top of Jebel edition Deir (\"mountain of the monastery\"). These heights were accurately determined by Royal Engineer surveyors in 1868 (Sir C. Wilson, Ordnance Survey of Sinai); and, though it is impossible to say which of the peaks Moses ascended, yet they are all much higher than any mountains in the Sinaitic desert, or in Midian. The highest tops in the Tih desert to the North are not much over 4,000 ft. Those in Midian, East of Elath, rise only to 4,200 ft. Even Jebel Serbal, 20 miles West of Sinai--a ridge with many crags, running 3 miles in length--is at its highest only 6,730 ft. above the sea. Horeb is not recorded to have been visited by any of the Hebrews after Moses, except by Elijah (1Ki 19:8) in a time of storm. In favor of the traditional site it may also be observed that clouds suddenly formed, or lasting for days (Ex 24:15 f), are apt to cap very lofty mountains. The Hebrews reached Sinai about the end of May (Ex 19:1) and, on the 3rd day, \"there were thunders and lightnings, and a thick cloud upon the mount\" (Ex 19:16). Such storms occur as a rule in the Sinaitic desert only in December and January, but thunderstorms are not unknown in Palestine even in May.\n\n5. Patristic Evidence:\n\nA constant tradition fixing the site is traceable back to the 4th century AD. Eusebius and Jerome (Onomasticon, under the word \"Choreb\") place Horeb near Paran, which in their time was placed (Onomasticon, under the word \"Raphidim\") in Wady Feiran. Anchorites lived at Paran, and at Sinai at least as early as 365 AD, and are noticed in 373 AD, and often later (Robinson, Biblical Res., 1838, I, 122-28); the monastery was first built for them by Justinian in 527 AD and his chapel still exists. Cosmas (Topogr. Christ.), in the same reign, says that Rephidim was then called Pharan, and (distinguishing Horeb from Sinai, as Eusebius also does) he places it \"about 6 miles from Pharan,\" and \"near Sinai.\" These various considerations may suffice to show that the tradition as to Horeb is at least as old as the time of Josephus, and that it agrees with all the indications given in the Old Testament.\n\n6. Lepsius' Theory:\n\nLepsius, it is true (Letters from Egypt, 1842-44), denying the existence of any unbroken tradition, and relying on his understanding of Cosmas, supposed Sinai to be the Jebel Serbal above mentioned, which lies immediately South of Wady Feiran. His main argument was that, visiting Sinai in March, he considered that the vicinity did not present sufficient water for Israel (Appendix B, 303-18). But, on this point, it is sufficient to give the opinion of the late F. W. Holland, based on the experience of four visits, in 1861, 1865, 1867-68.\n\nHe says (Recovery of Jerusalem, 524):\n\n\"With regard to water-supply there is no other spot in the whole Peninsula which is nearly so well supplied as the neighborhood of Jebel Musa. Four streams of running water are found there: one in Wady Leja; a second in Wady et Tl'ah which waters a succession of gardens extending more than 3 miles in length, and forms pools in which I have often had a swim; a third stream rises to the North of the watershed of the plain of er Rachah and runs West into Wady et Tl'ah; and a fourth, is formed by the drainage from the mountains of Umm Alawy, to the East of Wady Sebaiyeh and finds its way into that valley by a narrow ravine opposite Jebel edition Deir. In addition to these streams there are numerous wells and springs, affording excellent water throughout the whole of the granitie district. I have seldom found it necessary to carry water when making a mountain excursion, and the intermediate neighborhood of Jebel Masa would, I think, bear comparison with many mountain districts in Scotland with regard to its supply of water. There is also no other district in the Peninsula which affords such excellent pasturage.\"\n\nThis is important, as Israel encamped near Sinai from the end of May till April of the next year. There is also a well on the lower slope of Jebel Musa itself, where the ascent begins.\n\n7. Greene's Theory:\n\nAnother theory, put forward by Mr. Baker Greene (The Hebrew Migration from Egypt), though accepted by Dr. Sayce (Higher Cricitism, 1894, 268), appears likewise to be entirely untenable. Mr. Greene supposed Elim (Ex 15:27) to be Elath (De 2:8), now `Ailah at the head of the Gulf of `Akabah; and that Sinai therefore was some unknown mountain in Midian. But in this case Israel would in 4 days (see Ex 15:22,23,27) have traveled a distance of 200 miles to reach Elim, which cannot but be regarded as quite impossible for the Hebrews when accompanied by women, children, flocks and herds.\n\nC. R. Conder",
@@ -6728,6 +7583,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SIPHMOTH"
+  },
+  {
+   "id": 8126,
+   "term": "Sithri(시드리)",
+   "definition": "sith'-ri (cithri): A grandson of Kohath (Ex 6:22).",
+   "definition_ko": "시드리(히브리어 '시트리'). 고핫의 손자(출애굽기 6:22).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SITHRI"
   },
   {
    "id": 8127,
@@ -6766,6 +7630,15 @@
    "isbe_key": "SODOM"
   },
   {
+   "id": 8204,
+   "term": "Sop(적신 조각(빵조각))",
+   "definition": "sop (psomion): A thin, wafer-like piece of bread dipped into the common dish as a sort of improvised spoon, is thus designated in Joh 13:26 ff.\n\nSee MORSEL.",
+   "definition_ko": "적신 떡 조각(헬라어 '프소미온'). 공동의 그릇에 찍어 임시 숟가락처럼 쓰는 얇고 과자 같은 떡 조각. 요한복음 13:26 이하에서 이렇게 부른다. 조각 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SOP"
+  },
+  {
    "id": 8223,
    "term": "South(네게브 · 남방)",
    "definition": "south:\n\n(1) neghebh, according BDB from [?] naghabh, meaning \"to be dry,\" the word most often used, in the Revised Version (British and American) capitalized (South) in those places where it seems to denote a particular region, i.e. to the South of Judah.\n\n(2) yamin, \"right hand,\" \"right.\" The derived meaning, \"south,\" seems to imply an eastern posture in prayer in which the right hand is toward the South; compare Arabic yamin, \"right,\" and yemen, \"Yemen,\" a region in Southwestern Arabia.\n\n(3) teman, from the same root as (2) is often used for the south; also for the south wind (Ps 78:26; So 4:16).\n\n(4) yam, literally, \"sea\" (Ps 107:3).\n\n(5) darom, etymology doubtful (De 33:23; Eze 40:24).\n\n(6) midhbar, literally, \"desert\" (Ps 75:6, reading doubtful).\n\n(7) lips, \"south west wind\" (Ac 27:12).\n\n(8) mesembria, literally, \"mid-day\"; \"south\" (Ac 8:26); \"noon\" (Ac 22:6).\n\n(9) notos, \"south wind\" (Lu 12:55; Ac 27:13; 28:13); \"south\" (1 Macc 3:57; Mt 12:42; Lu 11:31; 13:29; Re 21:13).\n\nThe south wind is often referred to: see So 4:16; Job 37:9 (compare 9:9); Zec 9:14 (of Isa 21:1); Lu 12:55.\n\nOf the passages where South (neghebh) clearly refers to a particular region between Palestine and Sinai see: \"And Abraham journeyed, going on still toward the South\" (neghbah) (Ge 12:9; 13:1; De 1:7). We read of \"the South of the Jerahmeelites,\" \"the South of the Kenites\" (1Sa 27:10); \"the South of the Cherethites,\" \"the South of Caleb\" (1Sa 30:14); \"the South of Judah\" (2Ch 28:18); \"Ramoth of the South\" (1Sa 30:27).\n\nIn Ps 126:4, \"Turn again our captivity, O Yahweh, as the streams in the South,\" we have a figurative reference to the fact that, after a long period of drought, the dry watercourses are finally filled with rushing streams. The reference in Eze 20:46 f to \"the forest of the South\" is to a condition of things very different from that which exists today, though the region is not incapable of supporting trees if they are only planted and protected.\n\nAlfred Ely Day",
@@ -6784,6 +7657,15 @@
    "isbe_key": "SPAIN"
   },
   {
+   "id": 8311,
+   "term": "Steel(강철(구리))",
+   "definition": "stel: the Revised Version (British and American) substitutes \"brass\" for \"steel\" in 2Sa 22:35; Job 20:24; Ps 18:34; Jer 15:12, and \"steel\" for \"torches\" in Na 2:3.\n\nSee BRASS.",
+   "definition_ko": "강철. 영국·미국 개역판은 사무엘하 22:35; 욥기 20:24; 시편 18:34; 예레미야 15:12에서 「강철」 대신 「놋」을 넣고, 나훔 2:3에서는 「횃불」 대신 「강철」을 넣는다. 놋 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "STEEL"
+  },
+  {
    "id": 8379,
    "term": "Succoth (2)(숙곳)",
    "definition": "(cukkoth; Sokchoth (Ex 12:37; 13:20; Nu 33:5)): The first station of the Hebrews on leaving Rameses (see EXODUS). The word means \"booths.\" The distance from ETHAM (which see) suggests that the site may have lain in the lower part of Wady Tumeilat, but the exact position is unknown. This region seems possibly to have been called T-K-u by the Egyptians (see PITHOM). Brugsch and other scholars suppose this term to have been changed to Succoth by the Old Testament writer, but this is very doubtful, Succoth being a common Hebrew word, while T-K-u is Egyptian The Hebrew \"c\" does not appear ever to be rendered by \"t\" in Egyptian. The capital of the Sethroitic nome was called T-K-t (Pierret, Vocab. hieroglyph., 697), and this word means \"bread.\" If the region of T-K-u was near this town, it would seem to have lain on the shore road from Edom to Zoan, in which case it could not be the Succoth of the Exodus.\n\nC. R. Conder",
@@ -6791,6 +7673,24 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SUCCOTH (2)"
+  },
+  {
+   "id": 8382,
+   "term": "Sud",
+   "definition": "sud: The King James Version = the Revised Version (British and American) SUA (which see).",
+   "definition_ko": "수드. 흠정역의 표기로, 영국·미국 개역판의 수아(해당 항목을 보라)와 같다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SUD"
+  },
+  {
+   "id": 8387,
+   "term": "Sukkiim(숙 사람)",
+   "definition": "suk'-i-im (cukkiyim): Named in 2Ch 12:3 as a tribe that took part with Libyans and Cretans in the invasion of Judea by Shishak. The identification is uncertain.",
+   "definition_ko": "숙 사람(히브리어 '숙키임'). 역대하 12:3에서 시삭이 유다를 침입할 때 룹 사람(리비아 사람), 구스 사람과 함께한 부족으로 나온다(원문 「Cretans」). 누구인지는 확실하지 않다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SUKKIIM"
   },
   {
    "id": 8406,
@@ -6937,6 +7837,15 @@
    "isbe_key": "TAHATH (1)"
   },
   {
+   "id": 8485,
+   "term": "Tahchemonite(다그몬 사람)",
+   "definition": "ta-ke'-mo-nit, ta'-ke-mon-it (tachkemoni): Name of a family to which Jashobeam, the chief captain in David's army, belonged (2Sa 23:8; 1Ch 11:11). In 1 Chronicles it is \"Hachmonite.\"",
+   "definition_ko": "다그몬 사람(히브리어 '타흐케모니'). 다윗 군대의 군지휘관 두목 야소브암이 속한 가문의 이름(사무엘하 23:8; 역대상 11:11). 역대상에서는 「학몬 사람」이다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "TAHCHEMONITE"
+  },
+  {
    "id": 8486,
    "term": "Tahpanhes(다바네스)",
    "definition": "ta'-pan-hez, ta-pan'-hez (usually in the Old Testament tachpanchec; Septuagint Taphnas; Coptic, Taphnes): The various spellings of the Hebrew text are fairly well indicated in the King James Version by Tahapanes (Jer 2:16); Tahpanhes (Jer 43:7-9; 44:1; 46:14); Tehaphnehes (Eze 30:18), while an Egyptian queen (XXIst Dynasty) is named Tahpenes (1Ki 11:19,20). Tahpanhes was a city on the eastern frontier of Lower Egypt, represented today by Tell Defenneh, a desert mound lying some 20 miles Southwest from Pelusium (Biblical \"Sin\") and a little North of the modern Al-Kantarah (\"the bridge\"), marking the old caravan route from Egypt to Palestine, Mesopotamia and Assyria. Its Egyptian name is unknown, but it was called Daphnai, by the Greeks, and by the modern Arabs Def'neh. The site is now desolate, but it was a fertile district when watered by the Pelusiac branch of the Nile (compare Isa 19:6,7). Tahpanhes was so powerful that Jeremiah can say that it, with Memphis, has \"broken the crown\" of Israel's head (2:16), and Ezekiel can speak of its \"daughters\" (colonies or suburban towns), and names it with Heliopolis and Bubastis when the \"yokes Septuagint \"sceptres\") of Egypt\" shall be broken by Yahweh (30:18). In a later passage Jeremiah describes the flight of the Jews from their ruined capital to Tahpanhes after the death of Gedaliah (43:1-7) and prophesies that Nebuchadnezzar shall invade Egypt and punish it, establishing his throne upon the brick pavement (the King James Version \"kiln\") which is at the entry of Pharaoh's royal palace at Tahpanhes (Jer 43:8-11). He calls Tahpanhes as a witness to the desolation of the cities of Judah (Jer 44:1), but prophesies an equal destruction of Tahpanhes and other Egyptian cities (probably occupied by fugitive Jews) when Nebuchadnezzar shall smite them (Jer 46:14).\n\nThis invasion of Egypt by Nebuchadnezzar was for a long time strenuously denied (e.g. as late as 1889 by Kuenen, Historisch-critisch Onderzoek, 265-318); but since the discovery and publication (1878) of fragments of Nebuchadnezzar's annals in which he affirms his invasion of Egypt in his 37th year (568-567 BC), most scholars have agreed that the predictions of Jeremiah (43:9-13; 44:30) uttered shortly after 586 BC and of Ezekiel (29:19) uttered in 570 BC were fulfilled, \"at least in their general sense\" (Driver, Authority and Archaeology, 116). Three cuneiform inscriptions of Nebuchadnezzar were found by Arabs probably on or near this site. The excavation of Tahpanhes in 1886 by W. M. Flinders Petrie made it \"highly probable that the large oblong platform of brickwork close to the palace fort built at this spot by Psammetichus I, circa 664 BC, and now called Kasr Bint el-Yehudi, `the castle of the Jew's daughter,' is identical with the quadrangle `which is at the entry of Pharaoh's house in Tahpanhes' in which Jeremiah was commanded to bury the stones as a token that Nebuchadnezzar would spread his pavilion over them when he led his army into Egypt\" (ibid., 117). Josephus explicitly mentions that Nebuchadnezzar, when he captured Tahpanhes, carried off a Jewish contingent from that city (Ant., IX, vii). Dr. Petrie found that while a small fort had existed here since the Rameside era (compare Herodotus ii.17), yet the town was practically founded by Psammetichus I, continued prosperous for a century or more, but dwindled to a small village in Ptolemaic times. Many sealings of wine jars stamped with the cartouches of Psammetichus I and Amosis were found in situ. Tahpanhes being the nearest Egyptian town to Palestine, Jeremiah and the other Jewish refugees would naturally flee there (43:7). It is not at all unlikely that Nebuchadnezzar's invasion of Egypt was partly due to Egypt's favorable reception of these refugees.\n\nThe pottery found at Tahpanhes \"shows on the whole more evidence of Greeks than Egyptians in the place. .... Especially between 607-587 BC a constant intercourse with the Greek settlers must have been going on and a wider intercourse than even a Greek colony in Palestine would have produced. .... The whole circumstances were such as to give the best possible opportunity for the permeation of Greek words and Greek ideas among the upper classes of the Jewish exiles\" (Petrie, Nebesheh and Defenneh, 1888, 50). This was, however, only one of many places where the Greeks and Hebrews met freely in this century (see e.g. Duruy, History of Greece, II, 126-80; Cobern, Daniel, 301-307). A large foreign traffic is shown at Tahpanhes in which no doubt the Jews took part. Discoveries from the 6th century BC included some very finely painted pottery, \"full of archaic spirit and beauty,\" many amulets and much rich jewelry and bronze and iron weapons, a piece of scale armor, thousands of arrow heads, and three seals of a Syrian type. One of the few inscriptions prays the blessing of Neit upon \"all beautiful souls.\" There was also dug up a vast number of minute weights evidently used for weighing precious metals, showing that the manufacture of jewelry was carried on here on a large scale. One of the most pathetic and suggestive \"finds\" from this century, which witnessed the Babylonian captivity, consisted of certain curious figures of captives, carved in limestone, with their legs bent backward from their knees and their ankles and elbows bound together (Petrie, op. cit., chapters ix-xii).\n\nCamden M. Cobern",
@@ -6989,6 +7898,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "TARSUS"
+  },
+  {
+   "id": 8543,
+   "term": "Teil; Tree(테일나무(테레빈나무))",
+   "definition": "tel the King James Version Isa 6:13 = the Revised Version (British and American) TEREBINTH (which see).",
+   "definition_ko": "상수리나무(테일 나무). 흠정역 이사야 6:13의 표기로, 영국·미국 개역판의 테레빈나무(해당 항목을 보라)와 같다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "TEIL; TREE"
   },
   {
    "id": 8545,
@@ -7081,6 +7999,15 @@
    "isbe_key": "TERAH (2)"
   },
   {
+   "id": 8611,
+   "term": "Thara(데라)",
+   "definition": "tha'-ra, thar'-a (Thara): the King James Version; Greek form of \"Terah\" (thus, Lu 3:34 the Revised Version (British and American)).",
+   "definition_ko": "데라(헬라어 '다라'). 흠정역의 표기. 「데라」의 헬라어 꼴(누가복음 3:34; 영국·미국 개역판은 데라).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "THARA"
+  },
+  {
    "id": 8618,
    "term": "Thebez(데베스)",
    "definition": "the'-bez (tebhets, \"'brightness\"; Codex Vaticanus Thebes; Codex Alexandrinus Thaibais): A city in Mt. Ephraim which refused submission to Abimelech when he set up as king of Israel. After the reduction of Shechem he turned his arms against Thebez. There was a strong tower within the city--the citadel--into which all the inhabitants gathered for safety, climbing onto the roof of the tower. Abimelech incautiously venturing near the tower, a woman cast an upper millstone upon his head and broke his skull. Fearing the shame of perishing by the hand of a woman, he persuaded his armor-bearer to thrust him through (Jud 9:50). The incident is alluded to in 2Sa 11:21. Eusebius, Onomasticon places it 13 Roman miles from Neapolis (Nablus) on the road to Scythopolis (Beisan). There is no doubt that it is represented by Tubas. This is a village situated in a district of considerable fertility, about 10 miles from Nablus. There are many olive trees. The rain is captured and led to rockcut cisterns, whence the village draws its water-supply. According to the Samaritans the tomb of Neby Toba marks the grave of the patriarch Asher.\n\nW. Ewing",
@@ -7160,6 +8087,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "TIMNATH-HERES"
+  },
+  {
+   "id": 8693,
+   "term": "Timnite(딤나 사람)",
+   "definition": "tim'-nit (timni Thamnathaios): The father of Samson's wife, a native of Timnah (Jud 15:6).",
+   "definition_ko": "딤나 사람(히브리어 '팀니'; 탐나타이오스). 삼손의 아내의 아버지로, 딤나 출신(사사기 15:6).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "TIMNITE"
   },
   {
    "id": 8699,
@@ -7360,6 +8296,15 @@
    "isbe_key": "ZAANAN"
   },
   {
+   "id": 9177,
+   "term": "Zabulon(스불론)",
+   "definition": "zab'-u-lon (Zaboulon): Greek form of \"Zebulun\" of Mt 4:13,16; Re 7:8 the King James Version.",
+   "definition_ko": "스불론(헬라어 '자불론'). 마태복음 4:13, 15(원문 「16」)와 요한계시록 7:8 흠정역에 나오는 「스불론」의 헬라어 꼴.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "ZABULON"
+  },
+  {
    "id": 9190,
    "term": "Zair(사일)",
    "definition": "za'-ir (tsa`ir; Zeior): When he invaded Edom, we are told that Joram passed over to Zair and all his chariots with him (2Ki 8:21). In the parallel passage (2Ch 21:9), \"with his captains\" (`im sarayw) takes the place of \"to Zair\" (tsa`irah), probably a copyist's corruption. The place has not been identified. Some have thought that Mt. Seir is intended; others that it means the town of Zoar. Conder suggested ez-Zuweirah, Southeast of the Dead Sea. If Zoar lay in this direction, it is the way by which an invading army might enter Edom.",
@@ -7423,6 +8368,15 @@
    "isbe_key": "ZARETHAN"
   },
   {
+   "id": 9216,
+   "term": "Zartanah(사르다나)",
+   "definition": "zar-ta'-na, zar'-ta-na (tsarethanah): the King James Version in 1Ki 4:12 for \"Zarethan.\" The form is Zarethan with Hebrew locale.",
+   "definition_ko": "사르다나. 열왕기상 4:12 흠정역에서 「사르단」을 이렇게 적는다. 이 꼴은 히브리어 방향 어미가 붙은 사르단이다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ZARTANAH"
+  },
+  {
    "id": 9232,
    "term": "Zeboiim(스보임)",
    "definition": "ze-boi'-im (tsebhoyim; the Septuagint uniformly Sebo(e)im; the King James Version, Zeboim): One of the cities in the Vale of Siddim, destroyed with Sodom and Gomorrah. It is always mentioned next to Admah (Ge 10:19; 14:2,8; De 29:23; Ho 11:8). It is not to be confounded with Zeboim mentioned in 1Sa 13:18 and Ne 11:34. The site has not been positively identified, but must be determined by the general questions connected with the Vale of Siddim.\n\nSee SIDDIM, VALE OF.",
@@ -7466,6 +8420,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ZEMARAIM"
+  },
+  {
+   "id": 9267,
+   "term": "Zephonites(스본 족속)",
+   "definition": "ze'-fon-its, ze-fo'-nits (ha-tsphoni; ho Saphoni, Codex Alexandrinus omits): A family of Gadites descended from Zephon (Nu 26:15), who is called \"Ziphion\" in Ge 46:16.",
+   "definition_ko": "스본 종족(히브리어 '핫츠포니'; 호 사포니, 알렉산드리아 사본은 뺌). 스본(민수기 26:15)의 자손인 갓의 한 가문. 스본은 창세기 46:16에서 「시뵨」이라 불린다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ZEPHONITES"
   },
   {
    "id": 9268,
@@ -7556,6 +8519,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ZIPH (1)"
+  },
+  {
+   "id": 9314,
+   "term": "Ziphims(십 사람들)",
+   "definition": "zif'-imz: In title of Ps 54 the King James Version for the Revised Version (British and American) ZIPHITES (which see).",
+   "definition_ko": "십 사람들. 시편 54편 표제에서 흠정역이 영국·미국 개역판의 「십 사람」(해당 항목을 보라)을 이렇게 적는다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "ZIPHIMS"
   },
   {
    "id": 9325,
