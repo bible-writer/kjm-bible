@@ -1,11 +1,20 @@
 {
- "version": "1.132.0",
+ "version": "1.135.1",
  "date": "2026-09-19",
- "count": 1228,
+ "count": 1322,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
  "total_entries": 9349,
  "note": "지명DB·용어DB(isbeId)에 이어지는 항목만 담음(용어는 번역된 것부터 더함). id 는 ISBE 전체(total_entries, 넘겨주기 포함) 표제어 차례 번호 — 나중에 full 을 만들면 빠진 id 만 채운다. definition 은 영문 원문(본문 HTML 을 글로 — 문단은 빈 줄). definition_ko 는 하나씩 번역해 채운다(2026-09-18 kjm).",
  "entries": [
+  {
+   "id": 5,
+   "term": "Aaronites(아론 자손)",
+   "definition": "ar'-on-its (le-'aharon, literally, \"belonging to Aaron\"): A word used in the King James Version, but not in the revised versions, to translate the proper name Aaron in two instances where it. denotes a family and not merely a person (1Ch 12:27; 27:17). It is equivalent to the phrases \"sons of Aaron,\" \"house of Aaron,\" frequently used in the Old Testament. According to the books of Jos and Chronicles the \"sons of Aaron,\" were distinguished from the other Levites from the time of Joshua (e.g. Jos 21:4,10,13; 1Ch 6:54).",
+   "definition_ko": "아론 자손(히브리어 '레아하론', 문자적으로 「아론에게 속한」). 흠정역이 쓰고 개역판들은 쓰지 않은 말로, 고유명사 아론이 한 사람이 아니라 한 가문을 가리키는 두 곳에서 이렇게 옮겼다(역대상 12:27; 27:17 — 개역개정 「아론의 집」, 「아론 자손」). 구약에 자주 쓰이는 「아론의 자손」, 「아론의 집」이라는 말과 같은 뜻이다. 여호수아서와 역대기에 따르면 「아론의 자손」은 여호수아 때부터 다른 레위 사람과 구별되었다(보기: 여호수아 21:4, 10, 13; 역대상 6:54).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "AARONITES"
+  },
   {
    "id": 7,
    "term": "Ab (2)(압)",
@@ -23,6 +32,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "ABARIM"
+  },
+  {
+   "id": 17,
+   "term": "Abba(아바)",
+   "definition": "ab'-a (abba, 'abba', Hebraic-Chaldaic, \"Father\"): In Jewish and old-Christian prayers, a name by which God was addressed, then in oriental churches a title of bishops and patriarchs. So Jesus addresses God in prayer (Mt 11:25,26, 26:39,42, Lu 10:21; 22:42; 23:34, Joh 11:41; 12:27; 17:24,25). In Mr 14:36; Ro 8:15, and Ga 4:6 ho pater, is appended even in direct address, in an emphatic sense. Servants were not permitted to use the appellation in addressing the head of the house. See Delitzsch on Ro 8:15; compare G. Dalman, Gram. des jud.-palast. Aramaisch, etc., section 40, c. 3.\n\nJ. E. Harry",
+   "definition_ko": "아바(헬라어 '압바', 히브리·갈대아어 '압바', 「아버지」). 유대인과 옛 그리스도인의 기도에서 하나님을 부르는 이름이었고, 뒤에 동방 교회에서는 주교와 총대주교의 칭호가 되었다. 예수께서도 기도에서 하나님을 그렇게 부르셨다(마태복음 11:25, 26; 26:39, 42; 누가복음 10:21; 22:42; 23:34; 요한복음 11:41; 12:27; 17:24, 25). 마가복음 14:36; 로마서 8:15; 갈라디아서 4:6에서는 직접 부르는 말에서도 강조하는 뜻으로 '호 파테르'를 덧붙인다(개역개정 「아빠 아버지」). 종들은 집주인을 부를 때 이 호칭을 쓰지 못하였다. 로마서 8:15에 대한 델리취의 주석을 보라. G. 달만, 『유대·팔레스타인 아람어 문법』 40절 c. 3과 비교하라.\n\n(집필: J. E. Harry)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ABBA"
   },
   {
    "id": 24,
@@ -340,6 +358,24 @@
    "isbe_key": "AENON"
   },
   {
+   "id": 250,
+   "term": "Affinity(인척관계(사돈))",
+   "definition": "a-fin'-i-ti (chathan \"to join one-self\"): This term is used three times in the Old Testament:\n\n(1) in 1Ki 3:1, where we read that \"Solomon made affinity with Pharaoh King of Egypt\",\n\n(2) in 2Ch 18:1, where it is stated that Jehoshaphat \"joined affinity with Ahab,\" and\n\n(3) in Ezr 9:14, where it is asked \"Shall we .... join in affinity with the peoples that do these abominations?\" The Hebrew word thus rendered in the above three passages refers in each case to marriage alliances rather than to family or political relationships.\n\nSee MARRIAGE; FAMILY.\n\nW. W. Davies",
+   "definition_ko": "인척 관계(흠정역 「어피니티」; 히브리어 '하탄', 「스스로 결합하다」). 이 말은 구약에 세 번 쓰였다.\n\n(1) 열왕기상 3:1. 「솔로몬이 애굽의 왕 바로와 더불어 혼인 관계를 맺어」.\n\n(2) 역대하 18:1. 여호사밧이 「아합 가문과 혼인함으로 인척 관계를 맺었더라」.\n\n(3) 에스라 9:14. 「우리가 … 이 가증한 백성들과 통혼하오리이까」.\n\n이 세 곳에서 이렇게 옮겨진 히브리어는 모두 가족이나 정치 관계라기보다 혼인 동맹을 가리킨다.\n\n혼인; 가족 항목을 보라.\n\n(집필: W. W. Davies)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "AFFINITY"
+  },
+  {
+   "id": 286,
+   "term": "Ague(학질(열병))",
+   "definition": "a'-gu (qaddachath): In Le 26:16 the King James Version is one of the diseases threatened as a penalty for disobedience to the law. The malady is said to \"consume the eyes, and make the soul to pine away.\" The word means burning (Vulgate \"ardor\") and was probably intended to denote the malarial fever so common now both in the Shephelah and in the Jordan valley. In Septuagint the word used (ikteros) means jaundice, which often accompanies this fever. the Revised Version (British and American) translates it \"fever.\" See FEVER.",
+   "definition_ko": "학질·열병(흠정역 「에이그」; 히브리어 '카다하트'). 레위기 26:16에서 흠정역이 율법을 어긴 벌로 경고된 병 가운데 하나를 이렇게 옮겼다. 이 병은 「눈이 어둡고 생명이 쇠약하게」 한다. 이 낱말은 「불타는 것」을 뜻하며(불가타 「열」), 오늘날 세벨라와 요단 골짜기에 아주 흔한 말라리아 열병을 가리키려 한 것으로 보인다. 칠십인역에 쓰인 낱말('익테로스')은 황달을 뜻하는데, 황달은 이 열병에 흔히 따라온다. 영국·미국 개역판은 「열병」으로 옮긴다(개역개정도 「열병」). 열병 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "AGUE"
+  },
+  {
    "id": 297,
    "term": "Ahava(아하와 강가)",
    "definition": "a-ha'-va ('ahawa'): The river in Babylonia on the banks of which Ezra gathered together the Jews who accompanied him to Jerusalem. At this rendezvous the company encamped for three days to make preparation for the difficult and dangerous journey (Ezr 8:15 ff). On reviewing the people and the priests Ezra found no Levites among them; he therefore sent to Iddo, \"the chief at the place Casiphia,\" a request for ministers for the temple. A number of Levites with 220 Nethinim returned to the rendezvous with the deputation. Ezra had expressed to the king his faith in the protection of God; being, therefore, ashamed to ask for a military escort he proclaimed a fast to seek of God \"a straight way.\" To 12 priests Ezra assigned the care of the offering for the temple in Jerusalem. When all was ready the company \"departed from the river Ahava,\" and journeyed in safety to Jerusalem.\n\nThis river, apparently called after a town or district toward which it flowed (Ezr 8:15), remains unidentified, though many conjectures have been made. Rawlinson thinks it is the \"Is\" of Herodotus (i.79), now called \"Hit,\" which flowed past a town of the same name in the Euphrates basin, 8 days' journey from Babylon. Some identify the district with \"Ivvah\" (2Ki 18:34, etc.). Most probably, however, this was one of the numerous canals which intersected Babylonia, flowing from the Euphrates toward a town or district \"Ahava.\" If so, identification is impossible.\n\nS. F. Hunter",
@@ -565,6 +601,15 @@
    "isbe_key": "AMMAH"
   },
   {
+   "id": 465,
+   "term": "Ammi(암미)",
+   "definition": "am'-i (`ammi, \"my people\"): A symbolic name given to Israel by Hosea (Ho 2:1; 2:3 in Hebrew text), descriptive of Israel in the state of restoration, and in contrast to sinful and rejected Israel, represented by Hosea's son, who was called Lo-ammi, \"not my people,\" when born to the prophet (Ho 1:9,10). This restoration to the Divine favor is more fully described in Ho 2:21,23 in words quoted by Paul (Ro 9:25,26). The use of such figurative and descriptive names is frequent in the Old Testament; compare Isa 62:4,12.",
+   "definition_ko": "암미(히브리어 '암미', 「내 백성」). 호세아가 이스라엘에게 준 상징적 이름으로(호세아 2:1; 히브리어 본문으로는 2:3), 회복된 상태의 이스라엘을 묘사한다. 이는 죄를 짓고 버림받은 이스라엘, 곧 선지자에게서 태어날 때 「로암미」, 「내 백성이 아니라」는 이름을 받은 호세아의 아들이 나타내는 이스라엘과 대조된다(호세아 1:9, 10). 하나님의 은총으로의 이 회복은 호세아 2:21, 23에 더 자세히 묘사되며, 바울이 이 말씀을 인용한다(로마서 9:25, 26). 이처럼 비유적이고 묘사적인 이름을 쓰는 일은 구약에 자주 있다. 이사야 62:4, 12와 비교하라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "AMMI"
+  },
+  {
    "id": 482,
    "term": "Amphipolis(암비볼리)",
    "definition": "am-fip'-o-lis (Amphipolis): A town in Macedonia, situated on the eastern bank of the Strymon (modern Struma or Karasu) some three miles from its mouth, near the point where it flows out of Lake Prasias or Cercinitis. It lay on a terraced hill, protected on the North, West and South by the river, on the East by a wall (Thuc. iv.102), while its harbor-town of Eion lay on the coast close to the river's mouth. The name is derived either from its being nearly surrounded by the stream or from its being conspicuous on every side, a fact to which Thucydides draws attention (in the place cited). It was at first called Ennea Hodoi, Nine Ways, a name which suggests its importance both strategically and commercially. It guarded the main route from Thrace into Macedonia and later became an important station on the Via Egnatia, the great Roman road from Dyrrhachium on the Adriatic to the Hebrus (Maritza), and it was the center of a fertile district producing wine, oil, figs and timber in abundance and enriched by gold and silver mines and considerable manufactures, especially of woolen stuffs. In 497 BC Aristagoras, ex- despot of Miletus, tried to settle there, and a second vain attempt was made in 465-464 by the Athenians, who succeeded in founding a colony there in 437 under the leadership of Hagnon. The population, however, was too mixed to allow of strong Athenian sympathies, and in 424 the town fell away to the Spartan leader Brasidas and defied all the subsequent attempts of the Athenians to recover it. It passed under the protectorate of Perdiccas and Philip of Macedon, and the latter finally made himself master of it in 358. On the Roman partition of Macedonia after the battle of Pydna (168 BC) Amphipolis was made a free city and capital of Macedonia Prima. Paul and Silas passed through it on their way from Philippi to Thessalonica, but the narrative seems to preclude a long stay (Ac 17:1). The place was called Popolia in the Middle Ages, while in modern times the village of Neochori (Turkish, Yenikeui) marks the site (Leake, Northern Greece, III, 181 ff, Cousinery, Macedoine, I, 100 ff, 122 ff; Heuzey et Daumet, Mission archeol. de Macedoine, 165 ff).\n\nMarcus N. Tod",
@@ -646,6 +691,15 @@
    "isbe_key": "ANIM"
   },
   {
+   "id": 550,
+   "term": "Ant(개미)",
+   "definition": "(nemalah = Arabic namalah): The word occurs only twice in the Bible, in the familiar passages in Pr 6:6; 30:25 in both of which this insect is made an example of the wisdom of providing in the summer for the wants of the winter. Not all ants store up seeds for winter use, but among the ants of Palestine there are several species that do so, and their well-marked paths are often seen about Palestinian threshing-floors and in other places where seeds are to be obtained. The path sometimes extends for a great distance from the nest.\n\nAlfred Ely Day",
+   "definition_ko": "개미(히브리어 '네말라', 아랍어 '나말라'와 같음). 이 낱말은 성경에 두 번만, 잘 알려진 잠언 6:6; 30:25에 나온다. 두 곳 모두 이 곤충을 여름에 겨울 쓸 것을 마련하는 지혜의 본보기로 든다. 모든 개미가 겨울에 쓸 씨를 쌓아 두는 것은 아니지만, 팔레스타인 개미 가운데는 그렇게 하는 종이 여럿 있고, 그들이 다니는 뚜렷한 길이 팔레스타인의 타작마당 둘레나 씨를 얻을 수 있는 다른 곳에서 흔히 보인다. 이 길은 때로 둥지에서 아주 멀리까지 뻗는다.\n\n(집필: Alfred Ely Day)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ANT"
+  },
+  {
    "id": 576,
    "term": "Antipatris(안디바드리)",
    "definition": "an-tip'-a-tris (Antipatris): Is mentioned in Scripture only once, in connection with the descent of Paul from Jerusalem to Caesarea (Ac 23:31). References will be found in Ant, XIII, xv 1; XVI, v, 2; BJ, I, xxi, 9. It was a town built by Herod the Great, and called after his father Antipater. It is probably identical with the modern Ras el-`Ain, \"fountain head,\" a large mound with ruins at the source of Nahr el`Aujeh, in the plain to the Northeast of Jaffa. There are remains of a crusading castle which may be the Mirabel of those times.\n\nW. Ewing",
@@ -664,8 +718,17 @@
    "isbe_key": "ANTOTHITE"
   },
   {
+   "id": 582,
+   "term": "Anvil(모루)",
+   "definition": "an'-vil (pa`am): The word is used only once to mean anvil. The passage (Isa 41:7) refers to the custom still very common of workmen encouraging each other at their work. See CRAFTS. Just how pretentious the anvil of the ancients was we do not know. Most work requiring striking or beating, from the finest wrought jewelry to the largest copper vessels, is now done on an anvil shaped like an inverted letter L which is driven into a block of wood, or into the ground, or into a crack between two of the stone slabs of the workman's floor. The only massive anvils seen in the country today are modern and of foreign make.\n\nJames A. Patch",
+   "definition_ko": "모루(히브리어 '파암'). 이 낱말이 모루를 뜻하는 곳은 한 번뿐이다. 그 구절(이사야 41:7; 개역개정 「메질꾼」)은 일꾼들이 일하며 서로 격려하는 관습을 말하는데, 이 관습은 지금도 매우 흔하다. 공예 항목을 보라. 옛사람들의 모루가 얼마나 대단한 것이었는지는 알지 못한다. 치거나 두드려야 하는 일은 가장 섬세한 세공 보석부터 가장 큰 구리 그릇까지 대부분 지금은 영어 글자 L을 뒤집은 모양의 모루 위에서 한다. 이 모루는 나무토막이나 땅이나 일꾼의 방바닥 돌판 두 장 사이의 틈에 박아 쓴다. 오늘날 이 나라에서 볼 수 있는 육중한 모루는 모두 근래의 외국산이다.\n\n(집필: James A. Patch)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ANVIL"
+  },
+  {
    "id": 590,
-   "term": "Apharsites(아바삿개 사람)",
+   "term": "Apharsites(아바삿 사람 · 아바새 사람)",
    "definition": "a-far'-sits ('apharcaye'): A tribe transferred to Samaria by Asnappar of Assyria (Ezr 4:9). Rawlinson identifies them with the APHARSACHITES (which see), taking Apharsites to be an accidental repetition of the same word. He understands \"the Persians\" to be meant in both cases. Others identify them with a Median tribe mentioned in the inscriptions of Sennacherib as dwellers in the district of Parsua.",
    "definition_ko": "아바새 사람(아람어 '아파르사예'). 앗수르의 오스납발이 사마리아로 옮긴 부족(에스라 4:9). 롤린슨은 이들을 아바삿 사람(해당 항목을 보라)과 같게 보고, 아바새 사람을 같은 낱말이 우연히 되풀이된 것으로 여긴다. 그는 두 경우 모두 「페르시아 사람」을 뜻한다고 이해한다. 다른 이들은 산헤립의 비문에 파르수아 지방 주민으로 나오는 메대의 한 부족과 같게 본다.",
    "category": "인명",
@@ -797,6 +860,24 @@
    "category": "인명",
    "hebrew_greek": "",
    "isbe_key": "ARBITE"
+  },
+  {
+   "id": 686,
+   "term": "Arch(현관（이스턴）)",
+   "definition": "arch ('ayil; Septuagint ta ailam, in sense of \"posts\" or \"colonnade\"): Referred to repeatedly in Eze 40:16 ff, but translation is an error for \"porch\" or \"portico.\" the Revised Version (British and American) gives in marg, \"or, colonnade. The meaning of the Hebrew word is uncertain.\" The principle of arch construction was known to the Jews and examples of early Jewish rude arches have been found in Palestine. An arched form need not necessarily be constructed with radiating joints; it can be corbelled as at Mycenae (Treasury of Atreus). This type of construction has been found also in Palestine.",
+   "definition_ko": "현관·기둥(흠정역 「아치」; 히브리어 '아일'; 칠십인역 '타 아일람', 「기둥들」 또는 「주랑」의 뜻). 에스겔 40:16 이하에 거듭 나오지만, 「현관」이나 「주랑」의 잘못된 번역이다(개역개정 「현관」). 영국·미국 개역판 난외는 「또는 주랑. 히브리어의 뜻은 확실하지 않다」라고 적는다. 아치 구조의 원리는 유대인에게 알려져 있었고, 초기 유대인의 거친 아치 유적이 팔레스타인에서 발견되었다. 아치 모양이 반드시 부챗살 이음매로 지어질 필요는 없으며, 미케네(아트레우스의 보고)에서처럼 내쌓기로 지을 수도 있다. 이런 구조도 팔레스타인에서 발견되었다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "ARCH"
+  },
+  {
+   "id": 696,
+   "term": "Archites(아렉 족속)",
+   "definition": "ar'-kits (ha-'arki; the King James Version Archi): A clan mentioned in connection with the marking of the southern boundary of Joseph (Jos 16:2). The phrase (gebhul ha-'arki `aTaroth) offers difficulties, and it has been suggested that the order of the last two words be changed to read \"the border of Ataroth-of-the-Archites.\" See ATAROTH. G. A. Smith identifies Ataroth with the present Atara on the high road from Jerusalem to Bethel, three and one-half miles South of Bethel and six East of th e upper Beth-horon. Hushai, the \"friend\" of David, was an Arcbite (2Sa 16:16).\n\nH. J. Wolf",
+   "definition_ko": "아렉 족속(히브리어 '하아르키'; 흠정역 「아르키」). 요셉 자손의 남쪽 경계를 표시할 때 언급된 씨족이다(여호수아 16:2). 이 구절('게불 하아르키 아타로트')에는 어려움이 있어, 마지막 두 낱말의 차례를 바꾸어 「아렉 족속의 아다롯의 경계」로 읽자는 제안이 있다. 아다롯 항목을 보라. G. A. 스미스는 아다롯을 예루살렘에서 벧엘로 가는 큰길가에 있는 오늘날의 아타라로 보는데, 벧엘 남쪽 3.5마일, 윗 벧호론 동쪽 6마일이다. 다윗의 「친구」 후새가 아렉 사람이었다(사무엘하 16:16).\n\n(집필: H. J. Wolf)",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "ARCHITES"
   },
   {
    "id": 706,
@@ -1294,6 +1375,15 @@
    "isbe_key": "BAALIM"
   },
   {
+   "id": 1049,
+   "term": "Baalzebub(바알세붑)",
+   "definition": "ba-al-ze'-bub ba`al zebhubh = \"Lord of flies\"; Baal-muian: A deity worshipped by the Philistines at Ekron (2Ki 1:2,3,6,16). All that can be gathered from this one reference to him in ancient literature is that he had some fame as a god that gave oracles. Ahaziah, son of Ahab, and king of Israel, went to consult him whether he should recover of his sickness, and was therefore rebuked by Elijah, who declared that his death would be the result of this insult to Yahweh. Why he was called \"lord of flies,\" or whether his real name has not be en corrupted and lost are matters of conjecture. See BAAL (1).",
+   "definition_ko": "바알세붑(히브리어 '바알 제부브' = 「파리들의 주」; 헬라어 '바알 무이안'). 에그론에서 블레셋 사람들이 섬긴 신이다(열왕기하 1:2, 3, 6, 16). 고대 문헌에서 그에 대한 이 한 기록으로 알 수 있는 것은 그가 신탁을 주는 신으로 꽤 이름이 있었다는 것뿐이다. 아합의 아들이며 이스라엘 왕인 아하시야가 자기 병이 낫겠는지 그에게 물으러 사람을 보냈다가 엘리야에게 책망을 받았는데, 엘리야는 여호와를 이렇게 모욕한 결과로 그가 죽으리라고 선언하였다. 그가 왜 「파리들의 주」라 불렸는지, 또는 그의 참 이름이 변형되어 잃어버린 것은 아닌지는 짐작할 수밖에 없다. 바알 (1) 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BAALZEBUB"
+  },
+  {
    "id": 1062,
    "term": "Babel, Tower of(바벨)",
    "definition": "This expression does not occur in the Old Testament, but is used popularly for the tower mighdol built by the inhabitants of the world who, traveling in the East, built a city on the Plain of Shinar, with a tower \"whose top may reach unto heaven\"-- an expression which is regarded as meaning \"a very high tower.\"\n\n1. General Form of Babylonian Temple-Towers:\n\nThere was a great difference, however, between a Canaanite mighdol or watchtower, and the great Tower at Babylon. The watchtower was simply a high structure, probably without any special shape or form, which depended upon the will of the architect and the nature of the ground upon which it was erected. The Tower of Babel or Babylon, however, was a structure peculiar to Babylonia and Assyria. According to all accounts, and judging from the ruins of the various erections extant in those countries, Babylonian towers were always rectangular, built in stages, and provided with an inclined ascent continued along each side to the top. As religious ceremonies were performed thereon, they were generally surmounted by a chapel in which sacred objects or images were kept.\n\n2. Their Babylonian Name:\n\nThese erections had, with the Babylonians, a special name: ziqquratu, meaning, apparently, \"peak,\" or the highest point of a mountain, this word being applied to the mountain-height upon which Ut-napishtim, the Babylonian Noah, offered sacrifices on coming forth from the ark (or ship) when the waters of the great Flood had sufficiently subsided. It has also been thought that they were used as observatories when the Babylonians studied the starry heavens. This is probable, but as these structures were of no great height, it is possible that, in the clear atmosphere of the Babylonian plains, there was no real necessity to go above the surface of the earth when making their observations.\n\n3. Whereabouts of the Tower of Babel:\n\nThere has been much difference of opinion as to the geographical position of the Tower of Babel. Most writers upon the subject, following the tradition handed down by the Jews and Arabs, have identified it with the great Temple of Nebo in the city of Borsippa, now called the Birs-Nimroud (explained as a corruption of Birj Nimroud, \"Tower of Nimrod\"). This building, however, notwithstanding its importance, was to all appearance never regarded by the Babylonians as the Tower of Babel, for the very good reason that it was not situated in Babylon, but in Borsippa, which, though called, in later times, \"the second Babylon,\" was naturally not the original city of that name. The erection regarded by the Babylonians as the great Tower of their ancient city was E-temen-ana-ki, \"the Temple of the foundation of heaven and earth,\" called by Nabopolassar and Nebuchadrezzar ziqqurat Babili, \"the Tower of Babylon\"--the world-renowned temple dedicated to Merodach and his consort Zer- panitum, Babylon's chief deities.\n\n4. Its Position at Babylon:\n\nThis structure was situated in the southern portion of the city, not far from the right bank of the Euphrates, and according to Weissbach, is now represented by a depression within which is the original rectangular core of unbaked brick. From its shape, the Arabs have made this site Sahan, \"the dish.\" These remains of the great temple-tower of Babylon, within the memory of men not so very old, towered, even in its ruined state, high above the surrounding plain. The burnt bricks of the ancient Babylonians, however, who \"had brick for stone, and slime (bitumen) for mortar\" (Ge 11:3), are still good and have a commercial value, so they were all cleared out, with whatever precious material in the way of antiquities they may have contained, to repair, it is said, the banks of the Hindiyeh Canal. Certain records in the shape of conical \"cylinders,\" however, came into the market, and were acquired by the museums of Europe and America. As these refer to the restoration of the building by Nabopolassar, and the part taken by his sons Nebuchadrezzar and Nabu-sum-lisir in the ceremonies attending the rebuilding, it is very probable that they formed part of the spoils acquired.\n\n5. A Babylonian Description of the Tower:\n\nE-temen-ana-ki, to give the Babylonian (Sumerian) name, consisted of six stages built upon a platform, and provided with a sanctuary at the top. A tablet seemingly giving a detailed description of this building was for a time in the hands of the late George Smith in the year 1876. Unfortunately he had not time to give a translation of the document, or to publish the text, but his detailed account of it (Athenaeum, February 12, 1876) is exceedingly interesting. First there was the outer court called the \"grand court,\" measuring, according to G. Smith's estimate, 1,156 ft. by 900 ft., and a smaller one, called \"the court of Ishtar and Zagaga,\" 1,056 ft. by 450 ft. Round the court were six gates admitting to the temples:\n\n(1) the grand gate;\n\n(2) the gate of the rising sun (east);\n\n(3) the great gate;\n\n(4) the gate of the colossi;\n\n(5) the gate of the canal; and\n\n(6) the gate of the tower-view.\n\n6. The Platform:\n\nAfter this came a space or platform apparently walled--a ki-gallu square in form, and measuring 3 ku each way. Its size is doubtful, as the value of the ku is unknown. The sides of this enclosure faced the cardinal points. In its walls were four gates, one on each side, and named from the points toward which they looked. Within this enclosure stood a large building measuring 10 gar (Smith: 200 ft.) each way. Unfortunately, the name of this erection was damaged, so that its nature and use are uncertain.\n\n7. The Chapels and Shrines:\n\nRound the base of the Tower were small temples or chapels dedicated to the various gods of the Babylonians. On the East were 16 shrines, the principal of them being dedicated to Nebo and Tasmetu, his spouse; on thee North were two temples dedicated to Ea. (Ae) and Nusku respectively; on the South was a single temple to the two great gods, Anu and Bel (Enlil?). It was on the West, however, that the principal buildings lay--a double house with a court between the wings 35 cubits (Smith: 58 ft.) wide. These two wings were not alike in dimensions, the erection on one side being 100 cubits by 20 (166 ft. by 34 ft.) and on the other 100 cubits by 65 (166 ft. by 108 ft.). In these western chambers stood the couch of the god, and the golden throne mentioned by Herodotus, with other objects of great value. The couch was stated to have measured 9 cubits by 4 (15 ft. by 6 feet 8 inches).\n\n8. The Tower in Its First Stage:\n\nIn the center of these groups of buildings stood the great Tower in stages, called by the Babylonians \"the Tower of Babel\" (ziqqurat Babili). The stages decreased from the lowest upward, but each was square in plan. The first or foundation-stage was 15 gar each way by 5 1/2 gar high (300 ft. by 110 ft. high), and seems to have been decorated with the usual double recesses which are a characteristic of Assyr-Bab architecture.\n\n9. The Remaining Stages:\n\nThe second stage was 13 gar square and 3 gar high (260 ft. by 60 ft.). A term was applied to it which G. Smith did not understand, but he notes that it probably had sloping sides. The stages from the 3rd to the 5th were all of equal height, namely, 1 gar (20 ft.), and were respectively 10 gar (200 ft.), 8 1/3 gar (170 ft.) and 7 gar (140 ft.) square. The dimensions of the 6th stage were omitted, but may be restored in accordance with the others, namely, 5 1/2 gar square (110 ft.) by 1 gar (20 ft.) high.\n\n10. The Chapel at the Top:\n\nOn this was raised what Smith calls the 7th stage, namely, the upper temple or sanctuary of the god Bel-Merodach, 4 gar long, 3 1/2 gar broad and 2 1/2 gar high (80 ft., 60 ft., and 50 ft., respectively). He does not mention the statue of the god, but it may be supposed that it was set up in this topmost erection. The total height of the tower above its foundation was therefore 15 gar (300 ft.), the same as the breadth of its base. It cannot be said that it was by any means a beautiful erection, but there was probably some symbolism in its measurements, and in appearance it probably resembled (except the decoration) the temple tower of Calah as restored in the frontispiece to Layard's Monuments of Nineveh, 1st series, in which a step-pyramid with a similarly highbasement stage is shown.\n\n11. Herodotus' Description:\n\nWith this detailed description, which is quite what would be expected in a Babylonian account of such a celebrated temple, the description in Herodotus (i.181 ff) agrees. He states that it was a temple square in form, two furlongs (1,213 ft.) each way, in the midst of which was built a solid tower a furlong square (nearly 607 ft.). This, however, must have been the platform, which, with the six stages and the chapel on the top, would make up the total of eight stages of which Herodotus speaks. The ascent by which the top was reached he describes as running \"outside round about all the towers\"--wording which suggests, though not necessarily, that it was spiral--i.e. one had to walk round the structure 7 times to reach the top. Representations on Babylonian boundary-stones suggest that this view would be correct, though a symmetrical arrangement of inclined paths might have been constructed which would have greatly improved the design. At the middle of the ascent, Herodotus says, there was a stopping-place with seats to rest upon, which rather favors this idea. At the top of the last tower there was a large cell, and in the cell a large couch was laid, well covered; and by it a golden table. There was no image there, nor did any human being spend the night there, except only a woman of the natives of the place chosen by the god, \"as say the Chaldeans who are the priests of this god.\" These men told Herodotus that the god often came to the cell, and rested upon the couch, \"but,\" he adds, \"I do not believe them.\" After mentioning parallels to this at Egyptian Thebes and Patam in Lycia, he goes on to speak of another cell below (that referred to in G. Smith's tablet) wherein was a great image of Zeus (Bel-Merodach) sitting, with a footstool and a large table, all of gold, and weighing no less than 800 talents. Outside of this cell was an altar to the god, made of gold; and also another altar, whereon full-grown animals were sacrificed, the golden altar being for sucklings only. The Chaldeans also told him that there was, in the precincts of the building, a statue 12 cubits high, and of solid gold. Darius Hystaspis desired to take possession of this valuable object, but did not venture. His son Xerxes, however, was not so considerate of the feelings of the people and the priesthood, for he also killed the priest when he forbade him to meddle with it.\n\n12. The Builders of the Tower:\n\nThe Bible record does not state who the people were who journeyed in the East and built the city and the Tower. The indefinite \"they\" might be taken to mean whatever people were there at the time the record was written, and probably presupposes that the reader would certainly know. As the Tower of Babel bears, in the native inscriptions, a Sumero-Akkadian name, it may be supposed that the builders referred to belonged to that race.\n\n13. Traditions Concerning Its Destruction:\n\nIt is noteworthy that nothing is said in Ge concerning the stoppage of the erection, though they ceased to build the city. Bochart records a Jewish tradition which makes the tower to have been split through to its foundation by fire which fell from heaven--suggested probably by the condition of the tower at \"the second Babylon,\" i.e. the Birs Nimroud. Another tradition, recorded by Eusebius (Prep. Evang., ix; Chronicon, 13; Syncel. Chron., 44) makes it to have been blown down by the winds; \"but when it approached the heavens, the winds assisted the gods, and overturned the work upon its contrivers: and the gods introduced a diversity of tongues among men, who, until that time, had all spoken the same language.\"\n\n14. The Meaning of \"Babel\":\n\nThe place where they built the Tower was called Babylon, on account of the confusion of languages. Here we have again the statement as in Ge that the meaning of Babel is \"confusion.\" This, as is well known, is based upon the purely Hebrew etymological law, which makes balal, \"to confuse,\" or \"mingle,\" assume a reduplicate form; but as far as the cuneiform inscriptions, which are now very numerous, give us information, Babel, from baldlu, \"to mingle\" (the root in question), was an impossibility. But on the Babylonian side, that the rendering of the name as Bab-ili (-ilani), \"gate of god\" (\"of the gods\") was a folk-etymology, is undoubted, notwithstanding that the Sumero-Akkadian form Ka-dingira, with the same meaning, is far from rare. It is noteworthy, however, that one of the forms used by Nebuchadrezzar is Babilam, with the mimmation or \"emming,\" which is a characteristic of the Babylonian language; moreover, a place-name Babalam also occurs, which may be a still earlier, and perhaps the original, form. Notwithstanding that one would like to see in Babalam, \"the place of bringing together,\" and in Babilam, \"the bringer together,\" the termination -am would seem to be an insurmountable difficulty.\n\n15. The Ultimate Destruction of the Tower:\n\nThat the building of the city would have been stopped when the confusion of tongues took place is natural--the departure of the greater part of the inhabitants made this inevitable. When the population increased again, the building of the city was continued, with the result that Babylon ultimately became the greatest city of then known world. The Tower, notwithstanding what had been said as to its destruction, remained, and when, as happened from time to time, its condition became ruinous, some energetic Babylonian king would restore it. Alexander and Philip of Macedon began clearing away the rubbish to rebuild the great temple of Bclus (Bel-Merodach) connected with it and there is hardly any doubt that the Tower would have been restored likewise, but the untimely death of the former, and the deficient mental caliber of the latter for the ruling of a great empire, put an end to the work. The Tower therefore remained unrepaired--\"The tower was exceedingly tall. The third part of it sank down into the ground, a second third was burned down, and the remaining third was standing until the time of the destruction of Babylon\" (Rabbi Yehanan, Sanhedhrin, 109, 1).\n\n16. No Idea of Reaching Heaven:\n\nConcerning the reputed intention of the builders of the Tower, to carry it as high as the heavens, that, notwithstanding the Talmud and other writings, may be dismissed at once. The intention was to build a very high tower, and that is all that is implied by the words employed. That the Babylonians would have liked their tower to reach heaven may be conceded, and the idea may be taken as symbolical of Babylon's pride, the more especially as they regarded it as \"the house of the foundation of heaven and earth.\" Though at present brought lower than the other temple-towers of Babylonia, its renown remains as one of the great glories of that renowned capital. Dedicated as it was to the gods whom they worshipped, and chiefly to the glory of Merodach, the representative of Babylonian monotheism, the Babylonians' descendants, the native Christians, have no reason to remember this erection of their forefathers with shame, but rather with pride. The rallyingpoint of nations, Babylon, while it existed, was always a great commercial center, and many are the languages which have resounded in the Tower's vicinity. The confusion of tongues led to the Jewish fiction that the air of Babylon and Borsippa caused forgetfulness, and was therefore injurious to students of the Law, causing them to forget it as the builders of the Tower had of old forgotten their speech (Rashi, Sanhedhrin, 109, 1). This, however, did not prevent the rabbis of Babylon from being more celebrated than those of the Holy Land, and even of Jerusalem itself.\n\nSee also ASTRONOMY.\n\nT. G. Pinches",
@@ -1438,6 +1528,15 @@
    "isbe_key": "BAZLITH; BAZLUTH"
   },
   {
+   "id": 1217,
+   "term": "Bdellium(베델리엄)",
+   "definition": "del'-i-um (bedholach): The word occurs twice in the Pentateuch:\n\n(1) in Ge 2:12, in conjunction with gold and onyx, as a product of the land of HAVILAH (which see), and\n\n(2) in Nu 11:7, where the manna is likened to this substance in appearance: \"The appearance thereof as the appearance of bdellium.\" The latter comparison excludes the idea of bedholach being a precious stone, and points to the identification of it with the fragrant resinous gum known to the Greeks as bdellion, several kinds being mentioned by Dioscorides and Pliny. It was a product of Arabia, India, Afghanistan, etc.\n\nJames Orr",
+   "definition_ko": "베델리엄(히브리어 '베돌라흐'). 이 낱말은 오경에 두 번 나온다.\n\n(1) 창세기 2:12. 금, 호마노와 함께 하윌라(그 항목을 보라) 땅의 산물로 나온다.\n\n(2) 민수기 11:7. 만나를 겉모양이 이것과 같다고 한다. 「그 모양은 베델리엄 같다」(개역개정은 「모양은 진주와 같은 것이라」로 옮긴다). 이 뒤의 비교는 '베돌라흐'가 보석이라는 생각을 배제하고, 헬라 사람들이 '브델리온'이라 부른 향기로운 수지, 곧 고무진이라는 쪽을 가리킨다. 디오스코리데스와 플리니우스는 여러 종류를 든다. 이것은 아라비아, 인도, 아프가니스탄 등의 산물이었다.\n\n(집필: James Orr)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BDELLIUM"
+  },
+  {
    "id": 1219,
    "term": "Beacon(깃대)",
    "definition": "be'-k'-n. The translation of the Hebrew toren, which usually means \"mast\" (compare Isa 33:23; Eze 27:5), but in Isa 30:17 being used in parallelism with \"ensign\" the meaning may be \"signal-staff\" (Isa 30:17 the American Revised Version, margin \"pole\").",
@@ -1508,6 +1607,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "BEERSHEBA"
+  },
+  {
+   "id": 1269,
+   "term": "Beetle(귀뚜라미)",
+   "definition": "be'-t'-l (the Revised Version (British and American) CRICKET; chargol; See LOCUST): This name occurs only in Le 11:22 as one of four winged Jumping insects (sherets ha-`oph) which may be eaten. It certainly is not a beetle and is probably not a cricket. Probably all four are names of locusts, of which more than 30 species have been described from Syria and Palestine, and for which there are at least 8 Arabic names in use, though with little distinction of species. Closely allied to chargol are the Arabic charjalet, a troop of horses or a flight of locusts, from charjal, \"to gallop,\" and harjawan, \"a wingless locust.\"\n\nAlfred Ely Day",
+   "definition_ko": "귀뚜라미(흠정역 「비틀」; 영국·미국 개역판 「크리켓」; 히브리어 '하르골'; 메뚜기 항목을 보라). 이 이름은 레위기 11:22에만 나오며, 먹어도 되는 날개 달린 뛰는 곤충('셰레츠 하오프') 넷 가운데 하나다(개역개정 「귀뚜라미」). 딱정벌레가 아닌 것은 확실하고, 귀뚜라미도 아마 아닐 것이다. 넷 모두 아마 메뚜기의 이름일 것이다. 수리아와 팔레스타인에서 메뚜기는 30종 넘게 기재되었고, 아랍어 이름도 적어도 8가지가 쓰이지만 종을 거의 가리지 않는다. '하르골'과 가까운 말로 아랍어 '하르잘레트', 곧 「말의 무리」 또는 「메뚜기 떼」가 있는데 「달리다」라는 뜻의 '하르잘'에서 왔으며, '하르자완'은 「날개 없는 메뚜기」다.\n\n(집필: Alfred Ely Day)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BEETLE"
   },
   {
    "id": 1286,
@@ -1889,7 +1997,7 @@
   },
   {
    "id": 1422,
-   "term": "Beth-Rapha(벧라바)",
+   "term": "Beth-Rapha(베드라바)",
    "definition": "beth-ra'-fa (beth rapha'; B, ho Bathraia, Bathrepha): The name occurs only in the genealogical list in 1Ch 4:12. It does not seem possible now to associate it with any particular place or clan.",
    "definition_ko": "베드라바(히브리어 '벳 라파'; 바티칸 사본 호 바트라이아, 바트레파). 이 이름은 역대상 4:12의 족보 목록에만 나온다. 지금으로서는 어느 특정한 곳이나 가문과 연결할 수 없어 보인다.",
    "category": "인명",
@@ -2095,6 +2203,24 @@
    "isbe_key": "BLAINS"
   },
   {
+   "id": 1543,
+   "term": "Blessing(브라가)",
+   "definition": "(berakhah; eulogia): Sometimes means the form of words used in invoking the bestowal of good, as in De 33:1; Jos 8:34; and Jas 3:10. Sometimes it means the good or the benefit itself which has been conferred, as in Ge 27:36, \"Hast thou not reserved a blessing for me?\" and Pr 10:22, \"The blessing of Yahweh, it maketh rich.\" \"The cup of blessing\" (to poterion tes eulogias, a special use of the word in 1Co 10:16), means the cup for which we bless God, or which represents to us so much blessin g from God.\n\nJames M. Gray",
+   "definition_ko": "복(히브리어 '베라카', 헬라어 '율로기아'). 때로는 좋은 것을 내려 달라고 빌 때 쓰는 말의 꼴을 뜻한다. 신명기 33:1; 여호수아 8:34; 야고보서 3:10이 그렇다. 때로는 이미 주어진 좋은 것이나 유익 자체를 뜻한다. 창세기 27:36 「나를 위하여 빌 복을 남기지 아니하셨나이까」와 잠언 10:22 「여호와께서 주시는 복은 사람을 부하게 하고」가 그렇다. 「축복의 잔」(헬라어 '토 포테리온 테스 율로기아스', 고린도전서 10:16에서 이 낱말의 특별한 쓰임)은 우리가 그것 때문에 하나님을 찬송하는 잔, 또는 하나님께로부터 오는 그만큼의 복을 우리에게 나타내는 잔을 뜻한다.\n\n(집필: James M. Gray)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BLESSING"
+  },
+  {
+   "id": 1566,
+   "term": "Boar(멧돼지)",
+   "definition": "bor (chazir): In lamenting the troubled state of the Jewish nation the Psalmist (Ps 80:13) says: \"The boar out of the wood doth ravage it, and the wild beasts of the field feed on it,\" with evident reference to Israel's enemies, the Assyrians, etc. The wild boar is abundant in certain parts of Palestine and Syria, especially in the thickets which border the lakes and rivers, as about the Chuleh, the sea of Galilee, the Jordan, and in the deltas of streams flowing into the Dead Sea, as Ghaur-us-Cafiyeh. Several fountains in Lebanon bear the name, `Ain-ul-Chazir, though chazir is not an Arabic word, khanzir being the Arabic for \"swine.\"\n\nSee SWINE.\n\nAlfred Ely Day",
+   "definition_ko": "멧돼지(히브리어 '하지르'). 유대 민족의 어지러운 형편을 슬퍼하며 시인은 「숲 속의 멧돼지들이 상해하며 들짐승들이 먹나이다」(시편 80:13)라고 하는데, 분명히 이스라엘의 원수인 앗수르 사람 등을 가리킨다. 멧돼지는 팔레스타인과 수리아의 어떤 지역, 특히 호수와 강가의 덤불, 곧 훌레 호, 갈릴리 바다, 요단 강 둘레와 사해로 흘러드는 시내들의 삼각주(고르 에츠차피예 등)에 많다. 레바논의 여러 샘이 '아인 울하지르'라는 이름을 지니는데, 아랍어로 「돼지」는 '한지르'이므로 '하지르'는 아랍어가 아니다.\n\n돼지 항목을 보라.\n\n(집필: Alfred Ely Day)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BOAR"
+  },
+  {
    "id": 1573,
    "term": "Bochim(보김)",
    "definition": "bo'-kim (ha-bokhim): A place on the mountain West of Gilgal said to have been so named (literally \"the weepers\") because Israel wept there at the remonstrance of the angel (Jud 2:1,5). No name resembling this has been discovered. Given on the occasion mentioned, it may not have endured. Many, following Septuagint, identify it with Bethel.",
@@ -2111,6 +2237,24 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "BOLLED"
+  },
+  {
+   "id": 1584,
+   "term": "Bolster(베개)",
+   "definition": "bol'-ster: Found in the King James Version only in 1Sa 19:13,16, \"Behold, the teraphim was in the bed, with the pillow of goat's hair at the head thereof\" (the King James Version \"for his bolster\"), and 1Sa 26:7,11,12,16, \"Saul lay sleeping .... with his spear stuck in the ground at his head.\" \"Bolster\" in these passages in the King James Version was used to translate a Hebrew word whose true significance is \"the place of the head,\" or \"the head-place.\" It will be noted that it has disappeared from the Revised Version (British and American), which rightly has throughout \"head,\" instead of \"bolster.\"\n\nSee CUSHION.",
+   "definition_ko": "베개(흠정역 「볼스터」). 흠정역에서는 사무엘상 19:13, 16 「보라 우상이 침상에 있고 염소 털로 엮은 베개가 그 머리 쪽에 있더라」(흠정역 「그의 베개로」; 개역개정 「염소 털로 엮은 것을 그 머리에 씌우고」)와, 사무엘상 26:7, 11, 12, 16 「사울이 … 자고 있는데 창이 그 머리 곁 땅에 꽂혀 있더라」에만 나온다. 흠정역에서 이 구절들의 「볼스터」는 참뜻이 「머리 두는 곳」인 히브리어를 옮긴 것이다. 영국·미국 개역판에서는 이 말이 사라지고 모든 곳에서 「볼스터」 대신 바르게 「머리」로 옮긴 것을 보게 된다(개역개정도 「머리」, 「머리 곁」).\n\n방석 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BOLSTER"
+  },
+  {
+   "id": 1592,
+   "term": "Bonnet(제사장의 관 · 머리 관)",
+   "definition": "bon'-et: In the King James Version the designation of the special headdress of the rank and file of the priesthood, the Revised Version (British and American) \"head-tire\" (Ex 28:40). It consisted of a long swath of fine white linen wound around the head in oriental fashion. The Hebrew word found in Ex 29:9 the Revised Version (British and American), \"to bind head-tires,\" literally \"to wind head-tires,\" means, in the light of usage, \"to form an egg-shaped turban.\" Compare Josephus, Ant, III, vii, 3; and see Rich, Dict. Roman and Greek Ant, under the word pileus, for illustration of the egg- shaped cap of Ulysses, with which Jerome compared the priestly turban.\n\nSee DRESS; MITRE, etc.",
+   "definition_ko": "관(흠정역 「보닛」). 흠정역에서 일반 제사장들이 쓰는 특별한 머리 장식을 가리키는 말로, 영국·미국 개역판은 「머리 두건」(출애굽기 28:40; 개역개정 「관」)으로 옮긴다. 가는 흰 베를 길게 동방식으로 머리에 감아 만들었다. 출애굽기 29:9 영국·미국 개역판의 「머리 두건을 매다」, 문자적으로 「머리 두건을 감다」에 나오는 히브리어는 쓰임새로 보아 「달걀 모양의 터번을 만들다」를 뜻한다(개역개정 「관을 씌워」). 요세푸스 『유대 고대사』 3권 7장 3절과 비교하라. 히에로니무스가 제사장의 터번에 견준 오디세우스의 달걀 모양 모자의 그림은 리치, 『로마·그리스 고대 사전』의 '필레우스' 항목을 보라.\n\n의복; 관(마이터) 등 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BONNET"
   },
   {
    "id": 1605,
@@ -2138,6 +2282,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "BOWING"
+  },
+  {
+   "id": 1642,
+   "term": "Box-Tree(황양목)",
+   "definition": "box'-tre (te'ashshur; Isa 41:19; 60:13, \"boxwood\" Eze 27:6): A tree of uncertain identity, which must once have been common in the forests of Lebanon. According to Post (HDB, I, 313), \"The only species of box found in Bible lands is Buxus longifolia, which is a shrub from 2 to 3 ft. high. It does not grow South of Mt. Cassius and it is unlikely that it did in historical times.\"\n\nAs an alternative to the box the cypress, Cupressus sempervirens--known in Arabic as Sherbin--has been suggested. It is a fine tree and was probably once plentiful, but as it seems to answer to the berosh (see FIR), it cannot well be the te'ashshur. There is nothing certain to go upon.\n\nE. W. G. Masterman",
+   "definition_ko": "황양목(히브리어 '테아슈르'; 이사야 41:19; 60:13; 에스겔 27:6 「회양목」; 개역개정은 모두 「황양목」). 정체가 확실하지 않은 나무로, 한때 레바논 숲에 흔했을 것이다. 포스트(헤이스팅스 『성서 사전』 1권 313쪽)에 따르면 「성경 지역에서 발견되는 유일한 회양목 종은 북수스 롱기폴리아로, 높이 2~3피트의 관목이다. 카시우스 산 남쪽에서는 자라지 않으며, 역사 시대에 그곳에서 자랐을 것 같지도 않다」.\n\n회양목 대신 사이프러스, 곧 쿠프레수스 셈페르비렌스(아랍어 '셰르빈')가 제안되었다. 훌륭한 나무이며 한때 많았을 것이지만, '베로시'(전나무 항목을 보라)에 해당하는 것으로 보이므로 '테아슈르'일 수는 없다. 확실한 근거가 없다.\n\n(집필: E. W. G. Masterman)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BOX-TREE"
   },
   {
    "id": 1646,
@@ -2174,6 +2327,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "BRAVERY"
+  },
+  {
+   "id": 1665,
+   "term": "Breach(무너진 곳)",
+   "definition": "brech: Represented by\n\n(1) perets = \"a tear,\" \"a rending asunder,\" \"a break,\" hence, figuratively \"enmity,\" \"disruption,\" \"strife\" (Ge 38:29; Jud 21:15; 2Sa 5:20; 1Ch 15:13; Ne 6:1; Job 16:14; Ps 106:23; Isa 30:13; 58:12);\n\n(2) shebher = \"fracture,\" \"affliction,\" \"bruise,\" \"destruction\" (Le 24:20; Jer 14:17; La 2:13; Ps 60:2);\n\n(3) bedheq = \"a gap\" or \"leak\" (in a building or ship) occurring in 2Ki 12:5-8,12; 22:5;\n\n(4) tenu'ah = \"alienation,\" \"breach of promise\" (Nu 14:34 the King James Version);\n\n(5) miphrats = \"a break\" (in the shore), and hence, \"a haven\" (Jud 5:17, the Revised Version (British and American) \"creeks\").\n\nFrank E. Hirsch",
+   "definition_ko": "터진 곳·틈(흠정역 「브리치」). 다음 낱말들이 이에 해당한다.\n\n(1) '페레츠' = 「찢음」, 「찢어 가름」, 「깨짐」, 그래서 비유로 「원수 됨」, 「갈라짐」, 「다툼」(창세기 38:29; 사사기 21:15; 사무엘하 5:20; 역대상 15:13; 느헤미야 6:1; 욥기 16:14; 시편 106:23; 이사야 30:13; 58:12; 개역개정 「무너진 데」 등).\n\n(2) '셰베르' = 「골절」, 「고난」, 「상처」, 「파멸」(레위기 24:20, 개역개정 「상처」; 예레미야 14:17, 개역개정 「파멸」; 예레미야애가 2:13; 시편 60:2).\n\n(3) '베데크' = 건물이나 배의 「틈」 또는 「새는 곳」. 열왕기하 12:5~8, 12; 22:5에 나온다(개역개정 「파손된 것」).\n\n(4) '테누아' = 「멀어짐」, 「약속을 어김」(민수기 14:34 흠정역).\n\n(5) '미프라츠' = 바닷가의 「터진 곳」, 그래서 「항구」(사사기 5:17, 영국·미국 개역판 「후미」; 개역개정 「항만」).\n\n(집필: Frank E. Hirsch)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BREACH"
   },
   {
    "id": 1706,
@@ -2248,6 +2410,15 @@
    "isbe_key": "BUSHEL"
   },
   {
+   "id": 1755,
+   "term": "Butler(술 맡은 관원)",
+   "definition": "but'-ler: An officer in households of kings, or other dignitaries, having charge of wines and other potables. mashqeh, \"one who gives drink\" (Ge 40:1-23; 41:9), rendered \"cupbearer\" in 1Ki 10:5; 2Ch 9:4; Ne 1:11. The office was one of consider ble importance in oriental courts, because of the danger to the king's life through plots of poison, etc. Nehemiah held this position to King Artaxerxes. Wealthy courts, as that of Solomon, usually had more than one (1Ki 10:5); over these cupbearers or butlers was the sar ha-mash-qim, or chief butler (Ge 40:9).\n\nEdward Bagby Pollard",
+   "definition_ko": "술 맡은 관원(흠정역 「버틀러」). 왕이나 다른 높은 사람의 집에서 포도주와 다른 마실 것을 맡은 관리다. 히브리어 '마시케', 「마실 것을 주는 자」(창세기 40:1~23; 41:9; 개역개정 「술 맡은 자」, 「술 맡은 관원장」)이며, 열왕기상 10:5; 역대하 9:4; 느헤미야 1:11에서는 「잔 드는 자」로 옮겨진다(개역개정 「술 관원」). 동방 궁정에서는 독살 음모 따위로 왕의 목숨이 위태로울 수 있었으므로 이 직책이 꽤 중요하였다. 느헤미야는 아닥사스다 왕에게 이 직책을 맡았다. 솔로몬 궁정처럼 부유한 궁정에는 보통 여럿이 있었고(열왕기상 10:5), 이들 잔 드는 자, 곧 술 맡은 자들 위에 '사르 함마시킴', 곧 술 맡은 관원장이 있었다(창세기 40:9).\n\n(집필: Edward Bagby Pollard)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BUTLER"
+  },
+  {
    "id": 1759,
    "term": "By(나 스스로)",
    "definition": "In the sense of \"against\" which survives only in dialectal English (compare Wright, Dialect Dict., I, 470, for examples) is the King James Version rendering of the dative emauto of 1Co 4:4 (the American Standard Revised Version renders this \"against\"). In classical Greek the same idiom sunoida with dative = \"be conscious\" or \"be cognizant of\" a thing.",
@@ -2255,6 +2426,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "BY"
+  },
+  {
+   "id": 1760,
+   "term": "By and by(곧바로)",
+   "definition": "In the sense of \"immediately\" is the King James Version translation of exautes, of Mr 6:25 (the American Standard Revised Version \"forthwith\"); of euthus, Mt 13:21 (the American Standard Revised Version \"straightway\"); of eutheos, Lu 17:7 (the American Standard Revised Version \"straightway\"); Lu 21:9 (the American Standard Revised Version \"immediately\"). In English literally this meaning is obsolete (compare: \"After you have dyned and supte, laboure not by and by after, but make a pause--the space of an howre or more with some pastyme\") (Babees Book, EETS, 247).",
+   "definition_ko": "곧(흠정역 「바이 앤드 바이」). 「즉시」라는 뜻으로 흠정역이 다음 헬라어를 옮긴 말이다. 마가복음 6:25의 '엑사우테스'(미국 개역판 「즉시」), 마태복음 13:21의 '유튀스'(미국 개역판 「곧」), 누가복음 17:7(미국 개역판 「곧」)과 21:9(미국 개역판 「즉시」)의 '유테오스'(개역개정은 모두 「곧」). 영어에서 이 뜻은 이제 쓰이지 않는다(「점심과 저녁을 먹은 뒤에는 곧 일하지 말고, 한 시간 넘게 놀이로 쉬어라」, 『배비스 북』, 초기 영어 문헌 협회 247과 비교하라).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "BY AND BY"
   },
   {
    "id": 1765,
@@ -2383,6 +2563,15 @@
    "isbe_key": "CARMEL"
   },
   {
+   "id": 1865,
+   "term": "Carpenter(목수)",
+   "definition": "kar'-pen-ter (charash; tekton): This word, which is a general word for graver or craftsman, is translated \"carpenter\" in 2Ki 22:6; 2Ch 24:12; Ezr 3:7; Isa 41:7. The same word is rendered \"craftsman\" in the American Standard Revised Version of Jer 24:1 and Jer 29:2 and \"smith\" in the American Standard Revised Version of Zec 1:20. In 2Sa 5:11; 2Ki 12:11; 1Ch 14:1; and Isa 44:13, charash occurs with `ets (wood), and is more exactly translated \"carpenter\" or \"worker in wood.\" Tekton, the corresponding Greek word for artificer, is translated \"carpenter\" in Mt 13:55 and Mr 6:3.\n\nSee CARVING; CRAFTS.",
+   "definition_ko": "목수(히브리어 '하라시'; 헬라어 '텍톤'). 새기는 사람이나 장인을 이르는 일반 낱말로, 열왕기하 22:6; 역대하 24:12; 에스라 3:7; 이사야 41:7에서 「목수」로 옮겨진다. 같은 낱말이 미국 개역판 예레미야 24:1과 29:2에서는 「장인」으로(개역개정 「목공들」), 스가랴 1:20에서는 「대장장이」로 옮겨진다(개역개정도 「대장장이」). 사무엘하 5:11; 열왕기하 12:11; 역대상 14:1; 이사야 44:13에서는 '하라시'가 '에츠'(나무)와 함께 나오며, 더 정확히 「목수」 또는 「나무 다루는 장인」으로 옮겨진다. 이에 해당하는 헬라어로 장인을 뜻하는 '텍톤'은 마태복음 13:55와 마가복음 6:3에서 「목수」로 옮겨진다.\n\n조각; 공예 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "CARPENTER"
+  },
+  {
    "id": 1875,
    "term": "Casiphia(가시뱌)",
    "definition": "ka-sif'-i-a, ka-sif-e'-a (kaciphya'): An unidentified place in North Babylonia, near the river Ahava, to which Ezra sent for \"ministers for the house of our God\" (Ezr 8:17). Some have thought the name to be connected with keceph, \"silver\" or \"money.\" Septuagint renders argurio tou topou, as in 1 Esdras 8:45, \"the place of the treasury.\"",
@@ -2419,6 +2608,15 @@
    "isbe_key": "CAUDA"
   },
   {
+   "id": 1893,
+   "term": "Caul(머리 망사(꺼풀))",
+   "definition": "kol:\n\n(1) yothereth (Ex 29:13), the large lobe or flap of the liver, which is usually mentioned together with the kidneys and the fat as the special portions set aside for the burnt offering (Le 3:4,10,15; 4:9; 7:4; 8:16,25; 9:10,19).\n\n(2) ceghor (from the root caghar, \"to enclose,\" \"shut up\"), Ho 13:8, literally the enclosure or covering of the heart, the caul or pericardium, or perhaps the chest as surrounding the heart. It must not be forgotten, however, that the expression may be taken in the sense of \"mailcoat of the heart,\" i.e. hardened heart, which is shut to the influence of God's grace. So Luther and many modern translators and commentators.\n\nH. L. E. Luering",
+   "definition_ko": "꺼풀(흠정역 「콜」).\n\n(1) '요테레트'(출애굽기 29:13; 개역개정 「간 위에 있는 꺼풀」). 간의 큰 엽 또는 덮개로, 번제에 따로 떼어 두는 몫으로 대개 콩팥과 기름과 함께 언급된다(레위기 3:4, 10, 15; 4:9; 7:4; 8:16, 25; 9:10, 19).\n\n(2) '세고르'(「두르다」, 「가두다」라는 뜻의 어근 '사가르'에서), 호세아 13:8(개역개정 「염통 꺼풀」). 문자적으로 심장을 두른 것 또는 덮개, 곧 심낭이며, 어쩌면 심장을 둘러싼 가슴일 수도 있다. 그러나 이 표현은 「심장의 갑옷」, 곧 하나님의 은혜의 영향에 닫혀 있는 굳은 마음이라는 뜻으로도 볼 수 있음을 잊지 말아야 한다. 루터와 많은 근대 번역자와 주석가가 그렇게 본다.\n\n(집필: H. L. E. Luering)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "CAUL"
+  },
+  {
    "id": 1906,
    "term": "Cenchreae(겐그레아)",
    "definition": "sen'-kre-e (Kegchreai, Westcott and Hort, The New Testament in Greek Kenchreai; the King James Version incorrectly Cenchrea): A seaport of Corinth on the eastern side of the isthmus (see CORINTH). Here according to Ac 18:18, Paul had his hair shorn before sailing for Syria, since he had a vow. A local church must have been established there by Paul, since Phoebe, the deaconess of Cenchrea, was entrusted with the Epistle to the Romans, and was commended to them in the highest terms by the apostle, who charged them to \"assist her in whatsoever matter she may have need\" (Ro 16:1,2).",
@@ -2426,6 +2624,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "CENCHREAE"
+  },
+  {
+   "id": 1931,
+   "term": "Chambering(음란)",
+   "definition": "cham'-ber-ing: Illicit intercourse; the rendering in English Versions of the Bible since Tyndale of koitias (literally \"beds,\" Ro 13:13). The Greek usage is paralleled in classic authors and the Septuagint; like the English participle, it denotes repeated or habitual acts. The word is not recorded elsewhere in English literature as verb or participle in this sense; in Othello, iii, 3, a chamberer is an intriguer, male wanton, in Byron, Werner, IV, 1, 404, a gallant or carpet knight, and in Chaucer, Clerk's Tale, 766, a concubine.",
+   "definition_ko": "음란(흠정역 「체임버링」). 부정한 성관계를 말한다. 틴데일 이래 영역 성경이 '코이타이스'(문자적으로 「침상들」, 로마서 13:13)를 옮긴 말이다(개역개정 「음란」). 이 헬라어의 쓰임은 고전 작가들과 칠십인역에도 비슷하게 있다. 영어 분사처럼 되풀이되거나 습관이 된 행위를 나타낸다. 이 낱말은 영문학의 다른 곳에서 동사나 분사로 이런 뜻으로 쓰인 기록이 없다. 셰익스피어 『오셀로』 3막 3장에서 '체임버러'는 음모꾼, 방탕한 남자이고, 바이런 『워너』 4막 1장 404행에서는 멋쟁이 또는 규방의 기사이며, 초서 『서생의 이야기』 766행에서는 첩이다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "CHAMBERING"
   },
   {
    "id": 1939,
@@ -2599,6 +2806,15 @@
    "isbe_key": "CHORAZIN"
   },
   {
+   "id": 2091,
+   "term": "Churl(어리석은 자)",
+   "definition": "churl (kilay or kelay): The Hebrew word occurs only in Isa 32:5,7, in the latter verse in a form slightly modified so as to produce a pleasing assonance with the word immediately following. The word probably means \"crafty\" or \"miserly,\" both ideas being suitable to the context, though \"miserly\" accords with the setting in Isa somewhat better.\n\nIn 1Sa 25:3 the Hebrew qasheh which means \"hard,\" \"severe,\" \"rough,\" is rendered \"churlish.\" In Saxon, churl, as the name for the lowest order of freemen, came to be used of persons boorish in manner. The rough and ill-mannered Nabal is aptly described as churlish.\n\nJohn Richard Sampey",
+   "definition_ko": "우둔한 자·인색한 자(흠정역 「철」; 히브리어 '킬라이' 또는 '켈라이'). 이 히브리어 낱말은 이사야 32:5, 7에만 나오며, 뒤의 절에서는 바로 뒤따르는 낱말과 듣기 좋게 운이 맞도록 꼴을 조금 바꾸었다(개역개정 「우둔한 자」, 「악한 자」). 이 낱말은 아마 「교활한」 또는 「인색한」을 뜻할 것이다. 두 뜻 모두 문맥에 맞지만 「인색한」이 이사야의 문맥에 조금 더 맞는다.\n\n사무엘상 25:3에서는 「단단한」, 「엄한」, 「거친」이라는 뜻의 히브리어 '카셰'가 「천박한」으로 옮겨졌다(개역개정 「완고하고」). 색슨어에서 '철'은 자유민의 가장 낮은 계층을 이르는 이름이었는데, 몸가짐이 촌스러운 사람을 가리키게 되었다. 거칠고 버릇없는 나발을 두고 이 말을 쓴 것은 알맞다.\n\n(집필: John Richard Sampey)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "CHURL"
+  },
+  {
    "id": 2097,
    "term": "Cilicia(길리기아)",
    "definition": "si-lish'-i-a (he Kilikia): An important province at the Southeast angle of Asia Minor, corresponding nearly with the modern Turkish vilayet of Adana; enfolded between the Taurus mountains and the Mediterranean Sea, with the Amanus range on the East and Pamphylia on the West; chief rivers, the Pyramus, Sarus, Cydnus and Calycadnus. The character of Cilician history has been largely determined by the physical features of the province. It is divided by nature into a mountainous part to the West, called Tracheia, and a broad, alluvial plain, hot and fertile, toward the East, termed Campestris or Pedias. Cilicia has always been isolated from its neighbors by land by its encircling mountains, save for its two famous mountain passes, the \"Syrian Gates,\" which offer an easy road to Antioch and the South, and the wonderful \"Cilician Gates,\" which open a road to central and western Asia Minor. Through these passes the armies and the pilgrims, the trade and the travel of the centuries have made their way. Alexander was one of the most renowned leaders of such expeditions, and at Issus he met and shattered the power of the Persian empire.\n\nThe early settlers of Cilicia are held to have been Semitic Syrians and Phoenicians, but in the still earlier days the inhabitants must have been Hittites. While few Hittite remains have been brought to light in Cilicia proper, the province was so surrounded by Hittites, and such important works of Hittite art and industry remain on the outskirts of the province, as at Ivriz, Marash, Sinjirli and Sakche Geuzi, that the intervening territory could hardly fail to be overspread with the same civilization and imperial power. See Professor John Garstang's The Land of the Hittites.\n\nCilicia appears as independent under Syennesis, a contemporary of Alyattes of Lydia, 610 BC. Later it passed under the Persian sway, but retained its separate line of kings. After Alexander the Seleucid rulers governed Cilicia from Antioch. The disturbances of the times enabled the pirates so to multiply and establish themselves in their home base, in Cilicia, Tracheia, that they became the scourge of the Mediterranean until their power was broken by Pompey (67-66 BC). Cilicia was by degrees incorporated in the Roman administration, and Cicero, the orator, was governor (51-50 BC).\n\nThe foremost citizen of the province was Saul of Tarsus (Ac 21:39; 22:3; 23:34). Students or pilgrims from Cilicia like himself disputed with Stephen (Ac 6:9). Some of the earliest labors of the great apostle were near his home, in Syria and Cilicia (Ga 1:21; Ac 15:23,11). On his voyage to Rome he sailed across the sea which is off Cilicia (Ac 27:5). Constantinople and Antioch may be regarded as the front and back door of Asia Minor, and as the former was not founded till the 4th century, Asia Minor may be regarded as fronting during apostolic days on Antioch. Cilicia was intimately connected with its neighbor province on the South. The first Christian apostles and evangelists followed the great highways, through the famous mountain passes, and carried the religion of Jesus to Asia Minor from Antioch as a base.\n\nArmenians migrating from the North founded kingdom in Cilicia under Roupen which was terminated by the overthrow of King Levon, or Leo, by the conquering Turks in 1393. A remnant of this kingdom survives in the separate Armenian catholicate of Sis, which has jurisdiction over few bishoprics, and Armenians are among the most virile of the present inhabitants of the province.\n\nG. E. White",
@@ -2642,6 +2858,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "COCK-CROWING"
+  },
+  {
+   "id": 2169,
+   "term": "Cockle(가라지(악취 나는 잡초))",
+   "definition": "kok'-'-l (King James Version margin \"stinking weeds,\" the Revised Version, margin \"noisome weeds\"; bo'shah, from Hebrew root ba'ash, \"to stink\"; batos): \"Let thistles grow instead of wheat, and cockle instead of barley\" (Job 31:40). On account of the meaning of the Hebrew root we should expect that the reference was rather to repulsive, offensive weeds than to the pretty corn cockle. It is very possible that no particular plant is here intended, though the common Palestinian \"stinking\" arums have been suggested by Hooker.",
+   "definition_ko": "독보리·악취 나는 잡초(흠정역 「코클」, 흠정역 난외 「악취 나는 잡초」, 영국·미국 개역판 난외 「해로운 잡초」; 히브리어 '보샤', 「악취를 풍기다」라는 뜻의 어근 '바아시'에서; 헬라어 '바토스'). 「밀 대신에 가시나무가 나고 보리 대신에 독보리가 나는 것이 마땅하니라」(욥기 31:40; 개역개정은 '보샤'를 「독보리」로 옮긴다). 히브리어 어근의 뜻으로 보아 예쁜 들꽃 선옹초(코클)보다는 역겹고 불쾌한 잡초를 가리킨다고 보아야 한다. 어느 특정한 식물을 가리키지 않았을 가능성이 매우 크지만, 후커는 팔레스타인에 흔한 「악취 나는」 천남성과 식물을 내놓았다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "COCKLE"
   },
   {
    "id": 2172,
@@ -2734,6 +2959,15 @@
    "isbe_key": "CORINTH"
   },
   {
+   "id": 2315,
+   "term": "Corn(곡식)",
+   "definition": "korn (daghan; sitos): A word used for cereals generally (Ge 27:28,37, etc., the King James Version) much as our English word \"corn.\" the American Standard Revised Version almost invariably substitutes \"grain\" for \"corn.\" The latter may be taken to include\n\n(1) barley,\n\n(2) wheat,\n\n(3) fitches (vetches),\n\n(4) lentils,\n\n(5) beans,\n\n(6) millet,\n\n(7) rye--the wrong translation for vetches,\n\n(8) pulse--for all these see separate articles.\n\nRye and oats are not cultivated in Palestine For many references to corn see AGRICULTURE; FOOD. \"A corn kokkos, the Revised Version (British and American) \"grain\" of wheat\" is mentioned (Joh 12:24).",
+   "definition_ko": "곡식(흠정역 「콘」; 히브리어 '다간'; 헬라어 '시토스'). 영어 「콘」과 거의 같이 곡류 전체를 이르는 말이다(창세기 27:28, 37 등 흠정역). 미국 개역판은 거의 늘 「콘」 대신 「그레인」을 쓴다. 곡식에는 다음이 든다고 볼 수 있다.\n\n(1) 보리,\n\n(2) 밀,\n\n(3) 소회향(살갈퀴),\n\n(4) 렌즈콩,\n\n(5) 콩,\n\n(6) 조,\n\n(7) 호밀 — 살갈퀴를 잘못 옮긴 말,\n\n(8) 콩류 — 이 모두는 각 항목을 보라.\n\n호밀과 귀리는 팔레스타인에서 재배하지 않는다. 곡식에 관한 여러 언급은 농업; 음식 항목을 보라. 「밀 한 알」(헬라어 '콕코스', 영국·미국 개역판 「밀 한 알갱이」)이 요한복음 12:24에 나온다(개역개정 「한 알의 밀」).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "CORN"
+  },
+  {
    "id": 2327,
    "term": "Corruption, Mount of(멸망의 산)",
    "definition": "(har ha-mashchith; to oros tou Mosoath): The hill on the right hand of which Solomon built high places for Ashtoreth, Chemosh and Milcom (2Ki 23:13). The mountain referred to is no doubt the Mount of Olives. The high places would, therefore, be on the southern height called in later Christian writings the \"Mount of Offence,\" and now, by the Arabs, Baten el-Hawa. Har ha-mashchith is probably only a perversion of har ha-mishchah, \"Mount of Anointing,\" a later name of the Mount of Olives.\n\nW. Ewing",
@@ -2750,6 +2984,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "COS"
+  },
+  {
+   "id": 2335,
+   "term": "Cotton(면)",
+   "definition": "kot'-'-n (karpac is the better translation, as in the Revised Version, margin, where the King James Version and the Revised Version (British and American) have \"green\" in Es 1:6): The Hebrew karpac is from the Persian kirpas and the Sanskrit karpasa, \"the cotton plant.\" The derived words originally meant \"muslin\" or \"calico,\" but in classical times the use of words allied to karpac--in Greek and Latin--was extended to include linen. The probability is in favor of \"cotton\" in Es 1:6. This is the product of Gossypium herbaceum, a plant originally from India but now cultivated in many other lands.",
+   "definition_ko": "면(흠정역 「코튼」; 히브리어 '카르파스'가 더 나은 번역이며, 영국·미국 개역판 난외에 그렇게 되어 있다. 흠정역과 영국·미국 개역판은 에스더 1:6에서 「녹색」으로 옮긴다; 개역개정도 「녹색」). 히브리어 '카르파스'는 페르시아어 '키르파스', 산스크리트어 '카르파사', 「목화」에서 왔다. 여기서 나온 낱말들은 본디 「모슬린」이나 「옥양목」을 뜻하였으나, 고전 시대에는 헬라어와 라틴어에서 '카르파스'와 같은 계열의 낱말이 아마포까지 가리키도록 넓어졌다. 에스더 1:6에서는 「면」일 가능성이 크다. 면은 고시피움 헤르바케움의 산물로, 본디 인도에서 온 식물이지만 지금은 여러 나라에서 재배한다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "COTTON"
   },
   {
    "id": 2370,
@@ -2786,6 +3029,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "CRISPING PINS"
+  },
+  {
+   "id": 2431,
+   "term": "Cummin(대회향(근채))",
+   "definition": "kum'-in (kammon; kuminon): The seed of the herb Cuminum cyminum (Natural Order Umbelliferae). It has carminative properties and is used for flavoring various dishes, especially during fasts. In flavor and appearance it resembles caraway, though it is less agreeable to western palates. As an illustration of Yahweh's wisdom it is said (Isa 28:25,27) that cummin is scattered in sowing and beaten out with a rod in threshing. These facts are true in Palestine today. The Jews paid tithes of cummin (Mt 23:23) (see cut on following page).",
+   "definition_ko": "대회향·근채(흠정역 「커민」; 히브리어 '캄몬'; 헬라어 '퀴미논'). 쿠미눔 키미눔(산형과)이라는 풀의 씨다. 가스를 내보내는 약효가 있으며 여러 음식, 특히 금식 때의 음식에 맛을 내는 데 쓰인다. 맛과 생김새가 캐러웨이를 닮았지만 서양 사람의 입에는 덜 맞는다. 여호와의 지혜를 보여 주는 보기로, 씨를 뿌릴 때는 흩어 뿌리고 떨 때는 막대기로 두드린다고 한다(이사야 28:25, 27; 개역개정 「대회향」). 이것은 오늘날 팔레스타인에서도 그대로다. 유대인은 이것의 십일조도 바쳤다(마태복음 23:23; 개역개정 「근채」)(원문: 다음 쪽 그림 참조).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "CUMMIN"
   },
   {
    "id": 2432,
@@ -2986,6 +3238,33 @@
    "isbe_key": "DECAPOLIS"
   },
   {
+   "id": 2588,
+   "term": "Dedicate; Dedication(수전절)",
+   "definition": "ded'-i-kat, ded-ika'-shun (chanukkah, \"initiation,\" \"consecration\"; qadhesh, \"to be clean,\" \"sanctify\"; cherem, \"a thing devoted (to God)\"): Often used in Hebrew of the consecration of persons, but usually in the English Versions of the Bible of the setting apart of things to a sacred use, as of the altar (Nu 7:10 f,84,88; compare Da 3:2,3, \"the dedication of the image\"), of silver and gold (2Sa 8:11; 2Ki 12:4), of the Temple (1Ki 8:63; Ezr 6:16 f; compare Ex 29:44), of the wall of Jerusalem (Ne 12:27), of private dwellings (De 20:5). the Revised Version (British and American) substitutes \"devoted\" for \"dedicated\" in Eze 44:29. See CONSECRATION; SANCTIFICATION.",
+   "definition_ko": "봉헌·수전(히브리어 '하눅카', 「시작함」, 「봉헌」; '카데시', 「깨끗하다」, 「거룩하게 하다」; '헤렘', 「(하나님께) 바친 것」). 히브리어에서는 흔히 사람을 성별하는 데 쓰지만, 영역 성경에서는 대개 물건을 거룩한 용도로 구별하는 데 쓴다. 제단(민수기 7:10 이하, 84, 88; 다니엘 3:2, 3 「신상의 봉헌」(개역개정 「낙성식」)과 비교하라), 은과 금(사무엘하 8:11; 열왕기하 12:4), 성전(열왕기상 8:63; 에스라 6:16 이하; 출애굽기 29:44와 비교하라), 예루살렘 성벽(느헤미야 12:27), 개인의 집(신명기 20:5, 개역개정 「낙성식」)에 쓰인다. 영국·미국 개역판은 에스겔 44:29에서 「봉헌된」 대신 「바쳐진」을 쓴다. 성별; 성화 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DEDICATE; DEDICATION"
+  },
+  {
+   "id": 2591,
+   "term": "Deep(깊음(심연) · 깊음)",
+   "definition": "(tehom; abussos, Lu 8:31 the King James Version; Ro 10:7 the King James Version; bathos, Lu 5:4; buthos, 2Co 11:25):\n\nThe Hebrew word (\"water in commotion\") is used\n\n(1) of the primeval watery waste (Ge 1:2), where some suggest a connection with Babylonian Tiamat in the creation-epic;\n\n(2) of the sea (Isa 51:10 and commonly);\n\n(3) of the subterranean reservoir of water (Ge 7:11; 8:2; 49:25; De 33:13; Eze 31:4, etc.). In the Revised Version (British and American) the Greek word first noted is rendered, literally, \"abyss.\" See ABYSS; also ASTRONOMY, sec. III, 7.",
+   "definition_ko": "깊음(히브리어 '테홈'; 헬라어 '아뷔소스', 누가복음 8:31 흠정역; 로마서 10:7 흠정역; '바토스', 누가복음 5:4; '뷔토스', 고린도후서 11:25).\n\n히브리어 낱말(「요동하는 물」)은 다음에 쓰인다.\n\n(1) 태초의 물의 혼돈(창세기 1:2). 어떤 이는 여기서 바벨론 창조 서사시의 티아마트와의 관련을 짐작한다.\n\n(2) 바다(이사야 51:10 그리고 흔히).\n\n(3) 땅 밑의 물 저장고(창세기 7:11; 8:2; 49:25; 신명기 33:13; 에스겔 31:4 등; 개역개정 「큰 깊음의 샘들」 등).\n\n영국·미국 개역판은 처음 적은 헬라어를 문자 그대로 「아비스」로 옮긴다(개역개정 「무저갱」). 아비스 항목을 보라. 천문학 항목 III, 7도 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DEEP"
+  },
+  {
+   "id": 2626,
+   "term": "Denarius(데나리온)",
+   "definition": "de-na'-ri-us (denarion): A Roman silver coin, 25 of which went to the aureus, the standard gold coin of the empire in the time of Augustus, which was equal in value to about one guinea or $5,25; more exactly œ1.0,6 = $5.00, the œ = $4,866. Hence, the value of the denarius would be about 20 cents and this was the ordinary wage of a soldier and a day laborer. The word is uniformly rendered \"penny\" in the King James Version and \"shilling\" in the American Standard Revised Version, except in Mt 22:19; Mr 12:15 and Lu 20:24, where the Latin word is used, since in these passsages it refers to the coin in which tribute was paid to the Roman government. See MONEY.\n\nH. Porter",
+   "definition_ko": "데나리온(헬라어 '데나리온'). 로마의 은화다. 25데나리온이 아구스도 시대 제국의 표준 금화 '아우레우스' 하나였는데, 그 값은 약 1기니, 곧 5.25달러, 더 정확히는 1파운드 0실링 6펜스 = 5.00달러(1파운드 = 4.866달러)였다. 그러므로 데나리온의 값은 약 20센트였고, 이것이 군인과 날품팔이 일꾼의 보통 품삯이었다. 흠정역은 이 낱말을 한결같이 「페니」로, 미국 개역판은 「실링」으로 옮긴다. 다만 마태복음 22:19; 마가복음 12:15; 누가복음 20:24에서는 라틴어 낱말을 그대로 쓴다. 이 구절들에서는 로마 정부에 조세를 바치던 동전을 가리키기 때문이다(개역개정은 모든 곳에서 「데나리온」). 돈 항목을 보라.\n\n(집필: H. Porter)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DENARIUS"
+  },
+  {
    "id": 2632,
    "term": "Derbe(더베)",
    "definition": "dur'-be (Derbe, Ac 14:20,21; 16:1; Derbaios, 20:4; Derbetes, Strabo, Cicero): A city in the extreme Southeast corner of the Lycaonian plain is mentioned twice as having been visited by Paul (on his first and second missionary journeys respectively), and it may now be regarded as highly probable that he passed through it on his third journey (to the churches of Galatia). The view that these churches were in South Galatia is now accepted by the majority of English and American scholars, and a traveler passing through the Cilician Gates to Southern Galatia must have traversed the territory of Derbe.\n\n1. History:\n\nDerbe is first mentioned as the seat of Antipater, who entertained Cicero, the Roman orator and governor of Cilicia. When the kingdom of Amyntas passed, at his death in 25 BC, to the Romans, it was made into a province and called Galatia (see GALATIA). This province included Laranda as well as Derbe on the extreme. Southeast, and for a time Laranda was the frontier city looking toward Cappadocia and Cilicia and Syria via the Cilician Gates. But between 37 and 41 AD Laranda was transferred to the \"protected\" kingdom of Antiochus, and Derbe became the frontier city. It was the last city on distinctively Roman territory, on the road leading from Southern Galatia to the East; it was here that commerce entering the province had to pay the customs dues. Strabo records this fact when he calls Derbe a limen or \"customs station.\" It owed its importance (and consequently its visit from Paul on his first journey) to this fact, and to its position on a great Roman road leading from Antioch, the capital of Southern Galatia, to Iconium, Laranda, Heracleia-Cybistra, and the Cilician Gates. Roman milestones have been found along the line of this road, one at a point 15 miles Northwest of Derbe. It was one of those Lycaonian cities honored with the title \"Claudian\" by the emperor Claudius; its coins bear the legend \"Claudio-Derbe.\" This implied considerable importance and prosperity as well as strong pro-Roman feeling; yet we do not find Derbe standing aloof, like the Roman colonies Iconium and Lystra, from the Common Council of Lycaonian cities (Koinon Lykaonias).\n\nDerbe remained in the province Galatia till about 135 AD, when it passed to the jurisdiction of the triple province Cilicia-Isauria-Lycaonia. It continued in this division till 295 AD, and was then included in the newly formed province Isauria. This arrangement lasted till about 372 AD, when Lycaonia, including Derbe, was formed into a separate province. The statement of Stephanus of Byzantium that Derbe was \"a fortress of Isauria\" originated in the arrangement which existed from 295 to 372 AD. Coins of the city represent Heracles, Fortuna and a winged Victory writing on a shield (after the pattern of the Venus of Melos, in the Louvre, Paris). Derbe is mentioned several times in the records of the church councils. A bishop, Daphnus of Derbe, was present at the Council of Constantinople in 381.\n\n2. Situation:\n\nThe site of Derbe was approximately fixed by the American explorer Sterrett, and more accurately by Sir W. M. Ramsay, who, after carefully examining all the ruins in the neighborhood, placed it at Gudelisin. Up to 1911, certain epigraphic evidence fixing the site had not been found, but Ramsay's identification meets all the conditions, and cannot be far wrong. On the East, Derbe was conterminous with Laranda, on the Northeast with Barata in the Kara Dagh. It bordered on the territory of Iconium on the Northwest, and on Isauria on the West. Its territory touched the foothills of Taurus on the South, and the site commands a fine view of the great mountain called Hadji Baba or the Pilgrim Father. The Greeks of the district say that the name is a reminiscence of Paul, \"over whose travels\" the mountain \"stood as a silent witness.\"\n\nThe remains are mostly of the late Roman and Byzantine periods, but pottery of an earlier date has been found on the site. An inscription of a village on the territory of Derbe records the erection of a building by two architects from Lystra. A line of boundary stones, separating the territory of Derbe from that of Barata, is still standing. It probably belongs to an early delimitation of the territory of the frontier town of Galatia (Ramsay).\n\n3. Paul at Derbe:\n\nIn Ac 14:20,21, it is narrated that Paul and Barnabas, after being driven out of Lystra, departed to Derbe, where they \"preached the gospel .... and made many disciples.\" But they did not further. Paul's mission included only the centers of Greco-Roman civilization; it was no part of his plan to pass over the frontier of the province into non- Roman territory. This aspect of his purpose is illustrated by the reference to Derbe on his second journey (Ac 16:1). Paul started from Antioch and \"went through Syria and Cilicia, confirming the churches\" (Ac 15:41). \"Then he came to Derbe and Lystra\" (Ac 16:1 the King James Version). The unwarned reader might forget that in going from Cilicia to Derbe, Paul must have, passed through a considerable part of Antiochus' territory, and visited the important cities of Heracleia-Cybistra and Laranda. But his work ends with the Roman Cilicia and begins again with the Roman Galatia; to him, the intervening country is a blank. Concentration of effort, and utilization only of the most fully prepared material were the characteristics of Paul's missionary journeys in Asia Minor. That Paul was successful in Derbe may be gathered (as Ramsay points out) from the fact that he does not mention Derbe among the places where he had suffered persecution (2Ti 3:11). Gaius of Derbe (among others) accompanied Paul to Jerusalem, in charge of the donations of the churches to the poor in that city (Ac 20:4).LITERATURE.The only complete account of Derbe is that given in Sir W. M. Ramsay's Cities of Paul, 385-404. On Paul's mission there, see the same author's Paul the Traveler and Roman Citizen, 119, 178. Many inscriptions of the later Roman period are collected in Sterrett, Wolfe Expedition to Asia Minor, Numbers 18-52. The principal ancient authorities, besides Acts, are Cicero Ad Fam. xiii.73; Strabo xxx.569; Ptolemeus, v.6, 17; Steph. Byz., Hierocl., 675; Notit, Episcop., I, 404, and the Acta Conciliorum.\n\nW. M. Calder",
@@ -3040,6 +3319,15 @@
    "isbe_key": "DINHABAH"
   },
   {
+   "id": 2699,
+   "term": "Dioscuri(디오스구로)",
+   "definition": "di-os'-ku-ri (Dioscouroi; in Ac 28:11, the King James Version Castor and Pollux, the Revised Version (British and American) THE TWIN BROTHERS; in margin, \"Dioscuri\"): The sign of the ship on which Paul sailed from Melita to Syracuse and Rhegium. The Dioscuri (i.e. sons of Zeus), Castor and Pollux, are the two chief stars in the constellation of the Twins. Some 4,000 years BC they served as pointers to mark the beginning of the new year by setting together with the first new moon of springtime. The constellation of the Twins was supposed to be especially favorable to sailors, hence, ships were often placed under the protection of the twin gods.\n\nE. W. Maunder",
+   "definition_ko": "디오스구로(헬라어 '디오스쿠로이'; 사도행전 28:11, 흠정역 「카스토르와 폴룩스」, 영국·미국 개역판 「쌍둥이 형제」, 난외 「디오스쿠리」; 개역개정 「디오스구로」). 바울이 멜리데에서 수라구사와 레기온으로 타고 간 배의 표지(머리 장식)다. 디오스구로(곧 제우스의 아들들)인 카스토르와 폴룩스는 쌍둥이자리의 두 주요 별이다. 주전 4천 년쯤에는 이 별들이 봄철 첫 초승달과 함께 지면서 새해의 시작을 가리키는 표지 노릇을 하였다. 쌍둥이자리는 특히 뱃사람에게 이롭다고 여겨졌으므로 배를 흔히 쌍둥이 신의 보호 아래 두었다.\n\n(집필: E. W. Maunder)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DIOSCURI"
+  },
+  {
    "id": 2723,
    "term": "Dispensation(경륜(구속경륜))",
    "definition": "dis-pen-sa'-shun: The Greek word (oikonomia) so translated signifies primarily, a stewardship, the management or disposition of affairs entrusted to one. Thus 1Co 9:17, the King James Version \"A dispensation of the gospel is committed unto me,\" the Revised Version (British and American) \"I have stewardship entrusted to me.\" The idea is similar in Eph 3:2 parallel Col 1:25 (the Revised Version, margin \"stewardship\"). In Eph 1:10 God's own working is spoken of as \"dispensation.\"",
@@ -3083,6 +3371,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "DREDGE"
+  },
+  {
+   "id": 2788,
+   "term": "Dregs(찌끼(포도주 앙금))",
+   "definition": "dregs: The \"sediments,\" \"lees,\" \"grounds of liquor\"; only in plural. In the King James Version it stands for:\n\n(1) Hebrew qubba`ath, \"bowl,\" \"chalice,\" found only in Isa 51:17,22: \"the dregs of the cup of trembling\"; \"the dregs of the cup of my fury.\" the Revised Version (British and American) correctly changes \"dregs\" into \"bowl.\"\n\n(2) Hebrew shemarim, \"sediments\" or \"dregs,\" especially lees of wine. \"The dregs thereof, all the wicked of the earth shall wring (the American Standard Revised Version \"drain\") them out and drink them\" (Ps 75:8), i.e. God gives to the wicked the cup of wrathful judgment, which they must drink to the last drop.",
+   "definition_ko": "찌꺼기(흠정역 「드레그즈」). 「앙금」, 「술지게미」, 「술 찌끼」이며 복수로만 쓰인다. 흠정역에서 다음을 옮긴다.\n\n(1) 히브리어 '쿱바아트', 「사발」, 「잔」. 이사야 51:17, 22에만 나온다. 「떨게 하는 잔의 찌꺼기」, 「내 분노의 잔의 찌꺼기」. 영국·미국 개역판은 바르게 「찌꺼기」를 「사발」로 고친다(개역개정 「큰 잔」).\n\n(2) 히브리어 '셰마림', 「앙금」, 「찌꺼기」, 특히 포도주 앙금. 「실로 그 찌꺼기까지도 땅의 모든 악인이 기울여 마시리로다」(시편 75:8). 곧 하나님은 악인에게 진노의 심판의 잔을 주시며, 그들은 그것을 마지막 한 방울까지 마셔야 한다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "DREGS"
   },
   {
    "id": 2795,
@@ -3589,6 +3886,15 @@
    "isbe_key": "EPHLAL"
   },
   {
+   "id": 3126,
+   "term": "Ephphatha(에바다)",
+   "definition": "ef'-a-tha, ef-a'-tha (Ephphatha):\n\nAramaic word used by Christ (Mr 7:34), the 'ethpa`al imperative of Aramaic pethach (Hebrew pathach), translated, \"Be (thou) opened\"; compare Isa 35:5. The Aramaic was the sole popular language of Palestine (Shurer, History of the Jewish People in the Time of Jesus Christ, IIg, 9) and its use shows that we have here the graphic report of an eyewitness, upon whom the dialectic form employed made a deep impression. This and the corresponding act of the touch with the moistened finger is the foundation of a corresponding ceremony in the Roman Catholic formula for baptism.",
+   "definition_ko": "에바다(헬라어 '에파타'). 그리스도께서 쓰신 아람어로(마가복음 7:34), 아람어 '페타흐'(히브리어 '파타흐')의 '에트파알' 명령형이며, 「열려라」로 옮겨진다(개역개정 「이는 열리라는 뜻이라」). 이사야 35:5와 비교하라. 아람어는 팔레스타인의 유일한 대중 언어였으며(쉬러, 『예수 그리스도 시대 유대 민족사』 II, 9), 이 말을 그대로 적은 것은 여기에 쓰인 방언 꼴에 깊은 인상을 받은 목격자의 생생한 보고가 있음을 보여 준다. 이 말과, 침 묻힌 손가락으로 만지신 행위가 로마 가톨릭 세례 예식의 한 절차의 바탕이 되었다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "EPHPHATHA"
+  },
+  {
    "id": 3128,
    "term": "Ephraim (2)(에브라임)",
    "definition": "(1) A position apparently of some importance, since the position of Baal-hazor (probably = Tell `Asur) where Abraham's sheep- farm was located, is determined by relation to it (2Sa 13:23). That it lay North of Jerusalem seems to be indicated in 2Sa 13:34. It may be identical with the Ephraim of Eusebius, Onomasticon, 20 Roman miles North of Jerusalem, and therefore to be sought somewhere in the neighborhood of Sinjil and el- Lubban. Connected with this may have been the name Aphaerema, a district in Samaria mentioned in 1 Macc 11:34; Ant, XIII, iv, 9.\n\n(2) The town near the wilderness to which Jesus retired after the raising of Lazarus (Joh 11:54). This probably corresponds to Ephrem of Eusebius, Onomasticon (s .v. \"Afra\") 5 Roman miles East of Bethel. This may be the place named along with Bethel by Josephus (BJ, IV, ix, 9). It probably answers to eT-Taiyebeh, a large village about 4 miles North of Beitin. The antiquity of the site is attested by the cisterns and rock tombs. It stands on a high hill with a wide outlook including the plains of Jericho and the Dead Sea.\n\nSee EPHRON.\n\nW. Ewing",
@@ -3760,6 +4066,33 @@
    "isbe_key": "EUPHRATES"
   },
   {
+   "id": 3265,
+   "term": "Example(본보기(모범))",
+   "definition": "eg-zam'-p'-l (tupos, \"a pattern,\" hupodeigma, \"copy\" \"representation\" hupogrammos, \"a writing-copy,\" example):\n\nA typical, representative, or illustrative case; a pattern or model for imitation (hupodeigma, Joh 13:15; Heb 8:5 the King James Version; Jas 5:10; hupogrammos, 1Pe 2:21; tupos, 1Ti 4:12 the King James Version) or warning (deigma, \"a sample,\" \"exhibition,\" Jude 1:7; compare 2Pe 2:6; hupodeigma, Heb 4:11; tupos, 1Co 10:6,11). \"Ensample\" (tupos, /APC 2Macc 6:28,31; Php 3:17; 1Th 1:7; 2Th 3:9; 1Ti 4:12; 1Pe 5:3) and \"example\" have the same meaning, but the former is always suggestive of goodness.",
+   "definition_ko": "본·본보기(헬라어 '튀포스', 「본」; '휘포데이그마', 「사본」, 「표현」; '휘포그람모스', 「글씨 본」). 전형적이거나 대표적이거나 실례가 되는 경우, 곧 본받을 본이나 모형(휘포데이그마, 요한복음 13:15; 히브리서 8:5 흠정역; 야고보서 5:10; 휘포그람모스, 베드로전서 2:21; 튀포스, 디모데전서 4:12 흠정역; 개역개정 「본」) 또는 경계(데이그마, 「견본」, 「전시」, 유다서 1:7, 개역개정 「거울」; 베드로후서 2:6과 비교하라; 휘포데이그마, 히브리서 4:11; 튀포스, 고린도전서 10:6, 11, 개역개정 「본보기」)를 말한다. 「엔샘플」(튀포스, 마카베오하 6:28, 31; 빌립보서 3:17; 데살로니가전서 1:7; 데살로니가후서 3:9; 디모데전서 4:12; 베드로전서 5:3)과 「이그잼플」은 뜻이 같지만, 앞의 것은 늘 선함을 떠올리게 한다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "EXAMPLE"
+  },
+  {
+   "id": 3275,
+   "term": "Exile(포로(유배))",
+   "definition": "ek'-sil, eg'-zil (galah, tsa`ah):\n\nOccurs twice only in the King James Version (2Sa 15:19 (galah, \"to remove\"); Isa 51:14 (tsa`ah, \"to be bowed down\")). In the Revised Version (British and American) \"exile\" is substituted for \"captivity\" (Ezr 8:35 (shebhi), and Eze 12:4 (golah)); \"go into exile,\" for \"remove and go\" (Eze 12:11); \"exiles of Ethiopia\" for \"Ethiopians captives\" (Isa 20:4); \"He shall let my exiles go free\" for \"He shall let go my captives\" (Isa 45:13); \"an exile\" for \"a captive\" (Isa 49:21). \"The exile\" is in the King James Version and the Revised Version (British and American) \"the captivity\" (which see).",
+   "definition_ko": "포로·유배(흠정역 「엑사일」; 히브리어 '갈라', '차아').\n\n흠정역에는 두 번만 나온다(사무엘하 15:19('갈라', 「옮기다」; 개역개정 「쫓겨난 나그네」); 이사야 51:14('차아', 「구부러지다」; 개역개정 「결박된 포로」)). 영국·미국 개역판에서는 「사로잡힘」 대신 「유배」를 쓰고(에스라 8:35('셰비'); 에스겔 12:4('골라')), 「옮겨 가라」 대신 「유배를 가라」(에스겔 12:11), 「구스 사람 포로」 대신 「구스의 유배자들」(이사야 20:4), 「그가 내 포로들을 놓으리라」 대신 「그가 내 유배자들을 놓아 자유롭게 하리라」(이사야 45:13), 「포로」 대신 「유배자」를 쓴다(이사야 49:21). 「그 유배」는 흠정역과 영국·미국 개역판에서 「그 사로잡힘」(그 항목을 보라)이다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "EXILE"
+  },
+  {
+   "id": 3284,
+   "term": "Expiation(속죄(대속) · 속죄)",
+   "definition": "eks-pi-a'-shun:\n\nThis word represents no Hebrew or Greek word not rendered also by \"atonement.\" In Nu 8:7 it is employed in the Revised Version (British and American) to translate chaTath and in De 32:43, kipper. This version also employs \"expiate\" in the margin of several passages, eg. Ps 65:3; 79:9. Always its use in English Versions of the Bible is somewhat more narrow and specific than \"atonement\" and has especial reference to specific uncleanness or sin.\n\nIt will be sufficient to refer to ATONEMENT; SACRIFICE; PROPITIATION.",
+   "definition_ko": "속죄(흠정역 「익스피에이션」).\n\n이 낱말은 「속죄」(어톤먼트)로도 옮겨지지 않은 히브리어나 헬라어 낱말을 나타내는 것이 아니다. 영국·미국 개역판은 민수기 8:7에서 '하타트'를(개역개정 「속죄의 물」), 신명기 32:43에서 '킵페르'를 옮기는 데 이 말을 쓴다. 이 개역판은 난외에서도 여러 곳에 「속죄하다」를 쓴다. 보기: 시편 65:3; 79:9. 영역 성경에서 이 말의 쓰임은 늘 「어톤먼트」보다 조금 더 좁고 구체적이며, 특히 구체적인 부정이나 죄를 가리킨다.\n\n속죄; 제사; 화목제물 항목을 보면 충분하다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "EXPIATION"
+  },
+  {
    "id": 3299,
    "term": "Eyeservice(눈가림)",
    "definition": "i'-sur-vis (ophthalmodouleia):\n\nA term coined by Paul to express the conduct of slaves, who work only when they are watched, and whose motive, therefore, is not fidelity to duty, but either to avoid punishment or to gain reward from their masters (Eph 6:6; Col 3:22). \"A vice which slavery everywhere creates and exhibits. Hence, the need for drivers and overseers\" (Eadie).",
@@ -3797,7 +4130,7 @@
   },
   {
    "id": 3316,
-   "term": "Ezrahite(에스라 사람)",
+   "term": "Ezrahite(예스라 사람(에스라인))",
    "definition": "ez'-ra-hit ('ezrachi; Asebon):\n\nFound in 1Ki 4:31; Psalm 88; Psalm 89, titles; from which it appears that the word is a patronymic for Ethan and Heman. It may be derived from Zerah, instead of Ezrah, seeing that there were an Ethan and a Heman who were descendants of Zerah, head of a Judahite family (1Ch 2:6).\n\nThere were also an Ethan and a Heman who were Levites (1Ch 15:17).",
    "definition_ko": "예스라 사람(히브리어 '에즈라히'; 아세본; 개역개정 열왕기상 4:31 「예스라 사람」, 시편 88, 89편 표제 「에스라인」). 열왕기상 4:31과 시편 88, 89편 표제에 나오며, 여기서 이 낱말이 에단과 헤만의 가문 이름임이 드러난다. 에스라 대신 세라에서 왔을 수 있는데, 유다 가문의 우두머리 세라의 자손 가운데 에단과 헤만이 있었기 때문이다(역대상 2:6). 레위인 에단과 헤만도 있었다(역대상 15:17).",
    "category": "인명",
@@ -3812,6 +4145,33 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "FAIR HAVENS"
+  },
+  {
+   "id": 3328,
+   "term": "Fairs(상품(물품))",
+   "definition": "farz: Found only 5 times in the King James Version (Eze 27:12,14,16,19,27), apparently incorrect translation of `izzabhon, according to modern Hebraists (though Gesenius gives \"fair\" as one of its meanings). The Septuagint translates the Hebrew of the above five passages by two different words, agora, \"market-place\" (Eze 27:12,14,16,19), and misthos, \"hire,\" \"pay\" (Eze 27:27,33). The King James Version follows the Wyclif version in Eze 27:12 and the Geneva version throughout, although it properly translates \"wares\" in Eze 27:33. the Revised Version (British and American) gives \"wares\" (which see) throughout.",
+   "definition_ko": "물품·상품(흠정역 「페어즈」). 흠정역에서 다섯 번만 나오며(에스겔 27:12, 14, 16, 19, 27), 오늘날 히브리어 학자들에 따르면 '잇자본'의 틀린 번역으로 보인다(게세니우스는 「장터」를 그 뜻 가운데 하나로 들기는 한다). 칠십인역은 위 다섯 곳의 히브리어를 두 낱말로 옮기는데, '아고라', 「장터」(에스겔 27:12, 14, 16, 19)와 '미스토스', 「삯」, 「값」(에스겔 27:27, 33)이다. 흠정역은 에스겔 27:12에서 위클리프역을, 그리고 모든 곳에서 제네바역을 따랐지만, 에스겔 27:33에서는 바르게 「물품」으로 옮긴다. 영국·미국 개역판은 모든 곳에서 「물품」(그 항목을 보라)으로 옮긴다(개역개정 「물품」).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FAIRS"
+  },
+  {
+   "id": 3354,
+   "term": "Farm(농장(밭))",
+   "definition": "farm: Mt 22:5 is the only passage where agros, has been rendered \"farm.\" In the many other passages where the same word occurs it is rendered \"field\" or \"piece of ground.\" Farms such as the Occidental is accustomed to see, namely, isolated dwellings with their groups of outbuildings, surrounded by walls or hedges and overlooking the planted fields, were probably unknown in Palestine. For protection against wild beasts and Arab marauders everyone lived in a village and went out to his fields, located perhaps miles away, only as occasion required.\n\nJames A. Patch",
+   "definition_ko": "밭·농장(흠정역 「팜」). 마태복음 22:5는 '아그로스'를 「농장」으로 옮긴 유일한 곳이다(개역개정 「밭」). 같은 낱말이 나오는 다른 많은 곳에서는 「밭」이나 「땅」으로 옮긴다. 서양 사람이 흔히 보는 농장, 곧 담이나 울타리로 둘러싸인 채 곁채들을 거느리고 가꾼 밭을 내려다보는 외딴 집은 팔레스타인에서 아마 알려지지 않았을 것이다. 들짐승과 아랍 약탈자를 막으려고 모두 마을에 살았고, 때로는 여러 마일 떨어진 밭에 필요할 때만 나갔다.\n\n(집필: James A. Patch)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FARM"
+  },
+  {
+   "id": 3355,
+   "term": "Farthing(앗사리온(고드란트))",
+   "definition": "far'-thing: The rendering of two words in the Greek of the New Testament, assarion, and kodrantes, Latin quadrans. The assarion was the tenth part of the denarius, and hence in value about one penny or two centuries The quadrans was the fourth part of the Roman as, and worth only about three mills, or less than the English farthing, and is the only term rendered farthing by the American Standard Revised Version. It occurs in Mt 5:26 and Mr 12:42, while assarion, which occurs in Mt 10:29 and Lu 12:6, is rendered \"penny\" by the American Standard Revised Version.",
+   "definition_ko": "고드란트·앗사리온(흠정역 「파딩」). 신약 헬라어의 두 낱말, '앗사리온'과 '코드란테스'(라틴어 '콰드란스')를 옮긴 말이다. 앗사리온은 데나리온의 10분의 1로, 값은 약 1페니 또는 2센트였다. 콰드란스는 로마 동전 '아스'의 4분의 1로, 약 3밀의 값밖에 안 되어 영국 파딩보다 못하였다. 미국 개역판이 「파딩」으로 옮긴 것은 이것뿐이다. 이것은 마태복음 5:26(개역개정 「한 푼」)과 마가복음 12:42(개역개정 「고드란트」)에 나오며, 마태복음 10:29와 누가복음 12:6에 나오는 앗사리온(개역개정 「앗사리온」)은 미국 개역판이 「페니」로 옮긴다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FARTHING"
   },
   {
    "id": 3367,
@@ -3848,6 +4208,42 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "FISHPOOLS"
+  },
+  {
+   "id": 3441,
+   "term": "Flag(갈대(왕골))",
+   "definition": "Two Hebrew words:\n\n(1) cuph (Ex 2:3,1, \"flags\"; Isa 19:6, \"flags\"; Jon 2:5, \"weeds\"). This is apparently a general name which includes both the fresh-water weeds growing along a river bank and \"seaweeds.\" The Red Sea was known as Yam cuph.\n\n(2) 'achu (Ge 41:2,18, the King James Version \"meadow,\" the Revised Version (British and American) \"reed-grass\"; Job 8:11, \"Can the rush grow up without mire? Can the flag (margin \"reed-grass\") grow without water?\"). Some such general term as \"sedges\" or \"fens\" would better meet the requirements.",
+   "definition_ko": "갈대·부들(흠정역 「플래그」). 히브리어 두 낱말이 있다.\n\n(1) '수프'(출애굽기 2:3, 5, 「플래그」; 이사야 19:6, 「플래그」; 요나 2:5, 「해초」; 개역개정 「갈대」, 「부들」, 「바다 풀」). 강가에 자라는 민물풀과 「바다 풀」을 함께 이르는 일반 이름으로 보인다. 홍해를 '얌 수프'라 불렀다.\n\n(2) '아후'(창세기 41:2, 18, 흠정역 「초장」, 영국·미국 개역판 「갈풀」; 개역개정 「갈밭」; 욥기 8:11, 「왕골이 진펄 아닌 데서 크게 자라겠으며 갈대가 물 없는 데서 크게 자라겠느냐」, 난외 「갈풀」). 「사초」나 「습지 풀」 같은 일반 용어가 더 알맞을 것이다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FLAG"
+  },
+  {
+   "id": 3489,
+   "term": "Forces(재물(이방인의 부))",
+   "definition": "for'-sis (chayil):\n\n(1) The word is used as a military term, equivalent to army, in 2Ki 25:23,16 (where the King James Version reads \"armies\"); 2Ch 17:2; Jer 40:7, etc.\n\nSee ARMY.\n\n(2) In Isa 60:5,11, it is rendered in the Revised Version (British and American) by \"wealth,\" and in Ob verse 11, by \"substance.\"\n\nTwo other Hebrew words are also translated \"forces\" in the King James Version, ma'amatstsim (Job 36:19), and ma`oz (Da 11:38), the latter being rendered in the Revised Version (British and American) \"fortresses.\"",
+   "definition_ko": "군대·재물(흠정역 「포시즈」; 히브리어 '하일').\n\n(1) 이 낱말은 군사 용어로 쓰여 「군대」와 같은 뜻이다. 열왕기하 25:23, 26(원문은 「25:23, 16」; 흠정역 「군대들」); 역대하 17:2; 예레미야 40:7 등(개역개정 「군대 지휘관」, 「군대 장관들」, 「군대」, 「지휘관」).\n\n군대 항목을 보라.\n\n(2) 이사야 60:5, 11에서 영국·미국 개역판은 「재물」로, 오바댜 1:11에서는 「재산」으로 옮긴다(개역개정 「재물」).\n\n흠정역에서 「포시즈」로 옮긴 히브리어가 둘 더 있다. '마아맛침'(욥기 36:19)과 '마오즈'(다니엘 11:38)인데, 뒤의 것을 영국·미국 개역판은 「요새」로 옮긴다(개역개정 「강한 신」).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FORCES"
+  },
+  {
+   "id": 3497,
+   "term": "Foreigner(타국인(이방 거류민))",
+   "definition": "for'-in-er\" The translation of nokhri, \"unknown,\" \"foreign,\" frequently rendered \"stranger\" (De 15:3; Ob 1:11); of toshabh, \"a settler,\" \"an alien resident\" (Ex 12:45; the Revised Version (British and American) \"sojourner\"; compare Le 25:47; Ps 39:12); of paroikos, \"dwelling near,\" \"sojourner\" (Eph 2:19, the Revised Version (British and American) sojourners\").\n\nRevised Version has \"foreigner\" for \"stranger\" (De 17:15; 23:20; 29:22; Ru 2:10; 2Sa 15:19), for \"alien\" (De 14:21); \"the hand of a foreigner\" for \"a stranger's hand\" (Le 22:25).\n\nSee ALIEN; STRANGER AND SOJOURNER.",
+   "definition_ko": "타국인(흠정역 「포리너」). 다음 낱말들을 옮긴 말이다. '노크리', 「모르는」, 「이방의」, 흔히 「이방인」으로 옮겨짐(신명기 15:3; 오바댜 1:11). '토샤브', 「정착한 사람」, 「거류하는 외국인」(출애굽기 12:45, 영국·미국 개역판 「거류민」; 개역개정 「타국 품꾼」; 레위기 25:47; 시편 39:12와 비교하라). '파로이코스', 「가까이 사는 자」, 「나그네」(에베소서 2:19, 영국·미국 개역판 「나그네」; 개역개정 「나그네」).\n\n개역판은 「이방인」 대신 「외국인」을(신명기 17:15; 23:20; 29:22; 룻기 2:10; 사무엘하 15:19), 「타국인」 대신 「외국인」을 쓰고(신명기 14:21), 「이방인의 손」 대신 「외국인의 손」을 쓴다(레위기 22:25).\n\n타국인; 나그네와 거류민 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FOREIGNER"
+  },
+  {
+   "id": 3545,
+   "term": "Frankly(탕감하다)",
+   "definition": "frank'-li (charizomai):\n\n\"Frankly\" in the sense of \"freely,\" \"readily,\" \"graciously,\" occurs only in the translation of charizomai, properly \"to gratify,\" \"to do that which is grateful or pleasing,\" \"to forgive\" (Lu 7:42, \"He frankly forgave them both,\" the Revised Version (British and American) has simply \"forgave\"; the same word is translated in Lu 7:43, the King James Version and the Revised Version (British and American), \"forgave,\" in Lu 7:21 the King James Version it is \"gave,\" the Revised Version (British and American) \"bestowed,\" granted to see). It occurs in the New Testament only in Luke and Paul.",
+   "definition_ko": "탕감하다(흠정역 「프랭클리」, 헬라어 '카리조마이').\n\n「거저」, 「기꺼이」, 「은혜롭게」라는 뜻의 「프랭클리」는 '카리조마이'의 번역에만 나온다. '카리조마이'는 본디 「기쁘게 하다」, 「고맙거나 기쁜 일을 하다」, 「용서하다」라는 뜻이다(누가복음 7:42, 흠정역 「그가 둘 다 거저 용서하였다」, 영국·미국 개역판은 그냥 「용서하였다」; 개역개정 「탕감하여 주었으니」). 같은 낱말이 누가복음 7:43에서 흠정역과 영국·미국 개역판 모두 「용서하였다」로(개역개정 「탕감함을 받은」), 누가복음 7:21에서 흠정역은 「주었다」로, 영국·미국 개역판은 「베풀었다」로 옮겨진다(보게 하셨다). 신약에서 이 낱말은 누가와 바울의 글에만 나온다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "FRANKLY"
   },
   {
    "id": 3563,
@@ -3985,6 +4381,15 @@
    "isbe_key": "GAREB, THE HILL OF"
   },
   {
+   "id": 3648,
+   "term": "Garlic(마늘)",
+   "definition": "gar'-lik (shum, used only in plural shumim; compare Arabic thum):\n\nOne of the delights of Egypt for which the Israelites in the Wilderness longed (Nu 11:5); we know from other sources that, though originally a product of Central Asia, garlic was known to the ancient Egyptians. It is the bulb of Allium sativum, Natural Order Liliaceae, and is cultivated all over the Orient. It is eaten cooked in stews; its disagreeable penetrating odor is in evidence in the houses and on the breath of most Orientals. A bulb of garlic, hung over a bed or over the door of a house, is a powerful charm against the evil eye and other malign influences.\n\nE. W. G. Masterman",
+   "definition_ko": "마늘(히브리어 '숨', 복수 '슈밈'으로만 쓰임; 아랍어 '툼'과 비교하라).\n\n광야의 이스라엘 사람들이 그리워한 애굽의 즐거움 가운데 하나다(민수기 11:5). 다른 자료로 보아, 마늘은 본디 중앙아시아의 산물이지만 옛 애굽 사람들에게 알려져 있었다. 마늘은 백합과 알리움 사티붐의 비늘줄기로, 동방 어디서나 재배한다. 스튜에 넣어 익혀 먹으며, 그 불쾌하고 강한 냄새는 대부분의 동방 사람의 집과 입김에서 드러난다. 침대 위나 집 문 위에 걸어 둔 마늘 한 통은 악한 눈과 다른 해로운 기운을 막는 강력한 부적이다.\n\n(집필: E. W. G. Masterman)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "GARLIC"
+  },
+  {
    "id": 3650,
    "term": "Garmite(가르미 사람 · 가미 사람)",
    "definition": "gar'-mit (garmi):\n\nA gentilic name applied to Keilah in 1Ch 4:19.\n\nThe reason for this is not known.",
@@ -4001,6 +4406,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "GARNER"
+  },
+  {
+   "id": 3652,
+   "term": "Garnish(장식하다(꾸미다))",
+   "definition": "gar'-nish (tsippah, shiphrah; kosmeo):\n\nThe word is used twice in the Old Testament. In 2Ch 3:6, tsippah means \"to overlay,\" or \"to plate.\" Thus, he \"garnished\" the house or \"overlaid\" it, \"studded\" it, with precious stones, and thus adorned and beautified it. In Job 26:13, shiphrah is a feminine noun meaning \"fairness,\" \"beauty,\" \"brilliancy.\" \"By his Spirit the heavens are garnished,\" i.e. the clouds are driven off by the wind or breath of Yahweh, and the sky made bright and clear.\n\nIn the New Testament (Mt 12:44; 23:29) the word kosmeo means \"set in order,\" \"make ready,\" \"adorn,\" etc. In Mt 25:7 it is translated \"trimmed,\" and in Re 21:19 \"adorned.\"\n\nJ. J. Reeve",
+   "definition_ko": "꾸미다(흠정역 「가니시」; 히브리어 '칩파', '시프라'; 헬라어 '코스메오').\n\n이 낱말은 구약에 두 번 쓰인다. 역대하 3:6에서 '칩파'는 「입히다」, 「씌우다」를 뜻한다. 그러므로 그는 집을 「꾸몄다」, 곧 보석으로 「입히고」 「박아서」 꾸미고 아름답게 하였다(개역개정 「보석으로 성전을 꾸며」). 욥기 26:13에서 '시프라'는 「아름다움」, 「고움」, 「빛남」을 뜻하는 여성 명사다. 「그의 영으로 하늘이 꾸며졌다」(개역개정 「그의 입김으로 하늘을 맑게 하시고」), 곧 여호와의 바람이나 입김으로 구름이 쫓겨 가고 하늘이 밝고 맑아진다.\n\n신약에서(마태복음 12:44; 23:29) '코스메오'는 「정돈하다」, 「준비하다」, 「꾸미다」 등을 뜻한다(개역개정 「수리되었거늘」, 「꾸미며」). 마태복음 25:7에서는 「손질하다」로(개역개정 「등을 준비할새」), 요한계시록 21:19에서는 「꾸몄다」로 옮겨진다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "GARNISH"
   },
   {
    "id": 3659,
@@ -4309,6 +4723,15 @@
    "isbe_key": "GITTAIM"
   },
   {
+   "id": 3793,
+   "term": "Gittites(가드 사람)",
+   "definition": "git'-its (gittim, plural of gittiy): The inhabitants of Gath. They are mentioned along with the inhabitants of the other chief Philistine cities in Jos 13:3. It would seem that numbers of them emigrated to Judah, for we find 600 of them acting as a bodyguard to David with Ittai at their head (2Sa 15:18 ff; 18:2). Obed-edom, to whom David entrusted the ark when he was frustrated in bringing it into the city of David, was a Gittite (2Sa 6:11 f; 1Ch 13:13). The Gittites seem to have been remarkable for their great stature (2Sa 21:19; 1Ch 20:5).",
+   "definition_ko": "가드 사람(히브리어 '깃팀', '깃티'의 복수). 가드 주민이다. 여호수아 13:3에서 다른 주요 블레셋 성읍들의 주민과 함께 언급된다. 이들 가운데 많은 수가 유다로 옮겨 온 것으로 보인다. 잇대를 우두머리로 한 가드 사람 600명이 다윗의 호위대 노릇을 하였기 때문이다(사무엘하 15:18 이하; 18:2). 다윗이 언약궤를 다윗 성으로 옮겨 오려다 뜻을 이루지 못하였을 때 궤를 맡긴 오벧에돔도 가드 사람이었다(사무엘하 6:11 이하; 역대상 13:13). 가드 사람들은 키가 크기로 이름났던 것 같다(사무엘하 21:19; 역대상 20:5).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "GITTITES"
+  },
+  {
    "id": 3797,
    "term": "Gizrites(기르스 사람)",
    "definition": "giz'-rits (gizri (Kethibh); the King James Version Gezrites): Inhabitants of GEZER, (which see). The Qere reads girzi, Girzites (1Sa 27:8).",
@@ -4444,6 +4867,15 @@
    "isbe_key": "HABERGEON"
   },
   {
+   "id": 3949,
+   "term": "Habitation(거처(거주지))",
+   "definition": "hab-i-ta'-shun: Properly a place of sojourn or dwelling. The term in the King James Version representing some 16 Hebrew words (moshabh, ma`-on, mishkan, naweh, etc.), and 5 Greek words, is variously changed in certain passages in the Revised Version (British and American), as Ge 49:5, \"swords\"; Le 13:46 \"dwelling\"; Job 5:24; Jer 25:30 b,37, \"fold\"; Ps 89:14; 97:2, etc., \"foundation\"; Ps 132:5, \"tabernacle\"; Lu 16:9, \"tabernacles,\" etc. Conversely, \"habitation\" appears in the Revised Version (British and American) for the King James Version \"dwelling place\" in 2Ch 30:27; Ps 79:7, \"house\"; Ps 83:12; 2Co 5:2, \"tabernacle,\" Ac 7:46, etc.\n\nSee HOUSE.\n\nJames Orr",
+   "definition_ko": "처소·거처(흠정역 「해비테이션」). 본디 머물거나 사는 곳이다. 흠정역에서 이 말은 히브리어 약 16낱말('모샤브', '마온', '미시칸', '나웨' 등)과 헬라어 5낱말을 옮기는데, 영국·미국 개역판은 몇몇 곳에서 여러 가지로 바꾼다. 창세기 49:5 「칼」(개역개정도 「칼」), 레위기 13:46 「거처」, 욥기 5:24; 예레미야 25:30하, 37 「우리」, 시편 89:14; 97:2 등 「기초」(개역개정 「기초」), 시편 132:5 「성막」(개역개정도 「성막」), 누가복음 16:9 「처소들」 등이 그렇다. 거꾸로 영국·미국 개역판은 흠정역의 「사는 곳」 대신 「처소」를 쓰기도 한다(역대하 30:27; 시편 79:7 「집」; 시편 83:12; 고린도후서 5:2 「장막」; 사도행전 7:46 등; 개역개정은 대개 「처소」, 「거처」).\n\n집 항목을 보라.\n\n(집필: James Orr)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "HABITATION"
+  },
+  {
    "id": 3950,
    "term": "Habor(하볼)",
    "definition": "ha'-bor (chabhor; Habor, Habior; Isidor of Charax, Aburas (Abouras), Zosias, Aboras):\n\n1. Its Position and Course:\n\nIs described in 2Ki 17:6; 18:11 (compare 1Ch 5:26) as \"the river of Gozan.\" It is the Arabic Khabur, and flows in a southerly direction from several sources in the mountains of Karaj Dagh (Mons Masius), which, in the 37th parallel, flanks the valley of the Tigris on the West. The river ultimately joins the Euphrates after receiving its chief tributary, the Jaghjagha Su (Mygdonius), at Circesium (Kirkisiyeh).\n\n2. Etymologies of Habor:\n\nThe meaning of its name is doubtful, but Delitzsch has suggested a Sumerian etymology, namely, habur, \"the fish-waterway,\" or it may be connected with \"mother Hubur'\" a descriptive title of Tiamat (see MERODACH; RAHAB).\n\n3. Historical References:\n\nLayard found several interesting Assyrian remains in the district, including man-headed bulls bearing the name of Muses-Ninip, possibly an Assyrian governor. Tiglath-pileser I (circa 1120 BC) boasts of having killed 10 mighty elephants in Haran and on the banks of the Habor; and Assur-nacir-apli (circa 880 BC), after conquering Harsit (Harrit, Harmis), subjugated the tract around piate sa nar Habur, \"the mouths of the Habor.\" According to 2Ki and 1 Chronicles, Shalmaneser IV and Sargon transported the exiled Israelites thither. Philological considerations exclude the identification of the Chebar of Eze 13, etc., with the Habor.\n\nT. G. Pinches",
@@ -4568,6 +5000,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HAMMATH"
+  },
+  {
+   "id": 4016,
+   "term": "Hammer(망치(메))",
+   "definition": "ham'-er: The Hebrew maqqebheth, occurs in Jud 4:21, where it refers to the mallet (probably wooden) used to drive tent-pins into the ground. The same word occurs in 1Ki 6:7; Isa 44:12; Jer 10:4 as applied to a workman's hammer. paTTish (compare Arabic, fatis), occurs in Isa 41:7; Jer 23:29; 50:23. It was probably a blacksmith's hammer or heavy hammer used for breaking rock. There is doubt about the rendering of Jud 5:26, where the word, halmuth, occurs. From the context, the instrument mentioned was probably not a hammer. In Ps 74:6, kelaph, is better translated \"axes,\" not \"hammers.\"\n\nSee TOOLS.\n\nJames A. Patch",
+   "definition_ko": "망치·방망이. 히브리어 '막케베트'는 사사기 4:21에 나오며, 거기서는 장막 말뚝을 땅에 박는 데 쓴 메(아마 나무 메)를 가리킨다(개역개정 「방망이」). 같은 낱말이 열왕기상 6:7; 이사야 44:12; 예레미야 10:4에서는 장인의 망치에 쓰인다. '팟티시'(아랍어 '파티스'와 비교하라)는 이사야 41:7; 예레미야 23:29; 50:23에 나온다(개역개정 「망치」, 「방망이」). 이것은 아마 대장장이의 망치나 바위를 깨는 큰 망치였을 것이다. 사사기 5:26에 나오는 '할무트'의 번역은 의심스럽다(개역개정 「일꾼들의 방망이」). 문맥으로 보아 거기 언급된 도구는 아마 망치가 아니었을 것이다. 시편 74:6의 '켈라프'는 「망치」보다 「도끼」로 옮기는 편이 낫다(개역개정 「도끼와 철퇴」).\n\n연장 항목을 보라.\n\n(집필: James A. Patch)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "HAMMER"
   },
   {
    "id": 4019,
@@ -4930,6 +5371,15 @@
    "isbe_key": "HERALD"
   },
   {
+   "id": 4253,
+   "term": "Herdsman(목자(가축을 치는 자))",
+   "definition": "hurdz'-man (boqer; the King James Version, the English Revised Version \"herdman\"): A cowherd (Am 7:14). The same word is used in Syria today. ro`eh, has its equivalent in the language of Syria and Palestine (Arabic ra'i), and is a general term for any kind of a herdsman (Ge 13:7,8; 26:20; 1Sa 21:7). noqedh, occurs in one passage (Am 1:1); literally it means one who spots or marks the sheep, hence, a herdsman. Spotting the wool with different dyes is still the method of distinguishing between the sheep of different flocks. The herdsman is seldom the owner of the sheep, but a hireling.\n\nSee SHEEP; SHEEP TENDING.\n\nJames A. Patch",
+   "definition_ko": "목자(히브리어 '보케르'; 흠정역과 영국 개역판 「허드먼」). 소 치는 사람이다(아모스 7:14; 개역개정 「목자」). 같은 낱말이 오늘날 수리아에서도 쓰인다. '로에'는 수리아와 팔레스타인 말에 같은 말(아랍어 '라이')이 있으며, 온갖 가축 치는 사람을 이르는 일반 용어다(창세기 13:7, 8; 26:20; 사무엘상 21:7). '노케드'는 한 곳에만 나온다(아모스 1:1; 개역개정 「드고아 목자」). 문자적으로 양에 점을 찍거나 표시하는 사람이므로 목자를 뜻한다. 양털에 여러 가지 물감으로 점을 찍는 것은 지금도 여러 무리의 양을 가리는 방법이다. 목자는 양의 주인인 경우가 드물고 품꾼이다.\n\n양; 양 치기 항목을 보라.\n\n(집필: James A. Patch)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "HERDSMAN"
+  },
+  {
    "id": 4260,
    "term": "Heres(헤레스)",
    "definition": "he'-rez, he'-res:\n\n(1) har-cherec, \"Mount Heres\" (Jud 1:34 f), a district from which the Amorites were not expelled; it is mentioned along with Aijalon and Shallbim. In Jos 19:41 f we have then two towns in association with Ir-shemesh and many authorities consider that as cherec = shemesh, i.e. the sun, and har, being perhaps a copyist's error for `ir, \"city,\" we have in Jud 1:34 a reference to Beth-shemesh, the modern `Ain Shems. Conder thinks that Batn Harasheh, Northeast of Aijalon, a prominent hill, may be the place referred to. Budde thinks Har-heres may be identified with the Bit-Ninib (Ninib being the fierce morning sun) of the Tell el-Amarna Letters; this place was in the district of Jerusalem.\n\n(2) ma`aleh he-charec, \"the ascent of Heres\" (Jud 8:13, the King James Version \"before the sun was up\"), the place from which Gideon returned to Succoth after his defeat of Zebah and Zalmunna. the Revised Version (British and American) is probably a great improvement on the King James Version, but both the text and the topography are uncertain.\n\n(3) `ir ha-cherec, \"City of Heres\" EVm, \"City of Destruction\" (cherem) English Versions of the Bible, or \"City of the sun\" cherec) English Versions, margin. This is the name of one of the \"five cities in the land of Egypt that speak the language of Canaan, and swear to Yahweh of hosts\" (Isa 19:18).\n\nSee IR-HA-HERES.\n\nE. W. G. Masterman",
@@ -5003,7 +5453,7 @@
   },
   {
    "id": 4309,
-   "term": "Higgaion(히가욘(음악 표시))",
+   "term": "Higgaion(힉가욘(음악 표시))",
    "definition": "hi-ga'yon, hi-gi'-on (higgayon): The meaning of this word is uncertain. Two interpretations are possible; the one based on an allied Arabic root gives \"a deep vibrating sound,\" the other derived from the Greek versions of Ps 9:16, where we read higgayon Celah, takes it to mean an instrumental interlude.\n\nSee PSALMS.",
    "definition_ko": "힉가욘(히브리어 '힉가욘'). 이 낱말의 뜻은 확실하지 않다. 두 해석이 가능한데, 하나는 가까운 아랍어 어근에 근거하여 「깊이 울리는 소리」로 보고, 다른 하나는 시편 9:16의 헬라어 역본에서 「힉가욘 셀라」로 읽는 데서 악기 간주로 본다. 시편 항목을 보라.",
    "category": "용어",
@@ -5135,6 +5585,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "HOSAH"
+  },
+  {
+   "id": 4428,
+   "term": "House of God(하나님의 집)",
+   "definition": "In Ge 28:17,22 = BETHEL (which see). In Jgs, 1 and 2 Chronicles, Ezr, Neh, Ps, etc. (beth ha-'elohim), a designation of the sanctuary = \"house of Yahweh\" (of the tabernacle, Jud 18:31; 20:18,26 the King James Version; of the temple, 1Ch 9:11; 24:5 the King James Version; 2Ch 5:14; Ps 42:4; Isa 2:3, etc.; of the 2nd temple, Ezr 5:8,15; Ne 6:10; 13:11; compare Mt 12:4). Spiritually, in the New Testament, the \"house of God\" (oikos theou) is the church or community of believers (1Ti 3:15; Heb 10:21; 1Pe 4:17; compare 1Co 3:9,16,17; 1Pe 2:5).",
+   "definition_ko": "하나님의 집. 창세기 28:17, 22에서는 벧엘(그 항목을 보라)과 같다. 사사기, 역대상·하, 에스라, 느헤미야, 시편 등에서(히브리어 '베트 하엘로힘')는 성소를 가리키는 이름으로 「여호와의 집」과 같다. 성막에는 사사기 18:31; 20:18, 26(흠정역; 개역개정은 20:18, 26에서 「벧엘」), 성전에는 역대상 9:11; 24:5(흠정역); 역대하 5:14; 시편 42:4; 이사야 2:3 등, 둘째 성전에는 에스라 5:8, 15; 느헤미야 6:10; 13:11에 쓰였다. 마태복음 12:4와 비교하라. 신약에서 영적으로 「하나님의 집」(헬라어 '오이코스 테우')은 교회, 곧 믿는 이들의 공동체다(디모데전서 3:15; 히브리서 10:21; 베드로전서 4:17; 고린도전서 3:9, 16, 17; 베드로전서 2:5와 비교하라).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "HOUSE OF GOD"
   },
   {
    "id": 4438,
@@ -5272,6 +5731,15 @@
    "isbe_key": "IMPLEAD"
   },
   {
+   "id": 4541,
+   "term": "Impotent(병자)",
+   "definition": "im'-po-tent (astheneo, adunatos): The verb signifies \"to be without strength,\" and derivatives of it are used in Joh 5:3,7 the King James Version and Ac 4:9 to characterize the paralyzed man at Bethesda and the cripple at the Temple gate. For the same condition of the Lystra lame man the word adunatos is used, which is synonymous. In these cases it is the weakness of disease. In this sense the word is used by Shakespeare (Love's Labor Lost, V, ii, 864; Hamlet, I, ii, 29). The impotent folk referred to in the Epistle of Jeremy (Baruch 6:28) were those weak and feeble from age and want; compare \"impotent and snail-paced beggary\" (Richard III, IV, iii, 53).\n\nAlexander Macalister",
+   "definition_ko": "병자·약한 자(흠정역 「임포턴트」; 헬라어 '아스테네오', '아뒤나토스'). 이 동사는 「힘이 없다」를 뜻하며, 그 파생어가 요한복음 5:3, 7 흠정역과 사도행전 4:9에서 베데스다의 중풍 병자와 성전 문의 앉은뱅이를 묘사하는 데 쓰였다(개역개정 「병자」). 루스드라의 앉은뱅이에게는 같은 뜻의 '아뒤나토스'가 쓰였다. 이 경우들에서는 병으로 말미암은 약함이다. 셰익스피어도 이 낱말을 이런 뜻으로 쓴다(『사랑의 헛수고』 5막 2장 864행; 『햄릿』 1막 2장 29행). 예레미야의 편지(바룩 6:28)에 언급된 「약한 사람들」은 나이와 궁핍으로 약하고 힘없는 이들이었다. 「힘없고 달팽이 걸음 같은 구걸」(『리처드 3세』 4막 3장 53행)과 비교하라.\n\n(집필: Alexander Macalister)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "IMPOTENT"
+  },
+  {
    "id": 4556,
    "term": "India(인도)",
    "definition": "in'-di-a (hoddu: he Indike): The name occurs in canonical Scripture only in Es 1:1; 8:9, of the country which marked the eastern boundary of the territory of Ahasuerus. The Hebrew word comes from the name of the Indus, Hondu, and denotes, not the peninsula of Hindustan, but the country drained by that great river. This is the meaning also in 1 Esdras 3:2; Additions to Esther 3:2; 16:1. Many have thought that this country is intended by Havilah in Ge 2:11 and that the Indus is the Pishon. The drivers of the elephants (1 Macc 6:37) were doubtless natives of this land. The name in 1 Macc 8:9 is certainly an error. India never formed part of the dominions of Antiochus the Great. It may possibly be a clerical error for \"Ionia,\" as Media is possibly a mistake for Mysia. If the Israelites in early times had no direct relations with India, many characteristic Indian products seem to have found their way into Palestinian markets by way of the Arabian and Syrian trade routes, or by means of the Red Sea fleets (1Ki 10:11,15; Eze 27:15 ff, etc.). Among these may be noted \"horns of ivory and ebony,\" \"cassia and calamus,\" almug (sandalwood), apes and peacocks.\n\nW. Ewing",
@@ -5327,7 +5795,7 @@
   },
   {
    "id": 4636,
-   "term": "Ish-Tob(이스돕)",
+   "term": "Ish-Tob(돕 사람)",
    "definition": "ish'-tob ('ish Tobh, the American Standard Revised Version \"the men of Tob\"): A place in Palestine, probably a small kingdom, large enough, however, to supply at least 12,000 men of valor to the children of Ammorn in their struggle against Joab, David's general (2Sa 10:6,8).\n\nSee ISH.",
    "definition_ko": "돕 사람(흠정역 이스돕; 히브리어 '이쉬 토브', 미국 개역판 「돕 사람」). 팔레스타인의 한 곳으로 아마 작은 왕국이었을 것이며, 다윗의 장군 요압에 맞선 암몬 자손에게 적어도 용사 만 이천 명을 댈 만큼은 컸다(사무엘하 10:6, 8). 이스 항목을 보라.",
    "category": "지명",
@@ -5444,7 +5912,7 @@
   },
   {
    "id": 4709,
-   "term": "Izhar(여소알)",
+   "term": "Izhar(이소할)",
    "definition": "iz'-har (yitshar, \"the shining one\"):\n\n(1) The father of Korah (Nu 16:1), descended from a Kohathite Levite of this name, whose descendants formed a family, in the tribe of Levi (Ex 6:18,21; Nu 3:19,27; 1Ch 6:18,38).\n\n(2) A descendant of Judah, whose mother's name was Helah. the American Revised Version margin gives the name Zohar (1Ch 4:7).",
    "definition_ko": "이스할(히브리어 '이츠하르', 「빛나는 이」). (1) 고라의 아버지(민수기 16:1). 이 이름의 고핫 레위인에게서 나왔으며, 그 자손은 레위 지파의 한 가문을 이루었다(출애굽기 6:18, 21; 민수기 3:19, 27; 역대상 6:18, 38). (2) 유다의 자손으로 어머니의 이름은 헬라. 미국 개역판 난외는 이름을 「소할」로 준다(역대상 4:7, 개역개정 「이소할」).",
    "category": "인명",
@@ -5606,7 +6074,7 @@
   },
   {
    "id": 4827,
-   "term": "Jashubi-Lehem(야수비레헴)",
+   "term": "Jashubi-Lehem(야수비네헴)",
    "definition": "ja-shoo-bi-le'-hem (yashubhi-lechem): A name in 1Ch 4:22 where commentators insert beth, between the two words and translate \"(and) returned to Bethlehem.\"",
    "definition_ko": "야수비네헴(히브리어 '야슈비 레헴'). 역대상 4:22의 이름. 주석가들은 두 낱말 사이에 '벳'을 넣어 「(그리고) 베들레헴으로 돌아왔다」로 옮긴다.",
    "category": "용어",
@@ -5657,6 +6125,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "JEHOSHAPHAT, VALLEY OF"
+  },
+  {
+   "id": 4899,
+   "term": "Jehovah-Nissi(여호와 닛시)",
+   "definition": "je-ho'-va nis'-i (yahweh nicci, \"Yahweh is my banner\"): So Moses named the altar which he reared to signalize the defeat of the Amalekites by Israel under Joshua, at Rephidim (Ex 17:15). Septuagint translates \"the Lord my refuge,\" deriving nicci from nuc, \"to flee.\" Targum Onkelos reads, \"Moses built an altar and worshipped on it before Yahweh, who had wrought for him miracles\" (niccin). The suggestion is that the people should rally round God as an army gathers round its standard. He it is who leads them to victory.",
+   "definition_ko": "여호와 닛시(히브리어 '야웨 닛시', 「여호와는 나의 깃발」). 여호수아가 이끄는 이스라엘이 르비딤에서 아말렉을 이긴 것을 기념하여 모세가 쌓은 제단에 붙인 이름이다(출애굽기 17:15). 칠십인역은 '닛시'를 '누스'(「피하다」)에서 온 것으로 보아 「주는 나의 피난처」라고 옮긴다. 타르굼 온켈로스는 「모세가 제단을 쌓고 그 위에서, 자기를 위하여 기적('닛신')을 행하신 여호와 앞에 경배하였다」라고 읽는다. 군대가 제 깃발 둘레로 모이듯 백성이 하나님 둘레로 모여야 한다는 뜻이다. 그분이 그들을 승리로 이끄신다.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "JEHOVAH-NISSI"
   },
   {
    "id": 4900,
@@ -5929,6 +6406,15 @@
    "isbe_key": "JUDEA"
   },
   {
+   "id": 5159,
+   "term": "Judgment Seat(재판석)",
+   "definition": "(bema, \"a raised place,\" \"platform,\" \"tribune,\" Mt 27:19; Joh 19:13; see GABBATHA; Ac 12:21 margin (text \"throne\"); 18:12,16 ff; 25:6,17): In Greek law courts, one bema was provided for the accuser, another for the accused; but in the New Testament the word designates the official scat of a judge, usually of the Roman governor; also of the emperor (Ac 25:10); then of God (Ro 14:10), of Christ (2Co 5:10). The word kriterion, \"a tribunal,\" \"bench of judges\" (Jas 2:6) occurs also in 1Co 6:2-4, and is there translated in the Revised Version margin by \"tribunals.\"\n\nSee also JUDGE.",
+   "definition_ko": "재판석(헬라어 '베마', 「높은 곳」, 「단」, 「연단」, 마태복음 27:19; 요한복음 19:13; 가바다 항목을 보라; 사도행전 12:21 난외(본문 「보좌」; 개역개정 「단상」); 18:12, 16 이하(개역개정 「법정」); 25:6, 17). 헬라 법정에서는 고소하는 쪽에 한 단, 고소당한 쪽에 또 한 단을 두었으나, 신약에서 이 낱말은 재판관, 대개 로마 총독의 공식 자리를 뜻한다. 황제의 자리(사도행전 25:10, 개역개정 「가이사의 재판 자리」), 나아가 하나님의 자리(로마서 14:10)와 그리스도의 자리(고린도후서 5:10)에도 쓰인다(개역개정 「심판대」). 「법정」, 「재판관석」이라는 뜻의 '크리테리온'(야고보서 2:6)은 고린도전서 6:2~4에도 나오며, 영국·미국 개역판 난외는 거기서 「법정들」로 옮긴다.\n\n재판관 항목도 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "JUDGMENT SEAT"
+  },
+  {
    "id": 5178,
    "term": "Jushab-Hesed(유삽헤셋)",
    "definition": "joo'-shab-he'-sed (yushabh checedh, \"loving-kindness is returned\"): Son of Zerubbabel. The name is probably symbolical (1Ch 3:20); compare SHEAR-JASHUB.",
@@ -5972,6 +6458,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "KADESH-BARNEA"
+  },
+  {
+   "id": 5191,
+   "term": "Kadmonite(갓몬 족속)",
+   "definition": "kad'-mon-it (qadhmoni; Kedmonaioi, signifies \"the Easterner,\" or, less probably, \"one of the ancient race\"): The Kadmonites are mentioned in Ge 15:19 along with the Kenites and Kenizzites of Edom, and are doubtless the same as \"the children of the east,\" whose wisdom was celebrated (1Ki 4:30). qedhemah, \"the East,\" was a son of Ishmael (Ge 25:15; compare Ge 25:6). In an Egyptian story describing the adventures of a political refugee who fled from Egypt in the time of the XIIth Dynasty, it is said that he found a refuge in Canaan in the land of Kaduma or Kedem.\n\nA. H. Sayce",
+   "definition_ko": "갓몬 족속(히브리어 '카드모니'; 헬라어 '케드모나이오이', 「동방 사람」, 또는 그보다 가능성이 덜하지만 「옛 종족의 한 사람」을 뜻함). 갓몬 족속은 창세기 15:19에서 에돔의 겐 족속, 그니스 족속과 함께 언급되며, 지혜로 이름난 「동쪽 사람들」(열왕기상 4:30)과 틀림없이 같다. 「동쪽」이라는 뜻의 '케데마'는 이스마엘의 아들이었다(창세기 25:15, 개역개정 「게드마」; 창세기 25:6과 비교하라). 제12왕조 때 애굽에서 도망친 정치 망명자의 모험을 그린 애굽 이야기에서, 그는 가나안의 카두마 또는 케뎀 땅에서 피난처를 찾았다고 한다.\n\n(집필: A. H. Sayce)",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "KADMONITE"
   },
   {
    "id": 5192,
@@ -6100,6 +6595,15 @@
    "isbe_key": "KENATH"
   },
   {
+   "id": 5220,
+   "term": "Kenezite(그나스 족속 · 그니스 족속)",
+   "definition": "ke'-nez-it (qenizzi; Kenezaios): the King James Version in Ge 15:19 and the Revised Version (British and American) uniformly, spell \"Kenizzite.\" The Kenezites were the clan whose name-father was KENAZ (which see). Their land, along with that of their Canaanite tribes, was promised to Abram (Ge 15:19). To this clan belonged Jephunneh, the father of Caleb (Nu 32:12; Jos 14:6,14). It had evidently been absorbed by the tribe of Judah. If the Kenezites went down with Jacob into Egypt, they may have become identified with his family there.",
+   "definition_ko": "그나스 족속(흠정역 「케네지트」; 히브리어 '케닛지'; 헬라어 '케네자이오스'). 흠정역은 창세기 15:19에서, 영국·미국 개역판은 모든 곳에서 「케니지트」로 적는다(개역개정 창세기 15:19 「그니스 족속」, 민수기 32:12 「그나스 사람」). 그나스 족속은 그나스(그 항목을 보라)를 이름 조상으로 하는 씨족이다. 그들의 땅은 가나안 족속들의 땅과 함께 아브람에게 약속되었다(창세기 15:19). 갈렙의 아버지 여분네가 이 씨족에 속하였다(민수기 32:12; 여호수아 14:6, 14). 이 씨족은 분명히 유다 지파에 흡수되었다. 그나스 족속이 야곱과 함께 애굽으로 내려갔다면, 그곳에서 야곱의 가족과 하나가 되었을 수도 있다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "KENEZITE"
+  },
+  {
    "id": 5225,
    "term": "Kerchief(머릿수건)",
    "definition": "ker'-chif (micpachoth; epibolaia): Occurs only in Eze 13:18,21, in a passage which refers to some species of divination. Their exact shape or use is unknown. They were apparently long veils or coverings put over the heads of those consulting the false prophetesses and reaching down to the feet, for they were for \"persons of every stature.\"",
@@ -6170,6 +6674,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "KINAH"
+  },
+  {
+   "id": 5256,
+   "term": "Kine(암소 떼)",
+   "definition": "kin:\n\n(1) 'alaphim, plural of 'eleph, \"ox,\" or \"cow,\" the American Standard Revised Version \"cattle,\" the King James Version and the English Revised Version \"kine\" (De 7:13; 28:4,18,51);\n\n(2) baqar, \"ox\" or \"cow,\" the American Standard Revised Version \"herd,\" the King James Version and the English Revised Version \"kine\" (De 32:14; 2Sa 17:29);\n\n(3) paroth plural of parah, \"young cow\" or \"heifer,\" the Revised Version (British and American) \"kine\" in Ge 41:2-27; 1Sa 6:7-14; Am 4:1; in Ge 32:15, the American Standard Revised Version has \"cows.\"\n\nSee CATTLE; COW.",
+   "definition_ko": "암소·소(흠정역 「카인」).\n\n(1) '알라핌', 「황소」 또는 「암소」라는 뜻의 '엘레프'의 복수. 미국 개역판 「가축」, 흠정역과 영국 개역판 「카인」(신명기 7:13; 28:4, 18, 51; 개역개정 「소」).\n\n(2) '바카르', 「황소」 또는 「암소」. 미국 개역판 「소 떼」, 흠정역과 영국 개역판 「카인」(신명기 32:14; 사무엘하 17:29).\n\n(3) '파로트', 「어린 암소」라는 뜻의 '파라'의 복수. 영국·미국 개역판은 창세기 41:2~27; 사무엘상 6:7~14; 아모스 4:1에서 「카인」으로 옮기고(개역개정 「암소」, 「소」), 창세기 32:15에서 미국 개역판은 「암소」로 옮긴다.\n\n가축; 암소 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "KINE"
   },
   {
    "id": 5261,
@@ -6253,6 +6766,15 @@
    "isbe_key": "KITTIM"
   },
   {
+   "id": 5302,
+   "term": "Knock(문을 두드리다)",
+   "definition": "nok (krouo): The oriental house was fitted with heavy doors which were bolted and locked with wooden keys too large to be carried about, so that even a member of the household could not secure entrance until in response to his knock or call the door should be opened by someone within. At night the delay would be increased by the difficulty of arousing the inmates sleeping within the inner chambers. To persons familiar with such experiences, the words of Jesus concerning a higher entrance, \"Knock, and it shall be opened unto you\" (Mt 7:7; Lu 12:36), would have a unique force not easy for us to appreciate.\n\nRussell Benjamin Miller",
+   "definition_ko": "문을 두드리다(헬라어 '크루오'). 동방의 집에는 무거운 문이 달려 있었고, 들고 다니기에는 너무 큰 나무 열쇠로 빗장을 지르고 잠갔다. 그래서 집안 식구라도 두드리거나 불러서 안에 있는 사람이 열어 줄 때까지는 들어갈 수 없었다. 밤에는 안방에서 자는 사람들을 깨우기 어려워 더 오래 걸렸다. 이런 일에 익숙한 사람들에게 더 높은 들어감에 관한 예수의 말씀, 「문을 두드리라 그리하면 너희에게 열릴 것이니」(마태복음 7:7; 누가복음 12:36)는 우리가 제대로 헤아리기 어려운 특별한 힘을 지녔을 것이다.\n\n(집필: Russell Benjamin Miller)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "KNOCK"
+  },
+  {
    "id": 5303,
    "term": "Knop(장식 마디)",
    "definition": "nop: In Ex 25:31 ff; 37:17 ff (kaphtor), part of the ornaments of the golden candlestick; in 1Ki 6:18; 7:24 (peqa`im), gourd-like ornaments of the lining of Solomon's temple, and of the brazen sea (in 1Ki 6:18, the Revised Version margin \"gourds\").\n\nSee CANDLESTICK, THE GOLDEN; TEMPLE; SEA, THE MOLTEN.",
@@ -6287,6 +6809,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "LABANA"
+  },
+  {
+   "id": 5324,
+   "term": "Lace(청색 끈)",
+   "definition": "las (pathil, variously rendered in Ge 38:18,25; Ex 39:3; Nu 15:38; 19:15; Jud 16:9; Eze 40:3): In modern English the noun \"lace\" usually denotes a delicate ornamental fabric, but in the word in the sense of \"that which binds\" is still in perfectly good use, especially in such combinations as \"shoelace\" etc. It is this latter significance that is found in Ex 28:28 (\"They shall bind .... with a lace of blue\"); 28:37; 39:21,31, and in Sirach 6:30 the King James Version, klosma (the Revised Version (British and American) \"riband\").",
+   "definition_ko": "끈(흠정역 「레이스」; 히브리어 '파틸', 창세기 38:18, 25; 출애굽기 39:3; 민수기 15:38; 19:15; 사사기 16:9; 에스겔 40:3에서 여러 가지로 옮겨짐). 요즘 영어에서 명사 「레이스」는 흔히 섬세한 장식 직물을 뜻하지만, 「묶는 것」이라는 뜻으로도 여전히 쓰인다. 「신발 끈」 같은 합성어가 그렇다. 이 뒤의 뜻이 출애굽기 28:28(「청색 끈으로 … 매어」); 28:37; 39:21, 31에 있으며, 집회서 6:30 흠정역에도 있다('클로스마', 영국·미국 개역판 「리본」).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "LACE"
   },
   {
    "id": 5326,
@@ -6406,6 +6937,24 @@
    "isbe_key": "LATCHET"
   },
   {
+   "id": 5403,
+   "term": "Leaf; Leaves(잎(나무) · 잎, 문짝)",
+   "definition": "lef, levz: Used in three different senses, with reference:\n\n(1) To trees (`aleh, \"a coming up\"), Ge 3:7; 8:11; Le 26:36 (Tereph); Eze 17:9; phullon. Figuratively\n\n(a) of spiritual blessings (Eze 47:12; compare Re 22:2) and prosperity (Ps 1:3);\n\n(b) of moral decay (Isa 64:6), and\n\n(c) of a formal, empty profession (Mt 21:19).\n\n(2) To a book (deleth), Jer 36:23 (margin \"columns\"; see 36:2); as the parchment was gradually unfolded the successive columns could be read.\n\n(3) To doors (tsela`, \"side,\" qela`,\"a screen,\" \"hanging\"), 1Ki 6:34. The door of the Holy Place consisted of two halves, but each half had two leaves (compare Eze 41:24).\n\nM. O. Evans",
+   "definition_ko": "잎·쪽·문짝(흠정역 「리프」, 「리브즈」). 세 가지 다른 뜻으로 쓰인다.\n\n(1) 나무의 잎('알레', 「올라오는 것」). 창세기 3:7; 8:11; 레위기 26:36('테레프'); 에스겔 17:9; 헬라어 '퓔론'. 비유로\n\n(a) 영적인 복(에스겔 47:12; 요한계시록 22:2와 비교하라)과 번영(시편 1:3),\n\n(b) 도덕적 부패(이사야 64:6),\n\n(c) 겉모양뿐인 빈 신앙고백(마태복음 21:19)을 가리킨다.\n\n(2) 책의 쪽('델레트'). 예레미야 36:23(난외 「단」; 36:2를 보라; 개역개정 「서너 쪽」). 양피지 두루마리를 차츰 펼치면서 잇따른 단을 읽을 수 있었다.\n\n(3) 문짝('첼라', 「옆」; '켈라', 「가리개」, 「휘장」). 열왕기상 6:34. 성소의 문은 두 짝으로 되어 있었고, 각 짝은 다시 접히는 두 쪽으로 되어 있었다(에스겔 41:24와 비교하라; 개역개정 「접는 두 문짝」).\n\n(집필: M. O. Evans)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "LEAF; LEAVES"
+  },
+  {
+   "id": 5408,
+   "term": "Leasing(거짓말)",
+   "definition": "lez'-ing (kazabh \"to devise,\" \"to fabricate,\" hence, \"to lie\"; occurs but twice in the King James Version (Ps 4:2, the Revised Version (British and American) \"falsehood\"; 5:6, the Revised Version (British and American) \"lies\"); the Hebrew word is translated \"liars\" (Ps 116:11); \"lie\" or deceive (Job 6:28)): The idea of treachery, lying, and deceit, lies at the root of this word. Joab's conduct is a good illustration of the meaning (2Sa 3:27; 20:8-10). In Ps 5:6 David is referring to the cunning, treachery, and falsehood of his adversaries; compare 2Sa 13:28; 15:7-9. Doubtless David had a special person in mind as being guilty of \"leasing,\" probably Ahithophel.\n\nWilliam Evans",
+   "definition_ko": "거짓(흠정역 「리징」; 히브리어 '카자브', 「꾸미다」, 「지어내다」, 그래서 「거짓말하다」; 흠정역에 두 번만 나온다(시편 4:2, 영국·미국 개역판 「거짓」; 5:6, 영국·미국 개역판 「거짓말」; 개역개정 「거짓」, 「거짓말하는 자들」); 이 히브리어는 「거짓말쟁이」(시편 116:11), 「거짓말하다」, 「속이다」(욥기 6:28)로도 옮겨진다). 배신, 거짓말, 속임이라는 생각이 이 낱말의 뿌리에 있다. 요압의 행동이 그 뜻을 잘 보여 준다(사무엘하 3:27; 20:8~10). 시편 5:6에서 다윗은 원수들의 교활함과 배신과 거짓을 말하고 있다. 사무엘하 13:28; 15:7~9와 비교하라. 다윗은 틀림없이 「거짓」의 죄를 지은 특정한 사람, 아마 아히도벨을 마음에 두었을 것이다.\n\n(집필: William Evans)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "LEASING"
+  },
+  {
    "id": 5412,
    "term": "Lebanon(레바논)",
    "definition": "leb'-a-non (lebanon; Septuagint Libanos; Vulgate (Jerome's Latin Bible, 390-405 A.D.) Libanus):\n\n1. Name:\n\nDerived from the root labhen, \"to be white,\" probably from the snow which covers its summits the greater part of the year. \"White mountains\" are found in almost every country. The light color of the upper limestone may, however, form a sufficient reason for the name. In prose the article is usually connected with the name. In poetry it is more often without the article. In the Septuagint, however, the article is generally present both in prose and poetry.\n\n2. General Description:\n\nThe Lebanon range proper borders the east coast of the Mediterranean, for a distance of 100 miles, running North-Northeast and South-Southwest from the mouth of the Litany river, the classic Leontes (which enters the sea a little North of Tyre), to the mouth of the Eleuthurus (Nahr el-Kebir), a few miles North of Tripolis. This river comes through a depression between Lebanon and the Nuseiriyeh mountains, known as \"the entrance to Hamath,\" and connects with a caravan route to the Euphrates through Palmyra. For a considerable distance North of the Litany, the mountain summits average from 4,000 to 6,000 ft. in height, and the range is more or less dissected by short streams which enter the Mediterranean. Most prominent of these is the Nahr ez-Zaherany, which, after running 25 or 30 miles in a southerly direction through the center of the range, like the Litany, turns abruptly West opposite Mt. Hermon, reaching the sea between Tyre and Sidon. In roughly parallel courses Nahr el-`Awleh and Nahr Damur descend to the sea between Sidon and Beyrout, and Nahr Beyrout just North of the city. Throughout this district the mountain recesses are more or less wooded. Opposite Beyrout the range rises in Jebel Sannin to an elevation of 8,560 ft. Thirty miles farther Northeast the summit is reached in Jebel Mukhmal, at an elevation of 10,225 ft., with several others of nearly the same height. An amphitheater here opens to the West, in which is sheltered the most frequented cedar grove, and from which emerges the Nahr Qadisha (\"sacred stream\") which enters the Mediterranean at Tripolis. Snow is found upon these summits throughout the year (Jer 18:14), while formerly the level area between them furnished the snow fields from which a glacier descended several miles into the headwaters of the Qadisha, reaching a level of about 5,000 ft. The glacier deposited in this amphitheater a terminal moraine covering several square miles, which at its front, near Bsherreh, is 1,000 ft. in thickness. It is on this that the grove of cedars referred to is growing.\n\nThe view from this summit reveals the geographical features of the region in a most satisfactory manner. Toward the East lies Coele-Syria (the modern Buka), 7,000 ft. below the summit, bordered on the eastern side by the mountain wall of Anti-Lebanon, corresponding to the cliffs of Moab East of the Jordan valley, opposite Judea. This depression in fact is but a continuation of the great geological fault so conspicuous in the Jordan valley (see ARABAH). As one looks down into this valley, Ba`albek appears at the base of Anti-Lebanon, only 20 miles away. The valley is here about 10 miles wide, and forms the watershed between the Orontes and the Litany. To the Northeast the valley of the Orontes is soon obscured by intervening peaks, but to the Southwest the valley of the Litany closes up only where the glistering peak of Mt. Hermon pierces the sky, as the river turns abruptly toward the sea 40 miles distant. Toward the West, the blue waters of the Mediterranean, only 25 miles distant as the crow flies, show themselves at intervals through the gorges cut by the rapid streams which have furrowed the western flanks of the mountain (So 4:15); 3,500 ft. beneath is the amphitheater many square miles in area, filled with the terminal moraine from which the Qadisha river emerges, and on which the grove of cedars (compare 1Ki 4:33; Ps 92:12; Ho 14:5) appears as a green spot in the center. Onward to the West the river gorge winds its way amid numerous picturesque village sites and terraced fields, every foot of which is cultivated by a frugal and industrious people. To the traveler who has made the diagonal journey from Beirut to the cedars, memory fills in innumerable details which are concealed from vision at any one time. He has crossed Nahr el-Kelb (\"Dog River\"), near its mouth, where he has seen Egyptian and Assyrian inscriptions dating from the time of Sennacherib's invasion. Ascending this river, after passing numerous villages surrounded by mulberry and olive groves, vineyards, and fields of wheat, and pausing to study the ruins of a temple dating from Roman times, and having crossed a natural bridge at Jisr el-Hagar with a span of 120 ft., rising 75 ft. above the stream, he arrives, at the end of the second day, at the ruins of the famous temple of Venus destroyed by the order of Constantine on account of the impurity of the rites celebrated in it. Here, too, is a famous spring, typical of many others which gush forth on either side of the Lebanon range from beneath the thick deposits of limestone which everywhere crown its summit. The flow of water is enormous, and at certain seasons of the year is colored red with a mineral matter which the ancients regarded with mysterious reverence (see LB, III, 244). The lower part of the amphitheater is covered with verdure and a scanty growth of pine and walnut trees, but the upper part merges in the barren cliffs which lie above the snow line. Onward, alternately through upturned limestone strata, left by erosion in fantastic forms, and through barren areas of red sandstone, where the cedars of Lebanon would flourish if protected from the depredations of man and his domestic animals, he crosses by turns at higher and higher levels the headwaters of the Ibrahim, Fedar, Jozeh, Byblus and the Botrys rivers, and at length reaches, on the fourth day, the Qadisha, 5 miles below the cedars of Lebanon. Viewed from the Mediterranean the Lebanon range presents a continuous undulating outline of light-colored limestone peaks, the whole rising so abruptly from the sea that through most of the distance there is barely room for a road along the shore, while in places even that is prevented by rocky promontories projecting boldly into the sea. The only harbors of importance are at Beyrout and Tripolis, and these are only partially protected, being open to the Northwest. The eastern face of the range falling down into Coele-Syria is very abrupt, with no foothills and but one or two important valleys.\n\n3. Geology:\n\nGeologically considered, the Lebanon consists of three conformable strata of rock thrown up in an anticline with its steepest face to the East. The lowest of these are several thousand ft. thick, consisting of hard limestone containing few fossils, the most characteristic of which is Cidaris glandaria, from which the formation has been named Glandarian limestone. In its foldings this has been elevated in places to a height of 5,000 ft. Through erosion it is exposed in numerous places, where it presents picturesque castellated columns, whose bluish-gray sides are beautifully fluted by atmospheric agencies. The second formation consists of several hundred feet of red-colored sandstone alternating with soft limestone and clay deposits, occasionally containing a poor quality of bituminous coal, with pyrites and efflorescent salts. It is this that occasionally colors the water of the spring at Adonis. The characteristic fossil is Trigonia syriaca. Altogether this formation attains a thickness of 1,000 ft., and it is on its exposed surfaces that the most of the Lebanon pines are found. It contains also many signs of volcanic action. The third formation consists of hippurite limestone, a cretaceous formation, in some places almost wholly composed of fragments of the fossils from which it derives its name. This formation appears on all the highest summits, where in most cases it is nearly horizontal, and in places attains a thickness of 5,000 ft. Between the summits of the range and the foothills this formation has been almost wholly carried away by erosion, thus exposing the underlying formations. Cretaceous strata of still later age are found at low levels near the sea, which in places are covered by small deposits of Tertiary limestone, and by a porous sandstone of the Pleistocene age.\n\n4. Scenery:\n\nThe scenery of the western slopes of Lebanon is most varied, magnificent, and beautiful, and well calculated, as indeed it did to impress the imagination of the Hebrew poets. Originally it was heavily covered with forests of pine, oak and cedar; but these have for the most part long since disappeared, except in the valley of Nahr Ibrahim, which is still thickly wooded with pine, oak and plane trees. Of the cedars there remain, besides the grove at the head of the Qadisha, only two or three, and they are of less importance. Every available spot on the western flanks of the Lebanon is cultivated, being sown with wheat or planted with the vine, the olive, the mulberry and the walnut. Irrigation is extensively practiced. When we let the eye range from the snowy summits of the mountain over all that lies between them and the orange groves of Sidon on the seashore, we understand why the Arabs say that \"Lebanon bears winter on its head, spring on its shoulders, autumn in its lap, while summer lies at its feet.\"\n\nIn the more desolate places jackals, hyenas, wolves, and panthers are still found (compare 2Ki 14:9).\n\n5. History:\n\nThe original inhabitants of Lebanon were Hivites and Gebalites (Jud 3:3; Jos 13:5,6). The whole mountain range was assigned to the Israelites, but was never conquered by them. It seemed generally to have been subject to the Phoenicians. At present it is occupied by various sects of Christians and Mohammedans, of whom the Maronites, Druzes and Orthodox Greeks are most active and prominent. Since 1860 the region has been under the protection of European powers with a Christian governor. No exact figures are available, but the population at present numbers probably about 275,000.\n\nRuins of ancient temples are numerous throughout Lebanon. Bacon estimates that within a radius of 20 miles of Ba`albek there are 15 ruined sun-temples, the grandeur and beauty of which would have made them famous but for the surpassing splendor of Ba`albek.\n\n6. Anti-Lebanon:\n\nAnti-Libanus (Judith 1:7; Jos 13:5; So 7:4) is an extension northward of the great mountain system facing on the East the great geological fault most conspicuous in the valley of the Jordan (see JORDAN, VALLEY OF), extending from the Gulf of Akabah to Antioch on the Orontes River. The system begins at the Barada River just North of Mt. Hermon, and, running parallel to Mt. Lebanon for 65 miles, terminates at Chums, the \"entering in of Hamath.\" The highest points of the range reach an elevation of over 8,000 ft. Eastward the range merges into the plateau of the great Syrian desert. South of Ba`albek the Yahfufah, a stream of considerable importance, empties into the Litany, while the Barada (the \"Abana\" of Scripture), rising in the same plateau, flows eastward to Damascus, its volume being greatly increased by fountains coming in from the base of the dissected plateau.\n\nLITERATURE.\n\nThe geographical and geological descriptions are largely obtained by the writer from an extended excursion through the region in the company of Professor Day of the Protestant College at Beirut, whose knowledge of the region is most intimate and comprehensive. For more detailed information see Robinson, BRP2, II, 435 ff, 493; G. A. Smith, HGHL, 45 ff; Burton and Drake, Unexplored Syria; Benjamin W. Bacon, and G.F. Wright in Records of the Past, 1906, V, 67-83, 195-204; Baedeker-Socin, Palestine.\n\nGeorge Frederick Wright",
@@ -6469,6 +7018,33 @@
    "isbe_key": "LINEAGE"
   },
   {
+   "id": 5489,
+   "term": "Liquor(독한 술)",
+   "definition": "lik'-er: Every sort of intoxicating liquor except the beverage prepared from the juice of the grape (yayin), according to the usage of the Old Testament, is comprehended under the generic term shekhar (compare shakhar, to \"be drunk\"), rendered \"strong drink\" (compare Greek sikera in Lu 1:15). The two terms, yayin and shekhar, \"wine\" and \"strong drink,\" are often found together and are used by Old Testament writers as an exhaustive classification of the beverages in use among the ancient Hebrews (Le 10:9; 1Sa 1:15; Pr 20:1, etc.).\n\nSee WINE; DRINK, STRONG.",
+   "definition_ko": "독한 술(흠정역 「리커」). 구약의 쓰임에 따르면 포도즙으로 만든 음료('야인') 밖의 모든 취하게 하는 술은 '셰카르'(「취하다」라는 뜻의 '샤카르'와 비교하라)라는 총칭에 들며, 「독주」로 옮겨진다(누가복음 1:15의 헬라어 '시케라'와 비교하라 — 개역개정은 여기서 「독한 술」). '야인'과 '셰카르', 곧 「포도주」와 「독주」는 자주 함께 나오며, 구약 저자들은 이 두 말로 옛 히브리 사람들이 마시던 음료를 빠짐없이 나누었다(레위기 10:9; 사무엘상 1:15; 잠언 20:1 등).\n\n포도주; 독주 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "LIQUOR"
+  },
+  {
+   "id": 5492,
+   "term": "Litter(가마(들것))",
+   "definition": "lit'-er (tsabh): (1) Used upon backs of camels for easy riding, made of a wooden frame with light mattress and pillows, also a covering above, supported by upright pieces, sometimes having also side awnings for protection from the sun's rays. Mule litters were made with pairs of shafts projecting before and behind, between which the animals were yoked (Isa 66:20). Litter-wagons ('eghloth tsabh) are mentioned in Nu 7:3; the horse litter (phorion) is mentioned in 2 Macc 9:8; compare 3:27. (2) miTTah, \"palanquin\" or \"litter of Solomon\" (So 3:7; compare So 3:9).\n\nSee PALANQUIN.",
+   "definition_ko": "가마·들것(히브리어 '차브'). (1) 낙타 등에 얹어 편히 타게 하는 것으로, 나무틀에 가벼운 요와 베개를 깔고, 위에는 기둥으로 받친 덮개를 두며, 때로는 햇볕을 막는 옆 차양도 단다. 노새 가마는 앞뒤로 튀어나온 두 쌍의 채 사이에 짐승을 매어 멨다(이사야 66:20; 개역개정 「교자」). 가마 수레('에글로트 차브')가 민수기 7:3에 나오며(개역개정 「덮개 있는 수레」), 말 가마('포리온')는 마카베오하 9:8에 나온다. 3:27과 비교하라. (2) '밋타', 「가마」 곧 「솔로몬의 가마」(아가 3:7; 아가 3:9와 비교하라).\n\n가마(팔란퀸) 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "LITTER"
+  },
+  {
+   "id": 5498,
+   "term": "Lo-Ammi(로암미(내 백성이 아니다) · 로루하마(긍휼히 여김을 받지 못하는 자) · 로암미)",
+   "definition": "lo-am'-i (lo'-`ammi, \"not my people\"): The 2nd son and 3rd child of Gomer bath-Diblaim, wife of the prophet Hosea (Ho 1:9). An earlier child, a daughter, had been named Lo-ruhamah (lo'-ruchamah, \"uncompassionated\"). The names, like those given by Isaiah to his children, are symbolic, and set forth Hosea's conviction that Israel has, through sin, forfeited Yahweh's compassion, and can no longer claim His protection. Of the bearers of these names nothing further is known; but their symbolism is alluded to in Ho 2:1,23. This latter passage is quoted by Paul (Ro 9:25 f).\n\nSee HOSEA; JEZREEL.\n\nJohn A. Lees",
+   "definition_ko": "로암미(히브리어 '로암미', 「내 백성이 아니다」). 선지자 호세아의 아내인 디블라임의 딸 고멜의 둘째 아들이자 셋째 자식이다(호세아 1:9). 먼저 난 딸에게는 로루하마(히브리어 '로루하마', 「긍휼히 여김을 받지 못하는」)라는 이름을 지었다. 이 이름들은 이사야가 자기 자녀에게 지어 준 이름처럼 상징적이며, 이스라엘이 죄로 말미암아 여호와의 긍휼을 잃어 더는 그분의 보호를 요구할 수 없다는 호세아의 확신을 나타낸다. 이 이름을 지닌 이들에 대해서는 더 알려진 것이 없으나, 그 상징은 호세아 2:1, 23에서 넌지시 언급된다. 이 뒤의 구절을 바울이 인용한다(로마서 9:25 이하).\n\n호세아; 이스르엘 항목을 보라.\n\n(집필: John A. Lees)",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "LO-AMMI"
+  },
+  {
    "id": 5499,
    "term": "Lo-Debar(로드발)",
    "definition": "lo'-de-bar, lo-de'-bar (lo dhebhar): A place in Gilead where dwelt Machir, son of Ammiel, who sheltered Mephibosheth, son of Saul, after that monarch's death (2Sa 9:4), until he was sent for by David. This same Machir met David with supplies when he fled to Gilead from Absalom (2Sa 17:27 f). Possibly it is the same place as Lidebir in Jos 13:26 (Revised Version margin). No certain identification is possible; but Schumacher (Northern 'Ajlun, 101) found a site with the name Ibdar about 6 1/2 miles East of Umm Qeis, North of the great aqueduct, which may possibly represent the ancient city. Lidebir, at least, seems to be placed on the northern boundary of Gilead. The modern village stands on the southern shoulder of Wady Samar. There is a good spring to the East, a little lower down, while ancient remains are found in the neighborhood.\n\nW. Ewing",
@@ -6503,6 +7079,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "LOOP"
+  },
+  {
+   "id": 5544,
+   "term": "Lubim(루빔)",
+   "definition": "lu'-bim (lubhim): A people mentioned in the Old Testament (2Ch 12:3; 16:8; Da 11:43; Na 3:9). In all these cases the word is translated in the King James Version \"Libyans\"; in the Revised Version (British and American) only in Da 11:43. The people so named had their seat in North Africa, West of Egypt (compare Ac 2:10, \"the parts of Libya about Cyrene\"). See LIBYA. On three different occasions the Libyans invaded Egypt, and at length, in the 10th century BC, succeeded in founding an Egyptian dynasty under SHISHAK (which see).",
+   "definition_ko": "루빔(히브리어 '루빔'). 구약에 나오는 한 민족이다(역대하 12:3; 16:8; 다니엘 11:43; 나훔 3:9). 흠정역은 이 모든 곳에서 「리비아 사람」으로 옮기고, 영국·미국 개역판은 다니엘 11:43에서만 그렇게 옮긴다(개역개정은 역대하 12:3 「리비아」, 16:8 「룹 사람」, 다니엘 11:43 「리비아 사람」, 나훔 3:9 「루빔」). 이 민족은 애굽 서쪽 북아프리카에 자리 잡고 있었다(사도행전 2:10 「구레네에 가까운 리비야 여러 지방」과 비교하라). 리비아 항목을 보라. 리비아 사람들은 세 차례 애굽을 침략하였고, 마침내 주전 10세기에 시삭(그 항목을 보라) 아래 애굽 왕조를 세웠다.",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "LUBIM"
   },
   {
    "id": 5545,
@@ -6802,6 +7387,24 @@
    "isbe_key": "MANAHATHITES"
   },
   {
+   "id": 5710,
+   "term": "Maneh; Mina(므나)",
+   "definition": "man'-e, or mi'-na (maneh; mna, \"pound\" (English Versions of the Bible)): A weight containing 50 shekels, according to Hebrew usage, but which varied according to the standard adopted. Estimated on the Phoenician, or commercial, standard, it was equal to 11,200 grains, or about 2 lbs. troy, or about 1,6 lbs. avoirdupois. This is probably the weight intended in 1Ki 10:17; Ezr 2:69 and Ne 7:71 f (see WEIGHTS AND MEASURES). When used in a monetary sense, the maneh of silver was worth about 6 pounds 17 shillings, or $34 (in 1915); the gold maneh was equal to about 102 pounds 10 shillings, or $510 (in 1915).\n\nH. Porter",
+   "definition_ko": "마네·므나(히브리어 '마네'; 헬라어 '므나', 영역 성경 「파운드」). 히브리의 쓰임에 따르면 50세겔이 드는 무게지만, 어떤 기준을 택하느냐에 따라 달랐다. 페니키아 곧 상업 기준으로 셈하면 11,200그레인, 약 트로이 2파운드, 약 상형 1.6파운드였다. 열왕기상 10:17; 에스라 2:69; 느헤미야 7:71 이하에서 뜻하는 무게가 아마 이것일 것이다(개역개정 「마네」; 도량형 항목을 보라). 돈의 뜻으로 쓰일 때 은 마네는 약 6파운드 17실링, 곧 34달러(1915년 기준)였고, 금 마네는 약 102파운드 10실링, 곧 510달러(1915년 기준)였다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MANEH; MINA"
+  },
+  {
+   "id": 5712,
+   "term": "Manger(구유)",
+   "definition": "man'-jer (phatne): Properly the place in a stall or stable where the food of cattle is placed (in the Old Testament \"crib\" (Job 39:9; Pr 14:4; Isa 1:3)); thus also, apparently, in the narrative of the nativity in Lu 2:7,12,16. In Septuagint, the Greek word, representing different Hebrew words, has also the extended meaning of \"stall\" (2Ch 32:28; Hab 3:17); thus also in Lu 13:15, where the Revised Version margin has \"manger.\" Old tradition says that Jesus was born in a cave in the neighborhood of Bethlehem; even so, a place for food for cattle may have been cut in the side of the rock.\n\nJames Orr",
+   "definition_ko": "구유(헬라어 '파트네'). 본디 외양간이나 마구간에서 가축의 먹이를 두는 곳이다(구약에서 「구유」 — 욥기 39:9(개역개정 「외양간」); 잠언 14:4; 이사야 1:3). 예수 탄생 이야기의 누가복음 2:7, 12, 16도 그런 뜻으로 보인다. 칠십인역에서 이 헬라어는 여러 히브리어를 옮기며 「외양간」이라는 넓은 뜻도 지닌다(역대하 32:28; 하박국 3:17). 누가복음 13:15도 그러한데(개역개정 「외양간」), 영국·미국 개역판 난외에는 「구유」로 되어 있다. 옛 전승은 예수께서 베들레헴 근처의 한 동굴에서 나셨다고 한다. 그렇더라도 가축 먹이를 두는 곳을 바위 옆면에 깎아 만들었을 수 있다.\n\n(집필: James Orr)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MANGER"
+  },
+  {
    "id": 5727,
    "term": "Mantle(겉옷)",
    "definition": "man'-t'-l: Used 5 times of Elijah's mantle ('addereth, 1Ki 19:18,19; 2Ki 2:8,13,14), which was probably of hair. Found in plural once (Isa 3:22), where it (ma`ataphoth) is an upper wide tunic with sleeves (kethoneth).\n\nSee DRESS; KERCHIEF.",
@@ -6829,6 +7432,15 @@
    "isbe_key": "MARALAH"
   },
   {
+   "id": 5737,
+   "term": "Maranatha(마라나타)",
+   "definition": "mar-a-nath'-a, mar-an-a'-tha (from Aramaic words, marana' 'athah, \"Our Lord cometh, or will come\"; according to some, \"has come\"; to others, \"Come!\" an invitation for his speedy reappearance (compare Re 22:20); maranatha, or maran atha): Used in connection with anathema, \"accursed\" (1Co 16:22), but has no necessary connection therewith. It was used by early Christians to add solemn emphasis to previous statement, injunction or adjuration, and seems to have become a sort of watchword; possibly forming part of an early liturgy.",
+   "definition_ko": "마라나타(아람어 '마라나 아타', 「우리 주께서 오신다」 또는 「오실 것이다」; 어떤 이는 「오셨다」로, 어떤 이는 「오소서!」, 곧 그분이 속히 다시 나타나시기를 청하는 말로 본다(요한계시록 22:20과 비교하라); 헬라어 '마라나타' 또는 '마란 아타'). 「저주를 받을」이라는 뜻의 '아나테마'와 함께 쓰였으나(고린도전서 16:22; 개역개정은 「우리 주여 오시옵소서」로 옮긴다), 반드시 그것과 이어진 말은 아니다. 초기 그리스도인들이 앞선 말이나 명령이나 엄숙한 권면에 무게를 더하려고 썼으며, 일종의 표어가 되었던 것 같다. 초기 예전의 한 부분이었을 수도 있다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MARANATHA"
+  },
+  {
    "id": 5745,
    "term": "Mareshah(마레사)",
    "definition": "ma-re'-sha (mareshah; Septuagint: Codex Vaticanus Bathesar; Codex Alexandrinus Maresa): A town in the Shephelah of Judah named with Keilah and Achzib (Jos 15:44). It occupied such a position that Rehoboam thought well to fortify it for the protection of Jerusalem (2Ch 11:8). In the valley of Zephathah at Mareshah, Asa overwhelmed Zerah the Ethiopian and his army, pursuing them as far as Gezer (2Ch 14:9). From Mareshah came Eliezer the prophet who denounced disaster upon the commercial copartnery of Jehoshaphat and Ahaziah (2Ch 20:37). The place is mentioned in Mic (2Ch 1:15). Mareshah was plundered and burned by Judas Maccabeus (Ant., XII, viii, 6; 1 Macc 5:66 the Revised Version margin). Hither Gorgias escaped, having been rescued from the hands of Dositheus by a Thracian horseman (2 Macc 12:35). It was taken by John Hyrcanus, who allowed the inhabitants to remain on condition that they adopt circumcision and submit to the Jewish law. This they did; and later John avenged an injustice done to Mareshah by the Samaritans. It is then described as \"a colony of Jews\" (Ant., XIII, ix, 1; x, 2). The city was treated with favor by Pompey (XIV, iv, 4). When the Parthians invaded Judea in support of Antigonus they demolished Mareshah (xiii, 9).\n\nAccording to Eusebius, Onomasticon, Mareshah was 2 Roman miles from Eleutheropolis (Beit Jibrin). Until recently it was thought that Khirbet Mir`ash, where the old name lingers, not far Southwest of Beit Jibrin, represented the ancient city. The work of Dr. Bliss, however (\"Excavations in Palestine,\" PEF), shows that it must be located at Tell Sandachannah, about a mile South of Beit Jibrin. A series of remarkable tombs was discovered here. From 1Ch 2:42 we may perhaps gather that Hebron was colonized by the men of Mareshah.\n\nW. Ewing",
@@ -6845,6 +7457,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "MAROTH"
+  },
+  {
+   "id": 5764,
+   "term": "Martyr(순교자)",
+   "definition": "mar'-ter (martus, Aeolic martur): One who gives heed, and so, a \"witness,\" so translated in numerous passages, both as of one bearing testimony, and also as of one who is a spectator of anything (see WITNESS). In the King James Version rendered \"martyr\" in Ac 22:20, \"thy martyr Stephen\"; and Re 2:13, \"Antipas my faithful martyr\"; also 17:6, \"the blood of the martyrs of Jesus,\" where alone the American Standard Revised Version retains \"martyrs.\" These 3 passages are the beginning of the use of the word \"martyr\" for such witnesses as were faithful even unto death, its uniform modern use.",
+   "definition_ko": "순교자(헬라어 '마르튀스', 아이올리스 방언 '마르튀르'). 주의를 기울이는 사람, 그래서 「증인」이다. 여러 곳에서 그렇게 옮겨지며, 증언하는 사람과 무엇을 지켜보는 사람 모두를 가리킨다(증인 항목을 보라). 흠정역은 사도행전 22:20 「주의 순교자 스데반」, 요한계시록 2:13 「내 충성된 순교자 안디바」, 17:6 「예수의 순교자들의 피」에서 「순교자」로 옮기는데(개역개정은 세 곳 모두 「증인」), 미국 개역판은 마지막 곳에서만 「순교자들」을 남긴다. 이 세 곳이 죽기까지 충성한 증인을 「순교자」라 부르는 쓰임의 시작이며, 이것이 오늘날의 한결같은 쓰임이다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MARTYR"
   },
   {
    "id": 5774,
@@ -6890,6 +7511,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "MATTANAH"
+  },
+  {
+   "id": 5807,
+   "term": "Mattock(괭이(호미))",
+   "definition": "mat'-ok: The translation of 3 Hebrew words:\n\n(1) machereshah, probably \"a pick-axe\" (1Sa 13:20,21; compare 1Sa 13:21 margin);\n\n(2) cherebh, \"sword,\" \"ax,\" \"tool\" (2Ch 34:6 the King James Version, \"with their mattocks,\" the King James Version margin \"mauls,\" the Revised Version (British and American) \"in their ruins,\" the Revised Version margin \"with their axes\");\n\n(3) ma`-der, \"a hoe,\" \"rake,\" \"chopping instrument\" (Isa 7:25). Vines were usually grown on terraces on the hills of Palestine, and then the mattock was in constant use. The usual mattock is a pick with one end broad, the other pointed.",
+   "definition_ko": "괭이(흠정역 「매톡」). 히브리어 세 낱말을 옮긴 말이다.\n\n(1) '마하레샤', 아마 「곡괭이」(사무엘상 13:20, 21; 사무엘상 13:21 난외와 비교하라; 개역개정 「괭이」).\n\n(2) '헤레브', 「칼」, 「도끼」, 「연장」(역대하 34:6 흠정역 「그들의 괭이로」, 흠정역 난외 「메로」, 영국·미국 개역판 「그들의 폐허에서」, 영국·미국 개역판 난외 「그들의 도끼로」; 개역개정 「황폐한 성읍들」).\n\n(3) '마데르', 「호미」, 「갈퀴」, 「찍는 연장」(이사야 7:25; 개역개정 「보습」). 팔레스타인의 산에서는 대개 계단식 밭에 포도나무를 가꾸었으므로 괭이를 늘 썼다. 흔한 괭이는 한쪽 끝은 넓고 다른 쪽은 뾰족한 곡괭이다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MATTOCK"
   },
   {
    "id": 5808,
@@ -6989,6 +7619,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "MELONS"
+  },
+  {
+   "id": 5870,
+   "term": "Melzar(멜살)",
+   "definition": "mel'-zar (ha-meltsar; Septuagint Abiesdri, Theod. Hamelsad): Possibly a transliteration of the Babylonian Ameluucur, the officer to whom was entrusted the bringing-up of Daniel and his three companions (Da 1:11 the King James Version, the Revised Version (British and American) \"the steward,\" margin \"Hebrew: Hammelzar\"). It has been suggested that the name is not the name of a person, but denotes the office of guardian, like the Babylonian maccaru. In this case the \"l\" would come by dissimulation from the first of the two \"s\" sounds, which on its side has come from an assimilated \"n\", the root being nacaru, \"to protect\" \"to guard.\"\n\nR. Dick Wilson",
+   "definition_ko": "멜살(흠정역 「멜자르」; 히브리어 '함멜차르'; 칠십인역 '아비에스드리', 테오도티온 '하멜사드'). 아마 바벨론어 '아멜루우추르'의 음역일 것으로, 다니엘과 세 친구를 기르는 일을 맡은 관리다(다니엘 1:11 흠정역; 영국·미국 개역판 「감독자」, 난외 「히브리어로는 함멜살」; 개역개정 「감독하게 한 자」). 이것이 사람 이름이 아니라 바벨론어 '마차루'처럼 보호자라는 직책을 가리킨다는 제안이 있다. 그렇다면 「ㄹ」은 두 「ㅅ」 소리 가운데 첫째가 이화하여 생긴 것이고, 그 첫째 「ㅅ」은 동화된 「ㄴ」에서 왔으며, 어근은 「보호하다」, 「지키다」라는 뜻의 '나차루'다.\n\n(집필: R. Dick Wilson)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MELZAR"
   },
   {
    "id": 5876,
@@ -7144,6 +7783,15 @@
    "isbe_key": "MIGDOL"
   },
   {
+   "id": 5986,
+   "term": "Mildew(깜부기(썩는 재앙))",
+   "definition": "mil'-du (yeraqon; Septuagint usually ikteros, literally, \"jaundice\"): In the 5 passages where it occurs it is associated with shiddaphon, \"blasting\" (De 28:22; 1Ki 8:37; 2Ch 6:28; Am 4:9; Hag 2:17). In Jer 30:6, the same word is translated \"paleness,\" the yellow color of one with abdominal disease. The root-meaning is \"greenish yellow\"; compare the Arabic yarqan, meaning both \"jaundice\" and \"blight.\" Mildrew or \"rust\" in grain is due to a special fungus, Puccinia graminis, whose life is divided between the barberry and cereals. Many other varieties of fungi which flourish upon other plants are also designated \"mildew.\"\n\nSee BLASTING.\n\nE. W. G. Masterman",
+   "definition_ko": "깜부기(흠정역 「밀듀」; 히브리어 '예라콘'; 칠십인역은 대개 '익테로스', 문자적으로 「황달」). 이 낱말이 나오는 다섯 곳에서 모두 '쉿다폰', 「마르게 하는 재앙」과 함께 쓰인다(신명기 28:22, 개역개정 「썩는 재앙」; 열왕기상 8:37; 역대하 6:28, 개역개정 「깜부기」; 아모스 4:9; 학개 2:17, 개역개정 「깜부기 재앙」). 예레미야 30:6에서는 같은 낱말이 「창백함」, 곧 뱃병이 있는 사람의 누런빛으로 옮겨진다(개역개정 「새파래졌는가」). 뿌리 뜻은 「누르스름한 초록」이다. 「황달」과 「마름병」을 함께 뜻하는 아랍어 '야르칸'과 비교하라. 곡식의 곰팡이병, 곧 「녹병」은 특별한 곰팡이 푸키니아 그라미니스 때문인데, 이 곰팡이는 한살이를 매자나무와 곡류에서 나누어 산다. 다른 식물에 번성하는 다른 여러 곰팡이도 「밀듀」라 부른다.\n\n마르게 하는 재앙 항목을 보라.\n\n(집필: E. W. G. Masterman)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MILDEW"
+  },
+  {
    "id": 5988,
    "term": "Miletus(밀레도)",
    "definition": "mi-le'-tus (Miletos): A famous early Ionian Greek city on the coast of Caria, near the mouth of the Meander River, which, according to Ac 20:15-21:1, and 2Ti 4:20 (the King James Version \"Miletum\"), Paul twice visited. In the earliest times it was a prominent trading post, and it is said that 75 colonies were founded by its merchants. Among them were Abydos, Cyzicus and Sinope. In 494 BC, the city was taken by the Persians; it was recovered by Alexander the Great, but after his time it rapidly declined, yet it continued to exist until long after the Christian era. In the history of early Christianity it plays but a little part. The Meander brings down a considerable amount of sediment which it has deposited at its mouth, naturally altering the coast line. The gulf into which the river flows has thus been nearly filled with the deposit. In the ancient gulf stood a little island called Lade; the island now appears as a mound in the marshy malarial plain, and Palatia, the modern village which stands on the site of Miletus, is 6 miles from the coast. Without taking into account the great changes in the coast line it would be difficult to understand Ac 20:15-21, for in the days of Paul, Ephesus could be reached from Miletus by land only by making a long detour about the head of the gulf. To go directly from one of these cities to the other, one would have been obliged to cross the gulf by boat and then continue by land. This is what Paul's messenger probably did. The direct journey may now be made by land. Miletus has been so ruined that its plan can no longer be made out. Practically the only remaining object of unusual interest is theater, the largest in Asia Minor, which was not built in a hollow of the hillside, as most ancient theaters were, but in the open field.\n\nE. J. Banks",
@@ -7234,6 +7882,15 @@
    "isbe_key": "MISREPHOTH-MAIM"
   },
   {
+   "id": 6036,
+   "term": "Mite(렙돈)",
+   "definition": "mit (lepton): The smallest copper or bronze coin current among the Jews. They were first struck by the Maccabean princes with Hebrew legends, and afterward by the Herods and the Roman procurators with Greek legends. The \"widow's mite\" mentioned in Mr 12:42 and Lu 21:2 was probably of the first kind, since those with Greek legends were regarded as unlawful in the temple service. According to Mark, the lepton was only half a kodrantes (Latin quadrans), which would indicate a value of about one-fourth of a cent or half an English farthing.\n\nSee MONEY.\n\nH. Porter",
+   "definition_ko": "렙돈(흠정역 「마이트」; 헬라어 '렙톤'). 유대인 사이에 쓰이던 가장 작은 구리 또는 청동 동전이다. 처음에는 마카베오 가문의 통치자들이 히브리어 글자를 새겨 만들었고, 뒤에는 헤롯 가문과 로마 총독들이 헬라어 글자를 새겨 만들었다. 마가복음 12:42와 누가복음 21:2에 나오는 「과부의 렙돈」은 앞의 것이었을 것이다. 헬라어 글자를 새긴 것은 성전 예배에 쓰기에 부정하다고 여겨졌기 때문이다. 마가에 따르면 렙돈은 '코드란테스'(라틴어 '콰드란스', 개역개정 「고드란트」)의 절반에 지나지 않았으니, 그 값은 약 4분의 1센트, 곧 영국 파딩의 절반쯤이 된다.\n\n돈 항목을 보라.\n\n(집필: H. Porter)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MITE"
+  },
+  {
    "id": 6037,
    "term": "Mithkah(밋가)",
    "definition": "mith'-ka (mithqah \"sweetness\"; the King James Version Mithcah): Name given owing to sweetness of pasture or water. A desert camp of the Israelites between Terah and Hashmonah (Nu 33:28 f).\n\nSee WANDERINGS OF ISRAEL.",
@@ -7268,6 +7925,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "MOLOCH"
+  },
+  {
+   "id": 6078,
+   "term": "Month(달(월))",
+   "definition": "munth (chodhesh, yerach; men): Chodhesh is strictly the \"new moon,\" the appearance of which marked the beginning of the month, commonly indicated by ro'sh ha-chodhesh. Yerach is derived from yareach, \"moon,\" which comes from the verb that means \"to wander,\" \"to make a circuit.\" Thus the month was lunar, the period of the moon's circuit. The Greek men also meant \"moon,\" from the Sanskrit ma, \"to measure,\" the Latin mensis and our \"moon\" being derived from the same root.\n\nSee CALENDAR; TIME; ASTRONOMY.\n\nChodhesh, or rather ro'sh ha-chodhesh, was observed as a festival (1Sa 20:5,18,24; Isa 1:14).\n\nH. Porter",
+   "definition_ko": "달(히브리어 '호데시', '예라흐'; 헬라어 '멘'). '호데시'는 엄밀히 「새 달」이며, 그 나타남이 달의 시작을 표시하였고 흔히 '로시 하호데시'로 가리켰다. '예라흐'는 「달」이라는 뜻의 '야레아흐'에서 왔고, 이 말은 「떠돌다」, 「돌다」라는 동사에서 왔다. 그러므로 달은 태음월, 곧 달이 한 바퀴 도는 기간이었다. 헬라어 '멘'도 「달」을 뜻하며, 산스크리트어 '마', 「재다」에서 왔다. 라틴어 '멘시스'와 영어 「문」도 같은 뿌리에서 왔다.\n\n역법; 때; 천문학 항목을 보라.\n\n'호데시', 더 정확히는 '로시 하호데시'는 절기로 지켰다(사무엘상 20:5, 18, 24; 이사야 1:14; 개역개정 「초하루」, 「월삭」).\n\n(집필: H. Porter)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MONTH"
   },
   {
    "id": 6091,
@@ -7313,6 +7979,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "MOZAH"
+  },
+  {
+   "id": 6151,
+   "term": "Muzzle(망을 씌우다)",
+   "definition": "muz'l (chacam; phimoo) According to the Deuteronomic injunction (De 25:4), the ox was not to be muzzled while treading the grain, i.e. threshing. The muzzle was a guard placed on the mouth of the oxen to prevent them from biting or eating. The threshing ox would have ample opportunity of feeding (compare Ho 10:11). The Deuteronomic injunction is quite in accordance with the humane spirit which inspires it all through. Paul quotes this law in two places (1Co 9:9; 1Ti 5:18) to illustrate his view that the \"laborer is worthy of his hire.\"\n\nT. Lewis",
+   "definition_ko": "망을 씌우다(히브리어 '하삼'; 헬라어 '피모오'). 신명기의 명령(신명기 25:4)에 따르면 곡식을 밟는 동안, 곧 떠는 동안 소에게 망을 씌우지 말아야 했다. 망은 소가 물거나 먹지 못하게 입에 씌우는 덮개였다. 곡식을 떠는 소는 먹을 기회가 넉넉했을 것이다(호세아 10:11과 비교하라). 이 명령은 신명기 전체에 흐르는 인도적인 정신과 아주 잘 맞는다. 바울은 이 율법을 두 곳에서 인용하여(고린도전서 9:9; 디모데전서 5:18) 「일꾼이 그 삯을 받는 것은 마땅하다」는 자기 생각을 설명한다.\n\n(집필: T. Lewis)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "MUZZLE"
   },
   {
    "id": 6153,
@@ -7540,6 +8215,15 @@
    "isbe_key": "NEIEL"
   },
   {
+   "id": 6279,
+   "term": "Nekeb(아다미 네겝)",
+   "definition": "ne'-keb: This name occurs only in combination with \"Adami\" ('adhami ha-neqebh, \"Adami of the pass\"); Septuagint reads the names of two places: kai Arme kai Nabok (B); kai Armai kai Nakeb (Jos 19:33), so we should possibly read \"Adami and Nekeb.\" Neubauer says (Geog. du Talmud, 225) that later the name of Nekeb was Ciyadathah. It may therefore be represented by the modern Seiyadeh, not far from ed-Damieh to the East of Tabor, about 4 miles Southwest of Tiberias. The name of Nekeb, a town in Galilee, appears in the list of Thothmes III.",
+   "definition_ko": "네겝(넥켑). 이 이름은 「아다미」와 함께만 나온다(히브리어 '아드미 한네케브', 「고개의 아다미」; 개역개정 「아다미 네겝」). 칠십인역은 두 곳의 이름으로 읽는다. 「카이 아르메 카이 나보크」(바티칸 사본), 「카이 아르마이 카이 나케브」(여호수아 19:33). 그러므로 「아다미와 네겝」으로 읽어야 할지도 모른다. 노이바우어(『탈무드의 지리』 225)는 뒤에 네겝의 이름이 '치야다타'였다고 한다. 그렇다면 다볼 동쪽 에드다미에에서 멀지 않은, 디베랴 남서쪽 약 4마일의 오늘날 세이야데일 수 있다. 갈릴리의 한 성읍 네겝의 이름이 투트모세 3세의 지명 목록에 나온다.",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "NEKEB"
+  },
+  {
    "id": 6294,
    "term": "Nephtoah(넵도아)",
    "definition": "nef-to'-a, nef'-to-a (nephtoach, occurs only in the expression ma`yan me nephtoach, \"the fountain of the waters of Nephtoah\"; Septuagint pege hudatos Naphtho): This spring was on the border line between Judah and Benjamin (Jos 15:9; 18:15). The place is usually identified with Lifta, a village about 2 miles Northwest of Jerusalem, on the east bank of the Wady beit Hanina]. It is a village very conspicuous to the traveler along the high road from Jaffa as he nears Jerusalem. There are ancient rock-cut tombs and a copious spring which empties itself into a large masonry reservoir. The situation of Lifta seems to agree well with the most probable line of boundary between the two tribes; the spring as it is today does not appear to be so abundant as to warrant such an expression as \"spring of the waters,\" but it was, like many such sources, probably considerably more abundant in Old Testament times.\n\nConder would identify Lifta with the ancient ELEPH (which see) of Benjamin, and, on the ground that the Talmud (see Talmud Babylonian, Yom' 31a) identifies Nephtoah with ETAM (which see), he would find the site of Nephtoah at `Ain `Atan, South of Bethlehem. The Talmud is not a sufficiently trustworthy guide when unsupported by other evidence, and the identification creates great difficulty with the boundary line. See Palestine Exploration Fund, III, 18, 43, Sh XVII.\n\nE. W. G. Mastermin",
@@ -7556,6 +8240,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "NERGAL"
+  },
+  {
+   "id": 6299,
+   "term": "Nergal-Sharezer(네르갈사레셀)",
+   "definition": "nur-gal-sha-re'-zar (nereghal-shar'etser, Hebrew form of Assyrian Nergal-sar-usur, \"O Nergal, defend the prince\"): A Babylonian officer, the \"Rab-mag,\" associated with Nebushazban in the care of Jeremiah after the fall of Jerusalem (Jer 39:3,13). According to Hommel (article \"Babylon,\" Hastings, Dictionary of the Bible (five volumes)) and Sayce (Hastings Dictionary of the Bible, under the word), Nergal-sharezer is to be identified with Neriglissar who succeeded Evil-merodach on the throne of Babylon (compare Cheyne and Johns, Encyclopedia Biblica, under the word).",
+   "definition_ko": "네르갈사레셀(히브리어 '네레갈 사르에체르', 앗수르어 '네르갈 샤르 우추르', 「네르갈이여, 왕자를 지키소서」의 히브리어 꼴). 바벨론 관리로 「랍막」이었으며(개역개정 「궁중 장관」), 예루살렘이 함락된 뒤 느부사스반과 함께 예레미야를 돌보았다(예레미야 39:3, 13). 호멜(헤이스팅스 『성서 사전』(다섯 권)의 「바벨론」 항목)과 세이스(헤이스팅스 『성서 사전』의 이 낱말)에 따르면, 네르갈사레셀은 에윌므로닥의 뒤를 이어 바벨론 왕위에 오른 네리글리사르와 같은 사람이다(체인과 존스, 『성서 백과사전』의 이 낱말과 비교하라).",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "NERGAL-SHAREZER"
   },
   {
    "id": 6306,
@@ -7738,6 +8431,15 @@
    "isbe_key": "NOPHAH"
   },
   {
+   "id": 6420,
+   "term": "Oblation(예물)",
+   "definition": "ob-la'-shun: In Leviticus and Numbers, the King James Version occasionally uses \"oblation,\" but generally \"offering,\" as a rendering of qorban--a general term for all kinds of offering, but used only in Ezekiel, Leviticus and Numbers. the Revised Version (British and American) renders consistently \"oblation.\" In Ezekiel (also Isa 40:20), \"oblation\" renders terumah, generally translated \"heave offering.\" In some cases (e.g. Isa 1:13; Da 9:21) \"oblation\" in the King James Version corresponds to minchah, the ordinary word for \"gift,\" in the Priestly Code (P) \"grain offering.\"\n\nSee SACRIFICE.",
+   "definition_ko": "예물·헌물(흠정역 「오블레이션」). 레위기와 민수기에서 흠정역은 '코르반'을 가끔 「오블레이션」으로, 대개는 「오퍼링」으로 옮긴다. '코르반'은 온갖 제물을 이르는 일반 용어이나 에스겔, 레위기, 민수기에만 쓰인다. 영국·미국 개역판은 한결같이 「오블레이션」으로 옮긴다. 에스겔(그리고 이사야 40:20; 개역개정 「거제」)에서 「오블레이션」은 보통 「거제」로 옮겨지는 '테루마'를 옮긴 말이다. 어떤 곳(보기: 이사야 1:13; 다니엘 9:21)에서는 흠정역의 「오블레이션」이 「선물」을 뜻하는 흔한 말, 제사장 문서에서 「소제」인 '민하'에 해당한다(개역개정 「제물」, 「저녁 제사」).\n\n제사 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "OBLATION"
+  },
+  {
    "id": 6421,
    "term": "Oboth(오봇)",
    "definition": "o'-both, o'-both ('obhoth, \"waterbags\"): A desert camp of the Israelites, the 3rd after leaving Mt. Hor and close to the borders of Moab (Nu 21:10,11; 33:43,14).\n\nSee WANDERINGS OF ISRAEL.",
@@ -7918,6 +8620,15 @@
    "isbe_key": "PAMPHYLIA"
   },
   {
+   "id": 6611,
+   "term": "Pannag(판낙)",
+   "definition": "pan'-ag (pannagh; kasia; Eze 27:17 margin, \"Perhaps a kind of confection\"): One of the articles of commerce of Judah and Israel. The kasia of the Septuagint is said to be a shrub similar to the laurel. Nothing is known of the nature of pannag. Cheyne (EB, 3555) thinks the Heb letters have got misplaced and should be gephen, \"vine,\" and he would join to it the debhash, \"honey,\" which follows in the verse, giving a translation \"grape honey,\" the ordinary dibbs of Palestine--an extremely likely article of commerce.\n\nSee HONEY.",
+   "definition_ko": "판낙(히브리어 '판나그'; 헬라어 '카시아'; 에스겔 27:17 난외 「아마 과자의 일종」). 유다와 이스라엘의 무역품 가운데 하나다(개역개정 「과자」). 칠십인역의 '카시아'는 월계수 비슷한 관목이라고 한다. 판낙이 무엇인지는 알려진 바가 없다. 체인(『성서 백과사전』 3555)은 히브리어 글자의 차례가 뒤바뀐 것으로 보고 '게펜', 「포도나무」로 읽어야 한다고 하며, 그 절에서 뒤따르는 '데바시', 「꿀」과 이어 「포도 꿀」, 곧 팔레스타인에서 흔한 '딥스'로 옮기려 한다. 무역품으로 아주 그럴듯하다.\n\n꿀 항목을 보라.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PANNAG"
+  },
+  {
    "id": 6616,
    "term": "Paphos(바보)",
    "definition": "pa'-fos:\n\n1. Site:\n\nThe name of two towns, Old (Palaia Paphos, or Palaipaphos) and New Paphos Nea Paphos), situated at the southwestern extremity of Cyprus. Considerable confusion is caused by the use of the single name Paphos in ancient writers to denote now one, now the other, of these cities. That referred to in Ac 13:6,13 is strictly called New Paphos (modern Baffa), and lay on the coast about a mile South of the modern Ktima and some 10 miles Northwest of the old city. The latter (modern Kouklia) is situated on an eminence more than a mile from the sea, on the left bank of the Diarrizo, probably the ancient Bocarus.\n\n2. History of Old Paphos:\n\nIt was founded by Cinyras, the father of Adonis, or, according to another legend, by Aerias, and formed the capital of the most important kingdom in Cyprus except that of Salamis. Its territory embraced a considerable portion of Western Cyprus, extending northward to that of Soli, southward to that of Curium and eastward to the range of Troodus. Among its last kings was Nicocles, who ruled shortly after the death of Alexander the Great. In 310 BC Nicocreon of Salamis, who had been set over the whole of Cyprus by Ptolemy I of Egypt, was forced to put an end to his life at Paphos for plotting with Antigonus (Diodorus xx. 21, who wrongly gives the name as Nicocles; see Athenische Mitteilungen, XXII, 203 ff), and from that time Paphos remained under Egyptian rule until the Roman annexation of Cyprus in 58 BC. The growth of New Paphos brought with it the decline of the old city, which was also ruined by successive earthquakes. Yet its temple still retained much of its old fame, and in 69 AD Titus, the future emperor of Rome, turned aside on his journey to Jerusalem, which he was to capture in the following year, to visit the sacred shrine and to inquire of the priests into the fortune which awaited him (Tacitus History ii.2-4; Suetonius Titus 5).\n\n3. History of New Paphos:\n\nNew Paphos, originally the seaport of the old town, was founded, according to tradition, by Agapenor of Arcadia (Iliad ii.609; Pausan. viii.5, 2). Its possession of a good harbor secured its prosperity, and it had several rich temples. According to Dio Cassius (liv.23) it was restored by Augustus in 15 BC after a destructive earthquake and received the name Augusta (Greek Sebaste). Under the Roman Empire it was the administrative capital of the island and the seat of the governor. The extant remains all date from this period and include those of public buildings, private houses, city walls and the moles of the harbor.\n\n4. The Temple and Cult:\n\nBut the chief glory of Paphos and the source of its fame was the local cult, of which the kings and their descendants remained hereditary priests down to the Roman seizure of Cyprus. The goddess, identified with the Greek Aphrodite, who was said to have risen from the sea at Paphos, was in reality a Nature-goddess, closely resembling the Babylonian Ishtar and the Phoenician Astarte, a native deity of Asia Minor and the Aegean Islands. Her cult can be traced back at Paphos to Homeric times (Odyssey viii.362) and was repeatedly celebrated by Greek and Latin poets (Aeschylus Suppl. 555; Aristoph. Lys. 833; Virgil Aen. i.415; Horace Odes i.19 and 30; iii.26; Statius Silvae i.2, 101, etc.). The goddess was represented, not by a statue in human form, but by a white conical stone (Max. Tyr. viii.8; Tacitus History ii.3; Servius Ad Aen. i.724), of which models were on sale for the benefit of pilgrims (Athenaeus xv.18); her worship was sensuous in character and she is referred to by Athanasius as the deification of lust (Contra Genres 9). Excavation has brought to light at Old Paphos a complex of buildings belonging to Roman times and consisting of an open court with chambers or colonnades on three sides and an entrance on the East only, the whole forming a quadrilateral enclosure with sides about 210 ft. long. In this court may have stood the altar, or altars, of incense (Homer speaks of a single altar, Virgil of \"a hundred altars warm with Sabean frankincense\"); no blood might be shed thereon, and although it stood in the open it was \"wet by no rain\" (Tacitus, loc. cit.; Pliny, NH, ii.210). On the south side are the ruins of another building, possibly an earlier temple, now almost destroyed save for the western wall (Journal of Hellenic Studies, IX, 193-224). But the fact that no remains or inscriptions have been found here earlier than the Roman occupation of Cyprus militates against the view that the sanctuary stood at this spot from prehistoric times. Its site may be sought at Xylino, a short distance to the North of Kouklia (D.G. Hogarth, Times, August 5, 1910), or possibly on the plateau of Rhantidi, some 3 miles Southeast of the village, where numerous inscriptions in the old Cyprian syllabic script were found in the summer of 1910 (M. Ohnefalsch-Richter, Times, July 29, 1910).\n\n5. The Apostles' Visit:\n\nAfter visiting Salamis and passing through the whole island, about 100 miles in length, Barnabas, Paul and Mark reached Paphos, the residence of the Roman proconsul, Sergius Paulus (for the title see CYPRUS). Here too they would doubtless begin by preaching in the synagogue, but the governor--who is probably the same Paulus whose name appears as proconsul in an inscription of Soli (D.G. Hogarth, Devia Cypria, 114)--hearing of their mission, sent for them and questioned them on the subject of their preaching. A Jew named Bar-Jesus or Elymas, who, as a Magian or soothsayer, \"was with the proconsul,\" presumably as a member of his suite, used all his powers of persuasion to prevent his patron from giving his adherence to the new faith, and was met by Paul (it is at this point that the name is first introduced) with a scathing denunciation and a sentence of temporary loss of sight. The blindness which at once fell on him produced a deep impression on the mind of the proconsul, who professed his faith in the apostolic teaching. From Paphos, Paul and his companions sailed in a northwesterly direction to Perga in Pamphylia (Ac 13:6-13).\n\nPaul did not revisit Paphos, but we may feel confident that Barnabas and Mark would return there on their 2nd missionary journey (Ac 15:39). Of the later history of the Paphian church we know little. Tychicus, Paul's companion, is said to have been marryred there, and Jerome tells us that Hilarion sought in the neighborhood of the decayed and almost deserted town the quiet and retirement which he craved (Vita Hilar. 42). The Acta Barnabae speak of a certain Rhodon, who was attached to the temple service at Old Paphos, as having accepted the Christian faith.\n\nLITERATURE.\n\nBesides the works already referred to, see Journal of Hellenic Studies, IX, 175-92 (citation of passages from ancient authors relating to Old Paphos, together with a list of medieval and modern authorities), 225-271 (inscriptions and tombs), and the bibliography appended to article CYPRUS.\n\nMarcus N. Tod",
@@ -8024,6 +8735,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "PAVEMENT"
+  },
+  {
+   "id": 6680,
+   "term": "Pavilion(장막(휘장))",
+   "definition": "pa-vil'-yun: A covered place, booth, tent, in which a person may be kept hid or secret (cokh, Ps 27:5; cukkah--the usual term--Ps 31:20), or otherwise be withdrawn from view. The term is used with reference to God (2Sa 22:12; Ps 18:11); to kings drinking in privacy (1Ki 20:12,16); the Revised Version (British and American) gives \"pavilion\" for the King James Version \"tabernacle\" in Job 36:29; Isa 4:6; while in Nu 25:8 it substitutes this word, with the margin \"alcove,\" for the King James Version \"tent\" (qubbah), and Jer 43:10, for \"royal pavilion\" (shaphrur), reads in the margin \"glittering pavilion.\"\n\nJames Orr",
+   "definition_ko": "장막·초막(흠정역 「파빌리온」). 사람을 숨기거나 비밀히 지킬 수 있는 덮인 곳, 초막, 장막이다('소크', 시편 27:5, 개역개정 「초막」; 가장 흔한 말인 '숙카', 시편 31:20, 개역개정 「장막」). 또는 달리 사람의 눈에서 가려지는 곳이다. 이 말은 하나님께(사무엘하 22:12; 시편 18:11), 왕들이 따로 술 마시는 곳에(열왕기상 20:12, 16) 쓰인다. 영국·미국 개역판은 욥기 36:29; 이사야 4:6에서 흠정역의 「장막」 대신 「파빌리온」을 쓰고, 민수기 25:8에서는 흠정역의 「장막」('쿱바') 대신 이 말을 쓰며 난외에 「우묵한 방」이라 적는다(개역개정 「막사」). 예레미야 43:10에서는 「왕의 파빌리온」('샤프루르')에 대해 난외에 「빛나는 파빌리온」이라고 읽는다(개역개정 「화려한 큰 장막」).\n\n(집필: James Orr)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PAVILION"
   },
   {
    "id": 6696,
@@ -8224,6 +8944,15 @@
    "isbe_key": "PIECE OF GOLD"
   },
   {
+   "id": 6855,
+   "term": "Piece of Money(케시타(고대 화폐 단위) · 돈닢)",
+   "definition": "Two words are thus rendered in the King James Version (qesiTah; stater). the Revised Version (British and American) gives only the first this rendering (Job 42:11). It is supposed to be from Arabic qassaT, \"to divide equally by weight,\" and hence, something weighed; a piece of silver weighed for money, and perhaps stamped with its weight. The stater is the well-known Greek weight and coin (Mt 17:27 the King James Version, margin, \"stater,\" the Revised Version (British and American) \"shekel\"). In gold it was equal to about a guinea or five dollars, but in silver only to about 66 cents (in 1915).",
+   "definition_ko": "케쉬타·돈(흠정역 「피스 오브 머니」). 흠정역에서 두 낱말이 이렇게 옮겨진다(히브리어 '케시타'; 헬라어 '스타테르'). 영국·미국 개역판은 앞의 것만 이렇게 옮긴다(욥기 42:11; 개역개정 「케쉬타」). 이것은 「무게로 똑같이 나누다」라는 뜻의 아랍어 '카사타'에서 왔다고 하여, 무게를 단 것, 곧 돈으로 쓰려고 무게를 달고 아마 그 무게를 찍어 둔 은 조각으로 본다. 스타테르는 잘 알려진 헬라의 무게 단위이자 동전이다(마태복음 17:27, 흠정역 난외 「스타테르」, 영국·미국 개역판 「세겔」; 개역개정 「돈 한 세겔」). 금으로는 약 1기니, 곧 5달러에 해당하였으나, 은으로는 약 66센트에 지나지 않았다(1915년 기준).",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PIECE OF MONEY"
+  },
+  {
    "id": 6857,
    "term": "Piety(경건)",
    "definition": "pi'-e-ti: Only in 1Ti 5:4: \"Let them learn first to show piety toward their own family,\" where \"let them show piety\" represents a single Greek verb (eusebeo), in its only other occurrence (Ac 17:23) being rendered \"worship.\" In Elizabethan English \"piety\" (like the Latin pietas) could be used of devotion to one's parents (as still in the phrase \"filial piety\"), as well as of devotion to God. Hence, there is no explicit statement here that filial devotion is one form of divine worship.",
@@ -8357,6 +9086,15 @@
    "category": "용어",
    "hebrew_greek": "",
    "isbe_key": "PROPER"
+  },
+  {
+   "id": 7046,
+   "term": "Prophetess(여선지자)",
+   "definition": "prof'-et-es (nebhi'ah; prophetis): Women were not excluded from the prophetic office in the Old Testament, and were honored with the right of prophetic utterance in the New Testament. It should be noted, however, that women like Miriam (Ex 15:20), Deborah (Jud 4:4) and Huldah (2Ki 22:14) were not credited with the seer's insight into the future, but were called \"prophetesses\" because of the poetical inspiration of their speech. Among others mentioned as having the prophetic gift we find Hannah (1Sa 2:1), Anna (Lu 2:36) and the four daughters of Philip (Ac 21:8,9).\n\nSee PROPHET.\n\nC. E. Schenk",
+   "definition_ko": "여선지자(히브리어 '네비아'; 헬라어 '프로페티스'). 구약에서 여자는 선지자의 직분에서 배제되지 않았고, 신약에서는 예언하는 권리를 누리는 영예를 얻었다. 다만 미리암(출애굽기 15:20), 드보라(사사기 4:4), 훌다(열왕기하 22:14) 같은 여자들은 앞일을 내다보는 선견자의 통찰이 있다고 여겨진 것이 아니라, 그들 말의 시적 영감 때문에 「여선지자」로 불렸음을 알아 두어야 한다. 예언의 은사를 받은 사람으로 언급된 다른 이들 가운데 한나(사무엘상 2:1), 안나(누가복음 2:36), 빌립의 네 딸(사도행전 21:8, 9)이 있다.\n\n선지자 항목을 보라.\n\n(집필: C. E. Schenk)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "PROPHETESS"
   },
   {
    "id": 7069,
@@ -8602,6 +9340,15 @@
    "isbe_key": "RED SEA"
   },
   {
+   "id": 7236,
+   "term": "Reed, Measuring(갈대)",
+   "definition": "mezh'-ur-ing (qeneh ha-middah): In Ezekiel's vision of the temple a \"man\" (an angel) appears with a \"measuring reed\" to measure the dimensions of the temple (Eze 40:3 ff; 42:16). The reed is described as 6 cubits long, \"of a cubit and a handbreadth each,\" i.e. the cubit used was a handbreadth longer than the common cubit (see CUBIT; WEIGHTS AND MEASURES; TEMPLE). In the Apocalypse this idea of a measuring reed reappears for measuring the temple (Re 11:1) and the holy city (Re 21:15,16, \"a golden reed\"). The thought conveyed is exactitude in the dimensions of these edifices, symbolic of the symmetry and perfection of God's church.\n\nJames Orr",
+   "definition_ko": "측량하는 갈대(히브리어 '케네 함밋다'). 에스겔이 본 성전 환상에서 한 「사람」(천사)이 「측량하는 장대」를 들고 나타나 성전의 치수를 잰다(에스겔 40:3 이하; 42:16; 개역개정 「측량하는 장대」). 그 갈대의 길이는 6규빗인데 「각각 한 규빗에 한 손바닥 너비를 더한」 것이라 하니, 곧 보통 규빗보다 한 손바닥 긴 규빗을 썼다(규빗; 도량형; 성전 항목을 보라). 요한계시록에서는 측량하는 갈대라는 생각이 다시 나타나 성전(요한계시록 11:1, 개역개정 「지팡이 같은 갈대」)과 거룩한 성(요한계시록 21:15, 16, 「금 갈대」; 개역개정 「금 갈대 자」)을 잰다. 여기 담긴 생각은 이 건물들의 치수가 정확하다는 것이며, 이는 하나님의 교회의 균형과 완전함을 상징한다.\n\n(집필: James Orr)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "REED, MEASURING"
+  },
+  {
    "id": 7245,
    "term": "Refuge(도피성)",
    "definition": "ref'-uj: A place of resort and safety. The principal words in the Old Testament are machceh (Ps 14:6; 46:1; 62:7,8; Isa 4:6, etc.), and manoc (2Sa 22:3; Ps 59:16, etc.), both applied chiefly to God as a \"refuge\" for His people. For the King James Version \"refuge\" in De 33:27, the Revised Version (British and American) has \"dwelling-place,\" and in Ps 9:9, \"high tower.\" Conversely, the Revised Version (British and American) has \"refuge\" for the King James Version \"shelter\" in Ps 61:3, and \"hope\" in Jer 17:17.",
@@ -8774,7 +9521,7 @@
   },
   {
    "id": 7373,
-   "term": "Robbers of Temples(교회)",
+   "term": "Robbers of Temples(신전 물건 도둑질)",
    "definition": "(hierosuloi, \"guilty of sacrilege\"): A term used by the town clerk of Ephesus (Ac 19:37, the King James Version \"robbers of churches\"). As the temple of Diana (Artemas) had a great treasure-chamber, the offense might not be unknown among them; compare Ro 2:22.\n\nIn 2 Macc 4:42 the King James Version the epithet \"church-robber\" (the Revised Version (British and American) \"author of the sacrilege\") is applied to LYSIMACHUS (which see).",
    "definition_ko": "신전 도둑(헬라어 '히에로쉴로이', 「신성 모독의 죄를 지은」). 에베소의 서기장이 쓴 말(사도행전 19:37, 흠정역 「교회 도둑」; 개역개정 「신전의 물건을 도둑질하지도 아니하였고」). 디아나(아데미) 신전에는 큰 보물 창고가 있었으므로, 그 죄가 그들 사이에 알려지지 않은 것이 아니었을 것이다. 로마서 2:22와 비교하라. 마카베오하 4:42 흠정역에서는 「교회 도둑」(영국·미국 개역판 「신성 모독의 장본인」)이라는 별명이 루시마쿠스(해당 항목을 보라)에게 붙는다.",
    "category": "용어",
@@ -8852,6 +9599,15 @@
    "category": "인명",
    "hebrew_greek": "",
    "isbe_key": "SADOC"
+  },
+  {
+   "id": 7476,
+   "term": "Saffron(번홍화)",
+   "definition": "saf'-run (karkom; krokos): Identical with the Arabic kurqum, the same as za`faran, \"saffron.\" The source of the true saffron is Crocus sativus (Natural Order, Indaceae), a plant cultivated in Palestine; there are 8 wild varieties in all of which, as in the cultivated species, the orange-colored styles and stigmas yield the yellow dye, saffron. So 4:14 probably refers to the C. sativus. There is a kind of bastard saffron plant, the Carthamus tinctorius (Natural Order, Compositae), of which the orange-colored flowers yield a dye like saffron.\n\nE. W. G. Masterman",
+   "definition_ko": "번홍화·사프란(히브리어 '카르콤'; 헬라어 '크로코스'). 아랍어 '쿠르쿰'과 같은 말이며, 「사프란」이라는 뜻의 '자파란'과도 같다. 참 사프란은 크로쿠스 사티부스(붓꽃과)에서 나는데, 팔레스타인에서 재배되는 식물이다. 야생종이 8가지 있으며, 재배종과 마찬가지로 모두 주황색 암술대와 암술머리에서 노란 물감인 사프란을 얻는다. 아가 4:14(개역개정 「번홍화」)는 아마 크로쿠스 사티부스를 가리킬 것이다. 가짜 사프란이라 할 만한 잇꽃(카르타무스 팅크토리우스, 국화과)도 있는데, 그 주황색 꽃에서 사프란 비슷한 물감을 얻는다.\n\n(집필: E. W. G. Masterman)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SAFFRON"
   },
   {
    "id": 7479,
@@ -9032,6 +9788,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SEA OF JAZER"
+  },
+  {
+   "id": 7667,
+   "term": "Seat(자리)",
+   "definition": "set: This word is used to translate the Hebrew words (moshabh, shebheth, kicce', and tekhunah), once (Job 23:3). It translates the Greek word (kathedra) (Mt 21:12; 23:2; Mr 11:15), and \"chief seat\" translates the compound word (protokathedria) (Mt 23:6; Mr 12:39; Lu 20:46). In the King James Version it translates (thronos) (Lu 1:52; Re 2:13; 4:4; 11:16; 13:2; 16:10), which the Revised Version (British and American) renders \"throne.\" It denotes a place or thing upon which one sits, as a chair, or stool (1Sa 20:18; Jud 3:20). It is used also of the exalted position occupied by men of marked rank or influence, either in good or evil (Mt 23:2; Ps 1:1).\n\nJesse L. Cotton",
+   "definition_ko": "자리. 이 낱말은 히브리어 '모샤브', '셰베트', '킷세', 그리고 한 번(욥기 23:3, 개역개정 「처소」) '테쿠나'를 옮긴다. 헬라어 '카테드라'(마태복음 21:12; 23:2; 마가복음 11:15)를 옮기며, 「높은 자리」는 합성어 '프로토카테드리아'를 옮긴다(마태복음 23:6; 마가복음 12:39; 누가복음 20:46). 흠정역에서는 '트로노스'를 옮기기도 하는데(누가복음 1:52; 요한계시록 2:13; 4:4; 11:16; 13:2; 16:10), 영국·미국 개역판은 이를 「보좌」로 옮긴다. 이 낱말은 사람이 앉는 곳이나 물건, 곧 의자나 걸상을 뜻한다(사무엘상 20:18; 사사기 3:20). 또 선한 쪽으로든 악한 쪽으로든 뛰어난 지위나 영향력을 지닌 사람이 차지하는 높은 자리에도 쓰인다(마태복음 23:2 「모세의 자리」; 시편 1:1 「오만한 자들의 자리」).\n\n(집필: Jesse L. Cotton)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SEAT"
   },
   {
    "id": 7670,
@@ -9413,7 +10178,7 @@
   },
   {
    "id": 7941,
-   "term": "Shibboleth(십볼렛)",
+   "term": "Shibboleth(쉽볼렛 · 십볼렛)",
    "definition": "shib'-o-leth (shibboleth): A test of speech applied by the men of Gilead to the Ephraimites, who wished to cross the Jordan, after defeat. If they pronounced the word cibboleth, their dialectic variety of speech betrayed them. (Jud 12:6). The word probably has the sense of stream or \"flood\" (compare Ps 69:2).",
    "definition_ko": "쉽볼렛(히브리어 '쉽볼렛'). 패한 뒤 요단을 건너려는 에브라임 사람에게 길르앗 사람들이 쓴 말 시험. 그들이 이 낱말을 「십볼렛」으로 발음하면 그 사투리가 그들을 드러냈다(사사기 12:6). 이 낱말은 아마 「시내」나 「홍수」라는 뜻일 것이다(시편 69:2와 비교하라).",
    "category": "용어",
@@ -9422,7 +10187,7 @@
   },
   {
    "id": 7945,
-   "term": "Shiggaion(시가욘)",
+   "term": "Shiggaion(식가욘)",
    "definition": "shi-ga'-yon, shi-gi'-on (shiggayon): Occurs in the title of Ps 7, and, in the plural, in the verse introducing Habakkuk's prayer (Hab 3:1). Derived from a verb meaning \"to wander,\" it is generally taken to mean a dithyramb, or rhapsody. This is not supported by the Greek VSS, but they are evidently quite at a loss.\n\nSee PSALMS, BOOK OF.",
    "definition_ko": "식가욘(히브리어 '쉭가욘'). 시편 7편 표제에, 그리고 복수로 하박국의 기도를 여는 절(하박국 3:1 「시기오놋」)에 나온다. 「헤매다」라는 동사에서 왔으며, 보통 열광적인 찬가, 곧 광시곡으로 여겨진다. 헬라어 역본들은 이를 뒷받침하지 않지만, 그들도 분명히 전혀 갈피를 잡지 못한다. 시편 항목을 보라.",
    "category": "용어",
@@ -9545,6 +10310,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SHOA"
+  },
+  {
+   "id": 8013,
+   "term": "Shovel(부삽)",
+   "definition": "shuv'-l:\n\n(1) rachath, is a wooden shovel used on the threshing-floor for winnowing the grain (Isa 30:24).\n\n(2) ya`, is used in various passages to indicate some instrument employed to carry away ashes from the altar (Ex 27:3; 38:3; Nu 4:14; 1Ki 7:40,45; 2Ki 25:14; 2Ch 4:11,16; Jer 52:18). It was very likely a small shovel like those used in connection with modern fireplaces for cleaning away the ashes (compare Hebrew ya`ah, \"to sweep away\") or for carrying live coals to start a new fire.\n\n(3) yathedh (De 23:13 the Revised Version margin)\n\nJames A. Patch",
+   "definition_ko": "부삽.\n\n(1) '라하트'. 타작마당에서 곡식을 까부를 때 쓰는 나무 삽이다(이사야 30:24; 개역개정 「키」).\n\n(2) '야'. 여러 곳에서 제단의 재를 치우는 데 쓰는 도구를 가리킨다(출애굽기 27:3; 38:3; 민수기 4:14; 열왕기상 7:40, 45; 열왕기하 25:14; 역대하 4:11, 16; 예레미야 52:18; 개역개정 「부삽」). 오늘날 벽난로에서 재를 치우거나(히브리어 '야아', 「쓸어 없애다」와 비교하라) 새 불을 붙이려고 숯불을 나르는 데 쓰는 작은 삽과 매우 비슷했을 것이다.\n\n(3) '야테드'(신명기 23:13 영국·미국 개역판 난외; 개역개정 「작은 삽」).\n\n(집필: James A. Patch)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SHOVEL"
   },
   {
    "id": 8018,
@@ -9790,6 +10564,15 @@
    "isbe_key": "SOP"
   },
   {
+   "id": 8214,
+   "term": "Sosipater(소시바더)",
+   "definition": "so-sip'-a-ter (Sosipatros): Sosipater unites with Lucius and Jason in sending greetings to the Roman Christians (Ro 16:21). He is a \"kinsman\" of Paul, by which Paul means a Jew (Ro 9:3; 16:11,21). It is the same name as SOPATER (which see). \"Sopater of Berea\" was one of the companions of Paul on his journey from Philippi after his 3rd missionary journey (Ac 20:4). These two are probably the same person, Paul having with him in Corinth, at the time of writing to the Roman Christians, the two Macedonians, Sopater of Berea and Jason of Thessalonica. The name Sosipater is found on a list of politarchs of Thessalonica.\n\nS. F. Hunter",
+   "definition_ko": "소시바더(헬라어 '소시파트로스'). 누기오, 야손과 함께 로마의 그리스도인들에게 문안한다(로마서 16:21). 그는 바울의 「친척」인데, 바울은 이 말로 유대인을 뜻한다(로마서 9:3; 16:11, 21). 소바더(그 항목을 보라)와 같은 이름이다. 「베뢰아 사람 소바더」는 3차 선교 여행 뒤 빌립보에서 떠나는 바울의 여정에 동행한 이들 가운데 하나였다(사도행전 20:4). 이 둘은 아마 같은 사람일 것이다. 로마의 그리스도인들에게 편지를 쓸 때 바울이 고린도에서 두 마게도냐 사람, 베뢰아 사람 소바더와 데살로니가 사람 야손을 데리고 있었던 것이다. 소시바더라는 이름은 데살로니가의 읍장 명단에 나온다.\n\n(집필: S. F. Hunter)",
+   "category": "인명",
+   "hebrew_greek": "",
+   "isbe_key": "SOSIPATER"
+  },
+  {
    "id": 8223,
    "term": "South(네게브 · 남방)",
    "definition": "south:\n\n(1) neghebh, according BDB from [?] naghabh, meaning \"to be dry,\" the word most often used, in the Revised Version (British and American) capitalized (South) in those places where it seems to denote a particular region, i.e. to the South of Judah.\n\n(2) yamin, \"right hand,\" \"right.\" The derived meaning, \"south,\" seems to imply an eastern posture in prayer in which the right hand is toward the South; compare Arabic yamin, \"right,\" and yemen, \"Yemen,\" a region in Southwestern Arabia.\n\n(3) teman, from the same root as (2) is often used for the south; also for the south wind (Ps 78:26; So 4:16).\n\n(4) yam, literally, \"sea\" (Ps 107:3).\n\n(5) darom, etymology doubtful (De 33:23; Eze 40:24).\n\n(6) midhbar, literally, \"desert\" (Ps 75:6, reading doubtful).\n\n(7) lips, \"south west wind\" (Ac 27:12).\n\n(8) mesembria, literally, \"mid-day\"; \"south\" (Ac 8:26); \"noon\" (Ac 22:6).\n\n(9) notos, \"south wind\" (Lu 12:55; Ac 27:13; 28:13); \"south\" (1 Macc 3:57; Mt 12:42; Lu 11:31; 13:29; Re 21:13).\n\nThe south wind is often referred to: see So 4:16; Job 37:9 (compare 9:9); Zec 9:14 (of Isa 21:1); Lu 12:55.\n\nOf the passages where South (neghebh) clearly refers to a particular region between Palestine and Sinai see: \"And Abraham journeyed, going on still toward the South\" (neghbah) (Ge 12:9; 13:1; De 1:7). We read of \"the South of the Jerahmeelites,\" \"the South of the Kenites\" (1Sa 27:10); \"the South of the Cherethites,\" \"the South of Caleb\" (1Sa 30:14); \"the South of Judah\" (2Ch 28:18); \"Ramoth of the South\" (1Sa 30:27).\n\nIn Ps 126:4, \"Turn again our captivity, O Yahweh, as the streams in the South,\" we have a figurative reference to the fact that, after a long period of drought, the dry watercourses are finally filled with rushing streams. The reference in Eze 20:46 f to \"the forest of the South\" is to a condition of things very different from that which exists today, though the region is not incapable of supporting trees if they are only planted and protected.\n\nAlfred Ely Day",
@@ -9844,6 +10627,15 @@
    "isbe_key": "SPOUSE"
   },
   {
+   "id": 8285,
+   "term": "Stacte(소합향)",
+   "definition": "stak'-te (nataph, \"drops\" (Job 36:27); stakte, meaning \"oozing out in drops\"): One of the ingredients of the holy ointment (Ex 30:34; Ecclesiasticus 24:15, margin \"opobalsamum,\" the King James Version \"storax\"). The marginal reading is a concession to Jewish tradition, but see SPICE, (1). Dioscorides describes two kinds of stacte, one of pure myrrh and one of storax and a fat mixed. See MYRRH. This nataph must have been either myrrh \"in drops,\" as it is collected, or some other fragrant gum, similarly collected, such, for example, as gum tragacanth.",
+   "definition_ko": "소합향·스택테(히브리어 '나타프', 「방울」(욥기 36:27); 헬라어 '스탁테', 「방울져 스며 나오는」이라는 뜻). 거룩한 향의 재료 가운데 하나다(출애굽기 30:34, 개역개정 「소합향」; 집회서 24:15, 난외 「오포발삼」, 흠정역 「스토락스」). 난외 읽기는 유대 전승을 따른 것이지만, 향품 항목 (1)을 보라. 디오스코리데스는 두 가지 스택테를 묘사하는데, 하나는 순수한 몰약이고 하나는 소합향 수지에 기름을 섞은 것이다. 몰약 항목을 보라. 이 '나타프'는 거두어들이는 모습대로 「방울」로 된 몰약이거나, 비슷하게 거두는 다른 향기로운 수지, 보기로 트라가칸트 고무였을 것이다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "STACTE"
+  },
+  {
    "id": 8304,
    "term": "Stater(스타테르(은전))",
    "definition": "sta'-ter (stater): Used only once, Mt 17:27, where it is rendered by \"piece of money\" in the King James Version and \"shekel\" in the Revised Version (British and American). It was originally a standard Greek weight equal to two drachmas, but later it was used to designate the tetradrachma, and this is probably the coin referred to in the above passage.\n\nSee MONEY.",
@@ -9872,7 +10664,7 @@
   },
   {
    "id": 8375,
-   "term": "Sucathites(수가 사람들)",
+   "term": "Sucathites(수갓 종족)",
    "definition": "su'kath-its (sukhathim; Codex Vaticanus Sochathieim; Codex Alexandrinus Sokathieim; the King James Version Suchathites): These are named only once (1Ch 2:55), a family of scribes living at Jabez.",
    "definition_ko": "수갓 종족(히브리어 '수카팀'; 바티칸 사본 소카티에임; 알렉산드리아 사본 소카티에임; 흠정역 수카트 사람). 한 번만 나오며(역대상 2:55), 야베스에 살던 서기관 종족이다.",
    "category": "용어",
@@ -9905,6 +10697,15 @@
    "category": "인명",
    "hebrew_greek": "",
    "isbe_key": "SUKKIIM"
+  },
+  {
+   "id": 8389,
+   "term": "Summer(여름)",
+   "definition": "sum'-er (qayits; Aramaic qayiT (Da 2:35), from quts quT, \"to cut off,\" \"to pluck or gather fruit,\" hence, the time of fruit, summer (2Sa 16:1,2; Jer 40:10,12); theros (Mt 24:32; Lu 21:30)): The Hebrew verb, mentioned above, occurs in Isa 18:6, \"to summer,\" used of the ravenous birds feeding upon carcasses of the slain. The term \"summer parlor\" in Jud 3:20 (compare 3:24) is literally, \"upper room,\" and is so rendered in the Revised Version (British and American). The summer was the dry season extending from April to October when usually no rain falls. Hence, the \"drought of summer\" (Ps 32:4).\n\nSee SEASONS.\n\nH. Porter",
+   "definition_ko": "여름(히브리어 '카이츠'; 아람어 '카이트'(다니엘 2:35); 「베다」, 「열매를 따거나 거두다」라는 뜻의 '쿠츠', '쿠트'에서 왔으며, 그래서 열매의 때, 곧 여름(사무엘하 16:1, 2; 예레미야 40:10, 12; 개역개정 「여름 과일」); 헬라어 '테로스'(마태복음 24:32; 누가복음 21:30)). 위에 적은 히브리어 동사는 이사야 18:6에 「여름을 지내다」로 나오는데, 죽임당한 자의 시체를 먹는 사나운 새들에 쓰였다. 사사기 3:20(3:24와 비교하라)의 「여름 응접실」은 문자적으로 「다락방」이며, 영국·미국 개역판도 그렇게 옮긴다(개역개정 「서늘한 다락방」). 여름은 4월에서 10월까지 이어지는 건기로, 보통 비가 오지 않는다. 그래서 「여름 가뭄」이라는 말이 있다(시편 32:4).\n\n계절 항목을 보라.\n\n(집필: H. Porter)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SUMMER"
   },
   {
    "id": 8390,
@@ -9941,6 +10742,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "SUR"
+  },
+  {
+   "id": 8433,
+   "term": "Sycamine, Tree(뽕나무)",
+   "definition": "sik'-a-min, (sukaminos (Lu 17:6)): This is generally accepted as the black mulberry tree (Morus nigra; Natural Order, Urlicaceae), known in Arabic as tut shrami, \"the Damascus mulberry,\" a fine tree which grows to the height of 30 ft. It produces the dark blood-red mulberry juice referred to in 1 Macc 6:34 (moron), \"the blood of .... mulberries,\" which was shown to the elephants of the Syrians. The white mulberry, M. alba, has white and less juicy fruit, and it is cultivated largely for the sake of its leaves with which the silkworms of the Lebanon are fed.\n\nE. W. G. Masterman",
+   "definition_ko": "뽕나무(흠정역 「시카민 나무」; 헬라어 '쉬카미노스'(누가복음 17:6; 개역개정 「뽕나무」)). 흔히 검은 뽕나무(모루스 니그라, 쐐기풀과)로 받아들여지며, 아랍어로 '투트 샤미', 「다메섹 뽕나무」라 한다. 높이 30피트까지 자라는 좋은 나무다. 마카베오상 6:34의 「오디의 피」('모론')라 한 짙은 핏빛 오디즙이 이것인데, 수리아 사람들이 코끼리에게 보여 준 것이다. 흰 뽕나무(모루스 알바)는 열매가 희고 즙이 적으며, 레바논의 누에를 먹일 잎을 얻으려고 널리 재배한다.\n\n(집필: E. W. G. Masterman)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "SYCAMINE, TREE"
   },
   {
    "id": 8435,
@@ -10078,6 +10888,15 @@
    "isbe_key": "TAHPANHES"
   },
   {
+   "id": 8494,
+   "term": "Talitha Cumi(달리다굼)",
+   "definition": "ta-le'-tha koo'-me (talitha koumi): Derived from the Aramaic Talyetha' qumi, \"damsel, arise\"), which in the New Testament manuscripts is transliterated variously (Westcott-Hort, Taleitha koum, otherwise Talitha koumi). We have no data for determining how far Jesus employed the Aramaic language, but Mark (5:41) notes its use in this tender incident, and there is strong probability that Aramaic was used normally, if not exclusively, by Christ. There is, however, no ground for attributing any magical significance to the use of the Aramaic words in connection with this miracle.",
+   "definition_ko": "달리다굼(헬라어 '탈리타 쿠미'). 아람어 '탈예타 쿠미', 「소녀야, 일어나라」에서 온 말로, 신약 사본들마다 음역이 여러 가지다(웨스트코트·호르트 '탈레이타 쿰', 다른 사본 '탈리타 쿠미'). 예수께서 아람어를 얼마나 쓰셨는지 판단할 자료는 없지만, 마가는 이 애틋한 일에서 그 말을 쓰셨음을 적으며(마가복음 5:41), 그리스도께서 아람어를 오로지는 아니더라도 보통 쓰셨을 가능성이 크다. 그러나 이 기적과 관련하여 아람어 낱말을 쓴 데 어떤 주술적 뜻을 돌릴 근거는 없다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "TALITHA CUMI"
+  },
+  {
    "id": 8501,
    "term": "Tamar (2)(다말)",
    "definition": "(tamar, \"palm tree\"; Thaiman):\n\n(1) This name occurs in Ezekiel's ideal delimitation of the territory to be occupied by Israel (Eze 47:19; 48:28). The Dead Sea is the eastern border; and the southern boundary runs from Tamar as far as the waters of Meriboth-kadesh to the Brook of Egypt and the Great Sea. The place therefore lay somewhere to the Southwest of the Dead Sea. \"Hazazon-tamar (the same is En-gedi)\" (2Ch 20:2) is of course out of the question, being much too far to the North. Eusebius (in Onomasticon) mentions Asasonthamar, with which Thamara was identified. This place was a village with fortress and Roman garrison, a day's journey from Mampsis on the way from Hebron to Elath. It is the Thamaro mentioned by Ptolemy (v.16, 8), as a military station on the road from Hebron to Petra. It is named also in the Peutinger Tables. Neither Mampsis nor Thamaro has been identified.\n\n(2) Among the towns \"built\" or fortified by Solomon, named in 1Ki 9:18, is Tamar (the Revised Version (British and American) following Kethibh), or Tadmor (the King James Version following Qere; compare 2Ch 8:4). Gezer, Beth-horon and Baalath, named along with it, are all in Southern Palestine, while Tamar is described as in the wilderness in the land, pointing to the Negeb or to the Wilderness of Judah. It was probably intended to protect the road for trade from Ezion-geber to Jerusalem. We may with some confidence identify it with (1) above. It is interesting to note that the Chronicler (2Ch 8:4) takes it out of connection with the other cities (2Ch 8:5), and brings its building into relation with Solomon's conquest of Hamath-zobah. Clearly in his mind it denoted the great and beautiful city of Palmyra, which has so long been known as \"Tadmor in the Wilderness.\"\n\nW. Ewing",
@@ -10186,6 +11005,15 @@
    "isbe_key": "TEL-MELAH"
   },
   {
+   "id": 8550,
+   "term": "Telaim(들라임)",
+   "definition": "te-la'-im (ha-tela'-im \"the young lambs\"; en Galgalois): The place where Saul \"summoned the people, and numbered them\" (1Sa 15:4) before his attack on Agag, king of the Amalekites. Some authorities read \"Telam\" for \"Havilah\" in verse 7 and also find this name in 1Sa 27:8 instead of me`olam. In Septuagint and Josephus (Ant., VI, vii, 2) Gilgal occurs instead of Telaim, on what ground is not known. Probably Telaim is identical with TELEM (which see), though the former may have been the name of a Bedouin tribe inhabiting the latter district. Compare Dhallam Arabs now found South of Tell el-Milch.\n\nE. W. G. Masterman",
+   "definition_ko": "들라임(히브리어 '하텔라임', 「어린 양들」; 헬라어 '엔 갈갈로이스'). 사울이 아말렉 왕 아각을 치기 전에 「백성을 소집하고 그들을 … 세어 본」 곳이다(사무엘상 15:4). 어떤 학자들은 7절의 「하윌라」 대신 「델람」으로 읽고, 사무엘상 27:8의 '메올람'(「옛적부터」) 대신에도 이 이름을 찾는다. 칠십인역과 요세푸스(『유대 고대사』 6권 7장 2절)에는 들라임 대신 길갈이 나오는데, 무슨 근거인지는 알려져 있지 않다. 들라임은 아마 델렘(그 항목을 보라)과 같은 곳일 것이다. 다만 앞의 것이 뒤의 지역에 살던 베두인 부족의 이름이었을 수도 있다. 오늘날 텔 엘밀흐 남쪽에 있는 달람 아랍족과 비교하라.\n\n(집필: E. W. G. Masterman)",
+   "category": "지명",
+   "hebrew_greek": "",
+   "isbe_key": "TELAIM"
+  },
+  {
    "id": 8551,
    "term": "Telassar(들라살)",
    "definition": "te-las'-ar (tela'-ssar (2Ki 19:12), telassar (Isa 37:12); Codex Alexandrinus Thalassar; Codex Vaticanus Thaesthen; Vulgate (Jerome's Latin Bible, 390-405 A.D.) Thelassar, Thalassar):\n\n1. The Name and Its Meaning:\n\nThis city, which is referred to by Sennacherib's messengers to Hezekiah, is stated by them to have been inhabited by the \"children of Eden.\" It had been captured by the Assyrian king's forefathers, from whose hands its gods had been unable to save it. Notwithstanding the vocalization, the name is generally rendered \"Hill of Asshur,\" the chief god of the Assyrians, but \"Hill of Assar,\" or Asari (a name of the Babylonian Merodach), would probably be better.\n\n2. Suggestions as to the Geographical Position:\n\nAs Telassar was inhabited by the \"children of Eden,\" and is mentioned with Gozan, Haran, and Rezeph, in Western Mesopotamia, it has been suggested that it lay in Bit Adini, \"the House of Adinu,\" or Betheden, in the same direction, between the Euphrates and the Belikh. A place named Til-Assuri, however, is twice mentioned by Tiglath-pileser IV (Ann., 176; Slab-Inscr., II, 23), and from these passages it would seem to have lain near enough to the Assyrian border to be annexed. The king states that he made there holy sacrifices to Merodach, whose seat it was. It was inhabited by Babylonians (whose home was the Edinu or \"plain\"; see EDEN). Esarhaddon, Sennacherib's son, who likewise conquered the place, writes the name Til-Asurri, and states that the people of Mihranu called it Pitanu. Its inhabitants, he says, were people of Barnaku. If this be Bit Burnaki in Elam, extending from the boundary of Rasu (see ROSH), which was ravaged by Sennacherib (Babylonians Chronicles, III, 10 ff), Til-Assuri probably lay near the western border of Elam. Should this identification be the true one, the Hebrew form telassar would seem to be more correct than the Assyrian Til-Assuri (-Asurri), which latter may have been due to the popular idea that the second element was the name of the national god Assur. See French Delitzsch, Wo lag das Paradies? 264.\n\nT. G. Pinches",
@@ -10250,7 +11078,7 @@
   },
   {
    "id": 8588,
-   "term": "Testament(언약(성약) · 신약（스미스） · 구약 · 구약과 신약 · 유언)",
+   "term": "Testament(언약(성약) · 유언)",
    "definition": "tes'-ta-ment: The word diatheke, almost invariably rendered \"covenant,\" was rendered in the King James Version \"testament\" in Heb 9:16,17, in the sense of a will to dispose of property after the maker's death. It is not easy to find justification for the retention of this translation in the Revised Version (British and American), \"especially in a book which is so impregnated with the language of the Septuagint as the Epistle to the Hebrews\" (Hatch).\n\nSee COVENANT, IN THE NEW TESTAMENT.",
    "definition_ko": "유언(흠정역 「테스터먼트」). 거의 언제나 「언약」으로 옮기는 '디아테케'를 흠정역은 히브리서 9:16, 17에서 만든 이가 죽은 뒤 재산을 처분하는 유언장의 뜻으로 「유언」이라 옮겼다(개역개정도 「유언」). 영국·미국 개역판에서 이 번역을 그대로 둔 것을 정당화하기는 쉽지 않다. 「특히 히브리서처럼 칠십인역의 말이 깊이 배어 있는 책에서는」(해치). 언약, 신약에서 항목을 보라.",
    "category": "용어",
@@ -10427,6 +11255,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "TOCHEN"
+  },
+  {
+   "id": 8740,
+   "term": "Toll(통행세(관세))",
+   "definition": "tol: (1) Aramaic middah, \"toll\" or \"tribute\" paid by a vassal nation to its conqueror (Ezr 4:20; 6:8; Ne 5:4); written also mindah (Ezr 4:13; 7:24). More accurately for halakh, \"toll,\" or \"way tax\" (Ezr 4:13,10; 7:24). In New Testament times the Romans had placed throughout Palestine many toll stations (telonion). Levi the publican was stationed at such a tax office (Mt 9:9; Mr 2:14; Lu 5:27); compare telones, a \"tax collector\" or \"publican.\" The tax which the Jews paid toward the support of the temple, a didrachma, is called telos, \"toll\" (Mt 17:25), the same as the word rendered \"tribute\" (Ro 13:7).\n\nEdward Bagby Pollard",
+   "definition_ko": "통행세·관세(흠정역 「톨」). (1) 아람어 '밋다', 속국이 정복자에게 바치는 「세금」이나 「조공」(에스라 4:20; 6:8; 느헤미야 5:4; 개역개정 「조공」, 「세금」). '민다'로도 적는다(에스라 4:13; 7:24). 더 정확히는 '할라크', 「통행세」, 곧 「길 세」를 옮긴 말이다(에스라 4:13, 20(원문은 「4:13,10」); 7:24; 개역개정 「통행세」). 신약 시대에 로마 사람들은 팔레스타인 곳곳에 많은 세관('텔로니온')을 두었다. 세리 레위가 그런 세관에 앉아 있었다(마태복음 9:9; 마가복음 2:14; 누가복음 5:27). 「세리」라는 뜻의 '텔로네스'와 비교하라. 유대인이 성전 유지를 위하여 바치던 세금, 곧 두 드라크마는 '텔로스', 「관세」라 불리는데(마태복음 17:25), 이는 「조세」로 옮겨진 낱말과 같다(로마서 13:7; 개역개정 「관세」).\n\n(집필: Edward Bagby Pollard)",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "TOLL"
   },
   {
    "id": 8752,
@@ -10652,6 +11489,15 @@
    "category": "지명",
    "hebrew_greek": "",
    "isbe_key": "VALLEY GATE"
+  },
+  {
+   "id": 8979,
+   "term": "Vial(기름병)",
+   "definition": "vi'-al: In modern English means \"a tiny flask.\" The word appears in English Versions of the Bible 1Sa 10:1 and the Revised Version (British and American) 2Ki 9:1,3 (the King James Version \"box\") for pakh, a word found nowhere else and from a root meaning \"to pour.\" The shape and size of the pakh are quite uncertain. In 1 Esdras 2:13; and the King James Version Re 5:8, etc., \"vial\" translates phiale. The phiale was a flat, shallow bowl (Latin, patera), shaped much like a saucer. Hence, the Revised Version's change to \"bowl\" in Revelation, a change that should have been made in 1 Esdras also.",
+   "definition_ko": "기름병·대접(흠정역 「바이얼」). 요즘 영어에서는 「작은 병」을 뜻한다. 이 낱말은 영역 성경의 사무엘상 10:1과 영국·미국 개역판의 열왕기하 9:1, 3(흠정역 「상자」)에 '파크'의 번역으로 나온다(개역개정 「기름병」). '파크'는 다른 곳에 나오지 않는 낱말로, 「붓다」라는 뜻의 어근에서 왔다. '파크'의 모양과 크기는 매우 불확실하다. 에스드라상 2:13과 흠정역 요한계시록 5:8 등에서 「바이얼」은 '피알레'를 옮긴다. 피알레는 납작하고 얕은 사발(라틴어 '파테라')로, 받침 접시와 모양이 매우 비슷하였다. 그래서 영국·미국 개역판은 요한계시록에서 「보울」로 바꾸었는데(개역개정 「대접」), 에스드라상에서도 그렇게 바꾸었어야 했다.",
+   "category": "용어",
+   "hebrew_greek": "",
+   "isbe_key": "VIAL"
   },
   {
    "id": 8990,
