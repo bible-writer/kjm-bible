@@ -4395,13 +4395,16 @@
                  || this.findRawEntry(t.term_en, 'smith');
         const koH = this.findRawEntry(t.term_en, 'hitchcock');
         const hitchAuto = koH;
+        // (2026-09-19) ISBE — 용어DB isbeId 로 꺼낸다(영문으로 찾지 않음). 한글이 들어간 항목만 보이고, 길어서 접어 둔다
+        const koI = (t.isbeId != null && typeof placeDictIndex === 'function') ? (placeDictIndex().isbe[t.isbeId] || null) : null;
         /* 세로줄형 — 사전마다 2px 색 띠를 두어 어느 사전 글인지 눈으로 바로 갈리게 한다.
          * 이스턴 보라 · 스미스 청록 · 힛치콕 회색.
          * 띠가 한쪽에만 있는 테두리이므로 border-radius 는 0 이어야 한다. */
         const DICTBAR = {
           '이스턴': { bar: '#AFA9EC', ink: '#534AB7' },
           '스미스': { bar: '#5DCAA5', ink: '#0F6E56' },
-          '힛치콕': { bar: '#B4B2A9', ink: '#5F5E5A' }
+          '힛치콕': { bar: '#B4B2A9', ink: '#5F5E5A' },
+          'ISBE': { bar: '#F0B37E', ink: '#9A4B12' }
         };
         function dictKoSection(entry, label, open) {
           if (!entry) return '';
@@ -4427,7 +4430,8 @@
         let dictKoBlock =
             dictKoSection(koE, '이스턴', true)
           + dictKoSection(koS, '스미스', true)
-          + dictKoSection(koH, '힛치콕', false);
+          + dictKoSection(koH, '힛치콕', false)
+          + dictKoSection(koI, 'ISBE', false);
         if (!dictKoBlock) {
           dictKoBlock = '<div style="font-size:1em;line-height:1.6;color:#1e293b;white-space:pre-wrap">'
                       + previewHtml + (needsToggle ? '\u2026' : '') + '</div>'
@@ -15108,7 +15112,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260918-20`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260919-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
