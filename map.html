@@ -10828,7 +10828,14 @@
       if (!targetBook) return;
 
       // 현재 위치를 히스토리에 저장 (되돌리기용)
-      _saveCurrentPosition();
+      // 2026-09-20: 같은 장 안에서 절만 옮길 때는 저장하지 않는다
+      // (창세기 1장을 보면서 「← 창세기 1장」 단추가 뜨던 흠)
+      {
+        const _bs = document.getElementById('book-select');
+        const _cs = document.getElementById('chapter-select');
+        const _same = _bs && _cs && parseInt(_bs.value) === bookId && parseInt(_cs.value) === parseInt(chapter);
+        if (!_same) _saveCurrentPosition();
+      }
 
       // 주석 안에서 성구를 클릭해 여기로 온 경우, 아래 loadBibleText가 주석 패널을
       // 따라오게 할 때 이 실제 클릭한 절 번호를 쓰도록 남겨둔다 (1절로 초기화되는 버그 방지)
@@ -14498,9 +14505,26 @@
           console.error("원전분해 DB 자동 복원 오류:", err);
         }
       }
-      // DB 등록 여부와 관계없이, 앱을 열 때는 항상 시작 화면을 먼저 보여준다.
-      // (DB가 준비돼 있으면 시작 화면에 "이어서 읽기" 버튼이 함께 나타난다.)
-      renderWelcomeScreen();
+      // 2026-09-20 kjm: 앱을 열면 마지막으로 읽던 장을 바로 연다(스크롤 자리까지).
+      // 읽던 기록이 없거나 성경 DB 가 아직 없으면 예전처럼 시작 화면을 보여준다.
+      let _resumed = false;
+      if (sqliteDbInstance && detectedSchema) {
+        try {
+          const saved = JSON.parse(localStorage.getItem('lastReadPosition') || 'null');
+          const bk = saved && BIBLE_BOOKS.find(b => b.id === saved.bookId);
+          if (bk && saved.chapter) {
+            setSelectValuesAndLoad(bk.id, saved.chapter);
+            if (typeof buildBookGrid === 'function') { try { buildBookGrid(); buildChapGrid(); } catch (e) {} }
+            const st = parseInt(saved.scrollTop) || 0;
+            if (st > 0) setTimeout(() => {
+              const c = document.getElementById('bible-content');
+              if (c) c.scrollTop = st;
+            }, 300);
+            _resumed = true;
+          }
+        } catch (e) { console.warn('마지막 읽던 장 열기 실패:', e); }
+      }
+      if (!_resumed) renderWelcomeScreen();
       if (window.map) map.invalidateSize();
     }
 
@@ -14781,6 +14805,27 @@
         }, { passive: true });
       })();
 
+      // 2026-09-20: 읽던 자리(스크롤)도 함께 기억 — 멈춘 뒤 0.6초에 한 번만 저장
+      (function() {
+        const el = document.getElementById('bible-content');
+        let t = null;
+        el.addEventListener('scroll', function() {
+          clearTimeout(t);
+          t = setTimeout(function() {
+            try {
+              const saved = JSON.parse(localStorage.getItem('lastReadPosition') || 'null');
+              const bId = parseInt(document.getElementById('book-select').value);
+              const ch = parseInt(document.getElementById('chapter-select').value);
+              if (!saved || saved.bookId !== bId || parseInt(saved.chapter) !== ch) return;
+              if (document.getElementById('welcome-screen')) return;
+              saved.scrollTop = el.scrollTop;
+              saved.savedAt = Date.now();
+              localStorage.setItem('lastReadPosition', JSON.stringify(saved));
+            } catch (e) {}
+          }, 600);
+        }, { passive: true });
+      })();
+
       updateBookSelect();
       buildKeywordIndex(placeDatabase);
       renderMapMarkers();
@@ -14960,7 +15005,7 @@
 
       // [마지막 읽던 위치 저장] 다음 접속 시 창세기 대신 여기서 이어보기
       try {
-        localStorage.setItem('lastReadPosition', JSON.stringify({ bookId, chapter, savedAt: Date.now() }));
+        localStorage.setItem('lastReadPosition', JSON.stringify({ bookId, chapter, scrollTop: 0, savedAt: Date.now() }));
       } catch (e) {
         console.warn('마지막 읽던 위치 저장 실패:', e);
       }
@@ -15132,7 +15177,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-2`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-4`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
