@@ -1701,10 +1701,39 @@
     }
   .tribe-center-label { background:#d32f2f; color:#fff; border:none; border-radius:4px; padding:2px 8px; font-weight:bold; font-size:13px; box-shadow:0 1px 4px rgba(0,0,0,0.3); }
   .tribe-center-label::before { border-top-color:#d32f2f; }
+
+/* ── 2026-09-20 관리자 / 일반 모드 ──
+ * 일반 모드(기본): 읽기·지도·사전 보기·검색·백업만. 관리자 모드: 수정·내보내기·등록·교정.
+ * 화면에서 감추는 것일 뿐 보안이 아니다(데이터 보호는 DB 암호화가 맡는다). */
+body:not(.admin-mode) .admin-only,
+body:not(.admin-mode) #btn-open-proof,
+body:not(.admin-mode) #btn-sync-openbible,
+body:not(.admin-mode) #menu-open-xlsx,
+body:not(.admin-mode) #menu-open-interlinear,
+body:not(.admin-mode) #menu-open-hebko,
+body:not(.admin-mode) #menu-open-krvn,
+body:not(.admin-mode) #menu-drop-file,
+body:not(.admin-mode) #btn-coord-overrides,
+body:not(.admin-mode) #btn-name-overrides,
+body:not(.admin-mode) #menu-open-add-link,
+body:not(.admin-mode) #menu-open-blacklist,
+body:not(.admin-mode) #btn-open-add-link,
+body:not(.admin-mode) #btn-open-blacklist,
+body:not(.admin-mode) #btn-export-rawdict,
+body:not(.admin-mode) [id^="term-strong-editbtn"],
+body:not(.admin-mode) [id^="term-raw-trbtn"],
+body:not(.admin-mode) [id^="strong-tr-btn"],
+body:not(.admin-mode) [id^="strong-pop-trbtn"],
+body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
+#btn-admin-toggle.on { background: #b91c1c !important; color: #fff !important; }
   </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
+  <script>
+    // 관리자 모드는 기기마다 기억한다(한 번 켜면 끌 때까지 유지)
+    try { if (localStorage.getItem('kjmAdminMode') === '1') document.body.classList.add('admin-mode'); } catch (e) {}
+  </script>
   <!-- 좌측 성경 독서 패널 -->
   <div id="left-pane">
     <div class="panel-header">
@@ -1726,8 +1755,9 @@
       <span id="db-status-text" style="white-space:nowrap;flex-shrink:0">준비 중...</span>
       <div class="status-btn-group">
         <button class="tb-btn" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
+        <button class="tb-btn" id="btn-admin-toggle" title="관리자 모드 켜기/끄기 (수정·내보내기·교정)" onclick="toggleAdminMode()">🔒</button>
 
-        <div class="menu-group">
+        <div class="menu-group admin-only">
           <button class="tb-btn menu-trigger">내보내기 ▾</button>
           <div class="menu-panel">
             <button id="btn-export-xlsx" onclick="exportPlaceDatabaseToXlsx()">📊 지명 DB → XLSX</button>
@@ -1762,12 +1792,12 @@
             <button id="btn-drive-connect">🔗 Google Drive 연동</button>
             <label class="menu-check"><input type="checkbox" id="chk-drive-autobackup"> 10분마다 Drive 자동백업</label>
 
-            <div class="menu-sect">편집 이력</div>
+            <div class="menu-sect admin-only">편집 이력</div>
             <button id="btn-coord-overrides" onclick="openCoordOverrideManager()">📍 좌표 보정 이력</button>
             <button id="btn-name-overrides" onclick="openNameOverrideManager()">✏️ 지명 수정 이력</button>
             <button id="menu-open-add-link">🔗 수동 링크 추가</button>
             <button id="menu-open-blacklist">🚫 제외 단어 관리</button>
-            <button onclick="openStrongOverrideManager()">🔤 스트롱 코드 보정 이력</button>
+            <button class="admin-only" onclick="openStrongOverrideManager()">🔤 스트롱 코드 보정 이력</button>
 
             <div class="menu-sect">보기</div>
             <label class="menu-check"><input type="checkbox" id="chk-term-highlight"> 본문에 용어 표시</label>
@@ -8048,11 +8078,46 @@
     let selectedTextForAdd = "";
 
     let currentTermSkipCtx = null;
+    // ── 관리자 모드 켜기/끄기 (2026-09-20) ──
+    const _ADMIN_PW_SHA256 = 'd3fecfe58d6dfe1406929ed9854eb6d38f5e6cbca3426ff262546eea6fe5fee2';
+    function isAdminMode() { return document.body.classList.contains('admin-mode'); }
+    function _refreshAdminBtn() {
+      const b = document.getElementById('btn-admin-toggle');
+      if (!b) return;
+      const on = isAdminMode();
+      b.textContent = on ? '🔓 관리자' : '🔒';
+      b.classList.toggle('on', on);
+    }
+    async function toggleAdminMode() {
+      if (isAdminMode()) {
+        document.body.classList.remove('admin-mode');
+        try { localStorage.removeItem('kjmAdminMode'); } catch (e) {}
+        _refreshAdminBtn();
+        if (typeof showToast === 'function') showToast('일반 모드로 바꿨습니다');
+        return;
+      }
+      const pw = prompt('관리자 비밀번호');
+      if (pw === null) return;
+      try {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+        const hex = Array.from(new Uint8Array(buf)).map(x => x.toString(16).padStart(2, '0')).join('');
+        if (hex !== _ADMIN_PW_SHA256) { alert('비밀번호가 맞지 않습니다'); return; }
+      } catch (e) { alert('이 브라우저에서는 관리자 모드를 켤 수 없습니다'); return; }
+      document.body.classList.add('admin-mode');
+      try { localStorage.setItem('kjmAdminMode', '1'); } catch (e) {}
+      _refreshAdminBtn();
+      if (typeof showToast === 'function') showToast('관리자 모드를 켰습니다');
+    }
+    document.addEventListener('DOMContentLoaded', _refreshAdminBtn);
+    setTimeout(_refreshAdminBtn, 0);
+
     function handleNameContextMenu(event, kind, word, bookId, chapter, vNum, nth) {
+      if (!isAdminMode()) return;   // 일반 모드: 편집용 오른쪽 클릭 메뉴 없음
       handleTermContextMenu(event, word, bookId, chapter, vNum, '@' + kind + ':' + word, nth);
       currentTermSkipCtx.kind = kind;
     }
     function handleTermContextMenu(event, word, bookId, chapter, vNum, tok, nth) {
+      if (!isAdminMode()) return;   // 일반 모드: 편집용 오른쪽 클릭 메뉴 없음
       handleTagContextMenu(event, word);
       currentTermSkipCtx = { word, bookId, chapter, vNum, tok, nth };
       const bk = BIBLE_BOOKS.find(x => x.id === bookId);
@@ -8064,6 +8129,7 @@
     }
 
     function handleTagContextMenu(event, word) {
+      if (!isAdminMode()) return;   // 일반 모드: 편집용 오른쪽 클릭 메뉴 없음
       currentTermSkipCtx = null;
       document.getElementById("menu-skip-here").style.display = "none";
       document.getElementById("menu-skip-book").style.display = "none";
@@ -8082,6 +8148,7 @@
     }
 
     document.getElementById("bible-content").addEventListener("contextmenu", function(e) {
+      if (!isAdminMode()) return;   // 일반 모드: 편집용 오른쪽 클릭 메뉴 없음
       const selected = window.getSelection().toString().trim();
       if (selected && selected.length >= 2) {
         e.preventDefault();
@@ -10704,7 +10771,7 @@
           <button onclick="document.getElementById('btn-toggle-map')?.click()" class="welcome-quick">🗺 지도</button>
           <button onclick="openDictModal()" class="welcome-quick">📚 통합 사전</button>
           <button onclick="openRawDictModal()" class="welcome-quick">📜 원문사전</button>
-          <button onclick="document.getElementById('btn-open-proof')?.click()" class="welcome-quick">🖉 교정</button>
+          <button onclick="document.getElementById('btn-open-proof')?.click()" class="welcome-quick admin-only">🖉 교정</button>
         </div>` : '';
 
       container.innerHTML = `
@@ -15177,7 +15244,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-4`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-5`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
