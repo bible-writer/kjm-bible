@@ -164,7 +164,7 @@
     .menu-group .menu-panel {
       display: none; position: absolute; top: calc(100% + 4px); left: 0;
       background: #fff; border: 1px solid #cbd5e1; border-radius: 8px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.16); z-index: 5000;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.16); z-index: 5100; overscroll-behavior: contain;
       min-width: 210px; padding: 5px; white-space: nowrap;
     }
     .menu-group.open .menu-panel { display: block; }
@@ -15244,7 +15244,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-5`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-6`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -16326,7 +16326,21 @@ setTimeout(function() {
       var group = trigger.closest('.menu-group');
       var wasOpen = group.classList.contains('open');
       document.querySelectorAll('.menu-group.open').forEach(function(g) { g.classList.remove('open'); });
-      if (!wasOpen) { group.classList.add('open'); if (typeof refreshLocalFileState === 'function') refreshLocalFileState(); }
+      if (!wasOpen) {
+        group.classList.add('open');
+        if (typeof refreshLocalFileState === 'function') refreshLocalFileState();
+        // 2026-09-20: 메뉴가 길면 화면(폰은 하단 탭 막대) 아래로 잘려 「저장소 초기화」가 안 보였다
+        // → 보이는 높이만큼만 펼치고 안에서 스크롤되게 한다
+        var panel = group.querySelector('.menu-panel');
+        if (panel) {
+          panel.style.maxHeight = '';
+          var top = panel.getBoundingClientRect().top;
+          var tab = document.getElementById('mobile-tab-bar');
+          var tabH = (tab && getComputedStyle(tab).display !== 'none') ? tab.getBoundingClientRect().height : 0;
+          var avail = Math.floor(window.innerHeight - top - tabH - 10);
+          if (avail > 120) { panel.style.maxHeight = avail + 'px'; panel.style.overflowY = 'auto'; }
+        }
+      }
     });
   });
   // 메뉴 항목을 고르면 메뉴를 닫는다
