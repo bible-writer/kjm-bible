@@ -1605,6 +1605,10 @@
       #left-pane.mob-hidden { display: none !important; }
       #map-pane.mob-hidden { display: none !important; }
       #mobile-tab-bar { display: flex; }
+      /* 2026-09-20: 되돌리기 단추(← 창세기 1장)가 하단 탭의 「본문」 단추를 덮어
+         폰에서 본문으로 돌아갈 수 없던 흠 — 탭 막대 위로 올린다 */
+      #btn-bible-back { bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important; left: 12px !important; }
+      #toast-container { bottom: calc(84px + env(safe-area-inset-bottom, 0px)) !important; }
       /* 모바일에서는 주석(PDF 커멘터리) 기능 전체를 숨긴다 — 버튼도, 패널 자체도 */
       .commentary-feature-btn { display: none !important; }
       .btn-header-map-toggle { display: none !important; } /* 모바일에서는 하단 탭(본문/지도)이 이미 있어 중복이자 혼란의 원인이므로 숨김 */
@@ -15120,7 +15124,7 @@
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260919-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
