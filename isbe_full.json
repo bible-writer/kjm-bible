@@ -1,7 +1,7 @@
 {
- "version": "1.311.0",
+ "version": "1.327.0",
  "date": "2026-09-21",
- "count": 2866,
+ "count": 3471,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
  "total_entries": 9349,
  "note": "지명DB·용어DB(isbeId)에 이어지는 항목으로 시작하여, 405차부터 나머지 항목도 번역되는 대로 더함(목표 9,349 전부). id 는 ISBE 전체(total_entries, 넘겨주기 포함) 표제어 차례 번호 — 나중에 full 을 만들면 빠진 id 만 채운다. definition 은 영문 원문(본문 HTML 을 글로 — 문단은 빈 줄). definition_ko 는 하나씩 번역해 채운다(2026-09-18 kjm).",
@@ -10,7 +10,7 @@
   "isbe_full_2.json"
  ],
  "parts_md5": [
-  "cd066d4e6255",
-  "ef8f3a1d4a8e"
+  "d3112615c20c",
+  "7f8dc7406160"
  ]
 }
