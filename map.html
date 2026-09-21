@@ -6643,6 +6643,12 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       const container = document.getElementById('rawdict-results');
       const loadMoreWrap = document.getElementById('rawdict-load-more-wrap');
       if (reset) { container.innerHTML = ''; rawdictShownCount = 0; }
+      if (reset && rawdictBackStack.length) {
+        const back = document.createElement('div');
+        back.style.cssText = 'padding:6px 16px;border-bottom:1px solid #f1f5f9;background:#fffbeb';
+        back.innerHTML = `<button onclick="rawDictGoBack()" style="font-size:0.8em;color:#b45309;background:#fff;border:1px solid #fcd34d;border-radius:4px;padding:2px 10px;cursor:pointer">← 돌아가기</button>`;
+        container.appendChild(back);
+      }
 
       const source = getRawDictList(rawdictSrc);
       const q = (document.getElementById('rawdict-search-input').value || '').trim().toLowerCase();
@@ -6705,7 +6711,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         const koBlock = (e.definition_ko && !isEditing)
           ? `<div style="display:flex;gap:4px;align-items:flex-start;margin-top:6px">
                <div style="flex:1;min-width:0">
-                 <div style="font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyVerseRefs(escHtml(koParts.body), correctedVerseKeys(koParts.notes))}</div>${noteBlock}
+                 <div style="font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyDictRefs(linkifyVerseRefs(escHtml(koParts.body), correctedVerseKeys(koParts.notes)), rawdictSrc, e.id)}</div>${noteBlock}
                </div>
                <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
              </div>`
@@ -6830,11 +6836,100 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
            + 'border:1px solid #fcd34d;border-radius:4px;padding:1px 8px;cursor:pointer;">'
            + '\u2192 ' + escHtml(to.term) + ' \ubcf4\uae30</button></div>';
     }
+    /* ── 본문 안 「~ 항목을 보라」를 링크로 (2026-09-21 kjm) ──
+     * 번역문은 가리키는 항목을 「한글(대문자 영문 표제)」로 적는다 — 예) 제단(ALTAR) 항목을 보라.
+     *   1) 괄호 안 대문자 영문 표제가 같은 사전에 있으면 「한글(영문)」 전체를 링크로
+     *   2) 괄호 없이 「알파벳 항목」처럼 한글 표제만 있으면, 그 한글 표제가 있을 때 링크로
+     * 아직 번역되지 않아 목록에 없는 항목은 글자 그대로 둔다(나중에 번역되면 저절로 링크가 된다).
+     * 누르면 rawDictGoto 로 건너가고, 「← 돌아가기」로 앞 화면(검색어·갈래·스크롤)을 되살린다. */
+    let rawdictBackStack = [];
+    const rawDictRefIdxCache = {};
+    function rawDictRefNormKey(s) {
+      return String(s || '').toUpperCase()
+        .replace(/&#39;|&apos;|’/g, "'").replace(/&amp;/g, '&')
+        .replace(/\bOLD TESTAMENT\b/g, 'OT').replace(/\bNEW TESTAMENT\b/g, 'NT')
+        .replace(/\s+/g, ' ').replace(/[\s.;,]+$/, '').trim();
+    }
+    function rawDictRefIndex(srcKey) {
+      const list = getRawDictList(srcKey) || [];
+      const c = rawDictRefIdxCache[srcKey];
+      if (c && c.list === list && c.n === list.length) return c;
+      const en = new Map(), ko = new Map();
+      list.forEach(e => {
+        if (!e || e.id == null) return;
+        const term = String(e.term || '');
+        const enPart = term.replace(/\([^)]*\)/g, '').trim();
+        [e.isbe_key, enPart].forEach(k => { const nk = rawDictRefNormKey(k); if (nk && !en.has(nk)) en.set(nk, e.id); });
+        const m = term.match(/\(([^)]*)\)\s*$/);
+        if (m) {
+          m[1].split(/[;·]/).forEach(k => { k = k.trim(); if (k && /[가-힣]/.test(k) && !ko.has(k)) ko.set(k, e.id); });
+        }
+      });
+      const idx = { list, n: list.length, en, ko };
+      rawDictRefIdxCache[srcKey] = idx;
+      return idx;
+    }
+    function linkifyDictRefs(html, srcKey, selfId) {
+      if (!html) return html;
+      const idx = rawDictRefIndex(srcKey);
+      if (!idx.en.size && !idx.ko.size) return html;
+      const aOpen = id => `<a href="javascript:void(0)" onclick="rawDictGoto('${srcKey}',${id},true);return false;" style="color:#b45309;text-decoration:underline;text-decoration-style:dotted;cursor:pointer" title="이 항목으로 가기">`;
+      const re = /([가-힣][가-힣0-9·]*)?\(([A-Z](?:[A-Z0-9 ,;.\-’]|&#39;|&amp;)*)\)|([가-힣][가-힣0-9·]*)(?=\s항목)/g; // 괄호 안은 대문자 표제만(영문 일반 낱말 괄호는 건드리지 않음)
+      const linkText = txt => txt.replace(re, (all, koW, key, koOnly) => {
+        if (key !== undefined) {
+          const id = idx.en.get(rawDictRefNormKey(key));
+          if (id == null || id === selfId) return all;
+          return aOpen(id) + all + '</a>';
+        }
+        if (koOnly) {
+          const id = idx.ko.get(koOnly);
+          if (id == null || id === selfId) return all;
+          return aOpen(id) + koOnly + '</a>';
+        }
+        return all;
+      });
+      // 이미 있는 링크(구절 링크 등)와 태그 안은 건드리지 않는다
+      return html.split(/(<a\b[\s\S]*?<\/a>|<[^>]+>)/).map(p => p.startsWith('<') ? p : linkText(p)).join('');
+    }
+    function rawDictGoBack() {
+      const st = rawdictBackStack.pop();
+      if (!st) return;
+      rawdictSrc = st.src;
+      rawdictCatFilter = st.cat || '';
+      const box = document.getElementById('rawdict-search-input');
+      if (box) box.value = st.q || '';
+      document.querySelectorAll('#rawdict-filter-tabs .dict-filter-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.src === st.src);
+      });
+      document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(b => {
+        b.classList.toggle('active', (b.dataset.cat || '') === (st.cat || ''));
+      });
+      renderRawDictResults(true);
+      const results = document.getElementById('rawdict-results');
+      if (results) {
+        // 「더 보기」로 늘렸던 자리까지 되돌아가려면 그만큼 더 그린다
+        let guard = 0;
+        while (results.scrollHeight < st.scroll + results.clientHeight && guard++ < 50) {
+          const before = rawdictShownCount;
+          renderRawDictResults(false);
+          if (rawdictShownCount === before) break;
+        }
+        results.scrollTop = st.scroll || 0;
+      }
+    }
+
     // 검색칸에 그 표제어를 넣고 다시 그린다
-    function rawDictGoto(srcKey, id) {
+    function rawDictGoto(srcKey, id, fromLink) {
       const list = getRawDictList(srcKey) || [];
       const to = list.find(x => x && x.id === id);
       if (!to) { showToast('가리키는 항목을 찾지 못했습니다', 'warn'); return; }
+      if (fromLink) {
+        // 본문 안 「~ 항목을 보라」 링크로 건너갈 때는 지금 화면을 기억해 두고 「← 돌아가기」를 띄운다(2026-09-21 kjm)
+        const box0 = document.getElementById('rawdict-search-input');
+        const res0 = document.getElementById('rawdict-results');
+        rawdictBackStack.push({ src: rawdictSrc, q: box0 ? box0.value : '', cat: rawdictCatFilter, scroll: res0 ? res0.scrollTop : 0 });
+        if (rawdictBackStack.length > 30) rawdictBackStack.shift();
+      }
       rawdictSrc = srcKey;                 // 사전 딱지도 함께 옮긴다
       rawdictCatFilter = '';               // 갈래 거르기는 풀어야 건너간 항목이 보인다
       const box = document.getElementById('rawdict-search-input');
@@ -7150,7 +7245,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       const backdrop = document.getElementById('rawdict-modal-backdrop');
       if (backdrop) backdrop.onclick = closeRawDictModal;
       const searchInput = document.getElementById('rawdict-search-input');
-      if (searchInput) searchInput.addEventListener('input', () => renderRawDictResults(true));
+      if (searchInput) searchInput.addEventListener('input', () => { rawdictBackStack = []; renderRawDictResults(true); }); // 손으로 새로 찾으면 되돌아가기 기록은 비운다
       // 사전 탭은 창을 열 때마다 새로 만들어지므로, 그때마다 다시 연결한다 (bindRawDictSrcTabs)
       bindRawDictSrcTabs();
       document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(btn => {
@@ -15264,7 +15359,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260921-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260921-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
