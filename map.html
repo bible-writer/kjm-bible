@@ -4729,6 +4729,14 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       }
     };
 
+    /* (2026-09-22) 끝글자 붙은 원어 번호(G1160b 등 — 원전분해의 「기본」 번호, 비평 본문 철자 차이) → TR 번호.
+     * 원전분해.sdb 의 「(기본 <WG1160b> …)(TR <WG1138>)」 짝에서 뽑음(98개). G1160b 는 다윗(Δαυίδ)이지 G1160(δαπάνη 비용)이 아니다.
+     * 끝글자를 떼어 버리면 다른 낱말이 되므로, 뗄 때는 이 표를 먼저 본다. */
+    const STRONG_SUFFIX_TR = {"G0019A":"G0015","G0031B":"G0518","G0032B":"G0030","G0096A":"G0689","G0120A":"G4867","G0237B":"G0237","G0292B":"G0294","G0293A":"G0906","G0311B":"G0508","G0376A":"G0450","G0537B":"G0782","G0733B":"G0730","G0862B":"G0090","G0956A":"G4476","G1061A":"G1547","G1160B":"G1138","G1190A":"G2124","G1275A":"G3859","G1306B":"G1307","G1315B":"G5512","G1327A":"G1760","G1357A":"G2735","G1381B":"G1381","G1426A":"G0987","G1457B":"G1573","G1461A":"G2744","G1490A":"G2397","G1544A":"G1831","G1567B":"G2214","G1569B":"G2296","G1600A":"G4053","G1601A":"G1530","G1632B":"G1632","G1648B":"G1653","G1649A":"G1650","G1759B":"G1782","G1775A":"G3726","G1884A":"G1944","G1946A":"G2027","G1952B":"G0621","G1980B":"G0643","G1986B":"G4687","G1988A":"G1999","G2115B":"G2115","G2138A":"G2145","G2146B":"G2148","G2189A":"G5504","G2269B":"G2276","G2410B":"G1494","G2492B":"G5601","G2493A":"G2455","G2531B":"G2509","G2599B":"G0916","G2608B":"G1125","G2613B":"G1349","G2616B":"G2652","G2617A":"G2653","G2634A":"G2955","G2721A":"G2127","G2733B":"G2730","G2778A":"G5392","G2825A":"G2825","G2874B":"G2874","G2931A":"G2927","G2943A":"G2944","G3102B":"G3156","G3346B":"G3344","G3483B":"G3497","G3501A":"G3561","G3556B":"G3502","G3620B":"G3618","G3625A":"G3626","G3640A":"G0570","G3643B":"G3689","G3655B":"G2442","G3658B":"G3507","G3836A":"G3837","G3850A":"G3851","G3869A":"G3869","G3918A":"G4332","G3925A":"G4016","G3970A":"G3964","G4007B":"G2087","G4239A":"G4236","G4291A":"G4406","G4346A":"G4347","G4416B":"G4412","G4507A":"G4510","G4619A":"G4621","G4714A":"G4955","G4742A":"G4746","G4832A":"G4833","G4851B":"G4851","G5012B":"G5391","G5144A":"G5168","G5238B":"G4057","G5275A":"G2640","G5621A":"G5621"};
+    function strongTR(code) {
+      const m = String(code || '').trim().toUpperCase().match(/^([HG])0*(\d{1,5})([A-Z])$/);
+      return m ? (STRONG_SUFFIX_TR[m[1] + m[2].padStart(4, '0') + m[3]] || '') : '';
+    }
     /* 스트롱 원어 사전 엔진 — 인명/용어 팝업 속 스트롱 번호를 클릭하면 원어(히브리어/그리스어) 뜻을 보여줌 */
     let strongDict = null;      // { "H0175": {lemma, xlit, pron, def}, ... } 지연 로드
     let strongDictLoading = null;
@@ -4775,6 +4783,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (!strongDict) return null;
         const norm = this.normalize(code);
         if (strongDict[norm]) return strongDict[norm];
+        const tr = strongTR(norm);                        // G1160b → G1138 (끝글자만 떼면 다른 낱말)
+        if (tr && strongDict[tr]) return strongDict[tr];
         const base = norm.replace(/[A-Z]$/, '');
         if (base !== norm && strongDict[base]) return strongDict[base];
         return null;
@@ -14017,10 +14027,14 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           }
         }
         let state, msg;
+        // (2026-09-22) 끝글자 붙은 번호(G1160b)는 TR 번호(G1138)로 견준다 — 끝글자만 떼면 다른 낱말(G1160 비용)
+        const cmpOf = x => /[A-Za-z]$/.test(String(x).slice(1)) ? strongTR(x) : this.norm(x);
+        const showOf = x => { const tr = /[A-Za-z]$/.test(String(x).slice(1)) ? strongTR(x) : ''; return tr ? `${x}(=${tr})` : x; };
+        const hit = (textCodes || []).filter(x => { const k = cmpOf(x); return k && item.codes.indexOf(k) >= 0; });
         if (why) { state = 'unknown'; msg = why; }
-        else if (!item.codes.length) { state = 'unknown'; msg = `${item.kind} 항목에 스트롱 코드가 없음 · 본문 ${textCodes.join(', ')}`; }
-        else if (textCodes.some(x => item.codes.indexOf(x) >= 0)) { state = 'ok'; msg = `원어 일치 ${textCodes.filter(x => item.codes.indexOf(x) >= 0).join(', ')}`; }
-        else { state = 'bad'; msg = `본문 ${textCodes.join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}`; }
+        else if (!item.codes.length) { state = 'unknown'; msg = `${item.kind} 항목에 스트롱 코드가 없음 · 본문 ${textCodes.map(showOf).join(', ')}`; }
+        else if (hit.length) { state = 'ok'; msg = `원어 일치 ${hit.map(showOf).join(', ')}`; }
+        else { state = 'bad'; msg = `본문 ${textCodes.map(showOf).join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}`; }
         this.chip(tag, state, msg, { b, c, v, word, textCodes: textCodes || [], label: usedKrvn ? '어절 원어 분석' : (src ? src.label : ''), kt: usedKrvn ? kt : null, offset, text: vt.textContent });
       },
       chip: function(tag, state, msg, info) {
@@ -15514,7 +15528,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260922-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260922-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
