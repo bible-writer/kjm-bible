@@ -818,7 +818,7 @@
     }
     .dict-filter-btn.active { background: #b45309; color: #fff; border-color: #b45309; }
     .dict-result-item {
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 10px;
       padding: 10px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer;
     }
     .dict-result-item:hover { background: #f8fafc; }
@@ -2698,6 +2698,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             // personDatabase.json 직접 로드 (persons 배열이 있는 경우)
             if (pkg.persons && Array.isArray(pkg.persons)) {
               personDatabase = pkg.persons;
+              await reapplyEntityStrongOverrides('person', personDatabase, 'JSON');
               await setLocalItem('saved_person_database', personDatabase);
               buildPersonVerseIndex(personDatabase);
               loadBibleText();
@@ -2710,6 +2711,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             if (pkg.terms && Array.isArray(pkg.terms)) {
               termDatabase = pkg.terms;
               termDatabaseMeta = { note: pkg.note || '' };
+              await reapplyEntityStrongOverrides('term', termDatabase, 'JSON');
               await setLocalItem('saved_term_database', termDatabase);
               await setLocalItem('saved_term_database_meta', termDatabaseMeta);
               // 파일을 직접 열 때도 판을 저장해야 내보낼 때 끝자리를 바로 올린다(2026-09-12)
@@ -2758,6 +2760,10 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             }
             if (pkg.placeStrongOverrides && typeof pkg.placeStrongOverrides === 'object') {
               placeStrongOverrides = pkg.placeStrongOverrides; await savePlaceStrongOverrides();
+            }
+            if (pkg.entityStrongOverrides && typeof pkg.entityStrongOverrides === 'object') {
+              entityStrongOverrides = { term: pkg.entityStrongOverrides.term || {}, person: pkg.entityStrongOverrides.person || {} };
+              await saveEntityStrongOverrides('term'); await saveEntityStrongOverrides('person');
             }
             let deltaInfo = null;
             if (pkg.backupFormat === 'delta') {
@@ -4080,6 +4086,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           </div>
           <div style="font-size:0.92em;color:#7c3aed;font-weight:600;margin-bottom:4px">${escHtml(p.name_en || '')} ${briefest ? '· ' + escHtml(briefest) : ''}</div>
           <div id="person-strong-inline"></div>
+          <div style="margin-bottom:4px">${entityStrongLine('person', p, 'person-strong-box')}</div>
+          <div id="person-strong-box"></div>
           <div style="font-size:0.92em;color:#64748b;margin-bottom:6px">${escHtml(desc)}</div>
           <div style="font-size:1em;line-height:1.5;color:#1e293b">${escHtml(mainKo)}</div>
           ${enLine}
@@ -4340,17 +4348,14 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         const firstStrongCode = fsm ? fsm[0] : '';
         const noteDisplay = t.original_note ? `<div style="font-size:0.82em;color:#92400e;background:#fffbeb;border-left:3px solid #fcd34d;padding:4px 8px;margin-bottom:4px;line-height:1.5">${escHtml(t.original_note)}</div>` : '';
         const hgDisplay = noteDisplay + (t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.linkifyCodes(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '');
+        // (2026-09-22) 원어 번호 고치기 — 지명 창과 같은 꼴(번호 줄 + ✏️, 관리자 모드). 고친 값은 용어DB 를 새로 받아도 다시 입힌다
         const hg = `
           ${hgDisplay}
-          <div style="display:flex;gap:4px;align-items:center;margin-bottom:6px">
-            <input type="text" id="term-strong-input" value="${strongVal}" placeholder="예: H8179 또는 아마르(H559)"
-              ${hasStrong ? 'disabled' : ''}
-              style="flex:1;font-size:0.8em;padding:3px 6px;border:1px solid ${hasStrong ? '#e2e8f0' : '#fde68a'};border-radius:4px;${hasStrong ? 'background:#f1f5f9;color:#94a3b8;' : ''}">
-            ${hasStrong
-              ? `${firstStrongCode ? `<button onclick="StrongEngine.openUsage('${firstStrongCode}')" style="font-size:0.8em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">🔤 용례</button>` : ''}<button id="term-strong-editbtn" onclick="TermEngine.unlockStrong()" style="font-size:0.8em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">✏️ 수정</button>`
-              : `<button id="term-strong-editbtn" onclick="TermEngine.saveStrong(${t.id})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">저장</button>`
-            }
-          </div>`;
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+            ${firstStrongCode ? `<button onclick="StrongEngine.openUsage('${firstStrongCode}')" style="font-size:0.8em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:3px 8px;cursor:pointer;white-space:nowrap">🔤 용례</button>` : ''}
+            ${entityStrongLine('term', t, 'term-strong-box')}
+          </div>
+          <div id="term-strong-box"></div>`;
         const def = t.definition_ko || '';
         const rawSource = t.source || '';
         const urlMatch = rawSource.match(/https?:\/\/\S+/);
@@ -7630,8 +7635,15 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}${it.srcDict ? `<span class="dict-src-pill dict-src-${escHtml(it.srcDict)}">${escHtml(it.srcDict)}</span>` : ''}<button class="dict-edit-btn" title="표제어 수정" style="margin-left:6px;font-size:0.7em;font-weight:400;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button></div>
             ${defPreview ? `<div style="font-size:0.82em;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${defPreview}</div>` : ''}
           </div>
-          ${it.strong ? `<span class="dict-result-tag ${it.type}" title="${escHtml(it.strong)}">${escHtml(it.strong)}</span>` : ''}
+          <span style="display:flex;align-items:center;gap:4px;flex-shrink:0">${it.strong ? `<span class="dict-result-tag ${it.type}" title="${escHtml(it.strong)}">${escHtml(it.strong)}</span>` : ''}<button class="dict-strong-btn admin-only" title="원어 번호 고치기" style="font-size:0.7em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer">📜✏️</button></span>
         `;
+        const sBox = document.createElement('div');
+        sBox.id = 'dict-strong-box-' + it.type + '-' + it.ref.id;
+        sBox.style.cssText = 'flex-basis:100%;width:100%';
+        sBox.onclick = ev => ev.stopPropagation();
+        row.appendChild(sBox);
+        const sBtn = row.querySelector('.dict-strong-btn');
+        if (sBtn) sBtn.onclick = function (ev) { ev.stopPropagation(); dictEditStrong(it, sBox.id); };
         var editBtn = row.querySelector('.dict-edit-btn');
         if (editBtn) {
           editBtn.onclick = function (ev) {
@@ -10489,6 +10501,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         coordOverrides: coordOverrides,
         nameOverrides: nameOverrides,
         placeStrongOverrides: placeStrongOverrides,
+        entityStrongOverrides: entityStrongOverrides,
         strongOverrides: strongOverrides,
         termDatabaseMeta: termDatabaseMeta,
         deltas: {
@@ -10597,6 +10610,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           if (pkg.backupFormat === 'delta') {
             if (pkg.nameOverrides && typeof pkg.nameOverrides === 'object' && typeof saveNameOverrides === 'function') { nameOverrides = pkg.nameOverrides; await saveNameOverrides(); }
             if (pkg.placeStrongOverrides && typeof pkg.placeStrongOverrides === 'object') { placeStrongOverrides = pkg.placeStrongOverrides; await savePlaceStrongOverrides(); }
+            if (pkg.entityStrongOverrides && typeof pkg.entityStrongOverrides === 'object') { entityStrongOverrides = { term: pkg.entityStrongOverrides.term || {}, person: pkg.entityStrongOverrides.person || {} }; await saveEntityStrongOverrides('term'); await saveEntityStrongOverrides('person'); }
             if (pkg.strongOverrides) { strongOverrides = pkg.strongOverrides; await setLocalItem('saved_strong_overrides', strongOverrides); }
             if (pkg.termDatabaseMeta) { termDatabaseMeta = pkg.termDatabaseMeta; await setLocalItem('saved_term_database_meta', termDatabaseMeta); }
             window._deltaRestoreInfo = await BackupDelta.restore(pkg);
@@ -11465,13 +11479,149 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         q.style.left = keep.left; q.style.top = keep.top; q.style.display = 'block';
       }
       try { if (map && map.closePopup) map.closePopup(); } catch (e) {}
+      if (typeof dictCombinedCache !== 'undefined') dictCombinedCache = null;
+      const dm = document.getElementById('dict-results');
+      if (dm && dm.offsetParent !== null && typeof renderDictResults === 'function') renderDictResults(true);
     }
     // 지명 창에 붙일 원어 줄 (대표 [H1234] + 전체 번호 + ✏️)
     function placeStrongLine(place, boxId) {
       const all = String(place.hebrew_greek || '').split(',').filter(Boolean);
       const edited = placeStrongOverrides['ID' + place.id] ? ' <span style="font-size:10px;color:#b45309" title="이 기기에서 고친 값">(고침)</span>' : '';
       const list = all.length ? `<span style="font-size:11px;color:#64748b">${all.map(c => escHtml(c)).join(', ')}</span>` : '<span style="font-size:11px;color:#94a3b8">원어 번호 없음</span>';
-      return `<div style="font-size:12px;margin:2px 0">${list}${edited} <button onclick="editPlaceStrong(${place.id},'${boxId}')" title="지명 원어 번호 고치기" style="font-size:10px;padding:0 5px;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer">✏️</button></div><div id="${boxId}"></div>`;
+      return `<div style="font-size:12px;margin:2px 0">${list}${edited} <button class="admin-only" onclick="editPlaceStrong(${place.id},'${boxId}')" title="지명 원어 번호 고치기" style="font-size:10px;padding:0 5px;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer">✏️</button></div><div id="${boxId}"></div>`;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+     * [용어·인명 원어] 스트롱 코드 수정값 영속 저장소 (2026-09-22)
+     *   지명(placeStrongOverrides)과 같은 원리 — 용어DB·인명DB 를 GitHub·파일에서 새로 받아도
+     *   고친 번호를 다시 입힌다. 원본이 제3의 값으로 바뀌었으면(= DB 를 고쳐 올림) 원본 우선, 이력 해제.
+     *   용어: hebrew_greek(적은 차례 그대로 — 첫 번호가 용례·원어 칸의 대표)
+     *   인명: ustrong(대표 하나 — 사람 구별 끝글자 H5653G 꼴 유지) + strong(전체 번호, 정렬)
+     * ═══════════════════════════════════════════════════════════════ */
+    let entityStrongOverrides = { term: {}, person: {} };
+    const ENTITY_STRONG = {
+      term:   { store: 'saved_term_strong_overrides',   db: 'saved_term_database',   label: '용어',
+                list: () => termDatabase,   name: x => (x.term_ko || x.term_en || ''),
+                get: x => ({ a: x.hebrew_greek || '' }),
+                set: (x, v) => { if (v.a) x.hebrew_greek = v.a; else delete x.hebrew_greek; },
+                codes: x => String(x.hebrew_greek || '').split(',').filter(Boolean) },
+      person: { store: 'saved_person_strong_overrides', db: 'saved_person_database', label: '인명',
+                list: () => personDatabase, name: x => (x.name_ko || x.name_en || ''),
+                get: x => ({ a: x.ustrong || '', b: x.strong || '' }),
+                set: (x, v) => { if (v.a) x.ustrong = v.a; else delete x.ustrong; if (v.b) x.strong = v.b; else delete x.strong; },
+                codes: x => { const u = x.ustrong || ''; const rest = String(x.strong || '').split(',').filter(c => c && c !== u.replace(/[A-Z]$/, '')); return (u ? [u] : []).concat(rest); } }
+    };
+    function _esSame(a, b) { a = a || {}; b = b || {}; return (a.a || '') === (b.a || '') && (a.b || '') === (b.b || ''); }
+    async function loadEntityStrongOverrides() {
+      for (const k of ['term', 'person']) {
+        const saved = await getLocalItem(ENTITY_STRONG[k].store);
+        if (saved && typeof saved === 'object') entityStrongOverrides[k] = saved;
+      }
+      return entityStrongOverrides;
+    }
+    async function saveEntityStrongOverrides(kind) {
+      try { await setLocalItem(ENTITY_STRONG[kind].store, entityStrongOverrides[kind]); }
+      catch (e) { console.error(ENTITY_STRONG[kind].label + ' 원어 코드 수정 저장 실패:', e); }
+    }
+    function applyEntityStrongOverrides(kind, list) {
+      const r = { applied: 0, retired: 0 }, cfg = ENTITY_STRONG[kind], ovs = entityStrongOverrides[kind];
+      if (!list || !list.length) return r;
+      Object.keys(ovs).forEach(k => {
+        const ov = ovs[k], x = list.find(e => e.id === ov.id);
+        if (!x) return;
+        const cur = cfg.get(x);
+        if (_esSame(cur, ov.val)) { r.applied++; return; }
+        if (_esSame(cur, ov.base)) { cfg.set(x, ov.val); r.applied++; }
+        else { delete ovs[k]; r.retired++; }   // 원본이 새 값으로 바뀜 → 원본 우선
+      });
+      return r;
+    }
+    async function reapplyEntityStrongOverrides(kind, list, label) {
+      const r = applyEntityStrongOverrides(kind, list);
+      if (r.retired > 0) {
+        await saveEntityStrongOverrides(kind);
+        showToast(`${ENTITY_STRONG[kind].label} 원어 코드 수정 ${r.retired}개는 ${label || '원본'}이 갱신되어 해제`, 'info', 5000);
+      }
+      return r;
+    }
+    // 창에 붙일 원어 번호 줄 (번호 + (고침) + ✏️ — ✏️ 는 관리자 모드에서만)
+    function entityStrongLine(kind, x, boxId) {
+      const all = ENTITY_STRONG[kind].codes(x);
+      const edited = entityStrongOverrides[kind]['ID' + x.id] ? ' <span style="font-size:10px;color:#b45309" title="이 기기에서 고친 값">(고침)</span>' : '';
+      const list = all.length ? `<span style="font-size:11px;color:#64748b">${all.map(c => escHtml(c)).join(', ')}</span>` : '<span style="font-size:11px;color:#94a3b8">원어 번호 없음</span>';
+      return `<span style="font-size:12px">${list}${edited} <button class="admin-only" onclick="editEntityStrong('${kind}',${x.id},'${boxId}')" title="원어 번호 고치기" style="font-size:10px;padding:0 5px;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer">✏️</button></span>`;
+    }
+    function editEntityStrong(kind, id, boxId) {
+      const cfg = ENTITY_STRONG[kind], x = cfg.list().find(e => e.id === id), box = document.getElementById(boxId);
+      if (!x || !box) return;
+      const val = normStrongList(cfg.codes(x).join(',')).filter(c => c[0] !== '!').join(', ');
+      const hint = kind === 'person' ? '첫 번호가 대표(사람 구별 끝글자 H5653G 꼴도 됨)' : '첫 번호가 대표(용례·원어 칸)';
+      box.innerHTML = `<div style="margin:4px 0;font-size:12px;color:#475569">원어 번호 — 쉼표로 여럿 · ${hint}</div>
+        <input type="text" id="${boxId}-in" value="${escHtml(val)}" placeholder="예: H0175, G0002" style="width:100%;box-sizing:border-box;font-size:13px;padding:3px 6px;border:1px solid #94a3b8;border-radius:4px"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();saveEntityStrong('${kind}',${id},'${boxId}');}" onclick="event.stopPropagation()">
+        <div style="margin-top:4px;display:flex;gap:4px;flex-wrap:wrap">
+          <button onclick="event.stopPropagation();saveEntityStrong('${kind}',${id},'${boxId}')" style="font-size:11px;padding:2px 8px;background:#3b82f6;color:#fff;border:none;border-radius:4px;cursor:pointer">저장</button>
+          <button onclick="event.stopPropagation();document.getElementById('${boxId}').innerHTML=''" style="font-size:11px;padding:2px 8px;background:#94a3b8;color:#fff;border:none;border-radius:4px;cursor:pointer">취소</button>
+          ${entityStrongOverrides[kind]['ID' + id] ? `<button onclick="event.stopPropagation();resetEntityStrong('${kind}',${id},'${boxId}')" style="font-size:11px;padding:2px 8px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;border-radius:4px;cursor:pointer">원래대로</button>` : ''}
+        </div>`;
+      const el = document.getElementById(boxId + '-in'); if (el) { el.focus(); el.select(); }
+    }
+    function _entityNewVal(kind, x, codes) {
+      if (kind === 'term') return { a: codes.join(',') };
+      // 인명: 대표는 지금 대표(끝글자 포함)가 첫 번호와 같은 뿌리면 그대로 둔다
+      const curU = x.ustrong || '', first = codes[0] || '';
+      const a = !first ? '' : (curU && (curU === first || curU.replace(/[A-Z]$/, '') === first) ? curU : first);
+      const b = Array.from(new Set(codes.map(c => c.replace(/[A-Z]$/, '')))).sort().join(',');
+      return { a, b };
+    }
+    async function saveEntityStrong(kind, id, boxId) {
+      const cfg = ENTITY_STRONG[kind], x = cfg.list().find(e => e.id === id), el = document.getElementById(boxId + '-in');
+      if (!x || !el) return;
+      const codes = normStrongList(el.value);
+      const bad = codes.filter(c => c[0] === '!');
+      if (bad.length) { showToast('번호 꼴이 아닙니다: ' + bad.map(b => b.slice(1)).join(', ') + ' — H0175 · G0002 꼴로', 'warn'); return; }
+      const key = 'ID' + id, prev = entityStrongOverrides[kind][key];
+      const base = prev ? prev.base : cfg.get(x);
+      const val = _entityNewVal(kind, x, codes);
+      if (_esSame(val, base)) delete entityStrongOverrides[kind][key];
+      else entityStrongOverrides[kind][key] = { id, name: cfg.name(x), base, val, ts: new Date().toISOString() };
+      cfg.set(x, val);
+      await saveEntityStrongOverrides(kind);
+      await setLocalItem(cfg.db, cfg.list());
+      showToast(`${cfg.label} 원어 코드 저장: ${cfg.name(x)} — ${cfg.codes(x).join(',') || '(비움)'} · 다시 받아도 유지됩니다`, 'success', 4000);
+      refreshAfterEntityStrongEdit(kind, x);
+    }
+    async function resetEntityStrong(kind, id, boxId) {
+      const cfg = ENTITY_STRONG[kind], x = cfg.list().find(e => e.id === id), ov = entityStrongOverrides[kind]['ID' + id];
+      if (!x || !ov) return;
+      cfg.set(x, ov.base);
+      delete entityStrongOverrides[kind]['ID' + id];
+      await saveEntityStrongOverrides(kind);
+      await setLocalItem(cfg.db, cfg.list());
+      showToast(`${cfg.label} 원어 코드 원래대로: ${cfg.name(x)}`, 'info');
+      refreshAfterEntityStrongEdit(kind, x);
+    }
+    function refreshAfterEntityStrongEdit(kind, x) {
+      const pid = kind === 'term' ? 'term-info-panel' : 'person-info-panel';
+      const panel = document.getElementById(pid);
+      if (panel && panel.style.display !== 'none') {
+        const keep = { left: panel.style.left, top: panel.style.top, right: panel.style.right };
+        try {
+          if (kind === 'term') TermEngine.showPopup(x);
+          else PersonEngine.showPopup(x, x.name_ko);
+        } catch (e) {}
+        panel.style.left = keep.left; panel.style.top = keep.top; panel.style.right = keep.right;
+      }
+      if (kind === 'term' && typeof buildTermIndex === 'function') { try { buildTermIndex(termDatabase); } catch (e) {} }
+      if (typeof dictCombinedCache !== 'undefined') dictCombinedCache = null;
+      const dm = document.getElementById('dict-results');
+      if (dm && dm.offsetParent !== null && typeof renderDictResults === 'function') renderDictResults(true);
+    }
+    // 📖 사전 목록의 📜✏️ — 줄 안에 입력 칸
+    function dictEditStrong(it, boxId) {
+      if (it.type === 'TERM') editEntityStrong('term', it.ref.id, boxId);
+      else if (it.type === 'PERSON') editEntityStrong('person', it.ref.id, boxId);
+      else editPlaceStrong(it.ref.id, boxId);
     }
 
     // 지명 수정 이력 관리 모달
@@ -12502,6 +12652,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           throw new Error('유효한 인명 데이터가 없습니다.');
         }
         personDatabase = pkg.persons;
+        await reapplyEntityStrongOverrides('person', personDatabase, 'GitHub 원본');
         buildPersonVerseIndex(personDatabase);
         await setLocalItem('saved_person_database', personDatabase);
         await setLocalItem('saved_person_database_version', pkg.version || '');
@@ -12532,6 +12683,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         }
         termDatabase = pkg.terms;
         termDatabaseMeta = { note: pkg.note || '' };
+        await reapplyEntityStrongOverrides('term', termDatabase, 'GitHub 원본');
         buildTermIndex(termDatabase);
         await setLocalItem('saved_term_database', termDatabase);
         await setLocalItem('saved_term_database_meta', termDatabaseMeta);
@@ -14588,6 +14740,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       await loadNameOverrides();
       updateNameOverrideBadge();
       await loadPlaceStrongOverrides();
+      await loadEntityStrongOverrides();
 
       const savedPlaces = await getLocalItem("saved_place_database");
       if (savedPlaces && savedPlaces.length > 0) {
@@ -14625,6 +14778,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
               if (isNewer) {
                 termDatabase = netTermPkg.terms;
                 termDatabaseMeta = { note: netTermPkg.note || '' };
+                await reapplyEntityStrongOverrides('term', termDatabase, '새 판');
                 buildTermIndex(termDatabase);
                 await setLocalItem('saved_term_database', termDatabase);
                 await setLocalItem('saved_term_database_meta', termDatabaseMeta);
@@ -14648,6 +14802,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
               const isNewer = !savedPersons || netPkg.persons.length !== savedPersons.length || netPkg.version !== await getLocalItem('saved_person_database_version');
               if (isNewer) {
                 personDatabase = netPkg.persons;
+                await reapplyEntityStrongOverrides('person', personDatabase, '새 판');
                 buildPersonVerseIndex(personDatabase);
                 await setLocalItem('saved_person_database', personDatabase);
                 await setLocalItem('saved_person_database_version', netPkg.version || '');
@@ -15359,7 +15514,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260921-2`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260922-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
