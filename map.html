@@ -6426,7 +6426,27 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           //    공개 퍼블릭 도메인 텍스트라 암호화 없이 평문으로 둔다
           const res = await fetch(s.file, { cache: 'no-store' });
           if (res && res.ok) {
-            const pkg = await res.json();
+            let pkg = await res.json();
+            // (2026-09-21 kjm) GitHub 웹 업로드는 파일 하나 25MB까지라, 큰 사전(ISBE)은 조각으로 나눠 올린다.
+            //   s.file 이 목차 파일({..., parts:["isbe_full_1.json", ...]})이면 조각을 차례로 받아 entries 를 이어 붙인다.
+            //   조각이 하나라도 안 받아지면 이번에는 갱신을 건너뛴다(반쪽 데이터로 덮어쓰지 않도록).
+            if (pkg && Array.isArray(pkg.parts) && pkg.parts.length > 0) {
+              const base = s.file.replace(/[^\/]*$/, '');
+              const all = [];
+              let ok = true;
+              for (const part of pkg.parts) {
+                const pr = await fetch(base + part, { cache: 'no-store' });
+                if (!pr || !pr.ok) { ok = false; break; }
+                const pj = await pr.json();
+                if (!pj || !Array.isArray(pj.entries)) { ok = false; break; }
+                for (const e of pj.entries) all.push(e);
+              }
+              if (!ok) throw new Error('rawdict parts incomplete: ' + s.key);
+              const whole = {};
+              Object.keys(pkg).forEach(k => { if (k !== 'parts' && k !== 'parts_md5') whole[k] = pkg[k]; });
+              whole.entries = all;
+              pkg = whole;
+            }
             if (pkg && typeof pkg === 'object') {
               // entries 밖의 칸을 모두 챙겨 둔다 (count는 항목 수라 내보낼 때 새로 센다)
               const meta = {};
@@ -15244,7 +15264,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260920-6`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260921-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
