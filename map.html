@@ -8735,9 +8735,31 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             });
           });
           commentaryIndexByBook = idx;
+          try { syncCommentaryButtons(); } catch (e) {}
           resolve(idx);
         };
         req.onerror = reject;
+      });
+    }
+    /* (2026-09-22) 주석 목록을 늦게 읽으면(주석 PDF 가 크면 앱을 열 때 본문이 먼저 그려진다) 절마다 「📖 주석」 단추가 빠진 채 남았다.
+     * 목록을 읽을 때마다 지금 그려진 절에 단추를 맞춰 넣고/뺀다(본문을 다시 그리지 않아 읽던 자리가 그대로). */
+    function syncCommentaryButtons() {
+      const rows = document.querySelectorAll('#bible-content .verse-row[data-bc]');
+      rows.forEach(row => {
+        const [bookId, chapter] = row.dataset.bc.split('-').map(Number);
+        const vNum = Number(String(row.id).replace('verse-row-', ''));
+        const has = !!(commentaryIndexByBook[bookId] && commentaryIndexByBook[bookId].length);
+        const cur = row.querySelector(':scope > .commentary-feature-btn');
+        if (has && !cur && vNum) {
+          const b = document.createElement('button');
+          b.className = 'commentary-feature-btn';
+          b.setAttribute('onclick', `Commentary.jumpToVerse(${bookId},${chapter},${vNum})`);
+          b.style.cssText = 'margin-left:6px;font-size:0.7em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle;';
+          b.title = '이 절 주석 보기';
+          b.textContent = '📖 주석';
+          const after = row.querySelector(':scope > [id^="interlinear-toggle-"]') || row.querySelector(':scope > .verse-text');
+          if (after) after.after(b); else row.appendChild(b);
+        } else if (!has && cur) cur.remove();
       });
     }
     async function getCommentaryItem(id) {
@@ -15528,7 +15550,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260922-2`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260922-3`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
