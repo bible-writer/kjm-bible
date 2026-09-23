@@ -1,19 +1,19 @@
 {
- "version": "1.512.1",
- "date": "2026-09-23",
- "count": 9345,
+ "version": "1.517.0",
+ "date": "2026-09-24",
+ "count": 9349,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
  "license": "영문 원문: Public Domain (ISBE 1915). 한글 번역·편집: © kjm, All rights reserved(무단 전재·배포 금지). 번역문 속 성경 인용: 개역개정판 © 대한성서공회. NOTICE.md 참조.",
  "total_entries": 9349,
- "note": "지명DB·용어DB(isbeId)에 이어지는 항목으로 시작하여, 405차부터 나머지 항목도 번역되는 대로 더함(목표 9,349 전부). id 는 ISBE 전체(total_entries, 넘겨주기 포함) 표제어 차례 번호 — 나중에 full 을 만들면 빠진 id 만 채운다. definition 은 영문 원문(본문 HTML 을 글로 — 문단은 빈 줄). definition_ko 는 하나씩 번역해 채운다(2026-09-18 kjm).",
+ "note": "지명DB·용어DB(isbeId)에 이어지는 항목으로 시작하여, 405차부터 나머지 항목도 번역하여 414차(1.516.0)에 9,349 항목을 모두 채움. id 는 ISBE 전체(total_entries, 넘겨주기 포함) 표제어 차례 번호 — 나중에 full 을 만들면 빠진 id 만 채운다. definition 은 영문 원문(본문 HTML 을 글로 — 문단은 빈 줄). definition_ko 는 하나씩 번역해 채운다(2026-09-18 kjm).",
  "parts": [
   "isbe_full_1.json",
   "isbe_full_2.json",
   "isbe_full_3.json"
  ],
  "parts_md5": [
-  "1d46c36b1dfe",
-  "b49d397b04d2",
-  "66fe4c8e0811"
+  "f5430ef10aae",
+  "46f0c535fbf9",
+  "a67732fa764e"
  ]
 }
