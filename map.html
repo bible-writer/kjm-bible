@@ -3466,8 +3466,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     // - 세미콜론/쉼표로 이어지며 책 이름이 생략된 연속 인용(예: "Isaiah 41:19; 60:13"의 "60:13")도
     //   직전에 매칭된 책을 그대로 이어받아 링크로 인식한다 (아래 콜백의 lastBookId 상태 추적)
     const BOOK_REF_REGEX = new RegExp(
-      `(?<![A-Za-z가-힣])(?<book>${BOOK_REF_NAMES.map(n => n.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')).join('|')})\\.?\\s?(?<bchap>\\d{1,3})(?:\\s?장|[:.]\\s?(?<bverse>\\d{1,3}(?:\\s?[-,]\\s?\\d{1,3})*))?` +
-      `|(?<sep>[;,]\\s?)(?<cchap>\\d{1,3})[:.]\\s?(?<cverse>\\d{1,3}(?:\\s?[-,]\\s?\\d{1,3})*)`,
+      `(?<![A-Za-z가-힣])(?<book>${BOOK_REF_NAMES.map(n => n.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')).join('|')})\\.?\\s?(?<bchap>\\d{1,3})(?:\\s?장|[:.]\\s?(?<bverse>\\d{1,3}(?:\\s?[-,~]\\s?\\d{1,3})*))?` +
+      `|(?<sep>[;,]\\s?)(?<cchap>\\d{1,3})[:.]\\s?(?<cverse>\\d{1,3}(?:\\s?[-,~]\\s?\\d{1,3})*)`,
       'g'
     );
 
@@ -3475,6 +3475,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     // 성구 묶음 보관소 — 한 괄호 안에서 쌍반점·쉼표로 이어진 인용을 한 묶음으로 본다.
     // 「요한복음 2:1-11; 4:46」이면 둘이 한 묶음이 되어, 하나를 눌러도 함께 뜬다.
     const VREF_GROUPS = {};
+    // 외경·위경·다른 문헌 이름이 바로 앞에 오면 그 장:절은 성경 링크가 아니다 (ISBE 번역 표기)
+    const APOC_BEFORE = /(?:에스더 추가|에스더 헬라어 부분|예레미야의 편지|에스드라[1-4]서|마카베오[1-4상하]서?|집회서|시락서?|유딧서?|토빗서?|토비트|바룩[12]?서?|지혜서|므낫세의 기도|수산나|벨과 용|에녹[12]?서|희년서|시뷜라 신탁|모세 승천기|이사야 승천기|열두 족장의 유언|아리스테아스의 편지|』|히브리어 성경|히브리어 본문|칠십인역|불가타)\s*[\[(]?\s*$/;
     let vrefSeq = 0;
     // 「7:1,2,9,10,19」는 다섯 절을 따로 든 것이고 「2:1-11」만 범위이다.
     // 쉼표로 가른 뒤, 조각마다 붙임표가 있으면 범위로 읽는다.
@@ -3536,6 +3538,11 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         const groups = args[args.length - 1];
         const offset = args[args.length - 3];
         const whole = args[0];
+        /* ISBE 번역: 「솔로몬의 시편 17:32」 · 시편 151편 · 「마카베오상 4:52; 5:1」 따위는 정경 구절이 아니다 (2026-09-24) */
+        const before = escapedText.slice(Math.max(0, offset - 16), offset);
+        if (groups.book && /솔로몬의\s*$/.test(before)) { lastBookId = null; return whole; }
+        if (groups.book && BOOK_REF_MAP[groups.book] && parseInt(groups.bchap, 10) === 151 && /시편|Ps/.test(groups.book)) { lastBookId = null; return whole; }
+        if (APOC_BEFORE.test(before)) { lastBookId = null; return whole; }
         if (groups.book) {
           const bookId = BOOK_REF_MAP[groups.book];
           if (!bookId) return whole;
@@ -15563,7 +15570,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260922-6`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
