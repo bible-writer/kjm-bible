@@ -356,7 +356,7 @@ header .q:disabled{opacity:.45}
 </head>
 <body>
 <header>
-  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260911-3</span></h1>
+  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260924-1</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
   <span class="md5box">
     <span class="sub">영문 MD5</span>
@@ -389,7 +389,7 @@ header .q:disabled{opacity:.45}
     <div id="textcol">
     <div class="empty">
       <h3>사전 파일을 여십시오</h3>
-      <p>easton_full.json · smith_full.json · schaff_full.json을 열면 영문과 한글의 성구 인용을 맞대어 보고,
+      <p>easton_full.json · smith_full.json · schaff_full.json · isbe_full.json을 열면 영문과 한글의 성구 인용을 맞대어 보고,
       성경에 없는 절과 그 밖의 흠을 찾아 목록으로 세웁니다.</p>
       <p>절 수는 개역개정 기준으로 담아 두었습니다. 성경 본문은 담지 않았습니다.</p>
     </div>
@@ -534,16 +534,16 @@ function trimTail(tail, after){
   /* 「Exodus 12:37-19」 「2 Kings 24:18-25」처럼 뒤엣수가 앞엣수보다 작으면
      그것은 절이 아니라 끝나는 장의 번호이다. 절 범위로 읽지 않는다. */
   {
-    const m=String(tail).match(/^(\d+)\s*[-\u2013]\s*(\d+)$/);
+    const m=String(tail).match(/^(\d+)\s*[-\u2013~]\s*(\d+)$/);
     if(m && +m[2] < +m[1]) return m[1];
   }
   /* "창세기 1:27-5장" · "Genesis 1:27-ch. 5" 처럼 장 범위이면 그 수는 장 번호이므로 떼어 낸다 */
   if(after && /^\s*장/.test(after)){
-    const m=String(tail).match(/^(.*?)\s*[,\-–]\s*\d+$/);
+    const m=String(tail).match(/^(.*?)\s*[,\-–~]\s*\d+$/);
     if(m) return m[1];
   }
   if(after && after[0]===':'){
-    const m=String(tail).match(/^(.*?)\s*[,\-–]\s*\d+$/);
+    const m=String(tail).match(/^(.*?)\s*[,\-–~]\s*\d+$/);
     if(m) return m[1];
   }
   return tail;
@@ -551,7 +551,7 @@ function trimTail(tail, after){
 function spread(tail){
   const out=new Set();
   String(tail).split(/\s*,\s*/).forEach(p=>{
-    const r=p.split(/\s*[-–]\s*/);
+    const r=p.split(/\s*[-–~]\s*/);
     if(r.length===2 && /^\d+$/.test(r[0]) && /^\d+$/.test(r[1])){ for(let i=+r[0];i<=+r[1];i++) out.add(i); }
     else if(/^\d+$/.test(p)) out.add(+p);
   });
@@ -595,7 +595,11 @@ function enCites(t){
 const KO_LONG = KOBOOK.slice().sort((a,b)=>b.length-a.length);
 /* 「누가복음(20:27-38)」 「요나서(1:17)」처럼 책 이름 뒤에 바로 여는 괄호가 오거나
    「서」가 붙는 것도 우리 표기이므로 함께 읽는다. */
-const KO_ANY = new RegExp('(?:('+KO_LONG.join('|')+')서?[\\s(]{0,3})?(\\d+):(\\d+(?:\\s*[,\\-–]\\s*\\d+)*)','g');
+/* 앞 인용 뒤 문장에 책 이름이 나오면(「사도행전에서 세 번째다(9:28 …)」) 이어받을 책을 그 책으로 바꾼다.
+   사람 이름과 같은 책(이사야·다니엘·아가 따위)은 「이사야서」처럼 「서」가 붙을 때만 책으로 본다. */
+const KO_PERSONISH=new Set(['여호수아','에스라','느헤미야','에스더','아가','이사야','예레미야','에스겔','다니엘','호세아','요엘','아모스','오바댜','요나','미가','나훔','하박국','스바냐','학개','스가랴','말라기']);
+const KO_NAME = new RegExp('(?<![가-힣])(?:('+KO_LONG.filter(b=>!KO_PERSONISH.has(b)).join('|')+')|('+[...KO_PERSONISH].join('|')+')서)(?![가-힣]*\\s*\\d+:)','g');
+const KO_ANY = new RegExp('(?:('+KO_LONG.join('|')+')서?[\\s(]{0,3})?(\\d+):(\\d+(?:\\s*[,\\-–~]\\s*\\d+)*)','g');
 /* 한글 본문 끝에 붙은 「※ 원문 오류 / 판정 근거 / 원문 대조」 주석 덩이를 떼어 낸다.
    주석에 든 성구는 판정 근거로 든 것이지 이 항목의 본문 인용이 아니므로,
    영문↔한글 대조에 섞이면 없는 소견이 생긴다.
@@ -607,9 +611,15 @@ function koBody(t){
      주석은 언제나 맨 끝에 붙으므로 먼저 나오는 자리에서 자르면
      글자 자리(at)는 그대로 맞는다. */
   const m = s.match(/\n[ \t]*[「]?※/);
-  return m ? s.slice(0, m.index) : s;
+  const b = m ? s.slice(0, m.index) : s;
+  return b.replace(INLINE_NOTE, x=>' '.repeat(x.length));
 }
-function koNotes(t){ const s=String(t||''); return s.slice(koBody(s).length); }
+/* ISBE 번역은 옮긴이 주를 본문 가운데 대괄호로 둔다 — [원문 흠: …] [전자본 …] [옮긴이 주: …] 따위.
+   ( 원문은 「…」 ) 도 원문을 밝힌 것이지 본문 인용이 아니다. */
+const INLINE_NOTE=/\[(?:원문|전자본|옮긴이|이 표제|인쇄본)[^\]]*\]|(?:—\s*)?원문은\s*「[^」]*」|원문\s*「[^」]*」/g;
+function koInline(t){ return (String(t||'').match(INLINE_NOTE)||[]).join(' '); }
+function koBodyRaw(t){ const s=String(t||''); const m=s.match(/\n[ \t]*[「]?※/); return m? s.slice(0,m.index):s; }
+function koNotes(t){ const s=String(t||''); const m=s.match(/\n[ \t]*[「]?※/); return (m? s.slice(m.index):'')+' '+koInline(m? s.slice(0,m.index):s); }
 /* 주석 안에 적힌 원문 인용을 모은다. 저희 주석은 원문 인용을 늘 낫표 안에 적는다(「Ruth 4:20」).
    앞선 세션 꼴 「※ 원문 오류: 1 Chr 24:23 → 레위기 24:23」은 화살표 앞이 원문이다. */
 function noteCiteSet(ko){
@@ -617,13 +627,17 @@ function noteCiteSet(ko){
   const pieces=[];
   n.replace(/「([^「」]*)」/g,(m,a)=>{pieces.push(a);return m;});
   n.replace(/원문\s*(?:오류|결함)\s*:\s*([^\n→]+?)\s*→/g,(m,a)=>{pieces.push(a);return m;});
-  pieces.forEach(p=>enCites(p).forEach(c=>{ if(!c.book) return; c.vs.forEach(v=>out.add(c.book+'|'+c.ch+'|'+v)); }));
+  pieces.forEach(p=>[...enCites(p), ...koCites(p)].forEach(c=>{ if(!c.book) return; c.vs.forEach(v=>out.add(c.book+'|'+c.ch+'|'+v)); }));
+  /* 옮긴이 주는 책 이름 없이 「원문은 2:20으로 적었으나」처럼 장:절만 적기도 한다 — 어느 책이든 그 장:절로 본다 */
+  koInline(koBodyRaw(ko)).replace(/(\d+):(\d+(?:\s*[,\-–~]\s*\d+)*)/g,(m,c,t)=>{ spread(t).forEach(v=>out.add('ANY|'+c+'|'+v)); return m; });
   return out;
 }
 /* 외경 책 이름 — 개역개정 66권 목록에 없으므로 따로 알아본다.
    이것을 모르면 「마카베오상 4:52-59」의 4:52-59 가 책 이름 없는 인용으로 잡혀
    앞선 정경 책(요한복음 따위)이 엉뚱하게 채워진다. */
-const APOC_KO=/(?:에스더 외경|예레미야의 편지|에스드라[12]서|에스드라[상하]|마카베오삼서|마카베오[상하]|집회서|유딧서|토빗서?|바룩서?|지혜서)\s*$/;
+const APOC_KO=/(?:예레미야의 편지|에스드라[1-4]서|에스드라[상하]|마카베오[1-4]서|마카베오삼서|마카베오사서|마카베오[상하]|집회서|시락서?|유딧서?|토빗서?|토비트|바룩[12]?서?|지혜서|솔로몬의 지혜|솔로몬의 시편|므낫세의 기도|세 청년의 노래|수산나|벨과 용|에녹[12]?서|희년서|시뷜라 신탁|모세 승천기|이사야 승천기|열두 족장의 유언|아리스테아스의 편지|』|히브리어 성경|히브리어 본문|히브리어|칠십인역|불가타|흠정역|영역 성경|영역|마소라 본문)\s*$/;
+/* 에스더 헬라어 부록(영문 Esther 10:4~16:24) — ISBE 번역은 「에스더 추가」「에스더 헬라어 부분」으로 적는다 */
+const APOC_ES=/(?:에스더 외경|에스더 추가|에스더 헬라어 부분|헬라어 에스더)\s*$/;
 function koCites(t){
   t = koBody(t);
   const out=[]; if(!t) return out; KO_ANY.lastIndex=0; let m, last=null, lastEnd=-1;
@@ -633,19 +647,31 @@ function koCites(t){
     /* 외경 인용과 그 이어받기는 성경 대조 밖이므로 건너뛴다 */
     /* 「에스더 외경 16:10」은 영문 Esther 10:4 이하(헬라어 부록)와 같은 자리이므로 에스더로 센다 */
     let apoEs=false;
-    if(!m[1] && /에스더 외경\s*$/.test(t.slice(Math.max(0,m.index-12), m.index))){ b='에스더'; last='에스더'; apoEs=true; }
-    else if(!m[1] && APOC_KO.test(t.slice(Math.max(0,m.index-12), m.index))){ last='__APOC__'; lastEnd=m.index+m[0].length; continue; }
+    if(!m[1] && APOC_ES.test(t.slice(Math.max(0,m.index-12), m.index))){ b='에스더'; last='에스더'; apoEs=true; }
+    else if(!m[1] && APOC_KO.test(t.slice(Math.max(0,m.index-14), m.index).replace(/[\s(\[]+$/,''))){ last='__APOC__'; lastEnd=m.index+m[0].length; continue; }
     if(!m[1] && last==='__APOC__' && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))){ lastEnd=m.index+m[0].length; continue; }
     if(last==='__APOC__' && !m[1]){ last=null; lastEnd=-1; continue; }
+    if(m[1] && ((m[1]==='시편' && /솔로몬의\s*$/.test(t.slice(Math.max(0,m.index-6), m.index))) || (m[1]==='시편' && +m[2]===151))){
+      last='__APOC__'; lastEnd=m.index+m[0].length; continue; }
     if(b){ /* 에스더 외경 */ }
     else if(m[1]){ b=m[1]; last=m[1]; }
     else if(last && lastEnd>=0 && joinable(t.slice(lastEnd,m.index))){
       b=last;
+      { const gap=t.slice(lastEnd,m.index); let pm, nb=null; KO_NAME.lastIndex=0;
+        while((pm=KO_NAME.exec(gap))) nb=pm[1]||pm[2];
+        if(nb && nb!==last){ b=nb; last=nb; } }
       /* 앞 인용과 같은 괄호·묶음 안이면 책 이름을 다시 적지 않는 것이 우리 표기이다.
          「요한계시록 1:8,11; 21:6」 · 「창세기 25:19에서 35:29까지」 · 「[흠정역 13:14]」 */
       inside = !/[)\u3011]/.test(t.slice(lastEnd, m.index));
     }
-    else { last=null; lastEnd=-1; continue; }
+    else {
+      /* 앞 인용이 없어도 같은 문장 바로 앞에 책 이름이 나오면(「사도행전에만 나오며(11:19; …)」) 그 책으로 읽는다 */
+      const back=t.slice(Math.max(0,m.index-40), m.index), cutAt=Math.max(back.lastIndexOf('. '), back.lastIndexOf('\n'));
+      const seg=cutAt>=0? back.slice(cutAt+1) : back;
+      let pm, nb=null; KO_NAME.lastIndex=0; while((pm=KO_NAME.exec(seg))) nb=pm[1]||pm[2];
+      if(!nb){ last=null; lastEnd=-1; continue; }
+      b=nb; last=nb;
+    }
     /* 'Genesis 1:27-ch. 5' 는 장 범위이므로 '-ch' 앞에서 끊는다 */
     let rawTail=m[3];
     const chCut=t.slice(m.index, m.index+m[0].length+6).match(/^(.*?)\s*[-–]\s*ch/i);
@@ -714,7 +740,8 @@ function pairUp(EC, KC){
     const kIdx=KC.map((k,ki)=>({k,ki})).filter(o=>!usedK.has(o.ki)&&o.k.book===c.book&&o.k.ch===c.ch);
     if(eLeft!==1 || kIdx.length!==1) return;
     usedK.add(kIdx[0].ki); usedE.add(ci);
-    const vers=[...c.vs].some(v=>grade(c.book,c.ch,v)===1);
+    /* 영역과 개역개정의 절 나눔이 다른 자리(고후 13:14 ↔ 13:13 따위)는 맞은 것으로 본다 */
+    const vers=[...c.vs].some(v=>grade(c.book,c.ch,v)===1 || KJV_OK.has(c.book+' '+c.ch+':'+v));
     rows.push({en:c, ko:kIdx[0].k, state: vers?'ok':'bad'});
   });
   EC.forEach((c,ci)=>{ if(!usedE.has(ci)) rows.push({en:c, ko:null, state:'miss'}); });
@@ -912,7 +939,7 @@ function scan(){
   ROWS=[]; const seenId={}, seenT={};
   items().forEach(y=>{
     const id=y[PROF.idk], title=PROF.title(y)||'(이름 없음)';
-    const logged=PROF.pairs.some(p=>/※\s*원문\s*(?:오류|결손|훼손|참고)/.test(String(y[p.ko]||'')));
+    const logged=PROF.pairs.some(p=>/※\s*원문\s*(?:오류|결손|훼손|참고)|\[원문 흠|원문은\s*「/.test(String(y[p.ko]||'')));
     const push=(kind,note,ex)=>ROWS.push(Object.assign(
       {id,term:title,kind,note:(logged&&/^(en_miss|mismatch|en_bad)$/.test(kind)?'[원문 오류 적어 둠] ':'')+note},ex||{}));
     seenId[id]=(seenId[id]||0)+1; seenT[title]=(seenT[title]||0)+1;
@@ -928,7 +955,14 @@ function scan(){
       [[EC,'en'],[KC,'ko']].forEach(([L,side])=>L.forEach(c=>{
         if(c.inferred) return;
         const k=pr.label+'|'+key(c); if(seen.has(k)) return; seen.add(k);
-        const g=worst(c), who=both(c)?'영문·한글':(side==='en'?'영문':'한글');
+        let g=worst(c); const who=both(c)?'영문·한글':(side==='en'?'영문':'한글');
+        /* 한글에서 책 이름을 이어받은 인용이 없는 절이면, 항목 표제의 책이나 바로 앞 글에 나온 책 이름
+           (「에스겔은 … 45:18」 · 창세기 항목의 「48:3」)으로 읽어 온전하면 걸지 않는다 */
+        if(g===2 && side==='ko' && c.inside){
+          const near=String(ko).slice(Math.max(0,c.at-80), c.at)+' '+title;
+          const alt=KO_LONG.filter(n=>near.includes(n) && n!==c.book);
+          if(alt.some(n=>[...c.vs].every(v=>grade(n,c.ch,v)===0))) g=0;
+        }
         if(g===2) push(side==='en'?'en_bad':'ko_bad', pr.label+' '+who+' '+c.raw+'  →  '+over(c),
                        side==='en'?{cit:c.raw,fld:pr}:{kocit:c.raw,fld:pr});
         else if(g===1) push('versify', pr.label+' '+who+' '+c.raw+
@@ -940,8 +974,13 @@ function scan(){
       const missList=[];
       const KOCH=koChapters(ko);        /* 한글이 장으로만 가리킨 자리 */
       BARE=bareSet(en);
+      /* ISBE 는 바로잡은 자리마다 원문을 옮긴이 주로 밝혀 두므로, 그 인용은 대조에서 뺀다.
+         이스턴·스미스는 전처럼 [원문 오류 적어 둠] 딱지를 달아 목록에 남긴다. */
+      const NOTED=/^isbe/i.test(FILE)? noteCiteSet(ko) : new Set();
+      const noted=c=>[...c.vs].some(v=>NOTED.has(c.book+'|'+c.ch+'|'+v)||NOTED.has('ANY|'+c.ch+'|'+v));
       pairUp(EC, KC).forEach(p2=>{
         if(!p2.en || p2.en.inferred) return;
+        if(noted(p2.en)) return;
         /* 한글이 그 장을 통째로 가리켰으면 옮겨진 것으로 본다.
            영문 「2 Kings 18:20」(=18~20장) · 한글 「열왕기하 18-20장」 따위 */
         if(KOCH.has(p2.en.book+'|'+p2.en.ch)) return;
@@ -1172,7 +1211,7 @@ function missingRefs(y, fld){
     if(anyBad(p.en.book, p.en.ch, p.en.tail)) return; /* 성경에 없는 절은 붙이지 않는다 */
     if([...p.en.vs].every(v=>has.has(p.en.book+'|'+p.en.ch+'|'+v))) return;
     /* 주석이 짚어 둔 영문 인용은 가짜 주소이거나 일부러 뺀 것이므로 되붙이지 않는다 */
-    if([...p.en.vs].some(v=>skip.has(p.en.book+'|'+p.en.ch+'|'+v))) return;
+    if([...p.en.vs].some(v=>skip.has(p.en.book+'|'+p.en.ch+'|'+v)||skip.has('ANY|'+p.en.ch+'|'+v))) return;
     /* 같은 장·절이 다른 책 이름으로 한글에 적혀 있으면 옮긴이가 일부러 그 책으로 읽은 것이다.
        「Joshua (6:9-15)」의 여호수아는 사람이고 절은 스가랴인 것 따위. */
     if([...p.en.vs].every(v=>hasCV.has(p.en.ch+'|'+v))) return;
@@ -1541,7 +1580,7 @@ const drop=$('#drop');
 /* ══════════ 깃허브에서 바로 읽기 (암호본이면 풀어서) ══════════ */
 const RAW='https://raw.githubusercontent.com/bible-writer/kjm-bible/HEAD/';
 const FILES=[['easton_full.json','이스턴 사전'],['smith_full.json','스미스 사전'],
-             ['schaff_full.json','샤프 사전'],
+             ['schaff_full.json','샤프 사전'],['isbe_full.json','ISBE (조각 이어 붙임)'],
              ['placeDatabase.json','지명DB'],['personDatabase.json','인명DB'],['termDatabase.json','용어DB']];
 function b64(s){ const b=atob(s), a=new Uint8Array(b.length); for(let i=0;i<b.length;i++) a[i]=b.charCodeAt(i); return a; }
 async function decrypt(z, pw){
@@ -1573,7 +1612,19 @@ $('#gitgo').onclick=async ()=>{
     const res=await fetch(RAW+f, {cache:'no-store'});
     if(!res.ok) throw new Error('내려받지 못했습니다 ('+res.status+')');
     let text=await res.text();
-    const j=JSON.parse(text);
+    let j=JSON.parse(text);
+    /* ISBE 는 25MB 제한 때문에 목차(parts)와 조각으로 올린다 — 조각을 차례로 받아 이어 붙인다 */
+    if(Array.isArray(j.parts) && j.parts.length){
+      const all=[];
+      for(let i=0;i<j.parts.length;i++){
+        msg.textContent='조각 '+(i+1)+'/'+j.parts.length+' 내려받는 중…';
+        const pr=await fetch(RAW+j.parts[i], {cache:'no-store'});
+        if(!pr.ok) throw new Error('조각 '+j.parts[i]+'을 받지 못했습니다 ('+pr.status+')');
+        const pj=await pr.json(); (pj.entries||[]).forEach(e=>all.push(e));
+      }
+      const whole={}; Object.keys(j).forEach(k=>{ if(k!=='parts'&&k!=='parts_md5') whole[k]=j[k]; });
+      whole.entries=all; j=whole; text=JSON.stringify(whole);
+    }
     if(j.encrypted){
       if(!pw){ msg.textContent='이 파일은 암호본입니다. 비밀번호를 넣으십시오.'; return; }
       msg.textContent='푸는 중…';
