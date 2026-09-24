@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISBE 성경백과 (한글)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<!-- 성경 본문(개역개정)은 map.html 에 등록해 둔 성경 DB(SQLite)를 읽는다 — 그때만 쓰는 라이브러리 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+<style>
+/* ISBE 전용 앱 (kjm-bible, 2026-09-24)
+ * 1915년 백과사전을 한글로 읽는 도구. 본문 읽기가 주인이라 본문은 명조, 도구는 고딕.
+ * 색: 종이 흰색 바탕 · 먹색 글 · ISBE 딱지 빛(map.html 과 같은 갈색)을 한 곳에만 */
+:root{
+  --paper:#FCFCFB; --panel:#F3F4F6; --ink:#1E2530; --sub:#5B6472; --line:#E1E4E9;
+  --isbe:#9A4B12; --isbe-soft:#F6EBDD; --link:#1F5A7A; --focus:#2563EB;
+  --fs:17px;
+  --serif:"Noto Serif KR","Nanum Myeongjo",serif;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.app{display:grid;grid-template-columns:minmax(280px,360px) 1fr;grid-template-rows:auto 1fr;height:100%}
+header{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);background:#fff}
+.brand{font-family:var(--serif);font-weight:700;font-size:19px;white-space:nowrap}
+.brand small{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--sub);margin-left:6px}
+.status{font-size:12px;color:var(--sub);margin-left:auto;text-align:right}
+.tools{display:flex;gap:6px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px}
+.btn:hover{background:var(--panel)}
+aside{border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;background:#fff}
+.search{padding:12px 12px 8px}
+.search input{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:15px;background:var(--paper)}
+.opts{display:flex;align-items:center;gap:10px;margin-top:6px;font-size:12px;color:var(--sub)}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;padding:0 12px 10px}
+.tab{border:1px solid var(--line);background:#fff;border-radius:14px;padding:3px 10px;font-size:12px;cursor:pointer;color:var(--sub)}
+.tab[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.list{flex:1;overflow-y:auto;border-top:1px solid var(--line)}
+.row{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #F0F1F3;background:none;padding:9px 14px;cursor:pointer}
+.row:hover{background:var(--panel)}
+.row[aria-current="true"]{background:var(--isbe-soft)}
+.row .ko{font-weight:500}
+.row .en{color:var(--sub);font-size:12px;margin-left:6px}
+.row .cat{float:right;font-size:11px;color:var(--sub)}
+.more{padding:10px;text-align:center;font-size:12px;color:var(--sub)}
+main{overflow-y:auto;min-height:0}
+.reader{max-width:44em;margin:0 auto;padding:28px 28px 80px}
+.empty{color:var(--sub);line-height:1.8;padding-top:40px}
+.empty h2{font-family:var(--serif);color:var(--ink);font-size:24px;margin:0 0 8px}
+.head{border-bottom:2px solid var(--isbe);padding-bottom:12px;margin-bottom:18px}
+.head h1{font-family:var(--serif);font-size:30px;line-height:1.3;margin:0}
+.head .meta{margin-top:6px;font-size:13px;color:var(--sub);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.head .key{font-family:var(--serif);letter-spacing:.02em}
+.catpill{background:var(--isbe-soft);color:var(--isbe);border-radius:4px;padding:1px 7px;font-size:12px}
+.acts{margin-left:auto;display:flex;gap:6px}
+.nav{display:flex;gap:6px;margin-bottom:14px}
+.toc{background:var(--panel);border-radius:8px;padding:10px 14px;margin:0 0 18px;font-size:13px;line-height:1.9}
+.toc b{font-weight:500;color:var(--sub);margin-right:6px}
+.toc a{color:var(--link);text-decoration:none;margin-right:10px;white-space:nowrap}
+.body{font-family:var(--serif);font-size:var(--fs);line-height:1.95;word-break:keep-all;overflow-wrap:anywhere}
+.body p{margin:0 0 .9em}
+.body h3{font-family:var(--serif);font-size:1.05em;margin:1.6em 0 .5em;color:var(--ink)}
+.body a.vref{color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;cursor:pointer}
+.body a.xref{color:var(--isbe);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer}
+.orig{margin-top:28px;border-top:1px solid var(--line);padding-top:12px}
+.orig summary{cursor:pointer;font-size:13px;color:var(--sub)}
+.orig div{font-family:Georgia,serif;font-size:15px;line-height:1.7;color:#3A4250;white-space:pre-wrap;margin-top:8px}
+.credit{margin-top:34px;font-size:12px;color:var(--sub);line-height:1.7}
+.pop{position:fixed;z-index:20;left:50%;bottom:18px;transform:translateX(-50%);width:min(620px,94vw);max-height:48vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(20,30,50,.18);padding:14px 16px;display:none}
+.pop h4{margin:0 0 8px;font-size:14px;display:flex;align-items:center;gap:8px}
+.pop h4 .x{margin-left:auto}
+.pop .v{font-family:var(--serif);line-height:1.8;font-size:16px;margin:0 0 4px}
+.pop .v sup{color:var(--sub);font-family:var(--sans);font-size:11px;margin-right:4px}
+.pop .note{font-size:13px;color:var(--sub);line-height:1.6}
+.back{display:none}
+input[type=file]{display:none}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  aside{border-right:0}
+  main{display:none}
+  .app.reading aside{display:none}
+  .app.reading main{display:block}
+  .back{display:inline-block}
+  .reader{padding:18px 16px 90px}
+  .head h1{font-size:25px}
+  .status{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <div class="brand">ISBE 성경백과<small>국제 표준 성경 백과사전(1915) 한글판</small></div>
+    <div class="status" id="status">불러오는 중…</div>
+    <div class="tools">
+      <button class="btn" id="fs-down" title="글자 작게">가−</button>
+      <button class="btn" id="fs-up" title="글자 크게">가+</button>
+      <button class="btn" id="open-file" title="isbe_full.json 파일을 직접 골라 넣기">파일 열기</button>
+      <input type="file" id="file" accept=".json">
+    </div>
+  </header>
+  <aside>
+    <div class="search">
+      <input id="q" type="search" placeholder="표제어 찾기 — 한글 또는 영문" autocomplete="off">
+      <div class="opts"><label><input type="checkbox" id="inbody"> 본문까지 찾기</label><span id="count"></span></div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab" data-f="all" aria-pressed="true">전체</button>
+      <button class="tab" data-f="용어" aria-pressed="false">용어</button>
+      <button class="tab" data-f="인명" aria-pressed="false">인명</button>
+      <button class="tab" data-f="지명" aria-pressed="false">지명</button>
+      <button class="tab" data-f="fav" aria-pressed="false">즐겨찾기</button>
+      <button class="tab" data-f="recent" aria-pressed="false">최근 본 것</button>
+    </div>
+    <div class="list" id="list" role="list"></div>
+  </aside>
+  <main id="main"><div class="reader" id="reader">
+    <div class="empty"><h2>무엇을 찾아볼까요?</h2>왼쪽 칸에 표제어를 넣으세요. 한글(「아브라함」)로도, 영문(「Abraham」)으로도 찾습니다.<br>본문 속 성경 구절을 누르면 개역개정 본문이 뜨고, 「○○ 항목을 보라」를 누르면 그 항목으로 갑니다.</div>
+  </div></main>
+</div>
+<div class="pop" id="pop" role="dialog" aria-label="성경 구절"></div>
+<script>
+'use strict';
+/* ───────── 성경 책 이름 (map.html 과 같은 번호) ───────── */
+const BOOKS = [
+ [1,'창세기','창',50],[2,'출애굽기','출',40],[3,'레위기','레',27],[4,'민수기','민',36],[5,'신명기','신',34],[6,'여호수아','수',24],[7,'사사기','삿',21],[8,'룻기','룻',4],
+ [9,'사무엘상','삼상',31],[10,'사무엘하','삼하',24],[11,'열왕기상','왕상',22],[12,'열왕기하','왕하',25],[13,'역대상','대상',29],[14,'역대하','대하',36],[15,'에스라','스',10],
+ [16,'느헤미야','느',13],[17,'에스더','에',10],[18,'욥기','욥',42],[19,'시편','시',150],[20,'잠언','잠',31],[21,'전도서','전',12],[22,'아가','아',8],[23,'이사야','사',66],
+ [24,'예레미야','렘',52],[25,'예레미야애가','애',5],[26,'에스겔','겔',48],[27,'다니엘','단',12],[28,'호세아','호',14],[29,'요엘','욜',3],[30,'아모스','암',9],[31,'오바댜','옵',1],
+ [32,'요나','욘',4],[33,'미가','미',7],[34,'나훔','나',3],[35,'하박국','합',3],[36,'스바냐','습',3],[37,'학개','학',2],[38,'스가랴','슥',14],[39,'말라기','말',4],
+ [40,'마태복음','마',28],[41,'마가복음','막',16],[42,'누가복음','눅',24],[43,'요한복음','요',21],[44,'사도행전','행',28],[45,'로마서','롬',16],[46,'고린도전서','고전',16],
+ [47,'고린도후서','고후',13],[48,'갈라디아서','갈',6],[49,'에베소서','엡',6],[50,'빌립보서','빌',4],[51,'골로새서','골',4],[52,'데살로니가전서','살전',5],[53,'데살로니가후서','살후',3],
+ [54,'디모데전서','딤전',6],[55,'디모데후서','딤후',4],[56,'디도서','딛',3],[57,'빌레몬서','몬',1],[58,'히브리서','히',13],[59,'야고보서','약',5],[60,'베드로전서','벧전',5],
+ [61,'베드로후서','벧후',3],[62,'요한일서','요일',5],[63,'요한이서','요이',1],[64,'요한삼서','요삼',1],[65,'유다서','유',1],[66,'요한계시록','계',22]];
+const BOOK_ID = {}; BOOKS.forEach(b => { BOOK_ID[b[1]] = b[0]; BOOK_ID[b[2]] = b[0]; });
+const BOOK_NAME = {}; BOOKS.forEach(b => { BOOK_NAME[b[0]] = b[1]; });
+BOOK_ID['시'] = 19;
+const BOOK_ALT = Object.keys(BOOK_ID).sort((a, b) => b.length - a.length).join('|');
+/* 외경·다른 문헌 이름 바로 뒤의 장:절은 정경 구절이 아니다 (map.html 과 같은 규칙) */
+const APOC_BEFORE = /(?:에스더 추가|에스더 헬라어 부분|예레미야의 편지|에스드라[1-4]서|마카베오[1-4상하]서?|집회서|시락서?|유딧서?|토빗서?|토비트|바룩[12]?서?|지혜서|므낫세의 기도|수산나|벨과 용|에녹[12]?서|희년서|시뷜라 신탁|모세 승천기|이사야 승천기|열두 족장의 유언|아리스테아스의 편지|솔로몬의 시편|』|히브리어 성경|히브리어 본문|칠십인역|불가타)\s*[\[(]?\s*$/;
+
+/* ───────── 저장소 ─────────
+ * 앱 자신의 저장소(ISBEAppStorage)에 ISBE 를 보관한다.
+ * map.html 의 저장소(BibleMapPersistentStorage)는 읽기만 한다 — 성경 DB 와, 앱 저장소가 비었을 때의 ISBE 사본. */
+function idb(name, store) {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(name, 1);
+    r.onupgradeneeded = e => { const db = e.target.result; if (!db.objectStoreNames.contains(store)) db.createObjectStore(store); };
+    r.onsuccess = e => res(e.target.result); r.onerror = rej;
+  });
+}
+async function idbGet(name, store, key) {
+  try { const db = await idb(name, store); return await new Promise(res => { const q = db.transaction(store, 'readonly').objectStore(store).get(key); q.onsuccess = () => res(q.result ?? null); q.onerror = () => res(null); }); }
+  catch (e) { return null; }
+}
+async function idbSet(name, store, key, val) {
+  try { const db = await idb(name, store); return await new Promise(res => { const tx = db.transaction(store, 'readwrite'); tx.objectStore(store).put(val, key); tx.oncomplete = () => res(true); tx.onerror = () => res(false); }); }
+  catch (e) { return false; }
+}
+const APP_DB = ['ISBEAppStorage', 'files'];
+const MAP_DB = ['BibleMapPersistentStorage', 'appFiles'];
+const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+             set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+
+/* ───────── 상태 ───────── */
+let ENTRIES = [], BY_ID = new Map(), META = null;
+let filter = 'all', shown = 0; const PAGE = 120;
+let current = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ns = s => String(s || '').toLowerCase().replace(/\s+/g, '');
+
+function splitTerm(term) {
+  // 「Abraham(아브라함)」 · 「Babel, Babylon (1)(바벨; 바벨론(지형))」 — 맨 끝 괄호의 짝을 뒤에서 찾는다
+  const t = String(term || '').trim();
+  if (!t.endsWith(')')) return { en: t, ko: '' };
+  let dep = 0, i = t.length - 1;
+  for (; i >= 0; i--) { dep += (t[i] === ')') - (t[i] === '('); if (dep === 0) break; }
+  if (i <= 0) return { en: t, ko: '' };
+  const inner = t.slice(i + 1, -1), outer = t.slice(0, i).trim();
+  return /[가-힣]/.test(inner) && !/[가-힣]/.test(outer) ? { en: outer, ko: inner } : { en: t, ko: '' };
+}
+function prepare(list) {
+  ENTRIES = list.filter(e => e && e.definition_ko).map(e => {
+    const s = splitTerm(e.term);
+    return Object.assign(e, { _ko: s.ko || s.en, _en: s.en, _kn: ns(s.ko), _enn: ns(s.en), _key: ns(e.isbe_key) });
+  });
+  ENTRIES.sort((a, b) => a._ko.localeCompare(b._ko, 'ko'));
+  BY_ID = new Map(ENTRIES.map(e => [String(e.id), e]));
+  REFIDX = null;
+}
+
+/* ───────── 불러오기: 앱 저장소 → GitHub(판이 바뀌었을 때만) → map.html 사본 ───────── */
+async function load() {
+  const cached = await idbGet(...APP_DB, 'isbe_entries');
+  const cmeta = await idbGet(...APP_DB, 'isbe_meta');
+  if (cached && cached.length) { prepare(cached); META = cmeta; ready('저장해 둔 판'); }
+  try {
+    const r = await fetch('./isbe_full.json', { cache: 'no-store' });
+    if (!r.ok) throw new Error(r.status);
+    const idx = await r.json();
+    if (cmeta && cached && cached.length && idx.version === cmeta.version) { status(); return; }
+    let entries = idx.entries;
+    if (Array.isArray(idx.parts) && idx.parts.length) {
+      entries = [];
+      for (let i = 0; i < idx.parts.length; i++) {
+        setStatus(`새 판 ${idx.version} 받는 중… (${i + 1}/${idx.parts.length})`);
+        const pr = await fetch('./' + idx.parts[i], { cache: 'no-store' });
+        if (!pr.ok) throw new Error('조각 ' + idx.parts[i]);
+        const pj = await pr.json(); entries = entries.concat(pj.entries || []);
+      }
+    }
+    if (!entries || !entries.length) throw new Error('항목 없음');
+    META = { version: idx.version, date: idx.date, count: entries.length, from: 'GitHub' };
+    await idbSet(...APP_DB, 'isbe_entries', entries); await idbSet(...APP_DB, 'isbe_meta', META);
+    prepare(entries); ready('새 판');
+  } catch (err) {
+    if (ENTRIES.length) { status(); return; }
+    const m = await idbGet(...MAP_DB, 'isbe_full_dict');
+    if (m && m.length) { prepare(m); META = { version: '성경지도 앱 사본', count: m.length, from: 'map.html' }; ready('성경지도 앱 사본'); return; }
+    setStatus('ISBE 자료를 받지 못했습니다 — 「파일 열기」로 isbe_full.json 을 넣어 주세요');
+  }
+}
+function setStatus(t) { $('status').textContent = t; }
+function status() { if (META) setStatus(`판 ${META.version} · ${ENTRIES.length.toLocaleString()} 항목`); }
+function ready(why) { status(); render(true); openFromHash(); }
+$('open-file').onclick = () => $('file').click();
+$('file').onchange = async ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  try {
+    const d = JSON.parse(await f.text());
+    const list = Array.isArray(d) ? d : d.entries;
+    if (!list || !list.length) { alert('이 파일에는 항목(entries)이 없습니다. 조각으로 나눈 목차 파일이 아니라 통째 isbe_full.json 을 고르세요.'); return; }
+    META = { version: d.version || '파일', count: list.length, from: f.name };
+    await idbSet(...APP_DB, 'isbe_entries', list); await idbSet(...APP_DB, 'isbe_meta', META);
+    prepare(list); ready('파일');
+  } catch (e) { alert('파일을 읽지 못했습니다: ' + e.message); }
+  ev.target.value = '';
+};
+
+/* ───────── 목록 ───────── */
+function matches() {
+  const q = $('q').value.trim(), nq = ns(q), inBody = $('inbody').checked;
+  let L = ENTRIES;
+  if (filter === 'fav') { const f = new Set(ls.get('isbe_app_fav', []).map(String)); L = L.filter(e => f.has(String(e.id))); }
+  else if (filter === 'recent') { const r = ls.get('isbe_app_recent', []).map(String); L = r.map(id => BY_ID.get(id)).filter(Boolean); }
+  else if (filter !== 'all') L = L.filter(e => (e.category || '용어') === filter);
+  if (!nq) return L;
+  const hits = L.filter(e => e._kn.includes(nq) || e._enn.includes(nq) || e._key.includes(nq) || (inBody && e.definition_ko.toLowerCase().includes(q.toLowerCase())));
+  const rank = e => (e._kn === nq || e._enn === nq || e._key === nq) ? 0 : (e._kn.startsWith(nq) || e._enn.startsWith(nq)) ? 1 : (e._kn.includes(nq) || e._enn.includes(nq) || e._key.includes(nq)) ? 2 : 3;
+  return hits.sort((a, b) => rank(a) - rank(b) || a._ko.localeCompare(b._ko, 'ko'));
+}
+let LAST = [];
+function render(reset) {
+  const box = $('list');
+  if (reset) { LAST = matches(); shown = 0; box.innerHTML = ''; box.scrollTop = 0; }
+  $('count').textContent = LAST.length.toLocaleString() + '개';
+  if (!LAST.length) { box.innerHTML = `<div class="more">${filter === 'fav' ? '즐겨찾기한 항목이 없습니다. 항목 위의 ☆를 누르면 여기에 모입니다.' : '맞는 표제어가 없습니다. 「본문까지 찾기」를 켜 보세요.'}</div>`; return; }
+  const frag = document.createDocumentFragment();
+  LAST.slice(shown, shown + PAGE).forEach(e => {
+    const b = document.createElement('button'); b.className = 'row'; b.dataset.id = e.id; b.setAttribute('role', 'listitem');
+    if (current && String(current.id) === String(e.id)) b.setAttribute('aria-current', 'true');
+    b.innerHTML = `<span class="cat">${esc(e.category || '')}</span><span class="ko">${esc(e._ko)}</span><span class="en">${esc(e._en)}</span>`;
+    b.onclick = () => go(e.id);
+    frag.appendChild(b);
+  });
+  box.querySelector('.more')?.remove();
+  box.appendChild(frag); shown += PAGE;
+  if (shown < LAST.length) { const m = document.createElement('div'); m.className = 'more'; m.textContent = `아래로 내리면 ${Math.min(PAGE, LAST.length - shown)}개 더`; box.appendChild(m); }
+}
+$('list').addEventListener('scroll', function () { if (this.scrollTop + this.clientHeight > this.scrollHeight - 200 && shown < LAST.length) render(false); });
+let qT = null; $('q').addEventListener('input', () => { clearTimeout(qT); qT = setTimeout(() => render(true), 180); });
+$('inbody').onchange = () => render(true);
+$('tabs').onclick = ev => { const t = ev.target.closest('.tab'); if (!t) return; filter = t.dataset.f; document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-pressed', String(x === t))); render(true); };
+
+/* ───────── 「~ 항목을 보라」 잇기 (map.html 의 linkifyDictRefs 와 같은 규칙) ───────── */
+let REFIDX = null;
+const normKey = s => String(s || '').toUpperCase().replace(/&#39;|&apos;|’/g, "'").replace(/&amp;/g, '&')
+  .replace(/\bOLD TESTAMENT\b/g, 'OT').replace(/\bNEW TESTAMENT\b/g, 'NT').replace(/\s+/g, ' ').replace(/[\s.;,]+$/, '').trim();
+function refIndex() {
+  if (REFIDX) return REFIDX;
+  const en = new Map(), ko = new Map();
+  const addKo = (k, id) => { k = String(k || '').trim(); if (k && /[가-힣]/.test(k) && !ko.has(k)) ko.set(k, id); };
+  ENTRIES.forEach(e => {
+    const id = String(e.id);
+    [e.isbe_key, e._en].forEach(k => { String(k || '').split(';').concat([k]).forEach(p => { const n = normKey(p); if (n && !en.has(n)) en.set(n, id); }); });
+    addKo(e._ko, id); String(e._ko).split(/[;·]/).forEach(k => addKo(k.replace(/\([^)]*\)/g, ''), id));
+    const d0 = String(e.definition_ko).trim().match(/^([^(\n.「」]{1,30}?)\s*\(/);
+    if (d0) { addKo(d0[1], id); d0[1].split(/\s*[;·]\s*/).forEach(k => addKo(k, id)); }
+  });
+  REFIDX = { en, ko, enKeys: Array.from(en.keys()) };
+  return REFIDX;
+}
+function findEn(key) {
+  const I = refIndex(), k = normKey(key);
+  if (I.en.has(k)) return I.en.get(k);
+  for (const part of k.split(/\s*[;,]\s*/).filter(Boolean)) {
+    if (I.en.has(part)) return I.en.get(part);
+    const hit = I.enKeys.find(kk => kk.startsWith(part + ',') || kk.startsWith(part + ';') || kk.startsWith(part + ' ('));
+    if (hit) return I.en.get(hit);
+  }
+}
+function linkRefs(html, selfId) {
+  const I = refIndex(), self = String(selfId);
+  const a = id => `<a class="xref" data-id="${esc(id)}" href="#e${esc(id)}">`;
+  const re1 = /([가-힣][가-힣0-9·]*)?\(([A-Z](?:[A-Z0-9 .\-’]|&#39;|&amp;|[,;](?=\s?[A-Z]))*)(?=\)|,|;|\s[—–-]|\s(?:항목|해당))\)?|([가-힣][가-힣0-9·]*)(?=\s항목)/g;
+  const t1 = txt => txt.replace(re1, (all, koW, key, koOnly) => {
+    if (key !== undefined) { const id = findEn(key); return (id == null || id === self) ? all : a(id) + all + '</a>'; }
+    if (koOnly) { const id = I.ko.get(koOnly); return (id == null || id === self) ? all : a(id) + koOnly + '</a>'; }
+    return all;
+  });
+  const re2 = /([^()「」<>\n.:—]{1,80}?)(\s*\((?:해당|그)\s*|\s*)(?=항목(?:들)?을\s*보라)/g;
+  const t2 = txt => txt.replace(re2, (all, names, gap) => {
+    if (/\(/.test(gap)) {
+      const mm = names.match(/^([\s\S]*?)([가-힣][가-힣0-9·]*)$/); const id = mm ? I.ko.get(mm[2]) : undefined;
+      return (id == null || id === self) ? all : mm[1] + a(id) + mm[2] + '</a>' + gap;
+    }
+    let changed = false;
+    const out = names.split(/(\s*[;,]\s*|\s+및\s+|\s+또는\s+)/).map((b, i) => {
+      if (i % 2) return b;
+      const nm = b.trim().replace(/^「|」$/g, ''); const id = nm ? I.ko.get(nm) : undefined;
+      if (id == null || id === self) return b;
+      changed = true; return b.match(/^\s*/)[0] + a(id) + b.trim() + '</a>' + b.match(/\s*$/)[0];
+    });
+    return changed ? out.join('') + gap : all;
+  });
+  const SPLIT = /(<a\b[\s\S]*?<\/a>|<[^>]+>)/;
+  const once = html.split(SPLIT).map(p => p.startsWith('<') ? p : t1(p)).join('');
+  return once.split(SPLIT).map(p => p.startsWith('<') ? p : t2(p)).join('');
+}
+
+/* ───────── 성경 구절 잇기 ───────── */
+const VRE = new RegExp(`(?<![가-힣])(${BOOK_ALT})\\s?(\\d{1,3}):(\\d{1,3})(?:\\s?[-~]\\s?(\\d{1,3}))?|([;,]\\s?)(\\d{1,3}):(\\d{1,3})(?:\\s?[-~]\\s?(\\d{1,3}))?`, 'g');
+function linkVerses(text) {
+  let lastBook = null, lastEnd = -1;
+  return text.replace(VRE, (all, bk, c, v, to, sep, c2, v2, to2, off) => {
+    if (bk) {
+      if (APOC_BEFORE.test(text.slice(Math.max(0, off - 18), off))) { lastBook = null; return all; }
+      const b = BOOK_ID[bk]; if (!b) return all;
+      lastBook = b; lastEnd = off + all.length;
+      return `<a class="vref" data-b="${b}" data-c="${c}" data-v="${v}" data-to="${to || v}">${all}</a>`;
+    }
+    // 「창세기 1:1; 2:3」의 뒤엣것 — 바로 앞 구절에 이어질 때만
+    if (lastBook && off <= lastEnd + 2) {
+      lastEnd = off + all.length;
+      return `${sep}<a class="vref" data-b="${lastBook}" data-c="${c2}" data-v="${v2}" data-to="${to2 || v2}">${all.slice(sep.length)}</a>`;
+    }
+    return all;
+  });
+}
+
+/* ───────── 항목 보기 ───────── */
+const HEAD_RE = /^((?:[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ]+|\d{1,2}|[A-Z])\.|\(\d{1,2}\))\s+(\S.{0,46})$/;
+function isHead(line) { return HEAD_RE.test(line) && !/(다|라|요|니)[.」』)]*$/.test(line) && !/\d:\d/.test(line); }
+function bodyHtml(e) {
+  const lines = String(e.definition_ko).split('\n'); const toc = []; const out = [];
+  lines.forEach(raw => {
+    const line = raw.trim(); if (!line) return;
+    let h = linkRefs(linkVerses(esc(line)), e.id);
+    if (isHead(line)) { const n = toc.length; toc.push(line); out.push(`<h3 id="h${n}">${h}</h3>`); }
+    else out.push(`<p>${h}</p>`);
+  });
+  return { html: out.join(''), toc };
+}
+function go(id) { if (location.hash !== '#e' + id) location.hash = 'e' + id; else show(id); }
+function openFromHash() { const m = location.hash.match(/^#e(.+)$/); if (m && BY_ID.has(decodeURIComponent(m[1]))) show(decodeURIComponent(m[1])); }
+window.addEventListener('hashchange', () => { if (!location.hash) { $('app').classList.remove('reading'); return; } openFromHash(); });
+function show(id) {
+  const e = BY_ID.get(String(id)); if (!e) return;
+  current = e;
+  const rec = ls.get('isbe_app_recent', []).map(String).filter(x => x !== String(e.id)); rec.unshift(String(e.id)); ls.set('isbe_app_recent', rec.slice(0, 60));
+  const fav = new Set(ls.get('isbe_app_fav', []).map(String));
+  const { html, toc } = bodyHtml(e);
+  const tocHtml = toc.length >= 3 ? `<nav class="toc" aria-label="목차"><b>목차</b>${toc.map((t, i) => `<a href="#" data-h="${i}">${esc(t.length > 26 ? t.slice(0, 26) + '…' : t)}</a>`).join('')}</nav>` : '';
+  $('reader').innerHTML = `
+    <div class="nav"><button class="btn back" onclick="history.back()">← 목록</button></div>
+    <div class="head"><h1>${esc(e._ko)}</h1>
+      <div class="meta"><span class="key">${esc(e._en)}</span><span class="catpill">${esc(e.category || '용어')}</span>
+        <span class="acts"><button class="btn" id="favbtn" aria-pressed="${fav.has(String(e.id))}">${fav.has(String(e.id)) ? '★ 즐겨찾기됨' : '☆ 즐겨찾기'}</button></span></div></div>
+    ${tocHtml}
+    <div class="body">${html}</div>
+    ${e.definition ? `<details class="orig"><summary>영문 원문 보기</summary><div>${esc(e.definition)}</div></details>` : ''}
+    <div class="credit">ISBE(International Standard Bible Encyclopedia, 1915) 영문은 공개 저작물입니다.<br>한글 번역 © kjm — 무단 전재·배포 금지 · 성경 인용: 개역개정판 © 대한성서공회</div>`;
+  $('main').scrollTop = 0;
+  $('app').classList.add('reading');
+  document.querySelectorAll('.row').forEach(r => r.setAttribute('aria-current', String(r.dataset.id === String(e.id))));
+  $('favbtn').onclick = () => {
+    const f = new Set(ls.get('isbe_app_fav', []).map(String));
+    f.has(String(e.id)) ? f.delete(String(e.id)) : f.add(String(e.id));
+    ls.set('isbe_app_fav', Array.from(f)); show(e.id); if (filter === 'fav') render(true);
+  };
+  document.title = e._ko + ' — ISBE 성경백과';
+}
+$('reader').addEventListener('click', ev => {
+  const h = ev.target.closest('a[data-h]');
+  if (h) { ev.preventDefault(); document.getElementById('h' + h.dataset.h)?.scrollIntoView({ block: 'start' }); return; }
+  const x = ev.target.closest('a.xref');
+  if (x) { ev.preventDefault(); go(x.dataset.id); return; }
+  const v = ev.target.closest('a.vref');
+  if (v) { ev.preventDefault(); verse(+v.dataset.b, +v.dataset.c, +v.dataset.v, +v.dataset.to); }
+});
+
+/* ───────── 성경 본문 창 — map.html 에 등록한 개역개정(bdb)을 읽는다 ───────── */
+let BIBLE = null, BIBLE_TRIED = false;
+async function bible() {
+  if (BIBLE || BIBLE_TRIED) return BIBLE;
+  BIBLE_TRIED = true;
+  try {
+    const bin = await idbGet(...MAP_DB, 'saved_bdb_binary');
+    if (!bin || !window.initSqlJs) return null;
+    const SQL = await initSqlJs({ locateFile: f => 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/' + f });
+    BIBLE = new SQL.Database(new Uint8Array(bin));
+  } catch (e) { BIBLE = null; }
+  return BIBLE;
+}
+async function verse(b, c, v, to) {
+  const pop = $('pop'); const name = BOOK_NAME[b] || '';
+  const label = `${name} ${c}:${v}${to && to !== v ? '-' + to : ''}`;
+  const mapLink = `map.html?goto=${b}.${c}.${v}`;
+  pop.innerHTML = `<h4>${esc(label)}<button class="btn x" onclick="document.getElementById('pop').style.display='none'">닫기</button></h4><div class="note">불러오는 중…</div>`;
+  pop.style.display = 'block';
+  const db = await bible();
+  let body = '';
+  if (db) {
+    try {
+      const last = Math.min(to || v, v + 11);
+      const rs = db.exec(`SELECT verse, btext FROM Bible WHERE book=${b} AND chapter=${c} AND verse BETWEEN ${v} AND ${last} ORDER BY verse`);
+      const rows = rs[0] ? rs[0].values : [];
+      body = rows.length ? rows.map(r => `<p class="v"><sup>${r[0]}</sup>${esc(String(r[1]).replace(/<[^>]+>/g, ''))}</p>`).join('')
+                         : '<div class="note">이 절은 개역개정 본문에 없습니다.</div>';
+      if ((to || v) > last) body += `<div class="note">(${last - v + 1}절까지만 보입니다)</div>`;
+    } catch (e) { body = '<div class="note">본문을 읽지 못했습니다.</div>'; }
+  } else {
+    body = '<div class="note">이 기기에는 개역개정 본문이 등록되어 있지 않습니다. 성경지도(map.html)에서 성경 DB를 등록하면 여기에도 본문이 뜹니다.</div>';
+  }
+  pop.innerHTML = `<h4>${esc(label)}<a class="btn" href="${mapLink}" target="_blank" rel="noopener">성경지도에서 열기</a><button class="btn x" onclick="document.getElementById('pop').style.display='none'">닫기</button></h4>${body}`;
+}
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') $('pop').style.display = 'none'; });
+
+/* ───────── 글자 크기 ───────── */
+function setFs(px) { px = Math.max(14, Math.min(24, px)); document.documentElement.style.setProperty('--fs', px + 'px'); ls.set('isbe_app_fs', px); }
+setFs(ls.get('isbe_app_fs', 17));
+$('fs-down').onclick = () => setFs(ls.get('isbe_app_fs', 17) - 1);
+$('fs-up').onclick = () => setFs(ls.get('isbe_app_fs', 17) + 1);
+
+load();
+</script>
+</body>
+</html>
