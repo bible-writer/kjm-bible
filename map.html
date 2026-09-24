@@ -7329,7 +7329,13 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       const lab = x => '<span style="color:#A8336A;font-size:0.92em;margin-right:4px">' + x + '</span>';
       const uses = v.length
         ? '<div style="margin-top:4px;font-size:0.8em;line-height:1.6;color:#334155">' + lab('용례')
-          + v.map(x => /^\(/.test(x) ? '<span style="color:#94a3b8">' + escHtml(x) + '</span>' : linkifyVerseRefs(escHtml(x))).join(' · ') + '</div>'
+          + v.map(x => {
+              if (/^\(/.test(x)) return '<span style="color:#94a3b8">' + escHtml(x) + '</span>';
+              // 「계 5:5 7:5」처럼 책 이름 없이 이어진 장:절에도 책 이름을 붙여 누를 수 있게
+              const mm = x.match(/^([가-힣]+[0-9]?[가-힣]*)\s(\d+:\d+.*)$/);
+              const y = mm ? mm[1] + ' ' + mm[2].replace(/\s+(?=\d+:\d+)/g, '; ' + mm[1] + ' ') : x;
+              return linkifyVerseRefs(escHtml(y));
+            }).join(' · ') + '</div>'
         : '';
       const rel = r
         ? '<div style="margin-top:3px;font-size:0.8em;line-height:1.6;color:#334155">' + lab('연관')
@@ -15592,7 +15598,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-5`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-6`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
