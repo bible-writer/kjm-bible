@@ -356,7 +356,7 @@ header .q:disabled{opacity:.45}
 </head>
 <body>
 <header>
-  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260924-1</span></h1>
+  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260924-2</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
   <span class="md5box">
     <span class="sub">영문 MD5</span>
@@ -1070,6 +1070,7 @@ function scan(){
   scanDupEn();
   ROWS=ROWS.filter((r,i,a)=>a.findIndex(x=>x.id===r.id&&x.kind===r.kind&&x.note===r.note)===i);
   ROWS.forEach((r,i)=>{r.key=i; r.done=false;});
+  countStat();
 }
 
 /* ══════════ 그리기 ══════════ */
@@ -1530,23 +1531,34 @@ function rescan(){
   const same=ROWS.find(r=>r.id===keep&&!r.done); CUR=same?same.key:null; draw();
 }
 function draw(){ drawRail(); drawList(); drawDetail(); drawStat(); }
+let STATC={miss:0, dirty:0};
+const ISBE=()=>/^isbe/i.test(FILE);
+function countStat(){
+  STATC={miss:0, dirty:0}; if(!DB) return;
+  STATC.dirty=items().filter(y=>PROF.pairs.some(f=>/\(\s*참조\s*:/.test(String(y[f.ko]||'')))).length;
+  if(ISBE()) return;             /* ISBE 는 채우기를 끄므로 셀 까닭이 없다 */
+  items().forEach(y=>{
+    if(PROF.pairs.some(f=>(y[f.en]||'').trim() && (y[f.ko]||'').trim() && missingRefs(y,f).length)) STATC.miss++;
+  });
+}
 function drawStat(){
   const t=DB?items().filter(e=>e.__touched).length:0;
   $('#stat').textContent = DB? `소견 ${ROWS.filter(r=>!r.done).length} 남음 · 고친 항목 ${t}` : '';
   ['expJson','expEnc','expCsv'].forEach(i=>$('#'+i).disabled=!DB);
   $('#addNew').disabled=!DB;
-  const dirty=DB?items().filter(y=>PROF.pairs.some(f=>/\(\s*참조\s*:/.test(String(y[f.ko]||'')))).length:0;
+  /* 참조 셈은 전 항목을 다시 대조하므로 무겁다 — 검사(scan) 때 한 번만 세어 두고 그린다 (2026-09-24, ISBE 9,349항목에서 넘길 때마다 멈칫하던 것) */
+  const dirty=STATC.dirty;
   const nb=DB?[...new Set(ROWS.filter(r=>r.kind==='nobook'&&!r.done).map(r=>r.id))].length:0;
   const bb=$('#fixBooks'); bb.disabled=!nb;
   bb.textContent = nb?`책 이름 ${nb}항목 채우기`:'책 이름 채우기';
   const wb=$('#wipeRef'); wb.disabled=!dirty;
   wb.textContent = dirty?`참조 ${dirty}항목 씻어 내기`:'참조 씻어 내기';
-  let miss=0;
-  if(DB) items().forEach(y=>{
-    if(PROF.pairs.some(f=>(y[f.en]||'').trim() && (y[f.ko]||'').trim() && missingRefs(y,f).length)) miss++;
-  });
+  const miss=STATC.miss;
   const fb=$('#fillAll'); fb.disabled=!miss;
   fb.textContent = miss?`참조 ${miss}항목 채우기`:'참조 채우기';
+  /* ISBE 는 인쇄본대로 바로잡은 자리가 많아 자동 채우기를 쓰지 않는다 */
+  if(ISBE()){ [bb,fb].forEach(b=>{ b.disabled=true; b.title='ISBE 는 인쇄본대로 바로잡은 자리가 많아 자동으로 채우지 않습니다'; });
+    bb.textContent='책 이름 채우기 (ISBE 끔)'; fb.textContent='참조 채우기 (ISBE 끔)'; }
 }
 
 /* ══════════ 파일 읽기 ══════════ */
