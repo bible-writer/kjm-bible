@@ -1431,6 +1431,7 @@
     .dict-src-스미스 { background: #dcfce7; color: #15803d; }
     .dict-src-샤프   { background: #fef3c7; color: #b45309; }
     .dict-src-히치콕 { background: #fae8ff; color: #a21caf; }
+    .dict-src-ISBE   { background: #fdf1e6; color: #9a4b12; }
     .cpc-header { font-size: 13px; font-weight: 800; color: #0f172a; }
     .cpc-sub { font-size: 11px; color: #64748b; margin-top: 2px; overflow-wrap: anywhere; }
     .cpc-verse { font-size: 10.5px; color: #2563eb; font-weight: 600; margin-top: 2px;
@@ -4486,7 +4487,11 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             +   '</div>'
             +   '<div id="' + bid + '" style="display:' + (open ? 'block' : 'none') + ';'
             +        'font-size:1em;line-height:1.8;color:#1e293b;white-space:pre-wrap">'
-            +     linkifyVerseRefs(escHtml(ko))
+            +     (function () {   /* 「~ 항목을 보라」도 눌러 갈 수 있게 (2026-09-24) */
+                    const h = linkifyVerseRefs(escHtml(ko));
+                    const src = { '이스턴': 'easton', '스미스': 'smith', '힛치콕': 'hitchcock', 'ISBE': 'isbe' }[label];
+                    return (src && typeof linkifyDictRefs === 'function') ? linkifyDictRefs(h, src, entry.id) : h;
+                  })()
             +   '</div>'
             + '</div>';
         }
@@ -6877,24 +6882,56 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         const term = String(e.term || '');
         const enPart = term.replace(/\([^)]*\)/g, '').trim();
         [e.isbe_key, enPart].forEach(k => { const nk = rawDictRefNormKey(k); if (nk && !en.has(nk)) en.set(nk, e.id); });
+        // 「ABGAR; ABGARUS; ABAGARUS」처럼 쌍반점으로 묶인 표제는 조각마다도 (2026-09-24)
+        [e.isbe_key, enPart].forEach(k => String(k || '').split(';').forEach(pk => { const nk = rawDictRefNormKey(pk); if (nk && !en.has(nk)) en.set(nk, e.id); }));
+        const addKo = k => { k = String(k || '').trim(); if (k && /[가-힣]/.test(k) && !ko.has(k)) ko.set(k, e.id); };
         const m = term.match(/\(([^)]*)\)\s*$/);
         if (m) {
-          m[1].split(/[;·]/).forEach(k => { k = k.trim(); if (k && /[가-힣]/.test(k) && !ko.has(k)) ko.set(k, e.id); });
+          m[1].split(/[;·]/).forEach(k => addKo(k));
         }
+        /* (2026-09-24) 괄호가 겹친 표제 「Babel(바벨; 바벨론(지형))」의 한글 전체와 조각, 그리고
+         * 한글 본문 첫머리 표제(「그리스도의 시험(…」)도 한글 이름으로 찾게 한다 */
+        const m2 = term.match(/^[^(]*\((.*)\)\s*$/);
+        if (m2) { addKo(m2[1]); m2[1].split(/[;·]/).forEach(k => addKo(k.replace(/\([^)]*\)/g, ''))); }
+        const d0 = String(e.definition_ko || '').trim().match(/^([^(\n.「」]{1,30}?)\s*\(/);
+        if (d0) { addKo(d0[1]); d0[1].split(/\s*[;·]\s*/).forEach(k => addKo(k)); }
       });
-      const idx = { list, n: list.length, en, ko };
+      const idx = { list, n: list.length, en, ko, enKeys: Array.from(en.keys()) };
       rawDictRefIdxCache[srcKey] = idx;
       return idx;
+    }
+    /* 영문 표제 찾기 — 그대로 → 쉼표·쌍반점 조각 → 「조각, …」「조각; …」「조각 (…)」로 시작하는 표제 (2026-09-24) */
+    function rawDictFindEn(idx, key) {
+      const k = rawDictRefNormKey(key);
+      if (idx.en.has(k)) return idx.en.get(k);
+      const parts = k.split(/\s*[;,]\s*/).filter(Boolean);
+      for (const part of parts) {
+        if (idx.en.has(part)) return idx.en.get(part);
+        const hit = idx.enKeys.find(kk => kk.startsWith(part + ',') || kk.startsWith(part + ';') || kk.startsWith(part + ' ('));
+        if (hit) return idx.en.get(hit);
+      }
+      return undefined;
+    }
+    /* 사전 창 밖(용어·지명 창)에서 눌러도 원문사전을 열어 그 항목으로 간다 */
+    function rawDictLink(srcKey, id) {
+      const modal = document.getElementById('rawdict-modal');
+      if (modal && modal.style.display === 'flex') { rawDictGoto(srcKey, id, true); return; }
+      const e = (getRawDictList(srcKey) || []).find(x => x && String(x.id) === String(id));
+      if (!e) { showToast('가리키는 항목을 찾지 못했습니다', 'warn'); return; }
+      openRawDictAt(srcKey, e.term);
     }
     function linkifyDictRefs(html, srcKey, selfId) {
       if (!html) return html;
       const idx = rawDictRefIndex(srcKey);
       if (!idx.en.size && !idx.ko.size) return html;
-      const aOpen = id => `<a href="javascript:void(0)" onclick="rawDictGoto('${srcKey}',${id},true);return false;" style="color:#b45309;text-decoration:underline;text-decoration-style:dotted;cursor:pointer" title="이 항목으로 가기">`;
-      const re = /([가-힣][가-힣0-9·]*)?\(([A-Z](?:[A-Z0-9 ,;.\-’]|&#39;|&amp;)*)\)|([가-힣][가-힣0-9·]*)(?=\s항목)/g; // 괄호 안은 대문자 표제만(영문 일반 낱말 괄호는 건드리지 않음)
+      const aOpen = id => `<a href="javascript:void(0)" onclick="rawDictLink('${srcKey}','${String(id).replace(/'/g, '')}');return false;" style="color:#b45309;text-decoration:underline;text-decoration-style:dotted;cursor:pointer" title="이 항목으로 가기">`;
+      /* 괄호 안은 대문자 표제만(영문 일반 낱말 괄호는 건드리지 않음).
+       * (2026-09-24) 「(ABGARUS, 외경)」「(EDER, 해당 항목을 보라)」「(ACCAD — 그 …)」처럼 대문자 표제 뒤에 한글 덧말이 붙어도
+       *   대문자 표제까지만 잡는다 — 쉼표·쌍반점은 뒤가 대문자일 때만 표제로 이어 본다 */
+      const re = /([가-힣][가-힣0-9·]*)?\(([A-Z](?:[A-Z0-9 .\-’]|&#39;|&amp;|[,;](?=\s?[A-Z]))*)(?=\)|,|;|\s[—–-]|\s(?:항목|해당))\)?|([가-힣][가-힣0-9·]*)(?=\s항목)/g;
       const linkText = txt => txt.replace(re, (all, koW, key, koOnly) => {
         if (key !== undefined) {
-          const id = idx.en.get(rawDictRefNormKey(key));
+          const id = rawDictFindEn(idx, key);
           if (id == null || id === selfId) return all;
           return aOpen(id) + all + '</a>';
         }
@@ -6905,8 +6942,32 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         }
         return all;
       });
+      /* 둘째 판(2026-09-24): 「시기; 눈 항목을 보라」「변형(해당 항목을 보라)」「사탄(그 항목을 보라)」처럼
+       * 한글 이름만 든 것 — 「항목을 보라」 앞 한 토막을 쌍반점·쉼표·「및」으로 갈라 이름마다 잇는다 */
+      const re2 = /([^()「」<>\n.:—]{1,80}?)(\s*\((?:해당|그)\s*|\s*)(?=항목(?:들)?을\s*보라)/g;
+      const linkKo = txt => txt.replace(re2, (all, names, gap) => {
+        if (/\(/.test(gap)) {   // 「바르발(그 항목을 보라)」 — 괄호 바로 앞 낱말 하나가 가리키는 이름
+          const mm = names.match(/^([\s\S]*?)([가-힣][가-힣0-9·]*)$/);
+          const id = mm ? idx.ko.get(mm[2]) : undefined;
+          if (id == null || id === selfId) return all;
+          return mm[1] + aOpen(id) + mm[2] + '</a>' + gap;
+        }
+        const bits = names.split(/(\s*[;,]\s*|\s+및\s+|\s+또는\s+)/);
+        let changed = false;
+        const out = bits.map((b, i) => {
+          if (i % 2 === 1) return b;
+          const lead = b.match(/^\s*/)[0], tail = b.match(/\s*$/)[0];
+          const nm = b.trim().replace(/^「|」$/g, '');
+          const id = nm ? idx.ko.get(nm) : undefined;
+          if (id == null || id === selfId) return b;
+          changed = true;
+          return lead + aOpen(id) + b.trim() + '</a>' + tail;
+        });
+        return changed ? out.join('') + gap : all;
+      });
       // 이미 있는 링크(구절 링크 등)와 태그 안은 건드리지 않는다
-      return html.split(/(<a\b[\s\S]*?<\/a>|<[^>]+>)/).map(p => p.startsWith('<') ? p : linkText(p)).join('');
+      const once = html.split(/(<a\b[\s\S]*?<\/a>|<[^>]+>)/).map(p => p.startsWith('<') ? p : linkText(p)).join('');
+      return once.split(/(<a\b[\s\S]*?<\/a>|<[^>]+>)/).map(p => p.startsWith('<') ? p : linkKo(p)).join('');
     }
     function rawDictGoBack() {
       const st = rawdictBackStack.pop();
@@ -6938,7 +6999,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     // 검색칸에 그 표제어를 넣고 다시 그린다
     function rawDictGoto(srcKey, id, fromLink) {
       const list = getRawDictList(srcKey) || [];
-      const to = list.find(x => x && x.id === id);
+      const to = list.find(x => x && String(x.id) === String(id));
       if (!to) { showToast('가리키는 항목을 찾지 못했습니다', 'warn'); return; }
       if (fromLink) {
         // 본문 안 「~ 항목을 보라」 링크로 건너갈 때는 지금 화면을 기억해 두고 「← 돌아가기」를 띄운다(2026-09-21 kjm)
@@ -7574,8 +7635,37 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           ref: p
         });
       });
+      /* ISBE 에만 있는 항목도 통합 사전 전체 검색에 넣는다(2026-09-24 kjm 「ISBE 에만 있는 것 전체 검색에 안 나와」).
+       * 용어DB·지명DB 가 isbeId 로 이미 가리키는 항목은 그 항목에서 보이므로 뺀다.
+       * 누르면 원문사전의 ISBE 칸에서 그 항목을 연다. 표제어·원어 번호 고치기(✏️)는 앱DB 용이라 막는다. */
+      try {
+        const isbe = (typeof getRawDictList === 'function') ? (getRawDictList('isbe') || []) : [];
+        if (isbe.length) {
+          const linked = new Set();
+          termDatabase.forEach(t => { if (t.isbeId != null) linked.add(String(t.isbeId)); });
+          placeDatabase.forEach(p => { if (p.isbeId != null) linked.add(String(p.isbeId)); });
+          isbe.forEach(e => {
+            if (!e || !e.definition_ko || linked.has(String(e.id))) return;
+            const term = String(e.term || '');
+            const m = term.match(/^(.*?)\((.*)\)$/);
+            const en = m ? m[1].trim() : term;
+            const ko = m ? m[2].trim() : term;
+            const type = e.category === '인명' ? 'PERSON' : (e.category === '지명' ? 'PLACE' : 'TERM');
+            list.push({ type, sortKey: ko || en, nameKo: ko || en, nameEn: ko ? en : '',
+                        def: e.definition_ko || '', strong: e.hebrew_greek || '', srcDict: 'ISBE', isbe: true, ref: e });
+          });
+        }
+      } catch (err) { console.warn('ISBE 통합 검색 목록 실패', err); }
       list.sort((a, b) => a.sortKey.localeCompare(b.sortKey, 'ko'));
       return list;
+    }
+
+    /* 원문사전을 특정 사전·항목에 맞춰 연다 (2026-09-24) */
+    function openRawDictAt(srcKey, query) {
+      rawdictSrc = srcKey;
+      const inp = document.getElementById('rawdict-search-input');
+      if (inp) inp.value = query || '';
+      openRawDictModal();
     }
 
     function openDictModal() {
@@ -7622,6 +7712,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
      *   괄호 가운데 13  「잔치(연회) A」  끝의 A·B 는 같은 이름의 다른 항목을 가르는 표
      */
     function dictEditName(it) {
+      if (it.isbe) { showToast('ISBE 항목은 원문사전(📜)에서 고칩니다', 'warn'); return; }
       var cur, label;
       if (it.type === 'TERM')        { cur = it.ref.term_ko || ''; label = '용어'; }
       else if (it.type === 'PERSON') { cur = it.ref.name_ko || ''; label = '인물'; }
@@ -7701,7 +7792,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         sBox.onclick = ev => ev.stopPropagation();
         row.appendChild(sBox);
         const sBtn = row.querySelector('.dict-strong-btn');
-        if (sBtn) sBtn.onclick = function (ev) { ev.stopPropagation(); dictEditStrong(it, sBox.id); };
+        if (sBtn) sBtn.onclick = function (ev) { ev.stopPropagation(); if (it.isbe) { showToast('ISBE 항목은 원문사전(📜)에서 고칩니다', 'warn'); return; } dictEditStrong(it, sBox.id); };
         var editBtn = row.querySelector('.dict-edit-btn');
         if (editBtn) {
           editBtn.onclick = function (ev) {
@@ -7711,6 +7802,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         }
         row.onclick = () => {
           closeDictModal();
+          if (it.isbe) { openRawDictAt('isbe', it.ref.term || it.nameEn || it.nameKo); return; }
           if (it.type === 'TERM') TermEngine.showPopup(it.ref);
           else if (it.type === 'PERSON') PersonEngine.showPopup(it.ref, it.ref.name_ko);
           else if (it.type === 'PLACE') BibleGeoEngine.flyToPlace(it.ref);
@@ -13206,7 +13298,11 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           +     '<span style="margin-left:auto;">' + badge + '</span>'
           +   '</div>'
           +   '<div id="' + bid + '" class="popup-dict-body" style="display:none;font-size:' + placeDictFontSize() + 'px;line-height:1.75;'
-          +        'color:#334155;margin-top:4px;padding-left:14px;' + (key === 'isb' ? 'white-space:pre-wrap;max-height:420px;overflow-y:auto;' : '') + '">' + (typeof linkifyVerseRefs === 'function' ? linkifyVerseRefs(escHtml(body)) : escHtml(body))   // (2026-09-18) 사전 글의 성경 구절을 눌러 갈 수 있게
+          +        'color:#334155;margin-top:4px;padding-left:14px;' + (key === 'isb' ? 'white-space:pre-wrap;max-height:420px;overflow-y:auto;' : '') + '">' + (function () {   // (2026-09-18) 사전 글의 성경 구절을 눌러 갈 수 있게 · (2026-09-24) 「~ 항목을 보라」도
+               const h = (typeof linkifyVerseRefs === 'function' ? linkifyVerseRefs(escHtml(body)) : escHtml(body));
+               const src = { eas: 'easton', smi: 'smith', isb: 'isbe' }[key];
+               return (ko && src && typeof linkifyDictRefs === 'function') ? linkifyDictRefs(h, src, null) : h;
+             })()
           +     (ko ? '' : '<div style="margin-top:7px;"><button onclick="event.stopPropagation();placeDictDraft(this)" data-bid="' + bid + '" '
           +            'title="구글 번역 초안 — 저장되지 않음. 바른 번역은 하나씩 사전에 채워 넣는다" '
           +            'style="font-size:10px;padding:3px 9px;border:1px solid #bfdbfe;border-radius:4px;background:#2563eb;color:#fff;cursor:pointer;">\ud83c\udf10 번역 초안</button>'
@@ -15598,7 +15694,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-6`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-8`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
