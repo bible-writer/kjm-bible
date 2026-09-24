@@ -79,6 +79,15 @@ main{overflow-y:auto;min-height:0}
 .orig{margin-top:28px;border-top:1px solid var(--line);padding-top:12px}
 .orig summary{cursor:pointer;font-size:13px;color:var(--sub)}
 .orig div{font-family:Georgia,serif;font-size:15px;line-height:1.7;color:#3A4250;white-space:pre-wrap;margin-top:8px}
+.others{margin-top:26px;border-top:1px solid var(--line);padding-top:12px}
+.others h2{font-size:14px;font-weight:500;color:var(--sub);margin:0 0 8px}
+.others .hitch{font-size:14px;margin:0 0 10px;color:var(--ink)}
+.others .hitch b{font-weight:500;color:var(--sub);margin-right:6px}
+.others details{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:#fff}
+.others summary{cursor:pointer;padding:8px 12px;font-size:14px}
+.others summary small{color:var(--sub);margin-left:6px}
+.others .obody{padding:0 14px 10px;font-family:var(--serif);font-size:calc(var(--fs) - 1px);line-height:1.85}
+.others .obody p{margin:0 0 .7em}
 .credit{margin-top:34px;font-size:12px;color:var(--sub);line-height:1.7}
 .pop{position:fixed;z-index:20;left:50%;bottom:18px;transform:translateX(-50%);width:min(620px,94vw);max-height:48vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(20,30,50,.18);padding:14px 16px;display:none}
 .pop h4{margin:0 0 8px;font-size:14px;display:flex;align-items:center;gap:8px}
@@ -345,10 +354,16 @@ function linkRefs(html, selfId) {
 }
 
 /* ───────── 성경 구절 잇기 ───────── */
-const VRE = new RegExp(`(?<![가-힣])(${BOOK_ALT})\\s?(\\d{1,3}):(\\d{1,3})(?:\\s?[-~]\\s?(\\d{1,3}))?|([;,]\\s?)(\\d{1,3}):(\\d{1,3})(?:\\s?[-~]\\s?(\\d{1,3}))?`, 'g');
+const VRE = new RegExp(`(?<![가-힣])(${BOOK_ALT})\\s?(\\d{1,3}):(\\d{1,3})(?:\\s?[-~]\\s?(\\d{1,3}))?|([;,]\\s?)(\\d{1,3}):(\\d{1,3})(?:\\s?[-~]\\s?(\\d{1,3}))?|(?<![가-힣])(${BOOK_ALT})\\s?(\\d{1,3})\\s?(?:장|편)(?![\\d:~-])`, 'g');
 function linkVerses(text) {
   let lastBook = null, lastEnd = -1;
-  return text.replace(VRE, (all, bk, c, v, to, sep, c2, v2, to2, off) => {
+  return text.replace(VRE, (all, bk, c, v, to, sep, c2, v2, to2, bk3, c3, off) => {
+    if (bk3) {   // 「신명기 28장」「시편 1편」 — 장 단위 인용 (2026-09-24)
+      if (APOC_BEFORE.test(text.slice(Math.max(0, off - 18), off))) { lastBook = null; return all; }
+      const b = BOOK_ID[bk3]; if (!b) return all;
+      lastBook = b; lastEnd = off + all.length;
+      return `<a class="vref" data-b="${b}" data-c="${c3}" data-v="1" data-to="999" data-ch="1">${all}</a>`;
+    }
     if (bk) {
       if (APOC_BEFORE.test(text.slice(Math.max(0, off - 18), off))) { lastBook = null; return all; }
       const b = BOOK_ID[bk]; if (!b) return all;
@@ -362,6 +377,46 @@ function linkVerses(text) {
     }
     return all;
   });
+}
+
+/* ───────── 다른 사전(이스턴 · 스미스 · 힛치콕) — 영문 표제로 짝을 찾아 ISBE 항목 아래에 (2026-09-24) ─────────
+ * 처음 한 번 받아(브라우저가 바뀐 것만 다시 받음) 앱 저장소에도 둔다. 인터넷이 안 되면 저장해 둔 것을 쓴다. */
+const OTHER = [
+  { key: 'easton', label: '이스턴 성경사전', file: './easton_full.json' },
+  { key: 'smith', label: '스미스 성경사전', file: './smith_full.json' },
+  { key: 'hitchcock', label: '힛치콕 인명·지명 풀이', file: './hitchcock_full.json' }
+];
+const OTHER_IDX = {}; let OTHER_STATE = 'idle';
+const enKey = s => String(s || '').replace(/\([^)]*\)/g, '').toUpperCase().replace(/[^A-Z]/g, '');
+async function loadOthers() {
+  if (OTHER_STATE !== 'idle') return; OTHER_STATE = 'loading';
+  await Promise.all(OTHER.map(async o => {
+    let list = null;
+    try { const r = await fetch(o.file, { cache: 'no-cache' }); if (r.ok) { const d = await r.json(); list = Array.isArray(d) ? d : d.entries; if (list) idbSet(...APP_DB, 'other_' + o.key, list); } } catch (e) {}
+    if (!list) list = await idbGet(...APP_DB, 'other_' + o.key);
+    const ix = {};
+    (list || []).forEach(e => { if (!e || !e.definition_ko) return; const k = enKey(splitTerm(e.term).en || e.term); if (k) (ix[k] = ix[k] || []).push(e); });
+    OTHER_IDX[o.key] = ix;
+  }));
+  OTHER_STATE = 'ready';
+  if (current) { const box = document.getElementById('others'); if (box) box.outerHTML = othersHtml(current); }
+}
+function othersHtml(e) {
+  if (OTHER_STATE !== 'ready') return '<section class="others" id="others"><h2>다른 사전</h2><div class="more" style="text-align:left;padding:0">불러오는 중…</div></section>';
+  const keys = new Set([enKey(e._en)].concat(String(e.isbe_key || '').split(';').map(enKey)).filter(Boolean));
+  const hits = k => { const out = []; keys.forEach(x => (OTHER_IDX[k] && OTHER_IDX[k][x] || []).forEach(y => { if (!out.includes(y)) out.push(y); })); return out; };
+  let html = '';
+  const hc = hits('hitchcock');
+  if (hc.length) html += hc.map(h => `<p class="hitch"><b>이름 뜻(힛치콕)</b>${esc(h.definition_ko)}</p>`).join('');
+  ['easton', 'smith'].forEach(k => {
+    const o = OTHER.find(x => x.key === k);
+    hits(k).forEach(h => {
+      const body = String(h.definition_ko).split('\n').map(l => l.trim()).filter(Boolean).map(l => `<p>${linkVerses(esc(l))}</p>`).join('');
+      html += `<details><summary>${esc(o.label)}<small>${esc(splitTerm(h.term).ko || h.term)}</small></summary><div class="obody">${body}</div></details>`;
+    });
+  });
+  if (!html) return '<section class="others" id="others"></section>';
+  return `<section class="others" id="others"><h2>다른 사전</h2>${html}</section>`;
 }
 
 /* ───────── 항목 보기 ───────── */
@@ -394,8 +449,10 @@ function show(id) {
         <span class="acts"><button class="btn" id="favbtn" aria-pressed="${fav.has(String(e.id))}">${fav.has(String(e.id)) ? '★ 즐겨찾기됨' : '☆ 즐겨찾기'}</button></span></div></div>
     ${tocHtml}
     <div class="body">${html}</div>
+    ${othersHtml(e)}
     ${e.definition ? `<details class="orig"><summary>영문 원문 보기</summary><div>${esc(e.definition)}</div></details>` : ''}
-    <div class="credit">ISBE(International Standard Bible Encyclopedia, 1915) 영문은 공개 저작물입니다.<br>한글 번역 © kjm — 무단 전재·배포 금지 · 성경 인용: 개역개정판 © 대한성서공회</div>`;
+    <div class="credit">ISBE(International Standard Bible Encyclopedia, 1915) · 이스턴(1897) · 스미스(1863) · 힛치콕(1869) 영문은 공개 저작물입니다.<br>한글 번역 © kjm — 무단 전재·배포 금지 · 성경 인용: 개역개정판 © 대한성서공회</div>`;
+  loadOthers();
   $('main').scrollTop = 0;
   $('app').classList.add('reading');
   document.querySelectorAll('.row').forEach(r => r.setAttribute('aria-current', String(r.dataset.id === String(e.id))));
@@ -412,7 +469,7 @@ $('reader').addEventListener('click', ev => {
   const x = ev.target.closest('a.xref');
   if (x) { ev.preventDefault(); go(x.dataset.id); return; }
   const v = ev.target.closest('a.vref');
-  if (v) { ev.preventDefault(); verse(+v.dataset.b, +v.dataset.c, +v.dataset.v, +v.dataset.to); }
+  if (v) { ev.preventDefault(); verse(+v.dataset.b, +v.dataset.c, +v.dataset.v, +v.dataset.to, v.dataset.ch === '1'); }
 });
 
 /* ───────── 성경 본문 창 — map.html 에 등록한 개역개정(bdb)을 읽는다 ───────── */
@@ -428,9 +485,9 @@ async function bible() {
   } catch (e) { BIBLE = null; }
   return BIBLE;
 }
-async function verse(b, c, v, to) {
+async function verse(b, c, v, to, wholeChapter) {
   const pop = $('pop'); const name = BOOK_NAME[b] || '';
-  const label = `${name} ${c}:${v}${to && to !== v ? '-' + to : ''}`;
+  const label = wholeChapter ? `${name} ${c}${b === 19 ? '편' : '장'}` : `${name} ${c}:${v}${to && to !== v ? '-' + to : ''}`;
   const mapLink = `map.html?goto=${b}.${c}.${v}`;
   pop.innerHTML = `<h4>${esc(label)}<button class="btn x" onclick="document.getElementById('pop').style.display='none'">닫기</button></h4><div class="note">불러오는 중…</div>`;
   pop.style.display = 'block';
@@ -443,7 +500,7 @@ async function verse(b, c, v, to) {
       const rows = rs[0] ? rs[0].values : [];
       body = rows.length ? rows.map(r => `<p class="v"><sup>${r[0]}</sup>${esc(String(r[1]).replace(/<[^>]+>/g, ''))}</p>`).join('')
                          : '<div class="note">이 절은 개역개정 본문에 없습니다.</div>';
-      if ((to || v) > last) body += `<div class="note">(${last - v + 1}절까지만 보입니다)</div>`;
+      if ((to || v) > last && rows.length) body += `<div class="note">${wholeChapter ? `장의 첫 ${rows.length}절입니다 — 장 전체는 「성경지도에서 열기」` : `(${last - v + 1}절까지만 보입니다)`}</div>`;
     } catch (e) { body = '<div class="note">본문을 읽지 못했습니다.</div>'; }
   } else {
     body = '<div class="note">이 기기에는 개역개정 본문이 등록되어 있지 않습니다. 성경지도(map.html)에서 성경 DB를 등록하면 여기에도 본문이 뜹니다.</div>';
