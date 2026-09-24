@@ -6965,6 +6965,15 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         });
         return changed ? out.join('') + gap : all;
       });
+      /* 「시몬(SIMON)의 「가나나인(CANANAEAN)」 항목」 — 두 표제를 합친 항목을 한 링크로 (2026-09-24) */
+      const t0 = txt => txt.replace(/([가-힣][가-힣0-9·]*)?\(([A-Z][A-Z0-9 .,\-’]*)\)의\s*「([^」]*?)\(([A-Z][A-Z0-9 .,\-’]*)\)」/g, (all, k1, a1, k2, b1) => {
+        const ka = a1.trim(), kb = b1.trim();
+        for (const c of [`${ka} THE ${kb}`, `${ka} ${kb}`, `${ka}, ${kb}`, `${kb} OF ${ka}`, `${ka} OF ${kb}`]) {
+          const id = idx.en.get(rawDictRefNormKey(c)); if (id != null && id !== selfId) return aOpen(id) + all + '</a>';
+        }
+        return all;
+      });
+      html = html.split(/(<a\b[\s\S]*?<\/a>|<[^>]+>)/).map(p => p.startsWith('<') ? p : t0(p)).join('');
       // 이미 있는 링크(구절 링크 등)와 태그 안은 건드리지 않는다
       const once = html.split(/(<a\b[\s\S]*?<\/a>|<[^>]+>)/).map(p => p.startsWith('<') ? p : linkText(p)).join('');
       return once.split(/(<a\b[\s\S]*?<\/a>|<[^>]+>)/).map(p => p.startsWith('<') ? p : linkKo(p)).join('');
@@ -15722,7 +15731,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-9`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-10`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }

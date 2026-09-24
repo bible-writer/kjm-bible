@@ -29,13 +29,13 @@
   --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0}
+html,body{height:100%;margin:0;overflow-x:hidden}   /* 폰에서 옆으로 밀리지 않게(2026-09-24) */
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;
   padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 button,input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 .app{display:grid;grid-template-columns:minmax(280px,360px) 1fr;grid-template-rows:auto 1fr;height:100%}
-header{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);background:#fff}
+header{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-width:0;padding:10px 16px;border-bottom:1px solid var(--line);background:#fff}
 .brand{font-family:var(--serif);font-weight:700;font-size:19px;white-space:nowrap}
 .brand small{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--sub);margin-left:6px}
 .status{font-size:12px;color:var(--sub);margin-left:auto;text-align:right}
@@ -88,7 +88,7 @@ main{overflow-y:auto;min-height:0}
 .others summary small{color:var(--sub);margin-left:6px}
 .others .obody{padding:0 14px 10px;font-family:var(--serif);font-size:calc(var(--fs) - 1px);line-height:1.85}
 .others .obody p{margin:0 0 .7em}
-.credit{margin-top:34px;font-size:12px;color:var(--sub);line-height:1.7}
+.credit{overflow-wrap:anywhere;margin-top:34px;font-size:12px;color:var(--sub);line-height:1.7}
 .pop{position:fixed;z-index:20;left:50%;bottom:18px;transform:translateX(-50%);width:min(620px,94vw);max-height:48vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(20,30,50,.18);padding:14px 16px;display:none}
 .pop h4{margin:0 0 8px;font-size:14px;display:flex;align-items:center;gap:8px}
 .pop h4 .x{margin-left:auto}
@@ -107,6 +107,10 @@ input[type=file]{display:none}
   .reader{padding:18px 16px 90px}
   .head h1{font-size:25px}
   .status{display:none}
+  .brand{white-space:normal;font-size:17px}
+  .brand small{display:block;margin-left:0}
+  .tools{margin-left:auto}
+  main,aside,.reader,.body,.others{max-width:100vw;min-width:0}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
@@ -250,7 +254,7 @@ async function load() {
   }
 }
 function setStatus(t) { $('status').textContent = t; }
-const APP_BUILD = 'b20260924-5';   // 화면 판 — 폰에서 새 판이 들어왔는지 보는 표
+const APP_BUILD = 'b20260924-7';   // 화면 판 — 폰에서 새 판이 들어왔는지 보는 표
 function status() { if (META) setStatus(`판 ${META.version} · ${ENTRIES.length.toLocaleString()} 항목 · 앱 ${APP_BUILD}`); }
 function ready(why) { status(); render(true); openFromHash(); }
 $('open-file').onclick = () => $('file').click();
@@ -354,6 +358,15 @@ function linkRefs(html, selfId) {
     return changed ? out.join('') + gap : all;
   });
   const SPLIT = /(<a\b[\s\S]*?<\/a>|<[^>]+>)/;
+  /* 「시몬(SIMON)의 「가나나인(CANANAEAN)」 항목」 — 두 표제를 합친 항목(SIMON THE CANANAEAN)을 한 링크로 (2026-09-24) */
+  const t0 = txt => txt.replace(/([가-힣][가-힣0-9·]*)?\(([A-Z][A-Z0-9 .,\-’]*)\)의\s*「([^」]*?)\(([A-Z][A-Z0-9 .,\-’]*)\)」/g, (all, k1, a1, k2, b1) => {
+    const ka = a1.trim(), kb = b1.trim();
+    for (const c of [`${ka} THE ${kb}`, `${ka} ${kb}`, `${ka}, ${kb}`, `${kb} OF ${ka}`, `${ka} OF ${kb}`]) {
+      const id = I.en.get(normKey(c)); if (id != null && id !== self) return a(id) + all + '</a>';
+    }
+    return all;
+  });
+  html = html.split(SPLIT).map(p => p.startsWith('<') ? p : t0(p)).join('');
   const once = html.split(SPLIT).map(p => p.startsWith('<') ? p : t1(p)).join('');
   return once.split(SPLIT).map(p => p.startsWith('<') ? p : t2(p)).join('');
 }
