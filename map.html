@@ -7403,6 +7403,34 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           + ((typeof StrongEngine !== 'undefined' && StrongEngine.linkifyCodes) ? StrongEngine.linkifyCodes(escHtml(r), slot) : escHtml(r))
           + '</div><div id="' + slot + '"></div>'
         : '';
+      /* 가족(f) — 원문 TBES 의 son of / married to / brother of / father of 를 갈래대로 (2-753). 한글 이름으로 보이고 누르면 그 원어 카드 */
+      const fam = (k.f && typeof k.f === 'object') ? k.f : null;
+      /* 이름: 인명DB(같은 확장 번호의 사람) → 그 번호 그대로의 원어사전 항목 → 번호. 끝글자를 떼면 딴 낱말(H6872C 스롤 ↔ H6872 주머니)이라 떼지 않는다 */
+      const famName = c => {
+        try {
+          if (!hebKoBlockHtml._pidx && typeof personDatabase !== 'undefined' && personDatabase.length) {
+            const ix = {}; personDatabase.forEach(p => { [p.ustrong, p.dstrong].forEach(u => { if (u && !ix[u]) ix[u] = p.name_ko; }); });
+            hebKoBlockHtml._pidx = ix;
+          }
+          const pn = hebKoBlockHtml._pidx && hebKoBlockHtml._pidx[c];
+          if (pn) return pn;
+        } catch (e) {}
+        const mm = String(c).match(/^([HG])0*(\d+)([A-Za-z]?)$/);
+        const exact = mm && hebKoDict ? hebKoDict[mm[1] + mm[2] + (mm[3] ? mm[3].toLowerCase() : '')] : null;
+        const x = exact || (mm && !mm[3] ? hebKoLookup(c) : null);
+        const n = x ? String(x.m || x.t || '').replace(/\s*[\[(（].*$/, '').replace(/\s+[A-Z][A-Za-z'\-]*\.?$/, '').trim() : '';
+        return n || c;
+      };
+      const famRows = fam ? ['부모', '배우자', '형제', '자녀', '기타'].filter(g => Array.isArray(fam[g]) && fam[g].length).map(g =>
+          '<div><span style="display:inline-block;min-width:3.2em;color:#64748b">' + g + '</span>'
+          + fam[g].map(c => '<span class="strong-tag" style="color:#047857" title="' + escHtml(c) + '" onclick="StrongEngine.handleClick(\'' + escHtml(c) + '\',\'' + slot + '\')">' + escHtml(famName(c)) + '</span>'
+                          + '<span style="color:#94a3b8;font-size:0.85em;margin-left:2px">' + escHtml(c) + '</span>').join(' · ')
+          + '</div>').join('') : '';
+      const famBox = famRows
+        ? '<div style="margin-top:5px;background:#f8fafc;border-radius:6px;padding:5px 8px;font-size:0.8em;line-height:1.75">'
+          + '<div style="color:#A8336A;font-size:0.92em">가족</div>' + famRows + '</div>'
+          + (r ? '' : '<div id="' + slot + '"></div>')
+        : '';
       const det = dtl
         ? '<details style="margin-top:5px"><summary style="cursor:pointer;font-size:0.72em;color:#A8336A;list-style:none;outline:none">자세히</summary>'
           + '<div style="margin-top:4px;max-height:220px;overflow-y:auto;padding-right:6px;font-size:0.82em;line-height:1.6;color:#475569;white-space:pre-wrap;overflow-wrap:anywhere">' + linkifyVerseRefs(escHtml(dtl)) + '</div></details>'
@@ -7411,7 +7439,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         + '<div style="font-size:0.72em;color:#A8336A;margin-bottom:1px">한글 원어사전</div>'
         + (t ? '<div style="font-size:0.82em;color:#64748b">' + escHtml(t) + (g ? ' <span style="color:#94a3b8">· ' + escHtml(g) + '</span>' : '') + '</div>' : (g ? '<div style="font-size:0.8em;color:#94a3b8">' + escHtml(g) + '</div>' : ''))
         + (m ? '<div style="font-size:0.92em;line-height:1.5;color:#1e293b">' + escHtml(m) + '</div>' : '')
-        + uses + rel + det + '</div>';
+        + uses + rel + famBox + det + '</div>';
     }
     async function loadHebKoDict() {
       try {
@@ -15694,7 +15722,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-8`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-9`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
