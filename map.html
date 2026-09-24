@@ -15596,7 +15596,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-4`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -16832,9 +16832,22 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
         const sc = src.schema;
         // 전권을 통째로 끌어올리면 브라우저가 멎는다(원전분해는 57MB). SQL에서 먼저 거른다.
         const kwSql = (byCode ? ('<W' + byCode + '>') : keyword).replace(/'/g, "''");
+        /* 코드로 찾을 때는 원전분해가 다른 번호로 적은 짝도 함께 찾는다 — G1 이면 <WG256a>(알파) (2026-09-24) */
+        const kwList = [kwSql];
+        if (byCode) {
+          const want = StrongEngine.normalize(byCode);
+          Object.keys(STRONG_SUFFIX_TR).forEach(function(k) {
+            if (STRONG_SUFFIX_TR[k] === want) {
+              const mm = k.match(/^([HG])0*(\d+)([A-Z])$/);
+              if (mm) kwList.push('<W' + mm[1] + mm[2] + mm[3].toLowerCase() + '>');
+            }
+          });
+        }
+        const col = sc ? '"' + sc.content + '"' : 'btext';
+        const where = kwList.map(function(k) { return col + ' LIKE \'%' + k + '%\''; }).join(' OR ');
         const sql = sc
-          ? 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '" WHERE "' + sc.content + '" LIKE \'%' + kwSql + '%\''
-          : 'SELECT book, chapter, verse, btext FROM Bible WHERE btext LIKE \'%' + kwSql + '%\'';
+          ? 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '" WHERE ' + where
+          : 'SELECT book, chapter, verse, btext FROM Bible WHERE ' + where;
         try {
           const res = src.db.exec(sql);
           if (!res || !res[0]) return out;
