@@ -4858,26 +4858,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             <div style="font-size:1.15em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
             <div style="font-size:0.85em;color:#059669;margin-bottom:4px">${escHtml(entry.xlit || '')}</div>
             <div style="font-size:0.85em;line-height:1.4;color:#334155">${escHtml(entry.gloss || '')}</div>
-            ${(function(){ /* 한글 원어사전이 등록돼 있으면 함께 보인다(2026-09-12) */
-              const k = (typeof hebKoLookup === 'function') ? hebKoLookup(code) : null;
-              if (!k) return '';
-              const m = String(k.m || '').trim(), t = String(k.t || '').trim();
-              if (!m && !t && !String(k.d || '').trim()) return '';
-              const dtl = String(k.d || '').trim();
-              const det = dtl
-                ? '<details style="margin-top:5px">'
-                  + '<summary style="cursor:pointer;font-size:0.72em;color:#A8336A;list-style:none;outline:none">자세히</summary>'
-                  + '<div style="margin-top:4px;max-height:170px;overflow-y:auto;padding-right:6px;'
-                  +      'font-size:0.8em;line-height:1.6;color:#475569;white-space:pre-wrap;overflow-wrap:anywhere">'
-                  + escHtml(dtl) + '</div></details>'
-                : '';
-              return '<div style="margin-top:6px;padding-top:5px;border-top:1px dashed #a7f3d0">'
-                + '<div style="font-size:0.7em;color:#A8336A;margin-bottom:1px">한글 원어사전</div>'
-                + (t ? '<div style="font-size:0.8em;color:#64748b">' + escHtml(t) + '</div>' : '')
-                + (m ? '<div style="font-size:0.88em;line-height:1.5;color:#1e293b">' + escHtml(m) + '</div>' : '')
-                + det
-                + '</div>';
-            })()}
+            ${(typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(code) : ''}
             ${trBtn}
             ${detailBtn}
           </div>
@@ -7336,19 +7317,34 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
     /* 한글 원어사전 칸 — 원어 카드 어디서나 같은 모양으로 (2026-09-24) */
     function hebKoBlockHtml(code) {
+      /* 한글 원어사전 칸 — 원어 카드 어디서나 같은 모양으로 (2026-09-24)
+       * hebko 에 엑셀 칸을 합친 뒤(2-740) 문법 g · 용례 v · 연관 번호 r 도 보인다. 구절은 누르면 그 절로, 번호는 누르면 그 원어 카드로 */
       const k = hebKoLookup(code);
       if (!k) return '';
       const m = String(k.m || '').trim(), t = String(k.t || '').trim(), dtl = String(k.d || '').trim();
-      if (!m && !t && !dtl) return '';
+      const g = String(k.g || '').trim(), r = String(k.r || '').trim();
+      const v = Array.isArray(k.v) ? k.v.filter(Boolean) : [];
+      if (!m && !t && !dtl && !v.length) return '';
+      const slot = 'hk-rel-' + String(code).replace(/[^A-Za-z0-9]/g, '') + '-' + Math.random().toString(36).slice(2, 7);
+      const lab = x => '<span style="color:#A8336A;font-size:0.92em;margin-right:4px">' + x + '</span>';
+      const uses = v.length
+        ? '<div style="margin-top:4px;font-size:0.8em;line-height:1.6;color:#334155">' + lab('용례')
+          + v.map(x => /^\(/.test(x) ? '<span style="color:#94a3b8">' + escHtml(x) + '</span>' : linkifyVerseRefs(escHtml(x))).join(' · ') + '</div>'
+        : '';
+      const rel = r
+        ? '<div style="margin-top:3px;font-size:0.8em;line-height:1.6;color:#334155">' + lab('연관')
+          + ((typeof StrongEngine !== 'undefined' && StrongEngine.linkifyCodes) ? StrongEngine.linkifyCodes(escHtml(r), slot) : escHtml(r))
+          + '</div><div id="' + slot + '"></div>'
+        : '';
       const det = dtl
         ? '<details style="margin-top:5px"><summary style="cursor:pointer;font-size:0.72em;color:#A8336A;list-style:none;outline:none">자세히</summary>'
-          + '<div style="margin-top:4px;max-height:220px;overflow-y:auto;padding-right:6px;font-size:0.82em;line-height:1.6;color:#475569;white-space:pre-wrap;overflow-wrap:anywhere">' + escHtml(dtl) + '</div></details>'
+          + '<div style="margin-top:4px;max-height:220px;overflow-y:auto;padding-right:6px;font-size:0.82em;line-height:1.6;color:#475569;white-space:pre-wrap;overflow-wrap:anywhere">' + linkifyVerseRefs(escHtml(dtl)) + '</div></details>'
         : '';
       return '<div style="margin-top:8px;padding-top:6px;border-top:1px dashed #a7f3d0">'
         + '<div style="font-size:0.72em;color:#A8336A;margin-bottom:1px">한글 원어사전</div>'
-        + (t ? '<div style="font-size:0.82em;color:#64748b">' + escHtml(t) + '</div>' : '')
+        + (t ? '<div style="font-size:0.82em;color:#64748b">' + escHtml(t) + (g ? ' <span style="color:#94a3b8">· ' + escHtml(g) + '</span>' : '') + '</div>' : (g ? '<div style="font-size:0.8em;color:#94a3b8">' + escHtml(g) + '</div>' : ''))
         + (m ? '<div style="font-size:0.92em;line-height:1.5;color:#1e293b">' + escHtml(m) + '</div>' : '')
-        + det + '</div>';
+        + uses + rel + det + '</div>';
     }
     async function loadHebKoDict() {
       try {
@@ -15596,7 +15592,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-4`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-5`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
