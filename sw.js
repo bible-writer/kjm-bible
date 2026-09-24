@@ -43,7 +43,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => {
+        keys.filter(k => k.startsWith('bible-map-') && k !== CACHE_NAME).map(k => {   // (2026-09-24) 같은 사이트의 ISBE 앱 캐시(isbe-app-*)는 건드리지 않는다
           console.log('[SW] 이전 캐시 삭제:', k);
           return caches.delete(k);
         })
