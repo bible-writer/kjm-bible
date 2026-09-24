@@ -246,7 +246,8 @@ async function load() {
   }
 }
 function setStatus(t) { $('status').textContent = t; }
-function status() { if (META) setStatus(`판 ${META.version} · ${ENTRIES.length.toLocaleString()} 항목`); }
+const APP_BUILD = 'b20260924-3';   // 화면 판 — 폰에서 새 판이 들어왔는지 보는 표
+function status() { if (META) setStatus(`판 ${META.version} · ${ENTRIES.length.toLocaleString()} 항목 · 앱 ${APP_BUILD}`); }
 function ready(why) { status(); render(true); openFromHash(); }
 $('open-file').onclick = () => $('file').click();
 $('file').onchange = async ev => {
