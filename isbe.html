@@ -246,7 +246,7 @@ async function load() {
   }
 }
 function setStatus(t) { $('status').textContent = t; }
-const APP_BUILD = 'b20260924-3';   // 화면 판 — 폰에서 새 판이 들어왔는지 보는 표
+const APP_BUILD = 'b20260924-4';   // 화면 판 — 폰에서 새 판이 들어왔는지 보는 표
 function status() { if (META) setStatus(`판 ${META.version} · ${ENTRIES.length.toLocaleString()} 항목 · 앱 ${APP_BUILD}`); }
 function ready(why) { status(); render(true); openFromHash(); }
 $('open-file').onclick = () => $('file').click();
@@ -279,7 +279,7 @@ let LAST = [];
 function render(reset) {
   const box = $('list');
   if (reset) { LAST = matches(); shown = 0; box.innerHTML = ''; box.scrollTop = 0; }
-  $('count').textContent = LAST.length.toLocaleString() + '개';
+  $('count').textContent = LAST.length.toLocaleString() + '개 · 앱 ' + APP_BUILD;   // 폰에서는 머리 상태줄이 가려져 여기에도 판을 보인다
   if (!LAST.length) { box.innerHTML = `<div class="more">${filter === 'fav' ? '즐겨찾기한 항목이 없습니다. 항목 위의 ☆를 누르면 여기에 모입니다.' : '맞는 표제어가 없습니다. 「본문까지 찾기」를 켜 보세요.'}</div>`; return; }
   const frag = document.createDocumentFragment();
   LAST.slice(shown, shown + PAGE).forEach(e => {
