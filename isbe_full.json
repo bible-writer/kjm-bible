@@ -1,5 +1,5 @@
 {
- "version": "1.517.0",
+ "version": "1.517.1",
  "date": "2026-09-24",
  "count": 9349,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
@@ -12,8 +12,8 @@
   "isbe_full_3.json"
  ],
  "parts_md5": [
-  "f5430ef10aae",
-  "46f0c535fbf9",
-  "a67732fa764e"
+  "d86fa74905a7",
+  "d626f8e10f63",
+  "9570f60675b9"
  ]
 }
