@@ -4973,6 +4973,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             ${entry.gloss ? `<button id="strong-pop-trbtn-gloss" onclick="StrongEngine.translatePopup('${code}','gloss')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button>` : ''}
           </div>
           ${entry.gloss ? `<div id="strong-pop-tr-gloss" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div>` : ''}
+          ${(typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(code) : ''}
           ${detailBtn}
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">출처: Strong's Exhaustive Concordance (James Strong, 1890, Public Domain)</div>
         `;
@@ -7323,6 +7324,22 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         const e = (typeof strongDict !== 'undefined' && strongDict) ? strongDict[key] : null;
         return e && e.xlit ? String(e.xlit) : '';
       } catch (err) { return ''; }
+    }
+    /* 한글 원어사전 칸 — 원어 카드 어디서나 같은 모양으로 (2026-09-24) */
+    function hebKoBlockHtml(code) {
+      const k = hebKoLookup(code);
+      if (!k) return '';
+      const m = String(k.m || '').trim(), t = String(k.t || '').trim(), dtl = String(k.d || '').trim();
+      if (!m && !t && !dtl) return '';
+      const det = dtl
+        ? '<details style="margin-top:5px"><summary style="cursor:pointer;font-size:0.72em;color:#A8336A;list-style:none;outline:none">자세히</summary>'
+          + '<div style="margin-top:4px;max-height:220px;overflow-y:auto;padding-right:6px;font-size:0.82em;line-height:1.6;color:#475569;white-space:pre-wrap;overflow-wrap:anywhere">' + escHtml(dtl) + '</div></details>'
+        : '';
+      return '<div style="margin-top:8px;padding-top:6px;border-top:1px dashed #a7f3d0">'
+        + '<div style="font-size:0.72em;color:#A8336A;margin-bottom:1px">한글 원어사전</div>'
+        + (t ? '<div style="font-size:0.82em;color:#64748b">' + escHtml(t) + '</div>' : '')
+        + (m ? '<div style="font-size:0.92em;line-height:1.5;color:#1e293b">' + escHtml(m) + '</div>' : '')
+        + det + '</div>';
     }
     async function loadHebKoDict() {
       try {
@@ -15570,7 +15587,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260924-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -16886,6 +16903,22 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
             '<div style="padding:16px;color:#64748b;font-size:13px;line-height:1.8">' +
             '\ud55c\uae00 \ub0b1\ub9d0(\uc608: \uc758\ub85c\uc6b4) \ub610\ub294 \uc2a4\ud2b8\ub871 \ucf54\ub4dc(\uc608: H7225)\ub97c \ub123\uc73c\uc2ed\uc2dc\uc624.<br>' +
             '\ucc3e\uc740 \uacf3: ' + escHtml(data.source || '') + '</div>';
+          
+          /* 사전에는 있는데 개역개정 본문에 그 번호가 붙은 어절이 없는 경우(예: G1 알파 — 본문은 G256a) (2026-09-24) */
+          try {
+            const qc = String(query || '').trim();
+            if (/^[HGhg]\d{1,5}[A-Za-z]?$/.test(qc)) {
+              const hk = (typeof hebKoLookup === 'function') ? hebKoLookup(qc) : null;
+              const se = (typeof StrongEngine !== 'undefined' && StrongEngine.lookup) ? StrongEngine.lookup(qc) : null;
+              if (hk || se) {
+                contentEl.innerHTML = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(qc) + '" — 개역개정 본문에 이 번호가 붙은 어절이 없습니다</div>'
+                  + '<div style="padding:12px 16px;font-size:14px;line-height:1.7">'
+                  + (se ? '<div style="font-size:1.2em;font-weight:700;color:#065f46">' + escHtml(se.lemma || '') + '</div><div style="color:#059669">' + escHtml(se.xlit || '') + '</div><div style="color:#334155">' + escHtml(se.gloss || '') + '</div>' : (hk ? '<div style="font-size:1.2em;font-weight:700;color:#065f46">' + escHtml(hk.l || '') + '</div>' : ''))
+                  + ((typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(qc) : '')
+                  + '</div>';
+              }
+            }
+          } catch (e) {}
           return;
         }
         const total = list.reduce(function(a, b) { return a + b.n; }, 0);
