@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ISBE 성경백과 (한글)</title>
+<!-- 홈 화면 설치 — 성경지도(manifest.json)와 다른 id·범위를 주어 따로 설치된다 (2026-09-24) -->
+<link rel="manifest" href="isbe.webmanifest">
+<meta name="theme-color" content="#9A4B12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ISBE">
+<link rel="apple-touch-icon" href="isbe-192.png">
+<link rel="icon" href="isbe-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
@@ -451,6 +459,10 @@ $('fs-down').onclick = () => setFs(ls.get('isbe_app_fs', 17) - 1);
 $('fs-up').onclick = () => setFs(ls.get('isbe_app_fs', 17) + 1);
 
 load();
+/* 홈 화면 설치용 서비스 워커 — 범위를 ./isbe 로 좁힌다 */
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('./isbe_sw.js', { scope: './isbe' }).catch(() => {});
+}
 </script>
 </body>
 </html>
