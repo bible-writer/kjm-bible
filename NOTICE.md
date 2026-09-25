@@ -30,11 +30,19 @@
 ## 4. CC BY 4.0 자료 (출처 표시 의무)
 
 - **STEPBible TIPNR** (Tyndale House, Cambridge) — CC BY 4.0 — https://github.com/STEPBible/STEPBible-Data
-- **OpenBible.info Bible Geocoding Data** (좌표) — CC BY 4.0 — https://www.openbible.info/geo/
+- **OpenBible.info Bible Geocoding Data** (좌표·사진 목록) — CC BY 4.0 — https://www.openbible.info/geo/
 - **neuu-org/bible-dictionary-dataset** (Hitchcock 데이터셋, CCEL ThML 기반) — CC BY 4.0
 
 이 자료들은 원래의 CC BY 4.0 조건을 그대로 따릅니다. 이를 바탕으로 kjm 이 더한 한글 내용은 위 1에 따릅니다.
 
-## 5. 앞으로
+## 5. 지명 사진 (`photos/`) — 사진마다 따로 된 라이선스
+
+- `photos/` 의 사진은 OpenBible.info 가 Wikimedia Commons 사진과 Copernicus Sentinel-2 위성 자료로 만든 512x512 썸네일입니다(자르기·색 보정 등 가공). https://www.openbible.info/geo/
+- **사진은 위 1(© kjm)에 포함되지 않습니다.** 각 사진은 `photos/photos.json` 에 적힌 원래 라이선스(CC BY, CC BY-SA, CC0, 퍼블릭 도메인 등)를 따릅니다. 작성자·라이선스·원본 페이지는 `photos.json` 과 앱 지명 창의 사진 아래 줄에 있습니다.
+- CC BY-SA 사진은 가공된 썸네일도 같은 CC BY-SA 조건을 따릅니다.
+- 위성 사진: Contains modified Copernicus Sentinel data 2019.
+- GFDL·GPL 사진과 저작권이 있는 사진은 싣지 않았습니다.
+
+## 6. 앞으로
 
 한글 번역의 라이선스는 나중에 CC BY-NC 4.0 으로 넓힐 수 있습니다(2026-09-22 kjm). 바뀌면 이 파일에 적습니다.
