@@ -1728,10 +1728,6 @@ body:not(.admin-mode) [id^="strong-pop-trbtn"],
 body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
 #btn-admin-toggle.on { background: #b91c1c !important; color: #fff !important; }
   
-    /* (2026-09-25) 지도 타일 사이 흰 줄 없애기 — 화면 배율(125% 따위)·창 나누기에서 타일 경계가 반 픽셀 떠서
-       세로·가로 흰 줄이 보였다. 크롬 권장 해법: 바탕 타일을 더해 그려 경계의 반투명 픽셀을 메운다(Leaflet #3575).
-       글자 겹침 층(overlayPane)은 건드리지 않는다. */
-    .leaflet-tile-pane img.leaflet-tile { mix-blend-mode: plus-lighter; }
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -13497,6 +13493,21 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       document.addEventListener('touchend', onUp);
     });
 
+    /* (2026-09-25 둘째 판) 지도 타일 사이 흰 줄 — 확대·축소하는 동안 옛 타일이 늘거나 줄며(scale) 경계가 벌어졌다.
+       CSS 한 줄(plus-lighter)로는 멈춘 화면만 메워져, kjm 「처음 나타났다 없어져… 축소하면 나타나」.
+       타일마다 1px 크게 그려 이웃과 겹치게 한다(Leaflet 이슈 #3575 에서 널리 쓰는 방법). 모든 타일 층에 걸린다. */
+    (function () {
+      var initTile = L.GridLayer.prototype._initTile;
+      L.GridLayer.include({
+        _initTile: function (tile) {
+          initTile.call(this, tile);
+          var size = this.getTileSize();
+          tile.style.width = (size.x + 1) + 'px';
+          tile.style.height = (size.y + 1) + 'px';
+        }
+      });
+    })();
+
     var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19, attribution: '© OpenStreetMap'
     }).addTo(map);
@@ -15736,7 +15747,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
