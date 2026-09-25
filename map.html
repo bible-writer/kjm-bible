@@ -13073,6 +13073,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
      * [지명 사진] OpenBible.info 썸네일 (b20260925-4)
      *   photos/photos.json : { photos: { ob_id: [file, credit, credit_url, license, title, satellite] } }
      *   사진 파일 photos/<file> (512x512, OpenBible.info 가공). 사진마다 라이선스가 따로 — 출처 줄 필수.
+     *   사진은 draggable=false — 창을 끌다 사진이 파일 등록 칸에 떨어져 「지원 안 됨」이 뜨던 흠(b20260925-6)
      *   GitHub Pages 에서 열면 같은 자리(photos/), 파일로 열면 bible-writer.github.io 에서 불러옴.
      * ═══════════════════════════════════════════════════════════════ */
     const PlacePhotos = (function(){
@@ -13115,7 +13116,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         const [file, credit, url, lic, title, sat] = p;
         const L = LIC[lic] || [lic, ''];
         const name = esc(String(item.name || item.label || '').replace(/^(.+?)\s+\(.*\)$/, '$1'));
-        const img = `<img src="${esc(BASE + file)}" alt="${name} 사진" loading="lazy" decoding="async"
+        const img = `<img src="${esc(BASE + file)}" alt="${name} 사진" loading="lazy" decoding="async" draggable="false" ondragstart="return false;"
               style="width:100%;aspect-ratio:1/1;max-height:260px;object-fit:cover;border-radius:8px;display:block;background:#e2e8f0;"
               onerror="var b=this.closest('.pphoto');if(b)b.style.display='none';">`;
         const pic = url ? `<a href="${esc(url)}" target="_blank" rel="noopener" title="저작자·라이선스 페이지 열기">${img}</a>` : img;
@@ -15819,7 +15820,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-5`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-6`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
