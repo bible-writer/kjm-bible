@@ -1010,6 +1010,11 @@
       border-bottom: 2px solid #e2e8f0;
       padding-bottom: 4px;
     }
+    /* 머리줄은 창 안을 스크롤해도 위에 붙어 있음 — 폰에서는 여기를 잡아 창을 옮긴다 (b20260925-8) */
+    .leaflet-popup-content .popup-title {
+      position: sticky; top: 0; z-index: 5; background: #fff;
+      padding-top: 2px; touch-action: none; cursor: move;
+    }
 
     /* ── 성경 본문 검색 ── */
     #bible-search-bar {
@@ -13358,7 +13363,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     var PLACE_POPUP_W = (function () {
       var v = parseInt(localStorage.getItem('place_popup_w') || '', 10);
       // 사진 칸이 들어가 좁은 창은 답답함 — 420 보다 좁게 남아 있으면 420 으로 (b20260925-5)
-      return (v >= 420 && v <= 1200) ? v : (v >= 280 && v < 420 ? 420 : 640);
+      // 좁은 창은 답답함 — 560 보다 좁게 남아 있으면 560 으로 (b20260925-7, 전 420)
+      return (v >= 560 && v <= 1200) ? v : (v >= 280 && v < 560 ? 560 : 640);
     })();
     function placeDictFontSize() {
       var v = parseInt(localStorage.getItem('place_dict_fs') || '', 10);
@@ -13508,7 +13514,9 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       if (!wrapper || !content || wrapper._resizeBound) return;
       wrapper._resizeBound = true;
       wrapper.style.position = 'relative';
-      content.style.width = PLACE_POPUP_W + 'px';
+      // 화면(지도)보다 넓으면 지도 폭에 맞춤 — 폰
+      var mapW = map.getContainer().clientWidth;
+      content.style.width = Math.min(PLACE_POPUP_W, Math.max(280, mapW - 60)) + 'px';
       content.style.maxHeight = '82vh';
       content.style.overflowY = 'auto';
       // 폭이 바뀌면 Leaflet 이 잡아둔 자리가 어긋나 머리줄이 화면 위로 넘칠 수 있다
@@ -13547,6 +13555,43 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       });
     });
 
+    /* [지명 창 자리 잡기] (b20260925-7)
+     * Leaflet 팝업은 표시 위로 뜨므로 창이 길면 머리가 지도 위로 잘린다(autoPan 은 꺼 둠).
+     * 창이 지도 안에 다 들어오지 않으면 표시 옆(왼쪽, 자리가 없으면 오른쪽)으로 비켜 세우고
+     * 위아래는 지도 안에 들도록 옮긴다. 옮긴 거리는 창 끌기와 같은 translate 로 준다. */
+    function fitPlacePopup(popup) {
+      var container = popup && popup._container;
+      var wrapper = container && container.querySelector('.leaflet-popup-content-wrapper');
+      if (!wrapper || !popup._latlng) return;
+      var tip = container.querySelector('.leaflet-popup-tip-container');
+      wrapper.style.transform = '';
+      if (tip) tip.style.visibility = '';
+      var mr = map.getContainer().getBoundingClientRect();
+      var r = wrapper.getBoundingClientRect();
+      var pad = 10;
+      if (r.top >= mr.top + pad && r.bottom <= mr.bottom - pad &&
+          r.left >= mr.left + pad && r.right <= mr.right - pad) return;   // 다 보이면 그대로
+      var pt = map.latLngToContainerPoint(popup._latlng);
+      var mx = mr.left + pt.x, my = mr.top + pt.y, gap = 28;
+      var w = r.width, h = r.height;
+      var left;
+      if (mx - gap - w >= mr.left + pad) left = mx - gap - w;            // 표시 왼쪽
+      else if (mx + gap + w <= mr.right - pad) left = mx + gap;          // 표시 오른쪽
+      else left = Math.max(mr.left + pad, Math.min(r.left, mr.right - pad - w));
+      var top = my - h / 2;
+      top = Math.max(mr.top + pad, Math.min(top, mr.bottom - pad - h));
+      if (h > mr.height - 2 * pad) top = mr.top + pad;                   // 지도보다 길면 위에 맞춤
+      wrapper.style.transform = 'translate(' + Math.round(left - r.left) + 'px,' + Math.round(top - r.top) + 'px)';
+      if (tip) tip.style.visibility = 'hidden';
+    }
+    map.on('popupopen', function (e) {
+      var p = e.popup;
+      // 폭 맞춤(0ms)·사진 칸 채움 뒤에 한 번 더
+      p._kjmUserMoved = false;
+      setTimeout(function () { fitPlacePopup(p); }, 40);
+      setTimeout(function () { if (!p._kjmUserMoved) fitPlacePopup(p); }, 700);
+    });
+
     // [지도창 드래그] 지명 팝업(Leaflet 기본 팝업)을 마우스/터치로 자유롭게 옮길 수 있게 함
     map.on('popupopen', function(e) {
       var container = e.popup && e.popup._container;
@@ -13569,6 +13614,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (!dragging) return;
         var dx = cx - startX, dy = cy - startY;
         wrapper.style.transform = 'translate(' + (curX + dx) + 'px,' + (curY + dy) + 'px)';
+        if (e.popup) e.popup._kjmUserMoved = true;
         var tip = container.querySelector('.leaflet-popup-tip-container');
         if (tip) tip.style.visibility = 'hidden';
       }
@@ -13576,7 +13622,15 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       wrapper.addEventListener('mousedown', function(ev) { onDown(ev.clientX, ev.clientY); });
       document.addEventListener('mousemove', function(ev) { onMove(ev.clientX, ev.clientY); });
       document.addEventListener('mouseup', onUp);
-      wrapper.addEventListener('touchstart', function(ev) { var t = ev.touches[0]; onDown(t.clientX, t.clientY); }, { passive: true });
+      // 폰: 창 안을 손가락으로 스크롤하면 창이 같이 끌려 움직이던 흠(b20260925-8)
+      //  → 손가락 끌기는 머리줄(지명 이름 줄)에서 시작할 때만. 본문은 스크롤만 된다.
+      wrapper.addEventListener('touchstart', function(ev) {
+        if (ev.touches.length !== 1) return;
+        var tgt = ev.target;
+        if (!(tgt && tgt.closest && tgt.closest('.popup-title'))) return;
+        if (tgt.closest('input,button,textarea,select,a')) return;
+        var t = ev.touches[0]; onDown(t.clientX, t.clientY);
+      }, { passive: true });
       document.addEventListener('touchmove', function(ev) { if (!dragging) return; var t = ev.touches[0]; onMove(t.clientX, t.clientY); }, { passive: true });
       document.addEventListener('touchend', onUp);
     });
@@ -15820,7 +15874,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-6`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-8`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
