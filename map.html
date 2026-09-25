@@ -13356,7 +13356,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
      * 고른 값은 localStorage 에 남겨 다음에도 그대로 쓴다. */
     var PLACE_POPUP_W = (function () {
       var v = parseInt(localStorage.getItem('place_popup_w') || '', 10);
-      return (v >= 320 && v <= 1200) ? v : 640;
+      // 사진 칸이 들어가 좁은 창은 답답함 — 420 보다 좁게 남아 있으면 420 으로 (b20260925-5)
+      return (v >= 420 && v <= 1200) ? v : (v >= 280 && v < 420 ? 420 : 640);
     })();
     function placeDictFontSize() {
       var v = parseInt(localStorage.getItem('place_dict_fs') || '', 10);
@@ -13507,7 +13508,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       wrapper._resizeBound = true;
       wrapper.style.position = 'relative';
       content.style.width = PLACE_POPUP_W + 'px';
-      content.style.maxHeight = '70vh';
+      content.style.maxHeight = '82vh';
       content.style.overflowY = 'auto';
       // 폭이 바뀌면 Leaflet 이 잡아둔 자리가 어긋나 머리줄이 화면 위로 넘칠 수 있다
       setTimeout(function () { try { e.popup.update(); } catch (err) {} }, 0);
@@ -13529,7 +13530,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       });
       grip.addEventListener('pointermove', function (ev) {
         if (!on) return;
-        var w = Math.min(1200, Math.max(280, sw + (ev.clientX - sx)));
+        var w = Math.min(1200, Math.max(360, sw + (ev.clientX - sx)));
         var h = Math.min(window.innerHeight * 0.9, Math.max(160, sh + (ev.clientY - sy)));
         content.style.width = w + 'px';
         content.style.maxHeight = h + 'px';   // height 를 박으면 글이 짧을 때 빈칸이 남고
@@ -15818,7 +15819,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-4`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-5`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
