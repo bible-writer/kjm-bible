@@ -2203,7 +2203,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     <div id="rawdict-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border,#e2e8f0);cursor:move;user-select:none">
       <span style="font-weight:bold;font-size:1.1em">📜 원문사전 (영문) <span style="font-size:0.7em;font-weight:400;color:#94a3b8">(드래그하여 이동)</span></span>
       <div style="display:flex;align-items:center;gap:8px">
-        <button id="btn-export-rawdict" title="한글 설명 입력분 포함하여 easton_full.json / smith_full.json 내보내기 (평문, GitHub 업로드용)" style="font-size:11px;padding:4px 9px;background:#b45309;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:600">📥 내보내기</button>
+        <button id="btn-export-rawdict" title="한글 설명 입력분 포함하여 사전 파일 내보내기 (잠금본, GitHub 업로드용)" style="font-size:11px;padding:4px 9px;background:#b45309;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:600">📥 내보내기</button>
         <button id="btn-close-rawdict" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
       </div>
     </div>
@@ -6370,6 +6370,50 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     //   file        : 같은 폴더에 두는 JSON 파일 이름
     //   storeKey    : 브라우저 저장소 키
     //   editsKey    : 사용자가 직접 고친 항목 추적용 키
+    /* ── 번역 사전 잠금 풀기 (418차, kjm 「읽는 것은 하되 통째로 가져가는 것 방지」) ──
+     * GitHub 의 사전 파일은 gzip + AES-256-GCM 으로 잠가 둔다({kjmlock:1, iv, data}). 앱 안의 열쇠로 풀어 읽으므로 비밀번호는 없다.
+     * 평문 파일({entries:…})은 그대로 통과. */
+    const KjmLock = (() => {
+      const A = [134, 50, 248, 30, 111, 251, 126, 198, 28, 139, 226, 249, 49, 154, 144, 76, 18, 152, 197, 31, 50, 246, 99, 134, 233, 1, 74, 141, 132, 50, 167, 62];
+      const B = [70, 20, 136, 94, 52, 145, 45, 219, 123, 44, 37, 155, 164, 90, 69, 251, 20, 91, 228, 75, 93, 213, 50, 36, 158, 108, 156, 28, 139, 5, 222, 37];
+      let kp = null;
+      const key = () => kp || (kp = crypto.subtle.importKey('raw', new Uint8Array(A.map((x, i) => x ^ B[i])), 'AES-GCM', false, ['encrypt', 'decrypt']));
+      const b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+      const b64e = u => { let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); };
+      const isLocked = o => !!(o && o.kjmlock === 1 && o.data);
+      async function open(o) {
+        if (!isLocked(o)) return o;
+        const z = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(o.iv) }, await key(), b64d(o.data));
+        const txt = await new Response(new Blob([z]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+        return JSON.parse(txt);
+      }
+      async function lock(obj) {
+        const z = new Uint8Array(await new Response(new Blob([JSON.stringify(obj)]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await key(), z));
+        const out = { kjmlock: 1, note: '잠금 사전 — 성경지도 앱에서 읽음(무단 전재·배포 금지 © kjm)' };
+        ['version', 'date', 'part', 'of'].forEach(k => { if (obj && obj[k] != null) out[k] = obj[k]; });
+        out.iv = b64e(iv); out.data = b64e(ct);
+        return out;
+      }
+      // GitHub 에 올릴 파일들 [[이름, 글], …] — 큰 사전(ISBE)은 목차(평문 · 판 번호) + 잠금 조각(25MB 웹 한도 아래)
+      async function files(pkg, base) {
+        const txt = JSON.stringify(pkg);
+        const n = Math.ceil(txt.length / 20000000);
+        if (n <= 1 || !Array.isArray(pkg.entries)) return [[base + '.json', JSON.stringify(await lock(pkg))]];
+        const per = Math.ceil(pkg.entries.length / n), out = [], names = [];
+        for (let i = 0; i < n; i++) {
+          const part = { part: i + 1, of: n, version: pkg.version, entries: pkg.entries.slice(i * per, (i + 1) * per) };
+          names.push(base + '_' + (i + 1) + '.json');
+          out.push([names[i], JSON.stringify(await lock(part))]);
+        }
+        const idx = {}; Object.keys(pkg).forEach(k => { if (k !== 'entries') idx[k] = pkg[k]; });
+        idx.count = pkg.entries.length; idx.parts = names; delete idx.parts_md5;
+        out.unshift([base + '.json', JSON.stringify(idx, null, 1)]);
+        return out;
+      }
+      return { open, lock, isLocked, files };
+    })();
     const RAWDICT_SOURCES = [
       { key: 'easton',    label: 'Easton',    file: './easton_full.json',    storeKey: 'easton_full_dict',    editsKey: 'easton_local_edits' },
       { key: 'smith',     label: 'Smith',     file: './smith_full.json',     storeKey: 'smith_full_dict',     editsKey: 'smith_local_edits' },
@@ -6470,10 +6514,10 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           const savedMeta = await getLocalItem(rawDictMetaKey(s.key));
           if (savedMeta) rawDictMeta[s.key] = savedMeta;
           // 2) 최신본이 있으면 받아서 합친다 (내가 고친 내용은 보존됨)
-          //    공개 퍼블릭 도메인 텍스트라 암호화 없이 평문으로 둔다
+          //    (418차) 번역 사전은 잠금본({kjmlock:1}) — KjmLock 이 비밀번호 없이 풀어 읽는다. 통째 복사 방지용
           const res = await fetch(s.file, { cache: 'no-store' });
           if (res && res.ok) {
-            let pkg = await res.json();
+            let pkg = await KjmLock.open(await res.json());   // 잠금 사전이면 풀어서(418차)
             // (2026-09-21 kjm) GitHub 웹 업로드는 파일 하나 25MB까지라, 큰 사전(ISBE)은 조각으로 나눠 올린다.
             //   s.file 이 목차 파일({..., parts:["isbe_full_1.json", ...]})이면 조각을 차례로 받아 entries 를 이어 붙인다.
             //   조각이 하나라도 안 받아지면 이번에는 갱신을 건너뛴다(반쪽 데이터로 덮어쓰지 않도록).
@@ -6484,7 +6528,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
               for (const part of pkg.parts) {
                 const pr = await fetch(base + part, { cache: 'no-store' });
                 if (!pr || !pr.ok) { ok = false; break; }
-                const pj = await pr.json();
+                const pj = await KjmLock.open(await pr.json());
                 if (!pj || !Array.isArray(pj.entries)) { ok = false; break; }
                 for (const e of pj.entries) all.push(e);
               }
@@ -7343,18 +7387,22 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         date: today,
         count: list.length,
         source: meta.source || RAWDICT_SOURCE_TEXT[src] || getRawDictLabel(src),
-        note: meta.note || '공개 퍼블릭 도메인 텍스트이므로 평문(비암호화)으로 GitHub에 업로드.',
+        note: meta.note || '번역 사전 — GitHub 에는 잠금본(KjmLock)으로 올림.',
         entries: list
       });
       // entries 를 맨 뒤로 보내 사람이 열었을 때 머리말이 먼저 보이게 한다
       delete pkg.entries; pkg.entries = list;
       const kept = Object.keys(meta).filter(k => !['version', 'date', 'source', 'note'].includes(k)).length;
-      const blob = new Blob([JSON.stringify(pkg, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `${src}_full.json`;
-      a.click();
-      URL.revokeObjectURL(a.href);
+      // (418차) GitHub 에 올릴 파일은 잠금본으로 — 읽기는 앱이 풀어서, 통째 복사는 막음. 큰 사전(ISBE)은 목차 + 잠금 조각
+      const outs = await KjmLock.files(pkg, `${src === 'hastschaff' ? 'schaff' : src}_full`);
+      for (const [fn, txt] of outs) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json' }));
+        a.download = fn; a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+        await new Promise(r => setTimeout(r, 400));
+      }
+      const a = { download: outs.map(x => x[0]).join(' · ') };
       showToast(`📥 ${a.download} 생성 완료 (${list.length}개 · 판 ${pkg.version}${kept ? ` · 기록 ${kept}덩이 보존` : ''}) — GitHub에 업로드하세요`, 'success');
     }
 
@@ -16133,7 +16181,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-12`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-13`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }

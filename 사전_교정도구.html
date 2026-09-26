@@ -356,7 +356,7 @@ header .q:disabled{opacity:.45}
 </head>
 <body>
 <header>
-  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260924-2</span></h1>
+  <h1>교정 책상 <span style="font-size:0.55em;font-weight:400;color:#94a3b8;vertical-align:middle">b20260926-1</span></h1>
   <span class="sub" id="loaded">파일을 열거나 창에 끌어다 놓으십시오</span>
   <span class="md5box">
     <span class="sub">영문 MD5</span>
@@ -1561,9 +1561,55 @@ function drawStat(){
     bb.textContent='책 이름 채우기 (ISBE 끔)'; fb.textContent='참조 채우기 (ISBE 끔)'; }
 }
 
+/* ── 번역 사전 잠금 풀기 (418차, kjm 「읽는 것은 하되 통째로 가져가는 것 방지」) ──
+ * GitHub 의 사전 파일은 gzip + AES-256-GCM 으로 잠가 둔다({kjmlock:1, iv, data}). 앱 안의 열쇠로 풀어 읽으므로 비밀번호는 없다.
+ * 평문 파일({entries:…})은 그대로 통과. */
+const KjmLock = (() => {
+  const A = [134, 50, 248, 30, 111, 251, 126, 198, 28, 139, 226, 249, 49, 154, 144, 76, 18, 152, 197, 31, 50, 246, 99, 134, 233, 1, 74, 141, 132, 50, 167, 62];
+  const B = [70, 20, 136, 94, 52, 145, 45, 219, 123, 44, 37, 155, 164, 90, 69, 251, 20, 91, 228, 75, 93, 213, 50, 36, 158, 108, 156, 28, 139, 5, 222, 37];
+  let kp = null;
+  const key = () => kp || (kp = crypto.subtle.importKey('raw', new Uint8Array(A.map((x, i) => x ^ B[i])), 'AES-GCM', false, ['encrypt', 'decrypt']));
+  const b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const b64e = u => { let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); };
+  const isLocked = o => !!(o && o.kjmlock === 1 && o.data);
+  async function open(o) {
+    if (!isLocked(o)) return o;
+    const z = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(o.iv) }, await key(), b64d(o.data));
+    const txt = await new Response(new Blob([z]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    return JSON.parse(txt);
+  }
+  async function lock(obj) {
+    const z = new Uint8Array(await new Response(new Blob([JSON.stringify(obj)]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await key(), z));
+    const out = { kjmlock: 1, note: '잠금 사전 — 성경지도 앱에서 읽음(무단 전재·배포 금지 © kjm)' };
+    ['version', 'date', 'part', 'of'].forEach(k => { if (obj && obj[k] != null) out[k] = obj[k]; });
+    out.iv = b64e(iv); out.data = b64e(ct);
+    return out;
+  }
+  // GitHub 에 올릴 파일들 [[이름, 글], …] — 큰 사전(ISBE)은 목차(평문 · 판 번호) + 잠금 조각(25MB 웹 한도 아래)
+  async function files(pkg, base) {
+    const txt = JSON.stringify(pkg);
+    const n = Math.ceil(txt.length / 20000000);
+    if (n <= 1 || !Array.isArray(pkg.entries)) return [[base + '.json', JSON.stringify(await lock(pkg))]];
+    const per = Math.ceil(pkg.entries.length / n), out = [], names = [];
+    for (let i = 0; i < n; i++) {
+      const part = { part: i + 1, of: n, version: pkg.version, entries: pkg.entries.slice(i * per, (i + 1) * per) };
+      names.push(base + '_' + (i + 1) + '.json');
+      out.push([names[i], JSON.stringify(await lock(part))]);
+    }
+    const idx = {}; Object.keys(pkg).forEach(k => { if (k !== 'entries') idx[k] = pkg[k]; });
+    idx.count = pkg.entries.length; idx.parts = names; delete idx.parts_md5;
+    out.unshift([base + '.json', JSON.stringify(idx, null, 1)]);
+    return out;
+  }
+  return { open, lock, isLocked, files };
+})();
+
 /* ══════════ 파일 읽기 ══════════ */
 function load(text, name){
   let j; try{ j=JSON.parse(text); }catch(e){ alert('JSON을 읽지 못했습니다. '+e.message); return; }
+  if(KjmLock.isLocked(j)){ KjmLock.open(j).then(x=>load(JSON.stringify(x), name)).catch(e=>alert('잠금 사전을 풀지 못했습니다. '+e.message)); return; }
   const p=detect(j);
   if(!p){ alert('아는 얼개가 아닙니다. 사전(entries) · 지명(places) · 인명(persons) · 용어(terms) 가운데 하나여야 합니다.'); return; }
   DB=j; PROF=p; FILE=name;
@@ -1624,7 +1670,7 @@ $('#gitgo').onclick=async ()=>{
     const res=await fetch(RAW+f, {cache:'no-store'});
     if(!res.ok) throw new Error('내려받지 못했습니다 ('+res.status+')');
     let text=await res.text();
-    let j=JSON.parse(text);
+    let j=await KjmLock.open(JSON.parse(text)); text=JSON.stringify(j);
     /* ISBE 는 25MB 제한 때문에 목차(parts)와 조각으로 올린다 — 조각을 차례로 받아 이어 붙인다 */
     if(Array.isArray(j.parts) && j.parts.length){
       const all=[];
@@ -1632,7 +1678,7 @@ $('#gitgo').onclick=async ()=>{
         msg.textContent='조각 '+(i+1)+'/'+j.parts.length+' 내려받는 중…';
         const pr=await fetch(RAW+j.parts[i], {cache:'no-store'});
         if(!pr.ok) throw new Error('조각 '+j.parts[i]+'을 받지 못했습니다 ('+pr.status+')');
-        const pj=await pr.json(); (pj.entries||[]).forEach(e=>all.push(e));
+        const pj=await KjmLock.open(await pr.json()); (pj.entries||[]).forEach(e=>all.push(e));
       }
       const whole={}; Object.keys(j).forEach(k=>{ if(k!=='parts'&&k!=='parts_md5') whole[k]=j[k]; });
       whole.entries=all; j=whole; text=JSON.stringify(whole);
@@ -1717,6 +1763,11 @@ $('#expJson').onclick=()=>{
   const n=items().filter(e=>e.__touched).length;
   if(!n && !confirm('고친 항목이 없습니다. 그래도 내려받으시겠습니까?')) return;
   const {out}=bumped();
+  if(Array.isArray(out.entries)){   /* (418차) 번역 사전은 GitHub 용 잠금본으로(큰 ISBE 는 목차 + 잠금 조각) — 이름은 올릴 이름 그대로 */
+    const base=FILE.replace(/\.json$/,'').replace(/_v[\d.]+$/,'');
+    KjmLock.files(out, base).then(async fs=>{ for(const [fn,t] of fs){ dl(fn,t); await new Promise(r=>setTimeout(r,400)); } drawStat(); });
+    return;
+  }
   dl(FILE.replace(/\.json$/,'')+'_v'+DB.version+'.json', JSON.stringify(out,null,1));
   drawStat();
 };
