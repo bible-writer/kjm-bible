@@ -410,6 +410,10 @@
       text-align: right;
     }
     .verse-text { flex: 1; word-break: keep-all; }
+    /* 개역개정 어절 스트롱 번호(작게) — 글자는 ::after 로만 그려 본문 textContent·어절 셈을 바꾸지 않는다 (b20260926-4) */
+    .krv-sn::after { content: attr(data-sn); font-size: 0.55em; color: #94a3b8; vertical-align: super; margin: 0 1px 0 1px; cursor: pointer; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.02em; white-space: nowrap; }
+    .krv-sn:hover::after { color: #047857; text-decoration: underline; }
+    #btn-krv-sn.on { background: #ecfdf5; color: #047857; border-color: #a7f3d0; font-weight: 700; }
 
     /* 본문 지명·인명·용어 클릭 링크 (2026-09-16 kjm) — 배경 칸·여백 없이 글자색과 밑줄만.
        칸과 여백이 있으면 「주 는」처럼 뒤 조사가 띄어 쓴 것처럼 보였다. 조사는 칸 밖이라 본문처럼 읽힌다. */
@@ -1896,6 +1900,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         <span class="rb-right">
           <button class="rb-icon" id="btn-book-grid" title="책 고르기">📖</button>
           <button class="rb-icon" id="btn-chap-grid" title="장 고르기">🔢</button>
+          <button class="rb-icon" id="btn-krv-sn" title="개역개정 어절마다 스트롱 번호를 작게 (어절 원어 분석 등록 필요) — 번호를 누르면 원어 뜻">H#</button>
           <span class="rb-sep"></span>
           <button class="rb-icon" id="btn-font-dec" title="글자 줄이기">A−</button>
           <span id="font-size-display" class="rb-fs">15px</span>
@@ -7678,10 +7683,64 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     async function loadKrvnMorph() {
       try {
         const raw = await getLocalItem('saved_krvn_morph');
-        if (raw && raw.meta && raw.meta.kind === 'krvn_morph') { krvnMorph = raw; console.log('어절 원어 분석 ' + raw.meta.verses + '절 불러옴'); }
+        if (raw && raw.meta && raw.meta.kind === 'krvn_morph') { krvnMorph = raw; try { applyKrvStrong(); } catch (e) {} console.log('어절 원어 분석 ' + raw.meta.verses + '절 불러옴'); }
       } catch (e) { console.warn('어절 원어 분석 불러오기 실패', e); }
     }
     // 절 본문과 글자 위치 → 그 절 어절 목록과 몇 번째 어절 (본문 어절 수가 다르면 null)
+    /* ── 개역개정 본문에 스트롱 번호 작게 (b20260926-4) ──
+     * 어절 원어 분석(krvn_morph, 어절 차례 = 본문 띄어쓰기 차례)에서 어절마다 번호를 붙인다. 어절 수가 안 맞는 절은 건너뜀. */
+    var krvSnOn = false;
+    try { krvSnOn = localStorage.getItem('krv_sn_on') === '1'; } catch (e) {}
+    function krvSnShort(c) { const m = String(c).match(/^([HG])0*(\d+)([A-Za-z]?)$/); return m ? m[1] + m[2] + m[3] : String(c); }
+    function applyKrvStrong(container) {
+      container = container || document.getElementById('bible-content');
+      if (!container) return;
+      container.querySelectorAll('.krv-sn').forEach(e => e.remove());
+      container.querySelectorAll('.verse-text').forEach(vt => vt.normalize());
+      const btn = document.getElementById('btn-krv-sn'); if (btn) btn.classList.toggle('on', !!krvSnOn);
+      if (!krvSnOn || !krvnMorph) return;
+      container.querySelectorAll('.verse-row[data-bc]').forEach(row => {
+        const bc = String(row.dataset.bc || '').split('-').map(Number);
+        const v = parseInt(String(row.id || '').replace('verse-row-', ''), 10);
+        const vt = row.querySelector(':scope > .verse-text');
+        const arr = vt && krvnMorph.v[bc[0] + '-' + bc[1] + '-' + v];
+        if (!arr) return;
+        if (vt.textContent.trim().split(/\s+/).length !== arr.length) return;
+        const w = document.createTreeWalker(vt, NodeFilter.SHOW_TEXT); const nodes = []; let nd;
+        while ((nd = w.nextNode())) nodes.push(nd);
+        const ends = []; let inWord = false, last = null;
+        nodes.forEach(t => { const x = t.nodeValue; for (let i = 0; i < x.length; i++) { const sp = /\s/.test(x[i]);
+          if (sp && inWord) { ends.push([t, i]); inWord = false; } else if (!sp) { inWord = true; last = [t, i + 1]; } } });
+        if (inWord && last) ends.push(last);
+        if (ends.length !== arr.length) return;
+        for (let i = ends.length - 1; i >= 0; i--) {
+          const codes = String(arr[i][0] || '').split(',').filter(Boolean);
+          if (!codes.length) continue;
+          const [t, off] = ends[i]; const tail = t.splitText(off);
+          const sp = document.createElement('span'); sp.className = 'krv-sn';
+          sp.dataset.sn = codes.map(krvSnShort).join('·'); sp.dataset.code = codes[0];
+          sp.title = codes.join(', ');
+          t.parentNode.insertBefore(sp, tail);
+        }
+      });
+    }
+    document.addEventListener('click', function (ev) {
+      const sn = ev.target && ev.target.closest && ev.target.closest('.krv-sn');
+      if (!sn) return;
+      ev.stopPropagation(); ev.preventDefault();
+      if (typeof StrongEngine !== 'undefined') StrongEngine.handleClick(sn.dataset.code);
+    }, true);
+    document.addEventListener('DOMContentLoaded', function () {
+      const b = document.getElementById('btn-krv-sn');
+      if (!b) return;
+      b.classList.toggle('on', !!krvSnOn);
+      b.onclick = function () {
+        if (!krvnMorph) { showToast('📘 어절 원어 분석(krvn_morph_STEP.json)을 먼저 등록하세요', 'warn'); return; }
+        krvSnOn = !krvSnOn;
+        try { localStorage.setItem('krv_sn_on', krvSnOn ? '1' : '0'); } catch (e) {}
+        applyKrvStrong();
+      };
+    });
     function krvnTokenAt(b, c, v, text, offset) {
       if (!krvnMorph) return null;
       const arr = krvnMorph.v[`${b}-${c}-${v}`];
@@ -7706,6 +7765,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           const obj = JSON.parse(await f.text());
           if (!obj || !obj.meta || obj.meta.kind !== 'krvn_morph' || !obj.v || !obj.lm || !obj.mo) { showToast('어절 원어 분석 파일 꼴이 아닙니다', 'warn'); return; }
           krvnMorph = obj;
+          try { applyKrvStrong(); } catch (e) {}
           await setLocalItem('saved_krvn_morph', obj);
           showToast('📘 어절 원어 분석 ' + Object.keys(obj.v).length + '절 등록 완료', 'success');
         } catch (err) { console.error(err); showToast('어절 원어 분석 파일을 읽지 못했습니다', 'warn'); }
@@ -15792,6 +15852,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       });
 
       container.innerHTML = html;
+      try { applyKrvStrong(container); } catch (e) { console.warn('스트롱 번호 표시 생략', e); }
 
       // 현재 장의 모든 지명을 지도에 표시 + fitBounds
       showChapterPlaces(container);
@@ -15973,7 +16034,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-4`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
