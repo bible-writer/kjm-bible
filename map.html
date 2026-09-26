@@ -7687,18 +7687,20 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
     window.menuDropFile = menuDropFile;
 
+    var krvnLoading = true;   // 기기 저장소에서 어절 원어 분석(약 20MB)을 읽는 중 — 폰·탭은 몇 초 걸림
     async function loadKrvnMorph() {
       try {
         const raw = await getLocalItem('saved_krvn_morph');
         if (raw && raw.meta && raw.meta.kind === 'krvn_morph') { krvnMorph = raw; try { applyKrvStrong(); } catch (e) {} console.log('어절 원어 분석 ' + raw.meta.verses + '절 불러옴'); }
       } catch (e) { console.warn('어절 원어 분석 불러오기 실패', e); }
+      finally { krvnLoading = false; }
     }
     // 절 본문과 글자 위치 → 그 절 어절 목록과 몇 번째 어절 (본문 어절 수가 다르면 null)
     /* ── 개역개정 본문에 스트롱 번호 작게 — 어절 위에 (b20260926-5) ──
      * 어절 원어 분석(krvn_morph, 어절 차례 = 본문 띄어쓰기 차례)에서 어절마다 번호를 붙인다. 어절 수가 안 맞는 절은 건너뜀.
      * 한 글자 마디 안에 든 어절은 <span class="krv-w"> 로 감싸 번호를 가운데 위에, 마디가 갈린 어절(이름 강조 등)은 어절 앞 표시로 왼쪽 위에.
      * 번호는 CSS ::before 로만 그려 본문 textContent·어절 셈이 그대로다. */
-    var krvSnOn = false;
+    var krvSnOn = false, krvSnWantOn = false;
     try { krvSnOn = localStorage.getItem('krv_sn_on') === '1'; } catch (e) {}
     function krvSnShort(c) { const m = String(c).match(/^([HG])0*(\d+)([A-Za-z]?)$/); return m ? m[1] + m[2] + m[3] : String(c); }
     function krvSnClear(container) {
@@ -7820,7 +7822,18 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       if (!b) return;
       b.classList.toggle('on', !!krvSnOn);
       b.onclick = function () {
-        if (!krvnMorph) { showToast('📘 어절 원어 분석(krvn_morph_STEP.json)을 먼저 등록하세요', 'warn'); return; }
+        if (!krvnMorph) {
+          if (krvnLoading) {   // 아직 기기 저장소에서 읽는 중 — 켜 두면 다 읽은 뒤 번호가 나온다
+            krvSnOn = true; b.classList.add('on');
+            try { localStorage.setItem('krv_sn_on', '1'); } catch (e) {}
+            showToast('📘 어절 원어 분석을 불러오는 중입니다 — 잠시 뒤 번호가 나옵니다', 'info'); return;
+          }
+          // 이 기기에 등록된 적이 없음 — 곧바로 파일 고르기를 연다(등록되면 번호 켬)
+          krvSnWantOn = true;
+          showToast('📘 H# 번호는 어절 원어 분석 파일(krvn_morph_STEP.json)이 이 기기에 있어야 나옵니다 — 파일을 골라 주세요', 'warn');
+          document.getElementById('krvn-file-input')?.click();
+          return;
+        }
         krvSnOn = !krvSnOn;
         try { localStorage.setItem('krv_sn_on', krvSnOn ? '1' : '0'); } catch (e) {}
         applyKrvStrong();
@@ -7850,6 +7863,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           const obj = JSON.parse(await f.text());
           if (!obj || !obj.meta || obj.meta.kind !== 'krvn_morph' || !obj.v || !obj.lm || !obj.mo) { showToast('어절 원어 분석 파일 꼴이 아닙니다', 'warn'); return; }
           krvnMorph = obj;
+          if (krvSnWantOn) { krvSnWantOn = false; krvSnOn = true; try { localStorage.setItem('krv_sn_on', '1'); } catch (e) {} }
           try { applyKrvStrong(); } catch (e) {}
           await setLocalItem('saved_krvn_morph', obj);
           showToast('📘 어절 원어 분석 ' + Object.keys(obj.v).length + '절 등록 완료', 'success');
@@ -16119,7 +16133,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-11`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-12`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
