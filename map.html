@@ -414,8 +414,9 @@
     .verse-text.krv-on { line-height: 1.9; }
     /* 어절 = 번호(위) + 글자(아래) 세로 묶음 — 번호가 길면 어절 칸이 넓어져 겹치지 않는다 */
     .krv-w { display: inline-flex; flex-direction: column; align-items: center; vertical-align: bottom; line-height: 1.35; text-indent: 0; }
-    .krv-w::before, .krv-sn::before { content: attr(data-sn); font-size: calc(0.55em * var(--sns, 1)); line-height: calc(1.1 / var(--sns, 1)); color: #94a3b8; white-space: nowrap; cursor: pointer; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.03em; }
+    .krv-w::before, .krv-sn::before { content: attr(data-sn); font-size: calc(var(--snb, 0.55em) * var(--sns, 1)); line-height: calc(1.1 / var(--sns, 1)); color: #94a3b8; white-space: nowrap; cursor: pointer; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.03em; }
     .krv-t { display: inline; white-space: nowrap; }
+    @media (pointer: coarse), (max-width: 768px) { .verse-text.krv-on { --snb: 0.66em; } }   /* 폰·탭: 번호를 조금 크게 */
     .krv-sn { position: relative; display: inline-block; width: 0; }
     .krv-sn::before { position: absolute; left: 0; top: -0.9em; }
     .krv-w:hover::before, .krv-sn:hover::before { color: #047857; text-decoration: underline; }
@@ -7772,7 +7773,10 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           const lab = el.dataset.sn || '';
           return [el, ww, ctx.measureText(lab).width + ls * lab.length];
         });
-        jobs.forEach(([el, ww, lw]) => { if (ww > 0 && lw > ww) el.style.setProperty('--sns', Math.max(0.6, ww / lw).toFixed(3)); });
+        // 폰·탭은 번호가 너무 작아지지 않게(최소 10px) — 대신 어절 사이가 조금 벌어질 수 있음
+        const touch = (window.matchMedia && (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 768px)').matches));
+        const floor = Math.max(0.6, (touch ? 10 : 6) / fs);
+        jobs.forEach(([el, ww, lw]) => { if (ww > 0 && lw > ww) el.style.setProperty('--sns', Math.min(1, Math.max(floor, ww / lw)).toFixed(3)); });
       } catch (e) {}
     }
     // 번호가 둘 이상(예: G976·G1078)이면 누른 가로 위치로 어느 번호인지 고른다
@@ -7806,7 +7810,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       const el = ev.target && ev.target.closest && ev.target.closest('.krv-w, .krv-sn');
       if (!el || !el.dataset.code) return;
       const top = el.getBoundingClientRect().top;
-      const numH = el.classList.contains('krv-w') ? parseFloat(getComputedStyle(el).fontSize) * 0.62 : 0;
+      const numH = el.classList.contains('krv-w') ? (parseFloat(getComputedStyle(el, '::before').lineHeight) || parseFloat(getComputedStyle(el).fontSize) * 0.62) + 2 : 0;
       if (!(el.classList.contains('krv-sn') || ev.clientY < top + numH)) return;
       ev.stopPropagation(); ev.preventDefault();
       if (el.dataset.code && typeof StrongEngine !== 'undefined') StrongEngine.handleClick(krvSnPick(el, ev.clientX));
@@ -16115,7 +16119,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-10`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-11`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
