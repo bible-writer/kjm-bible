@@ -7803,7 +7803,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const codes = String(arr[i][0] || '').split(',').filter(Boolean);
           const segs = words[i];
           // 번호 없는 어절도 빈 번호 줄로 감싸 줄 높이를 맞춘다
-          const mk = el => { el.dataset.sn = codes.length ? codes.map(krvSnShort).join('·') : '\u00a0'; el.dataset.code = codes[0] || ''; if (codes.length > 1) el.dataset.codes = codes.join(','); if (codes.length) el.title = codes.join(', '); return el; };
+          const many = codes.length > 3;   // (418차 kjm 「빼는 게 낫다」) 번호가 넷 이상 = 여러 어절을 한 덩어리로 묶은 곳 — 번호를 달지 않는다(어절 원어 창에는 그대로)
+          const mk = el => { el.dataset.sn = (codes.length && !many) ? codes.map(krvSnShort).join('·') : '\u00a0'; el.dataset.code = many ? '' : (codes[0] || ''); if (codes.length > 1 && !many) el.dataset.codes = codes.join(','); if (codes.length && !many) el.title = codes.join(', '); return el; };
           // 어절이 이름 강조 딱지 등으로 마디가 갈려 있으면, 딱지를 통째로 품도록 범위를 넓혀 감싼다(딱지는 쪼개지 않음)
           const r = document.createRange();
           const g0 = segs[0], g1 = segs[segs.length - 1];
@@ -7881,6 +7882,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const numH = el.classList.contains('krv-w') ? (parseFloat(getComputedStyle(el, '::before').lineHeight) || parseFloat(getComputedStyle(el).fontSize) * 0.62) + 2 : 0;
       if (!(el.classList.contains('krv-sn') || ev.clientY < top + numH)) return;
       ev.stopPropagation(); ev.preventDefault();
+      if (el.dataset.many === '1' && typeof WordOrig !== 'undefined') {   // 번호가 많은 어절 — 어절 원어 창에 모두
+        const row = el.closest('.verse-row'); const vt = row && row.querySelector(':scope > .verse-text');
+        if (row && vt && krvnMorph) {
+          const bc = String(row.dataset.bc || '').split('-').map(Number); const v = parseInt(String(row.id || '').replace('verse-row-', ''), 10);
+          const arr = krvnMorph.v[bc[0] + '-' + bc[1] + '-' + v]; const r = el.getBoundingClientRect();
+          if (arr) { WordOrig.showKrvn(bc[0], bc[1], v, { arr, k: parseInt(el.dataset.k, 10), words: vt.textContent.trim().split(/\s+/) }, r.left, r.bottom); return; }
+        }
+      }
       if (el.dataset.code && typeof StrongEngine !== 'undefined') StrongEngine.handleClick(krvSnPick(el, ev.clientX));
     }, true);
     document.addEventListener('DOMContentLoaded', function () {
@@ -16211,7 +16220,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-16`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-18`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
