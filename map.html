@@ -1727,7 +1727,6 @@ body:not(.admin-mode) #btn-open-proof,
 body:not(.admin-mode) #btn-krv-sn,   /* (418차) H# — 어절 원어 분석(비공개)이 있는 kjm 기기용 */
 body:not(.admin-mode) #btn-sync-openbible,
 body:not(.admin-mode) #menu-open-xlsx,
-body:not(.admin-mode) #menu-open-interlinear,
 body:not(.admin-mode) #menu-open-hebko,
 body:not(.admin-mode) #menu-open-krvn,
 body:not(.admin-mode) #menu-drop-file,
@@ -14131,6 +14130,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     let detectedSchema = null;
     let interlinearDbInstance = null; // 원전분해 DB (본문 단어 클릭 시 원어 뜻)
 
+    /* (418차 kjm 「그건 그분들 몫」) 일반 사용자도 자기 원전분해를 등록 — 옛 접두어 번호(H9001=ב·H9002=כ·H9003=ל·H9004=מן)면
+     * STEPBible 번호(H9003·H9004·H9005·H9006)로 바꿔 둔다. strongKo·hebko 가 STEP 번호라 그대로 두면 엉뚱한 뜻이 뜸. */
+    function stepifyInterlinear(db) {
+      try {
+        const n = q => { const r = db.exec("SELECT COUNT(*) FROM Bible WHERE btext LIKE '%<WH" + q + ">%'"); return r.length ? r[0].values[0][0] : 0; };
+        if (n('9005') > 0 || n('9006') > 0 || n('9003') === 0) return false;   // 이미 STEP 번호거나 접두어가 없음
+        db.run("UPDATE Bible SET btext = replace(replace(replace(replace(btext,'<WH9004>','<WH9006>'),'<WH9003>','<WH9005>'),'<WH9002>','<WH9004>'),'<WH9001>','<WH9003>') WHERE btext LIKE '%<WH900%'");
+        return true;
+      } catch (e) { console.warn('접두어 번호 바꾸기 실패', e); return false; }
+    }
     // 원전분해 DB(.sdb) 파일 처리 — 개역개정.bdb와 동일한 방식(sql.js)으로 통째로 불러와 실시간 조회
     async function handleInterlinearFile(file) {
       if (!window.SQL) { showToast('SQLite 엔진 로딩 중. 잠시 후 다시 시도하세요.', 'warn'); return; }
@@ -14139,7 +14148,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         try {
           const arrayBuffer = this.result;
           interlinearDbInstance = new window.SQL.Database(new Uint8Array(arrayBuffer));
-          await setLocalItem('saved_interlinear_binary', arrayBuffer);
+          const conv = stepifyInterlinear(interlinearDbInstance);
+          await setLocalItem('saved_interlinear_binary', conv ? interlinearDbInstance.export().buffer : arrayBuffer);
+          if (conv) showToast('접두어 번호를 STEPBible 번호로 맞췄습니다 (בְּ H9003 · לְ H9005 …)', 'info');
           const statusEl = document.getElementById('interlinear-status');
           if (statusEl) statusEl.style.display = 'block';
           showToast(`원전분해 DB 로드 완료: ${file.name}`, 'success');
@@ -15542,6 +15553,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (savedInterlinear && window.SQL) {
         try {
           interlinearDbInstance = new window.SQL.Database(new Uint8Array(savedInterlinear));
+          if (stepifyInterlinear(interlinearDbInstance)) setLocalItem('saved_interlinear_binary', interlinearDbInstance.export().buffer);   // 전에 옛 번호로 등록된 것
           const statusEl = document.getElementById('interlinear-status');
           if (statusEl) statusEl.style.display = 'block';
         } catch (err) {
@@ -16221,7 +16233,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-19`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-20`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
