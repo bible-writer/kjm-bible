@@ -410,9 +410,14 @@
       text-align: right;
     }
     .verse-text { flex: 1; word-break: keep-all; }
-    /* 개역개정 어절 스트롱 번호(작게) — 글자는 ::after 로만 그려 본문 textContent·어절 셈을 바꾸지 않는다 (b20260926-4) */
-    .krv-sn::after { content: attr(data-sn); font-size: 0.55em; color: #94a3b8; vertical-align: super; margin: 0 1px 0 1px; cursor: pointer; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.02em; white-space: nowrap; }
-    .krv-sn:hover::after { color: #047857; text-decoration: underline; }
+    /* 개역개정 어절 스트롱 번호(작게, 어절 위) — 글자는 ::before 로만 그려 본문 textContent·어절 셈을 바꾸지 않는다 (b20260926-5) */
+    .verse-text.krv-on { line-height: 1.9; }
+    /* 어절 = 번호(위) + 글자(아래) 세로 묶음 — 번호가 길면 어절 칸이 넓어져 겹치지 않는다 */
+    .krv-w { display: inline-flex; flex-direction: column; align-items: center; vertical-align: bottom; line-height: 1.35; text-indent: 0; }
+    .krv-w::before, .krv-sn::before { content: attr(data-sn); font-size: 0.55em; line-height: 1.1; color: #94a3b8; white-space: nowrap; cursor: pointer; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.03em; }
+    .krv-sn { position: relative; display: inline-block; width: 0; }
+    .krv-sn::before { position: absolute; left: 0; top: -0.9em; }
+    .krv-w:hover::before, .krv-sn:hover::before { color: #047857; text-decoration: underline; }
     #btn-krv-sn.on { background: #ecfdf5; color: #047857; border-color: #a7f3d0; font-weight: 700; }
 
     /* 본문 지명·인명·용어 클릭 링크 (2026-09-16 kjm) — 배경 칸·여백 없이 글자색과 밑줄만.
@@ -7687,16 +7692,22 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       } catch (e) { console.warn('어절 원어 분석 불러오기 실패', e); }
     }
     // 절 본문과 글자 위치 → 그 절 어절 목록과 몇 번째 어절 (본문 어절 수가 다르면 null)
-    /* ── 개역개정 본문에 스트롱 번호 작게 (b20260926-4) ──
-     * 어절 원어 분석(krvn_morph, 어절 차례 = 본문 띄어쓰기 차례)에서 어절마다 번호를 붙인다. 어절 수가 안 맞는 절은 건너뜀. */
+    /* ── 개역개정 본문에 스트롱 번호 작게 — 어절 위에 (b20260926-5) ──
+     * 어절 원어 분석(krvn_morph, 어절 차례 = 본문 띄어쓰기 차례)에서 어절마다 번호를 붙인다. 어절 수가 안 맞는 절은 건너뜀.
+     * 한 글자 마디 안에 든 어절은 <span class="krv-w"> 로 감싸 번호를 가운데 위에, 마디가 갈린 어절(이름 강조 등)은 어절 앞 표시로 왼쪽 위에.
+     * 번호는 CSS ::before 로만 그려 본문 textContent·어절 셈이 그대로다. */
     var krvSnOn = false;
     try { krvSnOn = localStorage.getItem('krv_sn_on') === '1'; } catch (e) {}
     function krvSnShort(c) { const m = String(c).match(/^([HG])0*(\d+)([A-Za-z]?)$/); return m ? m[1] + m[2] + m[3] : String(c); }
+    function krvSnClear(container) {
+      container.querySelectorAll('.krv-sn').forEach(e => e.remove());
+      container.querySelectorAll('.krv-w').forEach(w => { const p = w.parentNode; while (w.firstChild) p.insertBefore(w.firstChild, w); p.removeChild(w); });
+      container.querySelectorAll('.verse-text').forEach(vt => { vt.classList.remove('krv-on'); vt.normalize(); });
+    }
     function applyKrvStrong(container) {
       container = container || document.getElementById('bible-content');
       if (!container) return;
-      container.querySelectorAll('.krv-sn').forEach(e => e.remove());
-      container.querySelectorAll('.verse-text').forEach(vt => vt.normalize());
+      krvSnClear(container);
       const btn = document.getElementById('btn-krv-sn'); if (btn) btn.classList.toggle('on', !!krvSnOn);
       if (!krvSnOn || !krvnMorph) return;
       container.querySelectorAll('.verse-row[data-bc]').forEach(row => {
@@ -7708,27 +7719,41 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (vt.textContent.trim().split(/\s+/).length !== arr.length) return;
         const w = document.createTreeWalker(vt, NodeFilter.SHOW_TEXT); const nodes = []; let nd;
         while ((nd = w.nextNode())) nodes.push(nd);
-        const ends = []; let inWord = false, last = null;
-        nodes.forEach(t => { const x = t.nodeValue; for (let i = 0; i < x.length; i++) { const sp = /\s/.test(x[i]);
-          if (sp && inWord) { ends.push([t, i]); inWord = false; } else if (!sp) { inWord = true; last = [t, i + 1]; } } });
-        if (inWord && last) ends.push(last);
-        if (ends.length !== arr.length) return;
-        for (let i = ends.length - 1; i >= 0; i--) {
+        const words = []; let cur = null;              // 어절마다 [{node, s, e}]
+        nodes.forEach(t => { const x = t.nodeValue; for (let i = 0; i < x.length; i++) {
+          if (/\s/.test(x[i])) { cur = null; continue; }
+          if (!cur) { cur = []; words.push(cur); }
+          const lastSeg = cur[cur.length - 1];
+          if (lastSeg && lastSeg.node === t && lastSeg.e === i) lastSeg.e = i + 1; else cur.push({ node: t, s: i, e: i + 1 });
+        } });
+        if (words.length !== arr.length) return;
+        vt.classList.add('krv-on');
+        for (let i = words.length - 1; i >= 0; i--) {
           const codes = String(arr[i][0] || '').split(',').filter(Boolean);
-          if (!codes.length) continue;
-          const [t, off] = ends[i]; const tail = t.splitText(off);
-          const sp = document.createElement('span'); sp.className = 'krv-sn';
-          sp.dataset.sn = codes.map(krvSnShort).join('·'); sp.dataset.code = codes[0];
-          sp.title = codes.join(', ');
-          t.parentNode.insertBefore(sp, tail);
+          const segs = words[i];
+          // 번호 없는 어절도 빈 번호 줄로 감싸 줄 높이를 맞춘다
+          const mk = el => { el.dataset.sn = codes.length ? codes.map(krvSnShort).join('·') : '\u00a0'; el.dataset.code = codes[0] || ''; if (codes.length) el.title = codes.join(', '); return el; };
+          if (!codes.length && segs.length !== 1) continue;
+          if (segs.length === 1) {
+            const g = segs[0]; const r = document.createRange(); r.setStart(g.node, g.s); r.setEnd(g.node, g.e);
+            const span = mk(document.createElement('span')); span.className = 'krv-w';
+            try { r.surroundContents(span); continue; } catch (e) {}
+          }
+          const g = segs[0]; const tail = g.node.splitText(g.s);
+          const sp = mk(document.createElement('span')); sp.className = 'krv-sn';
+          g.node.parentNode.insertBefore(sp, tail);
         }
       });
     }
+    // 번호(어절 위)를 누르면 원어 카드 · 어절 글자를 누르면 원래대로(어절 원어 창)
     document.addEventListener('click', function (ev) {
-      const sn = ev.target && ev.target.closest && ev.target.closest('.krv-sn');
-      if (!sn) return;
+      const el = ev.target && ev.target.closest && ev.target.closest('.krv-w, .krv-sn');
+      if (!el || !el.dataset.code) return;
+      const top = el.getBoundingClientRect().top;
+      const numH = el.classList.contains('krv-w') ? parseFloat(getComputedStyle(el).fontSize) * 0.62 : 0;
+      if (!(el.classList.contains('krv-sn') || ev.clientY < top + numH)) return;
       ev.stopPropagation(); ev.preventDefault();
-      if (typeof StrongEngine !== 'undefined') StrongEngine.handleClick(sn.dataset.code);
+      if (el.dataset.code && typeof StrongEngine !== 'undefined') StrongEngine.handleClick(el.dataset.code);
     }, true);
     document.addEventListener('DOMContentLoaded', function () {
       const b = document.getElementById('btn-krv-sn');
@@ -16034,7 +16059,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-4`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-5`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
