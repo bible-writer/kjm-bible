@@ -372,7 +372,7 @@ header .q:disabled{opacity:.45}
   <button class="btn" id="fixBooks" disabled>책 이름 채우기</button>
   <button class="btn" id="wipeRef" disabled>참조 씻어 내기</button>
   <button class="btn" id="expJson" disabled>평문 내려받기</button>
-  <button class="btn" id="expEnc" disabled>암호본 내려받기</button>
+  <button class="btn" id="expEnc" disabled>잠금본 내려받기 (GitHub 용)</button>
   <button class="btn" id="expCsv" disabled>소견표 내려받기</button>
   <input type="file" id="file" accept=".json" hidden>
   <button class="btn" id="pdfpick">인쇄본 붙이기</button>
@@ -1772,19 +1772,11 @@ $('#expJson').onclick=()=>{
   drawStat();
 };
 $('#expEnc').onclick=async ()=>{
-  const pw=prompt('암호본으로 만들 비밀번호를 넣으십시오.');
-  if(!pw) return;
+  /* (418차 kjm 「동기화 비번 없애」) 비밀번호 없는 잠금본(KjmLock) — 앱이 열쇠로 풀어 읽음. 이름은 GitHub 에 올릴 이름 그대로 */
   const {out}=bumped();
-  const plain=new TextEncoder().encode(JSON.stringify(out,null,1));
-  const salt=crypto.getRandomValues(new Uint8Array(16)), iv=crypto.getRandomValues(new Uint8Array(12));
-  const base=await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
-  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},
-    base, {name:'AES-GCM',length:256}, false, ['encrypt']);
-  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, plain);
-  const B=a=>btoa(String.fromCharCode(...new Uint8Array(a)));
-  dl(FILE.replace(/\.json$/,'')+'_v'+DB.version+'_encrypted.json',
-     JSON.stringify({encrypted:true,algo:'AES-GCM-256',kdf:'PBKDF2-SHA256',iterations:200000,
-       salt:B(salt), iv:B(iv), ciphertext:B(ct)}));
+  const base=FILE.replace(/\.json$/,'').replace(/_v[\d.]+$/,'').replace(/_plain.*$/,'').replace(/_encrypted$/,'');
+  const fs=await KjmLock.files(out, base);
+  for(const [fn,t] of fs){ dl(fn,t); await new Promise(r=>setTimeout(r,400)); }
   drawStat();
 };
 $('#expCsv').onclick=()=>{
