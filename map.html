@@ -8085,6 +8085,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
      *   괄호 가운데 13  「잔치(연회) A」  끝의 A·B 는 같은 이름의 다른 항목을 가르는 표
      */
     function dictEditName(it) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       if (it.isbe) { showToast('ISBE 항목은 원문사전(📜)에서 고칩니다', 'warn'); return; }
       var cur, label;
       if (it.type === 'TERM')        { cur = it.ref.term_ko || ''; label = '용어'; }
@@ -8154,7 +8155,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const defPreview = it.def ? escHtml(it.def.slice(0, 70)) + (it.def.length > 70 ? '…' : '') : '';
         row.innerHTML = `
           <div style="min-width:0">
-            <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}${it.srcDict ? `<span class="dict-src-pill dict-src-${escHtml(it.srcDict)}">${escHtml(it.srcDict)}</span>` : ''}<button class="dict-edit-btn" title="표제어 수정" style="margin-left:6px;font-size:0.7em;font-weight:400;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button></div>
+            <div style="font-weight:600;color:#1e293b">${escHtml(it.nameKo)}${it.nameEn ? ` <span style="font-weight:400;color:#94a3b8;font-size:0.85em">(${escHtml(it.nameEn)})</span>` : ''}${it.srcDict ? `<span class="dict-src-pill dict-src-${escHtml(it.srcDict)}">${escHtml(it.srcDict)}</span>` : ''}<button class="dict-edit-btn admin-only" title="표제어 수정" style="margin-left:6px;font-size:0.7em;font-weight:400;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">\u270f\ufe0f</button></div>
             ${defPreview ? `<div style="font-size:0.82em;color:#64748b;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${defPreview}</div>` : ''}
           </div>
           <span style="display:flex;align-items:center;gap:4px;flex-shrink:0">${it.strong ? `<span class="dict-result-tag ${it.type}" title="${escHtml(it.strong)}">${escHtml(it.strong)}</span>` : ''}<button class="dict-strong-btn admin-only" title="원어 번호 고치기" style="font-size:0.7em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer">📜✏️</button></span>
@@ -12178,6 +12179,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
     // 📖 사전 목록의 📜✏️ — 줄 안에 입력 칸
     function dictEditStrong(it, boxId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       if (it.type === 'TERM') editEntityStrong('term', it.ref.id, boxId);
       else if (it.type === 'PERSON') editEntityStrong('person', it.ref.id, boxId);
       else editPlaceStrong(it.ref.id, boxId);
@@ -16209,7 +16211,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-15`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-16`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
