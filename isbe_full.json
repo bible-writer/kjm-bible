@@ -1,6 +1,6 @@
 {
- "version": "1.518.0",
- "date": "2026-09-24",
+ "version": "1.518.1",
+ "date": "2026-09-26",
  "count": 9349,
  "source": "International Standard Bible Encyclopedia (James Orr 편, 1915, Public Domain) — CrossWire SWORD ISBE 모듈",
  "license": "영문 원문: Public Domain (ISBE 1915). 한글 번역·편집: © kjm, All rights reserved(무단 전재·배포 금지). 번역문 속 성경 인용: 개역개정판 © 대한성서공회. NOTICE.md 참조.",
@@ -12,8 +12,8 @@
   "isbe_full_3.json"
  ],
  "parts_md5": [
-  "235b242c745f",
-  "9472ebab1a5d",
-  "d115f87e9d26"
+  "b33514bc3dcd",
+  "608acc976cec",
+  "991d66516f7f"
  ]
 }
