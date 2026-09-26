@@ -1724,6 +1724,7 @@
  * 화면에서 감추는 것일 뿐 보안이 아니다(데이터 보호는 DB 암호화가 맡는다). */
 body:not(.admin-mode) .admin-only,
 body:not(.admin-mode) #btn-open-proof,
+body:not(.admin-mode) #btn-krv-sn,   /* (418차) H# — 어절 원어 분석(비공개)이 있는 kjm 기기용 */
 body:not(.admin-mode) #btn-sync-openbible,
 body:not(.admin-mode) #menu-open-xlsx,
 body:not(.admin-mode) #menu-open-interlinear,
@@ -16220,7 +16221,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-18`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-19`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
