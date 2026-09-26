@@ -4821,7 +4821,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             const e = hit.e;
             {
               const en = (Array.isArray(e.s) ? e.s : []).map(x => x.en).filter(Boolean);
-              return { lemma: e.w || '', xlit: e.x || '', gloss: [...new Set(en)].join('; '), _src: 'strongKo' };
+              return { lemma: String(e.w || '').replace(/^\//, ''), xlit: e.x || '', gloss: [...new Set(en)].join('; '), _src: 'strongKo' };
             }
           }
         }
@@ -7414,7 +7414,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         const head = multi ? '[' + (x.e || '') + '] ' + (x.ko || '') : '';
         return head ? head + (body ? '\n' + body : '') : body;
       }).filter(Boolean).join('\n\n');
-      return { l: e.w || '', t: [e.k, e.x].filter(Boolean).join(' '), m: e.m || '', g: e.gk || '',
+      return { l: String(e.w || '').replace(/^\//, ''), t: [e.k, e.x].filter(Boolean).join(' '), m: e.m || '', g: e.gk || '',
                d: d, r: e.r || '', f: e.f || null, v: [], _src: 'strongKo', _key: label || key };
     }
     /* 번호 → strongKo 원본 항목과 키 (끝글자 그대로 → TR 짝 → 끝글자 뗀 번호). 없으면 null */
@@ -15973,7 +15973,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
