@@ -4768,6 +4768,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     const StrongEngine = {
       // strongDict.json을 최초 클릭 시점에 1회만 네트워크에서 불러오고, 이후에는 메모리 캐시 사용
       ensureLoaded: async function() {
+        if (typeof ensureStrongKo === 'function') { try { await ensureStrongKo(); } catch (e) {} }
         if (strongDict) return strongDict;
         if (strongDictLoading) return strongDictLoading;
         strongDictLoading = (async () => {
@@ -4805,13 +4806,25 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       },
 
       lookup: function(code) {
-        if (!strongDict) return null;
         const norm = this.normalize(code);
-        if (strongDict[norm]) return strongDict[norm];
-        const tr = strongTR(norm);                        // G1160b → G1138 (끝글자만 떼면 다른 낱말)
-        if (tr && strongDict[tr]) return strongDict[tr];
-        const base = norm.replace(/[A-Z]$/, '');
-        if (base !== norm && strongDict[base]) return strongDict[base];
+        if (strongDict) {
+          if (strongDict[norm]) return strongDict[norm];
+          const tr = strongTR(norm);                        // G1160b → G1138 (끝글자만 떼면 다른 낱말)
+          if (tr && strongDict[tr]) return strongDict[tr];
+          const base = norm.replace(/[A-Z]$/, '');
+          if (base !== norm && strongDict[base]) return strongDict[base];
+        }
+        /* 영문 사전(strongDict)에 없는 번호 — 접두어(H9003 בְּ · H9005 לְ …)·STEP 확장 번호 — 는 strongKo 원문 칸으로 (b20260926-1) */
+        if (typeof strongKoDict !== 'undefined' && strongKoDict) {
+          const hit = strongKoRaw(code);
+          if (hit) {
+            const e = hit.e;
+            {
+              const en = (Array.isArray(e.s) ? e.s : []).map(x => x.en).filter(Boolean);
+              return { lemma: e.w || '', xlit: e.x || '', gloss: [...new Set(en)].join('; '), _src: 'strongKo' };
+            }
+          }
+        }
         return null;
       },
 
@@ -4973,7 +4986,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           ${entry.gloss ? `<div id="strong-pop-tr-gloss" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div>` : ''}
           ${(typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(code) : ''}
           ${detailBtn}
-          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">출처: Strong's Exhaustive Concordance (James Strong, 1890, Public Domain)</div>
+          <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${entry._src === 'strongKo' ? '출처: STEPBible TBESH·TBESG (CC BY 4.0)' : "출처: Strong's Exhaustive Concordance (James Strong, 1890, Public Domain)"}</div>
         `;
         panel.style.display = 'block';
         ensureTouchResizeGrip(panel);
@@ -7365,11 +7378,94 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
      * 꼴: { "H2088": {"l":"זֶה", "t":"제 zeh", "m":"이것 this, 이러한 such"}, ... } */
     var hebKoDict = null;
 
+    /* ── strongKo 공개 한글 원어사전 (b20260926-1) ──
+     * STEPBible TBESH·TBESG(CC BY 4.0)를 kjm 이 한글로 옮긴 공개판 — GitHub 의 ./strongKo.json.
+     * hebko(비공개)를 등록한 기기는 hebko 가 먼저, 없거나 그 번호가 없으면 strongKo 로 보인다.
+     * 한 번 받으면 IndexedDB 에 두고, 아래 판 번호가 바뀔 때만 다시 받는다(10MB). */
+    const STRONGKO_VER = '0.4.0';
+    var strongKoDict = null, strongKoLoading = null;
+    function ensureStrongKo() {
+      if (strongKoDict) return Promise.resolve(strongKoDict);
+      if (strongKoLoading) return strongKoLoading;
+      strongKoLoading = (async () => {
+        try {
+          const c = await getLocalItem('saved_strongko');
+          if (c && c._meta && c._meta.version === STRONGKO_VER) { strongKoDict = c; return strongKoDict; }
+        } catch (e) {}
+        try {
+          const resp = await fetch('./strongKo.json?v=' + STRONGKO_VER, { cache: 'no-store' });
+          if (resp && resp.ok) {
+            const d = await resp.json();
+            if (d && d._meta) { strongKoDict = d; setLocalItem('saved_strongko', d).catch(() => {}); }
+          }
+        } catch (e) { console.log('[strongKo] 불러오기 생략:', e.message); }
+        if (!strongKoDict) { try { const c = await getLocalItem('saved_strongko'); if (c && c._meta) strongKoDict = c; } catch (e) {} }
+        strongKoLoading = null;
+        return strongKoDict;
+      })();
+      return strongKoLoading;
+    }
+    /* strongKo 한 항목 → 한글 원어사전(hebko) 꼴 {l,t,m,g,d,r,f,v} 로 */
+    function strongKoAsHebKo(e, key, label) {
+      const ss = Array.isArray(e.s) ? e.s : [];
+      const multi = ss.length > 1;
+      const d = ss.map(x => {
+        const body = String(x.dk || '').trim();
+        const head = multi ? '[' + (x.e || '') + '] ' + (x.ko || '') : '';
+        return head ? head + (body ? '\n' + body : '') : body;
+      }).filter(Boolean).join('\n\n');
+      return { l: e.w || '', t: [e.k, e.x].filter(Boolean).join(' '), m: e.m || '', g: e.gk || '',
+               d: d, r: e.r || '', f: e.f || null, v: [], _src: 'strongKo', _key: label || key };
+    }
+    /* 번호 → strongKo 원본 항목과 키 (끝글자 그대로 → TR 짝 → 끝글자 뗀 번호). 없으면 null */
+    function strongKoRaw(code) {
+      if (!strongKoDict) return null;
+      const mm = String(code || '').trim().match(/^([HGhg])0*(\d+)([A-Za-z]?)$/);
+      if (!mm) return null;
+      const base = mm[1].toUpperCase() + String(parseInt(mm[2], 10));
+      if (mm[3]) {
+        const ex = base + mm[3].toLowerCase();
+        if (strongKoDict[ex]) return { e: strongKoDict[ex], k: ex };
+        const tr = (typeof strongTR === 'function') ? strongTR(code) : '';
+        if (tr) { const tk = hebKoNorm(tr); if (strongKoDict[tk]) return { e: strongKoDict[tk], k: tk }; }
+      }
+      if (strongKoDict[base]) return { e: strongKoDict[base], k: base };
+      if (strongKoDict[base + 'a']) return { e: strongKoDict[base + 'a'], k: base + 'a' };
+      return null;
+    }
+    function strongKoLookup(code) {
+      if (!strongKoDict) return null;
+      const mm = String(code || '').trim().match(/^([HGhg])0*(\d+)([A-Za-z]?)$/);
+      if (!mm) return null;
+      const base = mm[1].toUpperCase() + String(parseInt(mm[2], 10));
+      if (mm[3]) {
+        const ex = base + mm[3].toLowerCase();
+        if (strongKoDict[ex]) return strongKoAsHebKo(strongKoDict[ex], ex);
+        const tr = (typeof strongTR === 'function') ? strongTR(code) : '';
+        if (tr) { const tk = hebKoNorm(tr); if (strongKoDict[tk]) return strongKoAsHebKo(strongKoDict[tk], tk); }
+      }
+      if (strongKoDict[base]) return strongKoAsHebKo(strongKoDict[base], base);
+      /* 원전분해·어절 분석은 갈래 글자 없이 적는다(H1254) — strongKo 는 H1254a·H1254b 로 나뉘어 있으면 갈래를 함께 보인다 */
+      const vs = 'abcdefghijklmnopqrstuvwxyz'.split('').map(c => base + c).filter(k => strongKoDict[k]);
+      if (!vs.length) return null;
+      if (vs.length === 1) return strongKoAsHebKo(strongKoDict[vs[0]], vs[0]);
+      const parts = vs.map(k => strongKoAsHebKo(strongKoDict[k], k));
+      const first = parts[0];
+      return { l: first.l, t: first.t, g: first.g,
+               m: parts.map(x => x._key + ' ' + x.m).join(' · '),
+               d: parts.map(x => '【' + x._key + '】 ' + x.m + (x.d ? '\n' + x.d : '')).join('\n\n'),
+               r: first.r, f: null, v: [], _src: 'strongKo', _key: base + ' (' + vs.length + '갈래)' };
+    }
+
     function hebKoNorm(code) {
       var m = String(code || '').trim().toUpperCase().match(/^([HG])0*(\d+)/);
       return m ? m[1] + String(parseInt(m[2], 10)) : '';
     }
     function hebKoLookup(code) {
+      const hk = hebKoLookupOnly(code);
+      return hk || strongKoLookup(code);
+    }
+    function hebKoLookupOnly(code) {
       if (!hebKoDict) return null;
       /* 끝글자 붙은 번호(G256a·G1061a)는 먼저 그 번호 그대로 찾는다 — 끝글자를 떼면 다른 낱말이 된다
        * (G256a 알파 ↔ G256 알패오). 없으면 TR 번호 짝, 그다음 끝글자 뗀 번호 (2026-09-24) */
@@ -7457,10 +7553,12 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           + '<div style="margin-top:4px;max-height:220px;overflow-y:auto;padding-right:6px;font-size:0.82em;line-height:1.6;color:#475569;white-space:pre-wrap;overflow-wrap:anywhere">' + linkifyVerseRefs(escHtml(dtl)) + '</div></details>'
         : '';
       return '<div style="margin-top:8px;padding-top:6px;border-top:1px dashed #a7f3d0">'
-        + '<div style="font-size:0.72em;color:#A8336A;margin-bottom:1px">한글 원어사전</div>'
+        + '<div style="font-size:0.72em;color:#A8336A;margin-bottom:1px">' + (k._src === 'strongKo' ? '한글 원어사전 <span style="color:#94a3b8">· strongKo 공개판' + (k._key && /갈래/.test(k._key) ? ' · ' + escHtml(k._key) : '') + '</span>' : '한글 원어사전') + '</div>'
         + (t ? '<div style="font-size:0.82em;color:#64748b">' + escHtml(t) + (g ? ' <span style="color:#94a3b8">· ' + escHtml(g) + '</span>' : '') + '</div>' : (g ? '<div style="font-size:0.8em;color:#94a3b8">' + escHtml(g) + '</div>' : ''))
         + (m ? '<div style="font-size:0.92em;line-height:1.5;color:#1e293b">' + escHtml(m) + '</div>' : '')
-        + uses + rel + famBox + det + '</div>';
+        + uses + rel + famBox + det
+        + (k._src === 'strongKo' ? '<div style="margin-top:4px;font-size:0.66em;color:#c4c9d4">STEPBible TBESH·TBESG (CC BY 4.0, Tyndale House) 바탕 · 한글 © kjm</div>' : '')
+        + '</div>';
     }
     async function loadHebKoDict() {
       try {
@@ -7476,6 +7574,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
     document.addEventListener('DOMContentLoaded', function () {
       loadHebKoDict();
+      setTimeout(function () { try { ensureStrongKo(); } catch (e) {} }, 4000);   // 화면이 다 뜬 뒤 조용히
       var inp = document.getElementById('hebko-file-input');
       if (!inp) return;
       inp.onchange = async function (ev) {
@@ -15874,7 +15973,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260925-8`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }

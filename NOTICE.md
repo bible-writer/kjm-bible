@@ -39,6 +39,7 @@ The English originals are in the public domain. The Korean translations of them 
 ## 4. CC BY 4.0 자료 (출처 표시 의무) · CC BY 4.0 Materials (Attribution Required)
 
 - **STEPBible TIPNR** (Tyndale House, Cambridge) — CC BY 4.0 — https://github.com/STEPBible/STEPBible-Data
+- **STEPBible TBESH · TBESG** (Translators Brief lexicon of Extended Strongs for Hebrew / Greek, Tyndale House, Cambridge) — CC BY 4.0 — https://github.com/STEPBible/STEPBible-Data — `strongKo.json` · `strongKo_*_공개판.xlsx` 의 원어·음역·문법·영문 뜻·해설 원문 · the original-language, transliteration, grammar, English gloss and definition fields of strongKo
 - **OpenBible.info Bible Geocoding Data** (좌표·사진 목록 · coordinates and photo list) — CC BY 4.0 — https://www.openbible.info/geo/
 - **neuu-org/bible-dictionary-dataset** (Hitchcock 데이터셋, CCEL ThML 기반 · Hitchcock dataset based on CCEL ThML) — CC BY 4.0
 
