@@ -7733,15 +7733,17 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           const segs = words[i];
           // 번호 없는 어절도 빈 번호 줄로 감싸 줄 높이를 맞춘다
           const mk = el => { el.dataset.sn = codes.length ? codes.map(krvSnShort).join('·') : '\u00a0'; el.dataset.code = codes[0] || ''; if (codes.length) el.title = codes.join(', '); return el; };
-          if (!codes.length && segs.length !== 1) continue;
-          if (segs.length === 1) {
-            const g = segs[0]; const r = document.createRange(); r.setStart(g.node, g.s); r.setEnd(g.node, g.e);
-            const span = mk(document.createElement('span')); span.className = 'krv-w';
-            try { r.surroundContents(span); continue; } catch (e) {}
-          }
-          const g = segs[0]; const tail = g.node.splitText(g.s);
-          const sp = mk(document.createElement('span')); sp.className = 'krv-sn';
-          g.node.parentNode.insertBefore(sp, tail);
+          // 어절이 이름 강조 딱지 등으로 마디가 갈려 있으면, 딱지를 통째로 품도록 범위를 넓혀 감싼다(딱지는 쪼개지 않음)
+          const r = document.createRange();
+          const g0 = segs[0], g1 = segs[segs.length - 1];
+          let sn = g0.node;
+          if (g0.s === 0) { while (sn.parentNode && sn.parentNode !== vt && sn.parentNode.firstChild === sn) sn = sn.parentNode; r.setStartBefore(sn); }
+          else r.setStart(g0.node, g0.s);
+          let en = g1.node;
+          if (g1.e === g1.node.nodeValue.length) { while (en.parentNode && en.parentNode !== vt && en.parentNode.lastChild === en) en = en.parentNode; r.setEndAfter(en); }
+          else r.setEnd(g1.node, g1.e);
+          const span = mk(document.createElement('span')); span.className = 'krv-w';
+          try { r.surroundContents(span); } catch (e) { /* 딱지 가운데서 어절이 갈리는 드문 경우 — 번호 없이 둠 */ }
         }
       });
     }
@@ -16059,7 +16061,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-5`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-6`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
