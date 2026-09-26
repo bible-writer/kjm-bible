@@ -414,7 +414,7 @@
     .verse-text.krv-on { line-height: 1.9; }
     /* 어절 = 번호(위) + 글자(아래) 세로 묶음 — 번호가 길면 어절 칸이 넓어져 겹치지 않는다 */
     .krv-w { display: inline-flex; flex-direction: column; align-items: center; vertical-align: bottom; line-height: 1.35; text-indent: 0; }
-    .krv-w::before, .krv-sn::before { content: attr(data-sn); font-size: 0.55em; line-height: 1.1; color: #94a3b8; white-space: nowrap; cursor: pointer; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.03em; }
+    .krv-w::before, .krv-sn::before { content: attr(data-sn); font-size: calc(0.55em * var(--sns, 1)); line-height: calc(1.1 / var(--sns, 1)); color: #94a3b8; white-space: nowrap; cursor: pointer; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.03em; }
     .krv-t { display: inline; white-space: nowrap; }
     .krv-sn { position: relative; display: inline-block; width: 0; }
     .krv-sn::before { position: absolute; left: 0; top: -0.9em; }
@@ -7754,6 +7754,26 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           } catch (e) { /* 딱지 가운데서 어절이 갈리는 드문 경우 — 번호 없이 둠 */ }
         }
       });
+      krvSnFit(container);
+    }
+    // 번호 줄이 어절보다 넓으면 번호 글씨만 줄여 어절 폭에 맞춘다(어절 간격·줄 높이는 그대로)
+    function krvSnFit(container) {
+      try {
+        _krvCv = _krvCv || document.createElement('canvas');
+        const ctx = _krvCv.getContext('2d');
+        const els = Array.from(container.querySelectorAll('.krv-w[title]'));
+        if (!els.length) return;
+        const cs = getComputedStyle(els[0], '::before');
+        const fs = parseFloat(cs.fontSize) || 0; if (!fs) return;
+        ctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+        const ls = parseFloat(cs.letterSpacing) || 0;
+        const jobs = els.map(el => {
+          const t = el.querySelector('.krv-t'); const ww = t ? t.getBoundingClientRect().width : 0;
+          const lab = el.dataset.sn || '';
+          return [el, ww, ctx.measureText(lab).width + ls * lab.length];
+        });
+        jobs.forEach(([el, ww, lw]) => { if (ww > 0 && lw > ww) el.style.setProperty('--sns', Math.max(0.6, ww / lw).toFixed(3)); });
+      } catch (e) {}
     }
     // 번호가 둘 이상(예: G976·G1078)이면 누른 가로 위치로 어느 번호인지 고른다
     let _krvCv = null;
@@ -16095,7 +16115,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-8`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-9`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
