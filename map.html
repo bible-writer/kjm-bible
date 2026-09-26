@@ -1742,6 +1742,7 @@ body:not(.admin-mode) [id^="term-raw-trbtn"],
 body:not(.admin-mode) [id^="strong-tr-btn"],
 body:not(.admin-mode) [id^="strong-pop-trbtn"],
 body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
+body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: default !important; }
 #btn-admin-toggle.on { background: #b91c1c !important; color: #fff !important; }
   
 
@@ -4323,6 +4324,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
        * 한글 표제어를 눌러 고치고, 영문 표제어를 눌러 복사한다.
        * 「사전 비교」는 원문사전(📜)을 그 표제어로 열어 이스턴·스미스·힛치콕을 나란히 본다. */
       editTermKo: function (id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         var t = termDatabase.find(function (x) { return x.id === id; });
         if (!t) return;
         var cur = (t.term_ko || '').trim();
@@ -4452,8 +4454,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             ? rawBody(eastonRaw, 'easton')
             : (eastonAuto
               ? rawHead(eastonAuto, eastonVia) + rawBody(eastonAuto.definition || '', 'easton')
-              : rawMiss('easton', 'Easton') + `<textarea id="term-easton-input" placeholder="Easton's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
-               <button onclick="TermEngine.saveRawText(${t.id},'easton')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
+              : rawMiss('easton', 'Easton') + `<span class="admin-only"><textarea id="term-easton-input" placeholder="Easton's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
+               <button onclick="TermEngine.saveRawText(${t.id},'easton')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button></span>`)
           }
         </div>`;
         const smithBlock = `<div id="term-tab-content-smith" style="display:none">
@@ -4461,8 +4463,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
             ? rawBody(smithRaw, 'smith')
             : (smithAuto
               ? rawHead(smithAuto, smithVia) + rawBody(smithAuto.definition || '', 'smith')
-              : rawMiss('smith', 'Smith') + `<textarea id="term-smith-input" placeholder="Smith's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
-               <button onclick="TermEngine.saveRawText(${t.id},'smith')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>`)
+              : rawMiss('smith', 'Smith') + `<span class="admin-only"><textarea id="term-smith-input" placeholder="Smith's Bible Dictionary 원문(영어)을 붙여넣으세요" style="width:100%;box-sizing:border-box;height:70px;font-size:0.8em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical"></textarea>
+               <button onclick="TermEngine.saveRawText(${t.id},'smith')" style="margin-top:4px;font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button></span>`)
           }
         </div>`;
 
@@ -4534,9 +4536,9 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           <div id="term-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
             <span style="display:flex;align-items:baseline;gap:9px;min-width:0">
               ${refLabel ? `<span style="font-size:0.72em;color:#94a3b8">${refLabel}</span>` : ''}
-              <span onclick="TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="font-size:1.2em;font-weight:500;color:#1e293b;cursor:pointer">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
+              <span class="name-editable" onclick="if(isAdminMode())TermEngine.editTermKo(${t.id})" title="눌러서 한글 표제어 수정" style="font-size:1.2em;font-weight:500;color:#1e293b;cursor:pointer">${escHtml((t.term_ko || '').trim() || t.term_en || '')}</span>
               <span onclick="TermEngine.copyTermEn(${t.id})" title="눌러서 영문 표제어 복사${t.term_en_modern ? ' · 옛 영어(KJV) 표제어 → 요즘 영어' : ''}" style="font-size:0.8em;color:#94a3b8;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(t.term_en || '')}${t.term_en_modern ? ` <span style="color:#0f766e">→ ${escHtml(t.term_en_modern)}</span>` : ''}</span>
-              <button onclick="TermEngine.editTermKo(${t.id})" title="한글 표제어 수정" style="margin-left:auto;flex-shrink:0;border:none;background:none;font-size:0.85em;color:#94a3b8;cursor:pointer;padding:0 2px">\u270f\ufe0f</button>
+              <button class="admin-only" onclick="TermEngine.editTermKo(${t.id})" title="한글 표제어 수정" style="margin-left:auto;flex-shrink:0;border:none;background:none;font-size:0.85em;color:#94a3b8;cursor:pointer;padding:0 2px">\u270f\ufe0f</button>
             </span>
             <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
           </div>
@@ -4559,6 +4561,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       },
 
       saveRawText: function(id, which) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         const inputId = which === 'easton' ? 'term-easton-input' : 'term-smith-input';
         const input = document.getElementById(inputId);
         if (!input) return;
@@ -4745,6 +4748,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       },
 
       saveStrong: function(id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         const input = document.getElementById('term-strong-input');
         if (!input) return;
         const newVal = input.value.trim();
@@ -6816,9 +6820,9 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
                <div style="flex:1;min-width:0">
                  <div style="font-size:0.9em;color:#1e293b;line-height:1.6;white-space:pre-wrap">${linkifyDictRefs(linkifyVerseRefs(escHtml(koParts.body), correctedVerseKeys(koParts.notes)), rawdictSrc, e.id)}</div>${noteBlock}
                </div>
-               <button onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
+               <button class="admin-only" onclick="RawDict.editKo('${rawdictSrc}',${e.id})" style="flex-shrink:0;font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 7px;cursor:pointer;white-space:nowrap">✏️ 수정</button>
              </div>`
-          : `<div style="margin-top:6px">
+          : `<div class="admin-only" style="margin-top:6px">
                <textarea id="${safeId}" placeholder="한글 설명을 붙여넣으세요 (또는 자동번역 버튼 클릭)" style="width:100%;box-sizing:border-box;height:60px;font-size:0.85em;padding:5px;border:1px solid #fde68a;border-radius:4px;resize:vertical">${escHtml(e.definition_ko || '')}</textarea>
                <div style="display:flex;gap:6px;margin-top:4px">
                  <button onclick="RawDict.saveKo('${rawdictSrc}',${e.id})" style="font-size:0.8em;color:#fff;background:#b45309;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">저장</button>
@@ -6860,7 +6864,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
                <button onclick="RawDict.cancelMetaEdit('${rawdictSrc}',${e.id})" style="font-size:0.78em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:3px 10px;cursor:pointer">취소</button>
              </div>`
           : `<div style="font-weight:600;color:#1e293b">${catBadge}${originBadge}<span style="font-style:italic">${escHtml(e.term)}</span>
-               <button onclick="RawDict.editMeta('${rawdictSrc}',${e.id})" style="margin-left:6px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">✏️ 분류/표제어 수정</button>
+               <button class="admin-only" onclick="RawDict.editMeta('${rawdictSrc}',${e.id})" style="margin-left:6px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;cursor:pointer;vertical-align:middle">✏️ 분류/표제어 수정</button>
              </div>`;
         const strongTargetId = `rawdict-strong-${rawdictSrc}-${e.id}`;
         const isStrongEditing = rawdictStrongEditingSet.has(editKey);
@@ -6872,8 +6876,8 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
                <button onclick="RawDict.cancelStrongEdit('${rawdictSrc}',${e.id})" style="font-size:0.75em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;cursor:pointer">취소</button>
              </div>`
           : (e.hebrew_greek
-              ? `<div style="font-size:0.8em;color:#b45309;margin-top:4px">📜 ${StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), strongTargetId)} <button onclick="RawDict.editStrong('${rawdictSrc}',${e.id})" style="margin-left:4px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:0px 5px;cursor:pointer">✏️</button></div><div id="${strongTargetId}"></div>`
-              : `<div style="margin-top:4px"><button onclick="RawDict.editStrong('${rawdictSrc}',${e.id})" style="font-size:0.72em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 7px;cursor:pointer">📜 + 스트롱코드 추가</button></div>`);
+              ? `<div style="font-size:0.8em;color:#b45309;margin-top:4px">📜 ${StrongEngine.linkifyCodes(escHtml(e.hebrew_greek), strongTargetId)} <button class="admin-only" onclick="RawDict.editStrong('${rawdictSrc}',${e.id})" style="margin-left:4px;font-size:0.72em;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:0px 5px;cursor:pointer">✏️</button></div><div id="${strongTargetId}"></div>`
+              : `<div class="admin-only" style="margin-top:4px"><button class="admin-only" onclick="RawDict.editStrong('${rawdictSrc}',${e.id})" style="font-size:0.72em;color:#b45309;background:#fffbeb;border:1px solid #fde68a;border-radius:4px;padding:1px 7px;cursor:pointer">📜 + 스트롱코드 추가</button></div>`);
         row.innerHTML = `
           ${headerBlock}
           ${strongDisplay}
@@ -7257,6 +7261,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     const rawdictStrongEditingSet = new Set(); // 스트롱코드(hebrew_greek) 편집 중인 항목 추적 ("src:id")
     const RawDict = {
       autoTranslate: async function(src, id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         const list = getRawDictList(src);
         const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
@@ -7275,6 +7280,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         }
       },
       saveKo: function(src, id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         const input = document.getElementById(`rawdict-ko-${src}-${id}`);
         if (!input) return;
         const val = input.value.trim();
@@ -7292,6 +7298,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         renderRawDictResults(true);
       },
       editKo: function(src, id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         rawdictEditingSet.add(`${src}:${id}`);
         renderRawDictResults(true);
       },
@@ -7311,6 +7318,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         }
       },
       editMeta: function(src, id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         rawdictMetaEditingSet.add(`${src}:${id}`);
         renderRawDictResults(true);
       },
@@ -7319,6 +7327,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         renderRawDictResults(true);
       },
       editStrong: function(src, id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         rawdictStrongEditingSet.add(`${src}:${id}`);
         renderRawDictResults(true);
       },
@@ -7327,6 +7336,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         renderRawDictResults(true);
       },
       saveStrong: function(src, id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         const list = getRawDictList(src);
         const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
@@ -7342,6 +7352,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         renderRawDictResults(true);
       },
       saveMeta: function(src, id) {
+        if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
         const list = getRawDictList(src);
         const e = list.find(x => String(x.id) === String(id)); // id가 숫자/문자 어느 쪽이든 안전하게 찾도록
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
@@ -8713,6 +8724,12 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     // ── 관리자 모드 켜기/끄기 (2026-09-20) ──
     const _ADMIN_PW_SHA256 = 'd3fecfe58d6dfe1406929ed9854eb6d38f5e6cbca3426ff262546eea6fe5fee2';
     function isAdminMode() { return document.body.classList.contains('admin-mode'); }
+    // (418차 kjm 「관리자가 아니면 편집 기능은 비활성화」) 고치는 함수마다 맨 앞에서 확인 — 단추를 감추는 CSS 와 둘 다
+    function adminGuard() {
+      if (isAdminMode()) return true;
+      if (typeof showToast === 'function') showToast('🔒 관리자 모드에서만 고칠 수 있습니다', 'warn');
+      return false;
+    }
     function _refreshAdminBtn() {
       const b = document.getElementById('btn-admin-toggle');
       if (!b) return;
@@ -11600,6 +11617,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
 
     async function updatePlaceCoords(placeId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const latInput = document.getElementById('coord-lat-' + placeId);
       const lngInput = document.getElementById('coord-lng-' + placeId);
       if (!latInput || !lngInput) return;
@@ -11867,6 +11885,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
 
     // 팝업에서 한글 지명 저장
     async function updatePlaceName(placeId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const input = document.getElementById('name-input-' + placeId);
       if (!input) return;
       const newName = (input.value || '').trim();
@@ -11951,6 +11970,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
     // 지명 창의 ✏️ — 입력 칸 열기
     function editPlaceStrong(placeId, boxId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const place = placeDatabase.find(p => p.id === placeId);
       const box = document.getElementById(boxId);
       if (!place || !box) return;
@@ -11967,6 +11987,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       const el = document.getElementById(boxId + '-in'); if (el) { el.focus(); el.select(); }
     }
     async function savePlaceStrong(placeId, boxId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const place = placeDatabase.find(p => p.id === placeId);
       const el = document.getElementById(boxId + '-in');
       if (!place || !el) return;
@@ -11987,6 +12008,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       refreshPlacePanelsAfterStrongEdit(place);
     }
     async function resetPlaceStrong(placeId, boxId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const place = placeDatabase.find(p => p.id === placeId);
       const ov = placeStrongOverrides['ID' + placeId];
       if (!place || !ov) return;
@@ -12079,6 +12101,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       return `<span style="font-size:12px">${list}${edited} <button class="admin-only" onclick="editEntityStrong('${kind}',${x.id},'${boxId}')" title="원어 번호 고치기" style="font-size:10px;padding:0 5px;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer">✏️</button></span>`;
     }
     function editEntityStrong(kind, id, boxId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const cfg = ENTITY_STRONG[kind], x = cfg.list().find(e => e.id === id), box = document.getElementById(boxId);
       if (!x || !box) return;
       const val = normStrongList(cfg.codes(x).join(',')).filter(c => c[0] !== '!').join(', ');
@@ -12102,6 +12125,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       return { a, b };
     }
     async function saveEntityStrong(kind, id, boxId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const cfg = ENTITY_STRONG[kind], x = cfg.list().find(e => e.id === id), el = document.getElementById(boxId + '-in');
       if (!x || !el) return;
       const codes = normStrongList(el.value);
@@ -12119,6 +12143,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       refreshAfterEntityStrongEdit(kind, x);
     }
     async function resetEntityStrong(kind, id, boxId) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const cfg = ENTITY_STRONG[kind], x = cfg.list().find(e => e.id === id), ov = entityStrongOverrides[kind]['ID' + id];
       if (!x || !ov) return;
       cfg.set(x, ov.base);
@@ -12203,6 +12228,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
 
     async function revertNameOverride(key) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const ov = nameOverrides[key];
       if (!ov) return;
       const place = placeDatabase.find(p => p.id === ov.id);
@@ -12220,6 +12246,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
 
     async function clearNameOverrides() {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       if (!confirm('지명 수정 이력을 전부 삭제할까요?\n(현재 표시 중인 지명은 그대로 유지되며, 다음 데이터 재적재 시 원본으로 돌아갑니다)')) return;
       nameOverrides = {};
       await saveNameOverrides();
@@ -12324,6 +12351,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     }
 
     async function clearCoordOverrides() {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       if (!confirm('좌표 보정 이력을 모두 삭제합니다.\n(현재 지도에 적용된 좌표는 그대로 유지되지만, 다음 업로드부터는 재적용되지 않습니다.)\n계속할까요?')) return;
       coordOverrides = {};
       await saveCoordOverrides();
@@ -13055,6 +13083,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           showToast('📊 검증보고서 XLSX 다운로드 완료', 'success');
         };
         window.applyObReview = async function() {
+          if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
           const checks = document.querySelectorAll('.ob-review-chk:checked');
           if (checks.length === 0) { showToast('선택된 항목이 없습니다.', 'warn'); return; }
           
@@ -13497,7 +13526,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       return `
         <div class="popup-content">
           <div class="popup-title">
-            <span id="name-display-${item.id}" style="cursor:pointer;border-bottom:1px dashed rgba(148,163,184,.8);" title="\ud074\ub9ad\ud558\uc5ec \uc9c0\uba85 \uc218\uc815" onclick="this.style.display='none';document.getElementById('name-edit-${item.id}').style.display='block';var el=document.getElementById('name-input-${item.id}');if(el){el.focus();el.select();}">${escHtml(item.label || item.name)}</span>
+            <span id="name-display-${item.id}" style="cursor:pointer;border-bottom:1px dashed rgba(148,163,184,.8);" class="name-editable" title="\ud074\ub9ad\ud558\uc5ec \uc9c0\uba85 \uc218\uc815" onclick="if(!isAdminMode())return;this.style.display='none';document.getElementById('name-edit-${item.id}').style.display='block';var el=document.getElementById('name-input-${item.id}');if(el){el.focus();el.select();}">${escHtml(item.label || item.name)}</span>
             <span id="name-edit-${item.id}" style="display:none;">
               <input type="text" id="name-input-${item.id}" value="${escHtml(item.name || '')}" maxlength="40" style="width:130px;font-size:14px;padding:2px 5px;border:1px solid #94a3b8;border-radius:4px;" onkeydown="if(event.key==='Enter'){event.preventDefault();updatePlaceName(${item.id});}">
               <button onclick="updatePlaceName(${item.id})" style="font-size:11px;padding:2px 8px;background:#3b82f6;color:#fff;border:none;border-radius:4px;cursor:pointer;">저장</button>
@@ -13511,7 +13540,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
           ${placeStrongLine(item, 'place-strong-edit-' + item.id)}
           <div class="popup-coord-row" style="margin-top:4px;font-size:11px;color:#475569;">
             <b>좌표:</b> 
-            <span id="coord-display-${item.id}" style="cursor:pointer;border-bottom:1px dashed #94a3b8;" onclick="this.style.display='none';document.getElementById('coord-edit-${item.id}').style.display='inline';" title="클릭하여 수정">${item.lat}, ${item.lng}</span>
+            <span id="coord-display-${item.id}" class="name-editable" style="cursor:pointer;border-bottom:1px dashed #94a3b8;" onclick="if(!isAdminMode())return;this.style.display='none';document.getElementById('coord-edit-${item.id}').style.display='inline';" title="클릭하여 수정">${item.lat}, ${item.lng}</span>
             <span id="coord-edit-${item.id}" style="display:none;">
               <input type="text" id="coord-lat-${item.id}" value="${item.lat}" style="width:75px;font-size:11px;padding:1px 3px;border:1px solid #94a3b8;border-radius:3px;">
               <input type="text" id="coord-lng-${item.id}" value="${item.lng}" style="width:75px;font-size:11px;padding:1px 3px;border:1px solid #94a3b8;border-radius:3px;">
@@ -14218,6 +14247,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
       document.body.insertAdjacentHTML('beforeend', html);
     }
     async function removeStrongOverride(k) {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       delete strongOverrides[k];
       await setLocalItem('saved_strong_overrides', strongOverrides);
       showToast('되돌렸습니다', 'success');
@@ -14931,6 +14961,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
     /* 원어분해 창에서 스트롱 코드를 고친다(2026-09-12).
      * 원전분해.sdb 는 안 건드리고 strongOverrides 에만 적어 둔다. */
     async function wpEditCode() {
+      if (!adminGuard()) return;   // 일반 모드는 읽기만(418차)
       const st = _wpState; if (!st) return;
       const w = st.words[st.idx]; if (!w) return;
       const orig = w.origCode || w.code;
@@ -16181,7 +16212,7 @@ body:not(.admin-mode) [id^="rawdict-tr-btn"] { display: none !important; }
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-13`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260926-14`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }

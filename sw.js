@@ -1,8 +1,8 @@
-// 성경지도 PWA Service Worker v4.4.0
+// 성경지도 PWA Service Worker v4.6.0 (418차: map.html 중간 캐시 건너뛰기)
 // [변경] 네트워크 우선 요청에 cache:'no-store'를 명시해, 서비스워커의 "네트워크 우선" 의도와
 // 달리 브라우저 자체 HTTP 캐시에서 오래된 사본을 받아오던 문제를 해결함.
 // (fetch()만 쓰면 서비스워커 Cache API는 우회해도 브라우저 HTTP 캐시는 그대로 거칠 수 있음)
-const CACHE_NAME = 'bible-map-v4.5.0';
+const CACHE_NAME = 'bible-map-v4.6.0';
 
 // 핵심 캐시 대상
 const CORE_ASSETS = [
@@ -96,7 +96,22 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 일반 요청(map.html 포함): 네트워크 → 캐시 폴백
+  // (418차) map.html 은 주소 끝에 ?t=… 를 붙여 받는다 — GitHub Pages 중간 캐시(약 10분)가 옛 판을 내주는 것을 건너뜀.
+  //   ISBE 앱(isbe_sw.js)에서 쓰던 방법과 같음. 캐시에는 깨끗한 주소로 넣어 오프라인 때 꺼낸다.
+  if (event.request.method === 'GET' && url.origin === location.origin &&
+      (event.request.mode === 'navigate' || url.pathname.endsWith('/map.html') || url.pathname.endsWith('/'))) {
+    const fresh = new URL(url); fresh.searchParams.set('t', Date.now());
+    const clean = url.origin + url.pathname;
+    event.respondWith(
+      fetch(fresh.toString(), { cache: 'no-store' }).then(r => {
+        if (r.ok) { const c = r.clone(); caches.open(CACHE_NAME).then(ca => ca.put(clean, c)); }
+        return r.ok ? r : caches.match(clean).then(m => m || r);
+      }).catch(() => caches.match(clean).then(m => m || caches.match('./map.html')))
+    );
+    return;
+  }
+
+  // 일반 요청: 네트워크 → 캐시 폴백
   // cache:'no-store'로 브라우저 자체 HTTP 캐시까지 우회해서, "고쳤는데 안 바뀐다" 문제를 방지
   event.respondWith(
     fetch(event.request, { cache: 'no-store' }).then(response => {
