@@ -7807,7 +7807,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         // (b22 kjm 「같은 번호는 한 칸으로」 — 갓피플 참고) 이웃한 어절이 같은 번호면 한 묶음으로 감싸 번호를 한 번만 단다(최대 3어절)
         const wrap = (k, i, codes) => {
           const many = codes.length > 3;   // (418차 kjm 「빼는 게 낫다」) 번호가 넷 이상 = 여러 어절을 한 덩어리로 묶은 곳 — 번호를 달지 않는다(어절 원어 창에는 그대로)
-          const mk = el => { el.dataset.sn = (codes.length && !many) ? codes.map(krvSnShort).join('·') : ' '; el.dataset.code = many ? '' : (codes[0] || ''); if (codes.length > 1 && !many) el.dataset.codes = codes.join(','); if (codes.length && !many) el.title = codes.join(', '); return el; };
+          // (b23 kjm 「2」) 번호가 둘·셋인데 어절보다 넓으면 krvSnFit 이 「첫 번호+N」 으로 줄인다 — 누르면 어절 원어 창에 모두
+          const mk = el => { el.dataset.sn = (codes.length && !many) ? codes.map(krvSnShort).join('·') : '\u00a0'; el.dataset.code = many ? '' : (codes[0] || ''); if (codes.length > 1 && !many) { el.dataset.codes = codes.join(','); el.dataset.k = String(k); } if (codes.length && !many) el.title = codes.join(', '); return el; };
           // 어절이 이름 강조 딱지 등으로 마디가 갈려 있으면, 딱지를 통째로 품도록 범위를 넓혀 감싼다(딱지는 쪼개지 않음)
           const r = document.createRange();
           const g0 = words[k][0], g1 = words[i][words[i].length - 1];
@@ -7857,7 +7858,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         // 폰·탭은 번호가 너무 작아지지 않게(최소 10px) — 대신 어절 사이가 조금 벌어질 수 있음
         const touch = (window.matchMedia && (matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 768px)').matches));
         const floor = Math.max(0.6, (touch ? 10 : 6) / fs);
-        jobs.forEach(([el, ww, lw]) => { if (ww > 0 && lw > ww) el.style.setProperty('--sns', Math.min(1, Math.max(floor, ww / lw)).toFixed(3)); });
+        jobs.forEach(([el, ww, lw]) => {
+          if (!(ww > 0 && lw > ww)) return;
+          const cs2 = String(el.dataset.codes || '').split(',').filter(Boolean);
+          if (cs2.length > 1 && ww / lw < 0.85) {   // 번호 여럿이 어절보다 꽤 넓으면 「첫 번호+N」
+            const short = krvSnShort(cs2[0]) + '+' + (cs2.length - 1);
+            el.dataset.sn = short; el.dataset.many = '1';
+            lw = ctx.measureText(short).width + ls * short.length;
+            if (lw <= ww) return;
+          }
+          el.style.setProperty('--sns', Math.min(1, Math.max(floor, ww / lw)).toFixed(3));
+        });
       } catch (e) {}
     }
     // 번호가 둘 이상(예: G976·G1078)이면 누른 가로 위치로 어느 번호인지 고른다
@@ -16245,7 +16256,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260927-22`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260927-23`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
