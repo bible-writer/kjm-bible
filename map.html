@@ -459,6 +459,7 @@
       transition: background-color 0.15s ease;
       white-space: nowrap;
     }
+    .strong-tag.sn-in { font-size: 0.58em; font-weight: 500; padding: 0 2px; margin: 0 1px; vertical-align: 0.35em; background: none; border-bottom: none; color: #059669; font-family: ui-monospace, Consolas, monospace; letter-spacing: -0.03em; }
     .strong-tag:hover {
       background-color: #d1fae5;
       color: #065f46;
@@ -16256,7 +16257,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260927-23`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260927-24`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
@@ -16641,9 +16642,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           // 개역개정S 같은 스트롱 태그 본문 — 눌러서 원어 뜻을 볼 수 있는 딱지로 바꾼다
           .replace(/&lt;W([HG])(\d+)([a-z]?)&gt;/gi, function(_, hg, num, sf) {
             // (2026-09-22) 끝글자 붙은 번호(G1160b — 비평 본문 철자 차이)도 딱지로. 눌렀을 때 뜻은 TR 번호(G1138)로 찾는다
+            if (parseInt(num, 10) === 0) return '';   // (b24 kjm) <WH0> = 번호 없음 — 보이지 않게
             const code = hg.toUpperCase() + String(num).padStart(4, '0') + (sf || '').toLowerCase();
             const tr = sf ? strongTR(code) : '';
-            return '<span class="strong-tag" onclick="StrongEngine.handleClick(\'' + code + '\')"' + (tr ? ' title="TR ' + tr + '"' : '') + '>' + code + '</span>';
+            // (b24 kjm 「글짜가 너무 크지 않아?」) 본문 사이 번호는 작게 · 앞 0 없이(H430)
+            return '<span class="strong-tag sn-in" onclick="StrongEngine.handleClick(\'' + code + '\')"' + (tr ? ' title="TR ' + tr + '"' : '') + '>' + hg.toUpperCase() + parseInt(num, 10) + (sf || '').toLowerCase() + '</span>';
           })
           .replace(/&lt;\/?(?:f|n|Q|t|CM|CL|PF\d*|PI\d*)(?: [^&]*?)?&gt;/gi, '');  // 그 밖의 서식 태그는 표시만 제거
         if (tr.lang === 'en' && termHighlightEnabled && termDatabase.length > 0) {
