@@ -1026,7 +1026,15 @@
     .leaflet-popup-content .popup-title {
       position: sticky; top: 0; z-index: 5; background: #fff;
       padding-top: 2px; touch-action: none; cursor: move;
+      padding-right: 34px;   /* 닫기 ✕ 자리 */
     }
+    /* 지명 창 닫기 ✕ — 창 안 오른쪽 위, 창을 옮겨도 따라감 (b20261002-1) */
+    .leaflet-container a.leaflet-popup-close-button.kjm-popup-x {
+      position: absolute; top: 6px; right: 8px; z-index: 1001;
+      width: 28px; height: 28px; line-height: 26px; font-size: 22px; text-align: center;
+      border-radius: 50%; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; cursor: pointer;
+    }
+    .leaflet-container a.leaflet-popup-close-button.kjm-popup-x:hover { background: #fee2e2; color: #b91c1c; }
 
     /* ── 성경 본문 검색 ── */
     #bible-search-bar {
@@ -6171,7 +6179,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           if (!map.hasLayer(markerClusterGroup)) {
             markerClusterGroup.addTo(map);
           }
-          targetMarker.bindPopup(generatePopupHtml(p), {autoPan: false});
+          targetMarker.bindPopup(generatePopupHtml(p), {autoPan: false, maxWidth: PLACE_POPUP_W, minWidth: 280});   // b20261002-1: 폭을 안 주면 Leaflet 기본 300px 로 좁고 길쭉해짐
           markerClusterGroup.zoomToShowLayer(targetMarker, function() {
             targetMarker.openPopup();
           });
@@ -13883,7 +13891,20 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       wrapper.style.position = 'relative';
       // 화면(지도)보다 넓으면 지도 폭에 맞춤 — 폰
       var mapW = map.getContainer().clientWidth;
-      content.style.width = Math.min(PLACE_POPUP_W, Math.max(280, mapW - 60)) + 'px';
+      var fitW = Math.min(PLACE_POPUP_W, Math.max(280, mapW - 60));
+      e.popup.options.maxWidth = fitW;            // 아래 update() 가 Leaflet 셈으로 폭을 다시 정할 때도 이 폭을 넘지 않게
+      if ((e.popup.options.minWidth || 0) > fitW) e.popup.options.minWidth = fitW;
+      content.style.width = fitW + 'px';
+      // [닫기 ✕] (b20261002-1) Leaflet 닫기 단추는 바깥 틀(container)에 붙어 있어,
+      //  창을 옮기면(translate) 제자리에 남아 지도 밖 위로 사라졌다 → 창(wrapper) 안 오른쪽 위로 옮김
+      var xb = container.querySelector('.leaflet-popup-close-button');
+      if (xb && xb.parentNode !== wrapper) {
+        wrapper.appendChild(xb);
+        xb.classList.add('kjm-popup-x');
+        xb.title = '닫기 (Esc)';
+        xb.addEventListener('mousedown', function (ev) { ev.stopPropagation(); });
+        xb.addEventListener('touchstart', function (ev) { ev.stopPropagation(); }, { passive: true });
+      }
       content.style.maxHeight = '82vh';
       content.style.overflowY = 'auto';
       // 폭이 바뀌면 Leaflet 이 잡아둔 자리가 어긋나 머리줄이 화면 위로 넘칠 수 있다
@@ -13936,8 +13957,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       var mr = map.getContainer().getBoundingClientRect();
       var r = wrapper.getBoundingClientRect();
       var pad = 10;
+      // 지도 단추(＋/－·🚶 등)가 창 위를 덮어 닫기 ✕·이름이 가려지던 흠 (b20261002-1) → 단추와 겹치지 않게
+      var ctrls = [].slice.call(map.getContainer().querySelectorAll('.leaflet-top .leaflet-control'))
+        .map(function (c) { return c.getBoundingClientRect(); }).filter(function (q) { return q.width && q.height; });
+      var hitCtrl = function (L, T, W, H) { return ctrls.some(function (q) { return L < q.right && L + W > q.left && T < q.bottom && T + H > q.top; }); };
       if (r.top >= mr.top + pad && r.bottom <= mr.bottom - pad &&
-          r.left >= mr.left + pad && r.right <= mr.right - pad) return;   // 다 보이면 그대로
+          r.left >= mr.left + pad && r.right <= mr.right - pad && !hitCtrl(r.left, r.top, r.width, r.height)) return;   // 다 보이고 단추와도 안 겹치면 그대로
       var pt = map.latLngToContainerPoint(popup._latlng);
       var mx = mr.left + pt.x, my = mr.top + pt.y, gap = 28;
       var w = r.width, h = r.height;
@@ -13948,6 +13973,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       var top = my - h / 2;
       top = Math.max(mr.top + pad, Math.min(top, mr.bottom - pad - h));
       if (h > mr.height - 2 * pad) top = mr.top + pad;                   // 지도보다 길면 위에 맞춤
+      // 지도 단추와 겹치면 단추 아래로 내리고, 그만큼 창 높이를 줄여 지도 안에 들게
+      ctrls.forEach(function (q) { if (left < q.right && left + w > q.left && top < q.bottom && top + h > q.top) top = Math.max(top, q.bottom + 6); });
+      var content = wrapper.querySelector('.leaflet-popup-content');
+      if (content && top + h > mr.bottom - pad) {
+        var room = mr.bottom - pad - top - (h - content.offsetHeight);
+        if (room > 120) { content.style.maxHeight = room + 'px'; h = wrapper.getBoundingClientRect().height; }
+        else { top = Math.max(mr.top + pad, mr.bottom - pad - h); }
+      }
       wrapper.style.transform = 'translate(' + Math.round(left - r.left) + 'px,' + Math.round(top - r.top) + 'px)';
       if (tip) tip.style.visibility = 'hidden';
     }
@@ -16257,7 +16290,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20260927-24`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261002-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
