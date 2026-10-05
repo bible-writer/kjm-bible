@@ -1028,14 +1028,8 @@
       padding-top: 2px; touch-action: none; cursor: move;
       padding-right: 34px;   /* 닫기 ✕ 자리 */
     }
-    /* 지명 사진 (b20261005-1): PC 는 그대로(창 폭·260px), 탭·폰은 작은 정사각으로 — 사진 원본이 512x512 정사각이라 잘리지 않음 */
-    .pphoto-img { width:100%; aspect-ratio:1/1; max-height:260px; object-fit:cover; border-radius:8px; display:block; background:#e2e8f0; }
-    @media (max-width: 1024px), (pointer: coarse) {
-      .pphoto-img { width:min(100%, 34vh, 200px); height:auto; max-height:none; margin:0 auto; }
-    }
-    @media (max-width: 600px), (max-height: 500px) {
-      .pphoto-img { width:min(100%, 30vh, 150px); }
-    }
+    /* 탭·폰 지명 창 (b20261005-1): 창을 작게 열 때 사진(PC 260px)도 낮게 */
+    .kjm-pop-small .pphoto img { max-height: 150px !important; }
     /* 지명 창 닫기 ✕ — 창 안 오른쪽 위, 창을 옮겨도 따라감 (b20261002-1) */
     .leaflet-container a.leaflet-popup-close-button.kjm-popup-x {
       position: absolute; top: 6px; right: 8px; z-index: 1001;
@@ -13505,7 +13499,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const L = LIC[lic] || [lic, ''];
         const name = esc(String(item.name || item.label || '').replace(/^(.+?)\s+\(.*\)$/, '$1'));
         const img = `<img src="${esc(BASE + file)}" alt="${name} 사진" loading="lazy" decoding="async" draggable="false" ondragstart="return false;"
-              class="pphoto-img"
+              style="width:100%;aspect-ratio:1/1;max-height:260px;object-fit:cover;border-radius:8px;display:block;background:#e2e8f0;"
               onerror="var b=this.closest('.pphoto');if(b)b.style.display='none';">`;
         const pic = url ? `<a href="${esc(url)}" target="_blank" rel="noopener" title="저작자·라이선스 페이지 열기">${img}</a>` : img;
         const licHtml = L[1] ? `<a href="${esc(L[1])}" target="_blank" rel="noopener" style="color:inherit;">${esc(L[0])}</a>` : esc(L[0]);
@@ -13900,6 +13894,20 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       // 화면(지도)보다 넓으면 지도 폭에 맞춤 — 폰
       var mapW = map.getContainer().clientWidth;
       var fitW = Math.min(PLACE_POPUP_W, Math.max(280, mapW - 60));
+      // (b20261005-1) 탭·폰: PC 크기(폭 640·높이 82vh)로 열면 창이 지도를 거의 다 덮음 → 작게 열기.
+      //  폰 = 지도 폭 600 미만이거나 화면 높이 500 미만(가로로 눕힘), 탭 = 폭 1024 이하 또는 터치 화면.
+      //  손잡이로 키운 크기는 PC 와 따로 'place_popup_w_m' 에 남겨 그 기기에서 다음에도 그대로.
+      var small = window.matchMedia && matchMedia('(max-width: 1024px), (pointer: coarse)').matches;
+      var phone = mapW < 600 || window.innerHeight < 500;
+      var popH = '82vh';
+      if (small) {
+        var mw = parseInt(localStorage.getItem('place_popup_w_m') || '', 10);
+        var defW = phone ? 320 : 420;
+        fitW = Math.max(220, Math.min(mw >= 220 ? mw : defW, mapW - 60));   // 60 = 창 안쪽 여백·가장자리 몫 (넘쳐 ✕ 가 가려지지 않게)
+        popH = phone ? '42vh' : '50vh';
+        container.classList.add('kjm-pop-small');                           // 사진도 창에 맞춰 낮게 (CSS)
+      }
+      e.popup._kjmSmall = small;
       e.popup.options.maxWidth = fitW;            // 아래 update() 가 Leaflet 셈으로 폭을 다시 정할 때도 이 폭을 넘지 않게
       if ((e.popup.options.minWidth || 0) > fitW) e.popup.options.minWidth = fitW;
       content.style.width = fitW + 'px';
@@ -13913,7 +13921,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         xb.addEventListener('mousedown', function (ev) { ev.stopPropagation(); });
         xb.addEventListener('touchstart', function (ev) { ev.stopPropagation(); }, { passive: true });
       }
-      content.style.maxHeight = '82vh';
+      content.style.maxHeight = popH;
       content.style.overflowY = 'auto';
       // 폭이 바뀌면 Leaflet 이 잡아둔 자리가 어긋나 머리줄이 화면 위로 넘칠 수 있다
       setTimeout(function () { try { e.popup.update(); } catch (err) {} }, 0);
@@ -13935,7 +13943,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       });
       grip.addEventListener('pointermove', function (ev) {
         if (!on) return;
-        var w = Math.min(1200, Math.max(360, sw + (ev.clientX - sx)));
+        var w = Math.min(1200, Math.max(e.popup._kjmSmall ? 220 : 360, sw + (ev.clientX - sx)));
         var h = Math.min(window.innerHeight * 0.9, Math.max(160, sh + (ev.clientY - sy)));
         content.style.width = w + 'px';
         content.style.maxHeight = h + 'px';   // height 를 박으면 글이 짧을 때 빈칸이 남고
@@ -13946,6 +13954,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!on) return;
         on = false;
         try { grip.releasePointerCapture(ev.pointerId); } catch (err) {}
+        if (e.popup._kjmSmall) { localStorage.setItem('place_popup_w_m', String(content.offsetWidth)); return; }   // 탭·폰 크기는 따로
         PLACE_POPUP_W = content.offsetWidth;
         localStorage.setItem('place_popup_w', String(PLACE_POPUP_W));
       });
