@@ -1028,6 +1028,14 @@
       padding-top: 2px; touch-action: none; cursor: move;
       padding-right: 34px;   /* 닫기 ✕ 자리 */
     }
+    /* 지명 사진 (b20261005-1): PC 는 그대로(창 폭·260px), 탭·폰은 작은 정사각으로 — 사진 원본이 512x512 정사각이라 잘리지 않음 */
+    .pphoto-img { width:100%; aspect-ratio:1/1; max-height:260px; object-fit:cover; border-radius:8px; display:block; background:#e2e8f0; }
+    @media (max-width: 1024px), (pointer: coarse) {
+      .pphoto-img { width:min(100%, 34vh, 200px); height:auto; max-height:none; margin:0 auto; }
+    }
+    @media (max-width: 600px), (max-height: 500px) {
+      .pphoto-img { width:min(100%, 30vh, 150px); }
+    }
     /* 지명 창 닫기 ✕ — 창 안 오른쪽 위, 창을 옮겨도 따라감 (b20261002-1) */
     .leaflet-container a.leaflet-popup-close-button.kjm-popup-x {
       position: absolute; top: 6px; right: 8px; z-index: 1001;
@@ -13497,7 +13505,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const L = LIC[lic] || [lic, ''];
         const name = esc(String(item.name || item.label || '').replace(/^(.+?)\s+\(.*\)$/, '$1'));
         const img = `<img src="${esc(BASE + file)}" alt="${name} 사진" loading="lazy" decoding="async" draggable="false" ondragstart="return false;"
-              style="width:100%;aspect-ratio:1/1;max-height:260px;object-fit:cover;border-radius:8px;display:block;background:#e2e8f0;"
+              class="pphoto-img"
               onerror="var b=this.closest('.pphoto');if(b)b.style.display='none';">`;
         const pic = url ? `<a href="${esc(url)}" target="_blank" rel="noopener" title="저작자·라이선스 페이지 열기">${img}</a>` : img;
         const licHtml = L[1] ? `<a href="${esc(L[1])}" target="_blank" rel="noopener" style="color:inherit;">${esc(L[0])}</a>` : esc(L[0]);
@@ -16290,7 +16298,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261002-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261005-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
