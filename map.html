@@ -3996,6 +3996,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       }
       panelEl.style.width = (savedSize && savedSize.w) ? savedSize.w : (baseWidth + 'px');
       panelEl.style.height = (savedSize && savedSize.h) ? savedSize.h : 'auto';
+      // (b20261005-1) 탭·폰: 인명·용어·원어 창이 화면 85% 높이까지 자라 지도·본문을 거의 다 덮음
+      //  → 손잡이로 키운 적이 없으면 폰 45%·탭 50% 높이까지만, 폭도 화면 안쪽으로. 손잡이로 키우면 그 크기를 따름.
+      if (window.matchMedia && matchMedia('(max-width: 1024px), (pointer: coarse)').matches) {
+        const phone = window.innerWidth < 600 || window.innerHeight < 500;
+        if (!(savedSize && savedSize.h && savedSize.h !== 'auto')) panelEl.style.maxHeight = phone ? '45vh' : '50vh';
+        panelEl.style.maxWidth = 'calc(100vw - 24px)';
+        if (!(savedSize && savedSize.w)) panelEl.style.width = Math.min(baseWidth, window.innerWidth - 24) + 'px';
+      }
       panelEl._lastFontSize = baseFontPx; // 옵저버가 참조하는 기준값도 매번 초기화
 
       function fontForWidth(w) {
@@ -4092,6 +4100,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const newH = Math.max(minH, Math.min(maxH, dragState.startH + (e.clientY - dragState.startY)));
         panelEl.style.width = newW + 'px';
         panelEl.style.height = newH + 'px';
+        if (panelEl.style.maxHeight === '45vh' || panelEl.style.maxHeight === '50vh') panelEl.style.maxHeight = '92vh';   // 탭·폰 처음 한도(45·50%)는 손잡이로 넘길 수 있게
         e.preventDefault();
       });
       const endDrag = e => {
