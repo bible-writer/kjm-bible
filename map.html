@@ -12616,7 +12616,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       '벧여시못 (모압 평지 남단)':'Beth-jeshimoth',
       '벧파셋':'Beth-pazzez',
       '벧하간 (아하시야 도주길)':'Beth-haggan',
-      '벧하란 (헤롯 안디바 리비아스)':'Haran',
+      '벧하란 (헤롯 안디바 리비아스)':'Beth-haram',   // (2026-10-07) 'Haran'(메소포타미아 하란)으로 잘못 짝지어 640km 충돌 오경보
       '벧하람 (벧하란 / 율리아스)':'Beth-haram',
       '벧호글라 (사해 북단 샘 성읍)':'Beth-hoglah',
       '벧호론 비탈길 (상/하 벧호론)':'Beth-horon',
@@ -12774,12 +12774,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             
             // identifications → resolutions → lonlat 에서 좌표 추출
             let bestLat = null, bestLng = null, bestScore = -1;
+            const allPts = [];   // (2026-10-07) OB가 내놓은 모든 후보 좌표 — 우리 좌표가 그중 하나면 「일치」
             (obj.identifications || []).forEach(ident => {
               (ident.resolutions || []).forEach(res => {
                 if (!res.lonlat) return;
                 const parts = res.lonlat.split(',');
                 if (parts.length === 2) {
                   const score = (res.best_path_score || 0);
+                  allPts.push([parseFloat(parts[1]), parseFloat(parts[0])]);
                   if (score > bestScore) {
                     bestScore = score;
                     bestLng = parseFloat(parts[0]);
@@ -12805,6 +12807,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
                 type: (obj.types && obj.types[0]) || obj.type || '',
                 obId: obj.id || '',
                 slug: obj.url_slug || '',
+                allPts: allPts,
                 transNames: Object.keys(tnc),
                 modernNames: Object.keys(modAssoc).map(k => (modAssoc[k] && modAssoc[k].name) || '').filter(Boolean)
               });
@@ -12844,6 +12847,15 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             addObKey(keyAlnum(m), p, 70);
           });
         });
+        // (2026-10-07) 우리 DB에 적어 둔 OB 번호(ob_id)로 바로 찾기 — 이름 짝짓기보다 먼저
+        const obById = {};
+        obPlaces.forEach(p => { if (p.obId) obById[p.obId] = p; });
+        // 우리 좌표와 그 OB 지명의 모든 후보 좌표 중 가장 가까운 거리
+        function obMinDist(place, o) {
+          let m = Infinity;
+          (o.allPts || []).forEach(q => { const d = haversineKm(place.lat, place.lng, q[0], q[1]); if (d < m) m = d; });
+          return m;
+        }
 
         // 검색 후보 생성 시 단독으로는 의미가 없는 서술어
         const OB_STOPWORDS = new Set(['of','the','in','and','at','on','to','a','an','mount','mt','mountain',
@@ -12919,16 +12931,32 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const CONFLICT_KM = 30.0;         // 이름은 맞는데 좌표가 이만큼 멀면 '충돌'
 
         function matchOnePlace(place) {
+          const r0 = matchOnePlaceRaw(place);
+          // (2026-10-07) 고른 OB 지명의 「대표 좌표」와는 멀어도, OB 후보 좌표 중 하나와 1km 안이면 일치로 본다
+          //   (닷딤홋시: OB Kadesh 2 의 첫째 판정 좌표 = 우리 좌표, 대표 좌표는 다른 판정 경로라 185km)
+          if (r0 && r0.dist > 1.0) {
+            const md = obMinDist(place, r0.match);
+            if (md <= 1.0) { r0.dist = md; r0.conflict = null; r0.altHit = true; }
+          }
+          return r0;
+        }
+        function matchOnePlaceRaw(place) {
+          if (place.ob_id && obById[place.ob_id]) {
+            const o = obById[place.ob_id];
+            return { match: o, dist: haversineKm(place.lat, place.lng, o.latitude, o.longitude), method: 'OB번호', conflict: null };
+          }
           const cands = [];
           function pushKey(key, weak, bonus) {
             const hits = obIndex[key];
             if (!hits) return;
             for (let i = 0; i < hits.length; i++) {
               const o = hits[i].place;
+              // (2026-10-07) 현대 지명만 같은 것은 약한 근거 — 30km 밖이면 버림 (맛사다 → Hazar-gaddah 오매칭)
+              const wk = weak || hits[i].tier <= 70;
               cands.push({
-                score: hits[i].tier + bonus - (weak ? 25 : 0),
+                score: hits[i].tier + bonus - (wk ? 25 : 0),
                 dist: haversineKm(place.lat, place.lng, o.latitude, o.longitude),
-                place: o, weak: weak
+                place: o, weak: wk
               });
             }
           }
@@ -13112,7 +13140,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
               '사유': entry.r.conflict
                 ? ('이름은 ' + m.name + '와 일치하나 좌표가 ' + entry.r.dist.toFixed(0) +
                    'km 떨어짐 — 현재 좌표 근처는 ' + entry.r.conflict.match.name + ' (좌표 오류 의심)')
-                : '',
+                : (entry.r.altHit ? 'OB 후보 좌표 중 하나와 같음 (OB 대표 좌표는 다른 판정)' : ''),
               '현재위도': place.lat, '현재경도': place.lng,
               'OB위도': obLat, 'OB경도': obLng,
               '차이(km)': parseFloat(entry.r.dist.toFixed(2)),
@@ -15622,6 +15650,38 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       // 읽던 장을 먼저 연 뒤에 뒤에서 한다. 새 판이 오면 색인을 다시 만들고 지금 장을 다시 그린다.
       setTimeout(() => { (async () => {
         let _upd = false;
+      // [자동 업데이트] (2026-10-07 kjm 「1」) 지명 DB 도 새 판이면 받는다.
+      // 판 번호가 지금 것보다 「높을 때만」(PC에서 내보내고 아직 안 올린 판을 옛 판으로 덮지 않게).
+      // 좌표·이름·스트롱 보정 이력은 받은 뒤 다시 입힘(「🔄 업데이트」 단추와 같음).
+      // 관리자 모드(PC 편집 중)에서는 표제어 직접 고친 것이 지워질 수 있어 받지 않고 알리기만 한다.
+      try {
+        const netPlRes = await fetch('./placeDatabase.json', { cache: 'no-store' });
+        if (netPlRes && netPlRes.ok) {
+          const netPl = await EncryptedDB.openQuiet(await netPlRes.json());
+          if (netPl && Array.isArray(netPl.places) && netPl.places.length > 0) {
+            const curV = (await getLocalItem('saved_place_database_version')) || '';
+            const vn = s => String(s || '').split('.').map(x => parseInt(x) || 0);
+            const newer = (a, b) => { const A = vn(a), B = vn(b); for (let i = 0; i < Math.max(A.length, B.length); i++) { const d = (A[i] || 0) - (B[i] || 0); if (d) return d > 0; } return false; };
+            const need = !placeDatabase.length || !curV || newer(netPl.version, curV);
+            if (need && isAdminMode() && placeDatabase.length) {
+              showToast(`새 지명 DB v${netPl.version || '?'} 가 있습니다 (지금 v${curV || '?'}). 관리자 모드라 자동으로 받지 않았습니다 — 「🔄 업데이트」 단추로 받으세요.`, 'info');
+            } else if (need) {
+              await reapplyCoordOverrides(netPl.places, '새 판');
+              await reapplyNameOverrides(netPl.places, '새 판');
+              await reapplyPlaceStrongOverrides(netPl.places, '새 판');
+              placeDatabase = netPl.places;
+              await setLocalItem('saved_place_database', placeDatabase);
+              await setLocalItem('saved_place_database_version', netPl.version || '');
+              buildKeywordIndex(placeDatabase);
+              renderMapMarkers();
+              updateAppTitle();
+              _upd = true; showToast(`지명 DB 자동 업데이트: ${placeDatabase.length}곳 (v${netPl.version || '?'})`, 'success');
+            }
+          }
+        }
+      } catch (e) {
+        console.log('[자동 업데이트] placeDatabase.json 네트워크 로드 생략:', e.message);
+      }
       // [자동 업데이트] 네트워크로 최신 termDatabase.json 확인 (file:// 로컬 실행 시에는 자동 실패 후 무시됨)
       // 비밀번호가 이미 이번 세션에 입력되어 있을 때만 시도한다 — 그렇지 않으면 앱을 열 때마다
       // 예고 없이 비밀번호 창이 화면을 덮는 문제가 있어, 저장된 캐시만 쓰고 조용히 건너뛴다.
@@ -16332,7 +16392,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261007-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261007-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
