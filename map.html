@@ -4290,7 +4290,27 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).join('|');
         if (!escapedNames) return html;
         const regex = new RegExp(`(?<![가-힣])(${escapedNames})${particlePattern}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
-        return this.highlightOutsideTags(html, regex, (match, p1, p2, offset, whole) => {
+        // (2026-10-08 용어 1.12.19) 어절 원어 번호가 이 용어의 skip_codes(판정 「틀림」)이고 용어 번호와는 안 맞으면 딱지를 붙이지 않는다
+        //  (「인자」=헤세드, 「주」=사람 주인 …). 이미 붙은 인명·지명 딱지 안은 건드리지 않는다(창이 둘 뜨지 않게).
+        const kArr = (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) ? krvnMorph.v[`${bookId}-${chapter}-${vNum}`] : null;
+        const plainAll = String(html).replace(/<[^>]+>/g, '');
+        const kOk = kArr && plainAll.trim().split(/\s+/).length === kArr.length;
+        const nb = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
+        let plainBefore = '';
+        const skipHere = (t, partOffset) => {
+          if (!kOk || !t || !t.skip_codes) return false;
+          const head = (plainBefore + partOffset).replace(/\S+$/, '').trim();
+          const k = head === '' ? 0 : head.split(/\s+/).length;
+          const codes = String((kArr[k] || [])[0] || '').split(',').map(nb).filter(Boolean);
+          if (!codes.length) return false;
+          const skip = String(t.skip_codes).split(',').map(nb), own = String(t.hebrew_greek || '').split(/[,\s]+/).map(nb);
+          return codes.some(c => skip.indexOf(c) >= 0) && !codes.some(c => own.indexOf(c) >= 0);
+        };
+        const parts = String(html).split(/(<[^>]+>)/); let depth = 0;
+        for (let pi = 0; pi < parts.length; pi++) {
+          if (pi % 2 === 1) { if (/^<span\b/i.test(parts[pi])) depth++; else if (/^<\/span>/i.test(parts[pi])) depth = Math.max(0, depth - 1); continue; }
+          const seg = parts[pi]; if (!seg) continue;
+          if (depth === 0) parts[pi] = seg.replace(regex, (match, p1, p2, offset, whole) => {
           const particle = p2 || '';
           if (TERM_STOP_WORDS.has(p1 + particle)) return match;
           if (TERM_COUNTER_KEYS.has(p1) && typeof whole === 'string'
@@ -4306,11 +4326,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             const pick = vTable[tok + '#' + nth];
             if (pick === 0) return match;
             if (pick) {
+              if (skipHere((termDatabase || []).find(x => x.id === pick), seg.slice(0, offset))) return match;
               return `<span class="bible-term-tag" onclick="TermEngine.handleClickId(${pick}, ${bookId}, ${chapter}, ${vNum})" ${ctx} title="${p1} (용어사전)">${p1}</span>${particle}`;
             }
           }
+          if (skipHere(termIndex[p1], seg.slice(0, offset))) return match;
           return `<span class="bible-term-tag" onclick="TermEngine.handleClick('${safeName}', ${bookId}, ${chapter}, ${vNum})" ${ctx} title="${p1} (용어사전)">${p1}</span>${particle}`;
-        });
+          });
+          plainBefore += seg;
+        }
+        return parts.join('');
       },
 
       // 영어(term_en) 기준 용어 하이라이트 — NIV 등 영어 번역 비교보기용
@@ -14911,6 +14936,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           if (/인칭대명사/.test(mo) || (/[123]인 [남여공]성 [단복]수\s*$/.test(mo) && /명사|전치사|대격/.test(mo)))
             return { state: 'unknown', msg: `원어에서 대명사로 붙은 꼴 — 「${textCodes.map(showOf).join(', ')}」에 「당신·그」가 붙어 있어 번호로 견줄 수 없음` };
         }
+        // (2026-10-08) 헬라어 대명사(너의 G4675·그 G846 …)는 krvn 품사 칸이 비어 있는 일이 많아 strongKo 문법(g)으로도 가림
+        const isPron = x => { const k = cmpOf(x); if (!k || !strongKoDict) return false; const raw = k[0] + String(parseInt(k.slice(1), 10));
+          return [raw].concat('abcde'.split('').map(ch => raw + ch)).some(kk => { const e = strongKoDict[kk]; return e && /^(G:P(-|$)|G:[TRD](-|$)|G:CONJ|G:PREP|G:PRT|H:Per|H:P[sp]\d|H:DemP|H:Part|H:Prep|H:Conj|H:Art|Prefix)/.test(String(e.g || '')); }); };
+        if (textCodes.length && textCodes.every(isPron)) return { state: 'unknown', msg: `원어가 대명사·관사 같은 기능어(${textCodes.map(showOf).join(', ')}) — 번호로 견줄 수 없음` };
         const tokMo = (kToks && typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.mo) ? kToks.map(tk => (tk[2] || []).map(j => (j != null && j >= 0) ? krvnMorph.mo[j] : '').join(' ')).join(' ') : '';
         const tokProper = /고유명사|종족/.test(tokMo);   // 이 어절 원어가 이름이면 — 다른 이름을 가리키는 진짜 어긋남
         if ((item.kind === '인명' || item.kind === '지명') && kt && kt.arr && !tokProper) {
@@ -14918,6 +14947,13 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const inVerse = item.codes.some(c => all.indexOf(c) >= 0 || all.some(a => this.related(a).indexOf(c) >= 0));
           if (!inVerse) return { state: 'unknown', msg: `원문 이 절엔 이 이름이 없음 — 개역개정이 「그가」 등을 이름으로 옮김 (어절 원어 ${textCodes.map(showOf).join(', ')})` };
           if (inVerse) return { state: 'unknown', msg: `이 이름의 원어(${item.codes.slice(0, 3).join(', ')})는 같은 절 다른 어절에 있음 — 어순 차이` };
+        }
+        // (2026-10-08) 용어: 이 용어의 원어가 바로 옆 어절(±2)에 있으면 어절 나눔 차이 — ? 로
+        if (item.kind === '용어' && kt && kt.arr) {
+          for (let d = -2; d <= 2; d++) { const tk = kt.arr[kt.k + d]; if (!d || !tk || !tk[0]) continue;
+            const near = tk[0].split(',').filter(x => { const k = cmpOf(x); return k && item.codes.indexOf(k) >= 0; });
+            if (near.length) return { state: 'unknown', msg: `이 용어의 원어(${near.map(showOf).join(', ')})는 옆 어절에 있음 — 어절 나눔 차이` };
+          }
         }
         return { state: 'bad', msg: `본문 ${textCodes.map(showOf).join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}` };
       },
@@ -16541,7 +16577,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261007-5`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261008-1`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
