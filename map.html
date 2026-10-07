@@ -4133,7 +4133,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       parseAndHighlightByNames: function(html, nameMap, book, chapter, verse) {
         const names = Object.keys(nameMap || {});
         if (!html || names.length === 0) return html;
-        const particlePattern = '(들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|여|아)?';
+        const particlePattern = '((?:인들|인)?(?:에서부터|에게서부터|으로부터|에까지|까지도|에게로|에게는|에게도|께서는|께서도|께서|께로|이여|이시여|여|야|들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|여|아)?|인들|인)?';
         const sortedNames = names.sort((a, b) => b.length - a.length);
         const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).join('|');
         if (!escapedNames) return html;
@@ -4332,7 +4332,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         Object.keys(termIndex || {}).forEach(k => { if (termIndex[k] === t) keys.add(k); });
         const raw = String(t.term_ko || '').trim();
         if (raw) { keys.add(raw); const m = raw.match(/^([^()]+)\(([^()]+)\)$/); if (m) { keys.add(m[1].trim()); keys.add(m[2].trim()); } }
-        const part = '(들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
+        const part = '(들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?|인들|인)?';
         const seen = new Set();
         let scanned = 0;
         for (const k of keys) {
@@ -6043,10 +6043,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       },
 
       // OB 구절 기반 정확 매칭 하이라이트
-      parseAndHighlightByNames: function(verseText, currentContext, nameSet, bookId, chapter, vNum) {
+      parseAndHighlightByNames: function(verseText, currentContext, nameSet, bookId, chapter, vNum, personMap) {
         if (!verseText || nameSet.size === 0) return String(verseText || '');
         const safeText = String(verseText);
-        const particlePattern = '(들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|여|아)?';
+        const particlePattern = '((?:인들|인)?(?:에서부터|에게서부터|으로부터|에까지|까지도|에게로|에게는|에게도|께서는|께서도|께서|께로|이여|이시여|여|야|들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|이었더라|이었으니|이었고|이었다|이시니라|이시니|이시라|이니이다|이더라|이니라|이로다|이라니|이라도|이든지|이요|이며|이니|이나|이다|더라|니라|로다|요|며|니|나|다|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|여|아)?|인들|인)?';
 
         // nameSet을 길이 내림차순 정렬 (긴 지명 우선)
         const sortedNames = [...nameSet].sort((a, b) => b.length - a.length);
@@ -6056,8 +6056,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const regex = new RegExp(`(?<![가-힣])(${escapedNames})${particlePattern}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
 
         const seen = {};
+        const pNames = personMap ? Object.keys(personMap) : [];
         return safeText.replace(regex, (match, p1, p2) => {
           const particle = p2 || '';
+          // (2026-10-07) 「스구디아인」처럼 지명+인 이 이 절 인물 이름 그대로면 인명에 맡긴다
+          if (particle && pNames.some(n => n.length > p1.length && n.startsWith(p1) && match.startsWith(n))) return match;
           const safeName = p1.replace(/'/g, "\'");
           if (bookId) {   // (2026-09-17) 사용자 부분 제외 — 「@지명:이름」
             const nth = (seen[p1] = (seen[p1] || 0) + 1);
@@ -16052,6 +16055,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const currentContext = `${bookObj.abbr}${chapter}`;
       const currentOsis = bookObj.osis ? `${bookObj.osis}.${chapter}.` : null;
         const safeText = String(text || "");
+      // (2026-10-07 kjm 「어짜피 고쳐야 할것」) 이 절의 인명 — 지명 괄호 속 별칭이 이 절 인물 이름과 같으면 별칭으로 쓰지 않는다
+      //  (「살렘 (… / 멜기세덱)」→멜기세덱, 「온 (헬리오폴리스 / 아스낫)」→아스낫, 「미스바 (베냐민)」→베냐민, 「벳새다 (빌립·안드레…)」 등이 지명으로 걸리던 것)
+      const _verseP = personVerseIndex[`${bookId}-${chapter}-${vNum}`] || null;
       // OB 구절 단위 정확 매칭
       let highlightedText;
       if (currentOsis && placeDatabase.length > 0) {
@@ -16083,14 +16089,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
                 bm.replace(/[\(（\)）]/g, '').split(/\s*[\/·,]\s*/).forEach(part => {
                   const bn = part.trim();
                   // 한 낱말(띄어쓰기 없음)인 한글만 — 「다곤 신전」「바울이 간 곳」 같은 설명은 빠진다
-                  if (/^[가-힣]{2,}$/.test(bn) && (placeKeywordMap[bn] || !GENERIC.test(bn))) verseNames.add(bn);
+                  if (/^[가-힣]{2,}$/.test(bn) && (placeKeywordMap[bn] || !GENERIC.test(bn)) && !(_verseP && _verseP[bn])) verseNames.add(bn);
                 });
               });
             }
           }
         });
         if (verseNames.size > 0) {
-          highlightedText = BibleGeoEngine.parseAndHighlightByNames(safeText, currentContext, verseNames, bookId, chapter, vNum);
+          highlightedText = BibleGeoEngine.parseAndHighlightByNames(safeText, currentContext, verseNames, bookId, chapter, vNum, _verseP);
         } else {
           highlightedText = safeText; // 해당 구절 지명 없으면 하이라이트 없음
         }
@@ -16392,7 +16398,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261007-2`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261007-3`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
