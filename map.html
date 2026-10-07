@@ -3901,8 +3901,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       TermEngine._enIndexCache = null; // 목록이 바뀌었으니 영어(NIV 등) 인덱스도 다음 사용 시 재생성
     }
 
+    var personVerseMulti = {};   // (2026-10-07) 한 절에 같은 이름 둘 이상 — { 'b-c-v': { 이름: [인물…] } }
     function buildPersonVerseIndex(personList) {
-      personVerseIndex = {};
+      personVerseIndex = {}; personVerseMulti = {};
       if (!Array.isArray(personList)) return;
       const okName = n => n && !(userBlacklist.has(n) && !DEFAULT_PERSON_NAMES.has(n));   // (2026-09-18) 기본 불용어의 사람 이름은 인명 엔진에서는 막지 않음
       // 1) 본이름 — 같은 구절 안에서는 이름이 유일하다고 가정(뒤 인물이 이김, 예전과 같음)
@@ -3911,7 +3912,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         (p.verses || []).forEach(v => {
           const key = `${v.book}-${v.chapter}-${v.verse}`;
           if (!personVerseIndex[key]) personVerseIndex[key] = {};
-          if (okName(p.name_ko)) personVerseIndex[key][p.name_ko] = p;
+          if (okName(p.name_ko)) {
+            const had = personVerseIndex[key][p.name_ko];
+            if (had && had !== p) { const mm = (personVerseMulti[key] = personVerseMulti[key] || {}); const L = (mm[p.name_ko] = mm[p.name_ko] || [had]); if (L.indexOf(p) < 0) L.push(p); }
+            personVerseIndex[key][p.name_ko] = p;
+          }
         });
       });
       // 2) 별칭(aliases_ko — 개역개정이 책마다 달리 적은 이름) — 그 구절에서 다른 인물이 이미 쓰는 이름이면 건드리지 않음 (2026-09-18)
@@ -4117,6 +4122,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
 
     const PersonEngine = {
+      // (2026-10-07) 이미 붙은 딱지(<span>) 안의 글자는 건드리지 않는다 — 지명 딱지 안에 인명 딱지가 겹쳐 들어가
+      //  누르면 창이 두 개 뜨던 것(「다윗 성」「여부스」「게달」 등 129곳). 어느 쪽이 맞는지는 highlightVerseHtml 이 원어로 가린다.
+      highlightOutsideSpans: function(html, regex, replacer) {
+        const parts = html.split(/(<[^>]+>)/); let depth = 0;
+        for (let i = 0; i < parts.length; i++) {
+          if (i % 2 === 1) { if (/^<span\b/i.test(parts[i])) depth++; else if (/^<\/span>/i.test(parts[i])) depth = Math.max(0, depth - 1); continue; }
+          if (depth === 0 && parts[i]) parts[i] = parts[i].replace(regex, replacer);
+        }
+        return parts.join('');
+      },
       // 이미 지명 하이라이트가 끝난 HTML에 대해, <태그> 밖의 순수 텍스트에만 인명을 하이라이트
       highlightOutsideTags: function(html, regex, replacer) {
         const parts = html.split(/(<[^>]+>)/);
@@ -4139,20 +4154,41 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!escapedNames) return html;
         const regex = new RegExp(`(?<![가-힣])(${escapedNames})${particlePattern}(?=[\\s.,!?;:\\]\\)<>]|$)`, 'g');
         const seen = {};
-        return this.highlightOutsideTags(html, regex, (match, p1, p2) => {
+        return this.highlightOutsideSpans(html, regex, (match, p1, p2) => {
           const particle = p2 || '';
           const safeName = p1.replace(/'/g, "\\'");
           const nth = (seen[p1] = (seen[p1] || 0) + 1);
           if (nameSkipHit('인명', p1, nth, book, chapter, verse)) return match;   // (2026-09-17) 사용자 부분 제외
-          return `<span class="bible-person-tag" onclick="PersonEngine.handleClickAt('${safeName}', ${book}, ${chapter}, ${verse})" oncontextmenu="handleNameContextMenu(event, '인명', '${safeName}', ${book}, ${chapter}, ${verse}, ${nth})" title="${p1}">${p1}</span>${particle}`;
+          return `<span class="bible-person-tag" onclick="PersonEngine.handleClickAt('${safeName}', ${book}, ${chapter}, ${verse}, this)" oncontextmenu="handleNameContextMenu(event, '인명', '${safeName}', ${book}, ${chapter}, ${verse}, ${nth})" title="${p1}">${p1}</span>${particle}`;
         });
       },
 
       // 클릭한 태그의 정확한 구절 위치로 어느 인물인지 명확히 구분해서 조회 (동명이인/개명 대응)
-      handleClickAt: function(name, book, chapter, verse) {
-        if (typeof wpSetRef === 'function') wpSetRef(book, chapter, verse);
+      // (2026-10-07) 한 절에 같은 이름이 둘이면(창10:7 스바=Seba·Sheba, 스8:8 스바댜=Shephatiah·Zebadiah)
+      //  누른 어절의 원어 번호(어절 원어 분석)로 사람을 고른다. 원어를 못 보면 예전처럼.
+      resolveAt: function(name, book, chapter, verse, el) {
         const key = `${book}-${chapter}-${verse}`;
         const p = personVerseIndex[key] && personVerseIndex[key][name];
+        const L = personVerseMulti[key] && personVerseMulti[key][name];
+        if (!L || L.length < 2 || !el || typeof krvnTokenAt !== 'function') return p;
+        try {
+          const vt = el.closest('.verse-text') || el.parentNode; if (!vt) return p;
+          const pre = document.createRange(); pre.setStart(vt, 0); pre.setEndBefore(el);
+          const kt = krvnTokenAt(book, chapter, verse, vt.textContent, pre.toString().length);
+          if (!kt) return p;
+          const norm = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
+          const codes = String((kt.arr[kt.k] || [])[0] || '').split(',').map(norm).filter(Boolean);
+          if (!codes.length) return p;
+          const by = f => L.filter(q => String(f(q) || '').split(/[,\s]+/).map(norm).some(c => codes.indexOf(c) >= 0));
+          const a = by(q => q.ustrong); if (a.length === 1) return a[0];
+          const b2 = by(q => [q.ustrong, q.strong].join(',')); if (b2.length === 1) return b2[0];
+        } catch (e) {}
+        return p;
+      },
+      handleClickAt: function(name, book, chapter, verse, el) {
+        if (typeof wpSetRef === 'function') wpSetRef(book, chapter, verse);
+        const key = `${book}-${chapter}-${verse}`;
+        const p = this.resolveAt(name, book, chapter, verse, el);
         if (!p) { showToast(`'${name}' 인물 정보를 찾을 수 없습니다.`, 'info'); return; }
         this.showPopup(p, name);
       },
@@ -6065,7 +6101,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           if (bookId) {   // (2026-09-17) 사용자 부분 제외 — 「@지명:이름」
             const nth = (seen[p1] = (seen[p1] || 0) + 1);
             if (nameSkipHit('지명', p1, nth, bookId, chapter, vNum)) return match;
-            return `<span class="bible-place-tag" onclick="BibleGeoEngine.handleClick('${safeName}', '${currentContext}')" oncontextmenu="handleNameContextMenu(event, '지명', '${safeName}', ${bookId}, ${chapter}, ${vNum}, ${nth})" title="${p1}">${p1}</span>${particle}`;
+            return `<span class="bible-place-tag" onclick="BibleGeoEngine.handleClickAt('${safeName}', '${currentContext}', ${bookId}, ${chapter}, ${vNum})" oncontextmenu="handleNameContextMenu(event, '지명', '${safeName}', ${bookId}, ${chapter}, ${vNum}, ${nth})" title="${p1}">${p1}</span>${particle}`;
           }
           return `<span class="bible-place-tag" onclick="BibleGeoEngine.handleClick('${safeName}', '${currentContext}')" title="${p1}">${p1}</span>${particle}`;
         });
@@ -6091,6 +6127,24 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         });
       },
 
+      // (2026-10-07) 이 절에서 이 이름을 낸 지명이 하나면 그 지명을 바로 연다. 아니면 예전대로 이름으로.
+      handleClickAt: function(name, currentContext, b, c, v) {
+        const ids = window._placeTagIds && window._placeTagIds[`${b}-${c}-${v}`] && window._placeTagIds[`${b}-${c}-${v}`][name];
+        const mainOf = pl => String(pl.name || '').split(/[\(\[]/)[0].replace(/\s+\d+$/, '').trim();
+        const open = pl => { try { if (typeof wpSetRef === 'function') wpSetRef(b, c, v); } catch (e) {} showPlaceQuickPanel(pl); };
+        if (ids && ids.length) {
+          const pls = ids.map(id => placeDatabase.find(x => x.id === Math.abs(id))).filter(Boolean);
+          const mains = pls.filter(pl => mainOf(pl) === name);
+          if (mains.length === 1) { open(mains[0]); return; }
+          // 정식 이름의 첫 낱말(「그발 강가」→그발)에서 나온 것은 그 지명으로. 괄호 별칭(「브엘세바 (유다·…)」→유다)은
+          // 그 이름이 다른 지명의 정식 이름이면 예전처럼 이름으로 찾는다(「유다」, 「모압」, 「아람」)
+          const first = ids.filter(id => id > 0).map(id => placeDatabase.find(x => x.id === id)).filter(Boolean);
+          const named = placeDatabase.some(x => mainOf(x) === name);
+          if (!mains.length && first.length === 1) { open(first[0]); return; }
+          if (!mains.length && !first.length && !named && pls.length === 1) { open(pls[0]); return; }
+        }
+        return this.handleClick(name, currentContext);
+      },
       handleClick: function(name, currentContext) {
         /* 지명 태그는 절 번호를 넘겨받지 않는다. 지금 보고 있는 장의 첫 절을
            기준으로 삼아 구약·신약만이라도 바르게 가리게 한다. */
@@ -14797,12 +14851,18 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (tag.classList.contains('bible-person-tag')) {
           if (!(m = oc.match(/handleClickAt\('((?:[^'\\]|\\.)*)'/))) return null;
           const nm = m[1].replace(/\\'/g, "'");
-          const p = personVerseIndex[`${b}-${c}-${v}`] && personVerseIndex[`${b}-${c}-${v}`][nm];
+          const p = PersonEngine.resolveAt(nm, b, c, v, tag);
           return p ? { kind: '인명', name: p.name_ko, codes: this.codesOf([p.ustrong, p.strong].join(',')) } : null;
         }
         if (tag.classList.contains('bible-place-tag')) {
           if (!(m = oc.match(/handleClick\('((?:[^'\\]|\\.)*)'/))) return null;
           const nm = m[1].replace(/\\'/g, "'");
+          const _tid = window._placeTagIds && window._placeTagIds[`${b}-${c}-${v}`] && window._placeTagIds[`${b}-${c}-${v}`][nm];
+          if (_tid && _tid.length) {
+            const codes = [];
+            _tid.forEach(id => { const pl = placeDatabase.find(x => x.id === Math.abs(id)); if (pl) this.codesOf([pl.ustrong, pl.hebrew_greek].join(',')).forEach(x => { if (codes.indexOf(x) < 0) codes.push(x); }); });
+            return { kind: '지명', name: nm, codes };
+          }
           let cands = (placeKeywordMap[nm] || []).slice();
           const bk = BIBLE_BOOKS.find(x => x.id === b);
           const ref = bk ? `${bk.abbr}${c}:${v}` : '';
@@ -14813,6 +14873,53 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           return { kind: '지명', name: nm, codes };
         }
         return null;
+      },
+      // (2026-10-07 kjm 「잘못된것은 고쳐야지」) 틀리지 않은 것을 ⚠ 로 띄우지 않게 — 진짜 어긋남만 ⚠
+      //  ① STEP 연관번호(strongKo r · s[].u)로 이어지면 ✓ 「연관」
+      //  ② 원어에서 대명사·접미 대명사로 붙은 꼴(히브리 「주의 종」= 종+당신의)이면 ? 「대명사」
+      //  ③ 인명·지명인데 이 절 원어 어디에도 그 번호가 없으면 ? 「원문엔 이름 없음(번역이 보탬)」
+      _rel: null,
+      related: function(code) {
+        const k = this.norm(code); if (!k) return [];
+        if (!this._rel) this._rel = {};
+        if (this._rel[k]) return this._rel[k];
+        const out = [];
+        if (strongKoDict) {
+          const add = x => { const n = this.norm(x); if (n && n !== k && out.indexOf(n) < 0) out.push(n); };
+          const raw = k[0] + String(parseInt(k.slice(1), 10));
+          [raw].concat('abcdefgh'.split('').map(ch => raw + ch)).forEach(kk => {
+            const e = strongKoDict[kk]; if (!e) return;
+            String(e.r || '').split(/[,\s]+/).forEach(add);
+            (e.s || []).forEach(sx => { if (sx && sx.u) String(sx.u).split(/[,\s]+/).forEach(add); });
+          });
+          this._rel[k] = out;
+        }
+        return out;
+      },
+      judge: function(item, textCodes, why, kToks, kt) {
+        const cmpOf = x => /[A-Za-z]$/.test(String(x).slice(1)) ? strongTR(x) : this.norm(x);
+        const showOf = x => { const tr = /[A-Za-z]$/.test(String(x).slice(1)) ? strongTR(x) : ''; return tr ? `${x}(=${tr})` : x; };
+        if (why) return { state: 'unknown', msg: why };
+        if (!item.codes.length) return { state: 'unknown', msg: `${item.kind} 항목에 스트롱 코드가 없음 · 본문 ${textCodes.map(showOf).join(', ')}` };
+        const hit = textCodes.filter(x => { const k = cmpOf(x); return k && item.codes.indexOf(k) >= 0; });
+        if (hit.length) return { state: 'ok', msg: `원어 일치 ${hit.map(showOf).join(', ')}` };
+        if (!strongKoDict && typeof ensureStrongKo === 'function') ensureStrongKo().catch(() => {});
+        const rel = textCodes.filter(x => { const k = cmpOf(x); return k && (this.related(k).some(r => item.codes.indexOf(r) >= 0) || item.codes.some(ic => this.related(ic).indexOf(k) >= 0)); });
+        if (rel.length) return { state: 'ok', msg: `원어 연관 ${rel.map(showOf).join(', ')} (STEP 연관번호로 ${item.kind} 항목과 이어짐)` };
+        if (kToks && kToks.length && typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.mo) {
+          const mo = kToks.map(tk => (tk[2] || []).map(j => (j != null && j >= 0) ? krvnMorph.mo[j] : '').join(' ')).join(' ');
+          if (/인칭대명사/.test(mo) || (/[123]인 [남여공]성 [단복]수\s*$/.test(mo) && /명사|전치사|대격/.test(mo)))
+            return { state: 'unknown', msg: `원어에서 대명사로 붙은 꼴 — 「${textCodes.map(showOf).join(', ')}」에 「당신·그」가 붙어 있어 번호로 견줄 수 없음` };
+        }
+        const tokMo = (kToks && typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.mo) ? kToks.map(tk => (tk[2] || []).map(j => (j != null && j >= 0) ? krvnMorph.mo[j] : '').join(' ')).join(' ') : '';
+        const tokProper = /고유명사|종족/.test(tokMo);   // 이 어절 원어가 이름이면 — 다른 이름을 가리키는 진짜 어긋남
+        if ((item.kind === '인명' || item.kind === '지명') && kt && kt.arr && !tokProper) {
+          const all = []; kt.arr.forEach(tk => { if (tk && tk[0]) tk[0].split(',').forEach(x => { const k = cmpOf(x); if (k) all.push(k); }); });
+          const inVerse = item.codes.some(c => all.indexOf(c) >= 0 || all.some(a => this.related(a).indexOf(c) >= 0));
+          if (!inVerse) return { state: 'unknown', msg: `원문 이 절엔 이 이름이 없음 — 개역개정이 「그가」 등을 이름으로 옮김 (어절 원어 ${textCodes.map(showOf).join(', ')})` };
+          if (inVerse) return { state: 'unknown', msg: `이 이름의 원어(${item.codes.slice(0, 3).join(', ')})는 같은 절 다른 어절에 있음 — 어순 차이` };
+        }
+        return { state: 'bad', msg: `본문 ${textCodes.map(showOf).join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}` };
       },
       run: function(tag, ev) {
         if (!this.enabled) return;
@@ -14828,10 +14935,13 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         let textCodes = null, why = '';
         const src = WordOrig.source();
         const kt = krvnTokenAt(b, c, v, vt.textContent, offset);
-        let usedKrvn = false;
+        let usedKrvn = false, kToks = [];
         if (kt) {
-          const tk = kt.arr[kt.k];
-          textCodes = tk && tk[0] ? tk[0].split(',') : [];
+          // (2026-10-07) 여러 어절 딱지(「만군의 여호와」)는 덮는 어절 모두의 번호로 견준다
+          const nW = Math.max(1, String(word).trim().split(/\s+/).length);
+          for (let i = kt.k; i < Math.min(kt.arr.length, kt.k + nW); i++) kToks.push(kt.arr[i]);
+          textCodes = [];
+          kToks.forEach(tk => { if (tk && tk[0]) tk[0].split(',').forEach(x => { if (textCodes.indexOf(x) < 0) textCodes.push(x); }); });
           usedKrvn = textCodes.length > 0;
         }
         // (2026-09-17) 어절 원어 분석에 번호가 없는 어절은 개역개정S 글자 맞춤으로 채운다
@@ -14848,15 +14958,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             }
           }
         }
-        let state, msg;
-        // (2026-09-22) 끝글자 붙은 번호(G1160b)는 TR 번호(G1138)로 견준다 — 끝글자만 떼면 다른 낱말(G1160 비용)
-        const cmpOf = x => /[A-Za-z]$/.test(String(x).slice(1)) ? strongTR(x) : this.norm(x);
-        const showOf = x => { const tr = /[A-Za-z]$/.test(String(x).slice(1)) ? strongTR(x) : ''; return tr ? `${x}(=${tr})` : x; };
-        const hit = (textCodes || []).filter(x => { const k = cmpOf(x); return k && item.codes.indexOf(k) >= 0; });
-        if (why) { state = 'unknown'; msg = why; }
-        else if (!item.codes.length) { state = 'unknown'; msg = `${item.kind} 항목에 스트롱 코드가 없음 · 본문 ${textCodes.map(showOf).join(', ')}`; }
-        else if (hit.length) { state = 'ok'; msg = `원어 일치 ${hit.map(showOf).join(', ')}`; }
-        else { state = 'bad'; msg = `본문 ${textCodes.map(showOf).join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}`; }
+        const J = this.judge(item, textCodes || [], why, usedKrvn ? kToks : null, usedKrvn ? kt : null);
+        const state = J.state, msg = J.msg;
         this.chip(tag, state, msg, { b, c, v, word, textCodes: textCodes || [], label: usedKrvn ? '어절 원어 분석' : (src ? src.label : ''), kt: usedKrvn ? kt : null, offset, text: vt.textContent });
       },
       chip: function(tag, state, msg, info) {
@@ -16049,6 +16152,38 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
 
     // 한 절의 본문 → 지명·인명·용어 딱지를 입힌 HTML (2026-09-17 — 본문 화면과 본문 검색 결과가 함께 씀)
+    function placeOrPersonByOrig(html, b, c, v, pmap) {
+      if (!pmap || typeof krvnMorph === 'undefined' || !krvnMorph || !/bible-place-tag/.test(html)) return html;
+      const arr = krvnMorph.v[`${b}-${c}-${v}`]; if (!arr) return html;
+      const d = document.createElement('div'); d.innerHTML = html;
+      const words = d.textContent.trim().split(/\s+/); if (words.length !== arr.length) return html;
+      const norm = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
+      const codesOf = str => String(str || '').split(/[,\s;/]+/).map(norm).filter(Boolean);
+      const ids = (window._placeTagIds && window._placeTagIds[`${b}-${c}-${v}`]) || {};
+      let changed = false;
+      d.querySelectorAll('.bible-place-tag').forEach(sp => {
+        const nm = sp.textContent;
+        // 인물 이름: 딱지 글자 전체 또는 첫 낱말(「다윗 성」→다윗)
+        const pn = pmap[nm] ? nm : (pmap[nm.split(' ')[0]] ? nm.split(' ')[0] : null);
+        if (!pn) return;
+        const pre = document.createRange(); pre.setStart(d, 0); pre.setEndBefore(sp);
+        const head = pre.toString().replace(/\S+$/, '').trim(); const k = head === '' ? 0 : head.split(/\s+/).length;
+        const tk = codesOf((arr[k] || [])[0]); if (!tk.length) return;
+        const persons = (personVerseMulti[`${b}-${c}-${v}`] && personVerseMulti[`${b}-${c}-${v}`][pn]) || [pmap[pn]];
+        const pc = []; persons.forEach(p => codesOf([p.ustrong, p.strong].join(',')).forEach(x => pc.push(x)));
+        const lc = []; (ids[nm] || []).forEach(id => { const pl = placeDatabase.find(x => x.id === Math.abs(id)); if (pl) codesOf([pl.ustrong, pl.hebrew_greek].join(',')).forEach(x => lc.push(x)); });
+        const toPerson = tk.some(x => pc.indexOf(x) >= 0) && !tk.some(x => lc.indexOf(x) >= 0);
+        if (!toPerson) return;
+        // 지명 딱지를 풀고, 인물 이름 부분만 인명 엔진이 다시 잡게 글자로 되돌림
+        sp.replaceWith(document.createTextNode(nm));
+        changed = true;
+      });
+      if (!changed) return html;
+      // 글자로 되돌린 자리는 escHtml 된 본문과 같게 다시 이스케이프
+      const out = [];
+      d.childNodes.forEach(n => out.push(n.nodeType === 3 ? escHtml(n.nodeValue) : n.outerHTML));
+      return out.join('');
+    }
     function highlightVerseHtml(bookId, chapter, vNum, text) {
       const bookObj = BIBLE_BOOKS.find(b => b.id === bookId);
       if (!bookObj) return String(text || '');
@@ -16064,24 +16199,29 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         // 이 구절(Gen.14.1 등)에 해당하는 지명만 추출
         const verseOsis = `${currentOsis}${vNum}`;
         const verseNames = new Set();
+        // (2026-10-07) 이 절에서 딱지 이름 → 그 이름을 낸 지명(들). 누를 때 이름만으로 찾지 않고 이 지명을 연다
+        //  (에스겔 「그발 강」이 「그발 (비블로스)」로 열리던 것)
+        const _ids = {}; const _addN = (n, pl, br) => { verseNames.add(n); const k = br ? -pl.id : pl.id; (_ids[n] = _ids[n] || []).indexOf(k) < 0 && _ids[n].push(k); };   // 괄호 별칭에서 온 것은 음수 id
+        window._placeTagIds = window._placeTagIds || {};
+        window._placeTagIds[`${bookId}-${chapter}-${vNum}`] = _ids;
         placeDatabase.forEach(p => {
           const osis = p.verse_osis || '';
           if (osis.includes(verseOsis)) {
             const name = p.name || '';
             const mainName = name.split(/[\(\[]/)[0].replace(/\s+\d+$/, '').trim();
             if (mainName) {
-              verseNames.add(mainName);
+              _addN(mainName, p);
               // "과/와" 복합지명 분리 (소돔과 고모라 → 소돔, 고모라 단독도 추가)
               if (mainName.includes('과 ')) {
-                mainName.split('과 ').forEach(n => { if(n.trim()) verseNames.add(n.trim()); });
+                mainName.split('과 ').forEach(n => { if(n.trim()) _addN(n.trim(), p); });
               }
               if (mainName.includes('와 ')) {
-                mainName.split('와 ').forEach(n => { if(n.trim()) verseNames.add(n.trim()); });
+                mainName.split('와 ').forEach(n => { if(n.trim()) _addN(n.trim(), p); });
               }
               // 첫 단어 별칭 (요단 평야 → 요단) — (2026-09-17) 그 낱말이 실제 지명 키일 때만.
               //  「다윗 성」→「다윗」, 「하나님의 산」→「하나님의」 처럼 사람·일반 낱말이 지명으로 걸리던 것을 막음
               const words = mainName.split(' ');
-              if (words.length >= 2 && placeKeywordMap[words[0]]) verseNames.add(words[0]);
+              if (words.length >= 2 && placeKeywordMap[words[0]]) _addN(words[0], p);
               // 괄호 안 한글 지명 (헤브론 (마므레) → 마므레) — (2026-09-17) 괄호 안이 한 낱말뿐일 때만(설명 괄호 제외).
               //  「아스돗 (다곤 신전)」「아라비아 (바울이 간 곳)」「기브아 (사울의 기브아)」 같은 설명 괄호는 별칭이 아니다
               const GENERIC = /^(광야|바위|북방|남방|동방|서방|성|강|산|시내|골짜기|바다|평지|들|땅|성읍|성전|성막)$/;
@@ -16089,7 +16229,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
                 bm.replace(/[\(（\)）]/g, '').split(/\s*[\/·,]\s*/).forEach(part => {
                   const bn = part.trim();
                   // 한 낱말(띄어쓰기 없음)인 한글만 — 「다곤 신전」「바울이 간 곳」 같은 설명은 빠진다
-                  if (/^[가-힣]{2,}$/.test(bn) && (placeKeywordMap[bn] || !GENERIC.test(bn)) && !(_verseP && _verseP[bn])) verseNames.add(bn);
+                  if (/^[가-힣]{2,}$/.test(bn) && (placeKeywordMap[bn] || !GENERIC.test(bn)) && !(_verseP && _verseP[bn])) _addN(bn, p, true);
                 });
               });
             }
@@ -16103,6 +16243,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       } else {
         highlightedText = BibleGeoEngine.parseAndHighlight(safeText, currentContext);
       }
+      // (2026-10-07) 지명 딱지인데 같은 이름 인물이 이 절에 있고, 어절 원어 번호가 인물 쪽이면 인명 딱지로 바꾼다
+      //  (「다윗 성」 안의 다윗, 「여부스 사람」, 「게달」 자손 등). 원어를 못 보면 지명 그대로.
+      try { highlightedText = placeOrPersonByOrig(highlightedText, bookId, chapter, vNum, _verseP); } catch (e) {}
       // 인명 하이라이트 (지명 하이라이트 이후, 정확한 구절 매칭만)
       const personKey = `${bookId}-${chapter}-${vNum}`;
       const personNameMap = personVerseIndex[personKey];
@@ -16398,7 +16541,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261007-3`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261007-5`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
