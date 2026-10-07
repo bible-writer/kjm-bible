@@ -14955,6 +14955,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             if (near.length) return { state: 'unknown', msg: `이 용어의 원어(${near.map(showOf).join(', ')})는 옆 어절에 있음 — 어절 나눔 차이` };
           }
         }
+        // (2026-10-08 kjm 「1354ea 빨간색」) 용어: 이 용어의 원어가 같은 절 다른 어절에 있으면 어순 차이,
+        //  절 어디에도 없으면 개역개정이 보탠 낱말(「은 열 세겔」의 세겔처럼 원문엔 따로 없는 말) — 둘 다 ? 로.
+        //  (판정에서 「틀림」이 나온 것은 용어 DB skip_codes 로 딱지 자체를 안 붙임)
+        if (item.kind === '용어' && kt && kt.arr) {
+          const inV = kt.arr.some(tk => tk && tk[0] && tk[0].split(',').some(x => { const k = cmpOf(x); return k && item.codes.indexOf(k) >= 0; }));
+          if (inV) return { state: 'unknown', msg: `이 용어의 원어(${item.codes.slice(0, 3).join(', ')})는 같은 절 다른 어절에 있음 — 어순 차이` };
+          return { state: 'unknown', msg: `원문 이 절엔 이 낱말이 따로 없음 — 개역개정이 보탠 말 (어절 원어 ${textCodes.map(showOf).join(', ')})` };
+        }
         return { state: 'bad', msg: `본문 ${textCodes.map(showOf).join(', ')} ≠ ${item.kind} 항목 ${item.codes.slice(0, 4).join(', ')}${item.codes.length > 4 ? ' …' : ''}` };
       },
       run: function(tag, ev) {
@@ -16577,7 +16585,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261008-1`;
+        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261008-2`;
         document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
       }
     }
