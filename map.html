@@ -6599,7 +6599,18 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         // 그렇게 하면 GitHub의 신규 일괄 갱신(예: 음역 추가, 번역 보완)이 옛 캐시에 가려 화면에 반영되지 않는 버그가 생긴다.
         const fieldEdits = editsMap[netE.id] || {};
         if (fieldEdits.definition_ko && localE.definition_ko && localE.definition_ko !== netE.definition_ko) { result.definition_ko = localE.definition_ko; }
-        if (fieldEdits.hebrew_greek && localE.hebrew_greek && localE.hebrew_greek !== netE.hebrew_greek) { result.hebrew_greek = localE.hebrew_greek; }
+        // (b20261008-5 kjm 「변동이 없다」) 스트롱코드 칸: 새 판 번호를 기본으로, 내가 고친 차이(보탬·뺌)만 얹는다.
+        //   예전 방식으로 고친 칸(고치기 전 값 hg_base 기록 없음)은 새 판이 이긴다 — 옛 틀린 번호가 새 판을 가리지 않게.
+        if (fieldEdits.hebrew_greek && localE.hebrew_greek !== netE.hebrew_greek) {
+          if (typeof fieldEdits.hg_base === 'string') {
+            const sp = v => String(v || '').split(/[,\s]+/).filter(Boolean);
+            const base = sp(fieldEdits.hg_base), loc = sp(localE.hebrew_greek), net = sp(netE.hebrew_greek);
+            const added = loc.filter(c => base.indexOf(c) < 0), removed = base.filter(c => loc.indexOf(c) < 0);
+            const out = net.filter(c => removed.indexOf(c) < 0);
+            added.forEach(c => { if (out.indexOf(c) < 0) out.push(c); });
+            result.hebrew_greek = out.join(',');
+          }
+        }
         if (fieldEdits.term && localE.term && localE.term !== netE.term) { result.term = localE.term; }
         if (fieldEdits.category && localE.category && localE.category !== netE.category) { result.category = localE.category; }
         // 최종 결과값이 로컬 캐시와 단 한 필드라도 다르면 반드시 갱신된 결과를 반영해야 한다.
@@ -7452,10 +7463,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!e) { showToast('항목을 찾을 수 없습니다.', 'warn'); return; }
         const input = document.getElementById(`rawdict-strong-input-${src}-${id}`);
         const val = input ? input.value.trim() : '';
+        const _hgBefore = e.hebrew_greek || '';
         if (val) { e.hebrew_greek = val; } else { delete e.hebrew_greek; }
         rawdictStrongEditingSet.delete(`${src}:${id}`);
         const edits = getRawDictEdits(src);
-        edits[id] = Object.assign({}, edits[id], { hebrew_greek: true });
+        const _prev = edits[id] || {};
+        edits[id] = Object.assign({}, _prev, { hebrew_greek: true, hg_base: typeof _prev.hg_base === 'string' ? _prev.hg_base : _hgBefore });   // (b20261008-5) 고치기 전 값 — 새 판과 합칠 때 차이만 얹음
         setLocalItem(rawDictStoreKeys(src).editsKey, edits);
         setLocalItem(rawDictStoreKeys(src).storeKey, list);
         showToast(`'${e.term}' 스트롱코드 저장됨`, 'success');
@@ -16631,7 +16644,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261008-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261008-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
