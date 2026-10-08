@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>성경 66권 인터랙티브 독서 지도 (지명 데이터베이스)</title>
+  <title>바이블 맵 스터디</title>
   <!-- PWA 설정 -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e40af">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="성경지도">
+  <meta name="apple-mobile-web-app-title" content="바이블 맵">
   <link rel="apple-touch-icon" href="icon-192.png">
 
 
@@ -1775,8 +1775,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
   <div id="left-pane">
     <div class="panel-header">
       <div>
-        <h1 id="app-title">성경 66권 인터랙티브 독서 지도</h1>
-        <p id="app-subtitle">개역개정 본문 및 지명 전수 연동 완결판</p>
+        <h1 id="app-title">바이블 맵 스터디</h1>
+        <p id="app-subtitle">읽고, 찾아가고, 원어로 깊이</p>
       </div>
       <button id="btn-toggle-map" class="btn-header-map-toggle" title="지도 패널 표시/숨김">🗺 지도</button>
     </div>
@@ -16628,11 +16628,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (n > 0) {
         const titleEl = document.getElementById('app-title');
         const subEl   = document.getElementById('app-subtitle');
-        if (titleEl) titleEl.textContent = `성경 66권 인터랙티브 독서 지도`;
+        if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `개역개정 본문 및 ${n}대 지명 전수 연동 완결판 · b20261008-3`;
-        document.title = `성경 66권 ${n}대 지명 인터랙티브 독서 지도`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261008-4`;
+        document.title = `바이블 맵 스터디`;
       }
     }
 
