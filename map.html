@@ -1811,6 +1811,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <button id="btn-export-xlsx" onclick="exportPlaceDatabaseToXlsx()">📊 지명 DB → XLSX</button>
             <button id="btn-export-json" onclick="exportPlaceDatabaseJson()">📦 placeDatabase.json</button>
             <button id="btn-export-term-json" onclick="exportTermDatabaseJson()">📦 termDatabase.json</button>
+            <button id="btn-export-person-json" onclick="exportPersonDatabaseJson()">📦 personDatabase.json</button>
+            <button id="btn-export-vlink-json" onclick="exportVerseLinksJson()">🔗 verseLinks.json (본문 연결표)</button>
           </div>
         </div>
 
@@ -1843,7 +1845,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <div class="menu-sect admin-only">편집 이력</div>
             <button id="btn-coord-overrides" onclick="openCoordOverrideManager()">📍 좌표 보정 이력</button>
             <button id="btn-name-overrides" onclick="openNameOverrideManager()">✏️ 지명 수정 이력</button>
-            <button id="menu-open-add-link">🔗 수동 링크 추가</button>
+            <button onclick="openVlinkManager()">🔗 본문 연결표 보기</button>
+            <button id="menu-open-add-link">🔗 수동 링크 추가 (옛 지명 낱말)</button>
             <button id="menu-open-blacklist">🚫 제외 단어 관리</button>
             <button class="admin-only" onclick="openStrongOverrideManager()">🔤 스트롱 코드 보정 이력</button>
 
@@ -2369,6 +2372,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
   <div id="custom-context-menu">
     <div class="context-menu-item primary" id="menu-add-selected-link" style="display:none;">
       <span>[연결]</span> <span id="menu-add-word-label">지명 링크로 추가하기</span>
+    </div>
+    <div class="context-menu-item primary" id="menu-vlink" style="display:none;">
+      <span>[연결]</span> <span id="menu-vlink-label">이 자리 연결하기 (인명·지명·용어)</span>
     </div>
     <div class="context-menu-item danger" id="menu-skip-here" style="display:none;">
       <span>[제외]</span> <span id="menu-skip-here-label">이 자리만 제외</span>
@@ -9134,6 +9140,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     function handleTagContextMenu(event, word) {
       if (!isAdminMode()) return;   // 일반 모드: 편집용 오른쪽 클릭 메뉴 없음
       currentTermSkipCtx = null;
+      try { const tg = event.target && event.target.closest && event.target.closest('.bible-person-tag, .bible-place-tag, .bible-term-tag'); _vlinkCtx = tg ? vlinkCtxFromEl(tg) : null; const mi = document.getElementById('menu-vlink'); if (mi) mi.style.display = 'none'; if (_vlinkCtx) vlinkShowMenuItem(_vlinkCtx); } catch (e) {}
       document.getElementById("menu-skip-here").style.display = "none";
       document.getElementById("menu-skip-book").style.display = "none";
       event.preventDefault();
@@ -9153,9 +9160,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     document.getElementById("bible-content").addEventListener("contextmenu", function(e) {
       if (!isAdminMode()) return;   // 일반 모드: 편집용 오른쪽 클릭 메뉴 없음
       const selected = window.getSelection().toString().trim();
-      if (selected && selected.length >= 2) {
+      if (selected && selected.length >= 1) {
         e.preventDefault();
         selectedTextForAdd = selected;
+        try { const sel = window.getSelection(); _vlinkCtx = sel.rangeCount ? vlinkCtxFromRange(sel.getRangeAt(0)) : null; const mi = document.getElementById('menu-vlink'); if (mi) mi.style.display = 'none'; if (_vlinkCtx) vlinkShowMenuItem(_vlinkCtx); } catch (er) {}
 
         const menu = document.getElementById("custom-context-menu");
         document.getElementById("menu-add-selected-link").style.display = "flex";
@@ -9209,6 +9217,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       showToast(`'${c.word}' — ${bk ? bk.name : '이 책'}에서 ${c.kind || '용어'} 연결을 뺐습니다.`, 'success');
     });
 
+    document.getElementById("menu-vlink").addEventListener("click", function() { openVlinkModal(_vlinkCtx); });
     document.getElementById("menu-add-selected-link").addEventListener("click", function() {
       openAddLinkModal(selectedTextForAdd);
     });
@@ -15093,6 +15102,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       itemCodes: function(tag, b, c, v) {
         const oc = tag.getAttribute('onclick') || '';
         let m;
+        // (b-9) 본문 연결표로 직접 이은 딱지 — 이은 항목의 번호로 대조
+        if ((m = oc.match(/vlinkOpen\('([PLT])', (\d+)/))) {
+          const t = vlinkTarget(m[1] + ':' + m[2]); if (!t) return null;
+          const r = t.rec;
+          if (t.kind === 'T') return { kind: '용어', name: r.term_ko || r.term_en, codes: this.codesOf(r.hebrew_greek) };
+          if (t.kind === 'P') return { kind: '인명', name: r.name_ko, codes: this.codesOf([r.ustrong, r.strong].join(',')) };
+          return { kind: '지명', name: r.name, codes: this.codesOf([r.ustrong, r.hebrew_greek].join(',')) };
+        }
         if (tag.classList.contains('bible-term-tag')) {
           let t = null;
           if ((m = oc.match(/handleClickId\((\d+)/))) t = (termDatabase || []).find(x => x.id === Number(m[1]));
@@ -15929,6 +15946,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         applyFontSize(savedFontSize);
       }
 
+      try { const vlk = await getLocalItem('saved_verse_links'); if (vlk && typeof vlk === 'object') verseLinks = vlk; } catch (e) {}
       const savedTermSkip = await getLocalItem("saved_user_term_skip");
       if (savedTermSkip && typeof savedTermSkip === 'object') {
         userTermSkip = { verse: savedTermSkip.verse || {}, book: savedTermSkip.book || {} };
@@ -16030,6 +16048,27 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       // 판 번호가 지금 것보다 「높을 때만」(PC에서 내보내고 아직 안 올린 판을 옛 판으로 덮지 않게).
       // 좌표·이름·스트롱 보정 이력은 받은 뒤 다시 입힘(「🔄 업데이트」 단추와 같음).
       // 관리자 모드(PC 편집 중)에서는 표제어 직접 고친 것이 지워질 수 있어 받지 않고 알리기만 한다.
+      // (b-9) 본문 연결표 verseLinks.json — 판이 높을 때만 받음. 관리자 모드(PC 편집 중)면 알리기만
+      try {
+        const vr = await fetch('./verseLinks.json', { cache: 'no-store' });
+        if (vr && vr.ok) {
+          const nv = await EncryptedDB.openQuiet(await vr.json());
+          if (nv && nv.links && typeof nv.links === 'object') {
+            const curV = (await getLocalItem('saved_verse_links_version')) || '';
+            const vn = s => String(s || '').split('.').map(x => parseInt(x) || 0);
+            const newer = (a, b) => { const A = vn(a), B = vn(b); for (let i = 0; i < Math.max(A.length, B.length); i++) { const d = (A[i] || 0) - (B[i] || 0); if (d) return d > 0; } return false; };
+            const need = !curV || newer(nv.version, curV);
+            if (need && isAdminMode() && vlinkCount()) {
+              showToast(`새 본문 연결표 v${nv.version || '?'} 가 있습니다 (지금 v${curV || '?'}). 관리자 모드라 받지 않았습니다.`, 'info');
+            } else if (need) {
+              verseLinks = nv.links;
+              await saveVerseLinks();
+              await setLocalItem('saved_verse_links_version', nv.version || '');
+              _upd = true;
+            }
+          }
+        }
+      } catch (e) { console.log('[자동 업데이트] verseLinks.json 생략:', e.message); }
       try {
         const netPlRes = await fetch('./placeDatabase.json', { cache: 'no-store' });
         if (netPlRes && netPlRes.ok) {
@@ -16431,7 +16470,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const codesOf = str => String(str || '').split(/[,\s;/]+/).map(norm).filter(Boolean);
       const ids = (window._placeTagIds && window._placeTagIds[`${b}-${c}-${v}`]) || {};
       let changed = false;
-      d.querySelectorAll('.bible-place-tag').forEach(sp => {
+      d.querySelectorAll('.bible-place-tag:not(.vlink)').forEach(sp => {
         const nm = sp.textContent;
         // 인물 이름: 딱지 글자 전체 또는 첫 낱말(「다윗 성」→다윗)
         const pn = pmap[nm] ? nm : (pmap[nm.split(' ')[0]] ? nm.split(' ')[0] : null);
@@ -16454,6 +16493,319 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       d.childNodes.forEach(n => out.push(n.nodeType === 3 ? escHtml(n.nodeValue) : n.outerHTML));
       return out.join('');
     }
+    /* ── 본문 연결표 (b20261009-9, kjm 「본문에 3가지를 수정해서 매칭하고 싶은거야」) ──
+     * 본문 낱말 한 자리(절 + 낱말 + 몇 번째)를 인명·지명·용어 한 항목에 직접 잇거나, 딱지를 뺀다.
+     * 자동 딱지(지명→인명→용어)가 다 붙은 뒤 맨 마지막에 입히므로 자동 결과보다 항상 앞선다.
+     * 표: verseLinks = { "책-장-절": { "낱말#n": "P:인명id" | "L:지명id" | "T:용어id" | "0"(딱지 없음) } }
+     * 저장: 기기(saved_verse_links) → 내보내기 verseLinks.json(잠금본) → GitHub → 다른 기기가 자동으로 받음. */
+    let verseLinks = {};
+    const VLINK_KIND = { P: '인명', L: '지명', T: '용어' };
+    const VLINK_CLASS = { P: 'bible-person-tag', L: 'bible-place-tag', T: 'bible-term-tag' };
+    async function saveVerseLinks() { await setLocalItem('saved_verse_links', verseLinks); }
+    function vlinkCount() { let n = 0; Object.values(verseLinks || {}).forEach(o => { n += Object.keys(o || {}).length; }); return n; }
+    function vlinkTarget(code) {
+      const m = String(code || '').match(/^([PLT]):(\d+)$/); if (!m) return null;
+      const id = parseInt(m[2], 10);
+      const db = m[1] === 'P' ? personDatabase : m[1] === 'L' ? placeDatabase : termDatabase;
+      const rec = (db || []).find(x => x.id === id);
+      return rec ? { kind: m[1], id, rec } : null;
+    }
+    function vlinkLabel(kind, rec) {
+      if (!rec) return '';
+      if (kind === 'P') return rec.name_ko || rec.name_en || '';
+      if (kind === 'L') return rec.name || '';
+      return rec.term_ko || rec.term_en || '';
+    }
+    // 글 안에서 낱말의 n 번째 자리(0부터 센 글자 위치). 없으면 -1
+    function vlinkFind(text, word, nth) {
+      let i = -1, k = 0;
+      while (k < nth) { i = text.indexOf(word, i + 1); if (i < 0) return -1; k++; }
+      return i;
+    }
+    function vlinkTextOffset(root, node, off) {
+      const r = document.createRange(); r.setStart(root, 0); r.setEnd(node, off); return r.toString().length;
+    }
+    function vlinkPoint(root, pos) {   // 글자 위치 → (글 마디, 그 안 위치)
+      const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let nd, acc = 0, last = null;
+      while ((nd = w.nextNode())) { const L = nd.nodeValue.length; if (pos <= acc + L) return [nd, pos - acc]; acc += L; last = nd; }
+      return last ? [last, last.nodeValue.length] : null;
+    }
+    // 자동 딱지가 다 붙은 절 HTML 에 연결표를 입힌다
+    function applyVerseLinks(html, b, c, v) {
+      const tbl = verseLinks && verseLinks[`${b}-${c}-${v}`];
+      if (!tbl || !html) return html;
+      const toks = Object.keys(tbl); if (!toks.length) return html;
+      const d = document.createElement('div'); d.innerHTML = html;
+      let changed = false;
+      toks.forEach(tok => {
+        const cut = tok.lastIndexOf('#'); if (cut <= 0) return;
+        const word = tok.slice(0, cut), nth = parseInt(tok.slice(cut + 1), 10) || 1;
+        const code = tbl[tok];
+        const s = vlinkFind(d.textContent, word, nth); if (s < 0) return;
+        const e = s + word.length;
+        // 이 자리에 걸친 딱지(자동이든 앞서 입힌 것이든)는 풀어서 글자로 되돌린다
+        d.querySelectorAll('span.bible-person-tag, span.bible-place-tag, span.bible-term-tag, span.vlink').forEach(sp => {
+          if (!d.contains(sp)) return;
+          const ss = vlinkTextOffset(d, sp, 0), se = ss + sp.textContent.length;
+          if (ss < e && se > s) { const p = sp.parentNode; while (sp.firstChild) p.insertBefore(sp.firstChild, sp); p.removeChild(sp); }
+        });
+        d.normalize(); changed = true;
+        if (code === '0') return;
+        const t = vlinkTarget(code); if (!t) return;
+        const a = vlinkPoint(d, s), z = vlinkPoint(d, e); if (!a || !z) return;
+        const r = document.createRange(); r.setStart(a[0], a[1]); r.setEnd(z[0], z[1]);
+        const sp = document.createElement('span');
+        sp.className = VLINK_CLASS[t.kind] + ' vlink';
+        sp.setAttribute('onclick', `vlinkOpen('${t.kind}', ${t.id}, ${b}, ${c}, ${v}, this)`);
+        sp.setAttribute('oncontextmenu', `vlinkContextMenu(event, this)`);
+        sp.setAttribute('title', `${word} → ${VLINK_KIND[t.kind]} 「${vlinkLabel(t.kind, t.rec)}」 (직접 연결)`);
+        sp.appendChild(r.extractContents()); r.insertNode(sp);
+      });
+      if (!changed) return html;
+      d.normalize();
+      const out = [];
+      d.childNodes.forEach(n => out.push(n.nodeType === 3 ? escHtml(n.nodeValue) : (n.outerHTML || '')));
+      return out.join('');
+    }
+    function vlinkOpen(kind, id, b, c, v, el) {
+      const t = vlinkTarget(kind + ':' + id);
+      if (!t) { showToast('연결한 항목을 찾을 수 없습니다 (DB 에서 빠졌을 수 있음)', 'warn'); return; }
+      try { if (typeof wpSetRef === 'function') wpSetRef(b, c, v); } catch (e) {}
+      if (kind === 'P') PersonEngine.showPopup(t.rec, (el && el.textContent) || t.rec.name_ko);
+      else if (kind === 'L') showPlaceQuickPanel(t.rec);
+      else TermEngine.handleClickId(id, b, c, v);
+    }
+    // 본문의 한 자리(선택 범위 또는 딱지) → { b, c, v, word, nth }
+    function vlinkCtxFromRange(range) {
+      if (!range) return null;
+      let n = range.startContainer; if (n.nodeType === 3) n = n.parentNode;
+      const vt = n && n.closest && n.closest('.verse-text'); const row = vt && vt.closest('.verse-row');
+      if (!row || !row.dataset.bc || !String(row.id).startsWith('verse-row-')) return null;
+      const [b, c] = row.dataset.bc.split('-').map(Number);
+      const v = parseInt(String(row.id).slice('verse-row-'.length), 10);
+      const raw = range.toString();
+      const word = raw.trim(); if (!word || /\n/.test(word)) return null;
+      const lead = raw.length - raw.replace(/^\s+/, '').length;
+      const start = vlinkTextOffset(vt, range.startContainer, range.startOffset) + lead;
+      const full = vt.textContent;
+      let nth = 0, i = -1;
+      while ((i = full.indexOf(word, i + 1)) >= 0 && i <= start) nth++;
+      if (!nth) return null;
+      const head = full.slice(0, start).replace(/\S+$/, '').trim();
+      const k = head === '' ? 0 : head.split(/\s+/).length;
+      const words = full.trim().split(/\s+/).length;
+      return { b, c, v, word, nth, k, words, start, full };
+    }
+    let _vlinkCtx = null;
+    function vlinkShowMenuItem(ctx, clientX, clientY, onlyThis) {
+      _vlinkCtx = ctx;
+      const item = document.getElementById('menu-vlink');
+      if (!item || !ctx) return;
+      const tok = `${ctx.word}#${ctx.nth}`;
+      const cur = verseLinks[`${ctx.b}-${ctx.c}-${ctx.v}`] && verseLinks[`${ctx.b}-${ctx.c}-${ctx.v}`][tok];
+      document.getElementById('menu-vlink-label').innerText = `'${ctx.word}' 이 자리 ${cur ? '연결 바꾸기' : '연결하기'} (인명·지명·용어)`;
+      item.style.display = 'flex';
+      if (onlyThis) {
+        ['menu-add-selected-link', 'menu-exclude-word', 'menu-skip-here', 'menu-skip-book'].forEach(id => { const x = document.getElementById(id); if (x) x.style.display = 'none'; });
+        const menu = document.getElementById('custom-context-menu');
+        menu.style.top = `${clientY}px`; menu.style.left = `${clientX}px`; menu.style.display = 'block';
+      }
+    }
+    function vlinkCtxFromEl(el) {
+      if (!el) return null;
+      const r = document.createRange(); r.selectNodeContents(el); return vlinkCtxFromRange(r);
+    }
+    function vlinkContextMenu(event, el) {
+      if (!isAdminMode()) return;
+      event.preventDefault(); event.stopPropagation();
+      vlinkShowMenuItem(vlinkCtxFromEl(el), event.clientX, event.clientY, true);
+    }
+
+    /* 연결 창 */
+    function openVlinkModal(ctx) {
+      if (!adminGuard()) return;
+      if (!ctx) { showToast('본문 낱말 자리를 찾지 못했습니다', 'warn'); return; }
+      const key = `${ctx.b}-${ctx.c}-${ctx.v}`, tok = `${ctx.word}#${ctx.nth}`;
+      const cur = verseLinks[key] && verseLinks[key][tok];
+      const bk = BIBLE_BOOKS.find(x => x.id === ctx.b);
+      let box = document.getElementById('vlink-modal');
+      if (!box) {
+        box = document.createElement('div'); box.id = 'vlink-modal';
+        box.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:10050;background:var(--card,#fff);border:1px solid #94a3b8;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.3);width:min(460px,94vw);max-height:80vh;display:flex;flex-direction:column;font-family:sans-serif;font-size:14px;color:#1e293b';
+        document.body.appendChild(box);
+      }
+      const curT = cur && cur !== '0' ? vlinkTarget(cur) : null;
+      // 이 어절의 원어 번호(어절 원어 분석) — 후보마다 번호가 맞는지 보여 준다
+      const _nb = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
+      let wCodes = [];
+      try {
+        const arr = (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) ? krvnMorph.v[key] : null;
+        if (arr && ctx.k != null && arr.length === ctx.words) wCodes = String((arr[ctx.k] || [])[0] || '').split(',').map(_nb).filter(Boolean);
+      } catch (e) {}
+      const recCodes = (k, r) => String(k === 'P' ? [r.ustrong, r.strong].join(',') : k === 'L' ? [r.ustrong, r.hebrew_greek].join(',') : (r.hebrew_greek || '')).split(/[,\s;/]+/).map(_nb).filter(Boolean);
+      const codeHit = (k, r) => wCodes.length && recCodes(k, r).some(x => wCodes.indexOf(x) >= 0);
+      const curTxt = cur === '0' ? '딱지 없음 (직접 뺌)' : curT ? `${VLINK_KIND[curT.kind]} 「${escHtml(vlinkLabel(curT.kind, curT.rec))}」` : '자동 (사전 표제어로 붙음)';
+      const nthTxt = ctx.nth > 1 ? ` · 이 절 ${ctx.nth}번째` : '';
+      box.innerHTML = `
+        <div id="vlink-drag" style="padding:12px 14px 8px;border-bottom:1px solid #e2e8f0;cursor:move;user-select:none;display:flex;justify-content:space-between;align-items:center">
+          <div><b>🔗 본문 연결</b> <span style="color:#64748b">「${escHtml(ctx.word)}」 ${bk ? bk.abbr : ''}${ctx.c}:${ctx.v}${nthTxt}</span></div>
+          <button onclick="closeVlinkModal()" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button>
+        </div>
+        <div style="padding:8px 14px;font-size:0.9em;color:#475569">지금: <b>${curTxt}</b>
+          <div style="margin-top:3px">이 어절 원어: ${wCodes.length ? wCodes.map(x => `<b style="color:#b45309">${x}</b>`).join(', ') + ' <span style="color:#94a3b8">(번호가 맞는 항목에 ✓)</span>' : '<span style="color:#94a3b8">없음 (어절 원어 분석 미등록이거나 원문에 없는 말)</span>'}</div></div>
+        <div style="padding:0 14px 8px;display:flex;gap:6px;flex-wrap:wrap" id="vlink-kinds">
+          <button data-k="P" style="padding:4px 10px;border:1px solid #a78bfa;border-radius:14px;background:#fff;cursor:pointer;color:#6d28d9">👤 인명</button>
+          <button data-k="L" style="padding:4px 10px;border:1px solid #60a5fa;border-radius:14px;background:#fff;cursor:pointer;color:#1d4ed8">📍 지명</button>
+          <button data-k="T" style="padding:4px 10px;border:1px solid #f59e0b;border-radius:14px;background:#fff;cursor:pointer;color:#b45309">📚 용어</button>
+          <span style="flex:1"></span>
+          <button id="vlink-none" style="padding:4px 10px;border:1px solid #fca5a5;border-radius:14px;background:#fff;cursor:pointer;color:#b91c1c" title="이 자리엔 딱지를 붙이지 않음">🚫 딱지 빼기</button>
+          ${cur ? '<button id="vlink-auto" style="padding:4px 10px;border:1px solid #cbd5e1;border-radius:14px;background:#fff;cursor:pointer;color:#475569" title="직접 연결을 지우고 자동으로 되돌림">↺ 자동으로</button>' : ''}
+        </div>
+        <div style="padding:0 14px 8px"><input id="vlink-q" placeholder="찾기 (한글·영어·번호)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:14px"></div>
+        <div id="vlink-list" style="overflow:auto;padding:0 8px 10px;flex:1;min-height:120px"></div>`;
+      box.style.display = 'flex';
+      try { makeDraggable(box, '#vlink-drag'); } catch (e) {}
+      let kind = curT ? curT.kind : 'P';
+      // 낱말 끝 조사를 떼어 찾기 칸에 (아브람이 → 아브람)
+      const stem = String(ctx.word).replace(/(에게서|에게|으로|에서|께서|이라|이요|와|과|은|는|이|가|을|를|의|도|로|여|아|야|들)$/, '') || ctx.word;
+      const q = box.querySelector('#vlink-q'); q.value = stem;
+      const osis = (bk && bk.osis) ? `${bk.osis}.${ctx.c}.${ctx.v}` : '';
+      const inVerse = (k, r) => {
+        if (k === 'P') return (r.verses || []).some(x => x.book === ctx.b && x.chapter === ctx.c && x.verse === ctx.v);
+        if (k === 'L') return !!osis && new RegExp('(^|[^\\w.])' + osis.replace(/\./g, '\\.') + '(?![\\d])').test(String(r.verse_osis || ''));
+        return false;
+      };
+      const fields = (k, r) => k === 'P' ? [r.name_ko, r.name_en, ...(r.aliases_ko || [])]
+                              : k === 'L' ? [r.name, r.modern]
+                              : [r.term_ko, r.term_en];
+      const sub = (k, r) => k === 'P' ? [r.name_en, r.briefest_ko || r.briefest].filter(Boolean).join(' · ')
+                          : k === 'L' ? [r.region || r.country, r.modern].filter(Boolean).join(' · ')
+                          : [r.term_en, r.category].filter(Boolean).join(' · ');
+      const draw = () => {
+        box.querySelectorAll('#vlink-kinds [data-k]').forEach(bt => { const on = bt.dataset.k === kind; bt.style.background = on ? '#f1f5f9' : '#fff'; bt.style.fontWeight = on ? '700' : '400'; });
+        const db = kind === 'P' ? personDatabase : kind === 'L' ? placeDatabase : termDatabase;
+        const qq = q.value.trim().toLowerCase().replace(/\s+/g, '');
+        const nz = s => String(s || '').toLowerCase().replace(/\s+/g, '');
+        const main = s => nz(String(s || '').split(/[\(\[]/)[0]);
+        let hits = (db || []).filter(r => {
+          if (!qq) return inVerse(kind, r);
+          if (String(r.id) === qq) return true;
+          return fields(kind, r).some(f => f && (nz(f).includes(qq) || (main(f).length >= 1 && qq.startsWith(main(f)))));
+        });
+        hits = hits.map(r => ({ r, sc: (codeHit(kind, r) ? 0 : 20) + (inVerse(kind, r) ? 0 : 10) + (main(fields(kind, r)[0]) === qq ? 0 : 1) }))
+                   .sort((a, b) => a.sc - b.sc).slice(0, 60);
+        const list = box.querySelector('#vlink-list');
+        if (!hits.length) { list.innerHTML = `<div style="padding:14px;color:#94a3b8">찾은 ${VLINK_KIND[kind]} 항목이 없습니다</div>`; return; }
+        list.innerHTML = hits.map(({ r }) => {
+          const here = inVerse(kind, r) ? '<span style="font-size:0.75em;color:#059669;border:1px solid #a7f3d0;border-radius:8px;padding:0 5px;margin-left:4px">이 절</span>' : '';
+          const isCur = cur === `${kind}:${r.id}` ? ' style="background:#fef9c3"' : '';
+          const rc = recCodes(kind, r);
+          const cm = !rc.length ? '<span style="font-size:0.75em;color:#94a3b8;margin-left:4px">번호 없음</span>'
+                   : !wCodes.length ? `<span style="font-size:0.75em;color:#94a3b8;margin-left:4px">${rc.slice(0, 3).join(',')}</span>`
+                   : codeHit(kind, r) ? `<span style="font-size:0.75em;color:#059669;border:1px solid #a7f3d0;border-radius:8px;padding:0 5px;margin-left:4px">✓ 원어 ${rc.filter(x => wCodes.indexOf(x) >= 0).join(',')}</span>`
+                   : `<span style="font-size:0.75em;color:#b91c1c;margin-left:4px">⚠ ${rc.slice(0, 3).join(',')}</span>`;
+          return `<div class="vlink-row" data-id="${r.id}"${isCur} title="누르면 연결"><div style="padding:6px 8px;border-radius:6px;cursor:pointer"><b>${escHtml(vlinkLabel(kind, r))}</b>${here}${cm} <span style="color:#94a3b8;font-size:0.8em">#${r.id}</span><div style="font-size:0.8em;color:#64748b">${escHtml(sub(kind, r))}</div></div></div>`;
+        }).join('');
+        list.querySelectorAll('.vlink-row').forEach(el => {
+          el.onmouseenter = () => { el.firstChild.style.background = '#f1f5f9'; };
+          el.onmouseleave = () => { el.firstChild.style.background = ''; };
+          el.setAttribute('onclick', '');   // 창 빈 곳 끌기(makeDraggable)가 이 줄을 빈 곳으로 보지 않게
+          el.onclick = () => setVlink(ctx, `${kind}:${el.dataset.id}`);
+        });
+      };
+      box.querySelectorAll('#vlink-kinds [data-k]').forEach(bt => bt.onclick = () => { kind = bt.dataset.k; draw(); });
+      box.querySelector('#vlink-none').onclick = () => setVlink(ctx, '0');
+      const au = box.querySelector('#vlink-auto'); if (au) au.onclick = () => setVlink(ctx, null);
+      q.oninput = draw;
+      draw(); setTimeout(() => { try { q.focus(); q.select(); } catch (e) {} }, 30);
+    }
+    function closeVlinkModal() { const b = document.getElementById('vlink-modal'); if (b) b.style.display = 'none'; }
+    // (b-9) 조사 떼기 — 고른 낱말이 「항목 이름 + 조사」면 딱지는 이름에만 (자동 딱지와 같은 꼴: 아브람|에게)
+    const VLINK_PARTICLE = /^(?:인들|인|들)?(?:에게서부터|에서부터|으로부터|로부터|에게서|에게로|에게는|에게도|에게|께서는|께서도|께서|께로|께|에서는|에서도|에서|에는|에도|에|으로는|으로도|으로|로는|로도|로|와는|과는|와|과|은|는|이|가|을|를|의|도|만|이여|이시여|여|아|야|이라|라|이요|요|이니|이며|며|까지|부터|처럼|같이|보다|하고|이다|다|인데|이고|이었|였)?$/;
+    function vlinkTrim(ctx, code) {
+      const t = code && code !== '0' ? vlinkTarget(code) : null;
+      if (!t || ctx.full == null || ctx.start == null) return ctx;
+      const names = t.kind === 'P' ? [t.rec.name_ko, ...(t.rec.aliases_ko || [])]
+                  : t.kind === 'L' ? [t.rec.name] : [t.rec.term_ko];
+      const mains = names.map(n => String(n || '').split(/[\(\[（]/)[0].replace(/\s+[A-Z0-9]+$/, '').trim()).filter(Boolean).sort((a, b) => b.length - a.length);
+      for (const m of mains) {
+        if (m.length < ctx.word.length && ctx.word.startsWith(m) && VLINK_PARTICLE.test(ctx.word.slice(m.length))) {
+          let nth = 0, i = -1;
+          while ((i = ctx.full.indexOf(m, i + 1)) >= 0 && i <= ctx.start) nth++;
+          if (nth) return Object.assign({}, ctx, { word: m, nth });
+        }
+      }
+      return ctx;
+    }
+    async function setVlink(ctx0, code) {
+      if (!adminGuard()) return;
+      const ctx = vlinkTrim(ctx0, code);
+      // 조사까지 고른 자리에 앞서 적힌 것이 있으면 지운다(같은 자리를 두 번 적지 않게)
+      if (ctx !== ctx0 && verseLinks[`${ctx0.b}-${ctx0.c}-${ctx0.v}`]) delete verseLinks[`${ctx0.b}-${ctx0.c}-${ctx0.v}`][`${ctx0.word}#${ctx0.nth}`];
+      const key = `${ctx.b}-${ctx.c}-${ctx.v}`, tok = `${ctx.word}#${ctx.nth}`;
+      if (code === null) {
+        if (verseLinks[key]) { delete verseLinks[key][tok]; if (!Object.keys(verseLinks[key]).length) delete verseLinks[key]; }
+      } else {
+        (verseLinks[key] = verseLinks[key] || {})[tok] = code;
+      }
+      await saveVerseLinks();
+      closeVlinkModal();
+      const sc = document.getElementById('bible-content'); const top = sc ? sc.scrollTop : 0;
+      loadBibleText();
+      if (sc) setTimeout(() => { sc.scrollTop = top; }, 0);
+      const t = code && code !== '0' ? vlinkTarget(code) : null;
+      showToast(code === null ? `'${ctx.word}' 이 자리를 자동으로 되돌렸습니다`
+              : code === '0' ? `'${ctx.word}' 이 자리 딱지를 뺐습니다`
+              : `'${ctx.word}' → ${VLINK_KIND[t.kind]} 「${vlinkLabel(t.kind, t.rec)}」 연결 (내보내기 ▾ → 본문 연결표로 GitHub 에)`, 'success');
+    }
+    async function exportVerseLinksJson() {
+      if (!adminGuard()) return;
+      const n = vlinkCount();
+      if (!n) { showToast('직접 연결한 자리가 없습니다', 'warn'); return; }
+      const curV = (await getLocalItem('saved_verse_links_version')) || '';
+      const newV = await askVersion('본문 연결표', curV, '1.0.0');
+      if (!newV) { showToast('내보내기를 그만두었습니다', 'info'); return; }
+      const db = { version: newV, date: new Date().toISOString().slice(0, 10), count: n,
+        note: '본문 연결표 — 책-장-절 → 「낱말#몇번째」 → P:인명id · L:지명id · T:용어id · 0(딱지 없음)', links: verseLinks };
+      await exportBoth(db, 'verseLinks', null, `연결 ${n}자리`);
+      await setLocalItem('saved_verse_links_version', newV);
+    }
+    async function exportPersonDatabaseJson() {
+      if (!adminGuard()) return;
+      if (!personDatabase.length) { showToast('내보낼 인명 데이터가 없습니다.', 'warn'); return; }
+      const curV = (await getLocalItem('saved_person_database_version')) || '';
+      const newV = await askVersion('인명DB', curV, '3.76.15');
+      if (!newV) { showToast('내보내기를 그만두었습니다', 'info'); return; }
+      // 머리 정보(출처·메모 등)는 GitHub 에 있는 지금 판에서 그대로 가져온다
+      let meta = {};
+      try { const r = await fetch('./personDatabase.json', { cache: 'no-store' }); if (r.ok) { const p = await EncryptedDB.openQuiet(await r.json()); if (p) { meta = Object.assign({}, p); delete meta.persons; } } } catch (e) {}
+      const db = Object.assign({}, meta, { version: newV, date: new Date().toISOString().slice(0, 10) });
+      if ('reliable_count' in db) db.reliable_count = personDatabase.filter(p => !p.pending_review).length;
+      if ('pending_count' in db) db.pending_count = personDatabase.filter(p => p.pending_review).length;
+      db.count = personDatabase.length;
+      db.persons = personDatabase;
+      await exportBoth(db, 'personDatabase', null, `인명 ${personDatabase.length}명`);
+      await setLocalItem('saved_person_database_version', newV);
+    }
+    // 연결표 목록 (편집 이력)
+    function openVlinkManager() {
+      const rows = [];
+      Object.keys(verseLinks).forEach(key => Object.keys(verseLinks[key]).forEach(tok => {
+        const [b, c, v] = key.split('-').map(Number); const bk = BIBLE_BOOKS.find(x => x.id === b);
+        const code = verseLinks[key][tok]; const t = code !== '0' ? vlinkTarget(code) : null;
+        rows.push({ b, c, v, ref: `${bk ? bk.abbr : b}${c}:${v}`, tok, to: code === '0' ? '🚫 딱지 없음' : t ? `${VLINK_KIND[t.kind]} 「${vlinkLabel(t.kind, t.rec)}」` : `⚠ 없는 항목 ${code}` });
+      }));
+      rows.sort((a, b) => a.b - b.b || a.c - b.c || a.v - b.v);
+      let box = document.getElementById('vlink-manager');
+      if (!box) { box = document.createElement('div'); box.id = 'vlink-manager';
+        box.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:10050;background:var(--card,#fff);border:1px solid #94a3b8;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.3);width:min(520px,94vw);max-height:80vh;display:flex;flex-direction:column;font-family:sans-serif;font-size:14px;color:#1e293b';
+        document.body.appendChild(box); }
+      box.innerHTML = `<div id="vlink-mgr-drag" style="padding:12px 14px;border-bottom:1px solid #e2e8f0;cursor:move;display:flex;justify-content:space-between"><b>🔗 본문 연결표 — ${rows.length}자리</b><button onclick="document.getElementById('vlink-manager').style.display='none'" style="border:none;background:none;font-size:1.2em;cursor:pointer;color:#999">✕</button></div>
+        <div style="overflow:auto;padding:6px 10px">${rows.length ? rows.map(r => `<div style="display:flex;gap:8px;padding:5px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer" onclick="document.getElementById('vlink-manager').style.display='none';navigateToBibleVerse(${r.b},${r.c},${r.v})"><span style="width:70px;color:#64748b">${r.ref}</span><span style="flex:1">${escHtml(r.tok.replace(/#1$/, ''))}</span><span>${escHtml(r.to)}</span></div>`).join('') : '<div style="padding:14px;color:#94a3b8">아직 없습니다. 본문 낱말을 끌어 고르거나 딱지에서 오른쪽 클릭 → 「이 자리 연결하기」</div>'}</div>`;
+      box.style.display = 'flex';
+      try { makeDraggable(box, '#vlink-mgr-drag'); } catch (e) {}
+    }
+
     function highlightVerseHtml(bookId, chapter, vNum, text) {
       const bookObj = BIBLE_BOOKS.find(b => b.id === bookId);
       if (!bookObj) return String(text || '');
@@ -16526,6 +16878,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (termHighlightEnabled && termDatabase.length > 0) {
         highlightedText = TermEngine.parseAndHighlight(highlightedText, bookId, chapter, vNum);
       }
+      // (b-9) 본문 연결표 — 직접 이은 자리·뺀 자리를 맨 마지막에 입힘
+      try { highlightedText = applyVerseLinks(highlightedText, bookId, chapter, vNum); } catch (e) { console.warn('본문 연결표', e); }
       return highlightedText;
     }
 
@@ -16811,7 +17165,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
