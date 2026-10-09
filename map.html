@@ -16914,7 +16914,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           <span>붙일 항목</span>
           <select id="ul-target" style="flex:1;min-width:220px;padding:5px;border:1px solid #cbd5e1;border-radius:6px">${optHtml || '<option value="">이 번호를 가진 항목이 없습니다</option>'}</select>
         </div>
-        <div style="padding:0 14px 6px;display:flex;gap:10px;flex-wrap:wrap;font-size:0.88em;color:#475569" id="ul-sum"></div>
+        <div style="padding:0 14px 6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:0.88em;color:#475569">
+          <span>보기</span>
+          <select id="ul-view" style="padding:3px 6px;border:1px solid #cbd5e1;border-radius:6px">
+            <option value="none" selected>딱지 없는 곳만 (할 일)</option>
+            <option value="other">다른 딱지만</option>
+            <option value="same">같은 항목만</option>
+            <option value="sus">⚠ 의심만</option>
+            <option value="all">모두</option>
+          </select>
+          <span id="ul-sum"></span>
+        </div>
         <div style="padding:0 14px 6px;display:flex;gap:6px;flex-wrap:wrap">
           <button id="ul-sel-none" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">딱지 없는 곳만 고르기</button>
           <button id="ul-sel-all" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">다른 딱지까지 모두</button>
@@ -16989,7 +16999,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const draw = () => {
         const cnt = { same: 0, other: 0, none: 0, skip: 0 }; rows.forEach(r => cnt[r.st]++);
         box.querySelector('#ul-sum').innerHTML = `✓ 같은 항목 ${cnt.same} · <span style="color:#b45309">다른 딱지 ${cnt.other}</span> · <span style="color:#2563eb">딱지 없음 ${cnt.none}</span>${cnt.skip ? ` · 건너뜀 ${cnt.skip}` : ''}`;
-        list.innerHTML = rows.map((r, i) => {
+        const vis = isVis;
+        const shown = rows.filter(vis).length;
+        list.innerHTML = (shown ? '' : '<div style="padding:14px;color:#94a3b8">이 보기에 해당하는 줄이 없습니다</div>') + rows.map((r, i) => {
+          if (!vis(r)) return '';
           const bk = BIBLE_BOOKS.find(x => x.id === r.b);
           const dis = ((r.st === 'same' && !/직접/.test(r.why)) || r.st === 'skip') ? ' disabled' : '';
           const ejHtml = r.word ? escHtml(r.ej).replace(escHtml(r.word), `<mark>${escHtml(r.word)}</mark>`) : escHtml(r.ej || '');
@@ -17002,14 +17015,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         list.querySelectorAll('input[type=checkbox]').forEach(cb => cb.onchange = () => { rows[+cb.dataset.i].on = cb.checked; count(); });
         count();
       };
-      const count = () => { box.querySelector('#ul-count').textContent = `고른 곳 ${rows.filter(r => r.on).length}`; };
-      box.querySelector('#ul-sel-none').onclick = () => { rows.forEach(r => r.on = r.st === 'none'); draw(); };
-      box.querySelector('#ul-sel-all').onclick = () => { rows.forEach(r => r.on = r.st === 'none' || r.st === 'other'); draw(); };
+      // 보이는 줄만 셈·붙이기·풀기 (가려진 줄의 체크는 쓰지 않음)
+      function isVis(r) { const view = box.querySelector('#ul-view').value; return view === 'all' || (view === 'sus' ? !!r.sus : r.st === view); }
+      const setView = v => { box.querySelector('#ul-view').value = v; };
+      const count = () => { box.querySelector('#ul-count').textContent = `고른 곳 ${rows.filter(r => r.on && isVis(r)).length}`; };
+      box.querySelector('#ul-sel-none').onclick = () => { setView('none'); rows.forEach(r => r.on = r.st === 'none'); draw(); };
+      box.querySelector('#ul-sel-all').onclick = () => { setView('all'); rows.forEach(r => r.on = r.st === 'none' || r.st === 'other'); draw(); };
       box.querySelector('#ul-sel-clear').onclick = () => { rows.forEach(r => r.on = false); draw(); };
-      box.querySelector('#ul-sel-sus').onclick = () => { rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
-      box.querySelector('#ul-word').oninput = (ev) => { const q = ev.target.value.trim(); rows.forEach(r => r.on = !!q && !!r.word && r.word.indexOf(q) >= 0 && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
+      box.querySelector('#ul-sel-sus').onclick = () => { setView('sus'); rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
+      box.querySelector('#ul-word').oninput = (ev) => { const q = ev.target.value.trim(); if (q) setView('all'); rows.forEach(r => r.on = !!q && !!r.word && r.word.indexOf(q) >= 0 && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
       box.querySelector('#ul-unlink').onclick = async () => {
-        const pick = rows.filter(r => r.on && r.word);
+        const pick = rows.filter(r => r.on && r.word && isVis(r));
         let n = 0;
         pick.forEach(r => { const key = `${r.b}-${r.c}-${r.v}`, tok = `${r.word}#${r.nth}`;
           if (verseLinks[key] && verseLinks[key][tok] != null) { delete verseLinks[key][tok]; if (!Object.keys(verseLinks[key]).length) delete verseLinks[key]; n++; } });
@@ -17020,9 +17036,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         build();
       };
       sel.onchange = build;
+      box.querySelector('#ul-view').onchange = draw;
       box.querySelector('#ul-save').onclick = async () => {
         const cd = cands[+sel.value]; if (!cd) return;
-        const pick = rows.filter(r => r.on && r.word && (r.st === 'none' || r.st === 'other'));
+        const pick = rows.filter(r => r.on && r.word && isVis(r) && (r.st === 'none' || r.st === 'other'));
         if (!pick.length) { showToast('고른 곳이 없습니다', 'info'); return; }
         const codeStr = `${cd.kind}:${cd.rec.id}`;
         pick.forEach(r => { const key = `${r.b}-${r.c}-${r.v}`; (verseLinks[key] = verseLinks[key] || {})[`${r.word}#${r.nth}`] = codeStr; });
@@ -17394,7 +17411,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-12`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-13`;
         document.title = `바이블 맵 스터디`;
       }
     }
