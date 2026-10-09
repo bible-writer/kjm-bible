@@ -3990,8 +3990,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         panelEl.addEventListener('mousedown', ev => {
           if (ev.button !== 0 || (handle.contains(ev.target))) return;
           const t = ev.target;
-          const blank = t === panelEl || (t.classList && (t.classList.contains('code-grid') || t.classList.contains('wp-attach')));
-          if (!blank) return;
+          // (b20261009-4 kjm 「흑암 창 이동 안 됨」 — 사전 비교 줄 빈칸을 잡음) 빈 곳 = 누르는 것(단추·고리·번호 칸 등)이 아니고, 그 칸 자체에 글자가 없는 곳 (글 위에서는 글 고르기를 그대로 둔다)
+          if (!t || !t.closest || t.closest('button,a,input,select,textarea,summary,label,img,svg,.cg-cell,.strong-tag,[onclick],[contenteditable="true"]')) return;
+          const ownText = Array.from(t.childNodes || []).some(n => n.nodeType === 3 && n.textContent.trim());
+          if (ownText) return;
           const r = panelEl.getBoundingClientRect();
           if (ev.clientX > r.right - 22 && ev.clientY > r.bottom - 22) return;   // 오른쪽 아래 크기 손잡이
           if (ev.clientX > r.left + panelEl.clientWidth) return;                  // 스크롤 막대
@@ -16775,7 +16777,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
