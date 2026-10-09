@@ -16722,7 +16722,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
     function closeVlinkModal() { const b = document.getElementById('vlink-modal'); if (b) b.style.display = 'none'; }
     // (b-9) 조사 떼기 — 고른 낱말이 「항목 이름 + 조사」면 딱지는 이름에만 (자동 딱지와 같은 꼴: 아브람|에게)
-    const VLINK_PARTICLE = /^(?:인들|인|들)?(?:에게서부터|에서부터|으로부터|로부터|에게서|에게로|에게는|에게도|에게|께서는|께서도|께서|께로|께|에서는|에서도|에서|에는|에도|에|으로는|으로도|으로|로는|로도|로|와는|과는|와|과|은|는|이|가|을|를|의|도|만|이여|이시여|여|아|야|이라|라|이요|요|이니|이며|며|까지|부터|처럼|같이|보다|하고|이다|다|인데|이고|이었|였)?$/;
+    const VLINK_PARTICLE = /^(?:인들|인|들)?(?:에게서부터|에서부터|으로부터|로부터|에게서|에게로|에게는|에게도|에게|께서는|께서도|께서|께로|께|에서는|에서도|에서|에는|에도|에|으로는|으로도|으로|로는|로도|로|와는|과는|와|과|은|는|이|가|을|를|의|도|만|이여|이시여|여|아|야|이라|라|이요|요|이니|이며|며|까지|부터|처럼|같이|보다|하고|이다|다|인데|이고|이었|였|에나|이나|나|에서나|으로나|로나|조차|마저|뿐)?$/;
     function vlinkTrim(ctx, code) {
       const t = code && code !== '0' ? vlinkTarget(code) : null;
       if (!t || ctx.full == null || ctx.start == null) return ctx;
@@ -16917,7 +16917,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         <div style="padding:0 14px 6px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:0.88em;color:#475569">
           <span>보기</span>
           <select id="ul-view" style="padding:3px 6px;border:1px solid #cbd5e1;border-radius:6px">
-            <option value="none" selected>딱지 없는 곳만 (할 일)</option>
+            <option value="todo" selected>할 일 (딱지 없음 + 직접 연결한 곳)</option>
+            <option value="none">딱지 없는 곳만</option>
+            <option value="manual">직접 연결한 곳만</option>
             <option value="other">다른 딱지만</option>
             <option value="same">같은 항목만</option>
             <option value="sus">⚠ 의심만</option>
@@ -16986,7 +16988,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             r.gloss = gl && gl.length ? gl.join(' / ') : '';
             if (gl && gl.length) {
               const ej = String(r.ej || r.word);
-              r.sus = !(nm && r.word.indexOf(nm) >= 0) && !gl.some(g => { const c0 = core(g); if (!c0) return true; const k = c0.length >= 2 ? c0.slice(0, 2) : c0; return ej.indexOf(k) >= 0 || ej.indexOf(c0.slice(0, 1)) === 0; });
+              // 번역어가 여러 낱말이면(「하늘에 계신」「모든 하늘의」「하늘을 향하여」) 이름을 품은 낱말이 그 원어 자리 — 어절에 이름이 있어야 함
+              const STOPW = /^(모든|그|이|저|온|각|큰|여러)$/;
+              r.sus = !(nm && r.word.indexOf(nm) >= 0) && !gl.some(g => {
+                const toks = String(g).replace(/[\(（][^\)）]*[\)）]/g, '').split(/\s+/).map(core).filter(t => t && !STOPW.test(t));
+                if (!toks.length) return true;
+                if (nm && toks.some(t => t.indexOf(nm) >= 0)) return false;   // 번역어 쪽 원어 자리는 이름 낱말 — 이 어절은 아님
+                return toks.some(t => { const k = t.length >= 2 ? t.slice(0, 2) : t; return ej.indexOf(k) >= 0 || ej.indexOf(t.slice(0, 1)) === 0; });
+              });
             } else {
               r.sus = !(nm && r.word.indexOf(nm) >= 0) && freq[r.word] === 1;
             }
@@ -17016,10 +17025,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         count();
       };
       // 보이는 줄만 셈·붙이기·풀기 (가려진 줄의 체크는 쓰지 않음)
-      function isVis(r) { const view = box.querySelector('#ul-view').value; return view === 'all' || (view === 'sus' ? !!r.sus : r.st === view); }
+      function isVis(r) {
+        const view = box.querySelector('#ul-view').value, man = r.st === 'same' && /직접/.test(r.why);
+        if (view === 'all') return true;
+        if (view === 'sus') return !!r.sus;
+        if (view === 'todo') return r.st === 'none' || man;
+        if (view === 'manual') return man;
+        return r.st === view;
+      }
       const setView = v => { box.querySelector('#ul-view').value = v; };
       const count = () => { box.querySelector('#ul-count').textContent = `고른 곳 ${rows.filter(r => r.on && isVis(r)).length}`; };
-      box.querySelector('#ul-sel-none').onclick = () => { setView('none'); rows.forEach(r => r.on = r.st === 'none'); draw(); };
+      box.querySelector('#ul-sel-none').onclick = () => { setView('todo'); rows.forEach(r => r.on = r.st === 'none'); draw(); };
       box.querySelector('#ul-sel-all').onclick = () => { setView('all'); rows.forEach(r => r.on = r.st === 'none' || r.st === 'other'); draw(); };
       box.querySelector('#ul-sel-clear').onclick = () => { rows.forEach(r => r.on = false); draw(); };
       box.querySelector('#ul-sel-sus').onclick = () => { setView('sus'); rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
@@ -17411,7 +17427,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-13`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-14`;
         document.title = `바이블 맵 스터디`;
       }
     }
