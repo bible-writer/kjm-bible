@@ -3946,6 +3946,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     let _dragState = null;
     if (!window._panelDragListenersInit) {
       window._panelDragListenersInit = true;
+      window._dragMove = _dragMove;
       function _dragMove(clientX, clientY) {
         if (!_dragState) return;
         const { panelEl, startX, startY, startLeft, startTop } = _dragState;
@@ -3979,13 +3980,33 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         panelEl.style.bottom = 'auto';
         _dragState = { panelEl, startX: clientX, startY: clientY, startLeft: rect.left, startTop: rect.top };
       }
-      handle.onmousedown = e => { onDown(e.clientX, e.clientY, e.target); e.preventDefault(); };
+      // (b20261009-5) 마우스·펜은 Pointer Events + 포인터 붙잡기(setPointerCapture)로 — 창 밖(지도 위)으로 끌어도
+      //  움직임 신호가 창에 그대로 들어와, 다른 것(확장 프로그램·지도)이 mousemove 를 가로채도 끊기지 않는다
+      handle.onmousedown = e => { if (!_dragState) onDown(e.clientX, e.clientY, e.target); e.preventDefault(); };
       // (b20261009-3 kjm 「이동 안 됨」) 제목 줄은 대부분 누르는 글자(표제어 고치기·영문 복사)라 잡을 데가 좁았다.
       //  ① 끌어서 옮긴 뒤에는 그 글자의 '누르기'가 실행되지 않게 막고
       //  ② 창의 빈 곳(테두리 안쪽 여백·번호 칸 사이 틈)을 잡아도 움직이고
       //  ③ 창 안을 내려도 제목 줄이 맨 위에 붙어 있게 한다
       if (!panelEl._dragClickGuard) {
         panelEl._dragClickGuard = true;
+        const curHandle = () => (handleSelector ? panelEl.querySelector(handleSelector) : panelEl);
+        panelEl.addEventListener('pointerdown', ev => {
+          if (ev.pointerType === 'touch' || ev.button !== 0) return;
+          const h = curHandle(), t = ev.target;
+          let ok = h && h.contains(t) && !(t.closest && t.closest('button, input, select, a'));
+          if (!ok && t && t.closest && !t.closest('button,a,input,select,textarea,summary,label,img,svg,.cg-cell,.strong-tag,[onclick],[contenteditable="true"]')) {
+            ok = !Array.from(t.childNodes || []).some(n => n.nodeType === 3 && n.textContent.trim());
+          }
+          if (!ok) return;
+          const r = panelEl.getBoundingClientRect();
+          if (ev.clientX > r.left + panelEl.clientWidth) return;   // 스크롤 막대
+          onDown(ev.clientX, ev.clientY, null);
+          try { panelEl.setPointerCapture(ev.pointerId); } catch (e) {}
+          ev.preventDefault();
+        });
+        panelEl.addEventListener('pointermove', ev => { if (_dragState && _dragState.panelEl === panelEl && ev.pointerType !== 'touch') window._dragMove(ev.clientX, ev.clientY); });
+        const endP = ev => { if (_dragState && _dragState.panelEl === panelEl && ev.pointerType !== 'touch') { _dragState = null; try { panelEl.releasePointerCapture(ev.pointerId); } catch (e) {} } };
+        panelEl.addEventListener('pointerup', endP); panelEl.addEventListener('pointercancel', endP);
         panelEl.addEventListener('click', ev => { if (window._dragMovedAt && Date.now() - window._dragMovedAt < 350) { ev.stopPropagation(); ev.preventDefault(); } }, true);
         panelEl.addEventListener('mousedown', ev => {
           if (ev.button !== 0 || (handle.contains(ev.target))) return;
@@ -16777,7 +16798,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
