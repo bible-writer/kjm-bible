@@ -4299,9 +4299,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         panel.style.display = 'block';
         /* 원어·쓰인 곳·사전 칸을 이 창 아래에 덧붙인다 */
         window._wpPerson = p;
-        wpAttach('person-info-panel', p.ustrong || p.strong || '');
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#person-info-drag-handle');
+        try { wpAttach('person-info-panel', p.ustrong || p.strong || ''); } catch (e) { console.warn('wpAttach', e); }
       },
 
       toggleArticle: function() {
@@ -4453,7 +4453,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         Object.keys(termIndex || {}).forEach(k => { if (termIndex[k] === t) keys.add(k); });
         const raw = String(t.term_ko || '').trim();
         if (raw) { keys.add(raw); const m = raw.match(/^([^()]+)\(([^()]+)\)$/); if (m) { keys.add(m[1].trim()); keys.add(m[2].trim()); } }
-        const part = '(들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?|인들|인)?';
+        // (b20261009-6) 괄호가 하나 남아 정규식이 깨져 있었다(10-08~) — 「여호와」처럼 본문 연결 절을 찾는 용어 창이 열리다 멈춰
+        //  창 옮기기·크기 손잡이가 붙지 않았다. 인명·지명 쪽과 같은 꼴 ((?:인들|인)?(?:조사…)?) 로 바로잡음
+        const part = '((?:인들|인)?(?:들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?)';
         const seen = new Set();
         let scanned = 0;
         for (const k of keys) {
@@ -4747,9 +4749,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         `;
         panel.style.display = 'block';
         window._wpTerm = t;
-        wpAttach('term-info-panel', t.hebrew_greek || '');
+        // 아래쪽 덧붙이기에서 오류가 나도 창 옮기기·크기 손잡이는 반드시 붙게 순서를 바꿈 (b20261009-6)
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#term-info-drag-handle');
+        try { wpAttach('term-info-panel', t.hebrew_greek || ''); } catch (e) { console.warn('wpAttach', e); }
       },
 
       saveRawText: function(id, which) {
@@ -16798,7 +16801,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-6`;
         document.title = `바이블 맵 스터디`;
       }
     }
