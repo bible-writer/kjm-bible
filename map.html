@@ -3957,6 +3957,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         newTop = Math.max(0, Math.min(newTop, maxTop));
         panelEl.style.left = newLeft + 'px';
         panelEl.style.top = newTop + 'px';
+        if (Math.abs(clientX - startX) + Math.abs(clientY - startY) > 4) window._dragMovedAt = Date.now();
       }
       window.addEventListener('mousemove', e => _dragMove(e.clientX, e.clientY));
       window.addEventListener('mouseup', () => { _dragState = null; });
@@ -3979,6 +3980,30 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         _dragState = { panelEl, startX: clientX, startY: clientY, startLeft: rect.left, startTop: rect.top };
       }
       handle.onmousedown = e => { onDown(e.clientX, e.clientY, e.target); e.preventDefault(); };
+      // (b20261009-3 kjm 「이동 안 됨」) 제목 줄은 대부분 누르는 글자(표제어 고치기·영문 복사)라 잡을 데가 좁았다.
+      //  ① 끌어서 옮긴 뒤에는 그 글자의 '누르기'가 실행되지 않게 막고
+      //  ② 창의 빈 곳(테두리 안쪽 여백·번호 칸 사이 틈)을 잡아도 움직이고
+      //  ③ 창 안을 내려도 제목 줄이 맨 위에 붙어 있게 한다
+      if (!panelEl._dragClickGuard) {
+        panelEl._dragClickGuard = true;
+        panelEl.addEventListener('click', ev => { if (window._dragMovedAt && Date.now() - window._dragMovedAt < 350) { ev.stopPropagation(); ev.preventDefault(); } }, true);
+        panelEl.addEventListener('mousedown', ev => {
+          if (ev.button !== 0 || (handle.contains(ev.target))) return;
+          const t = ev.target;
+          const blank = t === panelEl || (t.classList && (t.classList.contains('code-grid') || t.classList.contains('wp-attach')));
+          if (!blank) return;
+          const r = panelEl.getBoundingClientRect();
+          if (ev.clientX > r.right - 22 && ev.clientY > r.bottom - 22) return;   // 오른쪽 아래 크기 손잡이
+          if (ev.clientX > r.left + panelEl.clientWidth) return;                  // 스크롤 막대
+          onDown(ev.clientX, ev.clientY, t); ev.preventDefault();
+        });
+      }
+      if (handle !== panelEl && handle.parentElement === panelEl) {
+        const pt = parseFloat(getComputedStyle(panelEl).paddingTop) || 0;
+        handle.style.position = 'sticky'; handle.style.top = (-pt) + 'px'; handle.style.zIndex = '3';
+        handle.style.background = getComputedStyle(panelEl).backgroundColor || '#fff';
+        handle.style.marginTop = (-pt) + 'px'; handle.style.paddingTop = pt + 'px';
+      }
       // (2026-09-17) 폰: 손잡이에서 시작한 손가락 움직임을 브라우저가 스크롤로 가져가지 않게 한다.
       //  창(overflow:auto) 안에 손잡이가 있어 전에는 창 안이 스크롤될 뿐 창이 움직이지 않았다.
       handle.style.touchAction = 'none';
@@ -4526,7 +4551,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const fsm = (t.hebrew_greek || '').match(/[HG]\d{1,5}[A-Za-z]?/);
         const firstStrongCode = fsm ? fsm[0] : '';
         const noteDisplay = t.original_note ? `<div style="font-size:0.82em;color:#92400e;background:#fffbeb;border-left:3px solid #fcd34d;padding:4px 8px;margin-bottom:4px;line-height:1.5">${escHtml(t.original_note)}</div>` : '';
-        const hgDisplay = noteDisplay + (t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.codeGrid(escHtml(t.hebrew_greek), 'term-strong-inline')}</div><div id="term-strong-inline"></div>` : '');
+        const hgDisplay = noteDisplay + (t.hebrew_greek ? `<div style="font-size:0.85em;color:#b45309;margin-bottom:4px">${StrongEngine.codeGrid(escHtml(t.hebrew_greek), 'term-strong-inline', t.term_ko)}</div><div id="term-strong-inline"></div>` : '');
         // (2026-09-22) 원어 번호 고치기 — 지명 창과 같은 꼴(번호 줄 + ✏️, 관리자 모드). 고친 값은 용어DB 를 새로 받아도 다시 입힌다
         const hg = `
           ${hgDisplay}
@@ -4992,21 +5017,37 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       // targetId: 클릭 시 원어 뜻을 펼쳐 보여줄 같은 팝업 내부의 컨테이너 id (기본값: 용어 팝업 내부 슬롯)
       // (b20261009-1 kjm 「내용이 안 보여 — 창에 맞추어 2단·3단, 동사·명사 섞임」) 번호 여럿을 창 폭에 맞춘 칸(2~3단)으로,
       //   칸마다 번호 + 품사(명·동·형…) + 짧은 뜻. 명사 → 동사 → 형용사 → 그 밖 차례로 묶는다. 뜻은 hebko → strongKo 에서.
-      codeGrid: function(text, targetId) {
+      codeGrid: function(text, targetId, hint) {
         const codes = String(text || '').match(/[HG]\d{1,5}[A-Za-z]?/g) || [];
         if (codes.length <= 2) return this.linkifyCodes(String(text || '').replace(/,(?=\S)/g, ', '), targetId);
         const tid = targetId || 'term-strong-inline';
         const gid = 'cg' + Math.random().toString(36).slice(2, 8);
         const cells = codes.map(c => `<div class="cg-cell" data-code="${c}" onclick="StrongEngine.handleClick('${c}','${tid}')" title="${c}"><span class="strong-tag">${c}</span><span class="cg-pos"></span><span class="cg-m"></span></div>`).join('');
         setTimeout(() => this.fillCodeGrid(gid), 0);
-        return `<div id="${gid}" class="code-grid">${cells}</div>`;
+        return `<div id="${gid}" class="code-grid" data-hint="${escHtml(String(hint || '').trim())}">${cells}</div>`;
       },
-      _codeInfo: function(c) {
+      // (b20261009-3) 공개 사전(strongKo)은 한 번호를 뜻별로 H219a·H219b 처럼 나눠 둔 것이 1,164개 —
+      //  맨 번호(H219)로만 찾으면 품사·뜻이 비었다. 나뉜 것을 모아, 창의 표제어(예: 빛)와 맞는 쪽을 고른다
+      _skFind: function(c, hint) {
+        const m = String(c).match(/^([HG])0*(\d+)([A-Za-z]?)/); if (!m) return null;
+        const D = (typeof strongKoDict !== 'undefined' && strongKoDict) ? strongKoDict : null; if (!D) return null;
+        const k1 = m[1] + m[2], k4 = m[1] + m[2].padStart(4, '0'), sf = (m[3] || '').toLowerCase();
+        if (sf && (D[k1 + sf] || D[k4 + sf])) return D[k1 + sf] || D[k4 + sf];
+        if (D[k1] || D[k4]) return D[k1] || D[k4];
+        const vs = [];
+        for (const ch of 'abcdefgh') { const v = D[k1 + ch] || D[k4 + ch]; if (v) vs.push(v); else if (vs.length) break; }
+        if (!vs.length) return null;
+        const h = String(hint || '').replace(/\s+/g, '');
+        if (h) { const hit = vs.find(v => String(v.m || '').replace(/\s+/g, '').indexOf(h) >= 0); if (hit) return hit; }
+        return vs[0];
+      },
+      _codeInfo: function(c, hint) {
         const m = String(c).match(/^([HG])0*(\d+)/); if (!m) return null;
         const k1 = m[1] + m[2], k4 = m[1] + m[2].padStart(4, '0');
         const hk = (typeof hebKoDict !== 'undefined' && hebKoDict) ? (hebKoDict[k4] || hebKoDict[k1]) : null;
-        const sk = (typeof strongKoDict !== 'undefined' && strongKoDict) ? (strongKoDict[k1] || strongKoDict[k4]) : null;
-        const raw = String((hk && hk.m) || (sk && sk.m) || '');
+        const sk = this._skFind(c, hint);
+        const split = sk && !((typeof strongKoDict !== 'undefined' && strongKoDict) && (strongKoDict[k1] || strongKoDict[k4]));
+        const raw = String((split && hint && String(sk.m || '').indexOf(String(hint).trim()) >= 0 ? sk.m : '') || (hk && hk.m) || (sk && sk.m) || '');
         const mean = (raw.split(/[,;·]/)[0].replace(/\s+[A-Za-z].*$/, '').trim()) || raw.slice(0, 18);
         const g = String((sk && (sk.gk || sk.g)) || '');
         let pos = '', ord = 3;
@@ -5020,7 +5061,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       fillCodeGrid: async function(gid) {
         try { if (typeof ensureStrongKo === 'function') await ensureStrongKo(); } catch (e) {}
         const box = document.getElementById(gid); if (!box) return;
-        const info = Array.from(box.querySelectorAll('.cg-cell')).map((el, i) => ({ el, i, x: this._codeInfo(el.dataset.code) || { mean: '', pos: '', ord: 3 } }));
+        const hint = box.dataset.hint || '';
+        const info = Array.from(box.querySelectorAll('.cg-cell')).map((el, i) => ({ el, i, x: this._codeInfo(el.dataset.code, hint) || { mean: '', pos: '', ord: 3 } }));
         info.forEach(o => { o.el.querySelector('.cg-pos').textContent = o.x.pos; o.el.querySelector('.cg-m').textContent = o.x.mean; if (o.x.mean) o.el.title = o.el.dataset.code + ' ' + o.x.mean; });
         info.sort((a, b) => a.x.ord - b.x.ord || a.i - b.i).forEach(o => box.appendChild(o.el));
       },
@@ -5037,7 +5079,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const m = String(code).match(/^([HG])0*(\d+)/);
         const k1 = m ? m[1] + m[2] : code, k4 = m ? m[1] + m[2].padStart(4, '0') : code;
         const hk = (typeof hebKoDict !== 'undefined' && hebKoDict) ? (hebKoDict[k4] || hebKoDict[k1]) : null;
-        const sk = (typeof strongKoDict !== 'undefined' && strongKoDict) ? (strongKoDict[k1] || strongKoDict[k4]) : null;
+        const gbox = el.closest ? el.closest('.code-grid') : null;
+        const sk = this._skFind(code, gbox ? gbox.dataset.hint : '');
         const ko = (hk && hk.m) || (sk && sk.m) || '';
         const read = (hk && hk.t) || (sk && sk.k) || '';
         const gk = (sk && sk.gk) || '';
@@ -16732,7 +16775,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
