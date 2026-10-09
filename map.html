@@ -16959,10 +16959,29 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             row.on = row.st === 'none';
             rows.push(row);
           });
-          // 의심: 낱말이 항목 이름을 품지 않고, 이 번호 용례 안에서 한 번만 나오는 낱말 (계신·독수리들보다 따위 — 어절·원어 짝 어긋남)
+          // (b-12) 의심 = 어절이 원전분해(STEP 원문 대역)의 이 번호 번역어와 안 맞음 — 계신·독수리들보다·위에 따위(어절·원어 짝 어긋남)
+          //  원전분해가 없으면: 낱말이 항목 이름을 품지 않고 한 번만 나오는 것
           const nm = String(vlinkLabel(cd.kind, cd.rec) || '').split(/[\(\[（]/)[0].trim();
           const freq = {}; rows.forEach(r => { if (r.word) freq[r.word] = (freq[r.word] || 0) + 1; });
-          rows.forEach(r => { r.sus = !!r.word && !(nm && r.word.indexOf(nm) >= 0) && freq[r.word] === 1; if (r.sus && r.st === 'none') r.on = false; });
+          const glossCache = {};
+          const core = g => String(g || '').replace(/[\(（][^\)）]*[\)）]/g, '').replace(/[^가-힣]/g, '');
+          rows.forEach(r => {
+            if (!r.word) return;
+            let gl = null;
+            if (typeof interlinearDbInstance !== 'undefined' && interlinearDbInstance && typeof getInterlinearWords === 'function') {
+              const key = `${r.b}-${r.c}-${r.v}`;
+              const ws = glossCache[key] || (glossCache[key] = getInterlinearWords(r.b, r.c, r.v));
+              gl = ws.filter(w => _ulNorm(w[0]) === code).map(w => w[1]);
+            }
+            r.gloss = gl && gl.length ? gl.join(' / ') : '';
+            if (gl && gl.length) {
+              const ej = String(r.ej || r.word);
+              r.sus = !(nm && r.word.indexOf(nm) >= 0) && !gl.some(g => { const c0 = core(g); if (!c0) return true; const k = c0.length >= 2 ? c0.slice(0, 2) : c0; return ej.indexOf(k) >= 0 || ej.indexOf(c0.slice(0, 1)) === 0; });
+            } else {
+              r.sus = !(nm && r.word.indexOf(nm) >= 0) && freq[r.word] === 1;
+            }
+            if (r.sus && r.st === 'none') r.on = false;
+          });
           draw();
         }, 20);
       };
@@ -16977,7 +16996,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           return `<label style="display:flex;gap:8px;align-items:center;padding:4px 4px;border-bottom:1px solid #f8fafc;cursor:pointer">
             <input type="checkbox" data-i="${i}"${r.on ? ' checked' : ''}${dis}>
             <span style="width:66px;color:#64748b;font-size:0.9em">${bk ? bk.abbr : r.b}${r.c}:${r.v}</span>
-            <span style="flex:1">${ejHtml}</span>
+            <span style="flex:1">${ejHtml}${r.gloss ? ` <span style="color:#94a3b8;font-size:0.8em" title="원전분해(원문 대역)에서 이 번호의 번역어">원문: ${escHtml(r.gloss)}</span>` : ''}</span>
             <span style="font-size:0.82em">${r.sus ? '<span style="color:#b91c1c;font-weight:700" title="낱말이 항목 이름과 다르고 한 번만 나옴 — 어절·원어 짝이 어긋났을 수 있음">⚠ 의심 </span>' : ''}${stTxt[r.st]} <span style="color:#64748b">${escHtml(r.why)}</span></span></label>`;
         }).join('');
         list.querySelectorAll('input[type=checkbox]').forEach(cb => cb.onchange = () => { rows[+cb.dataset.i].on = cb.checked; count(); });
@@ -17375,7 +17394,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-11`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-12`;
         document.title = `바이블 맵 스터디`;
       }
     }
