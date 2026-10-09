@@ -448,6 +448,10 @@
     .bible-term-tag   { color: #b45309; text-decoration-color: #f59e0b; text-decoration-style: dotted; }
     .bible-term-tag:hover   { background-color: #fef3c7; color: #92400e; }
 
+    /* (b20261009-2) 번호 위에 마우스를 올리면 뜨는 작은 뜻 창 */
+    #code-hover-tip { position: fixed; z-index: 20000; max-width: 300px; background: #fffef7; border: 1px solid #d97706; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.22); padding: 7px 10px; font-size: 13px; line-height: 1.5; color: #1e293b; pointer-events: none; display: none; }
+    #code-hover-tip .ht-lemma { font-size: 1.35em; font-family: 'SBL Hebrew','Ezra SIL','Noto Serif Hebrew','Noto Serif',serif; color: #065f46; }
+    #code-hover-tip .ht-sub { color: #64748b; font-size: 0.9em; }
     /* (b20261009-1) 번호 여럿 — 창 폭에 맞춰 2~3단 */
     .code-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 3px 6px; max-width: 100%; }
     .cg-cell { display: flex; align-items: baseline; gap: 4px; min-width: 0; cursor: pointer; padding: 1px 2px; border-radius: 4px; }
@@ -5020,6 +5024,35 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         info.forEach(o => { o.el.querySelector('.cg-pos').textContent = o.x.pos; o.el.querySelector('.cg-m').textContent = o.x.mean; if (o.x.mean) o.el.title = o.el.dataset.code + ' ' + o.x.mean; });
         info.sort((a, b) => a.x.ord - b.x.ord || a.i - b.i).forEach(o => box.appendChild(o.el));
       },
+      // (b20261009-2 kjm 「마우스로」) 번호 칸·번호 딱지 위에 마우스를 올리면 원어·읽는 소리·한글 뜻·품사를 작은 창으로
+      hoverTip: async function(el, x, y) {
+        const code = (el.dataset && el.dataset.code) || (el.textContent || '').trim();
+        if (!/^[HG]\d{1,5}[A-Za-z]?$/.test(code)) return;
+        let tip = document.getElementById('code-hover-tip');
+        if (!tip) { tip = document.createElement('div'); tip.id = 'code-hover-tip'; document.body.appendChild(tip); }
+        this._hoverCode = code;
+        try { await this.ensureLoaded(); if (typeof ensureStrongKo === 'function') await ensureStrongKo(); } catch (e) {}
+        if (this._hoverCode !== code) return;
+        const e = this.lookup(code) || {};
+        const m = String(code).match(/^([HG])0*(\d+)/);
+        const k1 = m ? m[1] + m[2] : code, k4 = m ? m[1] + m[2].padStart(4, '0') : code;
+        const hk = (typeof hebKoDict !== 'undefined' && hebKoDict) ? (hebKoDict[k4] || hebKoDict[k1]) : null;
+        const sk = (typeof strongKoDict !== 'undefined' && strongKoDict) ? (strongKoDict[k1] || strongKoDict[k4]) : null;
+        const ko = (hk && hk.m) || (sk && sk.m) || '';
+        const read = (hk && hk.t) || (sk && sk.k) || '';
+        const gk = (sk && sk.gk) || '';
+        tip.innerHTML = `<div><b style="color:#047857">${escHtml(code)}</b> <span class="ht-lemma">${escHtml(e.lemma || (hk && hk.l) || (sk && sk.w) || '')}</span></div>`
+          + (read || e.xlit ? `<div class="ht-sub">${escHtml(read)}${read && e.xlit ? ' · ' : ''}${escHtml(e.xlit || '')}${gk ? ' · ' + escHtml(gk) : ''}</div>` : '')
+          + (ko ? `<div>${escHtml(String(ko).slice(0, 160))}</div>` : '')
+          + (e.gloss ? `<div class="ht-sub">${escHtml(String(e.gloss).slice(0, 140))}</div>` : '');
+        tip.style.display = 'block';
+        const r = tip.getBoundingClientRect();
+        let lx = x + 14, ly = y + 16;
+        if (lx + r.width > window.innerWidth - 6) lx = Math.max(6, x - r.width - 10);
+        if (ly + r.height > window.innerHeight - 6) ly = Math.max(6, y - r.height - 12);
+        tip.style.left = lx + 'px'; tip.style.top = ly + 'px';
+      },
+      hideTip: function() { this._hoverCode = null; const t = document.getElementById('code-hover-tip'); if (t) t.style.display = 'none'; },
       linkifyCodes: function(text, targetId) {
         if (!text) return text;
         const tid = targetId || 'term-strong-inline';
@@ -14577,6 +14610,20 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
     window.openStrongOverrideManager = openStrongOverrideManager;
     window.removeStrongOverride = removeStrongOverride;
+    // (b20261009-2) 마우스를 번호 위에 올리면 뜻 창 — 마우스(포인터 fine)에서만, 폰·탭 손가락은 그대로 누르기
+    (function () {
+      if (!(window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+      let cur = null;
+      document.addEventListener('mouseover', ev => {
+        const el = ev.target && ev.target.closest && ev.target.closest('.cg-cell, .strong-tag');
+        if (el === cur) return;
+        cur = el;
+        if (el && typeof StrongEngine !== 'undefined') StrongEngine.hoverTip(el.classList.contains('strong-tag') && el.closest('.cg-cell') ? el.closest('.cg-cell') : el, ev.clientX, ev.clientY);
+        else if (typeof StrongEngine !== 'undefined') StrongEngine.hideTip();
+      });
+      document.addEventListener('mousedown', () => { if (typeof StrongEngine !== 'undefined') StrongEngine.hideTip(); }, true);
+      window.addEventListener('scroll', () => { if (typeof StrongEngine !== 'undefined') StrongEngine.hideTip(); }, true);
+    })();
 
     function getInterlinearWordsFull(bookId, chapter, verse) {
       if (!interlinearDbInstance) return [];
@@ -16685,7 +16732,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
