@@ -16918,11 +16918,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         <div style="padding:0 14px 6px;display:flex;gap:6px;flex-wrap:wrap">
           <button id="ul-sel-none" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">딱지 없는 곳만 고르기</button>
           <button id="ul-sel-all" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">다른 딱지까지 모두</button>
+          <button id="ul-sel-sus" style="padding:3px 9px;border:1px solid #fca5a5;border-radius:12px;background:#fff;cursor:pointer;color:#b91c1c" title="낱말이 항목 이름과 다르고 한 번만 나오는 곳 — 어절·원어 짝이 어긋났을 수 있음">⚠ 의심만 고르기</button>
           <button id="ul-sel-clear" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">모두 풀기</button>
+          <input id="ul-word" placeholder="낱말로 고르기 (예: 공중)" style="flex:1;min-width:120px;padding:3px 8px;border:1px solid #cbd5e1;border-radius:12px">
         </div>
         <div id="ul-list" style="overflow:auto;padding:0 10px;flex:1;min-height:160px;border-top:1px solid #f1f5f9"></div>
         <div style="padding:10px 14px;border-top:1px solid #e2e8f0;display:flex;gap:8px;align-items:center">
           <span id="ul-count" style="flex:1;color:#475569"></span>
+          <button id="ul-unlink" style="padding:6px 12px;border:1px solid #fca5a5;border-radius:6px;background:#fff;color:#b91c1c;font-weight:700;cursor:pointer" title="고른 곳 가운데 직접 연결한 것을 지워 자동 딱지로 되돌림">고른 곳 연결 풀기</button>
           <button id="ul-save" style="padding:6px 14px;border:none;border-radius:6px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer">고른 곳 붙이기</button>
         </div>`;
       box.style.display = 'flex';
@@ -16956,6 +16959,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             row.on = row.st === 'none';
             rows.push(row);
           });
+          // 의심: 낱말이 항목 이름을 품지 않고, 이 번호 용례 안에서 한 번만 나오는 낱말 (계신·독수리들보다 따위 — 어절·원어 짝 어긋남)
+          const nm = String(vlinkLabel(cd.kind, cd.rec) || '').split(/[\(\[（]/)[0].trim();
+          const freq = {}; rows.forEach(r => { if (r.word) freq[r.word] = (freq[r.word] || 0) + 1; });
+          rows.forEach(r => { r.sus = !!r.word && !(nm && r.word.indexOf(nm) >= 0) && freq[r.word] === 1; if (r.sus && r.st === 'none') r.on = false; });
           draw();
         }, 20);
       };
@@ -16965,13 +16972,13 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         box.querySelector('#ul-sum').innerHTML = `✓ 같은 항목 ${cnt.same} · <span style="color:#b45309">다른 딱지 ${cnt.other}</span> · <span style="color:#2563eb">딱지 없음 ${cnt.none}</span>${cnt.skip ? ` · 건너뜀 ${cnt.skip}` : ''}`;
         list.innerHTML = rows.map((r, i) => {
           const bk = BIBLE_BOOKS.find(x => x.id === r.b);
-          const dis = (r.st === 'same' || r.st === 'skip') ? ' disabled' : '';
+          const dis = ((r.st === 'same' && !/직접/.test(r.why)) || r.st === 'skip') ? ' disabled' : '';
           const ejHtml = r.word ? escHtml(r.ej).replace(escHtml(r.word), `<mark>${escHtml(r.word)}</mark>`) : escHtml(r.ej || '');
           return `<label style="display:flex;gap:8px;align-items:center;padding:4px 4px;border-bottom:1px solid #f8fafc;cursor:pointer">
             <input type="checkbox" data-i="${i}"${r.on ? ' checked' : ''}${dis}>
             <span style="width:66px;color:#64748b;font-size:0.9em">${bk ? bk.abbr : r.b}${r.c}:${r.v}</span>
             <span style="flex:1">${ejHtml}</span>
-            <span style="font-size:0.82em">${stTxt[r.st]} <span style="color:#64748b">${escHtml(r.why)}</span></span></label>`;
+            <span style="font-size:0.82em">${r.sus ? '<span style="color:#b91c1c;font-weight:700" title="낱말이 항목 이름과 다르고 한 번만 나옴 — 어절·원어 짝이 어긋났을 수 있음">⚠ 의심 </span>' : ''}${stTxt[r.st]} <span style="color:#64748b">${escHtml(r.why)}</span></span></label>`;
         }).join('');
         list.querySelectorAll('input[type=checkbox]').forEach(cb => cb.onchange = () => { rows[+cb.dataset.i].on = cb.checked; count(); });
         count();
@@ -16980,6 +16987,19 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       box.querySelector('#ul-sel-none').onclick = () => { rows.forEach(r => r.on = r.st === 'none'); draw(); };
       box.querySelector('#ul-sel-all').onclick = () => { rows.forEach(r => r.on = r.st === 'none' || r.st === 'other'); draw(); };
       box.querySelector('#ul-sel-clear').onclick = () => { rows.forEach(r => r.on = false); draw(); };
+      box.querySelector('#ul-sel-sus').onclick = () => { rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
+      box.querySelector('#ul-word').oninput = (ev) => { const q = ev.target.value.trim(); rows.forEach(r => r.on = !!q && !!r.word && r.word.indexOf(q) >= 0 && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
+      box.querySelector('#ul-unlink').onclick = async () => {
+        const pick = rows.filter(r => r.on && r.word);
+        let n = 0;
+        pick.forEach(r => { const key = `${r.b}-${r.c}-${r.v}`, tok = `${r.word}#${r.nth}`;
+          if (verseLinks[key] && verseLinks[key][tok] != null) { delete verseLinks[key][tok]; if (!Object.keys(verseLinks[key]).length) delete verseLinks[key]; n++; } });
+        if (!n) { showToast('고른 곳에 직접 연결한 것이 없습니다', 'info'); return; }
+        await saveVerseLinks();
+        try { const sc = document.getElementById('bible-content'); const top = sc ? sc.scrollTop : 0; loadBibleText(); if (sc) setTimeout(() => { sc.scrollTop = top; }, 0); } catch (e) {}
+        showToast(`${n}곳 직접 연결을 풀었습니다 (자동 딱지로 되돌림)`, 'success');
+        build();
+      };
       sel.onchange = build;
       box.querySelector('#ul-save').onclick = async () => {
         const cd = cands[+sel.value]; if (!cd) return;
@@ -17355,7 +17375,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-10`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-11`;
         document.title = `바이블 맵 스터디`;
       }
     }
