@@ -17053,12 +17053,15 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             peek = `<div style="margin:2px 0 6px 30px;padding:6px 10px;background:#f8fafc;border-left:3px solid #93c5fd;border-radius:4px;line-height:1.7;font-size:0.95em">${body}
               <button data-go="${i}" style="margin-left:6px;font-size:0.78em;color:#1d4ed8;background:#fff;border:1px solid #bfdbfe;border-radius:4px;padding:1px 7px;cursor:pointer">본문에서 보기 →</button></div>`;
           }
-          return `<div style="display:flex;gap:8px;align-items:center;padding:4px 4px;border-bottom:1px solid #f8fafc">
+          return `<div style="display:flex;gap:8px;align-items:center;padding:4px 4px;border-bottom:1px solid #f8fafc${r.sus ? ';background:#fef2f2' : ''}">
             <input type="checkbox" data-i="${i}"${r.on ? ' checked' : ''}${dis} style="cursor:pointer">
-            <span class="ul-peek" data-p="${i}" onclick="" style="display:flex;gap:8px;flex:1;align-items:center;cursor:pointer" title="누르면 이 절 본문을 펼침">
-            <span style="width:66px;color:#2563eb;font-size:0.9em;text-decoration:underline dotted">${bk ? bk.abbr : r.b}${r.c}:${r.v}</span>
-            <span style="flex:1">${ejHtml}${r.gloss ? ` <span style="color:#94a3b8;font-size:0.8em" title="원전분해(원문 대역)에서 이 번호의 번역어">원문: ${escHtml(r.gloss)}</span>` : ''}</span>
-            <span style="font-size:0.82em">${r.sus ? '<span style="color:#b91c1c;font-weight:700" title="낱말이 항목 이름과 다르고 한 번만 나옴 — 어절·원어 짝이 어긋났을 수 있음">⚠ 의심 </span>' : ''}${stTxt[r.st]} <span style="color:#64748b">${escHtml(r.why)}</span></span></span></div>${peek}`;
+            <span class="ul-peek" data-p="${i}" onclick="" style="display:flex;gap:8px;flex:1;align-items:center;cursor:pointer;min-width:0" title="누르면 이 절 본문을 펼침">
+            <span style="width:62px;flex:none;color:#2563eb;font-size:0.88em;text-decoration:underline dotted">${bk ? bk.abbr : r.b}${r.c}:${r.v}</span>
+            ${(() => { // (b20261010-4 kjm 「단어 앞으로 — 가독성」) 상태를 낱말 앞 짧은 꼬리표로
+              const C = { same: ['#ecfdf5', '#047857', /직접/.test(r.why) ? '✓ 직접' : '✓ 이미'], other: ['#fff7ed', '#c2410c', '◆ ' + (r.why || '다른').replace(/^.*「|」.*$/g, '')],
+                          none: ['#eff6ff', '#1d4ed8', '○ 없음'], excl: ['#f1f5f9', '#475569', '🚫 제외'], skip: ['#f8fafc', '#94a3b8', '건너뜀'] }[r.st] || ['#fff', '#333', r.st];
+              return `<span title="${escHtml(r.why || '')}" style="flex:none;width:86px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:0.78em;font-weight:700;padding:1px 6px;border-radius:9px;background:${C[0]};color:${C[1]}">${r.sus ? '⚠ ' : ''}${escHtml(C[2])}</span>`; })()}
+            <span style="flex:1;min-width:0">${ejHtml}${r.gloss ? ` <span style="color:#94a3b8;font-size:0.8em" title="원전분해(원문 대역)에서 이 번호의 번역어">원문: ${escHtml(r.gloss)}</span>` : ''}</span></span></div>${peek}`;
         }).join('');
         list.querySelectorAll('.ul-peek').forEach(el => el.onclick = () => { const r = rows[+el.dataset.p]; r.peek = !r.peek; const st = list.scrollTop; draw(); list.scrollTop = st; });
         list.querySelectorAll('button[data-go]').forEach(bt => bt.onclick = (ev) => { ev.stopPropagation(); const r = rows[+bt.dataset.go]; try { navigateToBibleVerse(r.b, r.c, r.v); } catch (e) {} });
@@ -17479,7 +17482,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
