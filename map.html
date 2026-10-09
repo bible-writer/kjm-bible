@@ -5063,8 +5063,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const vs = [];
         for (const ch of 'abcdefgh') { const v = D[k1 + ch] || D[k4 + ch]; if (v) vs.push(v); else if (vs.length) break; }
         if (!vs.length) return null;
-        const h = String(hint || '').replace(/\s+/g, '');
-        if (h) { const hit = vs.find(v => String(v.m || '').replace(/\s+/g, '').indexOf(h) >= 0); if (hit) return hit; }
+        const hs = String(hint || '').split(/[()（）,\/·]/).map(x => x.replace(/\s+/g, '')).filter(Boolean);
+        if (hs.length) { const hit = vs.find(v => hs.some(h => String(v.m || '').replace(/\s+/g, '').indexOf(h) >= 0)); if (hit) return hit; }
         return vs[0];
       },
       _codeInfo: function(c, hint) {
@@ -5073,8 +5073,15 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const hk = (typeof hebKoDict !== 'undefined' && hebKoDict) ? (hebKoDict[k4] || hebKoDict[k1]) : null;
         const sk = this._skFind(c, hint);
         const split = sk && !((typeof strongKoDict !== 'undefined' && strongKoDict) && (strongKoDict[k1] || strongKoDict[k4]));
-        const raw = String((split && hint && String(sk.m || '').indexOf(String(hint).trim()) >= 0 ? sk.m : '') || (hk && hk.m) || (sk && sk.m) || '');
-        const mean = (raw.split(/[,;·]/)[0].replace(/\s+[A-Za-z].*$/, '').trim()) || raw.slice(0, 18);
+        const raw = String((hk && hk.m) || (sk && sk.m) || '');
+        const rawAll = String((split && sk && sk.m ? sk.m + ', ' : '') + raw + ', ' + ((sk && sk.m) || ''));
+        // (b20261009-7 kjm 「숨·바람이 틀린 것 같다」) 뜻이 여럿이면 첫 뜻만 보여 H7307(숨, 바람, 영)이 「숨」으로 보였다
+        //  → 창 표제어(예: 바람, 흑암(어둠)→흑암·어둠)가 들어 있는 뜻을 먼저 보여 준다
+        const cut = t => t.split(/[,;·\/]/).map(x => x.replace(/\s+[A-Za-z].*$/, '').replace(/[\[\]]/g, '').trim()).filter(Boolean);
+        const segs = cut(raw), segsAll = cut(rawAll);
+        const hk2 = String(hint || '').split(/[()（）,\/·]/).map(x => x.trim()).filter(x => x.length >= 1);
+        const hitSeg = hk2.length ? segsAll.find(x => hk2.some(h => x.indexOf(h) >= 0 || (x.length >= 2 && h.indexOf(x) >= 0))) : null;
+        const mean = hitSeg || segs[0] || raw.slice(0, 18);
         const g = String((sk && (sk.gk || sk.g)) || '');
         let pos = '', ord = 3;
         if (/고유|인명|지명/.test(g)) { pos = '이름'; ord = 0; }
@@ -16801,7 +16808,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-6`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-7`;
         document.title = `바이블 맵 스터디`;
       }
     }
