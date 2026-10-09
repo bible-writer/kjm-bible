@@ -16946,6 +16946,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <option value="todo" selected>할 일 (딱지 없음 + 직접 연결한 곳)</option>
             <option value="none">딱지 없는 곳만</option>
             <option value="manual">직접 연결한 곳만</option>
+            <option value="excl">🚫 제외한 곳만</option>
             <option value="other">다른 딱지만</option>
             <option value="same">같은 항목만</option>
             <option value="sus">⚠ 의심만</option>
@@ -16957,12 +16958,13 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           <button id="ul-sel-none" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">딱지 없는 곳만 고르기</button>
           <button id="ul-sel-all" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">다른 딱지까지 모두</button>
           <button id="ul-sel-sus" style="padding:3px 9px;border:1px solid #fca5a5;border-radius:12px;background:#fff;cursor:pointer;color:#b91c1c" title="낱말이 항목 이름과 다르고 한 번만 나오는 곳 — 어절·원어 짝이 어긋났을 수 있음">⚠ 의심만 고르기</button>
-          <button id="ul-sel-clear" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">모두 풀기</button>
+          <button id="ul-sel-clear" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">체크 모두 해제</button>
           <input id="ul-word" placeholder="낱말로 고르기 (예: 공중)" style="flex:1;min-width:120px;padding:3px 8px;border:1px solid #cbd5e1;border-radius:12px">
         </div>
         <div id="ul-list" style="overflow:auto;padding:0 10px;flex:1;min-height:160px;border-top:1px solid #f1f5f9"></div>
         <div style="padding:10px 14px;border-top:1px solid #e2e8f0;display:flex;gap:8px;align-items:center">
           <span id="ul-count" style="flex:1;color:#475569"></span>
+          <button id="ul-excl" style="padding:6px 12px;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;color:#334155;font-weight:700;cursor:pointer" title="고른 곳을 「딱지 없음」으로 적어 두어 다시 할 일에 안 나오게 (연결표에 0) — 의심 줄 한꺼번에 정리">🚫 고른 곳 제외</button>
           <button id="ul-unlink" style="padding:6px 12px;border:1px solid #fca5a5;border-radius:6px;background:#fff;color:#b91c1c;font-weight:700;cursor:pointer" title="고른 곳 가운데 직접 연결한 것을 지워 자동 딱지로 되돌림">고른 곳 연결 풀기</button>
           <button id="ul-save" style="padding:6px 14px;border:none;border-radius:6px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer">고른 곳 붙이기</button>
         </div>`;
@@ -16994,6 +16996,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             const same = tg && tg.kind === cd.kind && (tg.id === cd.rec.id || (tg.ids && tg.ids.indexOf(cd.rec.id) >= 0));
             row.st = same ? 'same' : tg ? 'other' : 'none';
             row.why = same ? (tg.manual ? '직접 연결됨' : '이미 붙음') : tg ? `${kname[tg.kind]} 「${tg.name}」` : '';
+            // (b20261010-3) 「제외함」 = 연결표에 0(딱지 없음)으로 적힌 자리 — 할 일에서 빠짐
+            if (verseLinks[`${r.b}-${r.c}-${r.v}`] && verseLinks[`${r.b}-${r.c}-${r.v}`][`${w}#${nth}`] === '0') { row.st = 'excl'; row.why = '제외함'; }
             row.on = row.st === 'none';
             rows.push(row);
           });
@@ -17030,10 +17034,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           draw();
         }, 20);
       };
-      const stTxt = { same: '<span style="color:#059669">✓ 같은 항목</span>', other: '<span style="color:#b45309">다른 딱지</span>', none: '<span style="color:#2563eb">딱지 없음</span>', skip: '<span style="color:#94a3b8">건너뜀</span>' };
+      const stTxt = { same: '<span style="color:#059669">✓ 같은 항목</span>', other: '<span style="color:#b45309">다른 딱지</span>', none: '<span style="color:#2563eb">딱지 없음</span>', skip: '<span style="color:#94a3b8">건너뜀</span>', excl: '<span style="color:#64748b">🚫 제외함</span>' };
       const draw = () => {
-        const cnt = { same: 0, other: 0, none: 0, skip: 0 }; rows.forEach(r => cnt[r.st]++);
-        box.querySelector('#ul-sum').innerHTML = `✓ 같은 항목 ${cnt.same} · <span style="color:#b45309">다른 딱지 ${cnt.other}</span> · <span style="color:#2563eb">딱지 없음 ${cnt.none}</span>${cnt.skip ? ` · 건너뜀 ${cnt.skip}` : ''}`;
+        const cnt = { same: 0, other: 0, none: 0, skip: 0, excl: 0 }; rows.forEach(r => cnt[r.st]++);
+        box.querySelector('#ul-sum').innerHTML = `✓ 같은 항목 ${cnt.same} · <span style="color:#b45309">다른 딱지 ${cnt.other}</span> · <span style="color:#2563eb">딱지 없음 ${cnt.none}</span>${cnt.excl ? ` · 제외함 ${cnt.excl}` : ''}${cnt.skip ? ` · 건너뜀 ${cnt.skip}` : ''}`;
         const vis = isVis;
         const shown = rows.filter(vis).length;
         list.innerHTML = (shown ? '' : '<div style="padding:14px;color:#94a3b8">이 보기에 해당하는 줄이 없습니다</div>') + rows.map((r, i) => {
@@ -17065,7 +17069,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       function isVis(r) {
         const view = box.querySelector('#ul-view').value, man = r.st === 'same' && /직접/.test(r.why);
         if (view === 'all') return true;
-        if (view === 'sus') return !!r.sus;
+        if (view === 'sus') return !!r.sus && r.st !== 'excl';
         if (view === 'todo') return r.st === 'none' || man;
         if (view === 'manual') return man;
         return r.st === view;
@@ -17075,8 +17079,19 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       box.querySelector('#ul-sel-none').onclick = () => { setView('todo'); rows.forEach(r => r.on = r.st === 'none'); draw(); };
       box.querySelector('#ul-sel-all').onclick = () => { setView('all'); rows.forEach(r => r.on = r.st === 'none' || r.st === 'other'); draw(); };
       box.querySelector('#ul-sel-clear').onclick = () => { rows.forEach(r => r.on = false); draw(); };
-      box.querySelector('#ul-sel-sus').onclick = () => { setView('sus'); rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
+      box.querySelector('#ul-sel-sus').onclick = () => { setView('sus'); rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && r.st !== 'excl' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
       box.querySelector('#ul-word').oninput = (ev) => { const q = ev.target.value.trim(); if (q) setView('all'); rows.forEach(r => r.on = !!q && !!r.word && r.word.indexOf(q) >= 0 && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
+      box.querySelector('#ul-excl').onclick = async () => {
+        const pick = rows.filter(r => r.on && r.word && isVis(r) && r.st !== 'excl' && r.st !== 'skip');
+        if (!pick.length) { showToast('고른 곳이 없습니다', 'info'); return; }
+        const hasTag = pick.filter(r => r.st === 'same' || r.st === 'other').length;
+        if (hasTag && !confirm(`고른 ${pick.length}곳 가운데 ${hasTag}곳은 지금 딱지가 붙어 있습니다. 제외하면 그 딱지도 빠집니다. 계속할까요?`)) return;
+        pick.forEach(r => { const key = `${r.b}-${r.c}-${r.v}`; (verseLinks[key] = verseLinks[key] || {})[`${r.word}#${r.nth}`] = '0'; });
+        await saveVerseLinks();
+        try { const sc = document.getElementById('bible-content'); const top = sc ? sc.scrollTop : 0; loadBibleText(); if (sc) setTimeout(() => { sc.scrollTop = top; }, 0); } catch (e) {}
+        showToast(`${pick.length}곳 제외 (다시 할 일에 안 나옴 · 「🚫 제외한 곳만」 보기에서 「고른 곳 연결 풀기」로 되돌림)`, 'success');
+        build();
+      };
       box.querySelector('#ul-unlink').onclick = async () => {
         const pick = rows.filter(r => r.on && r.word && isVis(r));
         let n = 0;
@@ -17464,7 +17479,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
