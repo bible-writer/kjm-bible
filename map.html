@@ -6780,6 +6780,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     async function loadRawDictionaries() {
       // 등록된 사전을 하나씩 같은 방식으로 불러온다 (사전을 늘려도 이 함수는 그대로)
       for (const s of RAWDICT_SOURCES) {
+        // (b20261009-8 kjm 「샤프 완전히 빼기」) 가린 사전은 받지도 않는다 — 앱이 4MB 덜 받음, GitHub 에서 파일을 내려도 됨.
+        //  ?schaff=1 로 열면 예전처럼 받아서 보인다.
+        if (!rawDictVisible(s)) continue;
         try {
           // 1) 브라우저에 저장해둔 것 먼저 (오프라인에서도 바로 보이도록)
           const saved = await getLocalItem(s.storeKey);
@@ -16808,7 +16811,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-7`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261009-8`;
         document.title = `바이블 맵 스터디`;
       }
     }
