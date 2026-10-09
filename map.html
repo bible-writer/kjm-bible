@@ -1846,6 +1846,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <button id="btn-coord-overrides" onclick="openCoordOverrideManager()">📍 좌표 보정 이력</button>
             <button id="btn-name-overrides" onclick="openNameOverrideManager()">✏️ 지명 수정 이력</button>
             <button onclick="openVlinkManager()">🔗 본문 연결표 보기</button>
+            <button class="admin-only" onclick="pickVerseLinksMerge()">🔗 본문 연결표 파일 합치기</button>
             <button id="menu-open-add-link">🔗 수동 링크 추가 (옛 지명 낱말)</button>
             <button id="menu-open-blacklist">🚫 제외 단어 관리</button>
             <button class="admin-only" onclick="openStrongOverrideManager()">🔤 스트롱 코드 보정 이력</button>
@@ -4351,7 +4352,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!html || names.length === 0) return html;
         const vTable = TERM_VERSE_TABLE[`${bookId}-${chapter}-${vNum}`] || null;
         const tokSeen = {};
-        const particlePattern = '(들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
+        const particlePattern = '(에게서부터|에서부터|으로부터는|들이여|들보다|이라도|라도|이시여|이여|보다는|보다도|보다|에서나|으로나|에나|이나|에게로|에게는|에게도|처럼|같이|조차|마저|와는|과는|와도|과도|에서의|으로의|들에게서|들에게|들에서|들에는|들에도|들으로|들과는|들과|들을|들이|들의|들은|들는|들도|들만|들에|들|에서는|으로부터|에게서|로부터|에서도|으로도|에서|에게|으로|이라는|이라고|이란|이라|라고|까지|부터|에도|에만|에는|에|은|는|이|가|을|를|와|과|의|로|서|로의|라|란|도|만|야|여|아)?';
         const sortedNames = names.sort((a, b) => b.length - a.length);
         const escapedNames = sortedNames.map(n => n.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&')).join('|');
         if (!escapedNames) return html;
@@ -16788,6 +16789,31 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       await exportBoth(db, 'personDatabase', null, `인명 ${personDatabase.length}명`);
       await setLocalItem('saved_person_database_version', newV);
     }
+    // (b20261010-2) 연결표 파일 합치기 — Claude 가 만든 판정 연결표(verseLinks.json, 잠금본·평문 모두)를 이 기기 연결표에 더함.
+    //  이 기기에 이미 적힌 자리는 그대로 두고(kjm 이 직접 고친 것이 이김), 없는 자리만 보탠다.
+    function pickVerseLinksMerge() {
+      if (!adminGuard()) return;
+      const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json,application/json';
+      inp.onchange = async () => {
+        const f = inp.files && inp.files[0]; if (!f) return;
+        try {
+          let obj = JSON.parse(await f.text());
+          obj = await EncryptedDB.openQuiet(obj);
+          const links = obj && obj.links;
+          if (!links || typeof links !== 'object') { showToast('본문 연결표 파일 꼴이 아닙니다', 'warn'); return; }
+          let add = 0, same = 0, keep = 0;
+          Object.keys(links).forEach(key => Object.keys(links[key] || {}).forEach(tok => {
+            const cur = verseLinks[key] && verseLinks[key][tok], nv = links[key][tok];
+            if (cur == null) { (verseLinks[key] = verseLinks[key] || {})[tok] = nv; add++; }
+            else if (cur === nv) same++; else keep++;
+          }));
+          await saveVerseLinks();
+          try { const sc = document.getElementById('bible-content'); const top = sc ? sc.scrollTop : 0; loadBibleText(); if (sc) setTimeout(() => { sc.scrollTop = top; }, 0); } catch (e) {}
+          showToast(`본문 연결표 합침 (${obj.version || '?'}): 새로 ${add} · 같음 ${same} · 이 기기 것 유지 ${keep}`, 'success');
+        } catch (e) { showToast('연결표 파일을 읽지 못했습니다: ' + e.message, 'warn'); }
+      };
+      inp.click();
+    }
     // 연결표 목록 (편집 이력)
     function openVlinkManager() {
       const rows = [];
@@ -17438,7 +17464,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
