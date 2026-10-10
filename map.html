@@ -17051,7 +17051,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           <select id="ul-who" style="padding:3px 6px;border:1px solid #ddd6fe;border-radius:6px;background:#faf5ff;color:#5b21b6;max-width:100%"></select>
         </div>
         <div style="padding:0 14px 6px;display:flex;gap:6px;flex-wrap:wrap">
-          <button id="ul-sel-none" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">딱지 없는 곳만 고르기</button>
+          <button id="ul-sel-none" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">딱지 없고 이름 맞는 곳 고르기</button>
           <button id="ul-sel-all" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">다른 딱지까지 모두</button>
           <button id="ul-sel-sus" style="padding:3px 9px;border:1px solid #fca5a5;border-radius:12px;background:#fff;cursor:pointer;color:#b91c1c" title="낱말이 항목 이름과 다르고 한 번만 나오는 곳 — 어절·원어 짝이 어긋났을 수 있음">⚠ 의심만 고르기</button>
           <button id="ul-sel-clear" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">체크 모두 해제</button>
@@ -17161,6 +17161,20 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             }
             if (r.sus && r.st === 'none') r.on = false;
           });
+          // (b20261010-12 kjm 「뭔가 이상하다」 H8334 섬기다 → 섬기는 자) 어절이 항목 이름으로 시작해야 처음부터 체크
+          //  (동사·「그의」「때에」처럼 이름과 다른 어절은 보여 주되 체크 안 함 — 사람이 보고 고름)
+          try {
+            const rec = cd.rec, kind = cd.kind;
+            const raw = kind === 'P' ? [rec.name_ko, ...(rec.aliases_ko || [])] : kind === 'L' ? [rec.name] : [rec.term_ko, ...(Array.isArray(rec.alt_ko) ? rec.alt_ko : [])];
+            const firsts = [];
+            raw.forEach(n => { n = String(n || ''); const m = n.match(/^([^()（]+)[\(（]([^)）]+)[\)）]/);
+              (m ? [m[1], m[2]] : [n.replace(/[\(（].*$/, '')]).forEach(x => { const f = x.replace(/\s+[A-Z0-9]+$/, '').trim().split(/\s+/)[0]; if (f) firsts.push(f); }); });
+            rows.forEach(r => {
+              const ej = String(r.ej || '').replace(/^[^가-힣A-Za-z0-9]+/, '');
+              r.nameHit = firsts.some(f => ej.startsWith(f));
+              if (!r.nameHit && r.st === 'none') r.on = false;
+            });
+          } catch (e) {}
           draw();
         }, 20);
       };
@@ -17194,7 +17208,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             ${whoList.length ? (() => { const ps = (r.who || []).map(id => whoList.find(p => p.id === id)).filter(Boolean);
               const t = ps.length ? ps.map(p => String(p.ustrong || '').replace(/^[HG]0*\d+/, '') || '?').join('·') : '?';
               return `<span title="${escHtml(ps.map(p => (p.ustrong || '') + ' ' + (p.name_ko || '') + ' ' + (p.briefest_ko || '')).join(' / ') || '구절 목록으로 못 가림')}" style="flex:none;min-width:18px;text-align:center;font-size:0.76em;font-weight:700;padding:0 4px;border-radius:8px;background:${ps.length ? '#f3e8ff' : '#f1f5f9'};color:${ps.length ? '#6b21a8' : '#94a3b8'}${r.whoBy === 'step' ? ';border:1px solid #c084fc' : ''}">${escHtml(t)}</span>`; })() : ''}
-            <span style="flex:1;min-width:0">${ejHtml}${r.gloss ? ` <span style="color:#94a3b8;font-size:0.8em" title="원전분해(원문 대역)에서 이 번호의 번역어">원문: ${escHtml(r.gloss)}</span>` : ''}</span></span></div>${peek}`;
+            <span style="flex:1;min-width:0${r.nameHit === false ? ';opacity:.6' : ''}" title="${r.nameHit === false ? '어절이 항목 이름으로 시작하지 않음 — 처음에 체크 안 함' : ''}">${r.nameHit === false ? '<span style="font-size:0.75em;color:#94a3b8;margin-right:3px">≠이름</span>' : ''}${ejHtml}${r.gloss ? ` <span style="color:#94a3b8;font-size:0.8em" title="원전분해(원문 대역)에서 이 번호의 번역어">원문: ${escHtml(r.gloss)}</span>` : ''}</span></span></div>${peek}`;
         }).join('');
         list.querySelectorAll('.ul-peek').forEach(el => el.onclick = () => { const r = rows[+el.dataset.p]; r.peek = !r.peek; const st = list.scrollTop; draw(); list.scrollTop = st; });
         list.querySelectorAll('button[data-go]').forEach(bt => bt.onclick = (ev) => { ev.stopPropagation(); const r = rows[+bt.dataset.go]; try { navigateToBibleVerse(r.b, r.c, r.v); } catch (e) {} });
@@ -17213,7 +17227,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       }
       const setView = v => { box.querySelector('#ul-view').value = v; };
       const count = () => { box.querySelector('#ul-count').textContent = `고른 곳 ${rows.filter(r => r.on && isVis(r)).length}`; };
-      box.querySelector('#ul-sel-none').onclick = () => { setView('todo'); rows.forEach(r => r.on = r.st === 'none'); draw(); };
+      box.querySelector('#ul-sel-none').onclick = () => { setView('todo'); rows.forEach(r => r.on = r.st === 'none' && r.nameHit !== false && whoOk(r)); draw(); };
       box.querySelector('#ul-sel-all').onclick = () => { setView('all'); rows.forEach(r => r.on = r.st === 'none' || r.st === 'other'); draw(); };
       box.querySelector('#ul-sel-clear').onclick = () => { rows.forEach(r => r.on = false); draw(); };
       box.querySelector('#ul-sel-sus').onclick = () => { setView('sus'); rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && r.st !== 'excl' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
@@ -17622,7 +17636,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-11`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-12`;
         document.title = `바이블 맵 스터디`;
       }
     }
