@@ -17009,7 +17009,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         document.body.appendChild(box);
       }
       const kname = { T: '📚 용어', P: '👤 인명', L: '📍 지명' };
-      const optHtml = cands.map((x, i) => `<option value="${i}">${kname[x.kind]} 「${escHtml(vlinkLabel(x.kind, x.rec))}」 #${x.rec.id}${x.first ? ' · 대표 번호' : ''}</option>`).join('');
+      const optHtml = cands.map((x, i) => `<option value="${i}">${kname[x.kind]} 「${escHtml(vlinkLabel(x.kind, x.rec))}」 #${x.rec.id}${x.kind === 'P' && (x.rec.ustrong || x.rec.briefest_ko) ? ' · ' + escHtml([x.rec.ustrong, x.rec.briefest_ko || x.rec.description_ko].filter(Boolean).join(' ')) : ''}${x.first ? ' · 대표 번호' : ''}</option>`).join('');
       box.innerHTML = `
         <div id="ul-drag" style="padding:12px 14px 8px;border-bottom:1px solid #e2e8f0;cursor:move;user-select:none;display:flex;justify-content:space-between;align-items:center">
           <div><b>🔗 용례로 딱지 붙이기</b> <span style="color:#b45309;font-weight:700">${code}</span> <span style="color:#64748b">개역개정 어절 ${all.length}곳</span></div>
@@ -17033,6 +17033,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           </select>
           <span id="ul-sum"></span>
         </div>
+        <div id="ul-who-row" style="padding:0 14px 6px;display:none;gap:8px;flex-wrap:wrap;align-items:center;font-size:0.88em;color:#475569">
+          <span title="같은 번호를 쓰는 동명이인 — 인명DB 구절로 누구인지 가림 (STEP 고유번호 끝글자)">사람</span>
+          <select id="ul-who" style="padding:3px 6px;border:1px solid #ddd6fe;border-radius:6px;background:#faf5ff;color:#5b21b6;max-width:100%"></select>
+        </div>
         <div style="padding:0 14px 6px;display:flex;gap:6px;flex-wrap:wrap">
           <button id="ul-sel-none" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">딱지 없는 곳만 고르기</button>
           <button id="ul-sel-all" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">다른 딱지까지 모두</button>
@@ -17051,6 +17055,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       try { makeDraggable(box, '#ul-drag'); } catch (e) {}
       const sel = box.querySelector('#ul-target'), list = box.querySelector('#ul-list');
       let rows = [];
+      let whoList = [], whoSel = '';
+      const whoOk = r => !whoList.length || !whoSel || (whoSel === '?' ? !(r.who && r.who.length) : !!(r.who && r.who.some(id => String(id) === whoSel)));
       const build = () => {
         const cd = cands[+sel.value]; if (!cd) { list.innerHTML = ''; return; }
         list.innerHTML = '<div style="padding:14px;color:#94a3b8">어절을 살피는 중…</div>';
@@ -17081,6 +17087,28 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             row.on = row.st === 'none';
             rows.push(row);
           });
+          // (b20261010-9 kjm 「g,h,i 용례 선택이 안 됨」) 같은 번호 동명이인 — 인명DB 구절로 줄마다 누구인지 적고 사람별로 거름
+          try {
+            const nbU = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
+            const cb = nbU(code);
+            const ppl = (personDatabase || []).filter(p => !p.pending_review && nbU(p.ustrong) === cb && Array.isArray(p.verses) && p.verses.length);
+            const own = {};
+            ppl.forEach(p => p.verses.forEach(v => { const k = v.book + '-' + v.chapter + '-' + v.verse; (own[k] = own[k] || []).push(p); }));
+            rows.forEach(r => { r.who = (own[`${r.b}-${r.c}-${r.v}`] || []).map(p => p.id); });
+            whoList = ppl.length >= 2 ? ppl : [];
+            const wsel = box.querySelector('#ul-who'), wrow = box.querySelector('#ul-who-row');
+            if (whoList.length) {
+              const cntOf = id => rows.filter(r => r.who && r.who.indexOf(id) >= 0).length;
+              const noneN = rows.filter(r => !r.who || !r.who.length).length;
+              wsel.innerHTML = `<option value="">모든 사람 (${rows.length})</option>` + whoList.map(p =>
+                `<option value="${escHtml(String(p.id))}">${escHtml(p.ustrong || '')} ${escHtml(p.name_ko || '')} — ${escHtml(p.briefest_ko || p.description_ko || '')} (${cntOf(p.id)})</option>`).join('')
+                + `<option value="?">구절 목록으로 못 가린 곳 (${noneN})</option>`;
+              const dflt = (cd.kind === 'P' && whoList.some(p => p.id === cd.rec.id)) ? String(cd.rec.id) : '';
+              wsel.value = dflt; whoSel = dflt;
+              wrow.style.display = 'flex';
+              rows.forEach(r => { if (r.on && !whoOk(r)) r.on = false; });
+            } else { wrow.style.display = 'none'; whoSel = ''; }
+          } catch (e) { whoList = []; whoSel = ''; }
           // (b-12) 의심 = 어절이 원전분해(STEP 원문 대역)의 이 번호 번역어와 안 맞음 — 계신·독수리들보다·위에 따위(어절·원어 짝 어긋남)
           //  원전분해가 없으면: 낱말이 항목 이름을 품지 않고 한 번만 나오는 것
           // (b20261010-5) 이름 열쇠 = 표제어 앞 두 글자(정탐꾼→정탐) — 「정탐하게 하고」의 「하고」 같은 짝 어긋남을 잡으려고
@@ -17118,7 +17146,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       };
       const stTxt = { same: '<span style="color:#059669">✓ 같은 항목</span>', other: '<span style="color:#b45309">다른 딱지</span>', none: '<span style="color:#2563eb">딱지 없음</span>', skip: '<span style="color:#94a3b8">건너뜀</span>', excl: '<span style="color:#64748b">🚫 제외함</span>' };
       const draw = () => {
-        const cnt = { same: 0, other: 0, none: 0, skip: 0, excl: 0 }; rows.forEach(r => cnt[r.st]++);
+        const cnt = { same: 0, other: 0, none: 0, skip: 0, excl: 0 }; rows.forEach(r => { if (whoOk(r)) cnt[r.st]++; });
         box.querySelector('#ul-sum').innerHTML = `✓ 같은 항목 ${cnt.same} · <span style="color:#b45309">다른 딱지 ${cnt.other}</span> · <span style="color:#2563eb">딱지 없음 ${cnt.none}</span>${cnt.excl ? ` · 제외함 ${cnt.excl}` : ''}${cnt.skip ? ` · 건너뜀 ${cnt.skip}` : ''}`;
         const vis = isVis;
         const shown = rows.filter(vis).length;
@@ -17143,6 +17171,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
               const C = { same: ['#ecfdf5', '#047857', /직접/.test(r.why) ? '✓ 직접' : '✓ 이미'], other: ['#fff7ed', '#c2410c', '◆ ' + (r.why || '다른').replace(/^.*「|」.*$/g, '')],
                           none: ['#eff6ff', '#1d4ed8', '○ 없음'], excl: ['#f1f5f9', '#475569', '🚫 제외'], skip: ['#f8fafc', '#94a3b8', '건너뜀'] }[r.st] || ['#fff', '#333', r.st];
               return `<span title="${escHtml(r.why || '')}" style="flex:none;width:86px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:0.78em;font-weight:700;padding:1px 6px;border-radius:9px;background:${C[0]};color:${C[1]}">${r.sus ? '⚠ ' : ''}${escHtml(C[2])}</span>`; })()}
+            ${whoList.length ? (() => { const ps = (r.who || []).map(id => whoList.find(p => p.id === id)).filter(Boolean);
+              const t = ps.length ? ps.map(p => String(p.ustrong || '').replace(/^[HG]0*\d+/, '') || '?').join('·') : '?';
+              return `<span title="${escHtml(ps.map(p => (p.ustrong || '') + ' ' + (p.name_ko || '') + ' ' + (p.briefest_ko || '')).join(' / ') || '구절 목록으로 못 가림')}" style="flex:none;min-width:18px;text-align:center;font-size:0.76em;font-weight:700;padding:0 4px;border-radius:8px;background:${ps.length ? '#f3e8ff' : '#f1f5f9'};color:${ps.length ? '#6b21a8' : '#94a3b8'}">${escHtml(t)}</span>`; })() : ''}
             <span style="flex:1;min-width:0">${ejHtml}${r.gloss ? ` <span style="color:#94a3b8;font-size:0.8em" title="원전분해(원문 대역)에서 이 번호의 번역어">원문: ${escHtml(r.gloss)}</span>` : ''}</span></span></div>${peek}`;
         }).join('');
         list.querySelectorAll('.ul-peek').forEach(el => el.onclick = () => { const r = rows[+el.dataset.p]; r.peek = !r.peek; const st = list.scrollTop; draw(); list.scrollTop = st; });
@@ -17153,6 +17184,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       // 보이는 줄만 셈·붙이기·풀기 (가려진 줄의 체크는 쓰지 않음)
       function isVis(r) {
         const view = box.querySelector('#ul-view').value, man = r.st === 'same' && /직접/.test(r.why);
+        if (!whoOk(r)) return false;
         if (view === 'all') return true;
         if (view === 'sus') return !!r.sus && r.st !== 'excl';
         if (view === 'todo') return r.st === 'none' || man;
@@ -17189,6 +17221,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         build();
       };
       sel.onchange = build;
+      box.querySelector('#ul-who').onchange = (ev) => {
+        whoSel = ev.target.value;
+        // 사람을 고르면 붙일 항목도 그 사람으로 (딱지가 엉뚱한 사울에게 가지 않게)
+        const ci = whoSel && whoSel !== '?' ? cands.findIndex(x => x.kind === 'P' && String(x.rec.id) === whoSel) : -1;
+        if (ci >= 0 && +sel.value !== ci) { sel.value = String(ci); build(); setTimeout(() => { const w = box.querySelector('#ul-who'); if (w.value !== whoSel) { w.value = whoSel; } }, 60); return; }
+        rows.forEach(r => { if (r.on && !whoOk(r)) r.on = false; }); draw(); };
       box.querySelector('#ul-view').onchange = draw;
       box.querySelector('#ul-save').onclick = async () => {
         const cd = cands[+sel.value]; if (!cd) return;
@@ -17564,7 +17602,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
