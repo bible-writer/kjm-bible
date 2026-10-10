@@ -16929,7 +16929,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const out = [];
       [['T', termDatabase], ['P', personDatabase], ['L', placeDatabase]].forEach(([k, db]) => (db || []).forEach(r => {
         const cs = _ulCodesOf(k, r); const i = cs.indexOf(code);
-        if (i >= 0) out.push({ kind: k, rec: r, first: i === 0 });
+        if (i < 0) return;
+        // (b20261010-7 용어 1.12.23) 대표가 아닌 항목은 대표로 바꿔 한 번만 — 같은 낱말 사전 항목이 줄줄이 나오지 않게
+        const rec = (k === 'T' && typeof termRep === 'function') ? (termRep(r) || r) : r;
+        const had = out.find(x => x.kind === k && x.rec === rec);
+        if (had) { if (i === 0) had.first = true; return; }
+        out.push({ kind: k, rec: rec, first: i === 0 });
       }));
       out.sort((a, b) => (b.first - a.first) || ('TPL'.indexOf(a.kind) - 'TPL'.indexOf(b.kind)));
       return out;
@@ -16938,7 +16943,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     function _ulWord(ej, kind, rec) {
       const w = String(ej).replace(/^[^가-힣A-Za-z0-9]+|[^가-힣A-Za-z0-9]+$/g, '');
       if (!w) return '';
-      const names = kind === 'P' ? [rec.name_ko, ...(rec.aliases_ko || [])] : kind === 'L' ? [rec.name] : [rec.term_ko];
+      const names = kind === 'P' ? [rec.name_ko, ...(rec.aliases_ko || [])] : kind === 'L' ? [rec.name] : [rec.term_ko, ...(Array.isArray(rec.alt_ko) ? rec.alt_ko : [])];   // (b-7) 다른 이름(천하 → 하늘)도
       const mains = names.map(n => String(n || '').split(/[\(\[（]/)[0].replace(/\s+[A-Z0-9]+$/, '').trim()).filter(Boolean).sort((a, b) => b.length - a.length);
       for (const m of mains) if (w.startsWith(m)) return m;   // (b20261010-5) 이름으로 시작하면 이름만 (정탐꾼이니라→정탐꾼)
       for (let n = 1; n < w.length - 1; n++) {   // 뒤에서 조사 떼기 — 줄기가 두 글자 이상일 때만
@@ -17067,7 +17072,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             let nth = 0; idx = -1; while ((idx = text.indexOf(w, idx + 1)) >= 0 && idx <= s) nth++;
             row.word = w; row.nth = nth;
             const tg = _ulTagAt(r.b, r.c, r.v, text, s, e);
-            const same = tg && tg.kind === cd.kind && (tg.id === cd.rec.id || (tg.ids && tg.ids.indexOf(cd.rec.id) >= 0));
+            const tgRep = (tg && tg.kind === 'T' && tg.id != null && typeof termRep === 'function' && termById[tg.id]) ? termRep(termById[tg.id]).id : (tg && tg.id);
+            const same = tg && tg.kind === cd.kind && (tgRep === cd.rec.id || (tg.ids && tg.ids.indexOf(cd.rec.id) >= 0));
             row.st = same ? 'same' : tg ? 'other' : 'none';
             row.why = same ? (tg.manual ? '직접 연결됨' : '이미 붙음') : tg ? `${kname[tg.kind]} 「${tg.name}」` : '';
             // (b20261010-3) 「제외함」 = 연결표에 0(딱지 없음)으로 적힌 자리 — 할 일에서 빠짐
@@ -17558,7 +17564,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-6`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-7`;
         document.title = `바이블 맵 스터디`;
       }
     }
