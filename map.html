@@ -17622,7 +17622,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-10`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-11`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -18906,7 +18906,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
             if (byCode || bare(gloss) === kwBare) c.exact++;
             c.words[gloss] = (c.words[gloss] || 0) + 1;
             if (!c.root && root) { c.root = root; c.xlit = xlit || ''; }
-            if (out.hits.length < (maxVerses || 200)) {
+            if (out.hits.length < (byCode ? 5000 : (maxVerses || 200))) {   // (b20261010-11) 번호로 찾을 때는 용례를 다 모음(사람별 묶음이 300에서 잘리지 않게)
               out.hits.push({ bookId: Number(row[0]), chapter: Number(row[1]), verse: Number(row[2]),
                               code: code, gloss: gloss, morph: morph || '' });
             }
