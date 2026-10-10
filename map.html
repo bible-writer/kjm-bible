@@ -17564,7 +17564,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-7`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-8`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -18997,8 +18997,61 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           drawCodes(partList, '\ub2e4\ub978 \ub0b1\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
                     '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34 \u2014 \ub204\ub974\uba74 \ud3bc\uce68', true);
         }
+        // (b20261010-8 kjm 「H7586 이니셜로 구별 — 용례에 3명이 같이 나옴」) 같은 번호를 쓰는 동명이인이 있으면
+        //  인명DB 구절로 누구인지 가려 사람별(STEP 고유번호 끝글자 H7586G·H·I·J)로 묶어 보인다.
+        const _nbU = function(x) { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
+        let personGroups = null;
+        try {
+          if (data.hits.length && typeof personDatabase !== 'undefined' && personDatabase.length) {
+            const bases = {}; data.hits.forEach(function(r) { String(r.code || '').split(',').forEach(function(c) { const b = _nbU(c); if (b) bases[b] = 1; }); });
+            const ppl = personDatabase.filter(function(p) { return !p.pending_review && bases[_nbU(p.ustrong)] && Array.isArray(p.verses) && p.verses.length; });
+            if (ppl.length >= 2) {
+              const own = {};
+              ppl.forEach(function(p) { p.verses.forEach(function(v) { const k = v.book + '-' + v.chapter + '-' + v.verse; (own[k] = own[k] || []).push(p); }); });
+              const g = new Map(); const none = [];
+              data.hits.forEach(function(r) {
+                const hc = String(r.code || '').split(',').map(_nbU);
+                const who = (own[r.bookId + '-' + r.chapter + '-' + r.verse] || []).filter(function(p) { return hc.indexOf(_nbU(p.ustrong)) >= 0; });
+                if (!who.length) { none.push(r); return; }
+                who.forEach(function(p) { if (!g.has(p)) g.set(p, []); g.get(p).push(r); });
+              });
+              if (g.size >= 2) personGroups = { g: g, none: none };
+            }
+          }
+        } catch (e) { personGroups = null; }
+        const drawHit = function(r) {
+          const bo = BIBLE_BOOKS.find(function(b) { return b.id === r.bookId; });
+          const ref = (bo ? bo.abbr : '?') + r.chapter + ':' + r.verse;
+          h += '<div class="bsr-item" onclick="closeBibleSearch();navigateToBibleVerse(' + r.bookId + ',' + r.chapter + ',' + r.verse + ');">' +
+               '<span class="bsr-ref">' + escHtml(ref) + '</span>' +
+               '<span class="bsr-text"><mark>' + escHtml(r.gloss) + '</mark> ' +
+               '<span style="color:#94a3b8">' + escHtml(r.code) + ' \u00b7 ' + escHtml(r.morph) + '</span></span></div>';
+        };
+        if (personGroups) {
+          const arr = Array.from(personGroups.g.entries()).sort(function(a, b) { return b[1].length - a[1].length; });
+          h += '<div class="bsr-summary" style="margin-top:10px">\ud83d\udcd6 \uc6a9\ub840 \u2014 \uac19\uc740 \ubc88\ud638 \uc0ac\ub78c ' + arr.length + '\uba85 (\uc778\uba85 \uad6c\uc808\ub85c \uad6c\ubcc4)</div>';
+          h += '<div style="padding:6px 12px;display:flex;flex-wrap:wrap;gap:6px">';
+          arr.forEach(function(e, i) {
+            const p = e[0];
+            h += '<a href="#ug-' + i + '" onclick="event.preventDefault();var t=document.getElementById(\'ug-' + i + '\');if(t)t.scrollIntoView({block:\'start\'});" style="display:inline-flex;gap:5px;align-items:center;padding:3px 9px;border:1px solid #ddd6fe;border-radius:14px;background:#faf5ff;font-size:0.82em;text-decoration:none;color:#5b21b6">' +
+                 '<b>' + escHtml(p.ustrong || '') + '</b> ' + escHtml(p.name_ko || '') + ' <span style="color:#7c3aed">' + escHtml(p.briefest_ko || p.description_ko || '') + '</span> <span style="color:#94a3b8">' + e[1].length + '\uc808</span></a>';
+          });
+          h += '</div>';
+          arr.forEach(function(e, i) {
+            const p = e[0], list = e[1];
+            h += '<div id="ug-' + i + '" class="bsr-summary" style="margin-top:8px;color:#5b21b6;cursor:pointer" onclick="PersonEngine.showPopup(personDatabase.find(function(x){return x.id===' + JSON.stringify(p.id) + '}), \'' + escHtml(String(p.name_ko || '')).replace(/'/g, "\\'") + '\')">\ud83d\udc64 ' +
+                 escHtml(p.ustrong || '') + ' ' + escHtml(p.name_ko || '') + ' \u2014 ' + escHtml(p.briefest_ko || p.description_ko || '') + ' <span style="font-weight:400;color:#94a3b8">' + list.length + '\uc808' + (list.length > 60 ? ' (\uc55e 60\uc808)' : '') + '</span></div><div id="bible-search-results" style="max-height:none">';
+            list.slice(0, 60).forEach(drawHit);
+            h += '</div>';
+          });
+          if (personGroups.none.length) {
+            h += '<div class="bsr-summary" style="margin-top:8px;color:#64748b">\u2754 \uad6c\uc808 \ubaa9\ub85d\uc73c\ub85c \ubabb \uac00\ub9b0 \uacf3 ' + personGroups.none.length + '\uc808</div><div id="bible-search-results" style="max-height:none">';
+            personGroups.none.slice(0, 30).forEach(drawHit);
+            h += '</div>';
+          }
+        }
         // 용례 (앞에서부터 최대 60절)
-        if (data.hits.length) {
+        if (data.hits.length && !personGroups) {
           h += '<div class="bsr-summary" style="margin-top:10px">\ud83d\udcd6 \uc6a9\ub840</div><div id="bible-search-results">';
           const okCodes = {};
           exactList.forEach(function(c) { okCodes[c.code] = 1; });
