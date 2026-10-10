@@ -14832,6 +14832,92 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
        두 본문은 띄어쓰기가 달라 글자만 맞춘다(90%는 글자열이 같고, 나머지는 공통 부분열로 맞춤).
        본문·원어 자료를 앱에 새로 싣지 않는다 — 사용자가 올린 sdb 를 그 자리에서 읽는다.
        ══════════════════════════════════════════════════════════════ */
+    /* (b20261010-14 kjm 올어바웃 원어 화면처럼) 개역개정S(스트롱 본문)로 원어 번호 카드
+     *  번역 칩(그 번호 꼬리표 앞 글자 덩이) · 번역 분포 막대 · 같은 한글로 옮긴 다른 원어 · 책별 칩 · 용례(그 덩이만 칠함) */
+    function sdbCardFill(code, box) {
+      if (!box) return;
+      const src = (typeof WordOrig !== 'undefined') ? WordOrig.source() : null;
+      if (!src) { box.innerHTML = '<div style="padding:8px 12px;font-size:0.82em;color:#94a3b8">「개역개정S」(스트롱 본문)를 비교 번역으로 등록하면 번역어별 용례 칩이 보입니다.</div>'; return; }
+      const sc = src.schema, num = String(code).replace(/^([HG])0*/, '$1');
+      const tagRe = /((?:<W[HG]\d+[a-z]?>)+)/g;
+      const norm = t => { const m = String(t).match(/<W([HG])0*(\d+)[a-z]?>/i); return m ? m[1].toUpperCase() + m[2] : ''; };
+      const plain = t => String(t).replace(/<W[HG]\d+[a-z]?>/gi, '').replace(/<\/?[A-Za-z][^>]*>/g, '');
+      // 절 → [{s,e,codes}] (plain 글자 자리)
+      const spans = t => {
+        const out = []; let last = 0, pos = 0, m; tagRe.lastIndex = 0; let buf = '';
+        const parts = String(t).split(tagRe);
+        let plainPos = 0, segStart = 0;
+        for (let i = 0; i < parts.length; i++) {
+          if (i % 2 === 0) { const p = plain(parts[i]); plainPos += p.length; continue; }
+          const codes = (parts[i].match(/<W[HG]\d+[a-z]?>/gi) || []).map(norm);
+          out.push({ s: segStart, e: plainPos, codes });
+          segStart = plainPos;
+        }
+        return out;
+      };
+      let rows = [];
+      try {
+        const r = src.db.exec(`SELECT "${sc.book}","${sc.chapter}","${sc.verse}","${sc.content}" FROM "${sc.table}" WHERE "${sc.content}" LIKE '%<W${num}>%' OR "${sc.content}" LIKE '%<W${num}a>%' OR "${sc.content}" LIKE '%<W${num}b>%' ORDER BY "${sc.book}","${sc.chapter}",CAST("${sc.verse}" AS INTEGER)`);
+        rows = r && r[0] ? r[0].values : [];
+      } catch (e) { rows = []; }
+      if (!rows.length) { box.innerHTML = ''; return; }
+      const hits = [];   // {b,c,v,text,s,e,word}
+      rows.forEach(([b, c, v, t]) => {
+        const text = plain(t);
+        spans(t).forEach(sp => {
+          if (sp.codes.indexOf(num) < 0) return;
+          let s = sp.s, e = sp.e; while (s < e && /\s/.test(text[s])) s++;
+          const word = text.slice(s, e).trim(); if (!word) return;
+          hits.push({ b: +b, c: +c, v: +v, text, s, e: s + word.length, word });
+        });
+      });
+      if (!hits.length) { box.innerHTML = ''; return; }
+      const cnt = {}; hits.forEach(h => { cnt[h.word] = (cnt[h.word] || 0) + 1; });
+      const words = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a] || a.localeCompare(b));
+      // 분포: 덩이의 첫 낱말 줄기(앞 두 글자, 「하」로 시작하면 「하」)
+      const stem = w => { const f = w.split(/\s+/).pop().replace(/[^가-힣]/g, ''); if (!f) return '기타'; return f[0] === '하' ? '하' : f.slice(0, Math.min(2, f.length)); };
+      const dist = {}; hits.forEach(h => { const k = stem(h.word); dist[k] = (dist[k] || 0) + 1; });
+      const dk = Object.keys(dist).sort((a, b) => dist[b] - dist[a]);
+      const tot = hits.length, top3 = dk.slice(0, 3), etc = tot - top3.reduce((a, k) => a + dist[k], 0);
+      const cols = ['#9a6a45', '#c09a7a', '#d9c0a8', '#eee4da'];
+      // 같은 한글로 옮긴 다른 원어 (분포 첫 줄기)
+      const key = dk.find(k => k !== '하' && k !== '기타') || '';
+      const other = {};
+      if (key) {
+        try {
+          const r2 = src.db.exec(`SELECT "${sc.content}" FROM "${sc.table}" WHERE "${sc.content}" LIKE '%${key.replace(/'/g, "''")}%' LIMIT 3000`);
+          (r2 && r2[0] ? r2[0].values : []).forEach(([t]) => { const text = plain(t);
+            spans(t).forEach(sp => { const w = text.slice(sp.s, sp.e).trim(); if (w.indexOf(key) < 0) return;
+              sp.codes.forEach(cc => { if (cc && cc !== num && !/^[HG](0|9\d{3})$/.test(cc)) other[cc] = (other[cc] || 0) + 1; }); }); });
+        } catch (e) {}
+      }
+      const ok = Object.keys(other).sort((a, b) => other[b] - other[a]).filter(cc => other[cc] >= 2).slice(0, 6);
+      const lemma = cc => { try { const e = (typeof hebKoLookup === 'function') ? hebKoLookup(cc) : null; return e ? (e.l || '') : ''; } catch (er) { return ''; } };
+      const books = {}; hits.forEach(h => { books[h.b] = (books[h.b] || 0) + 1; });
+      const bk = id => { const o = BIBLE_BOOKS.find(x => x.id === id); return o ? o.name : id; };
+      const ab = id => { const o = BIBLE_BOOKS.find(x => x.id === id); return o ? o.abbr : id; };
+      const chip = (txt, n, attr, on) => `<span ${attr} style="display:inline-flex;gap:3px;align-items:center;padding:3px 10px;margin:2px 3px 2px 0;border:1px solid ${on ? '#6366f1' : '#e5d5c5'};border-radius:14px;background:${on ? '#eef2ff' : '#fff'};color:${on ? '#4338ca' : '#5b4636'};cursor:pointer;font-size:0.85em">${txt}<span style="color:#a8a29e;font-size:0.85em">${n}</span></span>`;
+      let selWord = '', selBook = 0;
+      const draw = () => {
+        const list = hits.filter(h => (!selWord || h.word === selWord) && (!selBook || h.b === selBook));
+        let s = `<div style="margin:8px 0;border:1px solid #eadfd4;border-radius:10px;background:#fffdfb">`;
+        s += `<div style="padding:8px 12px;border-bottom:1px solid #f1e8df;font-weight:700;color:#7c4a2d">개역개정 번역어 <span style="font-weight:400;color:#a8a29e;font-size:0.85em">개역개정S 꼬리표 · ${tot}곳 · 누르면 그 번역어 용례만</span></div>`;
+        s += `<div style="padding:6px 10px">${words.slice(0, 40).map(w => chip(escHtml(w), cnt[w], `data-sw="${escHtml(w)}"`, w === selWord)).join('')}</div>`;
+        s += `<div style="padding:6px 12px 8px;border-top:1px solid #f1e8df"><div style="font-size:0.8em;color:#7c4a2d;margin-bottom:4px">번역 분포 <span style="color:#a8a29e">원어 → 한글</span></div>
+              <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;background:#f5ede6">${top3.map((k, i) => `<div style="width:${dist[k] / tot * 100}%;background:${cols[i]}"></div>`).join('')}${etc ? `<div style="width:${etc / tot * 100}%;background:${cols[3]}"></div>` : ''}</div>
+              <div style="font-size:0.78em;color:#57534e;margin-top:3px">${top3.map((k, i) => `<span style="margin-right:10px"><span style="color:${cols[i]}">■</span> ${escHtml(k)} ${Math.round(dist[k] / tot * 100)}%</span>`).join('')}${etc ? `<span style="color:#a8a29e">기타 ${Math.round(etc / tot * 100)}%</span>` : ''}</div>`;
+        if (ok.length) s += `<div style="font-size:0.8em;color:#7c4a2d;margin:8px 0 3px">⇄ 「${escHtml(key)}」${(() => { const c = key.charCodeAt(key.length - 1) - 0xAC00; const j = c >= 0 && c < 11172 ? c % 28 : 0; return (j === 0 || j === 8) ? '로' : '으로'; })()} 옮긴 다른 원어 <span style="color:#a8a29e">한글 → 원어</span></div>
+              <div>${ok.map(cc => `<span onclick="StrongEngine.handleClick('${cc.charAt(0) + cc.slice(1).padStart(4, '0')}')" style="display:inline-flex;gap:4px;padding:2px 9px;margin:2px 4px 2px 0;border:1px solid #e5d5c5;border-radius:12px;cursor:pointer;font-size:0.82em;background:#fff"><b>${escHtml(lemma(cc))}</b> <span style="color:#2563eb">${cc}</span> <span style="color:#a8a29e">${other[cc]}</span></span>`).join('')}</div>`;
+        s += `</div><div style="padding:6px 10px;border-top:1px solid #f1e8df">${chip('모든 책', tot, 'data-sb="0"', !selBook)}${Object.keys(books).map(Number).sort((a, b) => a - b).map(id => chip(escHtml(bk(id)), books[id], `data-sb="${id}"`, id === selBook)).join('')}</div>`;
+        s += `<div style="padding:2px 6px 8px">${list.slice(0, 200).map(h => `<div class="bsr-item" onclick="closeBibleSearch();navigateToBibleVerse(${h.b},${h.c},${h.v});"><span class="bsr-ref">${escHtml(ab(h.b) + h.c + ':' + h.v)}</span><span class="bsr-text">${escHtml(h.text.slice(0, h.s))}<b style="color:#2563eb">${escHtml(h.text.slice(h.s, h.e))}</b>${escHtml(h.text.slice(h.e))}</span></div>`).join('')}${list.length > 200 ? `<div style="color:#a8a29e;font-size:0.8em;padding:4px 8px">앞 200곳만 (모두 ${list.length})</div>` : ''}</div></div>`;
+        box.innerHTML = s;
+        box.querySelectorAll('[data-sw]').forEach(el => el.onclick = () => { selWord = selWord === el.dataset.sw ? '' : el.dataset.sw; draw(); });
+        box.querySelectorAll('[data-sb]').forEach(el => el.onclick = () => { selBook = +el.dataset.sb; draw(); });
+      };
+      draw();
+    }
+    window.sdbCardFill = sdbCardFill;
+
     const WordOrig = {
       _src: undefined,
       _FUNC: /^(H0000|H9\d{3}|G0000|G3588)$/,
@@ -17636,7 +17722,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-13`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-14`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -19069,6 +19155,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           drawCodes(partList, '\ub2e4\ub978 \ub0b1\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
                     '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34 \u2014 \ub204\ub974\uba74 \ud3bc\uce68', true);
         }
+        if (data.byCode) h += '<div id="sdb-card"></div>';   // (b20261010-14) 개역개정S 번역어 카드
         // (b20261010-8 kjm 「H7586 이니셜로 구별 — 용례에 3명이 같이 나옴」) 같은 번호를 쓰는 동명이인이 있으면
         //  인명DB 구절로 누구인지 가려 사람별(STEP 고유번호 끝글자 H7586G·H·I·J)로 묶어 보인다.
         const _nbU = function(x) { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
@@ -19152,6 +19239,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
         }
         contentEl.innerHTML = h;
         contentEl.scrollTop = 0;
+        if (data.byCode && typeof window.sdbCardFill === 'function') { try { window.sdbCardFill(data.byCode, document.getElementById('sdb-card')); } catch (e) { console.warn('sdbCard', e); } }
       }
 
       /* ── 성경 DB 표시용 태그 정리 (검색 결과에 <i>·<J> 따위가 드러나지 않게) ── */
