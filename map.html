@@ -17052,7 +17052,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         </div>
         <div style="padding:0 14px 6px;display:flex;gap:6px;flex-wrap:wrap">
           <button id="ul-sel-none" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">딱지 없고 이름 맞는 곳 고르기</button>
-          <button id="ul-sel-all" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">다른 딱지까지 모두</button>
+          <button id="ul-sel-all" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">다른 딱지까지 (이름 맞는 곳)</button>
           <button id="ul-sel-sus" style="padding:3px 9px;border:1px solid #fca5a5;border-radius:12px;background:#fff;cursor:pointer;color:#b91c1c" title="낱말이 항목 이름과 다르고 한 번만 나오는 곳 — 어절·원어 짝이 어긋났을 수 있음">⚠ 의심만 고르기</button>
           <button id="ul-sel-clear" style="padding:3px 9px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;cursor:pointer">체크 모두 해제</button>
           <input id="ul-word" placeholder="낱말로 고르기 (예: 공중)" style="flex:1;min-width:120px;padding:3px 8px;border:1px solid #cbd5e1;border-radius:12px">
@@ -17228,7 +17228,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const setView = v => { box.querySelector('#ul-view').value = v; };
       const count = () => { box.querySelector('#ul-count').textContent = `고른 곳 ${rows.filter(r => r.on && isVis(r)).length}`; };
       box.querySelector('#ul-sel-none').onclick = () => { setView('todo'); rows.forEach(r => r.on = r.st === 'none' && r.nameHit !== false && whoOk(r)); draw(); };
-      box.querySelector('#ul-sel-all').onclick = () => { setView('all'); rows.forEach(r => r.on = r.st === 'none' || r.st === 'other'); draw(); };
+      box.querySelector('#ul-sel-all').onclick = () => { setView('all'); rows.forEach(r => r.on = (r.st === 'none' || r.st === 'other') && r.nameHit !== false && whoOk(r)); draw(); if (rows.some(r => r.nameHit === false && (r.st === 'none' || r.st === 'other'))) showToast('「≠이름」 줄은 고르지 않았습니다 — 필요하면 「낱말로 고르기」에 낱말을 넣어 고르세요', 'info'); };
       box.querySelector('#ul-sel-clear').onclick = () => { rows.forEach(r => r.on = false); draw(); };
       box.querySelector('#ul-sel-sus').onclick = () => { setView('sus'); rows.forEach(r => r.on = !!r.sus && r.st !== 'skip' && r.st !== 'excl' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
       box.querySelector('#ul-word').oninput = (ev) => { const q = ev.target.value.trim(); if (q) setView('all'); rows.forEach(r => r.on = !!q && !!r.word && r.word.indexOf(q) >= 0 && r.st !== 'skip' && !(r.st === 'same' && !/직접/.test(r.why))); draw(); };
@@ -17636,7 +17636,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-12`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-13`;
         document.title = `바이블 맵 스터디`;
       }
     }
