@@ -16993,6 +16993,19 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       rows.sort((x, y) => x.b - y.b || x.c - y.c || x.v - y.v || x.k - y.k);
       return rows;
     }
+    // (b20261010-10) krvn v14 의 10번째 칸(a[9]) = STEP 고유명사 끝글자 번호(H7586G …, 인명DB ustrong 과 같게 맞춘 것)
+    function _ulDsNorm(x) { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})([A-Z]?)/); return m ? m[1] + m[2] + m[3] : ''; }
+    function krvnDsAt(vk, k) {
+      const arr = (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) ? krvnMorph.v[vk] : null;
+      const a = arr && arr[k]; return a && a[9] ? String(a[9]).split(',').map(_ulDsNorm).filter(Boolean) : [];
+    }
+    function krvnDsInVerse(vk) {
+      const arr = (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) ? krvnMorph.v[vk] : null;
+      const out = []; (arr || []).forEach(a => { if (a && a[9]) String(a[9]).split(',').forEach(x => { const n = _ulDsNorm(x); if (n) out.push(n); }); });
+      return out;
+    }
+    window.krvnDsAt = krvnDsAt; window.krvnDsInVerse = krvnDsInVerse;
+    const _isUnnamedPerson = p => /이름 미상|이름 없음/.test(String(p && p.name_ko || ''));
     function openUsageLinker(codeIn) {
       if (!adminGuard()) return;
       const code = _ulNorm(codeIn);
@@ -17091,10 +17104,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           try {
             const nbU = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
             const cb = nbU(code);
-            const ppl = (personDatabase || []).filter(p => !p.pending_review && nbU(p.ustrong) === cb && Array.isArray(p.verses) && p.verses.length);
+            const ppl = (personDatabase || []).filter(p => !p.pending_review && !_isUnnamedPerson(p) && nbU(p.ustrong) === cb && Array.isArray(p.verses) && p.verses.length);
             const own = {};
             ppl.forEach(p => p.verses.forEach(v => { const k = v.book + '-' + v.chapter + '-' + v.verse; (own[k] = own[k] || []).push(p); }));
-            rows.forEach(r => { r.who = (own[`${r.b}-${r.c}-${r.v}`] || []).map(p => p.id); });
+            rows.forEach(r => {
+              const vk = `${r.b}-${r.c}-${r.v}`;
+              // 어절에 STEP 끝글자 번호가 있으면 그 사람 (한 절에 동명이인 둘이어도 어절마다 갈림), 없으면 인명 구절 목록
+              const ds = krvnDsAt(vk, r.k).filter(d => nbU(d) === cb);
+              const byDs = ds.length ? ppl.filter(p => ds.indexOf(_ulDsNorm(p.ustrong)) >= 0) : [];
+              r.who = (byDs.length ? byDs : (own[vk] || [])).map(p => p.id);
+              r.whoBy = byDs.length ? 'step' : 'list';
+            });
             whoList = ppl.length >= 2 ? ppl : [];
             const wsel = box.querySelector('#ul-who'), wrow = box.querySelector('#ul-who-row');
             if (whoList.length) {
@@ -17173,7 +17193,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
               return `<span title="${escHtml(r.why || '')}" style="flex:none;width:86px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:0.78em;font-weight:700;padding:1px 6px;border-radius:9px;background:${C[0]};color:${C[1]}">${r.sus ? '⚠ ' : ''}${escHtml(C[2])}</span>`; })()}
             ${whoList.length ? (() => { const ps = (r.who || []).map(id => whoList.find(p => p.id === id)).filter(Boolean);
               const t = ps.length ? ps.map(p => String(p.ustrong || '').replace(/^[HG]0*\d+/, '') || '?').join('·') : '?';
-              return `<span title="${escHtml(ps.map(p => (p.ustrong || '') + ' ' + (p.name_ko || '') + ' ' + (p.briefest_ko || '')).join(' / ') || '구절 목록으로 못 가림')}" style="flex:none;min-width:18px;text-align:center;font-size:0.76em;font-weight:700;padding:0 4px;border-radius:8px;background:${ps.length ? '#f3e8ff' : '#f1f5f9'};color:${ps.length ? '#6b21a8' : '#94a3b8'}">${escHtml(t)}</span>`; })() : ''}
+              return `<span title="${escHtml(ps.map(p => (p.ustrong || '') + ' ' + (p.name_ko || '') + ' ' + (p.briefest_ko || '')).join(' / ') || '구절 목록으로 못 가림')}" style="flex:none;min-width:18px;text-align:center;font-size:0.76em;font-weight:700;padding:0 4px;border-radius:8px;background:${ps.length ? '#f3e8ff' : '#f1f5f9'};color:${ps.length ? '#6b21a8' : '#94a3b8'}${r.whoBy === 'step' ? ';border:1px solid #c084fc' : ''}">${escHtml(t)}</span>`; })() : ''}
             <span style="flex:1;min-width:0">${ejHtml}${r.gloss ? ` <span style="color:#94a3b8;font-size:0.8em" title="원전분해(원문 대역)에서 이 번호의 번역어">원문: ${escHtml(r.gloss)}</span>` : ''}</span></span></div>${peek}`;
         }).join('');
         list.querySelectorAll('.ul-peek').forEach(el => el.onclick = () => { const r = rows[+el.dataset.p]; r.peek = !r.peek; const st = list.scrollTop; draw(); list.scrollTop = st; });
@@ -17602,7 +17622,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-9`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261010-10`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -19042,14 +19062,25 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
         try {
           if (data.hits.length && typeof personDatabase !== 'undefined' && personDatabase.length) {
             const bases = {}; data.hits.forEach(function(r) { String(r.code || '').split(',').forEach(function(c) { const b = _nbU(c); if (b) bases[b] = 1; }); });
-            const ppl = personDatabase.filter(function(p) { return !p.pending_review && bases[_nbU(p.ustrong)] && Array.isArray(p.verses) && p.verses.length; });
+            const ppl = personDatabase.filter(function(p) { return !p.pending_review && !/이름 미상|이름 없음/.test(String(p.name_ko || '')) && bases[_nbU(p.ustrong)] && Array.isArray(p.verses) && p.verses.length; });
             if (ppl.length >= 2) {
               const own = {};
               ppl.forEach(function(p) { p.verses.forEach(function(v) { const k = v.book + '-' + v.chapter + '-' + v.verse; (own[k] = own[k] || []).push(p); }); });
               const g = new Map(); const none = [];
               data.hits.forEach(function(r) {
                 const hc = String(r.code || '').split(',').map(_nbU);
-                const who = (own[r.bookId + '-' + r.chapter + '-' + r.verse] || []).filter(function(p) { return hc.indexOf(_nbU(p.ustrong)) >= 0; });
+                const vk = r.bookId + '-' + r.chapter + '-' + r.verse;
+                let who = (own[vk] || []).filter(function(p) { return hc.indexOf(_nbU(p.ustrong)) >= 0; });
+                // (b-10) 이 절 어절의 STEP 끝글자 번호(krvn v14)로 좁히거나 채움
+                try {
+                  const ds = (typeof krvnDsInVerse === 'function') ? krvnDsInVerse(vk) : [];
+                  if (ds.length) {
+                    const nz = function(x) { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})([A-Z]?)/); return m ? m[1] + m[2] + m[3] : ''; };
+                    const byDs = ppl.filter(function(p) { return hc.indexOf(_nbU(p.ustrong)) >= 0 && ds.indexOf(nz(p.ustrong)) >= 0; });
+                    if (byDs.length && (who.length !== 1 || !who.length)) who = byDs;
+                    else if (byDs.length && !who.length) who = byDs;
+                  }
+                } catch (e) {}
                 if (!who.length) { none.push(r); return; }
                 who.forEach(function(p) { if (!g.has(p)) g.set(p, []); g.get(p).push(r); });
               });
