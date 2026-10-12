@@ -3892,7 +3892,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     const TERM_KEY_OWNER = {"유월절":5,"교회":81,"조각목":14,"맹세":154,"고난":916,"환난":22,"두루마리":1014,"형제":66,"재갈":68,"짐":70,"장로":100,"금식":108,"맏아들":109,"성령":122,"기적":135,"천사":138,"휘장":165,"점술":360,"의복":377,"예복":377,"무기":200,"갈대":994,"병":319,"풀무":521,"등잔대":221,"향로":470,"홍보석":3133,"총독":562,"갑옷":264,"향유":883,"놋":1625,"초막":301,"잔":325,"관세":330,"정죄":1825,"멸망":353,"다릭":337,"염해":343,"깊음":348,"귀신":349,"그릇":358,"가락":359,"선생":361,"비둘기":368,"족장":385,"분문":390,"보증":400,"동방":404,"동쪽":404,"진영":1990,"영원한":429,"눈":437,"항구":610,"신접한 자":445,"밭":461,"횃불":469,"연못":2995,"양털":1269,"재물":498,"냄비":906,"거인":539,"솔개":540,"선물":541,"예물":880,"포도":2162,"메뚜기":787,"조각":934,"헬라파 유대인":2241,"맷돌질":575,"객실":579,"손":595,"손바닥 너비":2192,"추수":607,"가축 떼":2246,"목자":1071,"형상":2314,"섬":684,"문자":1278,"입술":779,"주":791,"제비":795,"속죄소":822,"달":848,"느디님 사람":860,"상수리나무":871,"황소":1650,"다락방":914,"장막":1160,"향료":3354,"평지":945,"토기":957,"기도":960,"방백":962,"감옥":963,"잠언":967,"부림":975,"구속자":3085,"계시":1004,"반지":1008,"성도":3147,"불뱀":1061,"뽕나무":1137,"성전":1159,"가시":1170,"모형":1212,"너울":1216,"전쟁":1232,"우물":1246,"바람":1256,"오홀라와 오홀리바":1322,"아스다롯":1418,"곳간":533,"베개":2970,"찔레":1639,"과자":1683,"하란":1748,"먹다":1912,"옷":2109,"그발 사람":2114,"하룹 사람":2211,"언덕":2258,"갈고리":2278,"호론 사람":2282,"이스마엘 사람":2342,"잇시야":2350,"이델 사람":2353,"야살의 책":2381,"이스르엘":2418,"그니스 족속":2495,"친족":2501,"무릎":2517,"말기수아":2644,"메네":2699,"느부심":2838,"발디 사람":2904,"자리":3194,"셀라하마느곳":3204,"시기오놋":3249,"기와":3465,"유언":3607,"스말 족속":3659};
     function _termKeyOk(k) { return k && !userBlacklist.has(k) && !TERM_STOP_KEYS.has(k); }
 
-    // (b20261012-2 용어 1.12.23) 대표 낱말 · 여러 뜻 · 다른 이름
+    // (b20261012-3 용어 1.12.23) 대표 낱말 · 여러 뜻 · 다른 이름
     //  같은 낱말이 사전마다 따로 있으면(rep_of) 대표 하나만 본문에 붙는다. 대표가 아닌 항목의 열쇠는 대표에게 간다.
     //  여러 뜻 낱말(sense_key)은 어절 원어 번호로 뜻을 고르고, 다른 이름(alt_ko)은 어절 번호가 맞을 때만 붙는다.
     var TERM_CANDS = {}, TERM_ALIAS_ONLY = new Set(), termById = {};
@@ -4441,7 +4441,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
               return `<span class="bible-term-tag" onclick="TermEngine.handleClickId(${pick}, ${bookId}, ${chapter}, ${vNum})" ${ctx} title="${p1} (용어사전)">${p1}</span>${particle}`;
             }
           }
-          if (TERM_CANDS[p1]) {   // (b20261012-2) 여러 뜻 · 다른 이름 — 어절 번호로 고름
+          if (TERM_CANDS[p1]) {   // (b20261012-3) 여러 뜻 · 다른 이름 — 어절 번호로 고름
             const tp = termPickByCodes(p1, codesAt(seg.slice(0, offset)));
             if (!tp) return match;
             if (tp !== termIndex[p1]) {
@@ -4509,7 +4509,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!t || !sqliteDbInstance || !detectedSchema) return out;
         const sc = detectedSchema;
         const keys = new Set();
-        const t0 = t; t = termRep(t) || t;   // (b20261012-2) 대표가 아닌 항목은 대표로 본문을 찾는다
+        const t0 = t; t = termRep(t) || t;   // (b20261012-3) 대표가 아닌 항목은 대표로 본문을 찾는다
         Object.keys(termIndex || {}).forEach(k => { if (termIndex[k] === t) keys.add(k); });
         Object.keys(TERM_CANDS || {}).forEach(k => { if (TERM_CANDS[k].indexOf(t) >= 0) keys.add(k); });
         if (t0 !== t) { const r0 = String(t0.term_ko || '').trim(); if (r0) keys.add(r0); }
@@ -4812,7 +4812,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <button onclick="document.getElementById('term-info-panel').style.display='none'" style="border:none;background:none;font-size:1.25em;cursor:pointer;color:#999">✕</button>
           </div>
           ${t.term_en ? `<div style="margin-bottom:8px"><button onclick="TermEngine.gotoRawDict(${t.id})" title="원문사전에서 이 표제어 찾기 (사전끼리 견주기)" style="font-size:0.72em;font-weight:400;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;cursor:pointer">\ud83d\udcdc 사전 비교</button></div>` : ''}
-          ${(() => {   // (b20261012-2) 같은 낱말 다른 사전 항목
+          ${(() => {   // (b20261012-3) 같은 낱말 다른 사전 항목
             const rep = termRep(t) || t;
             const sibs = (termDatabase || []).filter(x => x !== t && (x === rep || (x.rep_of && x.rep_of === rep.id)));
             if (!sibs.length) return '';
@@ -5269,7 +5269,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <div style="font-size:1.15em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
             <div style="font-size:0.85em;color:#059669;margin-bottom:4px">${escHtml(entry.xlit || '')}</div>
             <div style="font-size:0.85em;line-height:1.4;color:#334155">${escHtml(entry.gloss || '')}</div>
-            ${(typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(code) : ''}
+            ${(typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(code) : ''}${(typeof dictForCodeHtml === 'function') ? dictForCodeHtml(code) : ''}
             ${trBtn}
             ${detailBtn}
           </div>
@@ -5365,7 +5365,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             ${entry.gloss ? `<button id="strong-pop-trbtn-gloss" onclick="StrongEngine.translatePopup('${code}','gloss')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button>` : ''}
           </div>
           ${entry.gloss ? `<div id="strong-pop-tr-gloss" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div>` : ''}
-          ${(typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(code) : ''}
+          ${(typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(code) : ''}${(typeof dictForCodeHtml === 'function') ? dictForCodeHtml(code) : ''}
           ${detailBtn}
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:0.7em;color:#c4c9d4;line-height:1.4">${entry._src === 'strongKo' ? '출처: STEPBible TBESH·TBESG (CC BY 4.0)' : "출처: Strong's Exhaustive Concordance (James Strong, 1890, Public Domain)"}</div>
         `;
@@ -8405,7 +8405,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     const DICT_PAGE_SIZE = 100;
     let dictCombinedCache = null;
 
-    /* ── 통합 사전 b20261012-2 (2026-10-12 kjm 「시안하고 틀리네」) ──
+    /* ── 통합 사전 b20261012-3 (2026-10-12 kjm 「시안하고 틀리네」) ──
      * 시안(통합 사전 시안 아티팩트)과 같은 묶음: 인물은 이름 하나에 한 줄, 지명은 지명 DB 줄, 용어는 이스턴·스미스 용어 항목을 영문 표제로 묶음.
      * 줄마다 이스턴·스미스 항목(우리 번역)을 붙여 누르면 카드에서 「이스턴 단락 → 스미스 단락」으로 보인다.
      * 인명·지명 DB 의 eastonIds·smithIds(인명 3.77.0·지명 6.10.0)로 잇는다. ISBE 는 참고용 — 카드의 단추로 연다.
@@ -8424,7 +8424,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const list = [];
       // 인물 — 이름 하나에 한 줄
       const pBy = new Map();
-      personDatabase.forEach(p => { const k = (p.name_ko || p.name_en || '').trim(); if (!k) return; if (!pBy.has(k)) pBy.set(k, []); pBy.get(k).push(p); });
+      personDatabase.forEach(p => { const k = (p.name_ko || p.name_en || '').trim(); if (!k || /^\(/.test(k)) return; if (!pBy.has(k)) pBy.set(k, []); pBy.get(k).push(p); });
       pBy.forEach((ps, k) => {
         const main = ps.slice().sort((a, b) => (+b.verse_count || 0) - (+a.verse_count || 0))[0];
         const ents = [], seen = new Set();
@@ -8473,6 +8473,36 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       list.sort((a, b) => a.sortKey.localeCompare(b.sortKey, 'ko'));
       return list;
     }
+    /* 원어 카드의 「이 번호를 다룬 사전」 (b20261012-3, kjm 「나머지는 진행해」) — 통합 사전 줄 중 이 번호를 가진 것 */
+    let _dictCodeIdx = null;
+    function _dictNormCode(c) { const m = String(c || '').trim().toUpperCase().match(/^([HG])0*(\d+)/); return m ? m[1] + m[2] : ''; }
+    function dictForCodeHtml(code) {
+      try {
+        if (!_dictCodeIdx) {
+          const L = buildDictCombined();
+          if (!L.length || !L.some(x => x.entries)) return '';
+          const idx = new Map();
+          L.forEach((it, i) => {
+            const cs = new Set(String(it.strong || '').split(',').map(_dictNormCode).filter(Boolean));
+            (it.entries || []).forEach(x => String(x.e.hebrew_greek || '').split(',').map(_dictNormCode).filter(Boolean).forEach(c => cs.add(c)));
+            cs.forEach(c => { if (!idx.has(c)) idx.set(c, []); idx.get(c).push(i); });
+          });
+          _dictCodeIdx = { L, idx };
+        }
+        const arr = _dictCodeIdx.idx.get(_dictNormCode(code)) || [];
+        if (!arr.length) return '';
+        const col = { PERSON: '#6D28D9', PLACE: '#15803D', TERM: '#C2410C' }, lab = { PERSON: '인물', PLACE: '지명', TERM: '용어' };
+        return `<div style="margin:8px 0;padding:8px 10px;background:#fff7ed;border:1px solid #fde6cf;border-radius:8px"><div style="font-size:.8em;color:#a0522d;font-weight:700;margin-bottom:4px">📚 이 번호를 다룬 사전 (${arr.length})</div><div style="display:flex;flex-wrap:wrap;gap:5px">`
+          + arr.slice(0, 30).map(i => { const it = _dictCodeIdx.L[i]; return `<button onclick="openDictCardByIdx(${i})" style="font-size:.82em;border:1px solid ${col[it.type]}55;color:${col[it.type]};background:#fff;border-radius:6px;padding:2px 8px;cursor:pointer">${escHtml(it.nameKo)} <span style="opacity:.7">${lab[it.type]}</span></button>`; }).join('')
+          + `</div></div>`;
+      } catch (e) { return ''; }
+    }
+    function openDictCardByIdx(i) {
+      const it = _dictCodeIdx && _dictCodeIdx.L[i]; if (!it) return;
+      openDictModal();
+      const hit = (dictCombinedCache || []).find(x => x.type === it.type && x.nameKo === it.nameKo && x.ref === it.ref) || it;
+      openDictCard(hit);
+    }
     /* 통합 사전 카드 — 시안처럼 한 줄 안에 이스턴 단락 → 스미스 단락 */
     function _dictParas(s) {
       return String(s || '').split(/\n\s*\n/).filter(x => x.trim()).map(x => '<p style="margin:0 0 .6em;line-height:1.75">' + escHtml(x.trim()).replace(/\n/g, '<br>') + '</p>').join('');
@@ -8497,8 +8527,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           + it.people.map(p => `<li><a href="#" data-pid="${p.id}" style="color:#6D28D9">${escHtml(p.briefest_ko || p.description_ko || p.name_en || '')}</a> <span style="color:#94a3b8">${escHtml(p.name_en || '')}${p.verse_count ? ' · ' + p.verse_count + '구절' : ''}</span></li>`).join('') + '</ol></div>';
       } else if (it.type === 'PERSON' && it.ref.short_ko) h += `<div style="background:#f5f3ff;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.9em">${escHtml(it.ref.short_ko)}</div>`;
       if (it.type === 'PLACE' && (it.ref.desc || it.ref.modern)) h += `<div style="background:#f0fdf4;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:.9em">${escHtml(it.ref.desc || '')}${it.ref.modern ? '<br><span style="color:#64748b">오늘날: ' + escHtml(it.ref.modern) + '</span>' : ''}</div>`;
-      const ents = it.entries || [];
-      if (!ents.length) h += `<div style="color:#94a3b8;padding:10px 0">이 줄에 붙은 이스턴·스미스 항목이 없습니다.</div>`;
+      const isStub = x => { const d = String(x.e.definition_ko || '').trim(); return d.length < 60 && /(참조|항목|보라)\.?\]?\)?$/.test(d.replace(/[.\s]+$/, '')); };
+      const allEnts = it.entries || [];
+      const stubs = allEnts.filter(isStub);
+      const ents = allEnts.filter(x => !isStub(x));
+      if (stubs.length) h += `<div style="font-size:.82em;color:#64748b;margin:4px 0 2px">참조 항목: ` + stubs.map(x => `${x.src === 'easton' ? '이스턴' : '스미스'} ${escHtml(x.e.term || '')} — ${escHtml(String(x.e.definition_ko || '').trim())}`).join(' · ') + `</div>`;
+      if (!ents.length && !stubs.length) h += `<div style="color:#94a3b8;padding:10px 0">이 줄에 붙은 이스턴·스미스 항목이 없습니다.</div>`;
       ents.forEach(x => {
         h += `<div style="border-top:1px solid #eadbd2;padding-top:8px;margin-top:8px"><div style="font-size:.8em;color:#a0522d;font-weight:700;margin-bottom:4px">▣ ${x.src === 'easton' ? '이스턴' : '스미스'} 성경사전 <span style="font-weight:400;color:#94a3b8">${escHtml(x.e.term || '')}</span></div>`
           + `<div style="font-family:'Gowun Batang',serif;font-size:1em">${_dictParas(x.e.definition_ko)}</div></div>`;
@@ -14970,7 +15004,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
        두 본문은 띄어쓰기가 달라 글자만 맞춘다(90%는 글자열이 같고, 나머지는 공통 부분열로 맞춤).
        본문·원어 자료를 앱에 새로 싣지 않는다 — 사용자가 올린 sdb 를 그 자리에서 읽는다.
        ══════════════════════════════════════════════════════════════ */
-    /* (b20261012-2 kjm 올어바웃 원어 화면처럼) 개역개정S(스트롱 본문)로 원어 번호 카드
+    /* (b20261012-3 kjm 올어바웃 원어 화면처럼) 개역개정S(스트롱 본문)로 원어 번호 카드
      *  번역 칩(그 번호 꼬리표 앞 글자 덩이) · 번역 분포 막대 · 같은 한글로 옮긴 다른 원어 · 책별 칩 · 용례(그 덩이만 칠함) */
     function sdbCardFill(code, box) {
       if (!box) return;
@@ -17087,7 +17121,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       await exportBoth(db, 'personDatabase', null, `인명 ${personDatabase.length}명`);
       await setLocalItem('saved_person_database_version', newV);
     }
-    // (b20261012-2) 연결표 파일 합치기 — Claude 가 만든 판정 연결표(verseLinks.json, 잠금본·평문 모두)를 이 기기 연결표에 더함.
+    // (b20261012-3) 연결표 파일 합치기 — Claude 가 만든 판정 연결표(verseLinks.json, 잠금본·평문 모두)를 이 기기 연결표에 더함.
     //  이 기기에 이미 적힌 자리는 그대로 두고(kjm 이 직접 고친 것이 이김), 없는 자리만 보탠다.
     function pickVerseLinksMerge() {
       if (!adminGuard()) return;
@@ -17154,7 +17188,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       [['T', termDatabase], ['P', personDatabase], ['L', placeDatabase]].forEach(([k, db]) => (db || []).forEach(r => {
         const cs = _ulCodesOf(k, r); const i = cs.indexOf(code);
         if (i < 0) return;
-        // (b20261012-2 용어 1.12.23) 대표가 아닌 항목은 대표로 바꿔 한 번만 — 같은 낱말 사전 항목이 줄줄이 나오지 않게
+        // (b20261012-3 용어 1.12.23) 대표가 아닌 항목은 대표로 바꿔 한 번만 — 같은 낱말 사전 항목이 줄줄이 나오지 않게
         const rec = (k === 'T' && typeof termRep === 'function') ? (termRep(r) || r) : r;
         const had = out.find(x => x.kind === k && x.rec === rec);
         if (had) { if (i === 0) had.first = true; return; }
@@ -17169,7 +17203,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (!w) return '';
       const names = kind === 'P' ? [rec.name_ko, ...(rec.aliases_ko || [])] : kind === 'L' ? [rec.name] : [rec.term_ko, ...(Array.isArray(rec.alt_ko) ? rec.alt_ko : [])];   // (b-7) 다른 이름(천하 → 하늘)도
       const mains = names.map(n => String(n || '').split(/[\(\[（]/)[0].replace(/\s+[A-Z0-9]+$/, '').trim()).filter(Boolean).sort((a, b) => b.length - a.length);
-      for (const m of mains) if (w.startsWith(m)) return m;   // (b20261012-2) 이름으로 시작하면 이름만 (정탐꾼이니라→정탐꾼)
+      for (const m of mains) if (w.startsWith(m)) return m;   // (b20261012-3) 이름으로 시작하면 이름만 (정탐꾼이니라→정탐꾼)
       for (let n = 1; n < w.length - 1; n++) {   // 뒤에서 조사 떼기 — 줄기가 두 글자 이상일 때만
         const stem = w.slice(0, w.length - n), tail = w.slice(w.length - n);
         if (stem.length >= 2 && VLINK_PARTICLE.test(tail) && tail) return stem;
@@ -17217,7 +17251,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       rows.sort((x, y) => x.b - y.b || x.c - y.c || x.v - y.v || x.k - y.k);
       return rows;
     }
-    // (b20261012-2) krvn v14 의 10번째 칸(a[9]) = STEP 고유명사 끝글자 번호(H7586G …, 인명DB ustrong 과 같게 맞춘 것)
+    // (b20261012-3) krvn v14 의 10번째 칸(a[9]) = STEP 고유명사 끝글자 번호(H7586G …, 인명DB ustrong 과 같게 맞춘 것)
     function _ulDsNorm(x) { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})([A-Z]?)/); return m ? m[1] + m[2] + m[3] : ''; }
     function krvnDsAt(vk, k) {
       const arr = (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) ? krvnMorph.v[vk] : null;
@@ -17230,7 +17264,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
     window.krvnDsAt = krvnDsAt; window.krvnDsInVerse = krvnDsInVerse;
     const _isUnnamedPerson = p => /이름 미상|이름 없음/.test(String(p && p.name_ko || ''));
-    // (b20261012-2) 이 번호를 가진 항목이 없을 때 — 어절이 이름으로 시작하는 용어·인명·지명을 2곳 이상이면 추천
+    // (b20261012-3) 이 번호를 가진 항목이 없을 때 — 어절이 이름으로 시작하는 용어·인명·지명을 2곳 이상이면 추천
     function _ulSuggest(all) {
       const idx = {};
       const add = (k, rec, n) => { n = String(n || '').split(/[\(\[（]/)[0].replace(/\s+[A-Z0-9]+$/, '').trim(); if (n.length < 2 || /\s/.test(n)) return; (idx[n.slice(0, 2)] = idx[n.slice(0, 2)] || []).push({ k, rec, n }); };
@@ -17257,7 +17291,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const all = _ulCollect(code);
       if (!all.length) { showToast(`${code} 가 붙은 어절이 없습니다`, 'info'); return; }
       const cands = _ulCandidates(code);
-      // (b20261012-2 kjm 「용례에 아무것도 검색이 안 됨」 H5087) 번호를 가진 항목이 없으면 어절 낱말로 항목을 추천
+      // (b20261012-3 kjm 「용례에 아무것도 검색이 안 됨」 H5087) 번호를 가진 항목이 없으면 어절 낱말로 항목을 추천
       if (!cands.length) { try { _ulSuggest(all).forEach(x => cands.push(x)); } catch (e) {} }
       let box = document.getElementById('usage-linker');
       if (!box) {
@@ -17351,12 +17385,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             const same = tg && tg.kind === cd.kind && (tgRep === cd.rec.id || (tg.ids && tg.ids.indexOf(cd.rec.id) >= 0));
             row.st = same ? 'same' : tg ? 'other' : 'none';
             row.why = same ? (tg.manual ? '직접 연결됨' : '이미 붙음') : tg ? `${kname[tg.kind]} 「${tg.name}」` : '';
-            // (b20261012-2) 「제외함」 = 연결표에 0(딱지 없음)으로 적힌 자리 — 할 일에서 빠짐
+            // (b20261012-3) 「제외함」 = 연결표에 0(딱지 없음)으로 적힌 자리 — 할 일에서 빠짐
             if (verseLinks[`${r.b}-${r.c}-${r.v}`] && verseLinks[`${r.b}-${r.c}-${r.v}`][`${w}#${nth}`] === '0') { row.st = 'excl'; row.why = '제외함'; }
             row.on = row.st === 'none';
             rows.push(row);
           });
-          // (b20261012-2 kjm 「g,h,i 용례 선택이 안 됨」) 같은 번호 동명이인 — 인명DB 구절로 줄마다 누구인지 적고 사람별로 거름
+          // (b20261012-3 kjm 「g,h,i 용례 선택이 안 됨」) 같은 번호 동명이인 — 인명DB 구절로 줄마다 누구인지 적고 사람별로 거름
           try {
             const nbU = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
             const cb = nbU(code);
@@ -17387,7 +17421,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           } catch (e) { whoList = []; whoSel = ''; }
           // (b-12) 의심 = 어절이 원전분해(STEP 원문 대역)의 이 번호 번역어와 안 맞음 — 계신·독수리들보다·위에 따위(어절·원어 짝 어긋남)
           //  원전분해가 없으면: 낱말이 항목 이름을 품지 않고 한 번만 나오는 것
-          // (b20261012-2) 이름 열쇠 = 표제어 앞 두 글자(정탐꾼→정탐) — 「정탐하게 하고」의 「하고」 같은 짝 어긋남을 잡으려고
+          // (b20261012-3) 이름 열쇠 = 표제어 앞 두 글자(정탐꾼→정탐) — 「정탐하게 하고」의 「하고」 같은 짝 어긋남을 잡으려고
           const nm0 = String(vlinkLabel(cd.kind, cd.rec) || '').split(/[\(\[（]/)[0].replace(/\s+[A-Z]$/, '').trim();
           const nm = nm0.length >= 3 ? nm0.slice(0, 2) : nm0;
           const freq = {}; rows.forEach(r => { if (r.word) freq[r.word] = (freq[r.word] || 0) + 1; });
@@ -17417,7 +17451,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             }
             if (r.sus && r.st === 'none') r.on = false;
           });
-          // (b20261012-2 kjm 「뭔가 이상하다」 H8334 섬기다 → 섬기는 자) 어절이 항목 이름으로 시작해야 처음부터 체크
+          // (b20261012-3 kjm 「뭔가 이상하다」 H8334 섬기다 → 섬기는 자) 어절이 항목 이름으로 시작해야 처음부터 체크
           //  (동사·「그의」「때에」처럼 이름과 다른 어절은 보여 주되 체크 안 함 — 사람이 보고 고름)
           try {
             const rec = cd.rec, kind = cd.kind;
@@ -17457,7 +17491,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <input type="checkbox" data-i="${i}"${r.on ? ' checked' : ''}${dis} style="cursor:pointer">
             <span class="ul-peek" data-p="${i}" onclick="" style="display:flex;gap:8px;flex:1;align-items:center;cursor:pointer;min-width:0" title="누르면 이 절 본문을 펼침">
             <span style="width:62px;flex:none;color:#2563eb;font-size:0.88em;text-decoration:underline dotted">${bk ? bk.abbr : r.b}${r.c}:${r.v}</span>
-            ${(() => { // (b20261012-2 kjm 「단어 앞으로 — 가독성」) 상태를 낱말 앞 짧은 꼬리표로
+            ${(() => { // (b20261012-3 kjm 「단어 앞으로 — 가독성」) 상태를 낱말 앞 짧은 꼬리표로
               const C = { same: ['#ecfdf5', '#047857', /직접/.test(r.why) ? '✓ 직접' : '✓ 이미'], other: ['#fff7ed', '#c2410c', '◆ ' + (r.why || '다른').replace(/^.*「|」.*$/g, '')],
                           none: ['#eff6ff', '#1d4ed8', '○ 없음'], excl: ['#f1f5f9', '#475569', '🚫 제외'], skip: ['#f8fafc', '#94a3b8', '건너뜀'] }[r.st] || ['#fff', '#333', r.st];
               return `<span title="${escHtml(r.why || '')}" style="flex:none;width:86px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:0.78em;font-weight:700;padding:1px 6px;border-radius:9px;background:${C[0]};color:${C[1]}">${r.sus ? '⚠ ' : ''}${escHtml(C[2])}</span>`; })()}
@@ -17926,7 +17960,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -19210,7 +19244,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
             if (byCode || bare(gloss) === kwBare) c.exact++;
             c.words[gloss] = (c.words[gloss] || 0) + 1;
             if (!c.root && root) { c.root = root; c.xlit = xlit || ''; }
-            if (out.hits.length < (byCode ? 5000 : (maxVerses || 200))) {   // (b20261012-2) 번호로 찾을 때는 용례를 다 모음(사람별 묶음이 300에서 잘리지 않게)
+            if (out.hits.length < (byCode ? 5000 : (maxVerses || 200))) {   // (b20261012-3) 번호로 찾을 때는 용례를 다 모음(사람별 묶음이 300에서 잘리지 않게)
               out.hits.push({ bookId: Number(row[0]), chapter: Number(row[1]), verse: Number(row[2]),
                               code: code, gloss: gloss, morph: morph || '' });
             }
@@ -19271,7 +19305,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
                 contentEl.innerHTML = '<div class="bsr-summary">\ud83d\udd24 "' + escHtml(qc) + '" — 개역개정 본문에 이 번호가 붙은 어절이 없습니다</div>'
                   + '<div style="padding:12px 16px;font-size:14px;line-height:1.7">'
                   + (se ? '<div style="font-size:1.2em;font-weight:700;color:#065f46">' + escHtml(se.lemma || '') + '</div><div style="color:#059669">' + escHtml(se.xlit || '') + '</div><div style="color:#334155">' + escHtml(se.gloss || '') + '</div>' : (hk ? '<div style="font-size:1.2em;font-weight:700;color:#065f46">' + escHtml(hk.l || '') + '</div>' : ''))
-                  + ((typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(qc) : '')
+                  + ((typeof hebKoBlockHtml === 'function') ? hebKoBlockHtml(qc) : '') + ((typeof dictForCodeHtml === 'function') ? dictForCodeHtml(qc) : '')
                   + '</div>';
               }
             }
@@ -19359,8 +19393,8 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           drawCodes(partList, '\ub2e4\ub978 \ub0b1\ub9d0 \uc18d\uc5d0 \ub4e0 \uac83 ' + partList.length + '\uac1c',
                     '\uc608: \ud3ec\ub3c4\ub098\ubb34 \u00b7 \ubb34\ud654\uacfc\ub098\ubb34 \u2014 \ub204\ub974\uba74 \ud3bc\uce68', true);
         }
-        if (data.byCode) h += '<div id="sdb-card"></div>';   // (b20261012-2) 개역개정S 번역어 카드
-        // (b20261012-2 kjm 「H7586 이니셜로 구별 — 용례에 3명이 같이 나옴」) 같은 번호를 쓰는 동명이인이 있으면
+        if (data.byCode) h += '<div id="sdb-card"></div>';   // (b20261012-3) 개역개정S 번역어 카드
+        // (b20261012-3 kjm 「H7586 이니셜로 구별 — 용례에 3명이 같이 나옴」) 같은 번호를 쓰는 동명이인이 있으면
         //  인명DB 구절로 누구인지 가려 사람별(STEP 고유번호 끝글자 H7586G·H·I·J)로 묶어 보인다.
         const _nbU = function(x) { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
         let personGroups = null;
