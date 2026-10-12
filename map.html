@@ -8420,6 +8420,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const E = getRawDictList('easton'), S = getRawDictList('smith');
       if (!E.length || !S.length) return buildDictCombinedOld();
       const byId = { easton: new Map(E.map(e => [String(e.id), e])), smith: new Map(S.map(e => [String(e.id), e])) };
+      // (b20261013-2 kjm 「ISBE를 통합사전에 잇기」) 인명·지명·용어 DB 의 isbeIds(옛 isbeId 도)로 ISBE 항목을 붙인다 — 카드에서 이스턴·스미스 아래 접힌 단락
+      const IB = new Map((getRawDictList('isbe') || []).map(e => [String(e.id), e]));
+      const isbeOf = xs => { const out = [], seen = new Set(); xs.forEach(x => { if (!x) return; [..._dictIds(x.isbeIds), ..._dictIds(x.isbeId)].forEach(id => { if (seen.has(id)) return; seen.add(id); const e = IB.get(String(id)); if (e && (e.definition_ko || e.definition)) out.push(e); }); }); return out; };
       const used = new Set();
       // (b20261012-13) 「용어」로 분류된 사전 항목이 용어DB에도 이어져 있으면 인물·지명 줄이 먼저 가져가지 않게 (Easton Baal 신 → 지명 바알에 섞이던 것)
       const _tLinked = new Set(); termDatabase.forEach(t => { _dictIds(t.eastonId).forEach(i => _tLinked.add('easton:' + i)); _dictIds(t.smithId).forEach(i => _tLinked.add('smith:' + i)); });
@@ -8439,7 +8442,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const def = ps.length > 1 ? `${ps.length}명 · ` + ps.map(x => x.briefest_ko || x.description_ko || '').filter(Boolean).slice(0, 4).join(' / ')
                                   : (main.short_ko || main.description_ko || main.briefest_ko || '');
         list.push({ type: 'PERSON', sortKey: k, nameKo: k, nameEn: [...new Set(ps.map(x => x.name_en || ''))].filter(Boolean).join(' / '),
-          def, strong: [...new Set(ps.flatMap(x => _dictIds(x.strong || x.ustrong)))].join(','), people: ps, entries: ents, ref: main });
+          def, strong: [...new Set(ps.flatMap(x => _dictIds(x.strong || x.ustrong)))].join(','), people: ps, entries: ents, isbe: isbeOf(ps), ref: main });
       });
       // 지명 — 지명 DB 줄
       placeDatabase.forEach(p => {
@@ -8449,7 +8452,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         eIds.forEach(id => { const x = ent('easton', id); if (x) ents.push(x); });
         sIds.forEach(id => { const x = ent('smith', id); if (x) ents.push(x); });
         list.push({ type: 'PLACE', sortKey: p.name || '', nameKo: p.name || '', nameEn: p.orig || p.modern || '',
-          def: p.desc || '', strong: p.hebrew_greek || p.ustrong || '', entries: ents, ref: p });
+          def: p.desc || '', strong: p.hebrew_greek || p.ustrong || '', entries: ents, isbe: isbeOf([p]), ref: p });
       });
       // 용어 — 이스턴·스미스 용어 항목을 영문 표제로 묶음
       const termByE = new Map(), termByS = new Map();
@@ -8480,7 +8483,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         list.push({ type: 'TERM', sortKey: o.ko, nameKo: o.ko, nameEn: o.en,
           def: String(o.ents[0].e.definition_ko || '').replace(/\s+/g, ' ').slice(0, 120), strong: [...o.codes].slice(0, 6).join(','),
           entries: o.ents, raw: !o.term, ref: o.term || { id: 'raw-' + o.en }, srcDict: o.ents.length > 1 ? '이스턴+스미스' : (o.ents[0].src === 'easton' ? '이스턴' : '스미스'),
-          alt: kos.slice(1) });
+          alt: kos.slice(1), isbe: o.term ? isbeOf([o.term]) : [] });
       });
       // (b20261012-11 kjm 「사전에 있는데 우리가 누락」) 인명·지명으로 분류됐지만 인명DB·지명DB 어디에도 연결 안 된 사전 항목도 목록에 올린다
       //  (아말렉 사람·암몬 사람·아낙 족속·Smith Son …) — 사전 해설만 보이는 카드(raw)
@@ -8514,6 +8517,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           L.forEach((it, i) => {
             const cs = new Set(String(it.strong || '').split(',').map(_dictNormCode).filter(Boolean));
             (it.entries || []).forEach(x => String(x.e.hebrew_greek || '').split(',').map(_dictNormCode).filter(Boolean).forEach(c => cs.add(c)));
+            (it.isbe || []).forEach(e => String(e.hebrew_greek || '').split(',').map(_dictNormCode).filter(Boolean).forEach(c => cs.add(c)));
             cs.forEach(c => { if (!idx.has(c)) idx.set(c, []); idx.get(c).push(i); });
           });
           _dictCodeIdx = { L, idx };
@@ -8561,10 +8565,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const stubs = allEnts.filter(isStub);
       const ents = allEnts.filter(x => !isStub(x));
       if (stubs.length) h += `<div style="font-size:.82em;color:#64748b;margin:4px 0 2px">참조 항목: ` + stubs.map(x => `${x.src === 'easton' ? '이스턴' : '스미스'} ${escHtml(x.e.term || '')} — ${escHtml(String(x.e.definition_ko || '').trim())}`).join(' · ') + `</div>`;
-      if (!ents.length && !stubs.length) h += `<div style="color:#94a3b8;padding:10px 0">이 줄에 붙은 이스턴·스미스 항목이 없습니다.</div>`;
+      if (!ents.length && !stubs.length && !(it.isbe && it.isbe.length)) h += `<div style="color:#94a3b8;padding:10px 0">이 줄에 붙은 이스턴·스미스 항목이 없습니다.</div>`;
       ents.forEach(x => {
         h += `<div style="border-top:1px solid #eadbd2;padding-top:8px;margin-top:8px"><div style="font-size:.8em;color:#a0522d;font-weight:700;margin-bottom:4px">▣ ${x.src === 'easton' ? '이스턴' : '스미스'} 성경사전 <span style="font-weight:400;color:#94a3b8">${escHtml(x.e.term || '')}</span></div>`
           + `<div style="font-family:'Gowun Batang',serif;font-size:1em">${_dictParas(x.e.definition_ko)}</div></div>`;
+      });
+      // (b20261013-2) ISBE — 이스턴·스미스 아래, 길어서 접어 둔다(한 개뿐이고 앞 단락이 없으면 펼침)
+      (it.isbe || []).forEach((e, k) => {
+        const open = (!ents.length && (it.isbe.length === 1)) ? ' open' : '';
+        const body = e.definition_ko ? _dictParas(e.definition_ko) : `<div style="color:#94a3b8;font-size:.9em">(한글 번역 없음 — 영문)</div>` + _dictParas(e.definition || '');
+        h += `<details${open} style="border-top:1px solid #eadbd2;padding-top:8px;margin-top:8px"><summary style="cursor:pointer;font-size:.8em;color:#475569;font-weight:700">▣ ISBE 국제 표준 성경 백과사전 — ${escHtml(e.term || '')}${e.hebrew_greek ? ' <span style="font-weight:400;color:#94a3b8"># ' + escHtml(e.hebrew_greek) + '</span>' : ''}</summary>`
+          + `<div style="font-family:'Gowun Batang',serif;font-size:1em;margin-top:6px">${body}</div></details>`;
       });
       card.innerHTML = h;
       res.style.display = 'none'; card.style.display = 'block';
@@ -18375,7 +18386,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
