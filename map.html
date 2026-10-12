@@ -8470,6 +8470,23 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           entries: o.ents, raw: !o.term, ref: o.term || { id: 'raw-' + o.en }, srcDict: o.ents.length > 1 ? '이스턴+스미스' : (o.ents[0].src === 'easton' ? '이스턴' : '스미스'),
           alt: kos.slice(1) });
       });
+      // (b20261012-11 kjm 「사전에 있는데 우리가 누락」) 인명·지명으로 분류됐지만 인명DB·지명DB 어디에도 연결 안 된 사전 항목도 목록에 올린다
+      //  (아말렉 사람·암몬 사람·아낙 족속·Smith Son …) — 사전 해설만 보이는 카드(raw)
+      const usedAll = new Set(); list.forEach(x => (x.entries || []).forEach(y => usedAll.add(y.src + ':' + y.e.id)));
+      const og = new Map();
+      [['easton', E], ['smith', S]].forEach(([src, L]) => L.forEach(e => {
+        if (!e.definition_ko || usedAll.has(src + ':' + e.id) || (e.category !== '인명' && e.category !== '지명')) return;
+        const [en, ko0] = _dictSplitTerm(e.term); const ko = ko0 || en;
+        const key = e.category + ':' + (en.toLowerCase().replace(/[^a-z]/g, '') || ko);
+        if (!og.has(key)) og.set(key, { ko, en, cat: e.category, ents: [], codes: new Set() });
+        const o = og.get(key); o.ents.push({ src, e }); _dictIds(e.hebrew_greek).forEach(c => o.codes.add(c));
+      }));
+      og.forEach(o => {
+        o.ents.sort((a, b) => (a.src === 'easton' ? 0 : 1) - (b.src === 'easton' ? 0 : 1));
+        list.push({ type: o.cat === '인명' ? 'PERSON' : 'PLACE', sortKey: o.ko, nameKo: o.ko, nameEn: o.en,
+          def: String(o.ents[0].e.definition_ko || '').replace(/\s+/g, ' ').slice(0, 120), strong: [...o.codes].slice(0, 6).join(','),
+          entries: o.ents, raw: true, ref: { id: 'raw-' + o.en }, srcDict: o.ents.length > 1 ? '이스턴+스미스' : (o.ents[0].src === 'easton' ? '이스턴' : '스미스'), alt: [] });
+      });
       list.sort((a, b) => a.sortKey.localeCompare(b.sortKey, 'ko'));
       return list;
     }
@@ -8517,8 +8534,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         + `<b style="font-size:1.3em">${escHtml(it.nameKo)}</b><span style="font-size:.75em;padding:2px 7px;border-radius:5px;color:${col};background:${col}18">${lab}</span></div>`;
       h += `<div style="font-size:.85em;color:#64748b;margin-bottom:8px">${escHtml(it.nameEn || '')}${it.strong ? ' · # ' + escHtml(it.strong) : ''}${it.alt && it.alt.length ? ' · 다른 이름: ' + escHtml(it.alt.join(', ')) : ''}</div>`;
       const btns = [];
-      if (it.type === 'PLACE') btns.push(`<button data-act="map" style="background:#dcfce7;color:#15803D;border:1px solid #86efac;border-radius:6px;padding:4px 10px;cursor:pointer">📍 지도에서 보기</button>`);
-      if (it.type === 'PERSON') btns.push(`<button data-act="person" style="background:#ede9fe;color:#6D28D9;border:1px solid #c4b5fd;border-radius:6px;padding:4px 10px;cursor:pointer">👤 인물 카드</button>`);
+      if (it.type === 'PLACE' && !it.raw) btns.push(`<button data-act="map" style="background:#dcfce7;color:#15803D;border:1px solid #86efac;border-radius:6px;padding:4px 10px;cursor:pointer">📍 지도에서 보기</button>`);
+      if (it.type === 'PERSON' && !it.raw) btns.push(`<button data-act="person" style="background:#ede9fe;color:#6D28D9;border:1px solid #c4b5fd;border-radius:6px;padding:4px 10px;cursor:pointer">👤 인물 카드</button>`);
       if (it.type === 'TERM' && !it.raw) btns.push(`<button data-act="term" style="background:#ffedd5;color:#C2410C;border:1px solid #fdba74;border-radius:6px;padding:4px 10px;cursor:pointer">용어 카드</button>`);
       btns.push(`<button data-act="isbe" style="background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;border-radius:6px;padding:4px 10px;cursor:pointer">ISBE에서 찾기</button>`);
       h += `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${btns.join('')}</div>`;
@@ -18200,7 +18217,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-10`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-11`;
         document.title = `바이블 맵 스터디`;
       }
     }
