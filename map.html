@@ -8115,7 +8115,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const raw = await getLocalItem('saved_krvn_morph');
         if (raw && raw.meta && raw.meta.kind === 'krvn_morph') { krvnMorph = raw; try { applyKrvStrong(); } catch (e) {} console.log('어절 원어 분석 ' + raw.meta.verses + '절 불러옴'); }
       } catch (e) { console.warn('어절 원어 분석 불러오기 실패', e); }
-      finally { krvnLoading = false; }
+      finally { krvnLoading = false; setTimeout(() => { try { if (typeof _ctBuild === 'function') _ctBuild(); } catch (e) {} }, 2500); }   // (b-9) 원어 번호 딱지 색인을 미리 — 장을 넘길 때 멈칫하지 않게
     }
     // 절 본문과 글자 위치 → 그 절 어절 목록과 몇 번째 어절 (본문 어절 수가 다르면 null)
     /* ── 개역개정 본문에 스트롱 번호 작게 — 어절 위에 (b20260926-5) ──
@@ -15908,6 +15908,26 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const names = kind === '인명' ? [item.name_ko].concat(item.aliases_ko || [])
                                     : [String(item.name || '').split(/[(（\[]/)[0].trim()];
       const seen = new Set();
+      // (b20261012-9 kjm 「예수를 눌렀더니 본문이 늦게」) 절마다 본문 전체를 다시 그리던 것을 원어 번호 표로 바꿈 — 수천 배 빠름.
+      //  후보 = 구절 목록 + 그 항목 번호가 나오는 절. 원어 분석이 있는 절은 번호 딱지 표로, 없는 절만 예전 방식으로.
+      if (typeof codeTagTable === 'function' && codeTagsOn && typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) {
+        const K = kind === '인명' ? 'P' : 'L', want = K + ':' + item.id;
+        const cand = new Map(); refs.forEach(r => cand.set(r.join('-'), r));
+        try { const idx = _ctBuild(); (idx.vByItem && idx.vByItem.get(item) || []).forEach(vk => { if (!cand.has(vk)) cand.set(vk, vk.split('-').map(Number)); }); } catch (e) {}
+        cand.forEach(([b, c, v], vk) => {
+          if (seen.has(vk)) return;
+          const text = (typeof wpVerseText === 'function') ? wpVerseText(b, c, v) : '';
+          if (!text) return;
+          const tbl = codeTagTable(b, c, v, text);
+          let ok = false;
+          if (tbl) ok = Object.keys(tbl).some(k => tbl[k] === want);
+          if (!ok && refs.some(r => r[0] === b && r[1] === c && r[2] === v)) ok = names.some(n => n && text.indexOf(n) >= 0) && (!tbl || !Object.keys(tbl).length);
+          const man = verseLinks && verseLinks[vk]; if (man && Object.keys(man).some(k => man[k] === want)) ok = true;
+          if (ok) { seen.add(vk); out.total++; if (out.rows.length < limit) out.rows.push([b, c, v]); }
+        });
+        out.rows.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]);
+        return out;
+      }
       refs.forEach(([b, c, v]) => {
         const vk = `${b}-${c}-${v}`;
         if (seen.has(vk)) return;
@@ -16906,7 +16926,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       Object.keys(base).forEach(cd => { const L = base[cd]; if (L.length !== 1) return; const r = L[0].rec;
         const nv = L[0].kind === 'P' ? (Array.isArray(r.verses) ? r.verses.length : parseInt(r.verse_count, 10) || 0) : (parseInt(r.verse_count, 10) || 0);
         if (nv > 0 && (occ[cd] || 0) <= nv * 2 + 2) ok[cd] = true; });
-      return (_ctIdx = { key, ds, base, term, ok, occ });
+      // 항목별 「번호가 나오는 절」 (인명·지명 쓰인 곳 목록 후보)
+      const vByItem = new Map();
+      if (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) Object.keys(krvnMorph.v).forEach(vk => {
+        (krvnMorph.v[vk] || []).forEach(a => { if (!a) return;
+          if (a[9]) String(a[9]).split(',').forEach(x => { const L = ds[_ulDsNorm(x)]; if (L && L.length === 1) { const r = L[0].rec; const A = vByItem.get(r) || []; if (A[A.length - 1] !== vk) A.push(vk); vByItem.set(r, A); } });
+          String(a[0] || '').split(',').forEach(x => { const L = base[_ulNorm(x)]; if (L && L.length >= 1 && L.length <= 4) L.forEach(it => { const A = vByItem.get(it.rec) || []; if (A[A.length - 1] !== vk) A.push(vk); vByItem.set(it.rec, A); }); });
+        }); });
+      return (_ctIdx = { key, ds, base, term, ok, occ, vByItem });
     }
     function codeTagTable(b, c, v, text) {
       if (!codeTagsOn || typeof krvnMorph === 'undefined' || !krvnMorph || !krvnMorph.v) return null;
@@ -18002,7 +18029,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           + (isP ? 'background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6' : 'background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8');
         b.innerHTML = `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:0.8em;${isP ? 'background:#ede9fe' : 'background:#dbeafe'}">${isP ? escHtml(it.label.charAt(0)) : '📍'}</span>${escHtml(it.label)}${it.n > 1 ? `<span style="opacity:.6;font-size:0.85em">${it.n}</span>` : ''}`;
         b.title = (isP ? '인명' : '지명') + ' · 이 장에 ' + it.n + '번';
-        b.onclick = () => { try { it.first.scrollIntoView({ block: 'center', behavior: 'smooth' }); it.first.click(); } catch (e) {} };
+        b.onclick = (ev) => { try { ev.preventDefault(); it.first.click(); } catch (e) {} };   // (b-9 kjm) 본문은 움직이지 않고 창만
         box.appendChild(b);
       });
       const title = container.querySelector('.chapter-title');
