@@ -16915,9 +16915,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       (personDatabase || []).forEach(r => { if (r.pending_review === true || r.pending_review === 'True' || _isUnnamedPerson(r)) return;
         addDs('P', r, r.ustrong); String([r.ustrong, r.strong].join(',')).split(/[,\s]+/).forEach(c => addBase('P', r, c)); });
       (placeDatabase || []).forEach(r => { addDs('L', r, r.ustrong); String([r.ustrong, r.hebrew_greek].join(',')).split(/[,\s]+/).forEach(c => addBase('L', r, c)); });
-      (termDatabase || []).forEach(r => { if (r.rep_of) return; String(r.hebrew_greek || '').split(/[,\s]+/).map(_ulNorm).filter(Boolean)
-        .forEach((c, i) => { const L = (term[c] = term[c] || []); if (!L.some(x => x.rec === r)) L.push({ kind: 'T', rec: r, first: i === 0 }); }); });
-      Object.keys(term).forEach(c => term[c].sort((x, y) => y.first - x.first));
+      (termDatabase || []).forEach(r => { if (r.rep_of) return;
+        const mains = String(r.main_codes || '').split(/[,\s]+/).map(_ulNorm).filter(Boolean);   // (b-10 용어 1.12.29) 이 번호의 대표 용어
+        String(r.hebrew_greek || '').split(/[,\s]+/).map(_ulNorm).filter(Boolean)
+        .forEach((c, i) => { const L = (term[c] = term[c] || []); if (!L.some(x => x.rec === r)) L.push({ kind: 'T', rec: r, first: i === 0, main: mains.indexOf(c) >= 0 }); }); });
+      Object.keys(term).forEach(c => term[c].sort((x, y) => (y.main - x.main) || (y.first - x.first)));
       // 번호가 나오는 절 수 — 「한 항목만 가진 번호」라도 그 항목 구절보다 훨씬 많이 나오면(이스라엘 H3478 = 나라·백성) 쓰지 않는다
       const occ = {};
       if (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) Object.keys(krvnMorph.v).forEach(vk => {
@@ -16983,12 +16985,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         };
         if (!hit && termHighlightEnabled) codes.some(cd => {
           const L = idx.term[cd] || []; if (!L.length) return false;
+          // (b-10 kjm 「동사는 안 붙임」) 이 어절에서 그 원어가 동사·분사·부정사·수사면 용어 딱지를 붙이지 않는다(사랑하고·지키며 …)
+          const ci0 = String(a[0]).split(',').map(_ulNorm).indexOf(cd);
+          const mo0 = (ci0 >= 0 && Array.isArray(a[2]) && a[2][ci0] != null && a[2][ci0] >= 0 && krvnMorph.mo) ? String(krvnMorph.mo[a[2][ci0]] || '') : '';
+          if (mo0 && !/명사/.test(mo0) && /칼|피엘|히필|니팔|푸알|호팔|히트파엘|샤펠|파엘|아펠|분사|부정사|완료|미완|명령|동사|직설|가정법|희구|기수|서수/.test(mo0)) return false;
           for (const t of L) { const w = pickName('T', t.rec); if (w && tOk(w)) { hit = t; word = w; return true; } }
           // 이름과 다른 번역(세상·천지·나라): 1:1·단독 대응이고 그 원어가 명사일 때만(동사·형용사 어절은 빼기)
           const ci = String(a[0]).split(',').map(_ulNorm).indexOf(cd);
           const mo = (ci >= 0 && Array.isArray(a[2]) && a[2][ci] != null && a[2][ci] >= 0 && krvnMorph.mo) ? String(krvnMorph.mo[a[2][ci]] || '') : '';
           if ((a[4] === '1' || a[4] === 'S') && /명사/.test(mo) && !/고유|동사|분사|부정사/.test(mo)) {
-            const t = L.find(x => x.first) || L[0];
+            const t = L.find(x => x.main) || L.find(x => x.first) || L[0];
             // 줄기 = 뒤 조사를 뗀 앞부분(한 글자 줄기도: 길을→길). 동사·형용사 꼴이 섞인 줄기는 뺀다
             let w = ej.replace(/[^가-힣A-Za-z0-9]+$/, '');
             for (let n = Math.min(4, w.length - 1); n >= 1; n--) { const tail = w.slice(w.length - n); if (VLINK_PARTICLE.test(tail)) { w = w.slice(0, w.length - n); break; } }
@@ -18194,7 +18200,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-9`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-10`;
         document.title = `바이블 맵 스터디`;
       }
     }
