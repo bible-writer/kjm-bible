@@ -16876,6 +16876,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
      *  어느 경우든 어절이 그 항목의 이름·다른 이름으로 시작해야 붙인다(「그의」 같은 대명사 어절 제외).
      *  손으로 고친 연결표(verseLinks)가 늘 이긴다. 번호가 없는 어절은 예전(이름+구절) 그대로. */
     var codeTagsOn = true;
+    const _CT_FILLER = new Set(['그', '이', '저', '그의', '이의', '내', '네', '나', '너', '너희', '우리', '그들', '저희', '그녀', '자기', '있는', '모든', '온', '각', '여러', '이런', '그런', '저런', '어떤', '무슨', '한', '두', '세', '곧', '또', '및', '것', '자', '때', '중', '위', '안', '밖', '앞', '뒤']);
+    const _CT_DEFAULT_BL = new Set(typeof DEFAULT_BLACKLIST !== 'undefined' ? DEFAULT_BLACKLIST : []);
     try { codeTagsOn = localStorage.getItem('codeTagsOn') !== '0'; } catch (e) {}
     let _ctIdx = null;
     function _ctNames(kind, r) {
@@ -16904,7 +16906,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       Object.keys(base).forEach(cd => { const L = base[cd]; if (L.length !== 1) return; const r = L[0].rec;
         const nv = L[0].kind === 'P' ? (Array.isArray(r.verses) ? r.verses.length : parseInt(r.verse_count, 10) || 0) : (parseInt(r.verse_count, 10) || 0);
         if (nv > 0 && (occ[cd] || 0) <= nv * 2 + 2) ok[cd] = true; });
-      return (_ctIdx = { key, ds, base, term, ok });
+      return (_ctIdx = { key, ds, base, term, ok, occ });
     }
     function codeTagTable(b, c, v, text) {
       if (!codeTagsOn || typeof krvnMorph === 'undefined' || !krvnMorph || !krvnMorph.v) return null;
@@ -16916,24 +16918,54 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!a || !a[0]) return;
         const ej = ws[k].replace(/^[^가-힣A-Za-z0-9]+/, '');
         const lead = ws[k].length - ej.length;
-        const pickName = (kind, rec) => _ctNames(kind, rec).find(n => ej.startsWith(n));
+        const rest = text.slice(starts[k] + lead);   // 여러 어절 이름(블레셋 사람·여호와의 사자)도 맞춤
+        const pickName = (kind, rec) => _ctNames(kind, rec).find(n => rest.startsWith(n) && (n.indexOf(' ') < 0 ? ej.startsWith(n) : true));
         let hit = null, word = null;
         // 1) 끝글자 번호
         (a[9] ? String(a[9]).split(',') : []).some(x => { const L = idx.ds[_ulDsNorm(x)]; if (!L || L.length !== 1) return false;
           const w = pickName(L[0].kind, L[0].rec); if (w) { hit = L[0]; word = w; return true; } return false; });
         const codes = String(a[0]).split(',').map(_ulNorm).filter(Boolean);
         // 2) 한 항목만 가진 번호
-        if (!hit) codes.some(cd => { const L = idx.base[cd]; if (!L || L.length !== 1 || !idx.ok[cd]) return false;
-          // 어절 끝글자 번호가 같은 바탕의 다른 갈래를 가리키면(다른 사람·곳) 쓰지 않는다
-          if (a[9] && String(a[9]).split(',').some(x => { const n = _ulDsNorm(x); return n.replace(/[A-Z]$/, '') === cd && /[A-Z]$/.test(n) && n !== _ulDsNorm(L[0].rec.ustrong); })) return false;
+        //  (b-7) 같은 번호를 여러 항목이 가지면(다윗: 인물 둘·다윗 성, 애굽: 미스라임·애굽) 어절 이름이 맞는 항목만 남기고,
+        //  그래도 여럿이면 이 절이 구절 목록에 든 인물 하나만
+        const vkey = `${b}-${c}-${v}`;
+        const inVerses = r => Array.isArray(r.verses) && r.verses.some(x => x && x.book === b && x.chapter === c && x.verse === v);
+        if (!hit) codes.some(cd => { const L0 = idx.base[cd]; if (!L0 || !L0.length) return false;
+          const a9o = a[9] ? String(a[9]).split(',').map(_ulDsNorm).filter(n => n.replace(/[A-Z]$/, '') === cd && /[A-Z]$/.test(n)) : [];
+          let L = L0.filter(x => pickName(x.kind, x.rec) && !(a9o.length && /[A-Z]$/.test(_ulDsNorm(x.rec.ustrong)) && a9o.indexOf(_ulDsNorm(x.rec.ustrong)) < 0));
+          if (L.length > 1) { const Lv = L.filter(x => x.kind === 'P' && inVerses(x.rec)); if (Lv.length === 1) L = Lv; }
+          if (L.length > 1) { const names = new Set(L.map(x => x.kind + ':' + pickName(x.kind, x.rec))); if (names.size === 1 && L.every(x => x.kind === 'L')) L = [L[0]]; }
+          if (L.length !== 1) return false;
+          if (!(L[0].kind === 'P' && inVerses(L[0].rec))) {   // 구절 목록에 없는 절이면 「이 번호가 그 항목 구절보다 훨씬 많이 나오는지」로 거름 (이스라엘 나라)
+            const r = L[0].rec, nv = L[0].kind === 'P' ? (Array.isArray(r.verses) ? r.verses.length : 0) : (parseInt(r.verse_count, 10) || 0);
+            if (!(nv > 0 && (idx.occ[cd] || 0) <= nv * 2 + 2)) return false;
+          }
           const w = pickName(L[0].kind, L[0].rec); if (w) { hit = L[0]; word = w; return true; } return false; });
         // 3) 용어 (용어 딱지를 켰을 때만)
-        if (!hit && termHighlightEnabled) codes.some(cd => (idx.term[cd] || []).some(t => { const w = pickName('T', t.rec);
-          if (!w || !_termKeyOk(w) || (typeof TERM_STOP_WORDS !== 'undefined' && TERM_STOP_WORDS.has(ej.replace(/[^가-힣A-Za-z0-9]+$/, '')))) return false;
+        //  (b-7 kjm 「H0776 이면 다 붙어야」) 용어는 기본 불용어(땅·왕·집 …)를 따지지 않는다 — 번호가 근거.
+        //  이름으로 시작하지 않아도(세상·천지·지면·나라) 1:1·단독 대응 어절이면 줄기에 붙인다. 보탠 말(그·이·내·있는 …)은 뺀다.
+        const tOk = (w) => {
+          if (!w) return false;
+          if (_CT_FILLER.has(w)) return false;
+          if (typeof TERM_STOP_WORDS !== 'undefined' && TERM_STOP_WORDS.has(ej.replace(/[^가-힣A-Za-z0-9]+$/, ''))) return false;
+          if (userBlacklist && userBlacklist.has(w) && !_CT_DEFAULT_BL.has(w)) return false;   // kjm 이 직접 막은 낱말만 존중
           const vt = (typeof TERM_VERSE_TABLE !== 'undefined') && TERM_VERSE_TABLE[`${b}-${c}-${v}`];
           if (vt && Object.keys(vt).some(tk => vt[tk] === 0 && tk.startsWith(w))) return false;
           if (userTermSkip && userTermSkip.book && userTermSkip.book[b] && userTermSkip.book[b].indexOf(w) >= 0) return false;
-          hit = t; word = w; return true; }));
+          return true;
+        };
+        if (!hit && termHighlightEnabled) codes.some(cd => {
+          const L = idx.term[cd] || []; if (!L.length) return false;
+          for (const t of L) { const w = pickName('T', t.rec); if (w && tOk(w)) { hit = t; word = w; return true; } }
+          // 이름과 다른 번역(세상·천지·나라): 1:1·단독 대응이고 그 원어가 명사일 때만(동사·형용사 어절은 빼기)
+          const ci = String(a[0]).split(',').map(_ulNorm).indexOf(cd);
+          const mo = (ci >= 0 && Array.isArray(a[2]) && a[2][ci] != null && a[2][ci] >= 0 && krvnMorph.mo) ? String(krvnMorph.mo[a[2][ci]] || '') : '';
+          if ((a[4] === '1' || a[4] === 'S') && /명사/.test(mo) && !/고유|동사|분사|부정사/.test(mo)) {
+            const t = L.find(x => x.first) || L[0];
+            const w = _ulWord(ws[k], 'T', t.rec);
+            if (w && w.length >= 1 && tOk(w)) { hit = t; word = w; return true; }
+          }
+          return false; });
         if (!hit || !word) return;
         const st = starts[k] + lead; let nth = 0, i = -1;
         while ((i = text.indexOf(word, i + 1)) >= 0 && i <= st) nth++;
@@ -17894,6 +17926,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
 
       container.innerHTML = html;
       try { applyKrvStrong(container); } catch (e) { console.warn('스트롱 번호 표시 생략', e); }
+      try { renderChapterChips(container); } catch (e) { console.warn('장 등장 칩 생략', e); }
 
       // 현재 장의 모든 지명을 지도에 표시 + fitBounds
       showChapterPlaces(container);
@@ -17917,6 +17950,44 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         Commentary.jumpToVerse(bookId, chapter, _syncVerse, true);
       }
     }
+
+    /* ── (b20261012-8) 장 머리 등장 칩 — 이 장 본문에 붙은 인명·지명 딱지를 처음 나온 차례로 모아 한 줄로 (올어바웃처럼)
+     *  칩을 누르면 그 낱말이 처음 나온 절로 가서 딱지를 누른 것과 같이 연다. 같은 항목은 한 번만(횟수 표시). */
+    function renderChapterChips(container) {
+      const old = container.querySelector('#chapter-chips'); if (old) old.remove();
+      const spans = container.querySelectorAll('.verse-text span.bible-person-tag, .verse-text span.bible-place-tag');
+      if (!spans.length) return;
+      const seen = new Map();
+      spans.forEach(sp => {
+        const kind = sp.classList.contains('bible-person-tag') ? 'P' : 'L';
+        const oc = sp.getAttribute('onclick') || ''; let m, id = null;
+        if ((m = oc.match(/vlinkOpen\('([PL])', (\d+)/))) id = m[2];
+        let label = sp.textContent.trim();
+        if (id) { const t = vlinkTarget(kind + ':' + id); if (t) label = vlinkLabel(t.kind, t.rec) || label; }
+        else if (kind === 'P') { const row = sp.closest('.verse-row'); const vk = row && row.dataset.bc ? row.dataset.bc + '-' + String(row.id).replace('verse-row-', '') : '';
+          const nm = (oc.match(/handleClickAt\('((?:[^'\\]|\\.)*)'/) || [])[1] || label;
+          const p = vk && personVerseIndex[vk] && personVerseIndex[vk][nm.replace(/\\'/g, "'")]; if (p) { id = String(p.id); label = p.name_ko || label; } }
+        label = String(label).split(/[\(（]/)[0].trim();
+        const key = kind + ':' + (id || label);
+        if (!seen.has(key)) seen.set(key, { kind, label, first: sp, n: 0 });
+        seen.get(key).n++;
+      });
+      const box = document.createElement('div'); box.id = 'chapter-chips';
+      box.style.cssText = 'display:flex;gap:6px;overflow-x:auto;padding:6px 2px 10px;margin:-4px 0 6px;scrollbar-width:thin';
+      [...seen.values()].forEach((it, i) => {
+        const b = document.createElement('button');
+        const isP = it.kind === 'P';
+        b.style.cssText = 'flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 4px;border-radius:999px;cursor:pointer;font-size:0.85em;white-space:nowrap;'
+          + (isP ? 'background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6' : 'background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8');
+        b.innerHTML = `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:0.8em;${isP ? 'background:#ede9fe' : 'background:#dbeafe'}">${isP ? escHtml(it.label.charAt(0)) : '📍'}</span>${escHtml(it.label)}${it.n > 1 ? `<span style="opacity:.6;font-size:0.85em">${it.n}</span>` : ''}`;
+        b.title = (isP ? '인명' : '지명') + ' · 이 장에 ' + it.n + '번';
+        b.onclick = () => { try { it.first.scrollIntoView({ block: 'center', behavior: 'smooth' }); it.first.click(); } catch (e) {} };
+        box.appendChild(b);
+      });
+      const title = container.querySelector('.chapter-title');
+      if (title) title.insertAdjacentElement('afterend', box); else container.prepend(box);
+    }
+    window.renderChapterChips = renderChapterChips;
 
     function showChapterPlaces(container) {
       // 기존 장 지명 레이어 제거
@@ -18075,7 +18146,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-6`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-8`;
         document.title = `바이블 맵 스터디`;
       }
     }
