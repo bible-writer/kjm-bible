@@ -16868,11 +16868,88 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       return last ? [last, last.nodeValue.length] : null;
     }
     // 자동 딱지가 다 붙은 절 HTML 에 연결표를 입힌다
+    /* ── (b20261012-6 기획안 D단계 「원어 중심」) 원어 번호 딱지 ──
+     * 어절 원어 분석(krvn)의 번호가 인명·지명·용어의 번호와 같으면 그 어절에 딱지를 자동으로 붙인다.
+     *  1) 어절 a[9] 의 STEP 끝글자 번호(H3063G …) = 인명·지명 ustrong → 그 항목
+     *  2) 어절 a[0] 번호를 인명·지명 가운데 한 항목만 가지면 → 그 항목 (H87 아브람 → 아브라함)
+     *  3) 용어: 어절 번호가 용어 번호에 있고, 어절이 그 용어 이름(다른 이름)으로 시작할 때만
+     *  어느 경우든 어절이 그 항목의 이름·다른 이름으로 시작해야 붙인다(「그의」 같은 대명사 어절 제외).
+     *  손으로 고친 연결표(verseLinks)가 늘 이긴다. 번호가 없는 어절은 예전(이름+구절) 그대로. */
+    var codeTagsOn = true;
+    try { codeTagsOn = localStorage.getItem('codeTagsOn') !== '0'; } catch (e) {}
+    let _ctIdx = null;
+    function _ctNames(kind, r) {
+      let al = kind === 'P' ? r.aliases_ko : kind === 'T' ? r.alt_ko : r.aliases;
+      if (typeof al === 'string') { try { al = JSON.parse(al.replace(/'/g, '"')); } catch (e) { al = al ? [al] : []; } }
+      const ns = [kind === 'P' ? r.name_ko : kind === 'L' ? r.name : r.term_ko].concat(Array.isArray(al) ? al : []);
+      return ns.map(n => String(n || '').split(/[\(\[（]/)[0].replace(/\s+[A-Z0-9]+$/, '').trim()).filter(n => n.length >= 1).sort((x, y) => y.length - x.length);
+    }
+    function _ctBuild() {
+      const key = [personDatabase && personDatabase.length, placeDatabase && placeDatabase.length, termDatabase && termDatabase.length].join('/');
+      if (_ctIdx && _ctIdx.key === key) return _ctIdx;
+      const ds = {}, base = {}, term = {};
+      const addDs = (k, r, c) => { const n = _ulDsNorm(c); if (!n || !/[A-Z]$/.test(n)) return; (ds[n] = ds[n] || []).push({ kind: k, rec: r }); };
+      const addBase = (k, r, c) => { const n = _ulNorm(c); if (!n) return; const L = (base[n] = base[n] || []); if (!L.some(x => x.rec === r)) L.push({ kind: k, rec: r }); };
+      (personDatabase || []).forEach(r => { if (r.pending_review === true || r.pending_review === 'True' || _isUnnamedPerson(r)) return;
+        addDs('P', r, r.ustrong); String([r.ustrong, r.strong].join(',')).split(/[,\s]+/).forEach(c => addBase('P', r, c)); });
+      (placeDatabase || []).forEach(r => { addDs('L', r, r.ustrong); String([r.ustrong, r.hebrew_greek].join(',')).split(/[,\s]+/).forEach(c => addBase('L', r, c)); });
+      (termDatabase || []).forEach(r => { if (r.rep_of) return; String(r.hebrew_greek || '').split(/[,\s]+/).map(_ulNorm).filter(Boolean)
+        .forEach((c, i) => { const L = (term[c] = term[c] || []); if (!L.some(x => x.rec === r)) L.push({ kind: 'T', rec: r, first: i === 0 }); }); });
+      Object.keys(term).forEach(c => term[c].sort((x, y) => y.first - x.first));
+      // 번호가 나오는 절 수 — 「한 항목만 가진 번호」라도 그 항목 구절보다 훨씬 많이 나오면(이스라엘 H3478 = 나라·백성) 쓰지 않는다
+      const occ = {};
+      if (typeof krvnMorph !== 'undefined' && krvnMorph && krvnMorph.v) Object.keys(krvnMorph.v).forEach(vk => {
+        const seen = new Set(); (krvnMorph.v[vk] || []).forEach(a => String((a && a[0]) || '').split(',').forEach(x => { const n = _ulNorm(x); if (n && !seen.has(n)) { seen.add(n); occ[n] = (occ[n] || 0) + 1; } })); });
+      const ok = {};
+      Object.keys(base).forEach(cd => { const L = base[cd]; if (L.length !== 1) return; const r = L[0].rec;
+        const nv = L[0].kind === 'P' ? (Array.isArray(r.verses) ? r.verses.length : parseInt(r.verse_count, 10) || 0) : (parseInt(r.verse_count, 10) || 0);
+        if (nv > 0 && (occ[cd] || 0) <= nv * 2 + 2) ok[cd] = true; });
+      return (_ctIdx = { key, ds, base, term, ok });
+    }
+    function codeTagTable(b, c, v, text) {
+      if (!codeTagsOn || typeof krvnMorph === 'undefined' || !krvnMorph || !krvnMorph.v) return null;
+      const arr = krvnMorph.v[`${b}-${c}-${v}`]; if (!arr) return null;
+      const ws = String(text || '').trim().split(/\s+/); if (ws.length !== arr.length) return null;
+      const idx = _ctBuild(); const out = {};
+      let pos = 0; const starts = ws.map(w => { const i = text.indexOf(w, pos); pos = i + w.length; return i; });
+      arr.forEach((a, k) => {
+        if (!a || !a[0]) return;
+        const ej = ws[k].replace(/^[^가-힣A-Za-z0-9]+/, '');
+        const lead = ws[k].length - ej.length;
+        const pickName = (kind, rec) => _ctNames(kind, rec).find(n => ej.startsWith(n));
+        let hit = null, word = null;
+        // 1) 끝글자 번호
+        (a[9] ? String(a[9]).split(',') : []).some(x => { const L = idx.ds[_ulDsNorm(x)]; if (!L || L.length !== 1) return false;
+          const w = pickName(L[0].kind, L[0].rec); if (w) { hit = L[0]; word = w; return true; } return false; });
+        const codes = String(a[0]).split(',').map(_ulNorm).filter(Boolean);
+        // 2) 한 항목만 가진 번호
+        if (!hit) codes.some(cd => { const L = idx.base[cd]; if (!L || L.length !== 1 || !idx.ok[cd]) return false;
+          // 어절 끝글자 번호가 같은 바탕의 다른 갈래를 가리키면(다른 사람·곳) 쓰지 않는다
+          if (a[9] && String(a[9]).split(',').some(x => { const n = _ulDsNorm(x); return n.replace(/[A-Z]$/, '') === cd && /[A-Z]$/.test(n) && n !== _ulDsNorm(L[0].rec.ustrong); })) return false;
+          const w = pickName(L[0].kind, L[0].rec); if (w) { hit = L[0]; word = w; return true; } return false; });
+        // 3) 용어 (용어 딱지를 켰을 때만)
+        if (!hit && termHighlightEnabled) codes.some(cd => (idx.term[cd] || []).some(t => { const w = pickName('T', t.rec);
+          if (!w || !_termKeyOk(w) || (typeof TERM_STOP_WORDS !== 'undefined' && TERM_STOP_WORDS.has(ej.replace(/[^가-힣A-Za-z0-9]+$/, '')))) return false;
+          const vt = (typeof TERM_VERSE_TABLE !== 'undefined') && TERM_VERSE_TABLE[`${b}-${c}-${v}`];
+          if (vt && Object.keys(vt).some(tk => vt[tk] === 0 && tk.startsWith(w))) return false;
+          if (userTermSkip && userTermSkip.book && userTermSkip.book[b] && userTermSkip.book[b].indexOf(w) >= 0) return false;
+          hit = t; word = w; return true; }));
+        if (!hit || !word) return;
+        const st = starts[k] + lead; let nth = 0, i = -1;
+        while ((i = text.indexOf(word, i + 1)) >= 0 && i <= st) nth++;
+        if (nth) out[word + '#' + nth] = hit.kind + ':' + hit.rec.id;
+      });
+      return out;
+    }
+    window.toggleCodeTags = function (on) { codeTagsOn = on == null ? !codeTagsOn : !!on; try { localStorage.setItem('codeTagsOn', codeTagsOn ? '1' : '0'); } catch (e) {} try { loadBibleText(); } catch (e) {} return codeTagsOn; };
     function applyVerseLinks(html, b, c, v) {
-      const tbl = verseLinks && verseLinks[`${b}-${c}-${v}`];
-      if (!tbl || !html) return html;
-      const toks = Object.keys(tbl); if (!toks.length) return html;
+      const man = verseLinks && verseLinks[`${b}-${c}-${v}`];
+      if (!html) return html;
       const d = document.createElement('div'); d.innerHTML = html;
+      let auto = null; try { auto = codeTagTable(b, c, v, d.textContent); } catch (e) { console.warn('원어 번호 딱지', e); }
+      if (!man && !auto) return html;
+      const tbl = Object.assign({}, auto || {}, man || {});
+      const toks = Object.keys(tbl); if (!toks.length) return html;
       let changed = false;
       toks.forEach(tok => {
         const cut = tok.lastIndexOf('#'); if (cut <= 0) return;
@@ -16880,6 +16957,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const code = tbl[tok];
         const s = vlinkFind(d.textContent, word, nth); if (s < 0) return;
         const e = s + word.length;
+        if (!(man && man[tok] != null)) {   // 원어 번호 딱지: 이미 붙은 딱지를 함부로 풀지 않는다
+          let block = false;
+          d.querySelectorAll('span.bible-person-tag, span.bible-place-tag, span.bible-term-tag, span.vlink').forEach(sp => {
+            const ss = vlinkTextOffset(d, sp, 0), se = ss + sp.textContent.length;
+            if (!(ss < e && se > s)) return;
+            if (ss < s || se > e) block = true;                       // 더 긴 이름(싯딤 골짜기·두라 평지)은 그대로
+            else if (code.charAt(0) === 'T') block = true;           // 용어는 빈 자리에만
+            else if (sp.classList.contains('vlink')) block = true;
+          });
+          if (block) return;
+        }
         // 이 자리에 걸친 딱지(자동이든 앞서 입힌 것이든)는 풀어서 글자로 되돌린다
         d.querySelectorAll('span.bible-person-tag, span.bible-place-tag, span.bible-term-tag, span.vlink').forEach(sp => {
           if (!d.contains(sp)) return;
@@ -16892,10 +16980,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const a = vlinkPoint(d, s), z = vlinkPoint(d, e); if (!a || !z) return;
         const r = document.createRange(); r.setStart(a[0], a[1]); r.setEnd(z[0], z[1]);
         const sp = document.createElement('span');
-        sp.className = VLINK_CLASS[t.kind] + ' vlink';
+        const isMan = !!(man && man[tok] != null);
+        sp.className = VLINK_CLASS[t.kind] + (isMan ? ' vlink' : ' ctag');
         sp.setAttribute('onclick', `vlinkOpen('${t.kind}', ${t.id}, ${b}, ${c}, ${v}, this)`);
         sp.setAttribute('oncontextmenu', `vlinkContextMenu(event, this)`);
-        sp.setAttribute('title', `${word} → ${VLINK_KIND[t.kind]} 「${vlinkLabel(t.kind, t.rec)}」 (직접 연결)`);
+        sp.setAttribute('title', `${word} → ${VLINK_KIND[t.kind]} 「${vlinkLabel(t.kind, t.rec)}」 (${isMan ? '직접 연결' : '원어 번호'})`);
         sp.appendChild(r.extractContents()); r.insertNode(sp);
       });
       if (!changed) return html;
@@ -17986,7 +18075,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-6`;
         document.title = `바이블 맵 스터디`;
       }
     }
