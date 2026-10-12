@@ -1840,6 +1840,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <div class="menu-sect">백업</div>
             <button id="btn-import-backup-trigger">💾 백업에서 복원</button>
             <button id="btn-drive-connect">🔗 Google Drive 연동</button>
+            <button id="btn-appdata-sync" class="admin-only" onclick="appdataSync(true)">📥 앱자료 받기 (드라이브 성경지도_앱자료) <span id="menu-state-appdata" style="color:#94a3b8;font-size:0.85em"></span></button>
             <label class="menu-check"><input type="checkbox" id="chk-drive-autobackup"> 10분마다 Drive 자동백업</label>
 
             <div class="menu-sect admin-only">편집 이력</div>
@@ -9687,7 +9688,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
      * 11-b. Google Drive 자동 백업 모듈
      */
     const GDRIVE_CLIENT_ID = "683154240894-jgs7gel2r7jc0qla6f7bj0gmpca94ot1.apps.googleusercontent.com";
-    const GDRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
+    // (b20261013-1 kjm 「관리자 모드에서 구글 정해진 폴더에 로컬전용파일을 올려두고 기기에 자동으로 설치」) — 앱자료 폴더를 읽으려면 drive.readonly 도 받는다
+    const GDRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.readonly";
+    const GDRIVE_RO = "https://www.googleapis.com/auth/drive.readonly";
     const GDRIVE_FILE_NAME = "성경지도_자동백업.json";
     let gdriveAccessToken = null;
     let gdriveTokenClient = null;
@@ -9700,11 +9703,13 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       btn.style.background = gdriveAccessToken ? "#0f9d58" : "#4285F4";
     }
 
-    function gdriveSaveToken(token, expiresInSec) {
+    let gdriveScopeGranted = "";
+    function gdriveSaveToken(token, expiresInSec, scope) {
       gdriveAccessToken = token;
+      if (scope !== undefined) gdriveScopeGranted = scope || "";
       try {
         localStorage.setItem("gdrive_token_cache", JSON.stringify({
-          token,
+          token, scope: gdriveScopeGranted,
           expiresAt: Date.now() + Math.max(0, (expiresInSec || 3600) - 60) * 1000 // 여유 60초 두고 만료 처리
         }));
       } catch (e) {}
@@ -9720,6 +9725,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const cached = JSON.parse(localStorage.getItem("gdrive_token_cache") || "null");
         if (cached && cached.token && cached.expiresAt > Date.now()) {
           gdriveAccessToken = cached.token;
+          gdriveScopeGranted = cached.scope || "";
           gdriveUpdateButtonUI();
           return true;
         }
@@ -9734,12 +9740,18 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         scope: GDRIVE_SCOPE,
         callback: (resp) => {
           if (resp && resp.access_token) {
-            gdriveSaveToken(resp.access_token, resp.expires_in);
+            gdriveSaveToken(resp.access_token, resp.expires_in, resp.scope || "");
             gdriveUpdateButtonUI();
             showToast("Google Drive에 연결되었습니다.", "success");
           }
+          const p = window._gdrivePending; window._gdrivePending = null;
+          if (p) p(resp && resp.access_token ? resp.access_token : null);
         },
-        error_callback: () => { /* 조용한 자동 갱신 시도 실패는 무시(사용자가 직접 누르면 그때 안내) */ }
+        error_callback: () => {
+          /* 조용한 자동 갱신 시도 실패는 무시(사용자가 직접 누르면 그때 안내) */
+          const p = window._gdrivePending; window._gdrivePending = null;
+          if (p) p(null);
+        }
       });
     }
 
@@ -9749,7 +9761,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         showToast("Google 인증 스크립트를 아직 불러오는 중입니다. 잠시 후 다시 시도해 주세요.", "warn");
         return;
       }
-      gdriveTokenClient.requestAccessToken({ prompt: gdriveAccessToken ? "" : "consent" });
+      const needRo = isAdminMode() && gdriveScopeGranted.indexOf(GDRIVE_RO) < 0;
+      gdriveTokenClient.requestAccessToken({ prompt: (gdriveAccessToken && !needRo) ? "" : "consent" });
     }
 
     async function gdriveUploadJson(jsonStr) {
@@ -9801,6 +9814,140 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     // "팝업이 차단되었습니다" 알림을 계속 띄우는 부작용이 있어 제거했다 — 만료 후에는 사용자가
     // "🔗 연동" 버튼을 직접 눌러야 하며, 그때는 정상적으로 로그인 화면이 뜬다.
     gdriveRestoreTokenFromCache();
+
+    /* ── 앱자료 받기 (b20261013-1) ──
+     * kjm 「관리자 모드에서 구글 일정한(정해진 폴더)에 로컬전용파일을 올려두고 기기에 자동으로 설치」.
+     * 드라이브 「성경지도_앱자료」 폴더의 「앱자료_목록.json」을 읽어, 이 기기에 넣은 것과 md5 가 다른 파일만 받아 넣는다.
+     *   목록 꼴: { version, date, files: [ { name, kind, md5, size, label? } ] }
+     *   kind: hebko(한글 원어사전) · krvn(어절 원어 분석) · bdb(마스터 성경) · interlinear(원전분해) · extra(비교 번역, label 이름으로)
+     * 관리자 모드에서만. 드라이브 md5(md5Checksum)와 목록 md5 가 다르면 아직 올라가는 중으로 보고 건너뛴다.
+     * 받은 기록: localStorage appdata_installed = { 파일이름: md5 }. */
+    const APPDATA_FOLDER = "성경지도_앱자료";
+    const APPDATA_MANIFEST = "앱자료_목록.json";
+    let appdataBusy = false;
+    function appdataInstalled() { try { return JSON.parse(localStorage.getItem("appdata_installed") || "{}") || {}; } catch (e) { return {}; } }
+    function appdataMark(name, md5) { const m = appdataInstalled(); m[name] = md5; try { localStorage.setItem("appdata_installed", JSON.stringify(m)); } catch (e) {} }
+    function appdataState(t) { const el = document.getElementById("menu-state-appdata"); if (el) el.textContent = t || ""; }
+    function appdataToken(interactive) {
+      if (gdriveAccessToken && gdriveScopeGranted.indexOf(GDRIVE_RO) >= 0) return Promise.resolve(gdriveAccessToken);
+      if (!interactive) return Promise.resolve(null);
+      return new Promise(res => { window._gdrivePending = res; gdriveSignIn(); if (!gdriveTokenClient) { window._gdrivePending = null; res(null); } });
+    }
+    async function appdataApi(url, token) {
+      const r = await fetch(url, { headers: { Authorization: "Bearer " + token } });
+      if (r.status === 401) { gdriveClearToken(); gdriveUpdateButtonUI(); throw new Error("로그인이 끊겼습니다 — 다시 눌러 주세요"); }
+      if (!r.ok) throw new Error("드라이브 응답 " + r.status);
+      return r;
+    }
+    async function appdataInstallOne(f, entry, blob) {
+      const file = new File([blob], entry.name, { type: "application/octet-stream" });
+      if (entry.kind === "bdb") { await handleBdbFile(file); return; }
+      if (entry.kind === "interlinear") {
+        // handleInterlinearFile 은 FileReader 끝을 기다리지 않으므로 DB 가 새것으로 바뀔 때까지 기다린다(최대 2분)
+        const prev = interlinearDbInstance;
+        await handleInterlinearFile(file);
+        for (let i = 0; i < 1200 && interlinearDbInstance === prev; i++) await new Promise(r => setTimeout(r, 100));
+        if (interlinearDbInstance === prev) throw new Error("원전분해 DB 를 열지 못함");
+        await new Promise(r => setTimeout(r, 1500));   // 저장(setLocalItem)이 끝날 틈
+        return;
+      }
+      if (entry.kind === "hebko" || entry.kind === "krvn") {
+        const inp = document.getElementById(entry.kind === "hebko" ? "hebko-file-input" : "krvn-file-input");
+        if (!inp || !inp.onchange) throw new Error("등록 칸을 찾지 못함");
+        const dt = new DataTransfer(); dt.items.add(file);
+        await inp.onchange({ target: { files: dt.files, value: "" } });
+        return;
+      }
+      if (entry.kind === "extra") { await appdataInstallExtra(file, entry.label || entry.name.replace(/\.(bdb|db|sdb|sqlite3?)$/i, "")); return; }
+      throw new Error("모르는 종류: " + entry.kind);
+    }
+    // 비교 번역 등록 — 「성경 DB 용도」 창의 비교 번역과 같은 저장 꼴. 같은 이름이 있으면 DB 만 바꾼다.
+    async function appdataInstallExtra(file, transName) {
+      if (!window.SQL) throw new Error("SQLite 엔진 로딩 중");
+      const buf = await file.arrayBuffer();
+      const db = new window.SQL.Database(new Uint8Array(buf));
+      const schema = detectBibleSchema(db);
+      if (!schema) throw new Error("성경 DB 스키마를 인식할 수 없습니다");
+      const ex = Object.values(translationRegistry).find(tr => tr.label === transName && tr.key !== "master");
+      if (ex) {
+        if (ex.db) { try { ex.db.close(); } catch (e) {} }
+        ex.db = db; ex.schema = schema; ex.loaded = true;
+        await setLocalItem(`extra_bdb_${ex.key}`, buf);
+        if (compareMode && compareTranslation === ex.key) loadCompareText();
+        return;
+      }
+      const key = "custom_" + transName.replace(/\s+/g, "_").toLowerCase().slice(0, 20) + "_" + Date.now().toString(36);
+      const abbr = transName.length <= 6 ? transName : transName.slice(0, 5);
+      translationRegistry[key] = { key, label: transName, abbr, lang: "ko", type: "bdb", badge: "bdb", color: "#7c3aed", desc: `${transName} (사용자 등록)`, db, schema, loaded: true };
+      await setLocalItem(`extra_bdb_${key}`, buf);
+      await setLocalItem(`extra_bdb_meta_${key}`, JSON.stringify({ key, label: transName, abbr, lang: "ko", color: "#7c3aed" }));
+      let keys = [];
+      try { const raw = await getLocalItem("extra_bdb_custom_keys"); if (raw) keys = Array.isArray(raw) ? raw : JSON.parse(raw); } catch (e) { keys = []; }
+      if (!keys.includes(key)) keys.push(key);
+      await setLocalItem("extra_bdb_custom_keys", keys);
+      try { renderTransButtons(); } catch (e) {}
+    }
+    async function appdataSync(interactive) {
+      if (!isAdminMode()) { if (interactive) showToast("앱자료 받기는 관리자 모드에서만 됩니다", "warn"); return; }
+      if (appdataBusy) return;
+      appdataBusy = true;
+      try {
+        const token = await appdataToken(interactive);
+        if (!token) {
+          appdataState("(로그인 필요)");
+          if (interactive) showToast("Google Drive 로그인(읽기 권한)이 필요합니다", "warn");
+          return;
+        }
+        appdataState("(확인 중…)");
+        const q1 = encodeURIComponent(`name='${APPDATA_FOLDER}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
+        const fr = await (await appdataApi(`https://www.googleapis.com/drive/v3/files?q=${q1}&fields=files(id,name)&pageSize=10`, token)).json();
+        if (!fr.files || !fr.files.length) { appdataState("(폴더 없음)"); if (interactive) showToast(`드라이브에 「${APPDATA_FOLDER}」 폴더가 없습니다`, "warn", 6000); return; }
+        const folderId = fr.files[0].id;
+        const q2 = encodeURIComponent(`'${folderId}' in parents and trashed=false`);
+        const lr = await (await appdataApi(`https://www.googleapis.com/drive/v3/files?q=${q2}&fields=files(id,name,md5Checksum,size)&pageSize=200`, token)).json();
+        const byName = {}; (lr.files || []).forEach(f => { byName[f.name] = f; });
+        const mf = byName[APPDATA_MANIFEST];
+        if (!mf) { appdataState("(목록 없음)"); if (interactive) showToast(`「${APPDATA_MANIFEST}」이 폴더에 없습니다`, "warn", 6000); return; }
+        const manifest = await (await appdataApi(`https://www.googleapis.com/drive/v3/files/${mf.id}?alt=media`, token)).json();
+        const inst = appdataInstalled();
+        const todo = [], waiting = [];
+        (manifest.files || []).forEach(en => {
+          if (inst[en.name] === en.md5) return;                 // 이미 넣은 판
+          const f = byName[en.name];
+          if (!f || (f.md5Checksum && en.md5 && f.md5Checksum !== en.md5)) { waiting.push(en.name); return; }  // 아직 안 올라왔거나 올라가는 중
+          todo.push([f, en]);
+        });
+        if (!todo.length) {
+          appdataState(waiting.length ? `(올라가는 중 ${waiting.length})` : `(최신 · ${manifest.version || ""})`);
+          if (interactive) showToast(waiting.length ? `받을 것 없음 — 드라이브에 아직 다 올라가지 않은 파일 ${waiting.length}개: ${waiting.join(", ")}` : "앱자료가 모두 최신입니다", waiting.length ? "warn" : "success", 6000);
+          return;
+        }
+        const totalMB = Math.round(todo.reduce((s, [f]) => s + (+f.size || 0), 0) / 1048576);
+        showToast(`📥 앱자료 ${todo.length}개 받는 중… (${totalMB}MB)`, "info", 5000);
+        let ok = 0;
+        for (const [f, en] of todo) {
+          appdataState(`(${ok + 1}/${todo.length} ${en.name})`);
+          try {
+            const blob = await (await appdataApi(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`, token)).blob();
+            if (f.size && blob.size !== +f.size) throw new Error("받은 크기가 다름");
+            await appdataInstallOne(f, en, blob);
+            appdataMark(en.name, en.md5);
+            ok++;
+          } catch (err) {
+            console.error("앱자료 설치 실패", en.name, err);
+            showToast(`앱자료 「${en.name}」 넣기 실패: ${err.message}`, "warn", 8000);
+          }
+        }
+        appdataState(`(${manifest.version || ""} · ${ok}/${todo.length} 넣음)`);
+        showToast(`📥 앱자료 ${ok}/${todo.length}개 넣음 (${manifest.version || ""})`, ok === todo.length ? "success" : "warn", 6000);
+      } catch (err) {
+        console.error("앱자료 받기 오류", err);
+        appdataState("(오류)");
+        if (interactive) showToast("앱자료 받기 오류: " + err.message, "warn", 8000);
+      } finally { appdataBusy = false; }
+    }
+    // 관리자 모드 기기는 앱을 연 뒤 조용히 확인 — 로그인이 살아 있을 때만(1시간), 끊겼으면 단추 옆에 「로그인 필요」만 보인다
+    setTimeout(() => { try { if (isAdminMode()) appdataSync(false); } catch (e) {} }, 6000);
 
     // ── 우측 패널 모드 전환 (지도 / 주석 PDF / 숨김) ──
     let rightPanelMode = 'map';
@@ -18228,7 +18375,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-13`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
