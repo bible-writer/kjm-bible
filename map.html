@@ -16962,8 +16962,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const mo = (ci >= 0 && Array.isArray(a[2]) && a[2][ci] != null && a[2][ci] >= 0 && krvnMorph.mo) ? String(krvnMorph.mo[a[2][ci]] || '') : '';
           if ((a[4] === '1' || a[4] === 'S') && /명사/.test(mo) && !/고유|동사|분사|부정사/.test(mo)) {
             const t = L.find(x => x.first) || L[0];
-            const w = _ulWord(ws[k], 'T', t.rec);
-            if (w && w.length >= 1 && tOk(w)) { hit = t; word = w; return true; }
+            // 줄기 = 뒤 조사를 뗀 앞부분(한 글자 줄기도: 길을→길). 동사·형용사 꼴이 섞인 줄기는 뺀다
+            let w = ej.replace(/[^가-힣A-Za-z0-9]+$/, '');
+            for (let n = Math.min(4, w.length - 1); n >= 1; n--) { const tail = w.slice(w.length - n); if (VLINK_PARTICLE.test(tail)) { w = w.slice(0, w.length - n); break; } }
+            if (w && w.length <= 4 && !/[었였겠셨했]|으므|하[여고며니]/.test(w) && tOk(w)) { hit = t; word = w; return true; }
           }
           return false; });
         if (!hit || !word) return;
@@ -16983,36 +16985,55 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const tbl = Object.assign({}, auto || {}, man || {});
       const toks = Object.keys(tbl); if (!toks.length) return html;
       let changed = false;
+      // (b20261012-9 kjm 「두 번째부터 버벅」) 글자 위치·딱지 위치를 절마다 한 번만 재고, 바뀐 때만 다시 잰다
+      const full = d.textContent;
+      const SEL = 'span.bible-person-tag, span.bible-place-tag, span.bible-term-tag, span.vlink';
+      let spans = null;
+      const measure = () => {
+        spans = []; let acc = 0; const open = [];
+        const walk = (node) => {
+          for (let ch = node.firstChild; ch; ch = ch.nextSibling) {
+            if (ch.nodeType === 3) { acc += ch.nodeValue.length; continue; }
+            if (ch.nodeType !== 1) continue;
+            const isTag = ch.matches && ch.matches(SEL);
+            const st = acc; walk(ch);
+            if (isTag) spans.push({ sp: ch, s: st, e: acc, k: ch.classList.contains('bible-person-tag') ? 'P' : ch.classList.contains('bible-place-tag') ? 'L' : ch.classList.contains('bible-term-tag') ? 'T' : '', man: ch.classList.contains('vlink') });
+          }
+        };
+        walk(d);
+      };
       toks.forEach(tok => {
         const cut = tok.lastIndexOf('#'); if (cut <= 0) return;
         const word = tok.slice(0, cut), nth = parseInt(tok.slice(cut + 1), 10) || 1;
         const code = tbl[tok];
-        const s = vlinkFind(d.textContent, word, nth); if (s < 0) return;
+        const s = vlinkFind(full, word, nth); if (s < 0) return;
         const e = s + word.length;
-        if (!(man && man[tok] != null)) {   // 원어 번호 딱지: 이미 붙은 딱지를 함부로 풀지 않는다
-          let block = false;
-          d.querySelectorAll('span.bible-person-tag, span.bible-place-tag, span.bible-term-tag, span.vlink').forEach(sp => {
-            const ss = vlinkTextOffset(d, sp, 0), se = ss + sp.textContent.length;
-            if (!(ss < e && se > s)) return;
-            if (ss < s || se > e) block = true;                       // 더 긴 이름(싯딤 골짜기·두라 평지)은 그대로
-            else if (code.charAt(0) === 'T') block = true;           // 용어는 빈 자리에만
-            else if (sp.classList.contains('vlink')) block = true;
-          });
-          if (block) return;
+        if (!spans) measure();
+        const over = spans.filter(x => x.s < e && x.e > s);
+        const isMan = !!(man && man[tok] != null);
+        if (!isMan) {   // 원어 번호 딱지: 이미 붙은 딱지를 함부로 풀지 않는다
+          if (over.some(x => x.s < s || x.e > e)) return;            // 더 긴 이름(싯딤 골짜기·두라 평지)은 그대로
+          if (over.some(x => x.man)) return;
+          if (code.charAt(0) === 'T' && over.length) return;          // 용어는 빈 자리에만
+          // 같은 자리·같은 갈래 딱지가 이미 있으면(이름으로 붙은 같은 사람) 그대로 둔다 — 고칠 것 없음
+          if (over.length === 1 && over[0].s === s && over[0].e === e && over[0].k === code.charAt(0)) {
+            const oc = over[0].sp.getAttribute('onclick') || ''; const mm = oc.match(/vlinkOpen\('([PLT])', (\d+)/);
+            if (mm) { if ((mm[1] + ':' + mm[2]) === code) return; }
+            else if (code.charAt(0) === 'P') {   // 이름으로 붙은 인명: 같은 사람이면 그대로
+              const nm = ((oc.match(/handleClickAt\('((?:[^'\\]|\\.)*)'/) || [])[1] || over[0].sp.textContent).replace(/\\'/g, "'");
+              const pp = personVerseIndex[`${b}-${c}-${v}`] && personVerseIndex[`${b}-${c}-${v}`][nm];
+              if (!pp || ('P:' + pp.id) === code) return;
+            } else return;
+          }
         }
-        // 이 자리에 걸친 딱지(자동이든 앞서 입힌 것이든)는 풀어서 글자로 되돌린다
-        d.querySelectorAll('span.bible-person-tag, span.bible-place-tag, span.bible-term-tag, span.vlink').forEach(sp => {
-          if (!d.contains(sp)) return;
-          const ss = vlinkTextOffset(d, sp, 0), se = ss + sp.textContent.length;
-          if (ss < e && se > s) { const p = sp.parentNode; while (sp.firstChild) p.insertBefore(sp.firstChild, sp); p.removeChild(sp); }
-        });
-        d.normalize(); changed = true;
+        // 이 자리에 걸친 딱지는 풀어서 글자로 되돌린다
+        over.forEach(x => { const sp = x.sp; if (!d.contains(sp)) return; const p = sp.parentNode; while (sp.firstChild) p.insertBefore(sp.firstChild, sp); p.removeChild(sp); });
+        d.normalize(); changed = true; spans = null;
         if (code === '0') return;
         const t = vlinkTarget(code); if (!t) return;
         const a = vlinkPoint(d, s), z = vlinkPoint(d, e); if (!a || !z) return;
         const r = document.createRange(); r.setStart(a[0], a[1]); r.setEnd(z[0], z[1]);
         const sp = document.createElement('span');
-        const isMan = !!(man && man[tok] != null);
         sp.className = VLINK_CLASS[t.kind] + (isMan ? ' vlink' : ' ctag');
         sp.setAttribute('onclick', `vlinkOpen('${t.kind}', ${t.id}, ${b}, ${c}, ${v}, this)`);
         sp.setAttribute('oncontextmenu', `vlinkContextMenu(event, this)`);
@@ -18146,7 +18167,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261012-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
