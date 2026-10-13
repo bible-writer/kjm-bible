@@ -8479,21 +8479,23 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const termByE = new Map(), termByS = new Map();
       termDatabase.forEach(t => { _dictIds(t.eastonId).forEach(i => termByE.set(i, t)); _dictIds(t.smithId).forEach(i => termByS.set(i, t)); });
       const g = new Map();
-      const _linkedKo = new Map(); // 영문 표제 → 용어DB에 이어진 항목들의 한글 제목
+      const _linkedKo = new Map(); const _ek2T = new Map(); // 영문 표제 → 용어DB에 이어진 항목들의 한글 제목
       [['easton', E], ['smith', S]].forEach(([src, L]) => L.forEach(e => {
-        if (e.category !== '용어' || used.has(src + ':' + e.id) || !e.definition_ko) return;
-        const t = (src === 'easton' ? termByE : termByS).get(String(e.id)); if (!t) return;
+        const t = (src === 'easton' ? termByE : termByS).get(String(e.id));
+        if ((e.category !== '용어' && !t) || used.has(src + ':' + e.id) || !e.definition_ko) return;   // (b20261013-11) 용어DB에 이어진 항목은 사전 분류가 인명·지명이어도 용어 줄로
+        if (!t) return;
         const [en, ko0] = _dictSplitTerm(e.term); const ek = en.toLowerCase().replace(/[^a-z]/g, '') || ko0;
         if (!_linkedKo.has(ek)) _linkedKo.set(ek, new Set());
         _linkedKo.get(ek).add(ko0 || String(t.term_ko || '').replace(/\s*\(.*$/, '') || en);
+        if (!_ek2T.has(ek)) _ek2T.set(ek, 'T' + t.id);   // (b20261013-11) 같은 영문 표제 → 이어진 용어 줄
       }));
       [['easton', E], ['smith', S]].forEach(([src, L]) => L.forEach(e => {
-        if (e.category !== '용어' || used.has(src + ':' + e.id) || !e.definition_ko) return;
-        const [en, ko0] = _dictSplitTerm(e.term);
         const t = (src === 'easton' ? termByE : termByS).get(String(e.id));
+        if ((e.category !== '용어' && !t) || used.has(src + ':' + e.id) || !e.definition_ko) return;   // (b20261013-11 kjm 「갈릴리 사람이 두 번」)
+        const [en, ko0] = _dictSplitTerm(e.term);
         const ko = ko0 || (t ? String(t.term_ko || '').replace(/\s*\(.*$/, '') : '') || en;
         // (b20261012-12) 용어DB에 안 이어진 항목은 같은 영문이라도 한글 제목이 다르면 따로 (Smith Bow(절)이 Easton Bow(활) 줄에 섞이던 것)
-        const ekey = en.toLowerCase().replace(/[^a-z]/g, '') || ko; const key = (t || !_linkedKo.has(ekey) || _linkedKo.get(ekey).has(ko)) ? ekey : 'raw:' + ekey + ':' + ko;
+        const ekey = en.toLowerCase().replace(/[^a-z]/g, '') || ko; const key = t ? 'T' + t.id : ((!_linkedKo.has(ekey) || _linkedKo.get(ekey).has(ko)) ? (_ek2T.get(ekey) || ekey) : 'raw:' + ekey + ':' + ko);   // (b20261013-11) 용어DB에 이어진 항목은 용어 id 로 묶음(Galilean·Galileans 한 줄)
         if (!g.has(key)) g.set(key, { ko, en, ents: [], term: null, codes: new Set() });
         const o = g.get(key); o.ents.push({ src, e }); if (t && !o.term) o.term = t;
         _dictIds(e.hebrew_greek).forEach(c => o.codes.add(c));
@@ -12868,11 +12870,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (dm && dm.offsetParent !== null && typeof renderDictResults === 'function') renderDictResults(true);
     }
     // 지명 창에 붙일 원어 줄 (대표 [H1234] + 전체 번호 + ✏️)
-    function placeStrongLine(place, boxId) {
+    function placeStrongLine(place, boxId) {   // (b20261013-11 kjm 「원어 번호 줄 키우기」) px → em, 창 글자 크기를 따라감
       const all = String(place.hebrew_greek || '').split(',').filter(Boolean);
-      const edited = placeStrongOverrides['ID' + place.id] ? ' <span style="font-size:10px;color:#b45309" title="이 기기에서 고친 값">(고침)</span>' : '';
-      const list = all.length ? `<span style="font-size:11px;color:#64748b;overflow-wrap:anywhere;word-break:break-word">${all.map(c => escHtml(c)).join(', ')}</span>` : '<span style="font-size:11px;color:#94a3b8">원어 번호 없음</span>';
-      return `<div style="font-size:12px;margin:2px 0">${list}${edited} <button class="admin-only" onclick="editPlaceStrong(${place.id},'${boxId}')" title="지명 원어 번호 고치기" style="font-size:10px;padding:0 5px;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer">✏️</button></div><div id="${boxId}"></div>`;
+      const edited = placeStrongOverrides['ID' + place.id] ? ' <span style="font-size:0.8em;color:#b45309" title="이 기기에서 고친 값">(고침)</span>' : '';
+      const list = all.length ? `<span style="font-size:0.92em;color:#64748b;overflow-wrap:anywhere;word-break:break-word">${all.map(c => escHtml(c)).join(', ')}</span>` : '<span style="font-size:0.92em;color:#94a3b8">원어 번호 없음</span>';
+      return `<div style="font-size:1em;margin:2px 0">${list}${edited} <button class="admin-only" onclick="editPlaceStrong(${place.id},'${boxId}')" title="지명 원어 번호 고치기" style="font-size:0.8em;padding:0 5px;color:#64748b;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;cursor:pointer">✏️</button></div><div id="${boxId}"></div>`;
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -18418,7 +18420,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-10`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-11`;
         document.title = `바이블 맵 스터디`;
       }
     }
