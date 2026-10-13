@@ -8724,8 +8724,6 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     function closeDictModal() {
       document.getElementById('dict-modal').style.display = 'none';
       document.getElementById('dict-modal-backdrop').style.display = 'none';
-      // (b20261013-8 kjm 「사전창을 닫으면 지도창이 동시에 사라짐」) 지명 창에서 사전을 열었으면 함께 닫는다
-      try { const q = document.getElementById('place-quick-panel'); if (q) q.style.display = 'none'; } catch (e) {}
     }
     function updateDictFilterCounts() {
       if (!dictCombinedCache) return;
@@ -9255,7 +9253,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     document.addEventListener('click', function(e) {
       const panel = document.getElementById('place-quick-panel');
       if (panel && panel.style.display === 'block') {
-        if (!e.target.closest('#place-quick-panel') && !e.target.closest('.bible-place-tag') && !e.target.closest('#chapter-chips')) {
+        if (!e.target.closest('#place-quick-panel') && !e.target.closest('.bible-place-tag') && !e.target.closest('#chapter-chips') && !e.target.closest('#dict-modal, #dict-modal-backdrop')) {   // (b20261013-9 kjm 「사전창을 닫아도 지도창은 남아있어야」) 사전 창 안·닫기 단추를 누른 것으로 지명 창을 닫지 않는다
           panel.style.display = 'none';
         }
       }
@@ -18415,7 +18413,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
