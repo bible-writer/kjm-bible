@@ -1678,14 +1678,11 @@
         max-height: 70vh !important;
       }
       /* 미니 구절 패널 — 폰 중앙 */
-      #place-quick-panel {
+      #place-quick-panel {   /* (b20261013-10) 폰도 누른 자리(칩·딱지) 아래에 — 자리는 스크립트가 정함 */
         position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        width: 85vw !important;
-        max-width: 340px !important;
-        max-height: 60vh !important;
+        width: 92vw !important;
+        max-width: 92vw !important;
+        min-width: 0 !important;
         z-index: 5500 !important;
       }
       /* 팝업 내 버튼 터치 개선 */
@@ -9231,16 +9228,24 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         let top = rect.bottom + 4;
         let left = rect.left;
         // 화면 밖으로 나가지 않도록 보정
-        const PH = Math.min(window.innerHeight * 0.7, 640), PW = 450;
-        if (top + PH > window.innerHeight) top = rect.top - PH - 10;
-        top = Math.max(8, Math.min(top, window.innerHeight - PH - 10));
-        if (left + PW > window.innerWidth) left = window.innerWidth - PW - 10;
+        // (b20261013-10 kjm 「위치조정 — 갤럭시탭·핸드폰에서 위로 올라가 있음」) 누른 자리 아래에 두고, 아래 자리가 모자라면 창 높이를 줄인다(위로 뒤집지 않음)
+        const PW = window.innerWidth <= 768 ? Math.round(window.innerWidth * 0.92) : 450;
+        //  윗선 = 본문 칸(#bible-content) 위 끝 — 머리 줄·검색 줄은 가리지 않는다
+        const bc = document.getElementById('bible-content');
+        const aTop = Math.max(8, bc ? bc.getBoundingClientRect().top + 4 : 8);
+        const want = Math.min(640, window.innerHeight - aTop - 10);   // 바랄 수 있는 가장 큰 높이
+        if (window.innerHeight - top - 10 < Math.min(360, want)) top = Math.max(aTop, window.innerHeight - 10 - Math.min(360, want));
+        top = Math.max(aTop, top);
+        panel.style.maxHeight = Math.max(200, Math.min(640, window.innerHeight - top - 10)) + 'px';
+        if (window.innerWidth <= 768) left = Math.round(window.innerWidth * 0.04);
+        else if (left + PW > window.innerWidth) left = window.innerWidth - PW - 10;
         if (left < 0) left = 4;
         panel.style.top = top + 'px';
         panel.style.left = left + 'px';
       } else {
         panel.style.top = '50%';
         panel.style.left = '20%';
+        panel.style.maxHeight = '';
       }
 
       panel.style.display = 'block';
@@ -18413,7 +18418,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-9`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-10`;
         document.title = `바이블 맵 스터디`;
       }
     }
