@@ -18420,7 +18420,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-12`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-13`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20483,10 +20483,11 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- * [낭독] 성경 낭독 MP3 — 올어바웃 이름 규칙(BB_CODE_CC.mp3, 시편 CCC) (b20261013-12)
+ * [낭독] 성경 낭독 MP3 — 올어바웃 이름 규칙(BB_CODE_CC.mp3, 시편 CCC) (b20261013-12, 본문 연결 b20261013-13)
  *   · PC: 폴더 연결(복사 없이, 폴더 손잡이만 기억)  · 폰·탭: 파일/폴더 골라 기기(IndexedDB)에 보관
  *   · 확장자 대소문자 무관(.MP3/.mp3), 장 번호 2·3자리 모두
  *   · 장을 넘기면 그 장 낭독으로 바뀌고, 끝나면 다음 장으로 넘어가 이어 듣기
+ *   · (b20261013-13) 본문 연결: 읽는 절 밝힘·따라 내림, 절 번호 누르면 그 절로, 📌 맞춤(듣으며 절마다 눌러 시간 기록)
  * ═══════════════════════════════════════════════════════════════ */
 (function () {
   const btnTts = document.getElementById('bs-btn-tts');
@@ -20533,16 +20534,19 @@ if ('serviceWorker' in navigator) {
   st.textContent = '#audio-bar{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:9000;display:none;align-items:center;gap:6px;background:#1e293b;color:#fff;border-radius:22px;padding:6px 12px;box-shadow:0 4px 14px rgba(0,0,0,.3);font-size:13px;max-width:96vw;flex-wrap:nowrap;white-space:nowrap;justify-content:center}'
     + '#audio-bar button{background:none;border:none;color:#fff;font-size:16px;cursor:pointer;padding:2px 6px}#audio-bar select{background:#334155;color:#fff;border:none;border-radius:6px;font-size:12px;padding:2px}'
     + '#audio-bar input[type=range]{width:140px}#audio-bar .ab-t{font-variant-numeric:tabular-nums;font-size:11px;color:#cbd5e1}'
+    + ''
+    + '.verse-row.audio-cur{background:#dcfce7;border-radius:6px;box-shadow:inset 3px 0 0 #22c55e;transition:background .3s}.audio-on .verse-row .verse-num{cursor:pointer}.audio-on .verse-row .verse-num:hover{color:#16a34a;text-decoration:underline}'
+    + '#audio-bar button.on{background:#f59e0b;border-radius:6px}#audio-bar .ab-next{display:none;background:#f59e0b!important;border-radius:14px!important;font-size:13px!important;padding:3px 10px!important;font-weight:700}#audio-bar.sync .ab-next{display:inline-block}'
     + '#bs-btn-audio.has-audio{background:#dcfce7;border-color:#22c55e}#bs-btn-audio.playing{background:#22c55e;color:#fff}'
     + '#audio-panel{display:none;position:absolute;top:36px;right:0;width:290px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);padding:12px;z-index:9999;font-size:12px;color:#334155;line-height:1.5}'
     + '#audio-panel button{width:100%;margin-top:6px;padding:7px;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;cursor:pointer;font-size:12px}#audio-panel .ap-main{background:#1e293b;color:#fff;border-color:#1e293b}'
-    + '@media (max-width:768px){#audio-bar{bottom:72px;gap:2px;padding:5px 8px;font-size:12px}#audio-bar input[type=range]{width:60px}#audio-bar .ab-cont-t{display:none}#audio-bar button{padding:2px 3px;font-size:15px}#audio-bar .ab-t{font-size:10px}}';
+    + '@media (max-width:768px){#audio-bar{bottom:72px;gap:2px;padding:5px 8px;font-size:12px}#audio-bar input[type=range]{width:60px}#audio-bar .ab-cont-t{display:none}#audio-bar button{padding:2px 3px;font-size:15px}#audio-bar .ab-t{font-size:10px}#audio-bar.sync .ab-t,#audio-bar.sync input[type=range]{display:none}}';
   document.head.appendChild(st);
   const bar = document.createElement('div'); bar.id = 'audio-bar';
   bar.innerHTML = '<span class="ab-l">🎧</span><button data-a="back" title="10초 뒤로">⏪</button><button data-a="play" title="재생/멈춤">▶</button><button data-a="fwd" title="10초 앞으로">⏩</button>'
     + '<input type="range" min="0" max="1000" value="0" data-a="seek"><span class="ab-t">0:00 / 0:00</span>'
     + '<select data-a="rate" title="속도"><option>0.8</option><option>0.9</option><option selected>1.0</option><option>1.1</option><option>1.2</option><option>1.3</option><option>1.5</option></select>'
-    + '<label style="font-size:11px;color:#cbd5e1"><input type="checkbox" data-a="cont" checked title="끝나면 다음 장 이어 듣기"><span class="ab-cont-t"> 이어 듣기</span></label><button data-a="close" title="닫기">✕</button>';
+    + '<button data-a="sync" title="맞춤: 들으면서 새 절이 시작될 때마다 「다음 절」을 눌러 시간을 기록">📌</button><button class="ab-next" data-a="next" title="지금부터 다음 절">다음 절 ⏭</button><label style="font-size:11px;color:#cbd5e1"><input type="checkbox" data-a="cont" checked title="끝나면 다음 장 이어 듣기"><span class="ab-cont-t"> 이어 듣기</span></label><button data-a="close" title="닫기">✕</button>';
   document.body.appendChild(bar);
   const panel = document.createElement('div'); panel.id = 'audio-panel';
   btnTts.parentElement.style.position = 'relative'; btnTts.parentElement.appendChild(panel);
@@ -20616,13 +20620,86 @@ if ('serviceWorker' in navigator) {
     if (storedKeys.has(k)) { const b = await idb('files', 'readonly', function (s) { return s.get(k); }); if (b) return b; }
     return null;
   }
+
+  /* ── 본문 연결: 절 시간 찾기 ── */
+  const FPS = 50; const envCache = new Map(); let bounds = null, boundsKey = null, curVerse = 0, syncMode = false, syncNext = 0, lastUserScroll = 0;
+  function loadSync() { try { return JSON.parse(localStorage.getItem('kjmAudioSync') || '{}'); } catch (e) { return {}; } }
+  function saveSync(o) { try { localStorage.setItem('kjmAudioSync', JSON.stringify(o)); } catch (e) {} }
+  function rowsOf(k) { return Array.from(document.querySelectorAll('#bible-content .verse-row[data-bc="' + k + '"]')).filter(function (r) { return /^verse-row-\d+$/.test(r.id); }); }
+  async function envOf(k, blob) {
+    if (envCache.has(k)) return envCache.get(k);
+    const buf = await blob.arrayBuffer();
+    const ctx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 1, 8000);
+    const ab = await new Promise(function (res, rej) { const p = ctx.decodeAudioData(buf, res, rej); if (p && p.then) p.then(res, rej); });
+    const sr = ab.sampleRate, hop = Math.round(sr / FPS), n = Math.floor(ab.length / hop), ch = ab.numberOfChannels;
+    const d0 = ab.getChannelData(0), d1 = ch > 1 ? ab.getChannelData(1) : null; const db = new Float32Array(n);
+    for (let i = 0; i < n; i++) { let a = 0; for (let j = i * hop, e = j + hop; j < e; j++) { const v = d1 ? (d0[j] + d1[j]) / 2 : d0[j]; a += v * v; } db[i] = 10 * Math.log10(a / hop + 1e-12); }
+    const sm = new Float32Array(n); for (let i = 0; i < n; i++) { let a = 0, c = 0; for (let j = Math.max(0, i - 3); j <= Math.min(n - 1, i + 3); j++) { a += db[j]; c++; } sm[i] = a / c; }
+    const win = Math.round(1.5 * FPS), depth = new Float32Array(n);
+    for (let i = 0; i < n; i += 5) { const seg = Array.prototype.slice.call(sm, Math.max(0, i - win), Math.min(n, i + win)).sort(function (a, b) { return a - b; }); const med = seg[seg.length >> 1]; for (let j = i; j < Math.min(n, i + 5); j++) depth[j] = med - sm[j]; }
+    const srt = Array.prototype.slice.call(sm).sort(function (a, b) { return a - b; }); const pct = function (p) { return srt[Math.min(srt.length - 1, Math.floor(p / 100 * srt.length))]; };
+    let end = n - 1; const hiT = pct(60) - 6; while (end > 0 && sm[end] < hiT) end--;
+    const thr = pct(25); let start = null, best = 0;
+    for (let i = FPS; i < Math.min(n, 12 * FPS);) { if (sm[i] < thr) { let j = i; while (j < n && sm[j] < thr) j++; if ((j - i) / FPS > 0.5 && j - i > best) { best = j - i; start = j / FPS; } i = j; } else i++; }
+    if (start === null) { let i = 0; while (i < n && sm[i] < pct(30)) i++; start = i / FPS; }
+    const o = { depth: depth, start: start, end: end / FPS, n: n }; envCache.set(k, o); return o;
+  }
+  function computeBounds(k, env, rows) {
+    const N = rows.length; if (!N) return null;
+    const w = rows.map(function (r) { const t = r.querySelector('.verse-text'); return ((t ? t.textContent : '').replace(/[^가-힣A-Za-z0-9]/g, '').length) + 2; });
+    const anc = (loadSync()[k]) || {};
+    const fixed = new Array(N).fill(null); Object.keys(anc).forEach(function (v) { const i = +v - 1; if (i >= 0 && i < N) fixed[i] = anc[v]; });
+    if (fixed[0] === null) fixed[0] = env.start;
+    const pts = []; for (let i = 0; i < N; i++) if (fixed[i] !== null) pts.push(i); 
+    const out = new Array(N);
+    for (let p = 0; p < pts.length; p++) {
+      const a = pts[p], b = p + 1 < pts.length ? pts[p + 1] : N, ta = fixed[a], tb = b < N ? fixed[b] : env.end;
+      let tot = 0; for (let i = a; i < b; i++) tot += w[i];
+      let acc = 0, prev = ta; out[a] = ta;
+      for (let i = a + 1; i < b; i++) {
+        acc += w[i - 1]; const e = ta + acc / tot * (tb - ta); const W = Math.max(2, 0.5 * (tb - ta) / (b - a));
+        const lo = Math.max(Math.round((prev + 0.8) * FPS), Math.round((e - W) * FPS)), hi = Math.min(env.n, Math.round((e + W) * FPS), Math.round((tb - 0.8) * FPS));
+        let bt = e, bs = -1e9, bd = 0;
+        for (let j = lo; j < hi; j++) { const sc = env.depth[j] - Math.abs(j / FPS - e) / W * 4; if (sc > bs) { bs = sc; bd = env.depth[j]; bt = j / FPS; } }
+        out[i] = bd > 4 ? bt : Math.max(e, prev + 0.5); prev = out[i];
+      }
+    }
+    return out;
+  }
+  async function prepBounds(k, blob) {
+    bounds = null; boundsKey = k; curVerse = 0;
+    try { const env = await envOf(k, blob); if (boundsKey !== k) return; bounds = computeBounds(k, env, rowsOf(k)); } catch (e) { console.warn('낭독 절 맞춤 생략', e); }
+  }
+  function verseAt(t) { if (!bounds) return 0; let v = 0; for (let i = 0; i < bounds.length; i++) if (t >= bounds[i] - 0.05) v = i + 1; return v; }
+  function markVerse(v) {
+    if (v === curVerse) return; curVerse = v;
+    document.querySelectorAll('#bible-content .verse-row.audio-cur').forEach(function (r) { r.classList.remove('audio-cur'); });
+    if (!v || curKey !== cur()) return;
+    const r = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]'); if (!r) return;
+    r.classList.add('audio-cur');
+    if (Date.now() - lastUserScroll > 4000) { const box = document.getElementById('bible-content'); const rb = r.getBoundingClientRect(), bb = box.getBoundingClientRect();
+      if (rb.top < bb.top + 20 || rb.bottom > bb.bottom - 90) r.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  }
+  ['wheel', 'touchmove'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && e.target.closest('#bible-content')) lastUserScroll = Date.now(); }, { passive: true }); });
+  function setAnchor(v, t) {
+    const o = loadSync(); const a = o[curKey] || (o[curKey] = {}); a[v] = Math.max(0, Math.round(t * 100) / 100); saveSync(o);
+    const env = envCache.get(curKey); if (env) bounds = computeBounds(curKey, env, rowsOf(curKey)); curVerse = -1; markVerse(verseAt(audio.currentTime));
+  }
+  document.addEventListener('click', function (ev) {
+    const num = ev.target && ev.target.closest && ev.target.closest('#bible-content .verse-num'); if (!num || bar.style.display !== 'flex' || !curKey) return;
+    const row = num.closest('.verse-row'); if (!row || row.dataset.bc !== curKey) return;
+    const v = parseInt(String(row.id).replace('verse-row-', ''), 10); if (!v) return;
+    ev.stopPropagation(); ev.preventDefault();
+    if (syncMode) { setAnchor(v, audio.currentTime - 0.3); syncNext = v + 1; if (typeof showToast === 'function') showToast(v + '절 시작 ' + fmt(audio.currentTime) + ' 기록', 'info', 1200); return; }
+    if (bounds && bounds[v - 1] != null) { audio.currentTime = Math.max(0, bounds[v - 1] - 0.2); if (audio.paused) audio.play().catch(function () {}); }
+  }, true);
   /* ── 재생 ── */
   async function loadKey(k, play) {
     const b = await getBlob(k);
     if (!b) { curKey = null; audio.removeAttribute('src'); refreshBtn(); return false; }
     if (curUrl) URL.revokeObjectURL(curUrl);
     curUrl = URL.createObjectURL(b); curKey = k;
-    audio.src = curUrl; audio.playbackRate = parseFloat($('rate').value) || 1;
+    audio.src = curUrl; audio.playbackRate = parseFloat($('rate').value) || 1; document.body.classList.add('audio-on'); prepBounds(k, b);
     bar.querySelector('.ab-l').textContent = '🎧 ' + bookName(k);
     bar.style.display = 'flex';
     if (play) { try { await audio.play(); } catch (e) {} }
@@ -20633,6 +20710,7 @@ if ('serviceWorker' in navigator) {
   audio.addEventListener('timeupdate', function () {
     bar.querySelector('.ab-t').textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
     if (audio.duration) $('seek').value = Math.round(audio.currentTime / audio.duration * 1000);
+    markVerse(verseAt(audio.currentTime));
   });
   audio.addEventListener('ended', function () {
     if (!$('cont').checked) return;
@@ -20644,7 +20722,10 @@ if ('serviceWorker' in navigator) {
     if (a === 'play') { if (audio.paused) audio.play().catch(function () {}); else audio.pause(); }
     if (a === 'back') audio.currentTime = Math.max(0, audio.currentTime - 10);
     if (a === 'fwd') audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
-    if (a === 'close') { audio.pause(); bar.style.display = 'none'; }
+    if (a === 'close') { audio.pause(); bar.style.display = 'none'; document.body.classList.remove('audio-on'); markVerse(0); }
+    if (a === 'sync') { syncMode = !syncMode; ev.target.classList.toggle('on', syncMode); bar.classList.toggle('sync', syncMode); syncNext = Math.max(1, verseAt(audio.currentTime) + 1);
+      if (typeof showToast === 'function') showToast(syncMode ? '맞춤: 새 절이 시작될 때마다 「다음 절」(또는 절 번호)을 누르세요' : '맞춤 끝 — 기록한 시간은 이 기기에 남습니다', 'info', 3500); }
+    if (a === 'next') { const N = bounds ? bounds.length : 0; if (syncNext < 1) syncNext = 1; if (!N || syncNext <= N) { setAnchor(syncNext, audio.currentTime - 0.3); syncNext++; } }
   });
   $('seek').addEventListener('input', function () { if (audio.duration) audio.currentTime = this.value / 1000 * audio.duration; });
   $('rate').addEventListener('change', function () { audio.playbackRate = parseFloat(this.value) || 1; try { localStorage.setItem('kjmAudioRate', this.value); } catch (e) {} });
@@ -20659,6 +20740,7 @@ if ('serviceWorker' in navigator) {
       else { audio.pause(); if (was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); }
     }
     refreshBtn();
+    if (curKey === k && bounds) { curVerse = -1; markVerse(verseAt(audio.currentTime)); }
   }, 400);
   /* ── 버튼·창 ── */
   btn.addEventListener('click', async function (ev) {
@@ -20693,7 +20775,7 @@ if ('serviceWorker' in navigator) {
   /* 시작할 때 보관분·폴더 손잡이 불러오기 */
   idb('files', 'readonly', function (s) { return s.getAllKeys(); }).then(function (ks) { (ks || []).forEach(function (k) { storedKeys.add(k); }); refreshBtn(); }).catch(function () {});
   idb('meta', 'readonly', function (s) { return s.get('dir'); }).then(function (h) { if (h) { dirHandle = h; refreshBtn(); } }).catch(function () {});
-  window._kjmAudio = { keyOf: keyOf, addFiles: addFiles, loadKey: loadKey, audio: audio, hasKey: hasKey };
+  window._kjmAudio = { keyOf: keyOf, addFiles: addFiles, loadKey: loadKey, audio: audio, hasKey: hasKey, bounds: function () { return bounds; }, setAnchor: setAnchor };
 })();
 
 </script>
