@@ -9224,13 +9224,15 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       panel.innerHTML = html;
 
       // 클릭한 지명 근처에 표시
-      const clickedTag = event && event.target;
+      // (b20261013-6 kjm 「예루살렘·베들레헴 칩 반응 없음」) 칩으로 열면 딱지가 화면 밖(아래 절)일 수 있어 칩 자리에 띄운다
+      const clickedTag = window._chipAnchorEl || (event && event.target);
       if (clickedTag) {
         const rect = clickedTag.getBoundingClientRect();
         let top = rect.bottom + 4;
         let left = rect.left;
         // 화면 밖으로 나가지 않도록 보정
         if (top + 300 > window.innerHeight) top = rect.top - 310;
+        top = Math.max(8, Math.min(top, window.innerHeight - 310));
         if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
         if (left < 0) left = 4;
         panel.style.top = top + 'px';
@@ -18245,7 +18247,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           + (isP ? 'background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6' : 'background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8');
         b.innerHTML = `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:0.8em;${isP ? 'background:#ede9fe' : 'background:#dbeafe'}">${isP ? escHtml(it.label.charAt(0)) : '📍'}</span>${escHtml(it.label)}${it.n > 1 ? `<span style="opacity:.6;font-size:0.85em">${it.n}</span>` : ''}`;
         b.title = (isP ? '인명' : '지명') + ' · 이 장에 ' + it.n + '번';
-        b.onclick = (ev) => { try { ev.preventDefault(); ev.stopPropagation(); it.first.click(); } catch (e) {} };   // (b20261013-5) 칩 누름이 문서까지 가서 방금 연 지명 창을 닫지 않게   // (b-9 kjm) 본문은 움직이지 않고 창만
+        b.onclick = (ev) => { try { ev.preventDefault(); ev.stopPropagation(); window._chipAnchorEl = b; it.first.click(); } catch (e) {} finally { window._chipAnchorEl = null; } };   // (b20261013-5) 칩 누름이 문서까지 가서 방금 연 지명 창을 닫지 않게   // (b-9 kjm) 본문은 움직이지 않고 창만
         box.appendChild(b);
       });
       const title = container.querySelector('.chapter-title');
@@ -18410,7 +18412,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-6`;
         document.title = `바이블 맵 스터디`;
       }
     }
