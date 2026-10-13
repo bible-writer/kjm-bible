@@ -4296,7 +4296,29 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const key = `${book}-${chapter}-${verse}`;
         const p = this.resolveAt(name, book, chapter, verse, el);
         if (!p) { showToast(`'${name}' 인물 정보를 찾을 수 없습니다.`, 'info'); return; }
+        // (b20261013-3 kjm 「야곱」) 다른 이름으로 눌렀으면(야곱 → 이스라엘 항목) 누른 어절의 원어 번호를 제목 옆에 보인다
+        this._clickCode = '';
+        try {
+          if (name && name !== p.name_ko && el && typeof krvnTokenAt === 'function') {
+            const vt = el.closest('.verse-text') || el.parentNode;
+            if (vt) {
+              const pre = document.createRange(); pre.setStart(vt, 0); pre.setEndBefore(el);
+              const kt = krvnTokenAt(book, chapter, verse, vt.textContent, pre.toString().length);
+              const norm = x => { const m = String(x || '').toUpperCase().match(/^([HG])0*(\d{1,5})/); return m ? m[1] + m[2] : ''; };
+              const mine = String([p.strong, p.ustrong].join(',')).split(/[,\s]+/).map(norm).filter(Boolean);
+              const codes = kt ? String((kt.arr[kt.k] || [])[0] || '').split(',').map(x => x.trim()).filter(Boolean) : [];
+              const hit = codes.find(c => mine.indexOf(norm(c)) >= 0 && norm(c) !== norm(p.ustrong));
+              if (hit) this._clickCode = hit;
+              // 어절에 번호가 없으면(우리말에만 있는 이름) 사람 번호 가운데 한글 뜻이 누른 이름과 같은 것
+              if (!this._clickCode && typeof strongKoRaw === 'function') {
+                const byKo = String(p.strong || '').split(/[,\s]+/).filter(c => c && norm(c) !== norm(p.ustrong)).filter(c => { const r = strongKoRaw(c), e = r && r.e; return e && String(e.m || '').split(/[,;·\s]+/).indexOf(name) >= 0; });
+                if (byKo.length === 1) this._clickCode = byKo[0];
+              }
+            }
+          }
+        } catch (e) { this._clickCode = ''; }
         this.showPopup(p, name);
+        this._clickCode = '';
       },
 
       showPopup: function(p, clickedName) {
@@ -4316,7 +4338,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         else { mainKo = p.short || p.brief || ''; mainEn = ''; }
         const desc = p.description_ko || p.description || '';
         const aliasNote = (clickedName && clickedName !== p.name_ko) ? ` <span style="font-weight:400;color:#94a3b8">(현재 이름: ${escHtml(p.name_ko)})</span>` : '';
-        const strongRaw = (p.ustrong || '').trim();
+        const strongRaw = ((clickedName && clickedName !== p.name_ko && this._clickCode) ? this._clickCode : (p.ustrong || '')).trim();
         const strongValid = /^[HG]\d{1,5}[A-Za-z]?$/.test(strongRaw);
         const safeStrong = strongRaw.replace(/'/g, "\\'");
         const strongNote = strongValid ? ` <span class="strong-tag" style="font-size:0.85em" onclick="StrongEngine.handleClick('${safeStrong}','person-strong-inline')" title="원어 뜻 보기">[${escHtml(strongRaw)}]</span>` : '';
@@ -4347,7 +4369,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         window._wpPerson = p;
         ensureTouchResizeGrip(panel);
         makeDraggable(panel, '#person-info-drag-handle');
-        try { wpAttach('person-info-panel', p.ustrong || p.strong || ''); } catch (e) { console.warn('wpAttach', e); }
+        try { wpAttach('person-info-panel', (strongValid ? strongRaw : '') || p.ustrong || p.strong || ''); } catch (e) { console.warn('wpAttach', e); }
       },
 
       toggleArticle: function() {
@@ -18386,7 +18408,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
