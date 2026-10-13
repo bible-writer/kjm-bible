@@ -18420,7 +18420,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-11`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-12`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20481,6 +20481,221 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.warn('[PWA] Service Worker 등록 실패:', err));
   });
 }
+
+/* ═══════════════════════════════════════════════════════════════
+ * [낭독] 성경 낭독 MP3 — 올어바웃 이름 규칙(BB_CODE_CC.mp3, 시편 CCC) (b20261013-12)
+ *   · PC: 폴더 연결(복사 없이, 폴더 손잡이만 기억)  · 폰·탭: 파일/폴더 골라 기기(IndexedDB)에 보관
+ *   · 확장자 대소문자 무관(.MP3/.mp3), 장 번호 2·3자리 모두
+ *   · 장을 넘기면 그 장 낭독으로 바뀌고, 끝나면 다음 장으로 넘어가 이어 듣기
+ * ═══════════════════════════════════════════════════════════════ */
+(function () {
+  const btnTts = document.getElementById('bs-btn-tts');
+  if (!btnTts) return;
+  const CODES = ['GEN','EXO','LEV','NUM','DEU','JOS','JDG','RUT','1SA','2SA','1KI','2KI','1CH','2CH','EZR','NEH','EST','JOB','PSA','PRO','ECC','SNG','ISA','JER','LAM','EZK','DAN','HOS','JOL','AMO','OBA','JON','MIC','NAM','HAB','ZEP','HAG','ZEC','MAL','MAT','MRK','LUK','JHN','ACT','ROM','1CO','2CO','GAL','EPH','PHP','COL','1TH','2TH','1TI','2TI','TIT','PHM','HEB','JAS','1PE','2PE','1JN','2JN','3JN','JUD','REV'];
+  function keyOf(name) {
+    const m = /^(\d{1,2})_([0-9A-Z]{3})_(\d{1,3})\.mp3$/i.exec(String(name).trim());
+    if (!m) return null;
+    let b = parseInt(m[1], 10); const code = m[2].toUpperCase(); const c = parseInt(m[3], 10);
+    const ci = CODES.indexOf(code); if (ci >= 0) b = ci + 1;        // 권 번호보다 책 코드를 믿음
+    if (b < 1 || b > 66 || c < 1) return null;
+    return b + '-' + c;
+  }
+  /* ── IndexedDB ── */
+  let dbP = null;
+  function db() {
+    if (dbP) return dbP;
+    dbP = new Promise(function (res, rej) {
+      const r = indexedDB.open('kjmAudioDB', 1);
+      r.onupgradeneeded = function () { const d = r.result; d.createObjectStore('files'); d.createObjectStore('meta'); };
+      r.onsuccess = function () { res(r.result); }; r.onerror = function () { rej(r.error); };
+    });
+    return dbP;
+  }
+  function idb(store, mode, fn) {
+    return db().then(function (d) { return new Promise(function (res, rej) {
+      const tx = d.transaction(store, mode); const s = tx.objectStore(store); const out = fn(s);
+      tx.oncomplete = function () { res((out instanceof IDBRequest) ? out.result : out); };
+      tx.onerror = function () { rej(tx.error); };
+    }); });
+  }
+  /* ── 상태 ── */
+  const mem = new Map();      // key → File/Blob (이번 세션)
+  let dirMap = null;          // key → FileSystemFileHandle
+  let dirHandle = null;
+  let storedKeys = new Set(); // IndexedDB 에 보관된 장
+  let curKey = null, curUrl = null, wantPlay = false;
+  const audio = new Audio(); audio.preload = 'auto';
+  /* ── UI ── */
+  const btn = document.createElement('button');
+  btn.className = 'bs-btn'; btn.id = 'bs-btn-audio'; btn.title = '성경 낭독 (MP3)'; btn.textContent = '🎧';
+  btnTts.parentElement.insertBefore(btn, btnTts);
+  const st = document.createElement('style');
+  st.textContent = '#audio-bar{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:9000;display:none;align-items:center;gap:6px;background:#1e293b;color:#fff;border-radius:22px;padding:6px 12px;box-shadow:0 4px 14px rgba(0,0,0,.3);font-size:13px;max-width:96vw;flex-wrap:nowrap;white-space:nowrap;justify-content:center}'
+    + '#audio-bar button{background:none;border:none;color:#fff;font-size:16px;cursor:pointer;padding:2px 6px}#audio-bar select{background:#334155;color:#fff;border:none;border-radius:6px;font-size:12px;padding:2px}'
+    + '#audio-bar input[type=range]{width:140px}#audio-bar .ab-t{font-variant-numeric:tabular-nums;font-size:11px;color:#cbd5e1}'
+    + '#bs-btn-audio.has-audio{background:#dcfce7;border-color:#22c55e}#bs-btn-audio.playing{background:#22c55e;color:#fff}'
+    + '#audio-panel{display:none;position:absolute;top:36px;right:0;width:290px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);padding:12px;z-index:9999;font-size:12px;color:#334155;line-height:1.5}'
+    + '#audio-panel button{width:100%;margin-top:6px;padding:7px;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;cursor:pointer;font-size:12px}#audio-panel .ap-main{background:#1e293b;color:#fff;border-color:#1e293b}'
+    + '@media (max-width:768px){#audio-bar{bottom:72px;gap:2px;padding:5px 8px;font-size:12px}#audio-bar input[type=range]{width:60px}#audio-bar .ab-cont-t{display:none}#audio-bar button{padding:2px 3px;font-size:15px}#audio-bar .ab-t{font-size:10px}}';
+  document.head.appendChild(st);
+  const bar = document.createElement('div'); bar.id = 'audio-bar';
+  bar.innerHTML = '<span class="ab-l">🎧</span><button data-a="back" title="10초 뒤로">⏪</button><button data-a="play" title="재생/멈춤">▶</button><button data-a="fwd" title="10초 앞으로">⏩</button>'
+    + '<input type="range" min="0" max="1000" value="0" data-a="seek"><span class="ab-t">0:00 / 0:00</span>'
+    + '<select data-a="rate" title="속도"><option>0.8</option><option>0.9</option><option selected>1.0</option><option>1.1</option><option>1.2</option><option>1.3</option><option>1.5</option></select>'
+    + '<label style="font-size:11px;color:#cbd5e1"><input type="checkbox" data-a="cont" checked title="끝나면 다음 장 이어 듣기"><span class="ab-cont-t"> 이어 듣기</span></label><button data-a="close" title="닫기">✕</button>';
+  document.body.appendChild(bar);
+  const panel = document.createElement('div'); panel.id = 'audio-panel';
+  btnTts.parentElement.style.position = 'relative'; btnTts.parentElement.appendChild(panel);
+  const fIn = document.createElement('input'); fIn.type = 'file'; fIn.multiple = true; fIn.accept = '.mp3,.MP3,audio/mpeg'; fIn.style.display = 'none';
+  const dIn = document.createElement('input'); dIn.type = 'file'; dIn.multiple = true; dIn.setAttribute('webkitdirectory', ''); dIn.style.display = 'none';
+  document.body.appendChild(fIn); document.body.appendChild(dIn);
+  const $ = function (a) { return bar.querySelector('[data-a="' + a + '"]'); };
+  try { const r = localStorage.getItem('kjmAudioRate'); if (r) { $('rate').value = r; } } catch (e) {}
+  function fmt(s) { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function bookName(k) { const p = k.split('-'); const b = (typeof BIBLE_BOOKS !== 'undefined') && BIBLE_BOOKS.find(function (x) { return x.id === +p[0]; }); return (b ? b.name : p[0]) + ' ' + p[1] + (+p[0] === 19 ? '편' : '장'); }
+  function count() { const s = new Set(mem.keys()); storedKeys.forEach(function (k) { s.add(k); }); if (dirMap) dirMap.forEach(function (_, k) { s.add(k); }); return s.size; }
+  function hasKey(k) { return mem.has(k) || storedKeys.has(k) || (dirMap && dirMap.has(k)); }
+  function renderPanel() {
+    const n = count();
+    panel.innerHTML = '<div style="font-weight:700;margin-bottom:6px;color:#1e293b">🎧 성경 낭독</div>'
+      + '<div>올어바웃 낭독과 같은 이름 규칙: <b>01_GEN_01.mp3</b>, 시편 <b>19_PSA_001.mp3</b> (대소문자·2/3자리 모두 됨)</div>'
+      + '<div style="margin-top:6px">준비된 장: <b>' + n + '</b>' + (dirHandle ? ' · 폴더 「' + dirHandle.name + '」' : '') + '</div>'
+      + (hasKey(cur()) ? '<button class="ap-main" data-p="play">▶ ' + bookName(cur()) + ' 듣기</button>' : '<div style="margin-top:6px;color:#94a3b8">이 장(' + bookName(cur()) + ')의 낭독 파일이 없습니다.</div>')
+      + (window.showDirectoryPicker ? '<button data-p="dir">📁 낭독 폴더 연결 (PC · 복사 없이)</button>' : '')
+      + '<button data-p="files">🎵 MP3 파일 고르기 (기기에 보관)</button>'
+      + '<button data-p="folder">📂 폴더째 고르기 (기기에 보관)</button>'
+      + (storedKeys.size ? '<button data-p="clear" style="color:#b91c1c">보관한 낭독 ' + storedKeys.size + '장 지우기</button>' : '')
+      + '<div data-p="msg" style="margin-top:6px;color:#475569"></div>'
+      + '<button data-p="x">닫기</button>';
+  }
+  function msg(t) { const m = panel.querySelector('[data-p="msg"]'); if (m) m.textContent = t; }
+  function cur() { return (typeof curBookId === 'function' ? curBookId() : 1) + '-' + (typeof curChapterNo === 'function' ? curChapterNo() : 1); }
+  function refreshBtn() { btn.classList.toggle('has-audio', hasKey(cur())); btn.classList.toggle('playing', !audio.paused); }
+  /* ── 넣기 ── */
+  async function addFiles(list, store) {
+    let ok = 0, skip = [];
+    const arr = Array.from(list);
+    for (let i = 0; i < arr.length; i++) {
+      const f = arr[i]; const k = keyOf(f.name);
+      if (!k) { if (/\.mp3$/i.test(f.name)) skip.push(f.name); continue; }
+      mem.set(k, f); ok++;
+      if (store) {
+        try { await idb('files', 'readwrite', function (s) { return s.put(f, k); }); storedKeys.add(k); }
+        catch (e) { msg('기기 저장 공간이 모자랍니다. 이번 화면에서만 들을 수 있습니다.'); store = false; }
+        if (i % 20 === 0) msg('보관 중 ' + (i + 1) + ' / ' + arr.length);
+      }
+    }
+    renderPanel(); refreshBtn();
+    msg(ok + '장 넣음' + (skip.length ? ' · 이름 규칙에 안 맞아 건너뜀 ' + skip.length + '개 (예: ' + skip.slice(0, 2).join(', ') + ')' : ''));
+    if (typeof showToast === 'function') showToast('낭독 ' + ok + '장 준비됨', 'info');
+  }
+  async function scanDir(h) {
+    const m = new Map();
+    async function walk(d, depth) {
+      for await (const [name, e] of d.entries()) {
+        if (e.kind === 'file') { const k = keyOf(name); if (k) m.set(k, e); }
+        else if (depth < 2) await walk(e, depth + 1);
+      }
+    }
+    await walk(h, 0); return m;
+  }
+  async function ensureDir() {
+    if (!dirHandle) return false;
+    if (dirMap) return true;
+    try {
+      let p = await dirHandle.queryPermission({ mode: 'read' });
+      if (p !== 'granted') p = await dirHandle.requestPermission({ mode: 'read' });
+      if (p !== 'granted') return false;
+      dirMap = await scanDir(dirHandle); return true;
+    } catch (e) { return false; }
+  }
+  async function getBlob(k) {
+    if (mem.has(k)) return mem.get(k);
+    if (dirHandle && !dirMap) await ensureDir();
+    if (dirMap && dirMap.has(k)) { const f = await dirMap.get(k).getFile(); return f; }
+    if (storedKeys.has(k)) { const b = await idb('files', 'readonly', function (s) { return s.get(k); }); if (b) return b; }
+    return null;
+  }
+  /* ── 재생 ── */
+  async function loadKey(k, play) {
+    const b = await getBlob(k);
+    if (!b) { curKey = null; audio.removeAttribute('src'); refreshBtn(); return false; }
+    if (curUrl) URL.revokeObjectURL(curUrl);
+    curUrl = URL.createObjectURL(b); curKey = k;
+    audio.src = curUrl; audio.playbackRate = parseFloat($('rate').value) || 1;
+    bar.querySelector('.ab-l').textContent = '🎧 ' + bookName(k);
+    bar.style.display = 'flex';
+    if (play) { try { await audio.play(); } catch (e) {} }
+    refreshBtn(); return true;
+  }
+  audio.addEventListener('play', function () { $('play').textContent = '❚❚'; refreshBtn(); });
+  audio.addEventListener('pause', function () { $('play').textContent = '▶'; refreshBtn(); });
+  audio.addEventListener('timeupdate', function () {
+    bar.querySelector('.ab-t').textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+    if (audio.duration) $('seek').value = Math.round(audio.currentTime / audio.duration * 1000);
+  });
+  audio.addEventListener('ended', function () {
+    if (!$('cont').checked) return;
+    wantPlay = true;
+    if (typeof goToNextChapter === 'function') goToNextChapter();
+  });
+  bar.addEventListener('click', function (ev) {
+    const a = ev.target.getAttribute && ev.target.getAttribute('data-a'); if (!a) return;
+    if (a === 'play') { if (audio.paused) audio.play().catch(function () {}); else audio.pause(); }
+    if (a === 'back') audio.currentTime = Math.max(0, audio.currentTime - 10);
+    if (a === 'fwd') audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
+    if (a === 'close') { audio.pause(); bar.style.display = 'none'; }
+  });
+  $('seek').addEventListener('input', function () { if (audio.duration) audio.currentTime = this.value / 1000 * audio.duration; });
+  $('rate').addEventListener('change', function () { audio.playbackRate = parseFloat(this.value) || 1; try { localStorage.setItem('kjmAudioRate', this.value); } catch (e) {} });
+  /* 장이 바뀌면 그 장 낭독으로 */
+  let lastCur = null;
+  setInterval(function () {
+    const k = cur(); if (k === lastCur) return; lastCur = k;
+    const was = wantPlay || (!audio.paused && curKey);
+    wantPlay = false;
+    if (bar.style.display === 'flex' || was) {
+      if (hasKey(k) || dirHandle) loadKey(k, !!was).then(function (ok) { if (!ok && was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); });
+      else { audio.pause(); if (was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); }
+    }
+    refreshBtn();
+  }, 400);
+  /* ── 버튼·창 ── */
+  btn.addEventListener('click', async function (ev) {
+    ev.stopPropagation();
+    if (dirHandle && !dirMap) await ensureDir();
+    if (panel.style.display === 'block') { panel.style.display = 'none'; return; }
+    renderPanel(); panel.style.display = 'block';
+  });
+  panel.addEventListener('click', async function (ev) {
+    ev.stopPropagation();
+    const p = ev.target.getAttribute && ev.target.getAttribute('data-p'); if (!p) return;
+    if (p === 'x') panel.style.display = 'none';
+    if (p === 'play') { panel.style.display = 'none'; await loadKey(cur(), true); }
+    if (p === 'files') fIn.click();
+    if (p === 'folder') dIn.click();
+    if (p === 'dir') {
+      try {
+        dirHandle = await window.showDirectoryPicker({ id: 'kjmAudio', mode: 'read' });
+        dirMap = await scanDir(dirHandle);
+        await idb('meta', 'readwrite', function (s) { return s.put(dirHandle, 'dir'); });
+        renderPanel(); refreshBtn(); msg('폴더에서 ' + dirMap.size + '장 찾음');
+      } catch (e) { if (e && e.name !== 'AbortError') msg('폴더를 열 수 없습니다: ' + e.message); }
+    }
+    if (p === 'clear') {
+      await idb('files', 'readwrite', function (s) { return s.clear(); });
+      storedKeys.forEach(function (k) { mem.delete(k); }); storedKeys = new Set(); renderPanel(); refreshBtn();
+    }
+  });
+  document.addEventListener('click', function (ev) { if (panel.style.display === 'block' && !panel.contains(ev.target) && ev.target !== btn) panel.style.display = 'none'; });
+  fIn.addEventListener('change', function () { addFiles(fIn.files, true); fIn.value = ''; });
+  dIn.addEventListener('change', function () { addFiles(dIn.files, true); dIn.value = ''; });
+  /* 시작할 때 보관분·폴더 손잡이 불러오기 */
+  idb('files', 'readonly', function (s) { return s.getAllKeys(); }).then(function (ks) { (ks || []).forEach(function (k) { storedKeys.add(k); }); refreshBtn(); }).catch(function () {});
+  idb('meta', 'readonly', function (s) { return s.get('dir'); }).then(function (h) { if (h) { dirHandle = h; refreshBtn(); } }).catch(function () {});
+  window._kjmAudio = { keyOf: keyOf, addFiles: addFiles, loadKey: loadKey, audio: audio, hasKey: hasKey };
+})();
+
 </script>
 </body>
 </html>
