@@ -9250,7 +9250,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     document.addEventListener('click', function(e) {
       const panel = document.getElementById('place-quick-panel');
       if (panel && panel.style.display === 'block') {
-        if (!e.target.closest('#place-quick-panel') && !e.target.closest('.bible-place-tag')) {
+        if (!e.target.closest('#place-quick-panel') && !e.target.closest('.bible-place-tag') && !e.target.closest('#chapter-chips')) {
           panel.style.display = 'none';
         }
       }
@@ -18245,7 +18245,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           + (isP ? 'background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6' : 'background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8');
         b.innerHTML = `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:0.8em;${isP ? 'background:#ede9fe' : 'background:#dbeafe'}">${isP ? escHtml(it.label.charAt(0)) : '📍'}</span>${escHtml(it.label)}${it.n > 1 ? `<span style="opacity:.6;font-size:0.85em">${it.n}</span>` : ''}`;
         b.title = (isP ? '인명' : '지명') + ' · 이 장에 ' + it.n + '번';
-        b.onclick = (ev) => { try { ev.preventDefault(); it.first.click(); } catch (e) {} };   // (b-9 kjm) 본문은 움직이지 않고 창만
+        b.onclick = (ev) => { try { ev.preventDefault(); ev.stopPropagation(); it.first.click(); } catch (e) {} };   // (b20261013-5) 칩 누름이 문서까지 가서 방금 연 지명 창을 닫지 않게   // (b-9 kjm) 본문은 움직이지 않고 창만
         box.appendChild(b);
       });
       const title = container.querySelector('.chapter-title');
@@ -18410,7 +18410,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261013-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
