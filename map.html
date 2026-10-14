@@ -20713,7 +20713,8 @@ if ('serviceWorker' in navigator) {
           bounds = bb; bounds._tt = true; return; }
         // NIV 낭독 → 오른쪽 비교 창(NIV)에 표시
         if (en && d && Math.abs(d - en[0]) < 1.0) {
-          const bb = en[1].slice(); Object.keys(own).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = own[v]; });
+          const ownN = loadSync()[k + ':niv'] || {};   // NIV 📌 맞춤은 개역과 따로 저장
+          const bb = en[1].slice(); Object.keys(ownN).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = ownN[v]; });
           bounds = bb; bounds._tt = true; bounds._side = 'right'; return; } }
       const env = await envOf(k, blob); if (boundsKey !== k) return; bounds = computeBounds(k, env, rowsOf(k));
     } catch (e) { console.warn('낭독 절 맞춤 생략', e); }
@@ -20734,7 +20735,7 @@ if ('serviceWorker' in navigator) {
   }
   ['wheel', 'touchmove'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && (e.target.closest('#bible-content') || e.target.closest('#compare-content'))) lastUserScroll = Date.now(); }, { passive: true }); });
   function setAnchor(v, t) {
-    const o = loadSync(); const a = o[curKey] || (o[curKey] = {}); a[v] = Math.max(0, Math.round(t * 100) / 100); saveSync(o);
+    const o = loadSync(); const sk = curKey + (bounds && bounds._side === 'right' ? ':niv' : ''); const a = o[sk] || (o[sk] = {}); a[v] = Math.max(0, Math.round(t * 100) / 100); saveSync(o);
     if (bounds && bounds._tt) { const dlt = a[v] - bounds[v - 1]; bounds[v - 1] = a[v]; for (let i = v; i < bounds.length && !(a[i + 1] != null); i++) bounds[i] += dlt; } else { const env = envCache.get(curKey); if (env) bounds = computeBounds(curKey, env, rowsOf(curKey)); } curVerse = -1; markVerse(verseAt(audio.currentTime));
   }
   document.addEventListener('click', function (ev) {
