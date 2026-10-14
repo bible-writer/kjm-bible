@@ -18439,7 +18439,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261014-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261014-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20696,7 +20696,9 @@ if ('serviceWorker' in navigator) {
   /* 절별 시간표(audioTimes.json, 개역 낭독 MP3를 음성인식으로 맞춘 것) — 파일 길이가 1초 안으로 같을 때만 씀 (b20261014-1) */
   let timesP = null;
   function loadTimes() {
-    if (!timesP) timesP = fetch('./audioTimes.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+    // (b20261014-5) NIV 낭독 시간표(audioTimes_niv.json)도 함께 — 파일 길이로 어느 쪽인지 고름
+    const get = function (u) { return fetch(u, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }); };
+    if (!timesP) timesP = Promise.all([get('./audioTimes.json'), get('./audioTimes_niv.json')]).then(function (a) { return { t: (a[0] && a[0].t) || {}, niv: (a[1] && a[1].t) || {} }; });
     return timesP;
   }
   function metaDur() { return new Promise(function (res) { if (audio.duration) return res(audio.duration); const f = function () { audio.removeEventListener('loadedmetadata', f); res(audio.duration || 0); }; audio.addEventListener('loadedmetadata', f); setTimeout(function () { res(audio.duration || 0); }, 4000); }); }
@@ -20704,33 +20706,41 @@ if ('serviceWorker' in navigator) {
     bounds = null; boundsKey = k; curVerse = 0;
     const own = loadSync()[k] || {};
     try {
-      const tt = await loadTimes(); const e = tt && tt.t && tt.t[k];
-      if (e) { const d = await metaDur(); if (boundsKey !== k) return;
-        if (d && Math.abs(d - e[0]) < 1.0 && (rowsOf(k).length === e[1].length || rowsOf(k).length === 0)) {
+      const tt = await loadTimes(); const e = tt && tt.t && tt.t[k]; const en = tt && tt.niv && tt.niv[k];
+      if (e || en) { const d = await metaDur(); if (boundsKey !== k) return;
+        if (e && d && Math.abs(d - e[0]) < 1.0 && (rowsOf(k).length === e[1].length || rowsOf(k).length === 0)) {
           const bb = e[1].slice(); Object.keys(own).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = own[v]; });
-          bounds = bb; bounds._tt = true; return; } }
+          bounds = bb; bounds._tt = true; return; }
+        // NIV 낭독 → 오른쪽 비교 창(NIV)에 표시
+        if (en && d && Math.abs(d - en[0]) < 1.0) {
+          const bb = en[1].slice(); Object.keys(own).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = own[v]; });
+          bounds = bb; bounds._tt = true; bounds._side = 'right'; return; } }
       const env = await envOf(k, blob); if (boundsKey !== k) return; bounds = computeBounds(k, env, rowsOf(k));
     } catch (e) { console.warn('낭독 절 맞춤 생략', e); }
   }
   function verseAt(t) { if (!bounds) return 0; let v = 0; for (let i = 0; i < bounds.length; i++) if (t >= bounds[i] - 0.05) v = i + 1; return v; }
   function markVerse(v) {
     if (v === curVerse) return; curVerse = v;
-    document.querySelectorAll('#bible-content .verse-row.audio-cur').forEach(function (r) { r.classList.remove('audio-cur'); });
+    document.querySelectorAll('#bible-content .verse-row.audio-cur, #compare-content .verse-row.audio-cur').forEach(function (r) { r.classList.remove('audio-cur'); });
     if (!v || curKey !== cur()) return;
-    const r = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]'); if (!r) return;
+    // (b20261014-5) NIV 낭독이면 오른쪽 비교 창(열려 있을 때)에, 아니면 왼쪽 본문에
+    let r = null, box = document.getElementById('bible-content');
+    if (bounds && bounds._side === 'right') { const cp = document.getElementById('compare-panel'); if (cp && cp.classList.contains('open')) { r = document.querySelector('#compare-content #cmp-verse-' + v); if (r) box = document.getElementById('compare-content'); } }
+    if (!r) r = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]');
+    if (!r) return;
     r.classList.add('audio-cur');
-    if (Date.now() - lastUserScroll > 4000) { const box = document.getElementById('bible-content'); const rb = r.getBoundingClientRect(), bb = box.getBoundingClientRect();
+    if (Date.now() - lastUserScroll > 4000) { const rb = r.getBoundingClientRect(), bb = box.getBoundingClientRect();
       if (rb.top < bb.top + 20 || rb.bottom > bb.bottom - 90) r.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
   }
-  ['wheel', 'touchmove'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && e.target.closest('#bible-content')) lastUserScroll = Date.now(); }, { passive: true }); });
+  ['wheel', 'touchmove'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && (e.target.closest('#bible-content') || e.target.closest('#compare-content'))) lastUserScroll = Date.now(); }, { passive: true }); });
   function setAnchor(v, t) {
     const o = loadSync(); const a = o[curKey] || (o[curKey] = {}); a[v] = Math.max(0, Math.round(t * 100) / 100); saveSync(o);
     if (bounds && bounds._tt) { const dlt = a[v] - bounds[v - 1]; bounds[v - 1] = a[v]; for (let i = v; i < bounds.length && !(a[i + 1] != null); i++) bounds[i] += dlt; } else { const env = envCache.get(curKey); if (env) bounds = computeBounds(curKey, env, rowsOf(curKey)); } curVerse = -1; markVerse(verseAt(audio.currentTime));
   }
   document.addEventListener('click', function (ev) {
-    const num = ev.target && ev.target.closest && ev.target.closest('#bible-content .verse-num'); if (!num || bar.style.display !== 'flex' || !curKey) return;
-    const row = num.closest('.verse-row'); if (!row || row.dataset.bc !== curKey) return;
-    const v = parseInt(String(row.id).replace('verse-row-', ''), 10); if (!v) return;
+    const num = ev.target && ev.target.closest && (ev.target.closest('#bible-content .verse-num') || (bounds && bounds._side === 'right' && ev.target.closest('#compare-content .verse-num'))); if (!num || bar.style.display !== 'flex' || !curKey) return;
+    const row = num.closest('.verse-row'); if (!row || (row.id.indexOf('cmp-verse-') !== 0 && row.dataset.bc !== curKey)) return;
+    const v = parseInt(String(row.id).replace('verse-row-', '').replace('cmp-verse-', ''), 10); if (!v) return;
     ev.stopPropagation(); ev.preventDefault();
     if (syncMode) { setAnchor(v, audio.currentTime - 0.3); syncNext = v + 1; if (typeof showToast === 'function') showToast(v + '절 시작 ' + fmt(audio.currentTime) + ' 기록', 'info', 1200); return; }
     if (bounds && bounds[v - 1] != null) { audio.currentTime = Math.max(0, bounds[v - 1] - 0.2); if (audio.paused) audio.play().catch(function () {}); }
