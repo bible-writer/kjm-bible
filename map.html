@@ -18420,7 +18420,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261014-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261014-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20483,7 +20483,7 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
- * [낭독] 성경 낭독 MP3 — 올어바웃 이름 규칙(BB_CODE_CC.mp3, 시편 CCC) (b20261013-12, 본문 연결 b20261013-13, 절 시간표 b20261014-1, opus 폰용 -2)
+ * [낭독] 성경 낭독 MP3 — 올어바웃 이름 규칙(BB_CODE_CC.mp3, 시편 CCC) (b20261013-12, 본문 연결 b20261013-13, 절 시간표 b20261014-1, opus 폰용 -2, 화면 꺼짐 이어 듣기 -3)
  *   · PC: 폴더 연결(복사 없이, 폴더 손잡이만 기억)  · 폰·탭: 파일/폴더 골라 기기(IndexedDB)에 보관
  *   · 확장자 대소문자 무관(.MP3/.mp3), 장 번호 2·3자리 모두
  *   · 장을 넘기면 그 장 낭독으로 바뀌고, 끝나면 다음 장으로 넘어가 이어 듣기
@@ -20687,7 +20687,7 @@ if ('serviceWorker' in navigator) {
     try {
       const tt = await loadTimes(); const e = tt && tt.t && tt.t[k];
       if (e) { const d = await metaDur(); if (boundsKey !== k) return;
-        if (d && Math.abs(d - e[0]) < 1.0 && rowsOf(k).length === e[1].length) {
+        if (d && Math.abs(d - e[0]) < 1.0 && (rowsOf(k).length === e[1].length || rowsOf(k).length === 0)) {
           const bb = e[1].slice(); Object.keys(own).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = own[v]; });
           bounds = bb; bounds._tt = true; return; } }
       const env = await envOf(k, blob); if (boundsKey !== k) return; bounds = computeBounds(k, env, rowsOf(k));
@@ -20723,7 +20723,7 @@ if ('serviceWorker' in navigator) {
     if (curUrl) URL.revokeObjectURL(curUrl);
     curUrl = URL.createObjectURL(b); curKey = k;
     audio.src = curUrl; audio.playbackRate = parseFloat($('rate').value) || 1; document.body.classList.add('audio-on'); prepBounds(k, b);
-    bar.querySelector('.ab-l').textContent = '🎧 ' + bookName(k);
+    bar.querySelector('.ab-l').textContent = '🎧 ' + bookName(k); setMedia(k);
     bar.style.display = 'flex';
     if (play) { try { await audio.play(); } catch (e) {} }
     refreshBtn(); return true;
@@ -20735,11 +20735,45 @@ if ('serviceWorker' in navigator) {
     if (audio.duration) $('seek').value = Math.round(audio.currentTime / audio.duration * 1000);
     markVerse(verseAt(audio.currentTime));
   });
+  /* (b20261014-3) 화면이 꺼져도 이어 듣기: 끝나면 다음 장 소리를 바로 붙여 재생(타이머·화면 그리기를 기다리지 않음), 본문은 뒤따라 넘김 */
+  function nextKeyOf(k) {
+    const p = k.split('-'); let b = +p[0], c = +p[1] + 1;
+    const bk = (typeof BIBLE_BOOKS !== 'undefined') && BIBLE_BOOKS.find(function (x) { return x.id === b; });
+    if (bk && c > bk.chapters) { b++; c = 1; }
+    return b > 66 ? null : b + '-' + c;
+  }
+  function prevKeyOf(k) {
+    const p = k.split('-'); let b = +p[0], c = +p[1] - 1;
+    if (c < 1) { b--; const bk = (typeof BIBLE_BOOKS !== 'undefined') && BIBLE_BOOKS.find(function (x) { return x.id === b; }); c = bk ? bk.chapters : 1; }
+    return b < 1 ? null : b + '-' + c;
+  }
+  async function playNext(dir) {
+    const nk = dir < 0 ? prevKeyOf(curKey || cur()) : nextKeyOf(curKey || cur()); if (!nk) return;
+    if (!hasKey(nk) && !dirHandle) { if (typeof showToast === 'function') showToast(bookName(nk) + ' 낭독 파일이 없습니다', 'info'); }
+    const ok = await loadKey(nk, true);
+    lastCur = null;   // 본문 넘김은 아래에서
+    const p = nk.split('-');
+    try { if (typeof setSelectValuesAndLoad === 'function') setSelectValuesAndLoad(+p[0], +p[1]); } catch (e) {}
+    lastCur = cur();
+    return ok;
+  }
   audio.addEventListener('ended', function () {
     if (!$('cont').checked) return;
-    wantPlay = true;
-    if (typeof goToNextChapter === 'function') goToNextChapter();
+    playNext(1);
   });
+  /* 잠금 화면·이어폰 단추(미디어 세션) */
+  function setMedia(k) {
+    if (!('mediaSession' in navigator) || !k) return;
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({ title: bookName(k), artist: '성경 낭독', album: '바이블 맵' });
+      navigator.mediaSession.setActionHandler('play', function () { audio.play().catch(function () {}); });
+      navigator.mediaSession.setActionHandler('pause', function () { audio.pause(); });
+      navigator.mediaSession.setActionHandler('nexttrack', function () { playNext(1); });
+      navigator.mediaSession.setActionHandler('previoustrack', function () { playNext(-1); });
+      navigator.mediaSession.setActionHandler('seekbackward', function () { audio.currentTime = Math.max(0, audio.currentTime - 10); });
+      navigator.mediaSession.setActionHandler('seekforward', function () { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10); });
+    } catch (e) {}
+  }
   bar.addEventListener('click', function (ev) {
     const a = ev.target.getAttribute && ev.target.getAttribute('data-a'); if (!a) return;
     if (a === 'play') { if (audio.paused) audio.play().catch(function () {}); else audio.pause(); }
@@ -20758,7 +20792,7 @@ if ('serviceWorker' in navigator) {
     const k = cur(); if (k === lastCur) return; lastCur = k;
     const was = wantPlay || (!audio.paused && curKey);
     wantPlay = false;
-    if (bar.style.display === 'flex' || was) {
+    if ((bar.style.display === 'flex' || was) && k !== curKey) {
       if (hasKey(k) || dirHandle) loadKey(k, !!was).then(function (ok) { if (!ok && was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); });
       else { audio.pause(); if (was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); }
     }
