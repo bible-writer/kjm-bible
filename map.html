@@ -20724,15 +20724,20 @@ if ('serviceWorker' in navigator) {
     if (v === curVerse) return; curVerse = v;
     document.querySelectorAll('#bible-content .verse-row.audio-cur, #compare-content .verse-row.audio-cur').forEach(function (r) { r.classList.remove('audio-cur'); });
     if (!v || curKey !== cur()) return;
-    // (b20261014-5) NIV 낭독이면 오른쪽 비교 창(열려 있을 때)에, 아니면 왼쪽 본문에
-    let r = null, box = document.getElementById('bible-content');
-    if (bounds && bounds._side === 'right') { const cp = document.getElementById('compare-panel'); if (cp && cp.classList.contains('open')) { r = document.querySelector('#compare-content #cmp-verse-' + v); if (r) box = document.getElementById('compare-content'); } }
-    if (!r) r = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]');
-    if (!r) return;
-    r.classList.add('audio-cur');
-    if (Date.now() - lastUserScroll > 4000) { const rb = r.getBoundingClientRect(), bb = box.getBoundingClientRect();
-      if (rb.top < bb.top + 20 || rb.bottom > bb.bottom - 90) r.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    // (b20261014-5) 왼쪽 본문은 늘 함께 따라가고, NIV 낭독이면 오른쪽 비교 창(열려 있을 때)도 같은 절을 표시 (kjm 「왼쪽창이 같이 움직여야」)
+    const pairs = [];
+    const lr = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]');
+    if (lr) pairs.push([lr, document.getElementById('bible-content')]);
+    if (bounds && bounds._side === 'right') { const cp = document.getElementById('compare-panel');
+      if (cp && cp.classList.contains('open')) { const rr = document.querySelector('#compare-content #cmp-verse-' + v); if (rr) pairs.push([rr, document.getElementById('compare-content')]); } }
+    pairs.forEach(function (p) {
+      const r = p[0], box = p[1]; r.classList.add('audio-cur');
+      let sc = box; while (sc && sc !== document.body && !(sc.scrollHeight > sc.clientHeight + 2 && /auto|scroll/.test(getComputedStyle(sc).overflowY))) sc = sc.parentElement;
+      if (Date.now() - lastUserScroll > 4000 && sc && sc !== document.body) { const rb = r.getBoundingClientRect(), bb = sc.getBoundingClientRect();
+        if (rb.top < bb.top + 20 || rb.bottom > bb.bottom - 90) sc.scrollBy({ top: (rb.top + rb.height / 2) - (bb.top + bb.height / 2), behavior: 'smooth' }); }
+    });
   }
+
   ['wheel', 'touchmove'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && (e.target.closest('#bible-content') || e.target.closest('#compare-content'))) lastUserScroll = Date.now(); }, { passive: true }); });
   function setAnchor(v, t) {
     const o = loadSync(); const sk = curKey + (bounds && bounds._side === 'right' ? ':niv' : ''); const a = o[sk] || (o[sk] = {}); a[v] = Math.max(0, Math.round(t * 100) / 100); saveSync(o);
@@ -20866,5 +20871,47 @@ if ('serviceWorker' in navigator) {
 })();
 
 </script>
+<script>
+/* (b20261014-5) 영어 낱말 뜻 — 비교 창(NIV 등 영어 역본)의 낱말을 누르면 짧은 한글 뜻 (niv_gloss.json, kjm 「영어 번역기능 단어」) */
+(function () {
+  let G = null, gP = null, pop = null;
+  function load() { if (!gP) gP = fetch('./niv_gloss.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { G = (j && j.g) || {}; return G; }).catch(function () { G = {}; return G; }); return gP; }
+  function wordAt(x, y) {
+    let node, off;
+    if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); if (!p) return ''; node = p.offsetNode; off = p.offset; }
+    else if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(x, y); if (!r) return ''; node = r.startContainer; off = r.startOffset; }
+    if (!node || node.nodeType !== 3) return '';
+    const t = node.textContent; let a = off, b = off; const ok = function (c) { return /[A-Za-z'’]/.test(c); };
+    while (a > 0 && ok(t[a - 1])) a--; while (b < t.length && ok(t[b])) b++;
+    return t.slice(a, b).replace(/’/g, "'").replace(/^'+|'+$/g, '');
+  }
+  function lookup(w) {
+    const k = w.toLowerCase(); if (G[k]) return [k, G[k]];
+    const tries = [k.replace(/'s$/, ''), k.replace(/s$/, ''), k.replace(/es$/, ''), k.replace(/ed$/, ''), k.replace(/ing$/, ''), k.replace(/ies$/, 'y')];
+    for (const t of tries) if (t && G[t]) return [t, G[t]];
+    return null;
+  }
+  function hide() { if (pop) { pop.remove(); pop = null; } }
+  function show(x, y, w, g) {
+    hide(); pop = document.createElement('div');
+    pop.style.cssText = 'position:fixed;z-index:99999;max-width:280px;background:#1e293b;color:#fff;border-radius:8px;padding:7px 11px;font-size:14px;line-height:1.45;box-shadow:0 4px 14px rgba(0,0,0,.25)';
+    pop.innerHTML = '<b style="color:#93c5fd">' + w.replace(/[<>&]/g, '') + '</b>&nbsp; ' + (g ? String(g[1]).replace(/[<>&]/g, '') : '<span style="opacity:.7">뜻 없음</span>');
+    document.body.appendChild(pop);
+    const r = pop.getBoundingClientRect(); let L = x - r.width / 2, T = y - r.height - 12;
+    if (T < 8) T = y + 18; L = Math.max(8, Math.min(L, innerWidth - r.width - 8));
+    pop.style.left = L + 'px'; pop.style.top = T + 'px';
+    clearTimeout(show._t); show._t = setTimeout(hide, 6000);
+  }
+  document.addEventListener('click', function (ev) {
+    const txt = ev.target && ev.target.closest && ev.target.closest('#compare-content .verse-text');
+    if (!txt) { if (pop && !(ev.target.closest && ev.target.closest('.audio-gloss-pop'))) hide(); return; }
+    if (ev.target.closest('[onclick], a, .strong-tag, .bible-term-tag, sup')) return;   // 용어 딱지·원어 번호는 원래 동작
+    const w = wordAt(ev.clientX, ev.clientY); if (!w || !/^[A-Za-z]/.test(w)) { hide(); return; }
+    load().then(function () { show(ev.clientX, ev.clientY, w, lookup(w)); });
+  });
+  document.addEventListener('scroll', hide, true);
+})();
+</script>
+
 </body>
 </html>
