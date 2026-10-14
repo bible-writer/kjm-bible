@@ -8539,17 +8539,36 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const idx = new Map();
           L.forEach((it, i) => {
             const cs = new Set(String(it.strong || '').split(',').map(_dictNormCode).filter(Boolean));
-            (it.entries || []).forEach(x => String(x.e.hebrew_greek || '').split(',').map(_dictNormCode).filter(Boolean).forEach(c => cs.add(c)));
-            (it.isbe || []).forEach(e => String(e.hebrew_greek || '').split(',').map(_dictNormCode).filter(Boolean).forEach(c => cs.add(c)));
+            // (b20261014-4 kjm 「G2424에 요셉」) 인물·지명 줄은 DB 번호(STEP)만 — 이어진 사전 항목 번호(이스턴 Justus 항목의 G2424 등)는 쓰지 않음
+            if (!((it.type === 'PERSON' || it.type === 'PLACE') && cs.size)) {
+              (it.entries || []).forEach(x => String(x.e.hebrew_greek || '').split(',').map(_dictNormCode).filter(Boolean).forEach(c => cs.add(c)));
+              (it.isbe || []).forEach(e => String(e.hebrew_greek || '').split(',').map(_dictNormCode).filter(Boolean).forEach(c => cs.add(c)));
+            }
             cs.forEach(c => { if (!idx.has(c)) idx.set(c, []); idx.get(c).push(i); });
           });
           _dictCodeIdx = { L, idx };
         }
-        const arr = _dictCodeIdx.idx.get(_dictNormCode(code)) || [];
-        if (!arr.length) return '';
+        const nc = _dictNormCode(code);
+        const arr0 = _dictCodeIdx.idx.get(nc) || [];
+        if (!arr0.length) return '';
+        // (b20261014-4) 이 번호의 본래 주인(고유번호 G2424G → 예수)을 맨 앞에, 다른 인물은 그 번호로 불린 구절을 붙임(여호수아 — 행 7:45·히 4:8)
+        const _bk = new Map(BIBLE_BOOKS.map(b => [b.id, b.abbr]));
+        let owner = null;   // 고유번호가 이 번호인 사람 중 구절이 가장 많은 사람(G2424G 예수 · G2424K 여호수아 중 예수)
+        arr0.forEach(i => (_dictCodeIdx.L[i].people || []).forEach(p => { if (_dictNormCode(p.ustrong) === nc && (!owner || (p.verses || []).length > (owner.verses || []).length)) owner = p; }));
+        const pInfo = it => {
+          if (it.type !== 'PERSON') return { own: false, tag: '' };
+          const ps = (it.people || []).filter(p => p !== owner && _dictIds(p.strong || p.ustrong).some(c => _dictNormCode(c) === nc));
+          const own = (it.people || []).includes(owner);
+          if (own) return { own: true, tag: '' };   // 주인 줄은 굵게만(같은 이름 다른 사람 구절은 붙이지 않음)
+          const nt = nc[0] === 'G';
+          const vs = [];
+          ps.forEach(p => (p.verses || []).forEach(v => { if ((+v.book >= 40) === nt && vs.length < 3) vs.push(`${_bk.get(+v.book) || ''} ${v.chapter}:${v.verse}`); }));
+          return { own: false, tag: vs.join('·') };
+        };
+        const arr = arr0.map(i => ({ i, ...pInfo(_dictCodeIdx.L[i]) })).sort((a, b) => (b.own - a.own));
         const col = { PERSON: '#6D28D9', PLACE: '#15803D', TERM: '#C2410C' }, lab = { PERSON: '인물', PLACE: '지명', TERM: '용어' };
         return `<div style="margin:8px 0;padding:8px 10px;background:#fff7ed;border:1px solid #fde6cf;border-radius:8px"><div style="font-size:.8em;color:#a0522d;font-weight:700;margin-bottom:4px">📚 이 번호를 다룬 사전 (${arr.length})</div><div style="display:flex;flex-wrap:wrap;gap:5px">`
-          + arr.slice(0, 30).map(i => { const it = _dictCodeIdx.L[i]; return `<button onclick="openDictCardByIdx(${i})" style="font-size:.82em;border:1px solid ${col[it.type]}55;color:${col[it.type]};background:#fff;border-radius:6px;padding:2px 8px;cursor:pointer">${escHtml(it.nameKo)} <span style="opacity:.7">${lab[it.type]}</span></button>`; }).join('')
+          + arr.slice(0, 30).map(({ i, own, tag }) => { const it = _dictCodeIdx.L[i]; return `<button onclick="openDictCardByIdx(${i})" style="font-size:.82em;border:1px solid ${col[it.type]}${own ? '' : '55'};color:${col[it.type]};background:#fff;border-radius:6px;padding:2px 8px;cursor:pointer${own ? ';font-weight:700' : ''}">${escHtml(it.nameKo)} <span style="opacity:.7">${lab[it.type]}</span>${tag ? ` <span style="opacity:.6;font-size:.9em">— ${escHtml(tag)}</span>` : ''}</button>`; }).join('')
           + `</div></div>`;
       } catch (e) { return ''; }
     }
@@ -18420,7 +18439,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261014-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261014-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
