@@ -5277,7 +5277,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         // 용어DB 스트롱 칸을 채울 때 근거가 되는 것이 사전 뜻이 아니라 실제 번역어라서 붙였다.
         const useBtn = `<button onclick="StrongEngine.openUsage('${code}')" style="font-size:0.7em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:2px 8px;cursor:pointer">🔤 용례</button>`;
         const trBtn = `<div style="margin-top:4px;display:flex;gap:5px;align-items:center;flex-wrap:wrap">` +
-          useBtn +
+          useBtn + ((typeof biblehubBtn === 'function') ? biblehubBtn(code, true) : '') +
           (entry.gloss
             ? `<button id="strong-tr-btn-${container.id}" onclick="StrongEngine.translateInline('${code}','${container.id}')" style="font-size:0.7em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:2px 8px;cursor:pointer">🌐 번역</button><span id="${trSpanId}" style="font-size:0.82em;color:#1e40af"></span>`
             : '') +
@@ -5394,6 +5394,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           <div style="font-size:0.95em;line-height:1.5;color:#334155">${escHtml(entry.gloss || '')}</div>
           <div style="margin-top:6px;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
             <button onclick="StrongEngine.openUsage('${code}')" style="font-size:0.75em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:3px 9px;cursor:pointer">🔤 용례</button>
+            ${(typeof biblehubBtn === 'function') ? biblehubBtn(code) : ''}
             ${entry.gloss ? `<button id="strong-pop-trbtn-gloss" onclick="StrongEngine.translatePopup('${code}','gloss')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button>` : ''}
           </div>
           ${entry.gloss ? `<div id="strong-pop-tr-gloss" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div>` : ''}
@@ -7961,6 +7962,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
     /* (b20261015-1 kjm 「모른 사람은 헛갈려」 고전 7:2 여자마다 ↔ G1538 각각의)
      * 이 절 번역 말과 사전 뜻을 나란히 — 번역에서 보충한 사람 말(여자·남자…)은 따로 알린다 */
+    /* (b20261015-2 kjm 「biblehub 관련번호 링크」) 스트롱 번호 → biblehub 낱말 쪽 주소. 링크만 걸고 내용은 옮기지 않는다(저작권) */
+    function biblehubUrl(code) {
+      const m = String(code || '').trim().match(/^([HGhg])0*(\d+)/);
+      if (!m) return '';
+      return 'https://biblehub.com/' + (m[1].toUpperCase() === 'H' ? 'hebrew' : 'greek') + '/' + parseInt(m[2], 10) + '.htm';
+    }
+    function biblehubBtn(code, small) {
+      const u = biblehubUrl(code);
+      return u ? '<a href="' + u + '" target="_blank" rel="noopener noreferrer" title="Bible Hub에서 ' + escHtml(String(code)) + ' 보기 (새 창)"'
+        + ' style="font-size:' + (small ? '0.7em' : '0.75em') + ';color:#475569;background:#fff;border:1px solid #cbd5e1;border-radius:4px;padding:' + (small ? '2px 8px' : '3px 9px') + ';text-decoration:none;cursor:pointer">↗ Bible Hub</a>' : '';
+    }
     function wordCtxHtml(code, word, ref, morph, nCodes) {
       word = String(word || '').trim();
       if (!word) return '';
@@ -18480,7 +18492,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
