@@ -7969,15 +7969,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       return 'https://biblehub.com/' + (m[1].toUpperCase() === 'H' ? 'hebrew' : 'greek') + '/' + parseInt(m[2], 10) + '.htm';
     }
     function biblehubBtn(code, small) {
-      /* (b20261015-3 kjm 「열면 한글 자동, 영문 선택」) 큰 단추 = 구글 번역을 거친 한글 쪽, 작은 EN = 원래 영문 쪽 */
+      /* (b20261015-4) 구글 번역 경유(translate.goog)는 한국에서 「지역에서 쓸 수 없음」 — 영문 쪽만 연다.
+       * 한글로 보려면 브라우저 번역(크롬 「영어 항상 번역」)을 쓴다 */
       const u = biblehubUrl(code);
-      if (!u) return '';
-      const ko = u.replace('https://biblehub.com/', 'https://biblehub-com.translate.goog/') + '?_x_tr_sl=en&_x_tr_tl=ko&_x_tr_hl=ko';
-      const fs = small ? '0.7em' : '0.75em', pd = small ? '2px 8px' : '3px 9px';
-      const st = 'font-size:' + fs + ';color:#475569;background:#fff;border:1px solid #cbd5e1;text-decoration:none;cursor:pointer;';
-      return '<span style="display:inline-flex;white-space:nowrap">'
-        + '<a href="' + ko + '" target="_blank" rel="noopener noreferrer" title="Bible Hub ' + escHtml(String(code)) + ' — 구글 번역 한글로 (새 창)" style="' + st + 'border-radius:4px 0 0 4px;padding:' + pd + '">↗ Bible Hub 한글</a>'
-        + '<a href="' + u + '" target="_blank" rel="noopener noreferrer" title="Bible Hub ' + escHtml(String(code)) + ' — 영문 원래 쪽 (새 창)" style="' + st + 'border-left:none;border-radius:0 4px 4px 0;padding:' + pd + '">EN</a></span>';
+      return u ? '<a href="' + u + '" target="_blank" rel="noopener noreferrer" title="Bible Hub에서 ' + escHtml(String(code)) + ' 보기 (새 창 · 한글은 브라우저 번역)"'
+        + ' style="font-size:' + (small ? '0.7em' : '0.75em') + ';color:#475569;background:#fff;border:1px solid #cbd5e1;border-radius:4px;padding:' + (small ? '2px 8px' : '3px 9px') + ';text-decoration:none;cursor:pointer">↗ Bible Hub</a>' : '';
     }
     function wordCtxHtml(code, word, ref, morph, nCodes) {
       word = String(word || '').trim();
@@ -18498,7 +18494,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
