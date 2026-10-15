@@ -18494,7 +18494,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20753,7 +20753,8 @@ if ('serviceWorker' in navigator) {
   function loadTimes() {
     // (b20261014-5) NIV 낭독 시간표(audioTimes_niv.json)도 함께 — 파일 길이로 어느 쪽인지 고름
     const get = function (u) { return fetch(u, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }); };
-    if (!timesP) timesP = Promise.all([get('./audioTimes.json'), get('./audioTimes_niv.json')]).then(function (a) { return { t: (a[0] && a[0].t) || {}, niv: (a[1] && a[1].t) || {} }; });
+    // (b20261015-5) 개역개정 4판 낭독(kjm 구매본) 시간표 audioTimes_k4.json 도 — 파일 길이로 어느 녹음인지 고름
+    if (!timesP) timesP = Promise.all([get('./audioTimes.json'), get('./audioTimes_niv.json'), get('./audioTimes_k4.json')]).then(function (a) { return { t: (a[0] && a[0].t) || {}, niv: (a[1] && a[1].t) || {}, k4: (a[2] && a[2].t) || {} }; });
     return timesP;
   }
   function metaDur() { return new Promise(function (res) { if (audio.duration) return res(audio.duration); const f = function () { audio.removeEventListener('loadedmetadata', f); res(audio.duration || 0); }; audio.addEventListener('loadedmetadata', f); setTimeout(function () { res(audio.duration || 0); }, 4000); }); }
@@ -20761,11 +20762,16 @@ if ('serviceWorker' in navigator) {
     bounds = null; boundsKey = k; curVerse = 0;
     const own = loadSync()[k] || {};
     try {
-      const tt = await loadTimes(); const e = tt && tt.t && tt.t[k]; const en = tt && tt.niv && tt.niv[k];
-      if (e || en) { const d = await metaDur(); if (boundsKey !== k) return;
+      const tt = await loadTimes(); const e = tt && tt.t && tt.t[k]; const en = tt && tt.niv && tt.niv[k]; const e4 = tt && tt.k4 && tt.k4[k];
+      if (e || en || e4) { const d = await metaDur(); if (boundsKey !== k) return;
         if (e && d && Math.abs(d - e[0]) < 1.0 && (rowsOf(k).length === e[1].length || rowsOf(k).length === 0)) {
           const bb = e[1].slice(); Object.keys(own).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = own[v]; });
           bounds = bb; bounds._tt = true; return; }
+        // 개역개정 4판 낭독 — 📌 맞춤은 다른 녹음이라 따로 저장(k+':k4')
+        if (e4 && d && Math.abs(d - e4[0]) < 1.0 && (rowsOf(k).length === e4[1].length || rowsOf(k).length === 0)) {
+          const own4 = loadSync()[k + ':k4'] || {};
+          const bb = e4[1].slice(); Object.keys(own4).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = own4[v]; });
+          bounds = bb; bounds._tt = true; bounds._k4 = true; return; }
         // NIV 낭독 → 오른쪽 비교 창(NIV)에 표시
         if (en && d && Math.abs(d - en[0]) < 1.0) {
           const ownN = loadSync()[k + ':niv'] || {};   // NIV 📌 맞춤은 개역과 따로 저장
@@ -20795,7 +20801,7 @@ if ('serviceWorker' in navigator) {
 
   ['wheel', 'touchmove'].forEach(function (ev) { document.addEventListener(ev, function (e) { if (e.target && e.target.closest && (e.target.closest('#bible-content') || e.target.closest('#compare-content'))) lastUserScroll = Date.now(); }, { passive: true }); });
   function setAnchor(v, t) {
-    const o = loadSync(); const sk = curKey + (bounds && bounds._side === 'right' ? ':niv' : ''); const a = o[sk] || (o[sk] = {}); a[v] = Math.max(0, Math.round(t * 100) / 100); saveSync(o);
+    const o = loadSync(); const sk = curKey + (bounds && bounds._side === 'right' ? ':niv' : (bounds && bounds._k4 ? ':k4' : '')); const a = o[sk] || (o[sk] = {}); a[v] = Math.max(0, Math.round(t * 100) / 100); saveSync(o);
     if (bounds && bounds._tt) { const dlt = a[v] - bounds[v - 1]; bounds[v - 1] = a[v]; for (let i = v; i < bounds.length && !(a[i + 1] != null); i++) bounds[i] += dlt; } else { const env = envCache.get(curKey); if (env) bounds = computeBounds(curKey, env, rowsOf(curKey)); } curVerse = -1; markVerse(verseAt(audio.currentTime));
   }
   document.addEventListener('click', function (ev) {
