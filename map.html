@@ -5371,6 +5371,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           document.body.appendChild(panel);
         }
         makeResizableWithAutoFont(panel, 300, 13);
+        let ctxHtml = '';
+        try {   // (b20261015-1) 본문 어절 번호에서 열렸으면 그 절 번역과 사전 뜻을 나란히
+          const cx = this._ctx; this._ctx = null;
+          const nn = x => String(x || '').replace(/^([HG])0*(\d+).*$/, '$1$2');
+          if (cx && Date.now() - cx.at < 4000 && nn(cx.code) === nn(code) && typeof wordCtxHtml === 'function') {
+            const bk = (typeof BIBLE_BOOKS !== 'undefined') ? BIBLE_BOOKS.find(b => b.id === cx.b) : null;
+            let morph = '';
+            try { const ws = getInterlinearWordsFull(cx.b, cx.c, cx.v) || []; const hit = ws.find(w => nn(w.code) === nn(code) && w.gloss && cx.word.indexOf(w.gloss) >= 0) || ws.find(w => nn(w.code) === nn(code)); morph = hit ? hit.morph : ''; } catch (e) {}
+            ctxHtml = wordCtxHtml(code, cx.word, bk ? bk.abbr + cx.c + ':' + cx.v : '', morph, cx.n);
+          }
+        } catch (e) { ctxHtml = ''; }
         const detailBtn = entry.detail ? `<button onclick="StrongEngine.toggleDetail(this)" style="margin-top:6px;font-size:0.78em;color:#047857;background:none;border:1px solid #a7f3d0;border-radius:4px;padding:3px 8px;cursor:pointer">더보기 ▾</button><div style="display:none;margin-top:6px;font-size:0.85em;line-height:1.5;color:#475569;padding-top:6px;border-top:1px dashed #d1fae5;max-height:240px;overflow-y:auto">${escHtml(entry.detail)}<div style="margin-top:6px"><button id="strong-pop-trbtn-detail" onclick="StrongEngine.translatePopup('${code}','detail')" style="font-size:0.75em;color:#fff;background:#2563eb;border:none;border-radius:4px;padding:3px 9px;cursor:pointer">🌐 번역</button><div id="strong-pop-tr-detail" style="display:none;margin-top:5px;font-size:0.9em;line-height:1.5;color:#1e40af"></div></div><div style="margin-top:6px;font-size:0.85em;color:#94a3b8">출처: ${code.startsWith('H') ? '<a href="https://github.com/openscriptures/HebrewLexicon" target="_blank" rel="noopener" style="color:#059669">Brown-Driver-Briggs Hebrew Lexicon (1906, Public Domain) — openscriptures/HebrewLexicon</a>' : '<a href="https://github.com/biblicalhumanities/Dodson-Greek-Lexicon" target="_blank" rel="noopener" style="color:#059669">Dodson Greek Lexicon (Public Domain) — biblicalhumanities/Dodson-Greek-Lexicon</a>'}</div></div>` : '';
         panel.innerHTML = `
           <div id="strong-info-drag-handle" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;cursor:move;user-select:none">
@@ -5379,6 +5390,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           </div>
           <div style="font-size:1.3em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
           <div style="font-size:0.95em;color:#059669;margin-bottom:6px">${escHtml(entry.xlit || '')}</div>
+          ${ctxHtml}
           <div style="font-size:0.95em;line-height:1.5;color:#334155">${escHtml(entry.gloss || '')}</div>
           <div style="margin-top:6px;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
             <button onclick="StrongEngine.openUsage('${code}')" style="font-size:0.75em;color:#047857;background:#fff;border:1px solid #a7f3d0;border-radius:4px;padding:3px 9px;cursor:pointer">🔤 용례</button>
@@ -7947,6 +7959,24 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         return e && e.xlit ? String(e.xlit) : '';
       } catch (err) { return ''; }
     }
+    /* (b20261015-1 kjm 「모른 사람은 헛갈려」 고전 7:2 여자마다 ↔ G1538 각각의)
+     * 이 절 번역 말과 사전 뜻을 나란히 — 번역에서 보충한 사람 말(여자·남자…)은 따로 알린다 */
+    function wordCtxHtml(code, word, ref, morph, nCodes) {
+      word = String(word || '').trim();
+      if (!word) return '';
+      const k = (typeof hebKoLookup === 'function') ? hebKoLookup(code) : null;
+      const m = k ? String(k.m || '').trim() : '';
+      const nm = String(code).replace(/^([HG])0*(\d+).*$/, '$1$2');
+      const fem = /여성/.test(morph || ''), mas = /남성/.test(morph || '');
+      const extra = (nCodes || 1) > 1 ? [] : ['여자', '여인', '남자', '사내', '사람'].filter(x => word.indexOf(x) >= 0 && m.indexOf(x) < 0);
+      const why = fem ? '원어가 여성형이라' : mas ? '원어가 남성형이라' : '원어 낱말의 성·수를 살려';
+      return '<div class="word-ctx" style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:6px 9px;margin:6px 0 8px;font-size:0.84em;line-height:1.6;color:#334155">'
+        + '<div><span style="color:#9a3412">' + (ref ? '이 절(' + escHtml(ref) + ')' : '이 절') + ' 번역</span> 「<b>' + escHtml(word) + '</b>」 ← ' + escHtml(nm)
+        + ((nCodes || 1) > 1 ? ' <span style="color:#94a3b8">(이 어절은 원어 ' + nCodes + '개를 함께 옮긴 말)</span>' : '') + '</div>'
+        + (m ? '<div><span style="color:#9a3412">사전 뜻</span> ' + escHtml(m) + '</div>' : '')
+        + (extra.length ? '<div style="color:#9a3412;margin-top:2px">「' + extra.map(escHtml).join('·') + '」는 이 원어 뜻에 없는 말입니다 — ' + why + ' 번역에서 보충한 말입니다.</div>' : '')
+        + '</div>';
+    }
     /* 한글 원어사전 칸 — 원어 카드 어디서나 같은 모양으로 (2026-09-24) */
     function hebKoBlockHtml(code) {
       /* 한글 원어사전 칸 — 원어 카드 어디서나 같은 모양으로 (2026-09-24)
@@ -8331,7 +8361,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           if (arr) { WordOrig.showKrvn(bc[0], bc[1], v, { arr, k: parseInt(el.dataset.k, 10), words: vt.textContent.trim().split(/\s+/) }, r.left, r.bottom); return; }
         }
       }
-      if (el.dataset.code && typeof StrongEngine !== 'undefined') StrongEngine.handleClick(krvSnPick(el, ev.clientX));
+      if (el.dataset.code && typeof StrongEngine !== 'undefined') {
+        const pick = krvSnPick(el, ev.clientX);
+        try {   // (b20261015-1) 어느 어절의 번호를 눌렀는지 카드에 넘긴다
+          const row = el.closest('.verse-row'); const bc = String(row && row.dataset.bc || '').split('-').map(Number);
+          const v = parseInt(String(row && row.id || '').replace('verse-row-', ''), 10);
+          const t = ((el.querySelector('.krv-t') || el).textContent || '').trim();
+          const nC = String(el.dataset.codes || el.dataset.code || '').split(',').filter(Boolean).length || 1;
+          StrongEngine._ctx = { code: pick, word: t, b: bc[0], c: bc[1], v: v, n: nC, at: Date.now() };
+        } catch (e) { StrongEngine._ctx = null; }
+        StrongEngine.handleClick(pick);
+      }
     }, true);
     document.addEventListener('DOMContentLoaded', function () {
       const b = document.getElementById('btn-krv-sn');
@@ -15989,6 +16029,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         + '</div>'
         + '<div style="margin-top:7px;color:#475569">' + escHtml(w.morph) + '</div>'
         + '<div style="margin-top:3px;font-weight:600">' + escHtml(w.gloss) + '</div>'
+        + ((typeof wordCtxHtml === 'function') ? wordCtxHtml(w.code, w.gloss, ref, w.morph, 1) : '')
         + '<div id="word-panel-strong" style="margin-top:6px"></div>'
         + '<div style="margin-top:8px">'
         + '<button onclick="StrongEngine.handleClick(\'' + w.code + '\',\'word-panel-strong\')"'
@@ -18439,7 +18480,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261014-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
