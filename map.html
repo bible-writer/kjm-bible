@@ -18495,7 +18495,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21036,6 +21036,7 @@ if ('serviceWorker' in navigator) {
   }
   function esc(s) { return String(s).replace(/[<>&]/g, ''); }
   function hide() { if (pop) { pop.remove(); pop = null; } }
+  /* (b20261017-3) 🎭 비유 창에 원어 스트롱 번호(누르면 사전) */
   /* (b20261017-2) 🔊 영어 발음 듣기 — 브라우저 음성 읽기(speechSynthesis), 미국식 */
   let VO = null;
   function pickVoice() { try { const vs = speechSynthesis.getVoices(); VO = vs.find(v => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) || vs.find(v => /en[-_]US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null; } catch (e) {} }
@@ -21101,6 +21102,7 @@ window.FigTags = (function () {
     hide(); pop = document.createElement('div'); pop.className = 'fig-pop';
     pop.style.cssText = 'position:fixed;z-index:99998;max-width:420px;max-height:60vh;overflow:auto;background:#fff;color:#1e293b;border:1px solid #c4b5fd;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.55;box-shadow:0 8px 24px rgba(0,0,0,.18)';
     let h = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><b style="color:#6d28d9">🎭 ' + esc(ref) + ' 비유 표현</b><span class="fig-x" style="cursor:pointer;color:#94a3b8;font-size:16px">✕</span></div>';
+    let nx = 0;
     list.forEach(e => {
       const f = (D.figs || {})[e[0]] || [e[0], ''];
       let ph = '';
@@ -21111,9 +21113,10 @@ window.FigTags = (function () {
         + (ph ? '<div style="margin-top:3px">「<b>' + esc(ph) + '</b>」</div>' : '')
         + '<div style="margin-top:2px">' + esc(e[3]) + '</div>'
         + (e[4] ? '<div style="color:#64748b;font-size:12px">원어: ' + esc(e[4]) + '</div>' : '')
+        + (Array.isArray(e[7]) && e[7].length ? '<div style="font-size:12px;margin-top:2px">' + ((++nx), e[7].map(c => '<span class="strong-tag" style="cursor:pointer" onclick="event.stopPropagation();StrongEngine.handleClick(\'' + esc(c) + '\',\'fig-sx-' + nx + '\')">' + esc(c) + '</span>').join(' ')) + '</div><div id="fig-sx-' + nx + '"></div>' : '')
         + '</div>';
     });
-    h += '<div style="color:#94a3b8;font-size:11px;margin-top:4px">불링거 『성경의 비유법』(1898)을 바탕으로 한 한글 풀이 · 이름에 손을 대면 뜻이 보입니다</div>';
+    h += '<div style="color:#94a3b8;font-size:11px;margin-top:4px">불링거 『성경의 비유법』(1898)을 바탕으로 한 한글 풀이 · 이름에 손을 대면 뜻이 보입니다 · 원어 번호를 누르면 사전이 펼쳐집니다</div>';
     pop.innerHTML = h; document.body.appendChild(pop);
     const r = btn.getBoundingClientRect(), pr = pop.getBoundingClientRect();
     let L = Math.min(r.left, innerWidth - pr.width - 8), Tp = r.bottom + 6; if (Tp + pr.height > innerHeight - 8) Tp = Math.max(8, r.top - pr.height - 6);
