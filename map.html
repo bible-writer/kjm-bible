@@ -18494,7 +18494,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261016-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261016-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20975,8 +20975,8 @@ if ('serviceWorker' in navigator) {
 /* (b20261014-5) 영어 낱말 뜻 — 비교 창(NIV 등 영어 역본)의 낱말을 누르면 짧은 한글 뜻 (niv_gloss.json, kjm 「영어 번역기능 단어」)
    (b20261016-1) 숙어 뜻 — 누른 낱말 앞뒤를 살펴 숙어(niv_idiom.json)가 있으면 먼저 보여 줌, 끌어 잡은 경우도 (kjm 「숙어 사전」) */
 (function () {
-  let G = null, gP = null, pop = null, I = null, iP = null;
-  function load() { if (!gP) gP = fetch('./niv_gloss.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { G = (j && j.g) || {}; return G; }).catch(function () { G = {}; return G; }); return gP; }
+  let G = null, gP = null, pop = null, I = null, iP = null, IPA = {}, PS = {}, PK = {};   /* (b20261016-2) 발음기호·품사 (niv_gloss 1.1.0) */
+  function load() { if (!gP) gP = fetch('./niv_gloss.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { G = (j && j.g) || {}; IPA = (j && j.ipa) || {}; PS = (j && j.pos) || {}; PK = (j && j.posk) || {}; return G; }).catch(function () { G = {}; return G; }); return gP; }
   function loadI() { if (!iP) iP = fetch('./niv_idiom.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { I = (j && j.p) || []; return I; }).catch(function () { I = []; return I; }); return iP; }
   const IRR = {was:'be',were:'be',is:'be',are:'be',been:'be',am:'be',went:'go',gone:'go',goes:'go',came:'come',comes:'come',took:'take',taken:'take',gave:'give',given:'give',sets:'set',fell:'fall',fallen:'fall',rose:'rise',risen:'rise',brought:'bring',laid:'lay',lies:'lie',lain:'lie',tore:'tear',torn:'tear',broke:'break',broken:'break',stood:'stand',sat:'sit',got:'get',threw:'throw',thrown:'throw',drove:'drive',driven:'drive',found:'find',kept:'keep',made:'make',swore:'swear',sworn:'swear',spoke:'speak',spoken:'speak',struck:'strike',did:'do',done:'do',led:'lead',knew:'know',known:'know',slept:'sleep',held:'hold',bore:'bear',born:'bear',lifted:'lift',grew:'grow',wept:'weep',built:'build',sent:'send',told:'tell',said:'say',saw:'see',seen:'see',heard:'hear',became:'become',hardened:'harden',gathered:'gather'};
   const POS = {his:1,her:1,their:1,my:1,your:1,our:1,its:1};
@@ -21024,7 +21024,12 @@ if ('serviceWorker' in navigator) {
     pop.style.cssText = 'position:fixed;z-index:99999;max-width:320px;background:#1e293b;color:#fff;border-radius:8px;padding:7px 11px;font-size:14px;line-height:1.5;box-shadow:0 4px 14px rgba(0,0,0,.25)';
     let h = '';
     (ids || []).forEach(function (e) { h += '<div style="margin-bottom:4px"><span style="background:#f59e0b;color:#1e293b;border-radius:4px;padding:0 5px;font-size:12px;font-weight:700">숙어</span> <b style="color:#fcd34d">' + esc(e[0]) + '</b>&nbsp; ' + esc(e[1]) + '</div>'; });
-    if (w) h += '<div' + (ids && ids.length ? ' style="border-top:1px solid #334155;padding-top:4px;opacity:.85"' : '') + '><b style="color:#93c5fd">' + esc(w) + '</b>&nbsp; ' + (g ? esc(g[1]) : '<span style="opacity:.7">뜻 없음</span>') + '</div>';
+    if (w) { const lw = w.toLowerCase(), key = g ? g[0] : lw;
+      const ip = IPA[lw] || IPA[key] || '', pc = PS[lw] || PS[key], po = pc ? (PK[pc] || '') : '';
+      h += '<div' + (ids && ids.length ? ' style="border-top:1px solid #334155;padding-top:4px;opacity:.85"' : '') + '><b style="color:#93c5fd">' + esc(w) + '</b>'
+        + (ip ? ' <span style="color:#cbd5e1;font-family:\'Segoe UI\',\'Noto Sans\',sans-serif">[' + esc(ip) + ']</span>' : '')
+        + (po ? ' <span style="background:#334155;color:#e2e8f0;border-radius:4px;padding:0 5px;font-size:12px">' + esc(po) + '</span>' : '')
+        + '<br>' + (g ? esc(g[1]) : '<span style="opacity:.7">뜻 없음</span>') + '</div>'; }
     pop.innerHTML = h; document.body.appendChild(pop);
     const r = pop.getBoundingClientRect(); let L = x - r.width / 2, T = y - r.height - 12;
     if (T < 8) T = y + 18; L = Math.max(8, Math.min(L, innerWidth - r.width - 8));
