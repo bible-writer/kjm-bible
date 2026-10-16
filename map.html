@@ -18495,7 +18495,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21036,14 +21036,24 @@ if ('serviceWorker' in navigator) {
   }
   function esc(s) { return String(s).replace(/[<>&]/g, ''); }
   function hide() { if (pop) { pop.remove(); pop = null; } }
+  /* (b20261017-2) 🔊 영어 발음 듣기 — 브라우저 음성 읽기(speechSynthesis), 미국식 */
+  let VO = null;
+  function pickVoice() { try { const vs = speechSynthesis.getVoices(); VO = vs.find(v => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) || vs.find(v => /en[-_]US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null; } catch (e) {} }
+  try { if (window.speechSynthesis) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } } catch (e) {}
+  function say(t) {
+    if (!window.speechSynthesis) { if (pop) { const n = document.createElement('div'); n.style.cssText = 'font-size:12px;opacity:.7;margin-top:3px'; n.textContent = '이 브라우저는 음성 읽기를 지원하지 않습니다'; pop.appendChild(n); } return; }
+    try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.85; if (VO) u.voice = VO; speechSynthesis.speak(u); } catch (e) {}
+  }
+  const spk = t => ' <span class="say-btn" data-say="' + encodeURIComponent(t) + '" title="발음 듣기" style="cursor:pointer;font-size:15px;padding:0 3px;user-select:none">🔊</span>';
   function show(x, y, w, g, ids) {
-    hide(); pop = document.createElement('div');
+    hide(); pop = document.createElement('div'); pop.className = 'audio-gloss-pop';
+    pop.addEventListener('click', function (ev) { const b = ev.target.closest && ev.target.closest('.say-btn'); if (b) { ev.stopPropagation(); say(decodeURIComponent(b.getAttribute('data-say'))); } });
     pop.style.cssText = 'position:fixed;z-index:99999;max-width:320px;background:#1e293b;color:#fff;border-radius:8px;padding:7px 11px;font-size:14px;line-height:1.5;box-shadow:0 4px 14px rgba(0,0,0,.25)';
     let h = '';
-    (ids || []).forEach(function (e) { h += '<div style="margin-bottom:4px"><span style="background:#f59e0b;color:#1e293b;border-radius:4px;padding:0 5px;font-size:12px;font-weight:700">숙어</span> <b style="color:#fcd34d">' + esc(e[0]) + '</b>&nbsp; ' + esc(e[1]) + '</div>'; });
+    (ids || []).forEach(function (e) { h += '<div style="margin-bottom:4px"><span style="background:#f59e0b;color:#1e293b;border-radius:4px;padding:0 5px;font-size:12px;font-weight:700">숙어</span> <b style="color:#fcd34d">' + esc(e[0]) + '</b>' + spk(String(e[0]).replace(/~|\.\.\./g, ' ').replace(/\bone's\b/g, 'his').replace(/\boneself\b/g, 'himself')) + '&nbsp; ' + esc(e[1]) + '</div>'; });
     if (w) { const lw = w.toLowerCase(), key = g ? g[0] : lw;
       const ip = IPA[lw] || IPA[key] || '', pc = PS[lw] || PS[key], po = pc ? (PK[pc] || '') : '';
-      h += '<div' + (ids && ids.length ? ' style="border-top:1px solid #334155;padding-top:4px;opacity:.85"' : '') + '><b style="color:#93c5fd">' + esc(w) + '</b>'
+      h += '<div' + (ids && ids.length ? ' style="border-top:1px solid #334155;padding-top:4px;opacity:.85"' : '') + '><b style="color:#93c5fd">' + esc(w) + '</b>' + spk(w)
         + (ip ? ' <span style="color:#cbd5e1;font-family:\'Segoe UI\',\'Noto Sans\',sans-serif">[' + esc(ip) + ']</span>' : '')
         + (po ? ' <span style="background:#334155;color:#e2e8f0;border-radius:4px;padding:0 5px;font-size:12px">' + esc(po) + '</span>' : '')
         + '<br>' + (g ? esc(g[1]) : '<span style="opacity:.7">뜻 없음</span>') + '</div>'; }
