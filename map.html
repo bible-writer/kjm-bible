@@ -18494,7 +18494,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261016-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261016-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20994,15 +20994,25 @@ if ('serviceWorker' in navigator) {
   function spanEnd(T, i, m, pw, j) {   // 맞으면 끝 낱말 다음 번호, 아니면 -1
     if (j === m.length) return i;
     if (m[j] === '~') { for (let g = 1; g <= 3; g++) { if (i + g > T.length) break; const r = spanEnd(T, i + g, m, pw, j + 1); if (r >= 0) return r; } return -1; }
-    if (i >= T.length || !tokOk(T[i], m[j], pw[j])) return -1;
+    if (i >= T.length || !tokOk(T[i], m[j], pw[j])) {
+      /* (b20261016-4) 동사구(5번째 값 1): 동사 뒤에 him·them·it 등이 끼어도 맞춤 — drove them out → drive out */
+      if (j === 1 && spanEnd._pv && i < T.length && (OBJ[T[i].w] || REFL[T[i].w])) return spanEnd(T, i + 1, m, pw, j);
+      return -1;
+    }
     return spanEnd(T, i + 1, m, pw, j + 1);
   }
+  function spanOf(T, i, e) { spanEnd._pv = e[4] === 1; const r = spanEnd(T, i, e[2], e[3], 0); spanEnd._pv = false; return r; }
   function idiomsAt(T, k) { const hit = [];   // 누른 낱말(k)을 품은 숙어 — 긴 것 먼저, 최대 2개
-    for (const e of I) { const m = e[2]; for (let i = Math.max(0, k - m.length - 6); i <= k; i++) { const r = spanEnd(T, i, m, e[3], 0); if (r > k) { hit.push(e); break; } } }
-    hit.sort(function (x, y) { return y[2].length - x[2].length; }); return hit.slice(0, 2); }
+    for (const e of I) { const m = e[2]; for (let i = Math.max(0, k - m.length - 7); i <= k; i++) { const r = spanOf(T, i, e); if (r > k) { hit.push(e); break; } } }
+    hit.sort(function (x, y) { return y[2].length - x[2].length; }); return prune(hit).slice(0, 2); }
+  function prune(hit) {   // 긴 숙어 안에 들어가는 짧은 숙어는 뺌 (put ~ on trial 이 있으면 put on 빼기)
+    const core = function (e) { return e[2].filter(function (t) { return t !== '~'; }); };
+    return hit.filter(function (e, i) { const a = core(e);
+      return !hit.some(function (h, j) { if (j === i) return false; const b = core(h); if (b.length <= a.length) return false;
+        let p = 0; for (const t of b) if (t === a[p]) p++; return p === a.length; }); }); }
   function idiomsIn(T) { const hit = [];   // 끌어 잡은 구간 안의 숙어
-    for (const e of I) { const m = e[2]; for (let i = 0; i < T.length; i++) if (spanEnd(T, i, m, e[3], 0) >= 0) { hit.push(e); break; } }
-    hit.sort(function (x, y) { return y[2].length - x[2].length; }); return hit.slice(0, 3); }
+    for (const e of I) { const m = e[2]; for (let i = 0; i < T.length; i++) if (spanOf(T, i, e) >= 0) { hit.push(e); break; } }
+    hit.sort(function (x, y) { return y[2].length - x[2].length; }); return prune(hit).slice(0, 3); }
   function caret(x, y) {
     if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); return p ? [p.offsetNode, p.offset] : null; }
     if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(x, y); return r ? [r.startContainer, r.startOffset] : null; }
