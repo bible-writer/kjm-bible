@@ -18494,7 +18494,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261015-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261016-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20853,10 +20853,49 @@ if ('serviceWorker' in navigator) {
     lastCur = cur();
     return ok;
   }
-  audio.addEventListener('ended', function () {
+  /* (b20261015-6 kjm 「이어 듣기가 장 끝에서 가끔 멈춤」)
+   *  ① 끝나기 25초 전에 다음 장 소리를 미리 꺼내 둠(폴더·기기 보관에서 읽는 사이 폰이 화면 꺼짐으로 페이지를 재우면 재생이 막힘)
+   *  ② 끝나면 기다림 없이 바로 소리를 바꿔 재생 → 본문은 그 뒤에 넘김
+   *  ③ 재생이 막히면 한 번 더 시도, 그래도 안 되면 알림
+   *  ④ 일부 MP3는 길이 정보가 실제보다 길어 끝에서 'ended' 없이 멈춤 → 끝 근처에서 3초 넘게 안 움직이면 끝난 것으로 봄 */
+  let pre = null, preBusy = false, endedAt = 0;
+  async function prefetchNext() {
+    if (preBusy || !curKey || !$('cont').checked) return;
+    const nk = nextKeyOf(curKey); if (!nk || (pre && pre.k === nk)) return;
+    preBusy = true;
+    try { const b = await getBlob(nk); if (b && curKey && nextKeyOf(curKey) === nk) { if (pre && pre.url) URL.revokeObjectURL(pre.url); pre = { k: nk, b: b, url: URL.createObjectURL(b) }; } }
+    catch (e) {} finally { preBusy = false; }
+  }
+  function tryPlay(n) {
+    const pr = audio.play();
+    if (pr && pr.catch) pr.catch(function () {
+      if (n < 2) setTimeout(function () { tryPlay(n + 1); }, 400);
+      else if (typeof showToast === 'function') showToast('다음 장 재생이 막혔습니다 — ▶ 를 눌러 주세요', 'info', 5000);
+    });
+  }
+  function handoffNext() {
     if (!$('cont').checked) return;
-    playNext(1);
-  });
+    if (Date.now() - endedAt < 1500) return; endedAt = Date.now();
+    const nk = curKey && nextKeyOf(curKey);
+    if (pre && nk && pre.k === nk) {
+      const it = pre; pre = null;
+      if (curUrl) URL.revokeObjectURL(curUrl);
+      curUrl = it.url; curKey = nk; audio.src = curUrl; audio.playbackRate = parseFloat($('rate').value) || 1; tryPlay(0);
+      try { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; } catch (e) {}
+      prepBounds(nk, it.b); bar.querySelector('.ab-l').textContent = '🎧 ' + bookName(nk); setMedia(nk);
+      lastCur = null; const p = nk.split('-');
+      try { if (typeof setSelectValuesAndLoad === 'function') setSelectValuesAndLoad(+p[0], +p[1]); } catch (e) {}
+      lastCur = cur(); refreshBtn();
+    } else playNext(1);
+  }
+  audio.addEventListener('ended', handoffNext);
+  let lastT = -1, stuck = 0;
+  audio.addEventListener('timeupdate', function () { const d = audio.duration; if (d && d - audio.currentTime < 25) prefetchNext(); });
+  setInterval(function () {
+    const d = audio.duration, t = audio.currentTime;
+    if (!audio.paused && d && d - t < 6 && Math.abs(t - lastT) < 0.05) { if (++stuck >= 3) { stuck = 0; handoffNext(); } } else stuck = 0;
+    lastT = t;
+  }, 1000);
   /* 잠금 화면·이어폰 단추(미디어 세션) */
   function setMedia(k) {
     if (!('mediaSession' in navigator) || !k) return;
@@ -20933,42 +20972,85 @@ if ('serviceWorker' in navigator) {
 
 </script>
 <script>
-/* (b20261014-5) 영어 낱말 뜻 — 비교 창(NIV 등 영어 역본)의 낱말을 누르면 짧은 한글 뜻 (niv_gloss.json, kjm 「영어 번역기능 단어」) */
+/* (b20261014-5) 영어 낱말 뜻 — 비교 창(NIV 등 영어 역본)의 낱말을 누르면 짧은 한글 뜻 (niv_gloss.json, kjm 「영어 번역기능 단어」)
+   (b20261016-1) 숙어 뜻 — 누른 낱말 앞뒤를 살펴 숙어(niv_idiom.json)가 있으면 먼저 보여 줌, 끌어 잡은 경우도 (kjm 「숙어 사전」) */
 (function () {
-  let G = null, gP = null, pop = null;
+  let G = null, gP = null, pop = null, I = null, iP = null;
   function load() { if (!gP) gP = fetch('./niv_gloss.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { G = (j && j.g) || {}; return G; }).catch(function () { G = {}; return G; }); return gP; }
+  function loadI() { if (!iP) iP = fetch('./niv_idiom.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { I = (j && j.p) || []; return I; }).catch(function () { I = []; return I; }); return iP; }
+  const IRR = {was:'be',were:'be',is:'be',are:'be',been:'be',am:'be',went:'go',gone:'go',goes:'go',came:'come',comes:'come',took:'take',taken:'take',gave:'give',given:'give',sets:'set',fell:'fall',fallen:'fall',rose:'rise',risen:'rise',brought:'bring',laid:'lay',lies:'lie',lain:'lie',tore:'tear',torn:'tear',broke:'break',broken:'break',stood:'stand',sat:'sit',got:'get',threw:'throw',thrown:'throw',drove:'drive',driven:'drive',found:'find',kept:'keep',made:'make',swore:'swear',sworn:'swear',spoke:'speak',spoken:'speak',struck:'strike',did:'do',done:'do',led:'lead',knew:'know',known:'know',slept:'sleep',held:'hold',bore:'bear',born:'bear',lifted:'lift',grew:'grow',wept:'weep',built:'build',sent:'send',told:'tell',said:'say',saw:'see',seen:'see',heard:'hear',became:'become',hardened:'harden',gathered:'gather'};
+  const POS = {his:1,her:1,their:1,my:1,your:1,our:1,its:1};
+  function lem(w) {
+    if (IRR[w]) return IRR[w];
+    const g = G && G[w]; if (g) { const m = /\(([a-z]+)\)\s*$/.exec(g); if (m) return m[1]; }
+    if (w.length > 4 && G) { const R = [['ies','y'],['ied','y'],['es',''],['s',''],['ed',''],['ed','e'],['ing',''],['ing','e']];
+      for (const [x, y] of R) if (w.endsWith(x) && G[w.slice(0, -x.length) + y]) return w.slice(0, -x.length) + y; }
+    return w;
+  }
+  function toks(t) { const out = []; const re = /[A-Za-z][A-Za-z'\-]*/g; let m; while ((m = re.exec(t))) { const w = m[0].toLowerCase(); out.push({ w: w, l: lem(w), a: m.index, b: m.index + m[0].length }); } return out; }
+  function matchAt(T, i, m, pw) { if (i < 0 || i + m.length > T.length) return false;
+    for (let j = 0; j < m.length; j++) { const t = T[i + j]; if (m[j] === '*') { if (!POS[t.w]) return false; } else if (t.l !== m[j] && t.w !== pw[j]) return false; } return true; }
+  /* 누른 낱말(k번째)을 품은 숙어 — 긴 것 먼저, 최대 2개 */
+  function idiomsAt(T, k) { const hit = [];
+    for (const e of I) { const m = e[2]; for (let i = k - m.length + 1; i <= k; i++) if (matchAt(T, i, m, e[3])) { hit.push(e); break; } }
+    hit.sort(function (x, y) { return y[2].length - x[2].length; }); return hit.slice(0, 2); }
+  function idiomsIn(T) { const hit = [];   // 끌어 잡은 구간 안의 숙어
+    for (const e of I) { const m = e[2]; for (let i = 0; i + m.length <= T.length; i++) if (matchAt(T, i, m, e[3])) { hit.push(e); break; } }
+    hit.sort(function (x, y) { return y[2].length - x[2].length; }); return hit.slice(0, 3); }
+  function caret(x, y) {
+    if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); return p ? [p.offsetNode, p.offset] : null; }
+    if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(x, y); return r ? [r.startContainer, r.startOffset] : null; }
+    return null;
+  }
   function wordAt(x, y) {
-    let node, off;
-    if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); if (!p) return ''; node = p.offsetNode; off = p.offset; }
-    else if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(x, y); if (!r) return ''; node = r.startContainer; off = r.startOffset; }
+    const c = caret(x, y); if (!c) return ''; const node = c[0], off = c[1];
     if (!node || node.nodeType !== 3) return '';
-    const t = node.textContent; let a = off, b = off; const ok = function (c) { return /[A-Za-z'’]/.test(c); };
+    const t = node.textContent; let a = off, b = off; const ok = function (ch) { return /[A-Za-z'’]/.test(ch); };
     while (a > 0 && ok(t[a - 1])) a--; while (b < t.length && ok(t[b])) b++;
     return t.slice(a, b).replace(/’/g, "'").replace(/^'+|'+$/g, '');
   }
+  function offsetIn(el, x, y) { const c = caret(x, y); if (!c || !el.contains(c[0])) return -1;
+    try { const r = document.createRange(); r.setStart(el, 0); r.setEnd(c[0], c[1]); return r.toString().length; } catch (e) { return -1; } }
   function lookup(w) {
     const k = w.toLowerCase(); if (G[k]) return [k, G[k]];
     const tries = [k.replace(/'s$/, ''), k.replace(/s$/, ''), k.replace(/es$/, ''), k.replace(/ed$/, ''), k.replace(/ing$/, ''), k.replace(/ies$/, 'y')];
     for (const t of tries) if (t && G[t]) return [t, G[t]];
     return null;
   }
+  function esc(s) { return String(s).replace(/[<>&]/g, ''); }
   function hide() { if (pop) { pop.remove(); pop = null; } }
-  function show(x, y, w, g) {
+  function show(x, y, w, g, ids) {
     hide(); pop = document.createElement('div');
-    pop.style.cssText = 'position:fixed;z-index:99999;max-width:280px;background:#1e293b;color:#fff;border-radius:8px;padding:7px 11px;font-size:14px;line-height:1.45;box-shadow:0 4px 14px rgba(0,0,0,.25)';
-    pop.innerHTML = '<b style="color:#93c5fd">' + w.replace(/[<>&]/g, '') + '</b>&nbsp; ' + (g ? String(g[1]).replace(/[<>&]/g, '') : '<span style="opacity:.7">뜻 없음</span>');
-    document.body.appendChild(pop);
+    pop.style.cssText = 'position:fixed;z-index:99999;max-width:320px;background:#1e293b;color:#fff;border-radius:8px;padding:7px 11px;font-size:14px;line-height:1.5;box-shadow:0 4px 14px rgba(0,0,0,.25)';
+    let h = '';
+    (ids || []).forEach(function (e) { h += '<div style="margin-bottom:4px"><span style="background:#f59e0b;color:#1e293b;border-radius:4px;padding:0 5px;font-size:12px;font-weight:700">숙어</span> <b style="color:#fcd34d">' + esc(e[0]) + '</b>&nbsp; ' + esc(e[1]) + '</div>'; });
+    if (w) h += '<div' + (ids && ids.length ? ' style="border-top:1px solid #334155;padding-top:4px;opacity:.85"' : '') + '><b style="color:#93c5fd">' + esc(w) + '</b>&nbsp; ' + (g ? esc(g[1]) : '<span style="opacity:.7">뜻 없음</span>') + '</div>';
+    pop.innerHTML = h; document.body.appendChild(pop);
     const r = pop.getBoundingClientRect(); let L = x - r.width / 2, T = y - r.height - 12;
     if (T < 8) T = y + 18; L = Math.max(8, Math.min(L, innerWidth - r.width - 8));
     pop.style.left = L + 'px'; pop.style.top = T + 'px';
-    clearTimeout(show._t); show._t = setTimeout(hide, 6000);
+    clearTimeout(show._t); show._t = setTimeout(hide, (ids && ids.length) ? 9000 : 6000);
   }
   document.addEventListener('click', function (ev) {
     const txt = ev.target && ev.target.closest && ev.target.closest('#compare-content .verse-text');
     if (!txt) { if (pop && !(ev.target.closest && ev.target.closest('.audio-gloss-pop'))) hide(); return; }
     if (ev.target.closest('[onclick], a, .strong-tag, .bible-term-tag, sup')) return;   // 용어 딱지·원어 번호는 원래 동작
+    const sel = window.getSelection ? String(window.getSelection()) : '';
+    if (sel && /[A-Za-z]+\s+[A-Za-z]+/.test(sel)) {   // 여러 낱말을 끌어 잡음
+      Promise.all([load(), loadI()]).then(function () { const ids = idiomsIn(toks(sel.replace(/’/g, "'")));
+        const ws = sel.trim().split(/\s+/); const last = ws[ws.length - 1].replace(/[^A-Za-z']/g, '');
+        show(ev.clientX, ev.clientY, ids.length ? '' : last, ids.length ? null : lookup(last), ids); });
+      return;
+    }
     const w = wordAt(ev.clientX, ev.clientY); if (!w || !/^[A-Za-z]/.test(w)) { hide(); return; }
-    load().then(function () { show(ev.clientX, ev.clientY, w, lookup(w)); });
+    const off = offsetIn(txt, ev.clientX, ev.clientY);
+    Promise.all([load(), loadI()]).then(function () {
+      let ids = [];
+      if (off >= 0) { const T = toks(txt.textContent.replace(/’/g, "'")); let k = -1;
+        for (let i = 0; i < T.length; i++) if (off >= T[i].a && off <= T[i].b) { k = i; break; }
+        if (k >= 0) ids = idiomsAt(T, k); }
+      show(ev.clientX, ev.clientY, w, lookup(w), ids);
+    });
   });
   document.addEventListener('scroll', hide, true);
 })();
