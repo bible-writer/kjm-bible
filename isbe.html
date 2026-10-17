@@ -615,5 +615,41 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
   navigator.serviceWorker.register('./isbe_sw.js', { scope: './isbe' }).catch(() => {});
 }
 </script>
+<script>
+/* (2026-10-17 kjm 「사전 원문에 영어 사전 작용」) 「영문 원문 보기」의 낱말을 누르면 짧은 한글 뜻·발음기호·품사·🔊 (niv_gloss.json 1.2.0 — NIV 낱말 + 사전 원문 낱말) */
+(function () {
+  let G = null, IPA = {}, PS = {}, PK = {}, P = null, pop = null, VO = null;
+  function load() { if (!P) P = fetch('./niv_gloss.json').then(r => r.ok ? r.json() : null).then(j => { G = (j && j.g) || {}; IPA = (j && j.ipa) || {}; PS = (j && j.pos) || {}; PK = (j && j.posk) || {}; }).catch(() => { G = {}; }); return P; }
+  const esc = s => String(s).replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
+  function hide() { if (pop) { pop.remove(); pop = null; } }
+  function pickVoice() { try { const vs = speechSynthesis.getVoices(); VO = vs.find(v => /en[-_]US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null; } catch (e) {} }
+  try { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } catch (e) {}
+  function say(t) { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 0.85; if (VO) u.voice = VO; speechSynthesis.speak(u); } catch (e) {} }
+  function lookup(w) { const k = w.toLowerCase(); if (G[k]) return k;
+    for (const t of [k.replace(/'s$/, ''), k.replace(/s$/, ''), k.replace(/es$/, ''), k.replace(/ed$/, ''), k.replace(/ed$/, 'e'), k.replace(/ing$/, ''), k.replace(/ing$/, 'e'), k.replace(/ies$/, 'y'), k.replace(/ly$/, '')]) if (t && G[t]) return t; return null; }
+  function wordAt(x, y) { let n, o;
+    if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); if (!p) return ''; n = p.offsetNode; o = p.offset; }
+    else if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(x, y); if (!r) return ''; n = r.startContainer; o = r.startOffset; }
+    if (!n || n.nodeType !== 3) return ''; const t = n.textContent; let a = o, b = o; const ok = c => /[A-Za-z'’\-]/.test(c);
+    while (a > 0 && ok(t[a - 1])) a--; while (b < t.length && ok(t[b])) b++; return t.slice(a, b).replace(/’/g, "'").replace(/^['\-]+|['\-]+$/g, ''); }
+  document.addEventListener('click', ev => {
+    if (pop && ev.target.closest('.gl-pop')) { const b = ev.target.closest('.gl-say'); if (b) say(b.dataset.w); return; }
+    const box = ev.target.closest('details.orig > div'); if (!box || ev.target.closest('a, button, [onclick]')) { hide(); return; }
+    const w = wordAt(ev.clientX, ev.clientY); if (!/^[A-Za-z]/.test(w)) { hide(); return; }
+    load().then(() => { const k = lookup(w); hide();
+      pop = document.createElement('div'); pop.className = 'gl-pop';
+      pop.style.cssText = 'position:fixed;z-index:99999;max-width:300px;background:#1e293b;color:#fff;border-radius:8px;padding:7px 11px;font-size:14px;line-height:1.5;box-shadow:0 4px 14px rgba(0,0,0,.25)';
+      const pk = k && PS[k] ? (PK[PS[k]] || '') : '';
+      pop.innerHTML = '<b>' + esc(w) + '</b> <span class="gl-say" data-w="' + esc(w) + '" style="cursor:pointer">🔊</span>'
+        + (k && IPA[k] ? ' <span style="color:#93c5fd">[' + esc(IPA[k]) + ']</span>' : '') + (pk ? ' <span style="color:#a5b4fc;font-size:12px">' + esc(pk) + '</span>' : '')
+        + '<div>' + (k ? esc(G[k]) : '<span style="color:#94a3b8">사전에 없는 낱말</span>') + '</div>';
+      document.body.appendChild(pop); const r = pop.getBoundingClientRect();
+      pop.style.left = Math.max(6, Math.min(ev.clientX - r.width / 2, innerWidth - r.width - 6)) + 'px';
+      pop.style.top = (ev.clientY + 14 + r.height > innerHeight ? ev.clientY - r.height - 10 : ev.clientY + 14) + 'px';
+    });
+  });
+  document.addEventListener('scroll', hide, true);
+})();
+</script>
 </body>
 </html>

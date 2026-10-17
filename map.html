@@ -7233,7 +7233,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
                ${e.variants.map(v => `
                  <div style="margin-bottom:6px">
                    <div style="font-size:0.7em;font-weight:700;color:#475569">— ${escHtml(v.origin)} —</div>
-                   <div style="font-size:0.82em;color:#64748b;line-height:1.5">${linkifyVerseRefs(escHtml(v.definition || ''))}</div>
+                   <div class="en-gloss" style="font-size:0.82em;color:#64748b;line-height:1.5">${linkifyVerseRefs(escHtml(v.definition || ''))}</div>
                    ${v.definition_ko ? `<div style="font-size:0.85em;color:#1e293b;line-height:1.6;margin-top:3px">${linkifyVerseRefs(escHtml(v.definition_ko))}</div>` : ''}
                  </div>`).join('')}
              </div>`
@@ -18495,7 +18495,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-7`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-8`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21050,7 +21050,7 @@ if ('serviceWorker' in navigator) {
   const spk = t => ' <span class="say-btn" data-say="' + encodeURIComponent(t) + '" title="발음 듣기" style="cursor:pointer;font-size:15px;padding:0 3px;user-select:none">🔊</span>';
   function show(x, y, w, g, ids) {
     hide(); pop = document.createElement('div'); pop.className = 'audio-gloss-pop';
-    pop.addEventListener('click', function (ev) { const b = ev.target.closest && ev.target.closest('.say-btn'); if (b) { ev.stopPropagation(); say(decodeURIComponent(b.getAttribute('data-say'))); } });
+    pop.addEventListener('click', function (ev) { ev.stopPropagation(); const b = ev.target.closest && ev.target.closest('.say-btn'); if (b) say(decodeURIComponent(b.getAttribute('data-say'))); });   /* 창 안 누름이 사전 창 닫기로 번지지 않게 */
     pop.style.cssText = 'position:fixed;z-index:99999;max-width:320px;background:#1e293b;color:#fff;border-radius:8px;padding:7px 11px;font-size:14px;line-height:1.5;box-shadow:0 4px 14px rgba(0,0,0,.25)';
     let h = '';
     (ids || []).forEach(function (e) { h += '<div style="margin-bottom:4px"><span style="background:#f59e0b;color:#1e293b;border-radius:4px;padding:0 5px;font-size:12px;font-weight:700">숙어</span> <b style="color:#fcd34d">' + esc(e[0]) + '</b>' + spk(String(e[0]).replace(/~|\.\.\./g, ' ').replace(/\bone's\b/g, 'his').replace(/\boneself\b/g, 'himself')) + '&nbsp; ' + esc(e[1]) + '</div>'; });
@@ -21067,7 +21067,9 @@ if ('serviceWorker' in navigator) {
     clearTimeout(show._t); show._t = setTimeout(hide, (ids && ids.length) ? 9000 : 6000);
   }
   document.addEventListener('click', function (ev) {
-    const txt = ev.target && ev.target.closest && ev.target.closest('#compare-content .verse-text');
+    /* (b20261017-8 kjm 「사전 원문에 영어 사전 작용되도록」) 원문사전 영문·용어 창 Easton/Smith 원문 탭·사전별 본문에서도 낱말 뜻 */
+    const txt = ev.target && ev.target.closest && ev.target.closest('#compare-content .verse-text, .rawdict-eng > div > div:first-child, .en-gloss, #term-raw-easton, #term-raw-smith, #term-raw-isbe');
+    if (txt && ev.target.closest('summary, button, input, textarea, select')) return;
     if (!txt) { if (pop && !(ev.target.closest && ev.target.closest('.audio-gloss-pop'))) hide(); return; }
     if (ev.target.closest('[onclick], a, .strong-tag, .bible-term-tag, sup')) return;   // 용어 딱지·원어 번호는 원래 동작
     const sel = window.getSelection ? String(window.getSelection()) : '';
