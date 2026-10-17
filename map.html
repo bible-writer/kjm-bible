@@ -7844,7 +7844,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
      * STEPBible TBESH·TBESG(CC BY 4.0)를 kjm 이 한글로 옮긴 공개판 — GitHub 의 ./strongKo.json.
      * hebko(비공개)를 등록한 기기는 hebko 가 먼저, 없거나 그 번호가 없으면 strongKo 로 보인다.
      * 한 번 받으면 IndexedDB 에 두고, 아래 판 번호가 바뀔 때만 다시 받는다(10MB). */
-    const STRONGKO_VER = '0.4.3';
+    const STRONGKO_VER = '0.4.4';
     var strongKoDict = null, strongKoLoading = null;
     function ensureStrongKo() {
       if (strongKoDict) return Promise.resolve(strongKoDict);
@@ -18495,7 +18495,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
