@@ -18495,7 +18495,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-6`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20983,18 +20983,20 @@ if ('serviceWorker' in navigator) {
   const POS = {his:1,her:1,their:1,my:1,your:1,our:1,its:1};
   function lem(w) {
     if (IRR[w]) return IRR[w];
-    const g = G && G[w]; if (g) { const m = /\(([a-z]+)\)\s*$/.exec(g); if (m) return m[1]; }
+    const g = G && G[w]; if (g) { const m = /\(([a-z]+)\)\s*$/.exec(g); if (m && !(/(er|est)$/.test(w) && w.replace(/(er|est)$/, '').replace(/(.)\1$/, '$1').startsWith(m[1].replace(/e$/, '')))) return m[1]; }   /* (b20261017-6) 비교급·최상급(longer→long)은 원형으로 묶지 않음 */
     if (w.length > 4 && G) { const R = [['ies','y'],['ied','y'],['es',''],['s',''],['ed',''],['ed','e'],['ing',''],['ing','e']];
       for (const [x, y] of R) if (w.endsWith(x) && G[w.slice(0, -x.length) + y]) return w.slice(0, -x.length) + y; }
     return w;
   }
-  function toks(t) { const out = []; const re = /[A-Za-z][A-Za-z'\-]*/g; let m; while ((m = re.exec(t))) { const w = m[0].toLowerCase(); out.push({ w: w, l: lem(w), a: m.index, b: m.index + m[0].length }); } return out; }
+  /* (b20261017-6) 앞 낱말과 사이에 쉼표·마침표 등 문장 부호가 있으면 p=1 — 숙어는 문장 부호를 넘어 맞추지 않음 (was, but → be but 잘못 잡던 것) */
+  function toks(t) { const out = []; const re = /[A-Za-z][A-Za-z'\-]*/g; let m, pe = 0; while ((m = re.exec(t))) { const w = m[0].toLowerCase(); out.push({ w: w, l: lem(w), a: m.index, b: m.index + m[0].length, p: out.length && /[,.;:!?()\u2014\u2013"\u201c\u201d]/.test(t.slice(pe, m.index)) ? 1 : 0 }); pe = m.index + m[0].length; } return out; }
   /* (b20261016-3) 숙어 1.1.0 부호: *=소유격, @self=himself 등, @obj=him 등, ~=1~3낱말 빈자리 */
   const REFL = {himself:1,herself:1,themselves:1,myself:1,yourself:1,ourselves:1,itself:1,yourselves:1}, OBJ = {him:1,her:1,them:1,me:1,you:1,us:1,it:1,one:1};
-  function tokOk(t, p, w) { if (p === '*') return !!POS[t.w]; if (p === '@self') return !!REFL[t.w]; if (p === '@obj') return !!OBJ[t.w]; return t.l === p || t.w === w; }
+  function tokOk(t, p, w) { if (p === '*') return !!POS[t.w]; if (p === '@self') return !!REFL[t.w]; if (p === '@obj') return !!OBJ[t.w]; if (p[0] === '=') return t.w === p.slice(1); return t.l === p || t.w === w; }   /* =낱말: 원형으로 안 묶고 글자 그대로 (longer→long 막기) */
   function spanEnd(T, i, m, pw, j) {   // 맞으면 끝 낱말 다음 번호, 아니면 -1
     if (j === m.length) return i;
-    if (m[j] === '~') { for (let g = 1; g <= 3; g++) { if (i + g > T.length) break; const r = spanEnd(T, i + g, m, pw, j + 1); if (r >= 0) return r; } return -1; }
+    if (j > 0 && !spanEnd._ap && i < T.length && T[i].p) return -1;
+    if (m[j] === '~') { for (let g = 1; g <= 3; g++) { if (i + g > T.length || (!spanEnd._ap && T[i + g - 1].p)) break; const r = spanEnd(T, i + g, m, pw, j + 1); if (r >= 0) return r; } return -1; }
     if (i >= T.length || !tokOk(T[i], m[j], pw[j])) {
       /* (b20261016-4) 동사구(5번째 값 1): 동사 뒤에 him·them·it 등이 끼어도 맞춤 — drove them out → drive out */
       if (j === 1 && spanEnd._pv && i < T.length && (OBJ[T[i].w] || REFL[T[i].w])) return spanEnd(T, i + 1, m, pw, j);
@@ -21002,7 +21004,7 @@ if ('serviceWorker' in navigator) {
     }
     return spanEnd(T, i + 1, m, pw, j + 1);
   }
-  function spanOf(T, i, e) { spanEnd._pv = e[4] === 1; const r = spanEnd(T, i, e[2], e[3], 0); spanEnd._pv = false; return r; }
+  function spanOf(T, i, e) { spanEnd._pv = e[4] === 1; spanEnd._ap = /[,;:.!?]/.test(e[0]); const r = spanEnd(T, i, e[2], e[3], 0); spanEnd._pv = false; spanEnd._ap = false; return r; }
   function idiomsAt(T, k) { const hit = [];   // 누른 낱말(k)을 품은 숙어 — 긴 것 먼저, 최대 2개
     for (const e of I) { const m = e[2]; for (let i = Math.max(0, k - m.length - 7); i <= k; i++) { const r = spanOf(T, i, e); if (r > k) { hit.push(e); break; } } }
     hit.sort(function (x, y) { return y[2].length - x[2].length; }); return prune(hit).slice(0, 2); }
