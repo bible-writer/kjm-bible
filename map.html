@@ -18495,7 +18495,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21097,53 +21097,78 @@ window.FigTags = (function () {
   const T = (function () { const t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
   function crc16(str) { const b = new TextEncoder().encode(str); let c = 0xFFFFFFFF; for (const x of b) c = T[(c ^ x) & 0xFF] ^ (c >>> 8); return ((c ^ 0xFFFFFFFF) >>> 0) & 0xFFFF; }
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // (b20261017-5 kjm 「글자 및 크기(창) 조절이 안 됨」) 창 = 제목 줄(끌어 옮기기·A−/A+ 글자·✕) + 내용(스크롤) + 오른쪽 아래 손잡이(끌어 크기).
+  //  브라우저 기본 resize 는 지도 쪽 끌기 처리와 겹쳐 안 먹으므로 손잡이를 직접 만든다(손가락도 됨). 자리·크기·글자는 기억.
+  const BOX_KEY = 'figPopBox2';
+  function loadBox() { try { return JSON.parse(localStorage.getItem(BOX_KEY) || 'null') || {}; } catch (e) { return {}; } }
+  function saveBox(o) { try { localStorage.setItem(BOX_KEY, JSON.stringify(Object.assign(loadBox(), o))); } catch (e) {} }
   function hide() {
     if (!pop) return;
-    try { const b = pop.getBoundingClientRect(); if (pop._moved || pop.style.height) localStorage.setItem('figPopBox', JSON.stringify({ x: pop._moved ? Math.round(b.left) : null, y: Math.round(b.top), w: Math.round(b.width), h: pop.style.height ? Math.round(b.height) : 0 })); } catch (e) {}
     if (pop._ro) pop._ro.disconnect(); pop.remove(); pop = null;
+  }
+  function drag(el, onMove, onEnd) {
+    el.addEventListener('pointerdown', ev => {
+      if (ev.button !== 0 && ev.pointerType === 'mouse') return;
+      if (ev.target.closest('.fig-x,.fig-fs')) return;
+      const sx = ev.clientX, sy = ev.clientY, b = pop.getBoundingClientRect();
+      try { el.setPointerCapture(ev.pointerId); } catch (e) {}
+      const mv = e => onMove(b, e.clientX - sx, e.clientY - sy);
+      const up = e => { el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up); try { el.releasePointerCapture(e.pointerId); } catch (x) {} onEnd(); };
+      el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+      ev.preventDefault(); ev.stopPropagation();
+    });
   }
   function show(btn, list, text, ref) {
     hide(); pop = document.createElement('div'); pop.className = 'fig-pop';
-    // (b20261017-4 kjm 「고정되어 있어 아래 내용을 볼 수 없음 — 이동 및 크기 조절」) 제목 줄을 잡아 옮기고, 오른쪽 아래 모서리로 크기 조절.
-    //  원어 사전을 펼쳐 창이 커져도 화면 밖으로 나가지 않게 맞추고, 옮긴 자리·크기는 다음에 열 때도 쓴다.
-    pop.style.cssText = 'position:fixed;z-index:99998;box-sizing:border-box;width:min(420px,94vw);min-width:240px;min-height:120px;max-height:88vh;overflow:auto;resize:both;background:#fff;color:#1e293b;border:1px solid #c4b5fd;border-radius:10px;padding:0 12px 10px;font-size:14px;line-height:1.55;box-shadow:0 8px 24px rgba(0,0,0,.18)';
-    let h = '<div class="fig-head" style="position:sticky;top:0;z-index:1;background:#fff;display:flex;justify-content:space-between;align-items:center;margin:0 -12px 6px;padding:8px 12px 6px;border-bottom:1px solid #ede9fe;cursor:move;user-select:none;touch-action:none"><b style="color:#6d28d9">🎭 ' + esc(ref) + ' 비유 표현</b><span style="display:flex;gap:10px;align-items:center"><span style="color:#a78bfa;font-size:11px">끌어 옮기기 · ↘ 크기</span><span class="fig-x" style="cursor:pointer;color:#94a3b8;font-size:16px">✕</span></span></div>';
+    const box = loadBox(); const fs = Math.min(26, Math.max(11, box.fs || 14));
+    pop.style.cssText = 'position:fixed;z-index:99998;box-sizing:border-box;display:flex;flex-direction:column;width:min(420px,94vw);min-width:240px;min-height:140px;max-height:88vh;overflow:hidden;background:#fff;color:#1e293b;border:1px solid #c4b5fd;border-radius:10px;line-height:1.55;box-shadow:0 8px 24px rgba(0,0,0,.18)';
+    const bt = 'class="fig-fs" style="cursor:pointer;border:1px solid #ddd6fe;background:#f5f3ff;color:#6d28d9;border-radius:4px;padding:0 6px;font-size:12px;line-height:20px"';
+    let h = '<div class="fig-head" style="flex:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px 6px 12px;border-bottom:1px solid #ede9fe;cursor:move;user-select:none;touch-action:none;font-size:14px"><b style="color:#6d28d9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">🎭 ' + esc(ref) + ' 비유 표현</b>'
+      + '<span style="display:flex;gap:6px;align-items:center;flex:none"><span ' + bt + ' data-d="-1" title="글자 작게">A−</span><span ' + bt + ' data-d="1" title="글자 크게">A+</span><span class="fig-x" style="cursor:pointer;color:#94a3b8;font-size:17px;padding:0 2px" title="닫기">✕</span></span></div>'
+      + '<div class="fig-body" style="flex:1 1 auto;overflow:auto;padding:0 12px 14px;font-size:' + fs + 'px">';
     let nx = 0;
     list.forEach(e => {
       const f = (D.figs || {})[e[0]] || [e[0], ''];
       let ph = '';
       if (e[2] && text) { const s = text.substr(e[2][0], e[2][1]); if (s && crc16(s) === e[2][2]) ph = s; }
       h += '<div style="border-top:1px solid #ede9fe;padding:6px 0">'
-        + '<span title="' + esc(f[1]) + '" style="background:#ede9fe;color:#5b21b6;border-radius:4px;padding:0 6px;font-size:12px;font-weight:700">' + esc(f[0]) + '</span>'
-        + (e[1] ? ' <span style="color:#7c3aed;font-size:12px">' + esc(e[1]) + '</span>' : '')
+        + '<span title="' + esc(f[1]) + '" style="background:#ede9fe;color:#5b21b6;border-radius:4px;padding:0 6px;font-size:0.86em;font-weight:700">' + esc(f[0]) + '</span>'
+        + (e[1] ? ' <span style="color:#7c3aed;font-size:0.86em">' + esc(e[1]) + '</span>' : '')
         + (ph ? '<div style="margin-top:3px">「<b>' + esc(ph) + '</b>」</div>' : '')
         + '<div style="margin-top:2px">' + esc(e[3]) + '</div>'
-        + (e[4] ? '<div style="color:#64748b;font-size:12px">원어: ' + esc(e[4]) + '</div>' : '')
-        + (Array.isArray(e[7]) && e[7].length ? '<div style="font-size:12px;margin-top:2px">' + ((++nx), e[7].map(c => '<span class="strong-tag" style="cursor:pointer" onclick="event.stopPropagation();StrongEngine.handleClick(\'' + esc(c) + '\',\'fig-sx-' + nx + '\')">' + esc(c) + '</span>').join(' ')) + '</div><div id="fig-sx-' + nx + '"></div>' : '')
+        + (e[4] ? '<div style="color:#64748b;font-size:0.86em">원어: ' + esc(e[4]) + '</div>' : '')
+        + (Array.isArray(e[7]) && e[7].length ? '<div style="font-size:0.86em;margin-top:2px">' + ((++nx), e[7].map(c => '<span class="strong-tag" style="cursor:pointer" onclick="event.stopPropagation();StrongEngine.handleClick(\'' + esc(c) + '\',\'fig-sx-' + nx + '\')">' + esc(c) + '</span>').join(' ')) + '</div><div id="fig-sx-' + nx + '"></div>' : '')
         + '</div>';
     });
-    h += '<div style="color:#94a3b8;font-size:11px;margin-top:4px">불링거 『성경의 비유법』(1898)을 바탕으로 한 한글 풀이 · 이름에 손을 대면 뜻이 보입니다 · 원어 번호를 누르면 사전이 펼쳐집니다</div>';
+    h += '<div style="color:#94a3b8;font-size:0.8em;margin-top:4px">불링거 『성경의 비유법』(1898)을 바탕으로 한 한글 풀이 · 원어 번호를 누르면 사전이 펼쳐집니다 · 제목 줄을 끌면 옮겨지고, 오른쪽 아래 ◢ 를 끌면 크기가 바뀝니다</div></div>'
+      + '<div class="fig-grip" title="끌어서 크기 조절" style="position:absolute;right:0;bottom:0;width:22px;height:22px;cursor:nwse-resize;touch-action:none;background:linear-gradient(135deg,transparent 0 55%,#a78bfa 55% 62%,transparent 62% 72%,#a78bfa 72% 79%,transparent 79%);border-bottom-right-radius:10px"></div>';
     pop.innerHTML = h; document.body.appendChild(pop);
-    let saved = null; try { saved = JSON.parse(localStorage.getItem('figPopBox') || 'null'); } catch (e) {}
-    if (saved && saved.w) { pop.style.width = Math.min(saved.w, innerWidth - 16) + 'px'; if (saved.h) pop.style.height = Math.min(saved.h, innerHeight - 16) + 'px'; }
+    const body = pop.querySelector('.fig-body');
+    if (box.w) pop.style.width = Math.min(box.w, innerWidth - 16) + 'px';
+    if (box.h) { pop.style.height = Math.min(box.h, innerHeight - 16) + 'px'; pop.style.maxHeight = 'none'; }
     const r = btn.getBoundingClientRect(), pr = pop.getBoundingClientRect();
     let L, Tp;
-    if (saved && saved.x != null) { L = saved.x; Tp = saved.y; }
+    if (box.x != null) { L = box.x; Tp = box.y; }
     else { L = Math.min(r.left, innerWidth - pr.width - 8); Tp = r.bottom + 6; if (Tp + pr.height > innerHeight - 8) Tp = Math.max(8, r.top - pr.height - 6); }
     pop.style.left = Math.max(8, Math.min(L, innerWidth - pr.width - 8)) + 'px'; pop.style.top = Math.max(8, Tp) + 'px';
     fit();
-    pop.querySelector('.fig-x').onclick = hide;
-    const head = pop.querySelector('.fig-head');
-    head.addEventListener('pointerdown', () => { if (pop) pop._moved = true; });
-    // 옮기기: map 의 makeDraggable 을 쓰고, 없으면 제목 줄 끌기만 간단히
-    if (typeof makeDraggable === 'function') { try { makeDraggable(pop, '.fig-head'); } catch (e) {} }
-    else head.addEventListener('pointerdown', ev => {
-      if (ev.target.closest('.fig-x')) return;
-      const b = pop.getBoundingClientRect(), sx = ev.clientX, sy = ev.clientY;
-      const mv = e => { pop.style.left = Math.max(0, Math.min(innerWidth - 40, b.left + e.clientX - sx)) + 'px'; pop.style.top = Math.max(0, Math.min(innerHeight - 30, b.top + e.clientY - sy)) + 'px'; };
-      const up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); };
-      addEventListener('pointermove', mv); addEventListener('pointerup', up); ev.preventDefault();
+    pop.querySelector('.fig-x').onclick = ev => { ev.stopPropagation(); hide(); };
+    pop.querySelectorAll('.fig-fs').forEach(x => x.onclick = ev => {
+      ev.stopPropagation();
+      const n = Math.min(26, Math.max(11, (parseFloat(body.style.fontSize) || 14) + (+x.dataset.d) * 2));
+      body.style.fontSize = n + 'px'; saveBox({ fs: n }); fit();
     });
+    // 옮기기 (제목 줄)
+    drag(pop.querySelector('.fig-head'), (b, dx, dy) => {
+      pop.style.left = Math.max(0, Math.min(innerWidth - 60, b.left + dx)) + 'px';
+      pop.style.top = Math.max(0, Math.min(innerHeight - 40, b.top + dy)) + 'px';
+    }, () => { const b = pop.getBoundingClientRect(); saveBox({ x: Math.round(b.left), y: Math.round(b.top) }); });
+    // 크기 (오른쪽 아래 손잡이)
+    drag(pop.querySelector('.fig-grip'), (b, dx, dy) => {
+      pop.style.maxHeight = 'none';
+      pop.style.width = Math.max(240, Math.min(innerWidth - b.left - 4, b.width + dx)) + 'px';
+      pop.style.height = Math.max(140, Math.min(innerHeight - b.top - 4, b.height + dy)) + 'px';
+    }, () => { const b = pop.getBoundingClientRect(); saveBox({ w: Math.round(b.width), h: Math.round(b.height) }); });
     // 사전을 펼쳐 창이 커지면 화면 안으로 끌어올림
     if (window.ResizeObserver) { const ro = new ResizeObserver(fit); ro.observe(pop); pop._ro = ro; }
   }
