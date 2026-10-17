@@ -18495,7 +18495,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-6`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-7`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21128,14 +21128,16 @@ window.FigTags = (function () {
     let h = '<div class="fig-head" style="flex:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px 6px 12px;border-bottom:1px solid #ede9fe;cursor:move;user-select:none;touch-action:none;font-size:14px"><b style="color:#6d28d9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">🎭 ' + esc(ref) + ' 비유 표현</b>'
       + '<span style="display:flex;gap:6px;align-items:center;flex:none"><span ' + bt + ' data-d="-1" title="글자 작게">A−</span><span ' + bt + ' data-d="1" title="글자 크게">A+</span><span class="fig-x" style="cursor:pointer;color:#94a3b8;font-size:17px;padding:0 2px" title="닫기">✕</span></span></div>'
       + '<div class="fig-body" style="flex:1 1 auto;overflow:auto;padding:0 12px 14px;font-size:' + fs + 'px">';
-    let nx = 0;
+    let nx = 0, ni = 0; pop._ref = ref;
     list.forEach(e => {
       const f = (D.figs || {})[e[0]] || [e[0], ''];
       let ph = '';
       if (e[2] && text) { const s = text.substr(e[2][0], e[2][1]); if (s && crc16(s) === e[2][2]) ph = s; }
+      const li = nx + 1000 * (++ni);
       h += '<div style="border-top:1px solid #ede9fe;padding:6px 0">'
-        + '<span title="' + esc(f[1]) + '" style="background:#ede9fe;color:#5b21b6;border-radius:4px;padding:0 6px;font-size:0.86em;font-weight:700">' + esc(f[0]) + '</span>'
+        + '<span class="fig-name" data-fig="' + esc(e[0]) + '" data-sub="' + esc(e[1] || '') + '" data-li="' + li + '" title="' + esc(f[1]) + ' — 누르면 이 비유법이 쓰인 다른 구절" style="cursor:pointer;background:#ede9fe;color:#5b21b6;border-radius:4px;padding:0 6px;font-size:0.86em;font-weight:700;text-decoration:underline dotted">' + esc(f[0]) + ' ▾</span>'
         + (e[1] ? ' <span style="color:#7c3aed;font-size:0.86em">' + esc(e[1]) + '</span>' : '')
+        + '<div class="fig-ls" id="fig-ls-' + li + '"></div>'
         + (ph ? '<div style="margin-top:3px">「<b>' + esc(ph) + '</b>」</div>' : '')
         + '<div style="margin-top:2px">' + esc(e[3]) + '</div>'
         + (e[4] ? '<div style="color:#64748b;font-size:0.86em">원어: ' + esc(e[4]) + '</div>' : '')
@@ -21155,6 +21157,18 @@ window.FigTags = (function () {
     pop.style.left = Math.max(8, Math.min(L, innerWidth - pr.width - 8)) + 'px'; pop.style.top = Math.max(8, Tp) + 'px';
     fit();
     pop.querySelector('.fig-x').onclick = ev => { ev.stopPropagation(); hide(); };
+    // (b20261017-7 kjm 「비유법 이름 누르면 다른 구절」) 이름을 누르면 그 비유법(같은 갈래 / 전체)이 쓰인 구절 목록, 구절을 누르면 그 절로 감
+    pop.addEventListener('click', ev => {
+      const nm = ev.target.closest('.fig-name');
+      if (nm) { ev.stopPropagation(); const box = pop.querySelector('#fig-ls-' + nm.dataset.li); if (!box) return;
+        if (box.innerHTML) { box.innerHTML = ''; return; }
+        drawList(box, nm.dataset.fig, nm.dataset.sub, !!nm.dataset.sub); return; }
+      const sw = ev.target.closest('.fig-lsw');
+      if (sw) { ev.stopPropagation(); const box = sw.closest('.fig-ls'); drawList(box, box.dataset.fig, box.dataset.sub, sw.dataset.only === '1'); return; }
+      const go = ev.target.closest('.fig-go');
+      if (go) { ev.stopPropagation(); const [b, c, v] = go.dataset.k.split(':').map(Number);
+        if (typeof navigateToBibleVerse === 'function') navigateToBibleVerse(b, c, v); }
+    });
     pop.querySelectorAll('.fig-fs').forEach(x => x.onclick = ev => {
       ev.stopPropagation();
       const n = Math.min(26, Math.max(11, (parseFloat(body.style.fontSize) || 14) + (+x.dataset.d) * 2));
@@ -21173,6 +21187,24 @@ window.FigTags = (function () {
     }, () => { const b = pop.getBoundingClientRect(); saveBox({ w: Math.round(b.width), h: Math.round(b.height) }); });
     // 사전을 펼쳐 창이 커지면 화면 안으로 끌어올림
     if (window.ResizeObserver) { const ro = new ResizeObserver(fit); ro.observe(pop); pop._ro = ro; }
+  }
+  function bk(id) { try { const o = BIBLE_BOOKS.find(x => x.id === id); return o ? o.abbr : id; } catch (e) { return id; } }
+  function drawList(box, fig, sub, only) {
+    box.dataset.fig = fig; box.dataset.sub = sub || '';
+    const all = [], same = [];
+    Object.keys(D.v).forEach(k => D.v[k].forEach(e => { if (e[0] !== fig) return; all.push(k); if (sub && e[1] === sub) same.push(k); }));
+    const key = a => a.split(':').map(Number), cmp = (a, b) => { const x = key(a), y = key(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; };
+    const L = [...new Set(only && sub ? same : all)].sort(cmp);
+    const f = (D.figs || {})[fig] || [fig];
+    let h = '<div style="margin:5px 0 2px;padding:6px 8px;background:#faf5ff;border:1px solid #ede9fe;border-radius:6px;font-size:0.86em">'
+      + '<div style="margin-bottom:4px;color:#6d28d9"><b>' + esc(f[0]) + '</b> 쓰인 구절 ' + L.length.toLocaleString() + '곳'
+      + (sub ? ' · <span class="fig-lsw" data-only="1" style="cursor:pointer;' + (only ? 'font-weight:700;text-decoration:underline' : 'color:#7c3aed') + '">「' + esc(sub) + '」만 ' + new Set(same).size + '</span> · <span class="fig-lsw" data-only="0" style="cursor:pointer;' + (!only ? 'font-weight:700;text-decoration:underline' : 'color:#7c3aed') + '">전체 ' + new Set(all).size + '</span>' : '')
+      + '</div><div style="line-height:1.9">';
+    let lastB = 0;
+    L.forEach(k => { const [b, c, v] = key(k);
+      if (b !== lastB) { h += (lastB ? '<br>' : '') + '<b style="color:#64748b">' + esc(bk(b)) + '</b> '; lastB = b; }
+      h += '<span class="fig-go" data-k="' + k + '" style="cursor:pointer;color:#1d4ed8;margin-right:7px;white-space:nowrap">' + c + ':' + v + '</span> '; });
+    box.innerHTML = h + '</div></div>';
   }
   function fit() {
     if (!pop) return; const b = pop.getBoundingClientRect();
