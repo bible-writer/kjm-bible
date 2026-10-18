@@ -1851,6 +1851,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
 
             <div class="menu-sect">보기</div>
             <label class="menu-check"><input type="checkbox" id="chk-term-highlight"> 본문에 용어 표시</label>
+            <label class="menu-check" title="불링거 『성경의 비유법』(1898) 바탕 풀이 — 켜면 절 옆에 🎭 비유 단추가 나옵니다"><input type="checkbox" id="chk-fig-tags"> 🎭 성경 비유법 (불링거) 표시</label>
 
             <div class="menu-sect danger-sect">위험</div>
             <button id="btn-clear-db" class="menu-danger" title="저장소 초기화">저장소 초기화</button>
@@ -15007,6 +15008,17 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       loadBibleText();
     });
 
+    // (b20261018-1 kjm 「블링거 내용을 옵션으로 해, 선택하도록」) 기본은 꺼짐 — 켜야 bullinger_fig.json 을 받고 🎭 단추를 보임
+    (function () {
+      var c = document.getElementById('chk-fig-tags'); if (!c) return;
+      try { c.checked = localStorage.getItem('figTagsOn') === '1'; } catch (e) {}
+      c.addEventListener('change', function () {
+        try { localStorage.setItem('figTagsOn', this.checked ? '1' : '0'); } catch (e) {}
+        if (!this.checked) document.querySelectorAll('.fig-btn,.fig-pop').forEach(function (el) { el.remove(); });
+        loadBibleText();
+      });
+    })();
+
     function renderMapMarkers() {
       markerClusterGroup.clearLayers();
       var isPermanent = document.getElementById('chk-permanent-labels').checked;
@@ -18495,7 +18507,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261017-9`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261018-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21217,7 +21229,9 @@ window.FigTags = (function () {
   let downIn = false;
   document.addEventListener('pointerdown', ev => { downIn = !!(ev.target.closest && ev.target.closest('.fig-pop')); }, true);
   document.addEventListener('click', ev => { if (downIn) { downIn = false; return; } if (pop && !ev.target.closest('.fig-pop') && !ev.target.closest('.fig-btn')) hide(); });
+  function on() { try { return localStorage.getItem('figTagsOn') === '1'; } catch (e) { return false; } }
   function apply(container, bookId, chapter, verses) {
+    if (!on()) return;
     load().then(() => {
       if (!D || !D.v) return;
       const vt = {}; (verses || []).forEach(x => { if (Array.isArray(x)) vt[x[0]] = String(x[1] || ''); else if (x && x.v != null) vt[x.v] = String(x.text || ''); });
