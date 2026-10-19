@@ -20808,6 +20808,10 @@ if ('serviceWorker' in navigator) {
   function verseAt(t) { if (!bounds) return 0; let v = 0; for (let i = 0; i < bounds.length; i++) if (t >= bounds[i] - 0.05) v = i + 1; return v; }
   function markVerse(v) {
     if (v === curVerse) return; curVerse = v;
+    // (b20261019-1 kjm 「절 표시 못하나?」) 플레이어에 지금 읽는 절 번호
+    try { if (curKey) bar.querySelector('.ab-l').textContent = '🎧 ' + bookName(curKey) + (v ? ' ' + v + '절' : ''); } catch (e) {}
+    // (b20261019-1 kjm 「종료된 절 시작점 기억하기」) 마지막으로 듣던 장·절 저장 → 다음에 그 장을 열면 그 절 처음부터
+    try { if (curKey && v) localStorage.setItem('audio_resume', JSON.stringify({ k: curKey, v: v })); } catch (e) {}
     document.querySelectorAll('#bible-content .verse-row.audio-cur, #compare-content .verse-row.audio-cur').forEach(function (r) { r.classList.remove('audio-cur'); });
     if (!v || curKey !== cur()) return;
     // (b20261014-5) 왼쪽 본문은 늘 함께 따라가고, NIV 낭독이면 오른쪽 비교 창(열려 있을 때)도 같은 절을 표시 (kjm 「왼쪽창이 같이 움직여야」)
@@ -20838,6 +20842,17 @@ if ('serviceWorker' in navigator) {
     if (bounds && bounds[v - 1] != null) { audio.currentTime = Math.max(0, bounds[v - 1] - 0.2); if (audio.paused) audio.play().catch(function () {}); }
   }, true);
   /* ── 재생 ── */
+  function resumeAt(k) {
+    let r = null; try { r = JSON.parse(localStorage.getItem('audio_resume') || 'null'); } catch (e) {}
+    if (!r || r.k !== k || !(r.v > 1)) return;
+    let n = 0; const iv = setInterval(function () {
+      n++; if (curKey !== k || n > 50) { clearInterval(iv); return; }
+      if (bounds && boundsKey === k && bounds[r.v - 1] != null) { clearInterval(iv);
+        if (audio.currentTime < 3) { audio.currentTime = Math.max(0, bounds[r.v - 1] - 0.2); curVerse = -1; markVerse(r.v);
+          if (typeof showToast === 'function') showToast(r.v + '절부터 이어 듣기 (처음부터: ⏪ 또는 1절 번호 누르기)', 'info', 3000); } }
+    }, 100);
+  }
+  audio.addEventListener('ended', function () { try { const r = JSON.parse(localStorage.getItem('audio_resume') || 'null'); if (r && r.k === curKey) localStorage.removeItem('audio_resume'); } catch (e) {} });
   async function loadKey(k, play) {
     const b = await getBlob(k);
     if (!b) { curKey = null; audio.removeAttribute('src'); refreshBtn(); return false; }
@@ -20847,6 +20862,7 @@ if ('serviceWorker' in navigator) {
     bar.querySelector('.ab-l').textContent = '🎧 ' + bookName(k); setMedia(k);
     bar.style.display = 'flex'; placeBar();
     if (play) { try { await audio.play(); } catch (e) {} }
+    resumeAt(k);
     refreshBtn(); return true;
   }
   audio.addEventListener('play', function () { $('play').textContent = '❚❚'; refreshBtn(); });
