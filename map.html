@@ -20658,6 +20658,25 @@ if ('serviceWorker' in navigator) {
     const c = t.cloneNode(true); c.querySelectorAll('.strong-tag, button, sup').forEach(function (x) { x.remove(); });
     return (c.textContent || '').replace(/\s+/g, ' ').trim();
   }
+  /* (b20261019-1 kjm 「실시간 reading은 안되나」) 절 안에서 읽는 위치를 글자 수 비례로 어림해 읽은 부분만 밝게 — 낱말 시간표는 없어서 근사 */
+  let capV = 0, capTxt = '', capShown = -1;
+  function capTick() {
+    try {
+      if (capEl.style.display === 'none' && capShown !== -1) return;
+      const d = capEl.querySelector('.cap-d'), r = capEl.querySelector('.cap-r'); if (!d || !r) return;
+      if (!capTxt) { d.textContent = ''; r.textContent = ''; return; }
+      let n = capTxt.length;
+      if (bounds && bounds[capV - 1] != null) {
+        const t0 = bounds[capV - 1], t1 = (bounds[capV] != null ? bounds[capV] : (audio.duration || t0 + 1));
+        const f = Math.max(0, Math.min(1, (audio.currentTime - t0) / Math.max(0.5, t1 - t0 - 0.3)));
+        n = Math.round(capTxt.length * f);
+        const sp = capTxt.indexOf(' ', n); n = (f >= 0.999 || sp < 0) ? (f >= 0.999 ? capTxt.length : n) : sp;
+      }
+      if (n === capShown) return; capShown = n;
+      d.textContent = capTxt.slice(0, n); r.textContent = capTxt.slice(n);
+    } catch (e) {}
+  }
+  setInterval(function () { if (!audio.paused && capOn && capEl.style.display !== 'none') capTick(); }, 150);
   function updateCap(v) {
     try {
       const capB = bar.querySelector('[data-a="cap"]'); if (capB) capB.classList.toggle('on', capOn);
@@ -20666,7 +20685,9 @@ if ('serviceWorker' in navigator) {
       if (bounds && bounds._side === 'right') { const cp = document.getElementById('compare-panel'); if (cp && cp.classList.contains('open')) row = document.querySelector('#compare-content #cmp-verse-' + v); }
       else row = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]');
       const txt = capText(row);
-      capEl.innerHTML = '<b style="color:#fbbf24;margin-right:8px">' + bookName(curKey) + ' ' + v + '절</b>' + (txt ? txt.replace(/[&<>]/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]; }) : '');
+      capV = v; capTxt = txt; capShown = -1;
+      capEl.innerHTML = '<b style="color:#fbbf24;margin-right:8px">' + bookName(curKey) + ' ' + v + '절</b><span class="cap-d" style="color:#fff"></span><span class="cap-r" style="color:#64748b"></span>';
+      capTick();
       const br = bar.getBoundingClientRect();
       capEl.style.left = bar.style.left || '50%';
       capEl.style.maxWidth = (bar.style.maxWidth || 'min(900px, 94vw)');
