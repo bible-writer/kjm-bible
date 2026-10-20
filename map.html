@@ -18507,7 +18507,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261019-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261020-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20836,8 +20836,11 @@ if ('serviceWorker' in navigator) {
     bounds = null; boundsKey = k; curVerse = 0;
     const own = loadSync()[k] || {};
     try {
-      const tt = await loadTimes(); const e = tt && tt.t && tt.t[k]; const en = tt && tt.niv && tt.niv[k]; const e4 = tt && tt.k4 && tt.k4[k];
+      const tt = await loadTimes(); let e = tt && tt.t && tt.t[k]; let en = tt && tt.niv && tt.niv[k]; let e4 = tt && tt.k4 && tt.k4[k];
       if (e || en || e4) { const d = await metaDur(); if (boundsKey !== k) return;
+        // (b20261020-1 kjm 「NIV 창세기 18장인데 한글 자막」) 길이가 1초 안에 드는 녹음이 둘 이상이면(55장) 가장 가까운 것 하나만 고름
+        const df = function (x) { return (x && d) ? Math.abs(d - x[0]) : 9; }; const best = Math.min(df(e), df(e4), df(en));
+        if (best < 1.0) { e = df(e) === best ? e : null; e4 = (!e && df(e4) === best) ? e4 : null; en = (!e && !e4 && df(en) === best) ? en : null; }
         if (e && d && Math.abs(d - e[0]) < 1.0 && (rowsOf(k).length === e[1].length || rowsOf(k).length === 0)) {
           const bb = e[1].slice(); Object.keys(own).forEach(function (v) { if (+v >= 1 && +v <= bb.length) bb[+v - 1] = own[v]; });
           bounds = bb; bounds._tt = true; return; }
