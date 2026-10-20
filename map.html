@@ -18507,7 +18507,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261020-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261020-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20652,6 +20652,40 @@ if ('serviceWorker' in navigator) {
   capEl.style.cssText = 'position:fixed;z-index:8999;display:none;transform:translateX(-50%);background:rgba(15,23,42,.92);color:#f8fafc;border-radius:12px;padding:8px 14px;font-size:17px;line-height:1.55;box-shadow:0 4px 14px rgba(0,0,0,.3);max-height:30vh;overflow:auto;white-space:normal';
   document.body.appendChild(capEl);
   let capOn = true; try { capOn = localStorage.getItem('audio_cap') !== '0'; } catch (e) {}
+  /* (b20261020-2 kjm 「map 자막란 이동할 수 있나?」) 자막 왼쪽 ⠿ 손잡이를 끌어 옮김(마우스·터치), 손잡이 두 번 누르면 원래 자리. 위치는 이 기기에만 기억 */
+  let capPos = null; try { const p = JSON.parse(localStorage.getItem('audio_cap_pos') || 'null'); if (p && isFinite(p.x) && isFinite(p.y)) capPos = p; } catch (e) {}
+  function capClamp() {
+    if (!capPos) return;
+    const w = capEl.offsetWidth || 200, h = capEl.offsetHeight || 40;
+    capPos.x = Math.max(w / 2 + 4, Math.min(window.innerWidth - w / 2 - 4, capPos.x));
+    capPos.y = Math.max(4, Math.min(window.innerHeight - h - 4, capPos.y));
+    capEl.style.left = Math.round(capPos.x) + 'px'; capEl.style.top = Math.round(capPos.y) + 'px'; capEl.style.bottom = 'auto';
+  }
+  (function () {
+    let drag = null;
+    capEl.addEventListener('pointerdown', function (e) {
+      if (!e.target.closest || !e.target.closest('.cap-grip')) return;
+      e.preventDefault();
+      const r = capEl.getBoundingClientRect();
+      drag = { id: e.pointerId, dx: e.clientX - (r.left + r.width / 2), dy: e.clientY - r.top };
+      try { capEl.setPointerCapture(e.pointerId); } catch (x) {}
+    });
+    capEl.addEventListener('pointermove', function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      capPos = { x: e.clientX - drag.dx, y: e.clientY - drag.dy }; capClamp();
+    });
+    function end(e) {
+      if (!drag || e.pointerId !== drag.id) return; drag = null;
+      try { localStorage.setItem('audio_cap_pos', JSON.stringify(capPos)); } catch (x) {}
+    }
+    capEl.addEventListener('pointerup', end); capEl.addEventListener('pointercancel', end);
+    capEl.addEventListener('dblclick', function (e) {
+      if (!e.target.closest || !e.target.closest('.cap-grip')) return;
+      capPos = null; try { localStorage.removeItem('audio_cap_pos'); } catch (x) {}
+      capEl.style.top = ''; updateCap(capV);
+    });
+    window.addEventListener('resize', function () { if (capPos && capEl.style.display !== 'none') capClamp(); });
+  })();
   function capText(row) {
     if (!row) return '';
     const t = row.querySelector('.verse-text'); if (!t) return '';
@@ -20686,13 +20720,14 @@ if ('serviceWorker' in navigator) {
       else row = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]');
       const txt = capText(row);
       capV = v; capTxt = txt; capShown = -1;
-      capEl.innerHTML = '<b style="color:#fbbf24;margin-right:8px">' + bookName(curKey) + ' ' + v + '절</b><span class="cap-d" style="color:#fff"></span><span class="cap-r" style="color:#64748b"></span>';
+      capEl.innerHTML = '<span class="cap-grip" title="끌어서 옮기기 · 두 번 누르면 원래 자리" style="cursor:move;touch-action:none;user-select:none;color:#94a3b8;margin-right:8px;padding:2px 4px;font-size:18px">⠿</span><b style="color:#fbbf24;margin-right:8px">' + bookName(curKey) + ' ' + v + '절</b><span class="cap-d" style="color:#fff"></span><span class="cap-r" style="color:#64748b"></span>';
       capTick();
       const br = bar.getBoundingClientRect();
       capEl.style.left = bar.style.left || '50%';
       capEl.style.maxWidth = (bar.style.maxWidth || 'min(900px, 94vw)');
-      capEl.style.bottom = Math.round(window.innerHeight - br.top + 8) + 'px';
       capEl.style.display = 'block';
+      if (capPos) capClamp();
+      else { capEl.style.top = ''; capEl.style.bottom = Math.round(window.innerHeight - br.top + 8) + 'px'; }
     } catch (e) {}
   }
   try { const wEl = document.getElementById('bible-content-wrapper'); if (wEl && window.ResizeObserver) new ResizeObserver(placeBar).observe(wEl); } catch (e) {}
