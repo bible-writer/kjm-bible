@@ -2087,6 +2087,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       <button class="btn-catalog-trigger text-only-control" id="btn-commentary-font-inc" style="background:#334155" title="주석 글자 확대">A +</button>
       <button class="btn-catalog-trigger" id="btn-commentary-tts" style="background:#9333ea" title="주석 글을 소리로 읽기 (한글은 한국어 목소리, 영어는 영어 목소리). 글을 드래그해 고르면 그 부분만 읽습니다">🔊 읽기</button>
       <select id="commentary-tts-rate" style="padding:4px 4px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;cursor:pointer" title="읽는 빠르기"><option value="0.8">0.8배</option><option value="1" selected>1배</option><option value="1.2">1.2배</option><option value="1.5">1.5배</option></select>
+      <select id="commentary-tts-vko" style="padding:4px 4px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;cursor:pointer;max-width:120px" title="한국어 목소리"></select>
+      <select id="commentary-tts-ven" style="padding:4px 4px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;cursor:pointer;max-width:120px" title="영어 목소리"></select>
       <button class="btn-catalog-trigger" id="btn-open-commentary-manage" style="background:#b45309" title="주석 등록/관리">⚙ 관리</button>
       <button class="btn-catalog-trigger" id="btn-commentary-back-to-map" style="background:#2563eb" title="지도로 돌아가기">🗺 지도로</button>
     </div>
@@ -11647,11 +11649,27 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         let VKO = null, VEN = null, playing = false, selfNav = false, sess = 0;
         try { const r = localStorage.getItem('commentary_tts_rate'); if (r) rateSel.value = r; } catch (e) {}
         rateSel.onchange = () => { try { localStorage.setItem('commentary_tts_rate', rateSel.value); } catch (e) {} };
+        // 목소리: 고른 것(기억) → 자연스러운 목소리(Natural·Online) → Google → 그 밖
+        const selKo = document.getElementById('commentary-tts-vko'), selEn = document.getElementById('commentary-tts-ven');
+        function rank(v) { return /Natural|Online|Neural/i.test(v.name) ? 0 : /Google/i.test(v.name) ? 1 : /Yuna|Samantha|Siri/i.test(v.name) ? 2 : 3; }
+        function fill(sel, list, key, label) {
+          if (!sel) return null;
+          let saved = ''; try { saved = localStorage.getItem(key) || ''; } catch (e) {}
+          const sorted = list.slice().sort((a, b) => rank(a) - rank(b));
+          sel.innerHTML = sorted.map(v => `<option value="${v.name.replace(/"/g, '&quot;')}">${label} ${v.name.replace(/^(Microsoft|Google)\s*/, '').replace(/</g, '&lt;')}</option>`).join('') || `<option value="">${label} 목소리 없음</option>`;
+          const chosen = sorted.find(v => v.name === saved) || sorted[0] || null;
+          if (chosen) sel.value = chosen.name;
+          sel.onchange = () => { try { localStorage.setItem(key, sel.value); } catch (e) {} pick(); };
+          return chosen;
+        }
         function pick() {
           try {
             const vs = synth.getVoices();
-            VKO = vs.find(v => /ko[-_]KR/i.test(v.lang) && /Google|Microsoft|Yuna|Heami|SunHi/i.test(v.name)) || vs.find(v => /^ko/i.test(v.lang)) || null;
-            VEN = vs.find(v => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) || vs.find(v => /^en/i.test(v.lang)) || null;
+            const ko = vs.filter(v => /^ko/i.test(v.lang)), en = vs.filter(v => /^en[-_](US|GB|AU|CA)/i.test(v.lang));
+            if (selKo && selKo.options.length !== ko.length) fill(selKo, ko, 'commentary_tts_vko', '한');
+            if (selEn && selEn.options.length !== en.length) fill(selEn, en, 'commentary_tts_ven', '영');
+            VKO = ko.find(v => selKo && v.name === selKo.value) || ko.sort((a, b) => rank(a) - rank(b))[0] || null;
+            VEN = en.find(v => selEn && v.name === selEn.value) || en.sort((a, b) => rank(a) - rank(b))[0] || null;
           } catch (e) {}
         }
         if (synth) { pick(); try { synth.addEventListener('voiceschanged', pick); } catch (e) {} }
@@ -18620,7 +18638,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
