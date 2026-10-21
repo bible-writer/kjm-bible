@@ -2085,6 +2085,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       <button class="btn-catalog-trigger text-only-control" id="btn-commentary-font-dec" style="background:#334155" title="주석 글자 축소">A -</button>
       <span id="commentary-font-size-display" class="text-only-control" style="color:#e2e8f0;font-size:12px;font-weight:600;white-space:nowrap;min-width:36px;text-align:center">16px</span>
       <button class="btn-catalog-trigger text-only-control" id="btn-commentary-font-inc" style="background:#334155" title="주석 글자 확대">A +</button>
+      <button class="btn-catalog-trigger" id="btn-commentary-tts" style="background:#9333ea" title="주석 글을 소리로 읽기 (한글은 한국어 목소리, 영어는 영어 목소리). 글을 드래그해 고르면 그 부분만 읽습니다">🔊 읽기</button>
+      <select id="commentary-tts-rate" style="padding:4px 4px;border-radius:6px;border:1px solid #475569;background:#1e293b;color:#fff;font-size:12px;cursor:pointer" title="읽는 빠르기"><option value="0.8">0.8배</option><option value="1" selected>1배</option><option value="1.2">1.2배</option><option value="1.5">1.5배</option></select>
       <button class="btn-catalog-trigger" id="btn-open-commentary-manage" style="background:#b45309" title="주석 등록/관리">⚙ 관리</button>
       <button class="btn-catalog-trigger" id="btn-commentary-back-to-map" style="background:#2563eb" title="지도로 돌아가기">🗺 지도로</button>
     </div>
@@ -11634,6 +11636,117 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       };
       document.getElementById('btn-commentary-prev-page').onclick = () => Commentary.renderPage(Commentary.currentPage - 1);
       document.getElementById('btn-commentary-next-page').onclick = () => Commentary.renderPage(Commentary.currentPage + 1);
+      /* (b20261021-1 kjm 「주석창의 글자를 읽을 수 있나, 영어,한글」) 🔊 주석 소리로 읽기 — 브라우저 음성 읽기(speechSynthesis).
+         한글 문장은 한국어 목소리, 영어 덩어리는 영어 목소리. 히브리어·헬라어 글자는 건너뜀. 글을 골라 두면 그 부분만.
+         PDF 주석은 지금 쪽 글을 읽고 끝나면 다음 쪽으로 넘어가 이어 읽음. 다른 주석·장·쪽으로 바꾸거나 지도로 돌아가면 멈춤. */
+      (function setupCommentaryTTS() {
+        const btn = document.getElementById('btn-commentary-tts');
+        const rateSel = document.getElementById('commentary-tts-rate');
+        if (!btn) return;
+        const synth = window.speechSynthesis;
+        let VKO = null, VEN = null, playing = false, selfNav = false, sess = 0;
+        try { const r = localStorage.getItem('commentary_tts_rate'); if (r) rateSel.value = r; } catch (e) {}
+        rateSel.onchange = () => { try { localStorage.setItem('commentary_tts_rate', rateSel.value); } catch (e) {} };
+        function pick() {
+          try {
+            const vs = synth.getVoices();
+            VKO = vs.find(v => /ko[-_]KR/i.test(v.lang) && /Google|Microsoft|Yuna|Heami|SunHi/i.test(v.name)) || vs.find(v => /^ko/i.test(v.lang)) || null;
+            VEN = vs.find(v => /en[-_]US/i.test(v.lang) && /Google|Samantha|Microsoft/i.test(v.name)) || vs.find(v => /^en/i.test(v.lang)) || null;
+          } catch (e) {}
+        }
+        if (synth) { pick(); try { synth.addEventListener('voiceschanged', pick); } catch (e) {} }
+        function setBtn(on) { playing = on; btn.textContent = on ? '⏹ 멈춤' : '🔊 읽기'; btn.style.background = on ? '#be123c' : '#9333ea'; }
+        function stop() { sess++; try { if (synth) synth.cancel(); } catch (e) {} setBtn(false); }
+        window.stopCommentaryTTS = stop;
+        // 글 → 읽을 조각 [{t, lang}]
+        function pieces(text) {
+          text = String(text || '')
+            .replace(/[֐-׿Ͱ-Ͽἀ-῿]+/g, ' ')      // 히브리어·헬라어 글자
+            .replace(/[¹²³⁰⁴-⁹]+/g, '').replace(/[─━]{2,}/g, ' ').replace(/[「」『』]/g, ' ')            // 각주 번호·줄
+            .replace(/[ \t ]+/g, ' ');
+          const sents = text.split(/\n+|(?<=[.!?。])\s+/).map(x => x.trim()).filter(x => /[가-힣A-Za-z0-9]/.test(x));
+          const out = [];
+          const push = (t, lang) => {
+            t = t.trim(); if (!/[가-힣A-Za-z0-9]/.test(t)) return;
+            while (t.length > 220) { let cut = t.lastIndexOf(lang === 'en' ? ', ' : ' ', 200); if (cut < 60) cut = 200; out.push({ t: t.slice(0, cut), lang }); t = t.slice(cut).trim(); }
+            const last = out[out.length - 1];
+            if (last && last.lang === lang && last.t.length + t.length < 200) last.t += ' ' + t; else out.push({ t, lang });
+          };
+          for (const s of sents) {
+            if (!/[가-힣]/.test(s)) { push(s, 'en'); continue; }
+            // 한글 문장 안의 영어 덩어리(두 낱말 이상 또는 6자 이상)는 영어 목소리로
+            const re = /[A-Za-z][A-Za-z'’\-]*(?:[ ,;:.]+[A-Za-z][A-Za-z'’\-]*)+|[A-Za-z][A-Za-z'’\-]{5,}/g;
+            let i = 0, m;
+            while ((m = re.exec(s))) { push(s.slice(i, m.index), 'ko'); push(m[0], 'en'); i = m.index + m[0].length; }
+            push(s.slice(i), 'ko');
+          }
+          return out;
+        }
+        function speakAll(list, my, onDone) {
+          const rate = parseFloat(rateSel.value) || 1;
+          let k = 0;
+          const next = () => {
+            if (my !== sess) return;
+            if (k >= list.length) { onDone && onDone(); return; }
+            const p = list[k++];
+            const u = new SpeechSynthesisUtterance(p.t);
+            u.lang = p.lang === 'en' ? 'en-US' : 'ko-KR';
+            const v = p.lang === 'en' ? VEN : VKO; if (v) u.voice = v;
+            u.rate = p.lang === 'en' ? Math.max(0.6, rate * 0.9) : rate;
+            u.onend = next; u.onerror = (e) => { if (e && e.error === 'interrupted' || e && e.error === 'canceled') return; next(); };
+            try { synth.speak(u); } catch (e) { next(); }
+          };
+          next();
+        }
+        function selectedIn(el) {
+          try { const sel = window.getSelection(); if (!sel || sel.isCollapsed) return ''; const r = sel.getRangeAt(0); if (!el.contains(r.commonAncestorContainer)) return ''; return sel.toString(); } catch (e) { return ''; }
+        }
+        async function pdfPageText(n) {
+          const pg = await Commentary.currentPdfDoc.getPage(n);
+          const ct = await pg.getTextContent();
+          return ct.items.map(it => (it.str || '') + (it.hasEOL ? '\n' : ' ')).join('').replace(/-\n(?=[a-z])/g, '').replace(/([가-힣A-Za-z,])\n(?=[가-힣a-z])/g, '$1 ');
+        }
+        async function readPdfFrom(n, my) {
+          if (my !== sess || !Commentary.currentPdfDoc) return;
+          let t = '';
+          try { t = await pdfPageText(n); } catch (e) { showToast('이 쪽의 글을 읽지 못했습니다(그림으로 된 PDF일 수 있음).', 'warn'); stop(); return; }
+          if (my !== sess) return;
+          const list = pieces(t);
+          if (!list.length) { showToast('이 쪽에는 읽을 글자가 없습니다(그림으로 된 PDF일 수 있음).', 'warn'); stop(); return; }
+          speakAll(list, my, async () => {
+            if (my !== sess) return;
+            if (n < Commentary.currentPdfDoc.numPages) { selfNav = true; try { await Commentary.renderPage(n + 1); } finally { setTimeout(() => { selfNav = false; }, 300); } readPdfFrom(n + 1, my); }
+            else stop();
+          });
+        }
+        btn.onclick = () => {
+          if (!synth || typeof SpeechSynthesisUtterance === 'undefined') { showToast('이 브라우저는 음성 읽기를 지원하지 않습니다.', 'warn'); return; }
+          if (playing) { stop(); return; }
+          try { synth.cancel(); } catch (e) {}
+          pick();
+          const textView = document.getElementById('commentary-text-view');
+          const isText = textView && textView.style.display !== 'none';
+          if (isText) {
+            const el = document.getElementById('commentary-text-content');
+            const sel = selectedIn(el);
+            const ref = document.getElementById('commentary-text-ref')?.innerText || '';
+            const list = pieces(sel || ((ref ? ref + '\n' : '') + el.innerText));
+            if (!list.length) { showToast('읽을 글이 없습니다.', 'warn'); return; }
+            if (!VKO) showToast('이 기기에 한국어 목소리가 없어 기본 목소리로 읽습니다.', 'warn');
+            const my = ++sess; setBtn(true); speakAll(list, my, () => { if (my === sess) setBtn(false); });
+          } else if (Commentary.currentPdfDoc) {
+            const my = ++sess; setBtn(true); readPdfFrom(Commentary.currentPage || 1, my);
+          } else { showToast('먼저 주석을 여세요.', 'warn'); }
+        };
+        // 다른 주석·장·쪽으로 바뀌면 멈춤 (스스로 넘긴 쪽은 제외)
+        try {
+          const mo = new MutationObserver(() => { if (playing && !selfNav) stop(); });
+          const tc = document.getElementById('commentary-text-content'); if (tc) mo.observe(tc, { childList: true, characterData: true, subtree: false });
+          const pi = document.getElementById('commentary-page-indicator'); if (pi) mo.observe(pi, { childList: true, characterData: true, subtree: true });
+          const pane = document.getElementById('commentary-pane'); if (pane) new MutationObserver(() => { if (playing && pane.style.display === 'none') stop(); }).observe(pane, { attributes: true, attributeFilter: ['style'] });
+        } catch (e) {}
+        window.addEventListener('pagehide', stop);
+      })();
       document.getElementById('btn-commentary-zoom-in').onclick = () => Commentary.setZoom(Commentary.zoomFactor + 0.1);
       document.getElementById('btn-commentary-zoom-fit').onclick = () => Commentary.fitToWidth();
       // ── 필기 도구 버튼 연결 ──
@@ -18507,7 +18620,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261020-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
