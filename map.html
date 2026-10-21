@@ -11665,7 +11665,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         function pick() {
           try {
             const vs = synth.getVoices();
-            const ko = vs.filter(v => /^ko/i.test(v.lang)), en = vs.filter(v => /^en[-_](US|GB|AU|CA)/i.test(v.lang));
+            const ko = vs.filter(v => /^ko([-_]|$)/i.test(v.lang)), en = vs.filter(v => /^en[-_](US|GB|AU|CA)/i.test(v.lang));
+            en.sort((a, b) => (/US/i.test(b.lang) ? 1 : 0) - (/US/i.test(a.lang) ? 1 : 0));
             if (selKo && selKo.options.length !== ko.length) fill(selKo, ko, 'commentary_tts_vko', '한');
             if (selEn && selEn.options.length !== en.length) fill(selEn, en, 'commentary_tts_ven', '영');
             VKO = ko.find(v => selKo && v.name === selKo.value) || ko.sort((a, b) => rank(a) - rank(b))[0] || null;
@@ -11677,8 +11678,19 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         function stop() { sess++; try { if (synth) synth.cancel(); } catch (e) {} setBtn(false); }
         window.stopCommentaryTTS = stop;
         // 글 → 읽을 조각 [{t, lang}]
+        const TTS_AB = '창 출 레 민 신 수 삿 룻 삼상 삼하 왕상 왕하 대상 대하 스 느 에 욥 시 잠 전 아 사 렘 애 겔 단 호 욜 암 옵 욘 미 나 합 습 학 슥 말 마 막 눅 요 행 롬 고전 고후 갈 엡 빌 골 살전 살후 딤전 딤후 딛 몬 히 약 벧전 벧후 요일 요이 요삼 유 계'.split(' ');
+        const TTS_FULL = '창세기 출애굽기 레위기 민수기 신명기 여호수아 사사기 룻기 사무엘상 사무엘하 열왕기상 열왕기하 역대상 역대하 에스라 느헤미야 에스더 욥기 시편 잠언 전도서 아가 이사야 예레미야 예레미야애가 에스겔 다니엘 호세아 요엘 아모스 오바댜 요나 미가 나훔 하박국 스바냐 학개 스가랴 말라기 마태복음 마가복음 누가복음 요한복음 사도행전 로마서 고린도전서 고린도후서 갈라디아서 에베소서 빌립보서 골로새서 데살로니가전서 데살로니가후서 디모데전서 디모데후서 디도서 빌레몬서 히브리서 야고보서 베드로전서 베드로후서 요한일서 요한이서 요한삼서 유다서 요한계시록'.split(' ');
+        const TTS_BOOKRE = [...TTS_FULL, ...TTS_AB].sort((a, b) => b.length - a.length).join('|');
+        const TTS_REF = new RegExp('(?<![가-힣A-Za-z])(?:(' + TTS_BOOKRE + ')\\s*)?(\\d{1,3})\\s*:\\s*(\\d{1,3})(?:\\s*[-~–]\\s*(\\d{1,3}))?(?!\\d)', 'g');
+        function sayRefs(t) { // 「고전 15:1」 → 「고린도전서 15장 1절」, 「시 23:1-3」 → 「시편 23편 1절에서 3절」
+          return t.replace(TTS_REF, (m, b, c, v, e) => {
+            const full = b ? (TTS_AB.includes(b) ? TTS_FULL[TTS_AB.indexOf(b)] : b) : '';
+            const unit = full === '시편' ? '편' : '장';
+            return (full ? full + ' ' : '') + c + unit + ' ' + v + '절' + (e ? '에서 ' + e + '절' : '');
+         }).replace(/(절|장|편)(와|를|는|가|로서|로써)(?![가-힣])/g, (m, u, j) => u + ({ '와': '과', '를': '을', '는': '은', '가': '이', '로서': (u === '절' ? '로서' : '으로서'), '로써': (u === '절' ? '로써' : '으로써') }[j]));
+        }
         function pieces(text) {
-          text = String(text || '')
+          text = sayRefs(String(text || ''))
             .replace(/[֐-׿Ͱ-Ͽἀ-῿]+/g, ' ')      // 히브리어·헬라어 글자
             .replace(/[¹²³⁰⁴-⁹]+/g, '').replace(/[─━]{2,}/g, ' ').replace(/[「」『』]/g, ' ')            // 각주 번호·줄
             .replace(/[ \t ]+/g, ' ');
@@ -18638,7 +18650,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
