@@ -3671,6 +3671,50 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       }
       return out.join('\n\n');
     }
+    /* (b20261022-8 kjm 「기침과 어긋난 풀이 주석본문에 표기 방법」)
+     * 「신앙고백」을 든 [번역자 주]만: 주가 「…」로 따온 주석가의 말을 본문에서 찾아 그 문장에 주황 물결 밑줄,
+     * 주 자체는 「⚖ 침례회 신앙고백 — 번역자 주」 접이 상자(눌러 펼침). 따온 말을 못 찾으면 밑줄 없이 상자만.
+     * 주석 파일(cdb)은 그대로 — 화면에서만. 올어바웃에서는 지금처럼 [번역자 주] 글 그대로. */
+    function markConfessionNotes(html) {
+      if (html.indexOf('[번역자 주') < 0) return html;
+      const open = (() => { try { return localStorage.getItem('commentary_kc_open') === '1'; } catch (e) { return false; } })();
+      const notes = []; let i = 0;
+      for (;;) {
+        const k = html.indexOf('[번역자 주', i); if (k < 0) break;
+        let d = 0, e = -1;
+        for (let j = k; j < html.length && j < k + 8000; j++) { const c = html[j]; if (c === '[') d++; else if (c === ']') { d--; if (d === 0) { e = j + 1; break; } } }
+        if (e < 0) break;
+        if (html.slice(k, e).indexOf('신앙고백') >= 0) notes.push({ k, e });
+        i = e;
+      }
+      if (!notes.length) return html;
+      const marks = []; let prevEnd = 0;   // 밑줄 [s,t]
+      const isB = (t, x) => /[.!?。]/.test(t[x]) && /\s/.test(t[x + 1] || ' ') || t[x] === '\n';
+      for (const n of notes) {
+        const note = html.slice(n.k, n.e), body = html.slice(0, n.k);
+        const qs = []; note.replace(/「([^「」]{6,})」/g, (m, q) => { qs.push(q); return m; });
+        let pos = -1, len = 0;
+        for (const q of qs) {
+          const frs = [q, ...q.split(/…|\.\.\./).map(x => x.trim()), q.slice(0, 20), q.slice(-20)].filter(x => x.length >= 8);
+          for (const f of frs) { const p = body.lastIndexOf(f); if (p >= prevEnd) { pos = p; len = f.length; break; } }
+          if (pos >= 0) break;
+        }
+        if (pos < 0) continue;
+        let s0 = pos; while (s0 > prevEnd && !isB(html, s0 - 1) && !(html[s0 - 2] && isB(html, s0 - 2) && /\s/.test(html[s0 - 1]))) s0--;
+        let t0 = pos + len; while (t0 < n.k && !isB(html, t0 - 1)) t0++;
+        let seg = html.slice(s0, t0);
+        if ((seg.match(/<a\b/g) || []).length !== (seg.match(/<\/a>/g) || []).length || /<(?!\/?a\b)/.test(seg)) { s0 = pos; t0 = pos + len; }
+        while (s0 < t0 && /\s/.test(html[s0])) s0++;
+        marks.push([s0, t0]); prevEnd = t0;
+      }
+      let out = '', at = 0, mi = 0;
+      for (const n of notes) {
+        while (mi < marks.length && marks[mi][1] <= n.k) { const [s0, t0] = marks[mi++]; out += html.slice(at, s0) + '<span class="cm-kc-s">' + html.slice(s0, t0) + '</span>'; at = t0; }
+        out += html.slice(at, n.k) + `<details class="cm-kc"${open ? ' open' : ''}><summary>⚖ 침례회 신앙고백 — 번역자 주</summary>${html.slice(n.k, n.e)}</details>`;
+        at = n.e;
+      }
+      return out + html.slice(at);
+    }
     // (b20261022-7 kjm 「앱 넣으면 파일 커서」) 풀이는 따로 comm_gloss.json — 주석 글을 처음 열 때 한 번 받아 옴
     let COMM_GLOSS = [], _glossP = null;
     function loadCommGloss() {
@@ -3712,6 +3756,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const st = document.createElement('style');
       st.textContent = '.cm-gl{border-bottom:1px dotted #94a3b8;cursor:help}.cm-gl:hover{background:#f1f5f9}'
         + 'details.cm-foot{display:block;margin:2px 0;color:#64748b;font-size:.9em;white-space:pre-wrap}details.cm-foot>summary{cursor:pointer;color:#0f766e;font-weight:600;white-space:normal;list-style:none;padding:4px 0}details.cm-foot>summary::-webkit-details-marker{display:none}'
+        + '.cm-kc-s{cursor:pointer;text-decoration:underline wavy #f59e0b;text-decoration-thickness:1px;text-underline-offset:4px;background:rgba(251,191,36,.10)}details.cm-kc{display:block;margin:4px 0 6px;border-left:3px solid #f59e0b;background:#fffbeb;border-radius:6px;padding:2px 8px;color:#78350f;font-size:.95em;white-space:pre-wrap}details.cm-kc>summary{cursor:pointer;color:#b45309;font-weight:600;white-space:normal;list-style:none;padding:3px 0;font-size:.9em}details.cm-kc>summary::-webkit-details-marker{display:none}'
         + '#cm-gl-pop{position:fixed;z-index:30000;max-width:min(360px,92vw);background:#fff;color:#1e293b;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.22);padding:10px 12px;font-size:14px;line-height:1.6}'
         + '#cm-gl-pop b{font-size:15px}#cm-gl-pop .m{color:#64748b;font-size:12px;margin-left:4px}';
       document.head.appendChild(st);
@@ -3730,7 +3775,15 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         pop.style.left = x + 'px'; pop.style.top = y + 'px';
         e.stopPropagation();
       }, true);
-      document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.classList && d.classList.contains('cm-foot')) { try { localStorage.setItem('commentary_foot_open', d.open ? '1' : '0'); } catch (x) {} } }, true);
+      // 주황 밑줄 문장을 누르면 그 번역자 주 상자를 펼쳐 보여 줌
+      document.addEventListener('click', (e) => {
+        const u = e.target && e.target.closest ? e.target.closest('.cm-kc-s') : null; if (!u) return;
+        const sel = window.getSelection && window.getSelection(); if (sel && !sel.isCollapsed) return;
+        if (e.target.closest('a,.cm-gl')) return;
+        let n = u.nextElementSibling; while (n && !(n.matches && n.matches('details.cm-kc'))) n = n.nextElementSibling;
+        if (n) { n.open = true; n.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      });
+      document.addEventListener('toggle', (e) => { const d = e.target; if (d && d.classList && d.classList.contains('cm-foot')) { try { localStorage.setItem('commentary_foot_open', d.open ? '1' : '0'); } catch (x) {} } if (d && d.classList && d.classList.contains('cm-kc')) { try { localStorage.setItem('commentary_kc_open', d.open ? '1' : '0'); } catch (x) {} } }, true);
       window.addEventListener('scroll', () => { pop.style.display = 'none'; }, true);
     })();
 
@@ -11321,7 +11374,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             // 3) 본문에 나오는 성경구절(눅 12:6 등)을 눌러서 이동할 수 있게 링크로 바꾼다.
             //    escHtml로 먼저 안전하게 처리한 뒤 링크를 다는 순서라 태그 주입 위험이 없다.
             contentEl.style.whiteSpace = 'pre-wrap';
-            contentEl.innerHTML = foldCommentaryFootnotes(linkifyVerseRefs(escHtml(plain)));
+            contentEl.innerHTML = foldCommentaryFootnotes(markConfessionNotes(linkifyVerseRefs(escHtml(plain))));
             try { markCommentaryGloss(contentEl); } catch (e) { console.warn('[용어 풀이]', e); }
           } else {
             contentEl.textContent = '(이 절에 해당하는 주석 내용을 찾지 못했습니다.)';
@@ -19259,7 +19312,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-7`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-8`;
         document.title = `바이블 맵 스터디`;
       }
     }
