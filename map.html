@@ -19312,7 +19312,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20463,16 +20463,18 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
       let savedContentHtml = '';
       let isSearchMode = false;
 
+      // (b20261022-9 kjm 「요 3:16 검색했는데 요엘 3:16」) 약어(요=요한복음) → 온 이름 → 앞글자 순서로 찾음
+      function findBookByText(t) { return BIBLE_BOOKS.find(b => b.abbr === t) || BIBLE_BOOKS.find(b => b.name === t) || BIBLE_BOOKS.find(b => b.name.startsWith(t)); }
       /* ── 구절 참조 파서 ── */
       function parseVerseRef(q) {
         const m = q.match(/^([가-힣]+)\s*(\d+)\s*[:장]\s*(\d+)/);
         if (m) {
-          const bookObj = BIBLE_BOOKS.find(b => b.abbr === m[1] || b.name === m[1] || b.name.startsWith(m[1]));
+          const bookObj = findBookByText(m[1]);
           if (bookObj) return { bookId: bookObj.id, chapter: parseInt(m[2]), verse: parseInt(m[3]), bookObj };
         }
         const m2 = q.match(/^([가-힣]+)\s*(\d+)$/);
         if (m2) {
-          const bookObj = BIBLE_BOOKS.find(b => b.abbr === m2[1] || b.name === m2[1] || b.name.startsWith(m2[1]));
+          const bookObj = findBookByText(m2[1]);
           if (bookObj) return { bookId: bookObj.id, chapter: parseInt(m2[2]), verse: null, bookObj };
         }
         return null;
