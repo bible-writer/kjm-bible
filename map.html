@@ -11921,7 +11921,72 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         }
         if (synth) { pick(); try { synth.addEventListener('voiceschanged', pick); } catch (e) {} }
         function setBtn(on) { playing = on; btn.textContent = on ? '⏹ 멈춤' : '🔊 읽기'; btn.style.background = on ? '#be123c' : '#9333ea'; }
-        function stop() { sess++; try { if (synth) synth.cancel(); } catch (e) {} setBtn(false); clearHL(); }
+        function stop() { sess++; try { if (synth) synth.cancel(); } catch (e) {} setBtn(false); clearHL(); cur = null; paused = false; barShow(false); }
+        /* (b20261022-4 kjm 「낭독시 읽는 상태바를 보여주고 건너뛰기, 각주」) 읽는 동안 주석창 아래에 상태 막대:
+           ⏮ 앞 문장 · ⏸ 잠깐 멈춤/▶ 이어 읽기 · ⏭ 다음 문장 · 끌어서 원하는 곳으로 · 「각주 읽기」 켜고 끔(기본: 건너뜀).
+           각주 = 길의 <span font-size:smaller>각주: …</span>, 콘스터블의 <small>── 각주 ──…</small> */
+        let cur = null, paused = false;
+        let readFoot = false; try { readFoot = localStorage.getItem('commentary_tts_foot') === '1'; } catch (e) {}
+        const bar = document.createElement('div');
+        bar.id = 'commentary-tts-bar';
+        bar.style.cssText = 'display:none;position:absolute;left:10px;right:66px;bottom:14px;max-width:600px;z-index:30;background:rgba(30,41,59,.94);color:#fff;border-radius:12px;padding:8px 10px;box-shadow:0 4px 16px rgba(0,0,0,.35);align-items:center;gap:6px;font-size:13px;box-sizing:border-box;flex-wrap:wrap;touch-action:manipulation';
+        bar.innerHTML = '<button data-a="prev" title="앞 문장">⏮</button><button data-a="pause" title="잠깐 멈춤">⏸</button><button data-a="next" title="다음 문장">⏭</button>'
+          + '<input type="range" min="0" max="0" value="0" style="flex:1;min-width:60px;accent-color:#fbbf24">'
+          + '<span data-v="pos" style="min-width:58px;text-align:center;font-variant-numeric:tabular-nums">0/0</span>'
+          + '<button data-a="foot" title="각주도 읽기/건너뛰기" style="font-size:12px;padding:4px 8px"></button><button data-a="stop" title="멈춤">⏹</button>';
+        bar.querySelectorAll('button').forEach(b => { b.style.cssText += ';border:none;border-radius:8px;background:#334155;color:#fff;padding:5px 9px;font-size:15px;cursor:pointer;flex:none'; });
+        const barRange = bar.querySelector('input'), barPos = bar.querySelector('[data-v=pos]'), barFoot = bar.querySelector('[data-a=foot]'), barPause = bar.querySelector('[data-a=pause]');
+        function footLabel() { barFoot.textContent = readFoot ? '각주 읽음' : '각주 건너뜀'; barFoot.style.background = readFoot ? '#0f766e' : '#334155'; }
+        footLabel();
+        try { const pane = document.getElementById('commentary-pane'); if (pane) { if (getComputedStyle(pane).position === 'static') pane.style.position = 'relative'; pane.appendChild(bar); } } catch (e) {}
+        function barShow(on) { bar.style.display = on ? 'flex' : 'none'; const tv = document.getElementById('commentary-text-view'); if (tv) tv.style.paddingBottom = on ? '110px' : ''; }
+        function barUpdate(i) {
+          if (!cur) return;
+          const n = cur.list.length; barRange.max = String(Math.max(0, n - 1)); barRange.value = String(Math.min(i, n - 1));
+          barPos.textContent = (Math.min(i + 1, n)) + '/' + n + (cur.page ? ' · ' + cur.page + '쪽' : '');
+          barPause.textContent = paused ? '▶' : '⏸'; barPause.title = paused ? '이어 읽기' : '잠깐 멈춤';
+        }
+        function seek(i) {
+          if (!cur) return;
+          i = Math.max(0, Math.min(cur.list.length - 1, i));
+          const c = cur; const my = ++sess; try { synth.cancel(); } catch (e) {}
+          paused = false; setBtn(true); speakAll(c.list, my, c.onDone, i, c.page);
+        }
+        barRange.oninput = () => { if (cur) barPos.textContent = (+barRange.value + 1) + '/' + cur.list.length; };
+        barRange.onchange = () => seek(+barRange.value);
+        bar.addEventListener('click', (e) => {
+          const a = e.target && e.target.dataset && e.target.dataset.a; if (!a) return;
+          if (a === 'stop') { stop(); return; }
+          if (!cur) return;
+          if (a === 'prev') seek(cur.pos - 1);
+          else if (a === 'next') seek(cur.pos + 1);
+          else if (a === 'pause') {
+            if (paused) seek(cur.pos);
+            else { paused = true; sess++; try { synth.cancel(); } catch (e2) {} clearHL(); barUpdate(cur.pos); }
+          } else if (a === 'foot') {
+            readFoot = !readFoot; try { localStorage.setItem('commentary_tts_foot', readFoot ? '1' : '0'); } catch (e2) {}
+            footLabel();
+            if (cur && cur.rebuild) { const pos = cur.pos, ref = cur.list[pos]; const nl = cur.rebuild(); if (nl && nl.length) { let j = nl.findIndex(x => x.src === (ref && ref.src)); if (j < 0) j = Math.min(pos, nl.length - 1); cur.list = nl; if (!paused) seek(j); else { cur.pos = j; barUpdate(j); } } }
+          }
+        });
+        // 각주 자리 찾기 → [{a,b}]. 길: 「각주: (a) …」 한 단락. 콘스터블: 「── 각주 ──」 뒤 ¹²³ 로 시작하는 단락들.
+        function footZones(full) {
+          const out = []; const re = /(^|\n)[ \t]*(?:\[각주\]|각주\s*:|[─━\- \t]*각주[─━\- \t]*(?=\n))/g; let m;
+          while ((m = re.exec(full))) {
+            const a = m.index + m[1].length;
+            if (/각주\s*:|\[각주\]/.test(m[0]) && !/─|━/.test(m[0])) {
+              const e = full.indexOf('\n\n', a); out.push({ a, b: e < 0 ? full.length : e }); continue;
+            }
+            let b = full.indexOf('\n', a); if (b < 0) b = full.length;
+            for (;;) {
+              const rest = full.slice(b), mm = /^\n+([^\n]*)/.exec(rest);
+              if (!mm) { b = full.length; break; }
+              if (/^\s*[¹²³⁰⁴-⁹]/.test(mm[1])) b += mm[0].length; else break;
+            }
+            out.push({ a, b });
+          }
+          return out;
+        }
         /* (b20261021-4 kjm 「주석창의 내용에 형광펜 기능」) 읽는 문장을 형광으로 표시하고 화면 밖이면 따라 내림 */
         const HL_OK = typeof CSS !== 'undefined' && CSS.highlights && typeof Highlight !== 'undefined';
         function clearHL() {
@@ -11974,10 +12039,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             const x = nodes[lo]; return [x.n, Math.min(off - x.start, x.n.nodeValue.length)];
           };
           const list = [];
+          const zones = readFoot ? [] : footZones(full);
           for (const sp of sentenceSpans(full)) {
+            if (zones.some(z => sp.a >= z.a && sp.a < z.b)) continue;   // 각주는 건너뜀
             let range = null;
             if (nodes.length) { try { range = document.createRange(); const s0 = at(sp.a), s1 = at(sp.b); range.setStart(s0[0], s0[1]); range.setEnd(s1[0], s1[1]); } catch (e) { range = null; } }
-            for (const p of pieces(full.slice(sp.a, sp.b))) { p.hl = range ? { range } : null; list.push(p); }
+            for (const p of pieces(full.slice(sp.a, sp.b))) { p.hl = range ? { range } : null; p.src = sp.a; list.push(p); }
           }
           return list;
         }
@@ -12017,12 +12084,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           }
           return out;
         }
-        function speakAll(list, my, onDone) {
+        function speakAll(list, my, onDone, start, page) {
           const rate = parseFloat(rateSel.value) || 1;
-          let k = 0;
+          const rebuild = cur && cur.list === list ? cur.rebuild : (cur && cur.nextRebuild) || null;
+          cur = { list, onDone, pos: start || 0, page: page || 0, rebuild };
+          let k = start || 0;
+          barShow(true);
           const next = () => {
             if (my !== sess) return;
-            if (k >= list.length) { clearHL(); onDone && onDone(); return; }
+            if (k >= list.length) { clearHL(); onDone && onDone(my); return; }
+            cur.pos = k; barUpdate(k);
             const p = list[k++];
             const u = new SpeechSynthesisUtterance(p.t);
             showHL(p);
@@ -12074,11 +12145,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           try { list = await pdfPagePieces(n); } catch (e) { showToast('이 쪽의 글을 읽지 못했습니다(그림으로 된 PDF일 수 있음).', 'warn'); stop(); return; }
           if (my !== sess) return;
           if (!list.length) { showToast('이 쪽에는 읽을 글자가 없습니다(그림으로 된 PDF일 수 있음).', 'warn'); stop(); return; }
-          speakAll(list, my, async () => {
-            if (my !== sess) return;
-            if (n < Commentary.currentPdfDoc.numPages) { selfNav = true; try { await Commentary.renderPage(n + 1); } finally { setTimeout(() => { selfNav = false; }, 300); } readPdfFrom(n + 1, my); }
+          speakAll(list, my, async (m) => {
+            if (m !== sess) return;
+            if (n < Commentary.currentPdfDoc.numPages) { selfNav = true; try { await Commentary.renderPage(n + 1); } finally { setTimeout(() => { selfNav = false; }, 300); } readPdfFrom(n + 1, m); }
             else stop();
-          });
+          }, 0, n);
         }
         btn.onclick = () => {
           if (!synth || typeof SpeechSynthesisUtterance === 'undefined') { showToast('이 브라우저는 음성 읽기를 지원하지 않습니다.', 'warn'); return; }
@@ -12091,10 +12162,13 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             const el = document.getElementById('commentary-text-content');
             const sel = selectedIn(el);
             const ref = document.getElementById('commentary-text-ref')?.innerText || '';
-            const list = sel ? pieces(sel) : textPiecesWithRanges([document.getElementById('commentary-text-ref'), el]);
+            const build = () => sel ? pieces(sel) : textPiecesWithRanges([document.getElementById('commentary-text-ref'), el]);
+            const list = build();
             if (!list.length) { showToast('읽을 글이 없습니다.', 'warn'); return; }
             if (!VKO) showToast('이 기기에 한국어 목소리가 없어 기본 목소리로 읽습니다.', 'warn');
-            const my = ++sess; setBtn(true); speakAll(list, my, () => { if (my === sess) setBtn(false); });
+            const my = ++sess; setBtn(true); cur = null;
+            speakAll(list, my, (m) => { if (m === sess) { setBtn(false); cur = null; barShow(false); } });
+            if (!sel) cur.rebuild = build;
           } else if (Commentary.currentPdfDoc) {
             const my = ++sess; setBtn(true); readPdfFrom(Commentary.currentPage || 1, my);
           } else { showToast('먼저 주석을 여세요.', 'warn'); }
@@ -19095,7 +19169,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
