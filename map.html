@@ -21453,6 +21453,13 @@ if ('serviceWorker' in navigator) {
       const h = bar.offsetHeight || 40;
       let y = (r && r.height > 0 && r.bottom > 0) ? r.top + (r.height - h) / 2 : 8;
       bar.style.top = Math.max(4, Math.round(y)) + 'px'; bar.style.bottom = 'auto';
+      // 상태줄 단추(백업·관리자 …)를 가리지 않게: 「✓ 지명」 글과 첫 단추 사이 빈자리 가운데로
+      if (r && r.height > 0) {
+        const tx = document.getElementById('db-status-text'), tr = tx && tx.getBoundingClientRect();
+        let bl = Infinity; sb.querySelectorAll('button,select,a').forEach(function (b) { const q = b.getBoundingClientRect(); if (q.width > 0 && q.left > (tr ? tr.right : 0)) bl = Math.min(bl, q.left); });
+        const a0 = (tr ? tr.right : r.left) + 8, a1 = (isFinite(bl) ? bl : r.right) - 8, w = bar.offsetWidth;
+        if (w > 0 && a1 - a0 >= w) bar.style.left = Math.round((a0 + a1) / 2) + 'px';
+      }
     } catch (e) {}
   }
   function placeBar() {
@@ -21881,7 +21888,7 @@ if ('serviceWorker' in navigator) {
     if (a === 'back') audio.currentTime = Math.max(0, audio.currentTime - 10);
     if (a === 'fwd') audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
     if (a === 'close') { audio.pause(); bar.style.display = 'none'; document.body.classList.remove('audio-on'); markVerse(0); }
-    if (a === 'dock') { barTop = !barTop; try { localStorage.setItem('audio_bar_top', barTop ? '1' : '0'); } catch (e) {} dockBar(); updateCap(curVerse > 0 ? curVerse : 0); return; }
+    if (a === 'dock') { barTop = !barTop; try { localStorage.setItem('audio_bar_top', barTop ? '1' : '0'); } catch (e) {} placeBar(); updateCap(curVerse > 0 ? curVerse : 0); return; }
     if (a === 'cap') { capOn = !capOn; try { localStorage.setItem('audio_cap', capOn ? '1' : '0'); } catch (e) {} updateCap(curVerse > 0 ? curVerse : 0); }
     if (a === 'sync') { syncMode = !syncMode; ev.target.classList.toggle('on', syncMode); bar.classList.toggle('sync', syncMode); syncNext = Math.max(1, verseAt(audio.currentTime) + 1);
       if (typeof showToast === 'function') showToast(syncMode ? '맞춤: 새 절이 시작될 때마다 「다음 절」(또는 절 번호)을 누르세요' : '맞춤 끝 — 기록한 시간은 이 기기에 남습니다', 'info', 3500); }
