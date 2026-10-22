@@ -21518,14 +21518,30 @@ if ('serviceWorker' in navigator) {
     } catch (e) {}
   }
   setInterval(function () { if (!audio.paused && capOn && capEl.style.display !== 'none') capTick(); }, 150);
+  // 자막 글을 성경 자료에서 직접: NIV 낭독(오른쪽)이면 등록된 NIV, 아니면 개역개정
+  function capFromDb(v) {
+    try {
+      const p = String(curKey || '').split('-'), b = +p[0], c = +p[1]; if (!b || !c || !v) return '';
+      let db = null, sc = null;
+      if (bounds && bounds._side === 'right') {
+        for (const k in translationRegistry) { const tr = translationRegistry[k]; if (tr && tr.db && tr.schema && /NIV/i.test((tr.abbr || '') + ' ' + (tr.label || '') + ' ' + k)) { db = tr.db; sc = tr.schema; break; } }
+      } else if (typeof sqliteDbInstance !== 'undefined' && sqliteDbInstance && typeof detectedSchema !== 'undefined' && detectedSchema) { db = sqliteDbInstance; sc = detectedSchema; }
+      if (!db || !sc) return '';
+      const r = db.exec(`SELECT "${sc.content}" FROM "${sc.table}" WHERE "${sc.book}"=${b} AND "${sc.chapter}"=${c} AND CAST("${sc.verse}" AS INTEGER)=${v} LIMIT 1`);
+      let t = r && r[0] && r[0].values && r[0].values[0] ? String(r[0].values[0][0] || '') : '';
+      t = t.replace(/<S>[\s\S]*?<\/S>/gi, '').replace(/<sup>[\s\S]*?<\/sup>/gi, '').replace(/<RF>[\s\S]*?<Rf>/g, '').replace(/<W[HG]\d+[a-z]?>/gi, '').replace(/<[^>]*>/g, ' ');
+      return t.replace(/\s+/g, ' ').trim();
+    } catch (e) { return ''; }
+  }
   function updateCap(v) {
     try {
       const capB = bar.querySelector('[data-a="cap"]'); if (capB) capB.classList.toggle('on', capOn);
       if (!capOn || !v || bar.style.display !== 'flex' || !curKey) { capEl.style.display = 'none'; return; }
       let row = null;
-      if (bounds && bounds._side === 'right') { const cp = document.getElementById('compare-panel'); if (cp && cp.classList.contains('open')) row = document.querySelector('#compare-content #cmp-verse-' + v); }
+      if (bounds && bounds._side === 'right') { const cp = document.getElementById('compare-panel'); if (cp && cp.classList.contains('open') && /NIV/i.test(String(compareTranslation) + ' ' + ((translationRegistry[compareTranslation] || {}).abbr || ''))) row = document.querySelector('#compare-content #cmp-verse-' + v); }
       else row = document.querySelector('#bible-content #verse-row-' + v + '[data-bc="' + curKey + '"]');
-      const txt = capText(row);
+      let txt = capText(row);
+      if (!txt) txt = capFromDb(v);   // (b20261022-9 kjm 「비교창 쓸 때만 자막」) 화면에 그 절이 없으면 성경 자료에서 바로
       capV = v; capTxt = txt; capShown = -1;
       capEl.innerHTML = '<span class="cap-grip" title="끌어서 옮기기 · 두 번 누르면 원래 자리" style="cursor:move;touch-action:none;user-select:none;color:#94a3b8;margin-right:8px;padding:2px 4px;font-size:18px">⠿</span><b style="color:#fbbf24;margin-right:8px">' + bookName(curKey) + ' ' + v + '절</b><span class="cap-d" style="color:#fff"></span><span class="cap-r" style="color:#64748b"></span>';
       capTick();
