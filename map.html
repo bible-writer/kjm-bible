@@ -10051,7 +10051,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           files = files.concat((await gdListAll(`'${sub.id}' in parents and trashed=false`, token)).filter(f => f.mimeType !== FOLDER));
         }
       }
-      return files.filter(f => /\.(cdb|aab)$/i.test(f.name));
+      files = files.filter(f => /\.(cdb|aab)$/i.test(f.name));
+      // (b20261022-3) 같은 이름의 .cdb 와 .aab 가 함께 있으면(풀핏주석.cdb + 풀핏주석.aab) 같은 주석이므로 .cdb 하나만 받는다
+      const base = n => n.replace(/\.(cdb|aab)$/i, "");
+      const hasCdb = new Set(files.filter(f => /\.cdb$/i.test(f.name)).map(f => base(f.name)));
+      return files.filter(f => !(/\.aab$/i.test(f.name) && hasCdb.has(base(f.name))));
     }
     async function gdCommSync(interactive) {
       if (gdcommBusy) return;
@@ -19091,7 +19095,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
