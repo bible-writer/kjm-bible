@@ -2103,7 +2103,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       <button class="btn-catalog-trigger" id="btn-open-commentary-manage" style="background:#b45309" title="주석 등록/관리">⚙ 관리</button>
       <button class="btn-catalog-trigger" id="btn-commentary-back-to-map" style="background:#2563eb" title="지도로 돌아가기">🗺 지도로</button>
     </div>
-    <div id="commentary-ink-toolbar" class="pdf-only-control" style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#1e293b;flex-wrap:wrap">
+    <div id="commentary-ink-toolbar" style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:#1e293b;flex-wrap:wrap">
       <button class="btn-catalog-trigger ink-tool-btn active" id="btn-ink-off" data-tool="off" style="background:#475569" title="필기 끄기 (스크롤·확대 사용)">✋ 보기</button>
       <button class="btn-catalog-trigger ink-tool-btn" id="btn-ink-pen" data-tool="pen" style="background:#334155" title="펜으로 그리기">✏️ 펜</button>
       <button class="btn-catalog-trigger ink-tool-btn" id="btn-ink-highlight" data-tool="highlight" style="background:#334155" title="형광펜">🖍 형광펜</button>
@@ -2137,7 +2137,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       </div>
     </div>
     <div id="commentary-text-view" style="display:none;flex:1;overflow-y:auto;padding:24px;background:#fdfaf5">
-      <div style="max-width:720px;margin:0 auto;background:#fff;padding:24px 28px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,0.1)">
+      <div id="commentary-text-card" style="position:relative;max-width:720px;margin:0 auto;background:#fff;padding:24px 28px;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,0.1)">
+        <canvas id="commentary-text-ink-canvas" style="position:absolute;left:0;top:0;pointer-events:none;touch-action:none;z-index:2"></canvas>
+        <div id="commentary-text-notes-layer" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:3"></div>
         <div id="commentary-text-ref" style="font-weight:700;color:#b45309;font-size:1.05em;margin-bottom:10px"></div>
         <div id="commentary-text-content" style="line-height:1.7;color:#1e293b;font-size:0.95em;white-space:pre-wrap"></div>
       </div>
@@ -10600,6 +10602,18 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     // 좌표는 화면 픽셀이 아니라 "PDF 원본 기준 비율(0~1)"로 저장한다.
     // 그래야 확대/축소하거나 다른 기기(아이패드 등)에서 열어도 필기가 같은 자리에 찍힌다.
     const InkEngine = {
+      /* (b20261021-6 kjm 「탭에서는 손필기 기능도 필요」) 글 주석(CDB·JSON)에도 같은 필기 도구:
+         mode 'text'면 글 카드 위 캔버스에 그리고 item.textInk[「장:절」]에 저장 (PDF는 item.inkData[쪽]) */
+      mode: 'pdf',
+      cv() { return document.getElementById(this.mode === 'text' ? 'commentary-text-ink-canvas' : 'commentary-ink-canvas'); },
+      nl() { return document.getElementById(this.mode === 'text' ? 'commentary-text-notes-layer' : 'commentary-notes-layer'); },
+      resizeText() {
+        const card = document.getElementById('commentary-text-card'), ink = document.getElementById('commentary-text-ink-canvas');
+        if (!card || !ink) return;
+        const w = card.offsetWidth, h = card.offsetHeight;
+        if (ink.width !== w || ink.height !== h) { ink.width = w; ink.height = h; ink.style.width = w + 'px'; ink.style.height = h + 'px'; }
+        if (this.mode === 'text') this.redraw();
+      },
       tool: 'off',
       color: '#e11d48',
       width: 4,
@@ -10618,7 +10632,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         this.notes = [];
         try {
           const item = await getCommentaryItem(itemId);
-          const all = (item && item.inkData) || {};
+          const all = (item && (this.mode === 'text' ? item.textInk : item.inkData)) || {};
           const data = all[page] || {};
           this.strokes = data.strokes || [];
           this.notes = data.notes || [];
@@ -10638,15 +10652,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       async save() {
         const item = Commentary.currentItem;
         if (!item) return;
-        const page = Commentary.currentPage;
+        const page = this.mode === 'text' ? Commentary.currentTextKey : Commentary.currentPage;
+        const F = this.mode === 'text' ? 'textInk' : 'inkData';
         try {
           const full = await getCommentaryItem(item.id);
           if (!full) return;
-          full.inkData = full.inkData || {};
+          full[F] = full[F] || {};
           if (this.strokes.length === 0 && this.notes.length === 0) {
-            delete full.inkData[page];
+            delete full[F][page];
           } else {
-            full.inkData[page] = { strokes: this.strokes, notes: this.notes };
+            full[F][page] = { strokes: this.strokes, notes: this.notes };
           }
           await updateCommentaryItemInDb(full);
           Commentary.currentItem = full;
@@ -10667,7 +10682,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       },
 
       redraw() {
-        const ink = document.getElementById('commentary-ink-canvas');
+        const ink = this.cv();
         if (!ink) return;
         const ctx = ink.getContext('2d');
         ctx.clearRect(0, 0, ink.width, ink.height);
@@ -10708,7 +10723,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         document.querySelectorAll('.ink-tool-btn').forEach(b => {
           b.classList.toggle('active', b.dataset.tool === tool);
         });
-        const ink = document.getElementById('commentary-ink-canvas');
+        ['commentary-ink-canvas', 'commentary-text-ink-canvas'].forEach(id => { const c = document.getElementById(id); if (c && c !== this.cv()) c.style.pointerEvents = 'none'; });
+        const ink = this.cv();
         if (ink) {
           // '보기' 모드일 때는 필기 레이어가 터치를 가로채지 않게 해서 스크롤·확대가 정상 동작하게 한다
           ink.style.pointerEvents = tool === 'off' ? 'none' : 'auto';
@@ -10735,19 +10751,20 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       },
 
       clearPage() {
-        if (this.strokes.length === 0 && this.notes.length === 0) { showToast('이 페이지에는 필기가 없습니다.', 'info'); return; }
-        if (!confirm('이 페이지의 필기와 메모를 모두 지울까요?')) return;
+        const where = this.mode === 'text' ? '이 절' : '이 페이지';
+        if (this.strokes.length === 0 && this.notes.length === 0) { showToast(where + '에는 필기가 없습니다.', 'info'); return; }
+        if (!confirm(where + '의 필기와 메모를 모두 지울까요?')) return;
         this.strokes = [];
         this.notes = [];
         this.redraw();
         this.renderNotes();
         this.scheduleSave();
-        showToast('이 페이지의 필기를 지웠습니다.', 'success');
+        showToast((this.mode === 'text' ? '이 절' : '이 페이지') + '의 필기를 지웠습니다.', 'success');
       },
 
       // 지우개: 터치한 지점 근처를 지나는 획을 통째로 지운다
       eraseAt(rel) {
-        const ink = document.getElementById('commentary-ink-canvas');
+        const ink = this.cv();
         const tolX = 10 / ink.width, tolY = 10 / ink.height;
         const before = this.strokes.length;
         this.strokes = this.strokes.filter(s =>
@@ -10760,7 +10777,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       },
 
       renderNotes() {
-        const layer = document.getElementById('commentary-notes-layer');
+        const layer = this.nl();
         if (!layer) return;
         layer.innerHTML = '';
         this.notes.forEach((note, idx) => {
@@ -10815,7 +10832,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       },
 
       attach() {
-        const ink = document.getElementById('commentary-ink-canvas');
+        const ink = this.cv();
         if (!ink || ink.dataset.wired) return;
         ink.dataset.wired = '1';
 
@@ -11023,6 +11040,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           populateChapterJumpForItem(item);
           localStorage.setItem(`commentary_last_item_book_${item.bookId}`, String(itemId));
           if (typeof applyCommentaryFontSize === 'function') applyCommentaryFontSize(commentaryFontSize);
+          // 글 주석 위 필기: 이 절의 필기를 불러옴
+          InkEngine.mode = 'text';
+          InkEngine.resizeText();
+          InkEngine.attach();
+          InkEngine.setTool(InkEngine.tool);
+          await InkEngine.load(item.id, this.currentTextKey);
         } catch (err) {
           console.error('[Commentary.showTextViewer 오류]', err);
           showToast('주석 텍스트 표시 중 오류: ' + (err.message || err), 'error');
@@ -11081,8 +11104,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const manualPageSpan = document.getElementById('manual-map-current-page');
           if (manualPageSpan) manualPageSpan.textContent = pageNum;
           // 페이지가 그려진 뒤 필기 레이어 크기를 맞추고 이 페이지의 필기를 불러온다
+          InkEngine.mode = 'pdf';
           InkEngine.resizeToCanvas();
           InkEngine.attach();
+          InkEngine.setTool(InkEngine.tool);
           if (this.currentItem) await InkEngine.load(this.currentItem.id, pageNum);
         } catch (err) {
           console.error('[Commentary.renderPage 오류]', err);
@@ -11299,7 +11324,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const textItems = all.filter(it => it.type === 'json').map(it => ({
         name: it.name, bookId: it.bookId, type: 'json',
         sourceType: it.sourceType || 'json', versesText: it.versesText, createdAt: it.createdAt,
-        textHL: it.textHL || undefined
+        textHL: it.textHL || undefined, textInk: it.textInk || undefined
       }));
       // PDF 본체는 용량이 커서 못 담지만, PDF 위에 한 필기·메모는 반드시 백업한다
       // (필기는 직접 손으로 남긴 소중한 작업물이므로 유실되면 복구가 불가능)
@@ -11330,7 +11355,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const req = tx.objectStore('items').add({
             name: it.name, bookId: it.bookId, type: 'json',
             sourceType: it.sourceType || 'json', versesText: it.versesText,
-            createdAt: it.createdAt || Date.now(), textHL: it.textHL || undefined
+            createdAt: it.createdAt || Date.now(), textHL: it.textHL || undefined, textInk: it.textInk || undefined
           });
           req.onsuccess = resolve;
           req.onerror = reject;
@@ -11885,6 +11910,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
          글 주석(CDB·JSON)에서 글을 골라(드래그·길게 눌러 고르기) 색 단추를 누르면 형광 표시.
          칠한 곳을 누르면 「지우기」. 주석·장·절마다 기억(IndexedDB item.textHL, 주석 백업에 함께 들어감).
          글(DOM)은 바꾸지 않고 CSS Highlight로 칠한다(읽기·번역·성구 링크와 겹치지 않음). */
+      try { const card = document.getElementById('commentary-text-card'); if (card && typeof ResizeObserver !== 'undefined') new ResizeObserver(() => InkEngine.resizeText()).observe(card); } catch (e) {}
       (function setupTextHighlighter() {
         const el = document.getElementById('commentary-text-content');
         if (!el || typeof CSS === 'undefined' || !CSS.highlights || typeof Highlight === 'undefined') return;
@@ -18865,7 +18891,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-6`;
         document.title = `바이블 맵 스터디`;
       }
     }
