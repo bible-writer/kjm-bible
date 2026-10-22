@@ -2165,6 +2165,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       <button id="btn-close-commentary-modal" style="border:none;background:none;font-size:18px;cursor:pointer">✕</button>
     </div>
     <div style="padding:14px 16px;border-bottom:1px solid #e2e8f0;background:#f8fafc">
+      <div style="margin-bottom:12px;padding:8px;border:1px solid #bfdbfe;background:#eff6ff;border-radius:8px">
+        <button type="button" id="btn-gdcomm-sync" onclick="gdCommSync(true)" style="width:100%;padding:8px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:0.88em">☁ 구글 드라이브 주석 받기·업데이트</button>
+        <div id="gdcomm-state" style="font-size:0.74em;color:#475569;margin-top:5px">드라이브 「3_올어바웃_모듈」 폴더(하위 폴더 포함)의 .cdb/.aab 를 읽어, 바뀐 주석만 다시 받습니다. 형광펜·필기·메모는 그대로 둡니다.</div>
+      </div>
       <div style="font-weight:600;font-size:0.9em;margin-bottom:8px;color:#334155">➕ 새 주석 추가</div>
       <input type="text" id="commentary-new-name" placeholder="주석 이름 (예: 콘스터블 주석, 매튜헨리)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.9em;margin-bottom:6px">
       <select id="commentary-new-book" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.9em;margin-bottom:6px"></select>
@@ -9951,6 +9955,182 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     // "팝업이 차단되었습니다" 알림을 계속 띄우는 부작용이 있어 제거했다 — 만료 후에는 사용자가
     // "🔗 연동" 버튼을 직접 눌러야 하며, 그때는 정상적으로 로그인 화면이 뜬다.
     gdriveRestoreTokenFromCache();
+
+    /* ── 구글 드라이브 주석 받기·업데이트 (b20261022-1) ──
+     * kjm 「올어바웃처럼 주석 구글 업데안되나?」.
+     * 드라이브 「3_올어바웃_모듈」 폴더(바로 아래 하위 폴더까지, 이름이 _ 로 시작하거나 「옛판」이 든 폴더는 뺌)의 .cdb/.aab 를 찾아
+     * 드라이브 md5(md5Checksum)가 이 기기에 넣은 판과 다르면 받아서, 같은 이름 주석의 책마다 versesText 만 바꿔 넣는다.
+     * 항목 id 를 그대로 두므로 형광펜(textHL)·손필기(textInk)·메모는 남는다(형광펜은 칠한 글자로 자리를 다시 찾는다).
+     * 받은 기록: localStorage gdcomm_map = { 드라이브파일id: { group: 앱 안 주석 이름, md5, name } }.
+     * 앱을 열 때는 로그인이 살아 있으면 「확인만」 하고(큰 파일을 몰래 받지 않음) 알림만 띄운다. 받기는 단추로. */
+    const GDCOMM_FOLDER = "3_올어바웃_모듈";
+    let gdcommBusy = false;
+    function gdcommMap() { try { return JSON.parse(localStorage.getItem("gdcomm_map") || "{}") || {}; } catch (e) { return {}; } }
+    function gdcommSaveMap(m) { try { localStorage.setItem("gdcomm_map", JSON.stringify(m)); } catch (e) {} }
+    function gdcommState(t) { const el = document.getElementById("gdcomm-state"); if (el) el.textContent = t || ""; }
+    const gdNorm = t => String(t || "").replace(/\.(cdb|aab)$/i, "").replace(/[\s_\-·.()（）\[\]]/g, "").toLowerCase();
+    async function gdListAll(q, token) {
+      let out = [], pt = "";
+      for (let i = 0; i < 20; i++) {
+        const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=nextPageToken,files(id,name,mimeType,md5Checksum,size,modifiedTime)&pageSize=200` + (pt ? `&pageToken=${encodeURIComponent(pt)}` : "");
+        const r = await (await appdataApi(url, token)).json();
+        out = out.concat(r.files || []);
+        if (!r.nextPageToken) break; pt = r.nextPageToken;
+      }
+      return out;
+    }
+    // 이 기기에 들어 있는 CDB 주석 묶음: { 이름: [항목들] }
+    async function gdcommGroups() {
+      const db = await openCommentaryDB();
+      const all = await new Promise((res, rej) => { const rq = db.transaction("items", "readonly").objectStore("items").getAll(); rq.onsuccess = () => res(rq.result || []); rq.onerror = rej; });
+      const g = {};
+      all.forEach(it => {
+        if ((it.sourceType || it.type) !== "cdb" || !it.name) return;
+        const b = BIBLE_BOOKS.find(x => x.id === it.bookId);
+        const nm = b && it.name.endsWith(" " + b.name) ? it.name.slice(0, -(b.name.length + 1)) : it.name.replace(/\s+\S+$/, "");
+        (g[nm] = g[nm] || []).push(it);
+      });
+      return g;
+    }
+    // 드라이브 파일 이름 → 앱 안 주석 이름 짐작(하나로 딱 맞을 때만)
+    function gdcommGuess(fileName, groupNames) {
+      const base = gdNorm(fileName);
+      let c = groupNames.filter(n => gdNorm(n) === base);
+      if (c.length === 1) return c[0];
+      const toks = fileName.replace(/\.(cdb|aab)$/i, "").split(/[_\s]+/).map(gdNorm).filter(t => t.length >= 2);
+      if (!toks.length) return null;
+      c = groupNames.filter(n => gdNorm(n).includes(toks[0]) || toks[0].includes(gdNorm(n)));
+      if (c.length > 1 && toks[1]) c = c.filter(n => gdNorm(n).includes(toks[1].slice(0, 2)));
+      return c.length === 1 ? c[0] : null;
+    }
+    function gdcommParse(arrayBuffer) {
+      let bytes = new Uint8Array(arrayBuffer);
+      if (bytes.length >= 4 && bytes[0] === 0x41 && bytes[1] === 0x41 && bytes[2] === 0x42 && bytes[3] === 0x42) bytes = bytes.slice(8);
+      if (!window.SQL) throw new Error("SQLite 엔진 로딩 중 — 잠시 뒤 다시");
+      const sqldb = new window.SQL.Database(bytes);
+      let rows;
+      try { const r = sqldb.exec("SELECT book, chapter, verse, btext FROM Bible ORDER BY book, chapter, verse"); rows = r[0] ? r[0].values : []; }
+      finally { sqldb.close(); }
+      if (!rows.length) throw new Error("주석 내용이 비어 있음");
+      const byBook = {};
+      for (const r of rows) { const m = byBook[r[0]] || (byBook[r[0]] = Object.create(null)); m[r[1] + ":" + r[2]] = r[3]; }
+      return byBook;
+    }
+    // 같은 이름 주석의 책 항목은 versesText 만 바꾸고(id·형광펜·필기 그대로), 없던 책은 새로 넣는다
+    async function gdcommApply(group, byBook) {
+      const db = await openCommentaryDB();
+      const all = await new Promise((res, rej) => { const rq = db.transaction("items", "readonly").objectStore("items").getAll(); rq.onsuccess = () => res(rq.result || []); rq.onerror = rej; });
+      const mine = {};
+      all.forEach(it => { if ((it.sourceType || it.type) === "cdb" && it.name && it.name.startsWith(group + " ") && !mine[it.bookId]) mine[it.bookId] = it; });
+      let upd = 0, add = 0;
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction("items", "readwrite"), st = tx.objectStore("items");
+        Object.keys(byBook).map(Number).sort((a, b) => a - b).forEach(bId => {
+          const ex = mine[bId];
+          if (ex) { ex.versesText = byBook[bId]; ex.updatedAt = Date.now(); st.put(ex); upd++; }
+          else {
+            const bo = BIBLE_BOOKS.find(b => b.id === bId);
+            st.add({ name: `${group} ${bo ? bo.name : "책" + bId}`, bookId: bId, type: "json", sourceType: "cdb", versesText: byBook[bId], createdAt: Date.now() });
+            add++;
+          }
+        });
+        tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error);
+      });
+      return { upd, add };
+    }
+    async function gdcommFindFiles(token) {
+      const fq = `name='${GDCOMM_FOLDER}' and mimeType='application/vnd.google-apps.folder' and trashed=false`;
+      const roots = await gdListAll(fq, token);
+      if (!roots.length) return null;
+      const FOLDER = "application/vnd.google-apps.folder";
+      let files = [];
+      for (const root of roots) {
+        const kids = await gdListAll(`'${root.id}' in parents and trashed=false`, token);
+        files = files.concat(kids.filter(f => f.mimeType !== FOLDER));
+        for (const sub of kids.filter(f => f.mimeType === FOLDER && !/^_/.test(f.name) && f.name.indexOf("옛판") < 0)) {
+          files = files.concat((await gdListAll(`'${sub.id}' in parents and trashed=false`, token)).filter(f => f.mimeType !== FOLDER));
+        }
+      }
+      return files.filter(f => /\.(cdb|aab)$/i.test(f.name));
+    }
+    async function gdCommSync(interactive) {
+      if (gdcommBusy) return;
+      gdcommBusy = true;
+      try {
+        const token = await appdataToken(interactive);
+        if (!token) { gdcommState("구글 로그인이 필요합니다 — 이 단추를 누르면 로그인 창이 뜹니다."); return; }
+        gdcommState("드라이브 확인 중…");
+        const files = await gdcommFindFiles(token);
+        if (files === null) { gdcommState(`드라이브에 「${GDCOMM_FOLDER}」 폴더가 없습니다.`); if (interactive) showToast(`드라이브에 「${GDCOMM_FOLDER}」 폴더가 없습니다`, "warn", 6000); return; }
+        const map = gdcommMap();
+        const groups = await gdcommGroups();
+        const gnames = Object.keys(groups);
+        const todo = [], fresh = [];
+        for (const f of files) {
+          const m = map[f.id];
+          let group = m && m.group;
+          if (group && m.md5 === f.md5Checksum && groups[group]) continue;             // 최신
+          if (!group) group = gdcommGuess(f.name, gnames);
+          if (!group || !groups[group]) { fresh.push([f, group]); continue; }           // 이 기기에 없는 주석
+          todo.push([f, group]);
+        }
+        if (!interactive) {
+          const n = todo.length;
+          gdcommState(n ? `새 판 ${n}개: ${todo.map(x => x[1]).join(", ")} — 이 단추를 누르면 받습니다.` : `모두 최신입니다 (드라이브 주석 ${files.length}개).`);
+          if (n) showToast(`☁ 구글 드라이브에 새 주석판 ${n}개 — ⚙ 주석 관리에서 「구글 드라이브 주석 받기」를 누르세요`, "info", 8000);
+          return;
+        }
+        // 이 기기에 없는 주석: 이름을 물어 새로 넣는다(빈칸이면 건너뜀, 다음에 또 묻지 않으려면 「x」)
+        for (const [f, g] of fresh) {
+          if (map[f.id] && map[f.id].skip === f.md5Checksum) continue;
+          const def = g || f.name.replace(/\.(cdb|aab)$/i, "").replace(/_/g, " ");
+          const ans = prompt(`드라이브의 「${f.name}」(${Math.round((+f.size || 0) / 1048576)}MB)이 이 기기에 없습니다.\n받을 이름을 적으세요. (빈칸 = 이번엔 건너뛰기, x = 이 판은 묻지 않기)\n\n이미 있는 주석: ${gnames.join(", ") || "없음"}`, def);
+          if (ans === null || !ans.trim()) continue;
+          if (ans.trim().toLowerCase() === "x") { map[f.id] = Object.assign({}, map[f.id], { skip: f.md5Checksum, name: f.name }); gdcommSaveMap(map); continue; }
+          todo.push([f, ans.trim()]);
+        }
+        if (!todo.length) { gdcommState(`모두 최신입니다 (드라이브 주석 ${files.length}개).`); showToast("구글 드라이브 주석이 모두 최신입니다", "success"); return; }
+        const totalMB = Math.round(todo.reduce((a, [f]) => a + (+f.size || 0), 0) / 1048576);
+        if (!confirm(`구글 드라이브에서 주석 ${todo.length}개를 받습니다 (${totalMB}MB).\n\n${todo.map(([f, g]) => `· ${g} ← ${f.name}`).join("\n")}\n\n형광펜·필기·메모는 그대로 둡니다. 와이파이에서 받기를 권합니다.`)) { gdcommState("받기를 취소했습니다."); return; }
+        let ok = 0; const done = [];
+        for (const [f, group] of todo) {
+          gdcommState(`(${ok + 1}/${todo.length}) 「${group}」 받는 중… ${Math.round((+f.size || 0) / 1048576)}MB`);
+          try {
+            const buf = await (await appdataApi(`https://www.googleapis.com/drive/v3/files/${f.id}?alt=media`, token)).arrayBuffer();
+            if (f.size && buf.byteLength !== +f.size) throw new Error("받은 크기가 다름");
+            gdcommState(`(${ok + 1}/${todo.length}) 「${group}」 넣는 중…`);
+            const byBook = gdcommParse(buf);
+            const r = await gdcommApply(group, byBook);
+            map[f.id] = { group, md5: f.md5Checksum, name: f.name, at: Date.now() };
+            gdcommSaveMap(map);
+            done.push(group); ok++;
+            console.log("[구글 주석]", group, f.name, r);
+          } catch (err) {
+            console.error("[구글 주석 받기 실패]", f.name, err);
+            showToast(`「${group}」 받기 실패: ${err.message}`, "warn", 8000);
+          }
+        }
+        await refreshCommentaryIndex();
+        try { renderCommentaryList(); } catch (e) {}
+        // 지금 보고 있는 주석이 바뀐 것이면 새 글로 다시 보여 준다
+        try {
+          const cur = Commentary.currentItem;
+          if (cur && cur.type === "json" && done.some(g => cur.name && cur.name.startsWith(g + " "))) {
+            const full = await getCommentaryItem(cur.id);
+            const [c, v] = String(Commentary.currentTextKey || "1:1").split(":").map(Number);
+            if (full) await Commentary.showTextViewer(cur.id, full, c || 1, v || 1);
+          }
+        } catch (e) { console.warn(e); }
+        gdcommState(`${ok}/${todo.length}개 받음: ${done.join(", ")}`);
+        showToast(`☁ 구글 드라이브 주석 ${ok}/${todo.length}개 업데이트`, ok === todo.length ? "success" : "warn", 6000);
+      } catch (err) {
+        console.error("구글 주석 오류", err);
+        gdcommState("오류: " + err.message);
+        if (interactive) showToast("구글 드라이브 주석 오류: " + err.message, "warn", 8000);
+      } finally { gdcommBusy = false; }
+    }
+    // 앱을 열고 10초 뒤, 로그인이 살아 있으면 확인만(받지는 않음)
+    setTimeout(() => { try { if (gdriveAccessToken && gdriveScopeGranted.indexOf(GDRIVE_RO) >= 0) gdCommSync(false); } catch (e) {} }, 10000);
 
     /* ── 앱자료 받기 (b20261013-1) ──
      * kjm 「관리자 모드에서 구글 일정한(정해진 폴더)에 로컬전용파일을 올려두고 기기에 자동으로 설치」.
@@ -18891,7 +19071,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-6`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
