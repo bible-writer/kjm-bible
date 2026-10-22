@@ -10787,11 +10787,25 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       mode: 'pdf',
       cv() { return document.getElementById(this.mode === 'text' ? 'commentary-text-ink-canvas' : 'commentary-ink-canvas'); },
       nl() { return document.getElementById(this.mode === 'text' ? 'commentary-text-notes-layer' : 'commentary-notes-layer'); },
+      // 획을 그릴 기준 크기 — 글 주석은 카드 전체, PDF 는 캔버스
+      dims() {
+        const ink = this.cv();
+        if (this.mode === 'text') { const card = document.getElementById('commentary-text-card'); if (card) return { w: card.offsetWidth, h: card.offsetHeight, off: this._tOff || 0 }; }
+        return { w: ink ? ink.width : 1, h: ink ? ink.height : 1, off: 0 };
+      },
       resizeText() {
         const card = document.getElementById('commentary-text-card'), ink = document.getElementById('commentary-text-ink-canvas');
         if (!card || !ink) return;
-        const w = card.offsetWidth, h = card.offsetHeight;
+        /* (b20261022-2) 긴 주석(캐롤 마 1:1 = 글 카드 높이 8만 px)에서 카드 전체 크기 캔버스는 브라우저 한도(약 6만 5천 px)를 넘어
+           깨진 그림이 되어 글을 덮었다. 캔버스는 지금 보이는 부분만 덮고, 획 좌표는 그대로 카드 전체 기준(0~1)으로 둔다. */
+        const view = document.getElementById('commentary-text-view');
+        const w = card.offsetWidth, H = card.offsetHeight;
+        const vh = view ? view.clientHeight : window.innerHeight;
+        const off = Math.max(0, Math.min(H - 1, (view ? view.scrollTop : 0) - card.offsetTop));
+        const h = Math.max(1, Math.min(H - off, vh + 40));
+        this._tOff = off;
         if (ink.width !== w || ink.height !== h) { ink.width = w; ink.height = h; ink.style.width = w + 'px'; ink.style.height = h + 'px'; }
+        ink.style.top = off + 'px';
         if (this.mode === 'text') this.redraw();
       },
       tool: 'off',
@@ -10866,8 +10880,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!ink) return;
         const ctx = ink.getContext('2d');
         ctx.clearRect(0, 0, ink.width, ink.height);
-        this.strokes.forEach(s => this.drawStroke(ctx, s, ink.width, ink.height));
-        if (this.current) this.drawStroke(ctx, this.current, ink.width, ink.height);
+        const d = this.dims();
+        ctx.save(); ctx.translate(0, -d.off);
+        this.strokes.forEach(s => this.drawStroke(ctx, s, d.w, d.h));
+        if (this.current) this.drawStroke(ctx, this.current, d.w, d.h);
+        ctx.restore();
       },
 
       drawStroke(ctx, stroke, w, h) {
@@ -10894,7 +10911,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
 
       // 화면 좌표 → 0~1 비율 좌표
       toRel(e, canvas) {
-        const r = canvas.getBoundingClientRect();
+        const box = canvas && canvas.id === 'commentary-text-ink-canvas' ? (document.getElementById('commentary-text-card') || canvas) : canvas;
+        const r = box.getBoundingClientRect();
         return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height];
       },
 
@@ -10945,7 +10963,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       // 지우개: 터치한 지점 근처를 지나는 획을 통째로 지운다
       eraseAt(rel) {
         const ink = this.cv();
-        const tolX = 10 / ink.width, tolY = 10 / ink.height;
+        const dd = this.dims(), tolX = 10 / dd.w, tolY = 10 / dd.h;
         const before = this.strokes.length;
         this.strokes = this.strokes.filter(s =>
           !s.points.some(p => Math.abs(p[0] - rel[0]) < tolX && Math.abs(p[1] - rel[1]) < tolY)
@@ -12091,6 +12109,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
          칠한 곳을 누르면 「지우기」. 주석·장·절마다 기억(IndexedDB item.textHL, 주석 백업에 함께 들어감).
          글(DOM)은 바꾸지 않고 CSS Highlight로 칠한다(읽기·번역·성구 링크와 겹치지 않음). */
       try { const card = document.getElementById('commentary-text-card'); if (card && typeof ResizeObserver !== 'undefined') new ResizeObserver(() => InkEngine.resizeText()).observe(card); } catch (e) {}
+      // (b20261022-2) 글 주석을 굴리면 필기 캔버스도 보이는 자리로 따라간다
+      try { const tv = document.getElementById('commentary-text-view'); let _rq = 0; if (tv) tv.addEventListener('scroll', () => { if (_rq) return; _rq = requestAnimationFrame(() => { _rq = 0; InkEngine.resizeText(); }); }, { passive: true }); } catch (e) {}
       (function setupTextHighlighter() {
         const el = document.getElementById('commentary-text-content');
         if (!el || typeof CSS === 'undefined' || !CSS.highlights || typeof Highlight === 'undefined') return;
@@ -19071,7 +19091,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
