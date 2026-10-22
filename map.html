@@ -1773,6 +1773,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     .leaflet-tile-pane img.leaflet-tile { mix-blend-mode: plus-lighter; }
   /* (b20261021-4) 주석 읽기 — 지금 읽는 문장 형광 표시 */
   ::highlight(tts-now) { background-color: #fde047; color: inherit; }
+  /* (b20261021-5) 글 주석 손 형광펜 */
+  ::highlight(thl-y) { background-color: rgba(253,224,71,0.75); }
+  ::highlight(thl-g) { background-color: rgba(134,239,172,0.75); }
+  ::highlight(thl-p) { background-color: rgba(249,168,212,0.75); }
+  ::highlight(thl-b) { background-color: rgba(147,197,253,0.75); }
+  #thl-bar { position:fixed; z-index:9999; display:none; gap:6px; align-items:center; padding:6px 8px; background:#1e293b; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.35); }
+  #thl-bar button { border:2px solid #fff; border-radius:50%; width:34px; height:34px; cursor:pointer; font-size:15px; }
+  #thl-bar button.thl-del { border-radius:8px; width:auto; padding:0 10px; background:#be123c; color:#fff; font-weight:700; font-size:13px; }
   #commentary-tts-hl-layer > div { position:absolute; background:rgba(253,224,71,0.45); border-radius:2px; mix-blend-mode:multiply; }
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -10984,6 +10992,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           document.getElementById('commentary-text-view').style.display = 'block';
           const bookObj = BIBLE_BOOKS.find(b => b.id === item.bookId);
           const text = findTextForVerse(item, chapter, vNum);
+          this.currentTextKey = (() => { // 실제 글이 나온 절(앞 절 글을 함께 보여 줄 때도 같은 열쇠로 형광 저장)
+            const vt = item.versesText || {}; const k0 = `${chapter}:${vNum}`; if (vt[k0]) return k0;
+            let best = null, first = null;
+            Object.keys(vt).forEach(k => { const [c, v] = k.split(':').map(Number); if (c !== chapter) return; if (v <= vNum && (best === null || v > best.v)) best = { v, k }; if (first === null || v < first.v) first = { v, k }; });
+            return best ? best.k : first ? first.k : k0;
+          })();
           document.getElementById('commentary-text-ref').textContent = `${bookObj ? bookObj.name : ''} ${chapter}:${vNum}`;
           const contentEl = document.getElementById('commentary-text-content');
           if (text) {
@@ -11284,7 +11298,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       });
       const textItems = all.filter(it => it.type === 'json').map(it => ({
         name: it.name, bookId: it.bookId, type: 'json',
-        sourceType: it.sourceType || 'json', versesText: it.versesText, createdAt: it.createdAt
+        sourceType: it.sourceType || 'json', versesText: it.versesText, createdAt: it.createdAt,
+        textHL: it.textHL || undefined
       }));
       // PDF 본체는 용량이 커서 못 담지만, PDF 위에 한 필기·메모는 반드시 백업한다
       // (필기는 직접 손으로 남긴 소중한 작업물이므로 유실되면 복구가 불가능)
@@ -11315,7 +11330,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const req = tx.objectStore('items').add({
             name: it.name, bookId: it.bookId, type: 'json',
             sourceType: it.sourceType || 'json', versesText: it.versesText,
-            createdAt: it.createdAt || Date.now()
+            createdAt: it.createdAt || Date.now(), textHL: it.textHL || undefined
           });
           req.onsuccess = resolve;
           req.onerror = reject;
@@ -11865,6 +11880,117 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           const pane = document.getElementById('commentary-pane'); if (pane) new MutationObserver(() => { if (playing && pane.style.display === 'none') stop(); }).observe(pane, { attributes: true, attributeFilter: ['style'] });
         } catch (e) {}
         window.addEventListener('pagehide', stop);
+      })();
+      /* (b20261021-5 kjm 「글로 된 주석에도 손으로 긋는 형광펜이 필요」)
+         글 주석(CDB·JSON)에서 글을 골라(드래그·길게 눌러 고르기) 색 단추를 누르면 형광 표시.
+         칠한 곳을 누르면 「지우기」. 주석·장·절마다 기억(IndexedDB item.textHL, 주석 백업에 함께 들어감).
+         글(DOM)은 바꾸지 않고 CSS Highlight로 칠한다(읽기·번역·성구 링크와 겹치지 않음). */
+      (function setupTextHighlighter() {
+        const el = document.getElementById('commentary-text-content');
+        if (!el || typeof CSS === 'undefined' || !CSS.highlights || typeof Highlight === 'undefined') return;
+        const COLORS = { y: '#fde047', g: '#86efac', p: '#f9a8d4', b: '#93c5fd' };
+        const bar = document.createElement('div'); bar.id = 'thl-bar';
+        bar.innerHTML = Object.entries(COLORS).map(([k, c]) => `<button data-c="${k}" style="background:${c}" title="형광펜"></button>`).join('') + '<button class="thl-del">지우기</button>';
+        document.body.appendChild(bar);
+        let marks = [], pending = null, hitIdx = -1;
+        const keyOf = () => Commentary.currentItem && Commentary.currentItem.type === 'json' && Commentary.currentTextKey ? Commentary.currentTextKey : null;
+        function textNodes() { const out = []; let off = 0; const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) { out.push({ n, a: off }); off += n.nodeValue.length; } return { nodes: out, len: off }; }
+        function fullText() { return el.textContent || ''; }
+        function toRange(a, b, tn) {
+          const at = (off) => { let x = tn.nodes[0]; for (const t of tn.nodes) { if (t.a <= off) x = t; else break; } return [x.n, Math.min(off - x.a, x.n.nodeValue.length)]; };
+          const r = document.createRange(); const s0 = at(a), s1 = at(b); r.setStart(s0[0], s0[1]); r.setEnd(s1[0], s1[1]); return r;
+        }
+        function offsetOf(node, o) { // (노드, 노드 안 위치) → 글 전체 위치
+          const tn = textNodes(); for (const t of tn.nodes) if (t.n === node) return t.a + o;
+          if (node.nodeType === 1) { const r = document.createRange(); r.setStart(el, 0); try { r.setEnd(node, o); return r.toString().length; } catch (e) {} }
+          return -1;
+        }
+        function paint() {
+          for (const k of Object.keys(COLORS)) CSS.highlights.delete('thl-' + k);
+          if (!keyOf() || !marks.length) return;
+          const tn = textNodes(); if (!tn.nodes.length) return;
+          const txt = fullText(); const by = {};
+          for (const m of marks) {
+            let a = m.a, b = m.b;
+            if (txt.slice(a, b) !== m.s) { const i = txt.indexOf(m.s); if (i < 0) continue; a = i; b = i + m.s.length; m.a = a; m.b = b; }
+            try { (by[m.c] = by[m.c] || []).push(toRange(a, b, tn)); } catch (e) {}
+          }
+          for (const [k, rs] of Object.entries(by)) CSS.highlights.set('thl-' + k, new Highlight(...rs));
+        }
+        async function load() {
+          marks = []; hide();
+          const k = keyOf(); if (!k) { paint(); return; }
+          try { const it = await getCommentaryItem(Commentary.currentItem.id); marks = ((it && it.textHL) || {})[k] || []; } catch (e) { marks = []; }
+          paint();
+        }
+        async function save() {
+          const k = keyOf(); if (!k) return;
+          try {
+            const full = await getCommentaryItem(Commentary.currentItem.id); if (!full) return;
+            full.textHL = full.textHL || {};
+            if (marks.length) full.textHL[k] = marks; else delete full.textHL[k];
+            await updateCommentaryItemInDb(full);
+            Commentary.currentItem.textHL = full.textHL;
+          } catch (e) { console.error('[형광펜 저장 오류]', e); showToast('형광펜을 저장하지 못했습니다.', 'error'); }
+        }
+        function hide() { bar.style.display = 'none'; pending = null; hitIdx = -1; }
+        function showAt(rect, withColors, withDel) {
+          bar.querySelectorAll('button[data-c]').forEach(b => b.style.display = withColors ? '' : 'none');
+          bar.querySelector('.thl-del').style.display = withDel ? '' : 'none';
+          bar.style.display = 'flex';
+          const bw = bar.offsetWidth, bh = bar.offsetHeight;
+          let x = Math.max(6, Math.min(window.innerWidth - bw - 6, rect.left + rect.width / 2 - bw / 2));
+          let y = rect.bottom + 12; if (y + bh > window.innerHeight - 6) y = Math.max(6, rect.top - bh - 12);
+          bar.style.left = x + 'px'; bar.style.top = y + 'px';
+        }
+        function selInfo() {
+          const sel = window.getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
+          const r = sel.getRangeAt(0); if (!el.contains(r.startContainer) || !el.contains(r.endContainer)) return null;
+          let a = offsetOf(r.startContainer, r.startOffset), b = offsetOf(r.endContainer, r.endOffset);
+          if (a < 0 || b < 0) return null; if (a > b) [a, b] = [b, a];
+          const txt = fullText(); while (a < b && /\s/.test(txt[a])) a++; while (b > a && /\s/.test(txt[b - 1])) b--;
+          if (b - a < 1) return null; return { a, b, rect: r.getBoundingClientRect() };
+        }
+        let selTimer = null;
+        document.addEventListener('selectionchange', () => {
+          clearTimeout(selTimer);
+          selTimer = setTimeout(() => {
+            if (!keyOf()) return;
+            const s = selInfo();
+            if (s) { pending = s; hitIdx = -1; const over = marks.some(m => m.b > s.a && m.a < s.b); showAt(s.rect, true, over); }
+            else if (pending) hide();
+          }, 250);
+        });
+        el.addEventListener('click', (e) => {
+          if (!keyOf() || e.target.closest('.term-verse-ref')) return;
+          const sel = window.getSelection(); if (sel && !sel.isCollapsed) return;
+          let node = null, o = 0;
+          if (document.caretPositionFromPoint) { const c = document.caretPositionFromPoint(e.clientX, e.clientY); if (c) { node = c.offsetNode; o = c.offset; } }
+          else if (document.caretRangeFromPoint) { const c = document.caretRangeFromPoint(e.clientX, e.clientY); if (c) { node = c.startContainer; o = c.startOffset; } }
+          if (!node) { hide(); return; }
+          const off = offsetOf(node, o); const i = marks.findIndex(m => off >= m.a && off < m.b);
+          if (i < 0) { hide(); return; }
+          hitIdx = i; pending = null;
+          try { showAt(toRange(marks[i].a, marks[i].b, textNodes()).getBoundingClientRect(), false, true); } catch (err) { hide(); }
+        });
+        bar.addEventListener('pointerdown', (e) => e.preventDefault()); // 고른 글이 풀리지 않게
+        bar.addEventListener('click', async (e) => {
+          const btn = e.target.closest('button'); if (!btn) return;
+          if (btn.classList.contains('thl-del')) {
+            if (hitIdx >= 0) marks.splice(hitIdx, 1);
+            else if (pending) { const { a, b } = pending; const keep = []; for (const m of marks) { if (m.b <= a || m.a >= b) keep.push(m); else { if (m.a < a) keep.push({ ...m, b: a, s: fullText().slice(m.a, a) }); if (m.b > b) keep.push({ ...m, a: b, s: fullText().slice(b, m.b) }); } } marks = keep; }
+          } else if (pending) {
+            const { a, b } = pending; const c = btn.dataset.c; const txt = fullText();
+            const keep = []; for (const m of marks) { if (m.b <= a || m.a >= b) keep.push(m); else { if (m.a < a) keep.push({ ...m, b: a, s: txt.slice(m.a, a) }); if (m.b > b) keep.push({ ...m, a: b, s: txt.slice(b, m.b) }); } }
+            keep.push({ a, b, c, s: txt.slice(a, b) }); keep.sort((x, y) => x.a - y.a); marks = keep;
+          }
+          try { window.getSelection().removeAllRanges(); } catch (err) {}
+          hide(); paint(); save();
+        });
+        // 다른 절·주석으로 바뀌면(글이 새로 그려지면) 그 절의 형광을 불러옴
+        new MutationObserver(() => load()).observe(el, { childList: true });
+        document.getElementById('commentary-text-view')?.addEventListener('scroll', hide, { passive: true });
+        window.addEventListener('resize', hide);
       })();
       document.getElementById('btn-commentary-zoom-in').onclick = () => Commentary.setZoom(Commentary.zoomFactor + 0.1);
       document.getElementById('btn-commentary-zoom-fit').onclick = () => Commentary.fitToWidth();
@@ -18739,7 +18865,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261021-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
