@@ -10130,14 +10130,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       return g;
     }
     // 드라이브 파일 이름 → 앱 안 주석 이름 짐작(하나로 딱 맞을 때만)
+    // (b20261022-11 kjm 화면: 「풀핏_원어사전_히브리어_v2.aab → 풀핏주석」, 「스펄전_사복음서해설.cdb → 스펄전시편」으로 잘못 짝지음)
+    // 첫 낱말만 같으면 짝짓던 것을 없애고, 판 표시(_보정·_v2·_3판·_최종 등)만 뗀 이름이 통째로 같을 때만 짝짓는다.
     function gdcommGuess(fileName, groupNames) {
-      const base = gdNorm(fileName);
-      let c = groupNames.filter(n => gdNorm(n) === base);
-      if (c.length === 1) return c[0];
-      const toks = fileName.replace(/\.(cdb|aab)$/i, "").split(/[_\s]+/).map(gdNorm).filter(t => t.length >= 2);
-      if (!toks.length) return null;
-      c = groupNames.filter(n => gdNorm(n).includes(toks[0]) || toks[0].includes(gdNorm(n)));
-      if (c.length > 1 && toks[1]) c = c.filter(n => gdNorm(n).includes(toks[1].slice(0, 2)));
+      const VER = /^(v\d+|\d+판|\d+차|보정|수정|최종|최종판|new|old)$/i;
+      const toks = String(fileName || "").replace(/\.(cdb|aab)$/i, "").split(/[_\s]+/).filter(Boolean);
+      while (toks.length > 1 && VER.test(toks[toks.length - 1])) toks.pop();
+      const keys = new Set([gdNorm(fileName), gdNorm(toks.join(""))]);
+      const c = groupNames.filter(n => keys.has(gdNorm(n)));
       return c.length === 1 ? c[0] : null;
     }
     function gdcommParse(arrayBuffer) {
@@ -10194,6 +10194,20 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const hasCdb = new Set(files.filter(f => /\.cdb$/i.test(f.name)).map(f => base(f.name)));
       return files.filter(f => !(/\.aab$/i.test(f.name) && hasCdb.has(base(f.name))));
     }
+    // (b20261022-10 kjm 「map 자동업데이 손 봐야」) 드라이브에서 파일 이름이 바뀌면(예: 스펄전_마태복음강해.cdb → 스펄전_사복음서해설.cdb, 링크·파일 id 그대로)
+    // 앱 안 주석 이름도 새 파일 이름으로 바꾼다. 항목 id 는 그대로라 형광펜·필기·메모는 남는다.
+    const gdPretty = n => String(n || "").replace(/\.(cdb|aab)$/i, "").replace(/_/g, " ").trim();
+    async function gdcommRename(oldG, newG) {
+      const db = await openCommentaryDB();
+      const all = await new Promise((res, rej) => { const rq = db.transaction("items", "readonly").objectStore("items").getAll(); rq.onsuccess = () => res(rq.result || []); rq.onerror = rej; });
+      let n = 0;
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction("items", "readwrite"), st = tx.objectStore("items");
+        all.forEach(it => { if ((it.sourceType || it.type) === "cdb" && it.name && it.name.startsWith(oldG + " ")) { it.name = newG + it.name.slice(oldG.length); it.updatedAt = Date.now(); st.put(it); n++; } });
+        tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); tx.onabort = () => reject(tx.error);
+      });
+      return n;
+    }
     async function gdCommSync(interactive) {
       if (gdcommBusy) return;
       gdcommBusy = true;
@@ -10207,13 +10221,31 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const groups = await gdcommGroups();
         const gnames = Object.keys(groups);
         const todo = [], fresh = [];
+        let renamed = [];
         for (const f of files) {
           const m = map[f.id];
+          if (m && m.group && m.name && m.name !== f.name && groups[m.group]) {
+            const ng = gdPretty(f.name);
+            if (ng && ng !== m.group && !groups[ng] && gdNorm(ng) !== gdNorm(m.group)) {
+              const n = await gdcommRename(m.group, ng);
+              groups[ng] = groups[m.group]; delete groups[m.group];
+              renamed.push(`${m.group} → ${ng}`);
+              m.group = ng; m.name = f.name; gdcommSaveMap(map);
+              console.log("[구글 주석] 이름 바뀜", renamed[renamed.length - 1], n);
+            } else { m.name = f.name; gdcommSaveMap(map); }
+          }
           let group = m && m.group;
           if (group && m.md5 === f.md5Checksum && groups[group]) continue;             // 최신
-          if (!group) group = gdcommGuess(f.name, gnames);
-          if (!group || !groups[group]) { fresh.push([f, group]); continue; }           // 이 기기에 없는 주석
+          if (!group) {                                                                // 이 기기에 받은 기록이 없는 파일
+            const gs = gdcommGuess(f.name, gnames);                                    // (b-11) 짐작은 묻는 칸의 기본값으로만 쓴다
+            fresh.push([f, gs]); continue;
+          }
+          if (!groups[group]) { fresh.push([f, null]); continue; }                     // 기록은 있는데 앱에서 지운 주석
           todo.push([f, group]);
+        }
+        if (renamed.length) {
+          try { await refreshCommentaryIndex(); renderCommentaryList(); } catch (e) {}
+          showToast(`☁ 드라이브에서 이름이 바뀐 주석: ${renamed.join(", ")}`, "info", 8000);
         }
         // (b20261022-6 kjm 「업데이트 해야 해??」) 「저절로 받기」를 켠 기기는 앱을 열 때 묻지 않고 받는다(이 기기에 이미 있는 주석만)
         let auto = false; try { auto = localStorage.getItem("gdcomm_auto") === "1"; } catch (e) {}
@@ -10226,11 +10258,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (!interactive) showToast(`☁ 새 주석판 ${todo.length}개를 받습니다: ${todo.map(x => x[1]).join(", ")}`, "info", 6000);
         // 이 기기에 없는 주석: 이름을 물어 새로 넣는다(빈칸이면 건너뜀, 다음에 또 묻지 않으려면 「x」)
         for (const [f, g] of (interactive ? fresh : [])) {
-          if (map[f.id] && map[f.id].skip === f.md5Checksum) continue;
+          if (map[f.id] && (map[f.id].skip === true || map[f.id].skip === f.md5Checksum)) continue;   // x = 다시 묻지 않기(b-10부터 판이 바뀌어도)
           const def = g || f.name.replace(/\.(cdb|aab)$/i, "").replace(/_/g, " ");
-          const ans = prompt(`드라이브의 「${f.name}」(${Math.round((+f.size || 0) / 1048576)}MB)이 이 기기에 없습니다.\n받을 이름을 적으세요. (빈칸 = 이번엔 건너뛰기, x = 이 판은 묻지 않기)\n\n이미 있는 주석: ${gnames.join(", ") || "없음"}`, def);
+          const head = g ? `드라이브의 「${f.name}」(${Math.round((+f.size || 0) / 1048576)}MB)은 이 기기의 「${g}」 새 판으로 보입니다.\n맞으면 그대로 확인, 다른 주석이면 새 이름을 적으세요.` : `드라이브의 「${f.name}」(${Math.round((+f.size || 0) / 1048576)}MB)이 이 기기에 없습니다.\n받을 이름을 적으세요.`;
+          const ans = prompt(`${head} (빈칸 = 이번엔 건너뛰기, x = 이 파일은 다시 묻지 않기)\n\n이미 있는 주석: ${gnames.join(", ") || "없음"}`, def);
           if (ans === null || !ans.trim()) continue;
-          if (ans.trim().toLowerCase() === "x") { map[f.id] = Object.assign({}, map[f.id], { skip: f.md5Checksum, name: f.name }); gdcommSaveMap(map); continue; }
+          if (ans.trim().toLowerCase() === "x") { map[f.id] = Object.assign({}, map[f.id], { skip: true, name: f.name }); gdcommSaveMap(map); continue; }
           todo.push([f, ans.trim()]);
         }
         if (!todo.length) { gdcommState(`모두 최신입니다 (드라이브 주석 ${files.length}개).`); showToast("구글 드라이브 주석이 모두 최신입니다", "success"); return; }
@@ -19312,7 +19345,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-9`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261022-11`;
         document.title = `바이블 맵 스터디`;
       }
     }
