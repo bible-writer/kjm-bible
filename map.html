@@ -15811,13 +15811,32 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       maxZoom: 19, attribution: 'Tiles © Esri'
     });
 
-    // (b20261028-2 kjm 「지도가 너무 눈이 피곤한데 가벼운거 없나」) 연한 지도·외국 글자 없는 연한 지도·밤 지도 (CARTO, OSM 자료)
-    var _cartoAttr = '© OpenStreetMap © CARTO';
-    var softLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: _cartoAttr });
-    var softPlainLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: _cartoAttr });
-    var nightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: _cartoAttr });
+    // (b20261028-3) CARTO는 열쇠(API key)가 필요해져 「API KEY REQUIRED」가 덮임 → 열쇠 없는 지도로 바꿈
+    //  연한 지도 = OSM에 부드러운 색 거르개 · 외국 글자 없음 = Esri 연회색 바탕(글자 없음) · 밤 지도 = Esri 진회색 바탕
+    //  Esri 그림이 안 오면 OSM 거르개 판으로 저절로 바꿈
+    var _esriAttr = 'Tiles © Esri';
+    var softLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap', className: 'tiles-soft' });
+    var softPlainLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, attribution: _esriAttr });
+    var nightLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, attribution: _esriAttr });
+    var _softPlainFallback = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap', className: 'tiles-soft' });
+    var _nightFallback = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap', className: 'tiles-night' });
+    function _watchTiles(layer, fallback) {
+      var bad = 0, good = 0;
+      layer.on('tileload', function() { good++; });
+      layer.on('tileerror', function() {
+        bad++;
+        if (bad >= 4 && good === 0 && map.hasLayer(layer)) { map.removeLayer(layer); map.addLayer(fallback); }
+      });
+    }
+    _watchTiles(softPlainLayer, _softPlainFallback);
+    _watchTiles(nightLayer, _nightFallback);
+    (function() {
+      var st = document.createElement('style');
+      st.textContent = '.tiles-soft img{filter:saturate(.35) brightness(1.04) contrast(.85);} .tiles-night img{filter:invert(1) hue-rotate(180deg) saturate(.4) brightness(.85) contrast(.9);}';
+      document.head.appendChild(st);
+    })();
     var currentMapLayer = 'osm';
-    var allBaseLayers = [osmLayer, satLayer, terrainLayer, topoLayer, labelsOverlay, softLayer, softPlainLayer, nightLayer];
+    var allBaseLayers = [osmLayer, satLayer, terrainLayer, topoLayer, labelsOverlay, softLayer, softPlainLayer, nightLayer, _softPlainFallback, _nightFallback];
 
     function switchMapLayer(mode) {
       // Remove all base layers
@@ -19362,7 +19381,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261028-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261028-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
