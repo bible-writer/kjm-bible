@@ -2050,6 +2050,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         <span>📍 표시</span>
       </label>
       <select id="map-layer-select" onchange="switchMapLayer(this.value)" style="padding:4px 8px;border-radius:6px;border:1px solid #3388ff;background:#3388ff;color:#fff;font-size:12px;font-weight:bold;cursor:pointer;outline:none;flex-shrink:0">
+        <option value="soft" style="background:#fff;color:#333">🌫 연한 지도</option>
+        <option value="softplain" style="background:#fff;color:#333">🤍 연한 지도(외국 글자 없음)</option>
+        <option value="night" style="background:#fff;color:#333">🌙 밤 지도</option>
         <option value="osm" style="background:#fff;color:#333">🗺 일반</option>
         <option value="sat" style="background:#fff;color:#333">🛰 위성</option>
         <option value="hybrid" style="background:#fff;color:#333">🌍 위성+라벨</option>
@@ -15808,8 +15811,13 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       maxZoom: 19, attribution: 'Tiles © Esri'
     });
 
+    // (b20261028-2 kjm 「지도가 너무 눈이 피곤한데 가벼운거 없나」) 연한 지도·외국 글자 없는 연한 지도·밤 지도 (CARTO, OSM 자료)
+    var _cartoAttr = '© OpenStreetMap © CARTO';
+    var softLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: _cartoAttr });
+    var softPlainLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: _cartoAttr });
+    var nightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd', attribution: _cartoAttr });
     var currentMapLayer = 'osm';
-    var allBaseLayers = [osmLayer, satLayer, terrainLayer, topoLayer, labelsOverlay];
+    var allBaseLayers = [osmLayer, satLayer, terrainLayer, topoLayer, labelsOverlay, softLayer, softPlainLayer, nightLayer];
 
     function switchMapLayer(mode) {
       // Remove all base layers
@@ -15826,16 +15834,25 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         map.addLayer(terrainLayer);
       } else if (mode === 'topo') {
         map.addLayer(topoLayer);
+      } else if (mode === 'soft') {
+        map.addLayer(softLayer);
+      } else if (mode === 'softplain') {
+        map.addLayer(softPlainLayer);
+      } else if (mode === 'night') {
+        map.addLayer(nightLayer);
       }
 
       // Korean labels: adjust style based on dark/light background
       if (!krLabelGroup) buildKrLabels();
       if (!map.hasLayer(krLabelGroup)) map.addLayer(krLabelGroup);
-      var isDark = (mode === 'sat' || mode === 'hybrid');
+      var isDark = (mode === 'sat' || mode === 'hybrid' || mode === 'night');
       setKrLabelStyle(isDark ? 'sat' : 'osm');
 
       currentMapLayer = mode;
+      try { localStorage.setItem('kjm_map_layer', mode); } catch(e) {}
+      var _sel = document.getElementById('map-layer-select'); if (_sel && _sel.value !== mode) _sel.value = mode;
     }
+
 
     document.getElementById('chk-permanent-labels').addEventListener('change', function() {
       renderMapMarkers();
@@ -19345,7 +19362,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261028-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261028-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20401,6 +20418,11 @@ function setKrLabelStyle(mode) {
     }
   });
 }
+
+// (b20261028-2) 고른 지도를 기기마다 기억 — 한글 라벨을 만든 뒤에 되살림
+setTimeout(function() {
+  try { var s = localStorage.getItem('kjm_map_layer'); if (s && s !== 'osm' && document.querySelector('#map-layer-select option[value="' + s + '"]')) switchMapLayer(s); } catch(e) {}
+}, 2300);
 
 // 초기 로드: 지역/경로 패널을 먼저, 확실하게 초기화 (라벨 빌드 실패와 무관하게)
 var _panelsReady = false;
