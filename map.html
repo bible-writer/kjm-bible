@@ -19381,7 +19381,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261028-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261028-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22284,6 +22284,145 @@ window.FigTags = (function () {
     });
   }
   return { apply, load };
+})();
+</script>
+<script>
+/* (b20261028-4 kjm 「아침과 저녁 … 한번 해보자 마음에들어」·「앱을 넣어서 필요할때 찾아서 읽는다」)
+   스펄전 『아침과 저녁』 732편 한글 — spurgeon_me.json 을 처음 열 때 한 번 받아 옴.
+   날짜(◀ 오늘 ▶)·아침/저녁, 낱말·성구 찾기, 「이 장의 묵상」, 성구 누르면 본문으로 */
+(function () {
+  var D = null, P = null, cur = null;
+  function load() {
+    if (!P) P = fetch('./spurgeon_me.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { D = (j && j.items) || []; return D; }).catch(function () { D = []; return D; });
+    return P;
+  }
+  var MD = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function find(m, d, p) { for (var i = 0; i < D.length; i++) { var x = D[i]; if (x.m === m && x.d === d && x.p === p) return i; } return -1; }
+  function todayKey() { var t = new Date(); return { m: t.getMonth() + 1, d: t.getDate(), p: t.getHours() < 15 ? 'a' : 'e' }; }
+  function step(k, dir) {
+    var m = k.m, d = k.d, p = k.p;
+    if (dir > 0) { if (p === 'a') p = 'e'; else { p = 'a'; d++; if (d > MD[m - 1]) { d = 1; m = m % 12 + 1; } } }
+    else { if (p === 'e') p = 'a'; else { p = 'e'; d--; if (d < 1) { m = (m + 10) % 12 + 1; d = MD[m - 1]; } } }
+    return { m: m, d: d, p: p };
+  }
+  function css() {
+    if (document.getElementById('devo-style')) return;
+    var st = document.createElement('style'); st.id = 'devo-style';
+    st.textContent = '#devo-modal{position:fixed;z-index:10050;left:50%;top:50%;transform:translate(-50%,-50%);width:min(680px,94vw);height:min(86vh,900px);background:var(--card,#fff);color:var(--text,#222);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}'
+      + '#devo-bk{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10049}'
+      + '#devo-modal .dv-h{padding:0 !important}#devo-modal .dv-hi{display:flex;align-items:center;gap:6px;padding:10px 12px;background:#7c4a1e;color:#fff;flex-wrap:wrap}'
+      + '#devo-modal .dv-h b{font-size:16px;margin-right:auto}'
+      + '#devo-modal button{border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px}'
+      + '#devo-modal .dv-h button{background:rgba(255,255,255,.18);color:#fff}#devo-modal .dv-h button.on{background:#fff;color:#7c4a1e;font-weight:bold}'
+      + '#devo-modal .dv-s{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border,#e5e7eb)}'
+      + '#devo-modal .dv-s input{flex:1;padding:6px 8px;border:1px solid var(--border,#ccc);border-radius:6px;font-size:14px;background:var(--card,#fff);color:inherit}'
+      + '#devo-modal .dv-s button{background:#f1e4d6;color:#7c4a1e}'
+      + '#devo-modal .dv-b{flex:1;overflow:auto;padding:16px 20px 28px;line-height:1.85;font-size:var(--devo-fs,17px)}'
+      + '#devo-modal .dv-date{color:#9a6b3f;font-size:13px;margin-bottom:6px}'
+      + '#devo-modal .dv-verse{font-size:1.08em;font-weight:bold;color:#5b3412;margin:4px 0 2px}'
+      + '#devo-modal .dv-ref{display:inline-block;margin:2px 0 14px;color:#2563eb;cursor:pointer;text-decoration:underline;font-size:.9em}'
+      + '#devo-modal .dv-b p{margin:0 0 12px}'
+      + '#devo-modal .dv-b p.dv-poem{margin:0 0 2px 1.5em;font-style:italic;color:#6b4a2a}'
+      + '#devo-modal .dv-li{padding:8px 4px;border-bottom:1px solid var(--border,#eee);cursor:pointer;line-height:1.5}'
+      + '#devo-modal .dv-li small{color:#9a6b3f}'
+      + '#devo-modal mark{background:#fde68a;color:inherit}'
+      + '#devo-modal .dv-f{font-size:11px;color:#999;padding:4px 12px;border-top:1px solid var(--border,#eee)}';
+    document.head.appendChild(st);
+  }
+  function label(x) { return x.m + '월 ' + x.d + '일 ' + (x.p === 'a' ? '아침' : '저녁'); }
+  function show(i) {
+    var x = D[i]; if (!x) return; cur = { m: x.m, d: x.d, p: x.p };
+    var b = document.querySelector('#devo-modal .dv-b');
+    b.innerHTML = '<div class="dv-date">' + label(x) + '</div>'
+      + '<div class="dv-verse">「' + esc(x.verse) + '」</div>'
+      + (x.ref ? '<span class="dv-ref" data-b="' + (x.b || '') + '" data-c="' + (x.c || '') + '" data-v="' + (x.vs || '') + '">' + esc(x.ref) + ' 본문 보기</span>' : '')
+      + x.text.map(function (t) { var poem = t.length < 45 && !/[.?!다]$/.test(t.replace(/["”」』\s]+$/, '')); return '<p' + (poem ? ' class="dv-poem"' : '') + '>' + esc(t) + '</p>'; }).join('');
+    b.scrollTop = 0;
+    document.querySelectorAll('#devo-modal .dv-ap').forEach(function (el) { el.classList.toggle('on', el.dataset.p === x.p); });
+    document.querySelector('#devo-modal .dv-today').textContent = x.m + '/' + x.d;
+    try { localStorage.setItem('kjm_devo_last', JSON.stringify(cur)); } catch (e) {}
+  }
+  function list(arr, title, q) {
+    var b = document.querySelector('#devo-modal .dv-b');
+    if (!arr.length) { b.innerHTML = '<div style="color:#888">' + esc(title) + ' — 찾은 것이 없습니다.</div>'; return; }
+    var re = q ? new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g') : null;
+    b.innerHTML = '<div class="dv-date">' + esc(title) + ' · ' + arr.length + '편</div>' + arr.slice(0, 300).map(function (i) {
+      var x = D[i], snip = '';
+      if (q) { var all = x.text.join(' '), k = all.indexOf(q); snip = k >= 0 ? all.slice(Math.max(0, k - 30), k + 50) : x.text[0].slice(0, 70); }
+      else snip = x.text[0].slice(0, 70);
+      var h = esc(snip); if (re) h = h.replace(re, '<mark>$&</mark>');
+      return '<div class="dv-li" data-i="' + i + '"><small>' + label(x) + ' · ' + esc(x.ref || '') + '</small><br><b>「' + esc(x.verse).slice(0, 60) + '」</b><br>' + h + '…</div>';
+    }).join('');
+    b.scrollTop = 0;
+  }
+  function search(q) {
+    q = (q || '').trim(); if (!q) return;
+    var refm = q.match(/^([가-힣]{1,3})\s*(\d+)(?::(\d+))?$/), out = [];
+    D.forEach(function (x, i) {
+      if (refm) { var r = (x.ref || '').match(/^([가-힣]{1,3})\s*(\d+):?(\d+)?/); if (r && r[1] === refm[1] && r[2] === refm[2] && (!refm[3] || r[3] === refm[3])) out.push(i); }
+      else if (x.verse.indexOf(q) >= 0 || x.text.some(function (t) { return t.indexOf(q) >= 0; })) out.push(i);
+    });
+    list(out, '「' + q + '」 찾기', refm ? null : q);
+  }
+  function thisChapter() {
+    var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
+    var b = bs ? parseInt(bs.value, 10) : 0, c = cs ? parseInt(cs.value, 10) : 0, out = [];
+    D.forEach(function (x, i) { if (x.b === b && x.c === c) out.push(i); });
+    var bk = (typeof BIBLE_BOOKS !== 'undefined' && BIBLE_BOOKS.find(function (o) { return o.id === b; })) || {};
+    list(out, (bk.name || '') + ' ' + c + '장의 묵상', null);
+  }
+  function build() {
+    css();
+    var bk = document.createElement('div'); bk.id = 'devo-bk';
+    var m = document.createElement('div'); m.id = 'devo-modal';
+    m.innerHTML = '<div class="dv-h"><div class="dv-hi"><b>🌅 아침과 저녁 <span style="font-weight:normal;font-size:12px">스펄전</span></b>'
+      + '<button class="dv-prev" title="앞 편">◀</button><button class="dv-today" title="오늘">오늘</button><button class="dv-next" title="다음 편">▶</button>'
+      + '<button class="dv-ap" data-p="a">아침</button><button class="dv-ap" data-p="e">저녁</button>'
+      + '<button class="dv-fs" data-d="-1" title="글자 줄이기">A−</button><button class="dv-fs" data-d="1" title="글자 키우기">A+</button>'
+      + '<button class="dv-x" title="닫기">✕</button></div></div>'
+      + '<div class="dv-s"><input placeholder="낱말 또는 성구 찾기 (예: 위로, 시 23)"><button class="dv-go">찾기</button><button class="dv-ch" title="지금 읽는 장을 다룬 묵상">이 장</button></div>'
+      + '<div class="dv-b">불러오는 중…</div>'
+      + '<div class="dv-f">C. H. 스펄전 『아침과 저녁』(1865–68) · 한글 번역 © kjm</div>';
+    document.body.appendChild(bk); document.body.appendChild(m);
+    var close = function () { m.style.display = 'none'; bk.style.display = 'none'; };
+    bk.onclick = close; m.querySelector('.dv-x').onclick = close;
+    m.querySelector('.dv-prev').onclick = function () { var k = step(cur, -1); show(find(k.m, k.d, k.p)); };
+    m.querySelector('.dv-next').onclick = function () { var k = step(cur, 1); show(find(k.m, k.d, k.p)); };
+    m.querySelector('.dv-today').onclick = function () { var k = todayKey(); show(find(k.m, k.d, k.p)); };
+    m.querySelectorAll('.dv-ap').forEach(function (el) { el.onclick = function () { show(find(cur.m, cur.d, el.dataset.p)); }; });
+    var fs = 17; try { fs = parseInt(localStorage.getItem('kjm_devo_fs'), 10) || 17; } catch (e) {}
+    m.style.setProperty('--devo-fs', fs + 'px');
+    m.querySelectorAll('.dv-fs').forEach(function (el) { el.onclick = function () { fs = Math.max(13, Math.min(28, fs + parseInt(el.dataset.d, 10))); m.style.setProperty('--devo-fs', fs + 'px'); try { localStorage.setItem('kjm_devo_fs', fs); } catch (e) {} }; });
+    var inp = m.querySelector('.dv-s input');
+    m.querySelector('.dv-go').onclick = function () { search(inp.value); };
+    inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') search(inp.value); });
+    m.querySelector('.dv-ch').onclick = thisChapter;
+    m.querySelector('.dv-b').addEventListener('click', function (e) {
+      var li = e.target.closest('.dv-li'); if (li) { show(parseInt(li.dataset.i, 10)); return; }
+      var r = e.target.closest('.dv-ref');
+      if (r && r.dataset.b && typeof navigateToBibleVerse === 'function') { close(); navigateToBibleVerse(parseInt(r.dataset.b, 10), parseInt(r.dataset.c, 10) || 1, parseInt(r.dataset.v, 10) || 1); }
+    });
+    if (typeof makeDraggable === 'function') { try { makeDraggable(m, '.dv-h'); } catch (e) {} }
+    return m;
+  }
+  window.openDevotional = function () {
+    var m = document.getElementById('devo-modal') || build();
+    m.style.display = 'flex'; document.getElementById('devo-bk').style.display = 'block';
+    load().then(function () {
+      if (!D.length) { m.querySelector('.dv-b').innerHTML = '묵상 자료(spurgeon_me.json)를 받지 못했습니다.'; return; }
+      if (!cur) { var k = todayKey(); show(find(k.m, k.d, k.p)); }
+    });
+  };
+  document.addEventListener('DOMContentLoaded', function () {
+    var ref = document.getElementById('btn-open-dict');
+    if (!ref || document.getElementById('btn-open-devo')) return;
+    var b = document.createElement('button');
+    b.className = 'btn-catalog-trigger'; b.id = 'btn-open-devo'; b.style.marginLeft = '4px'; b.style.background = '#7c4a1e';
+    b.title = '스펄전 『아침과 저녁』 묵상'; b.textContent = '🌅 묵상'; b.onclick = window.openDevotional;
+    ref.parentNode.insertBefore(b, ref.nextSibling);
+  });
 })();
 </script>
 </body>
