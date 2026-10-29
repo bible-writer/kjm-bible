@@ -1,0 +1,16 @@
+{
+  "id": "./devo.html",
+  "name": "오늘의 묵상 (스펄전·머레이)",
+  "short_name": "묵상",
+  "description": "스펄전 『아침과 저녁』·『믿음의 수표책』, 머레이 『그리스도 안에서 거룩함』 한글판",
+  "start_url": "./devo.html",
+  "scope": "./devo",
+  "display": "standalone",
+  "background_color": "#F7F7F4",
+  "theme_color": "#7C4A1E",
+  "lang": "ko",
+  "icons": [
+    { "src": "devo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "devo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

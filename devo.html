@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>오늘의 묵상</title>
+<!-- 홈 화면 설치 — 성경지도·ISBE 앱과 다른 id·범위로 따로 설치된다 (2026-10-29) -->
+<link rel="manifest" href="devo.webmanifest">
+<meta name="theme-color" content="#7C4A1E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="묵상">
+<link rel="apple-touch-icon" href="devo-192.png">
+<link rel="icon" href="devo-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 묵상 전용 앱 (kjm-bible, 2026-10-29)
+ * 세 권: 스펄전 『아침과 저녁』·『믿음의 수표책』, 머레이 『그리스도 안에서 거룩함』.
+ * 읽기가 주인이라 본문은 고운바탕, 도구는 고딕. 책마다 빛깔 하나(--ac)만 바뀐다.
+ * 폰에서는 넘기는 단추를 엄지가 닿는 아래쪽에 둔다. 손가락으로 옆으로 밀어도 하루씩 넘어간다. */
+:root{
+  --bg:#F7F7F4; --card:#FFFFFF; --ink:#23262B; --sub:#6A6F78; --line:#E3E4E1;
+  --ac:#7C4A1E; --ac-soft:#F3E9DF; --link:#1F5A7A;
+  --fs:18px;
+  --serif:"Gowun Batang","Noto Serif KR","Nanum Myeongjo",serif;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+:root[data-book="fc"]{--ac:#2F5D50;--ac-soft:#E2EEE9}
+:root[data-book="hc"]{--ac:#5A4B8A;--ac-soft:#ECE8F6}
+:root[data-theme="dark"]{--bg:#17181B;--card:#1F2125;--ink:#E6E3DC;--sub:#9A9EA6;--line:#2E3036;--link:#8CC3E0}
+:root[data-theme="dark"]{--ac:#D9A06B;--ac-soft:#2C241D}
+:root[data-theme="dark"][data-book="fc"]{--ac:#7FC3AE;--ac-soft:#1E2A26}
+:root[data-theme="dark"][data-book="hc"]{--ac:#B4A6E6;--ac-soft:#25222F}
+*{box-sizing:border-box}
+html,body{margin:0;overflow-x:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;-webkit-tap-highlight-color:transparent;
+  padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+
+/* 머리: 책 고르기 */
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top,0px) + 6px) 16px 0;border-bottom:1px solid var(--line)}
+.books{display:flex;gap:2px;max-width:36rem;margin:0 auto;overflow-x:auto;scrollbar-width:none}
+.books::-webkit-scrollbar{display:none}
+.books button{flex:0 0 auto;border:0;background:none;padding:10px 10px 11px;font-size:14px;color:var(--sub);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.books button[aria-pressed="true"]{color:var(--ink);font-weight:700;border-bottom-color:var(--ac)}
+
+main{max-width:36rem;margin:0 auto;padding:22px 20px 40px}
+/* 날짜 — 이 앱의 얼굴. 큰 숫자 하나 */
+.when{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
+.when .big{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1;color:var(--ac);letter-spacing:-.02em}
+.when .unit{font-family:var(--serif);font-size:20px;color:var(--ink)}
+.when .ap{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-left:auto;align-self:center}
+.when .ap button{border:0;background:none;padding:5px 14px;font-size:13px;cursor:pointer;color:var(--sub)}
+.when .ap button[aria-pressed="true"]{background:var(--ac);color:#fff}
+:root[data-theme="dark"] .when .ap button[aria-pressed="true"]{color:#17181B}
+.author{font-size:13px;color:var(--sub);margin:6px 0 18px}
+h1{font-family:var(--serif);font-weight:700;font-size:1.3em;line-height:1.45;margin:0 0 14px}
+.read{font-size:var(--fs)}
+.verse{margin:0 0 22px;padding:2px 0 2px 16px;border-left:3px solid var(--ac)}
+.verse + .verse{margin-top:-8px}
+.verse q{display:block;quotes:none;font-family:var(--serif);font-weight:700;font-size:1.06em;line-height:1.75}
+.verse a{display:inline-block;margin-top:6px;font-size:13px;color:var(--link);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+.text p{font-family:var(--serif);line-height:1.95;margin:0 0 1.05em;word-break:keep-all;overflow-wrap:break-word}
+.text p.poem{margin:0 0 .3em 1.4em;color:var(--sub)}
+.text p.pt{padding-left:.6em;border-left:2px solid var(--line)}
+.text p.fn{font-family:var(--sans);font-size:.8em;line-height:1.7;color:var(--sub)}
+.text h2{font-family:var(--serif);font-size:1em;font-weight:700;color:var(--ac);text-align:center;margin:1.8em 0 1.2em}
+.foot{margin-top:28px;font-size:12px;color:var(--sub)}
+.empty{color:var(--sub);padding:40px 0;text-align:center;line-height:1.8}
+
+/* 아래 막대: 엄지 자리 */
+nav.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--line);
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));display:flex;justify-content:center}
+nav.bar .in{display:flex;align-items:center;gap:4px;width:100%;max-width:36rem}
+nav.bar button{flex:1;border:0;background:none;padding:8px 0;border-radius:10px;cursor:pointer;font-size:12px;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:2px}
+nav.bar button b{font-size:19px;font-weight:400;color:var(--ink);line-height:1.1}
+nav.bar button:active{background:var(--ac-soft)}
+nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
+
+/* 찾기·글자 창 (아래에서 올라옴) */
+.sheet{position:fixed;inset:0;z-index:20;display:none}
+.sheet.on{display:block}
+.sheet .dim{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.sheet .pane{position:absolute;left:0;right:0;bottom:0;max-height:86vh;display:flex;flex-direction:column;background:var(--card);border-radius:16px 16px 0 0;
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));max-width:40rem;margin:0 auto;animation:up .18s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet .pane{animation:none}}
+.pane .top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.pane .top strong{font-size:15px;margin-right:auto}
+.pane .x{border:0;background:var(--bg);border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:16px}
+.pane input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:16px}
+.hint{font-size:12px;color:var(--sub);margin:8px 2px}
+.res{overflow-y:auto;margin:0 -16px;border-top:1px solid var(--line)}
+.res button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:11px 16px;cursor:pointer;line-height:1.55}
+.res small{color:var(--sub)}
+.res .v{font-family:var(--serif);font-weight:700;display:block;margin:2px 0}
+.res mark{background:var(--ac-soft);color:inherit;border-radius:2px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row span{flex:1}
+.row button{border:1px solid var(--line);background:var(--bg);border-radius:10px;min-width:48px;height:40px;cursor:pointer;font-size:15px}
+.row button[aria-pressed="true"]{border-color:var(--ac);color:var(--ac);font-weight:700}
+.about{font-size:12.5px;color:var(--sub);line-height:1.7;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:13px;padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30;white-space:nowrap}
+.toast.on{opacity:.92}
+</style>
+</head>
+<body>
+<header><div class="books" role="group" aria-label="묵상집 고르기"></div></header>
+<main id="main"><div class="empty">묵상을 불러오는 중입니다…</div></main>
+<nav class="bar"><div class="in">
+  <button id="prev" aria-label="앞 날"><b>‹</b>앞 날</button>
+  <button id="today" class="today" aria-label="오늘 묵상"><b>오늘</b>&nbsp;</button>
+  <button id="next" aria-label="다음 날"><b>›</b>다음 날</button>
+  <button id="find" aria-label="찾기"><b>⌕</b>찾기</button>
+  <button id="opt" aria-label="글자와 화면"><b>가</b>글자</button>
+</div></nav>
+
+<div class="sheet" id="s-find"><div class="dim"></div><div class="pane">
+  <div class="top"><strong>찾기</strong><button class="x" aria-label="닫기">✕</button></div>
+  <input id="q" type="search" placeholder="낱말이나 성구 (예: 위로, 시 23)" enterkeyhint="search" autocomplete="off">
+  <div class="hint" id="qhint">지금 고른 책에서 찾습니다.</div>
+  <div class="res" id="res"></div>
+</div></div>
+
+<div class="sheet" id="s-opt"><div class="dim"></div><div class="pane">
+  <div class="top"><strong>글자와 화면</strong><button class="x" aria-label="닫기">✕</button></div>
+  <div class="row"><span>글자 크기</span><button data-fs="-1" aria-label="글자 작게">가−</button><button data-fs="1" aria-label="글자 크게">가+</button></div>
+  <div class="row"><span>화면</span><button data-th="light">밝게</button><button data-th="dark">어둡게</button><button data-th="auto">기기대로</button></div>
+  <div class="about" id="about"></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+  var BOOKS = {
+    me: { file: 'spurgeon_me.json', name: '아침과 저녁', by: 'C. H. 스펄전 『아침과 저녁』(1865–68)', ap: true },
+    fc: { file: 'spurgeon_fc.json', name: '믿음의 수표책', by: 'C. H. 스펄전 『믿음의 수표책』(1888)' },
+    hc: { file: 'murray_hc.json', name: '그리스도 안에서 거룩함', by: '앤드루 머레이 『그리스도 안에서 거룩함』(1887) · 31일, 날짜의 일에 맞춰 매달 되풀이', d31: true }
+  };
+  var MD = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var $ = function (s) { return document.querySelector(s); };
+  var root = document.documentElement;
+  function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  var book = BOOKS[ls('devo_book')] ? ls('devo_book') : 'me';
+  var DATA = {}, cur = null;
+
+  /* ── 화면 설정 ── */
+  var fs = parseInt(ls('devo_fs'), 10) || 18;
+  function applyFs() { root.style.setProperty('--fs', fs + 'px'); }
+  var theme = ls('devo_theme') || 'auto';
+  function applyTheme() {
+    var dark = theme === 'dark' || (theme === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+    root.dataset.theme = dark ? 'dark' : 'light';
+    document.querySelectorAll('[data-th]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.th === theme); });
+    var tc = getComputedStyle(root).getPropertyValue('--bg').trim();
+    document.querySelector('meta[name=theme-color]').content = tc || '#F7F7F4';
+  }
+  applyFs(); applyTheme();
+  if (window.matchMedia) try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); } catch (e) {}
+
+  /* ── 자료 받기: 늘 새로, 안 되면 서비스 워커가 둔 사본 ── */
+  function load(id) {
+    if (DATA[id]) return Promise.resolve(DATA[id]);
+    return fetch(BOOKS[id].file, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) { DATA[id] = j.items || []; return DATA[id]; });
+  }
+
+  /* ── 날짜 ── */
+  function todayKey() { var t = new Date(); return { m: t.getMonth() + 1, d: t.getDate(), p: t.getHours() < 15 ? 'a' : 'e' }; }
+  function B() { return BOOKS[book]; }
+  function find(k) {
+    var D = DATA[book] || [];
+    for (var i = 0; i < D.length; i++) {
+      var x = D[i];
+      if (B().d31 ? x.d === k.d : (x.m === k.m && x.d === k.d && (!B().ap || x.p === k.p))) return i;
+    }
+    return -1;
+  }
+  function step(k, dir) {
+    var m = k.m, d = k.d, p = k.p || 'a';
+    if (B().d31) return { m: m, d: dir > 0 ? d % 31 + 1 : (d + 29) % 31 + 1, p: p };
+    function nx() { d++; if (d > MD[m - 1]) { d = 1; m = m % 12 + 1; } }
+    function pv() { d--; if (d < 1) { m = (m + 10) % 12 + 1; d = MD[m - 1]; } }
+    if (!B().ap) { dir > 0 ? nx() : pv(); return { m: m, d: d, p: p }; }
+    if (dir > 0) { if (p === 'a') p = 'e'; else { p = 'a'; nx(); } } else { if (p === 'e') p = 'a'; else { p = 'e'; pv(); } }
+    return { m: m, d: d, p: p };
+  }
+  function label(x) { return B().d31 ? '제' + x.d + '일' : x.m + '월 ' + x.d + '일' + (B().ap ? (x.p === 'a' ? ' 아침' : ' 저녁') : ''); }
+
+  /* ── 그리기 ── */
+  function vvs(x) { return (x.vv && x.vv.length) ? x.vv : [x]; }
+  function para(t) {
+    if (t.indexOf('## ') === 0) return '<h2>' + esc(t.slice(3)) + '</h2>';
+    if (/^\[\d+\]/.test(t)) return '<p class="fn">' + esc(t) + '</p>';
+    if (/^\d+\. /.test(t)) return '<p class="pt">' + esc(t) + '</p>';
+    var poem = t.length < 45 && !/[.?!다]$/.test(t.replace(/["”」』\s]+$/, ''));
+    return '<p' + (poem ? ' class="poem"' : '') + '>' + esc(t) + '</p>';
+  }
+  function show(i, keepScroll) {
+    var D = DATA[book] || [], x = D[i];
+    if (!x) { $('#main').innerHTML = '<div class="empty">이 날의 묵상이 없습니다. 「오늘」을 눌러 보세요.</div>'; return; }
+    cur = { m: x.m, d: x.d, p: x.p || 'a' };
+    ls('devo_last_' + book, JSON.stringify(cur));
+    var when;
+    if (B().d31) when = '<span class="big">' + x.d + '</span><span class="unit">일째</span>';
+    else when = '<span class="big" aria-label="' + x.m + '월 ' + x.d + '일">' + x.m + '.' + x.d + '</span>';
+    if (B().ap) when += '<span class="ap" role="group" aria-label="아침 저녁"><button data-p="a" aria-pressed="' + (x.p === 'a') + '">아침</button><button data-p="e" aria-pressed="' + (x.p === 'e') + '">저녁</button></span>';
+    var h = '<div class="when">' + when + '</div><div class="author">' + esc(B().by) + '</div>';
+    if (x.t) h += '<h1>' + esc(x.t) + '</h1>';
+    h += '<div class="read">' + vvs(x).map(function (v) {
+      return '<blockquote class="verse"><q>' + esc(v.verse) + '</q>' +
+        (v.ref ? (v.b ? '<a href="map.html?goto=' + v.b + '.' + (v.c || 1) + '.' + (v.vs || 1) + '">' + esc(v.ref) + ' 성경에서 읽기</a>' : '<a>' + esc(v.ref) + '</a>') : '') + '</blockquote>';
+    }).join('') + '<div class="text">' + x.text.map(para).join('') + '</div></div>';
+    h += '<div class="foot">한글 번역 © kjm · 원문은 저작권이 끝난 책입니다.</div>';
+    $('#main').innerHTML = h;
+    $('#main').querySelectorAll('.ap button').forEach(function (b) { b.onclick = function () { var k = { m: cur.m, d: cur.d, p: b.dataset.p }; var j = find(k); if (j >= 0) show(j, true); }; });
+    var tk = todayKey(), isToday = B().d31 ? tk.d === x.d : (tk.m === x.m && tk.d === x.d);
+    $('#today').innerHTML = '<b>오늘</b>' + (isToday ? '읽는 중' : label(tk).replace(/ (아침|저녁)$/, ''));
+    if (!keepScroll) window.scrollTo(0, 0);
+  }
+  function go(dir) { if (!cur) return; var k = step(cur, dir), i = find(k); if (i >= 0) show(i); }
+  function goToday() { var i = find(todayKey()); show(i >= 0 ? i : 0); }
+
+  function setBook(id) {
+    book = id; ls('devo_book', id); root.dataset.book = id; applyTheme();
+    document.querySelectorAll('.books button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === id); });
+    $('#main').innerHTML = '<div class="empty">묵상을 불러오는 중입니다…</div>';
+    load(id).then(function () {
+      if (book !== id) return;
+      var last = null; try { last = JSON.parse(ls('devo_last_' + id)); } catch (e) {}
+      // 오늘 처음 연 날이면 오늘 묵상, 같은 날 다시 열면 읽던 곳
+      var day = new Date().toDateString(), seen = ls('devo_seen_' + id);
+      ls('devo_seen_' + id, day);
+      var i = (seen === day && last) ? find(last) : find(todayKey());
+      show(i >= 0 ? i : 0);
+    }).catch(function () {
+      $('#main').innerHTML = '<div class="empty">묵상을 받지 못했습니다.<br>인터넷에 연결한 뒤 다시 열어 주세요.<br>한 번 받은 책은 인터넷 없이도 읽을 수 있습니다.</div>';
+    });
+  }
+
+  /* ── 책 단추 ── */
+  $('.books').innerHTML = Object.keys(BOOKS).map(function (k) { return '<button data-k="' + k + '">' + BOOKS[k].name + '</button>'; }).join('');
+  document.querySelectorAll('.books button').forEach(function (b) { b.onclick = function () { if (b.dataset.k !== book) setBook(b.dataset.k); }; });
+
+  /* ── 아래 막대 ── */
+  $('#prev').onclick = function () { go(-1); };
+  $('#next').onclick = function () { go(1); };
+  $('#today').onclick = goToday;
+  function openSheet(id) { $(id).classList.add('on'); }
+  function closeSheets() { document.querySelectorAll('.sheet').forEach(function (s) { s.classList.remove('on'); }); }
+  document.querySelectorAll('.sheet .dim, .sheet .x').forEach(function (e) { e.onclick = closeSheets; });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeSheets();
+    if (document.querySelector('.sheet.on') || /INPUT/.test(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1);
+  });
+  $('#find').onclick = function () { openSheet('#s-find'); $('#qhint').textContent = '『' + B().name + '』에서 찾습니다.'; setTimeout(function () { $('#q').focus(); }, 50); };
+  $('#opt').onclick = function () { openSheet('#s-opt'); };
+  document.querySelectorAll('[data-fs]').forEach(function (b) { b.onclick = function () { fs = Math.max(14, Math.min(28, fs + parseInt(b.dataset.fs, 10))); ls('devo_fs', fs); applyFs(); toast('글자 ' + fs); }; });
+  document.querySelectorAll('[data-th]').forEach(function (b) { b.onclick = function () { theme = b.dataset.th; ls('devo_theme', theme); applyTheme(); }; });
+  $('#about').innerHTML = '하루 한 편씩 읽는 묵상집 세 권입니다. 본문을 옆으로 밀면 앞 날·다음 날로 넘어갑니다. 성구 아래 「성경에서 읽기」를 누르면 성경지도에서 그 절이 열립니다.<br>홈 화면에 추가하면 앱처럼 쓸 수 있고, 한 번 연 책은 인터넷 없이도 읽힙니다.';
+
+  /* ── 찾기 ── */
+  var qt = null;
+  $('#q').addEventListener('input', function () { clearTimeout(qt); qt = setTimeout(search, 180); });
+  function search() {
+    var q = $('#q').value.trim(), D = DATA[book] || [], out = [];
+    if (!q) { $('#res').innerHTML = ''; return; }
+    var rm = q.match(/^([가-힣]{1,3})\s*(\d+)(?::(\d+))?$/);
+    D.forEach(function (x, i) {
+      if (rm) { if (vvs(x).some(function (v) { var r = (v.ref || '').match(/^([가-힣]{1,3})\s*(\d+):?(\d+)?/); return r && r[1] === rm[1] && r[2] === rm[2] && (!rm[3] || r[3] === rm[3]); })) out.push(i); }
+      else if ((x.t || '').indexOf(q) >= 0 || vvs(x).some(function (v) { return (v.verse || '').indexOf(q) >= 0; }) || x.text.some(function (t) { return t.indexOf(q) >= 0; })) out.push(i);
+    });
+    if (!out.length) { $('#res').innerHTML = '<div class="hint" style="padding:12px 16px">「' + esc(q) + '」이(가) 들어간 묵상이 없습니다. 낱말을 짧게 바꿔 보세요.</div>'; return; }
+    var re = rm ? null : new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+    $('#res').innerHTML = '<div class="hint" style="padding:0 16px">' + out.length + '편</div>' + out.slice(0, 200).map(function (i) {
+      var x = D[i], all = x.text.join(' '), k = re ? all.indexOf(q) : -1;
+      var snip = k >= 0 ? all.slice(Math.max(0, k - 24), k + 46) : all.slice(0, 60);
+      var hs = esc(snip); if (re) hs = hs.replace(re, '<mark>$&</mark>');
+      return '<button data-i="' + i + '"><small>' + label(x) + ' · ' + esc(vvs(x)[0].ref || '') + '</small><span class="v">' + esc(x.t || vvs(x)[0].verse).slice(0, 48) + '</span>' + hs + '…</button>';
+    }).join('');
+    $('#res').querySelectorAll('button').forEach(function (b) { b.onclick = function () { closeSheets(); show(parseInt(b.dataset.i, 10)); }; });
+  }
+
+  /* ── 옆으로 밀어 넘기기 ── */
+  var sx = 0, sy = 0, st = 0;
+  $('#main').addEventListener('touchstart', function (e) { var t = e.touches[0]; sx = t.clientX; sy = t.clientY; st = Date.now(); }, { passive: true });
+  $('#main').addEventListener('touchend', function (e) {
+    var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Date.now() - st < 600 && Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  var tt = null;
+  function toast(s) { var e = $('#toast'); e.textContent = s; e.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { e.classList.remove('on'); }, 1200); }
+
+  setBook(book);
+
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('./devo_sw.js', { scope: './devo' }).catch(function () {});
+  }
+})();
+</script>
+</body>
+</html>
