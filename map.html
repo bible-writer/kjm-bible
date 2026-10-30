@@ -1812,6 +1812,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       <div class="status-btn-group">
         <button class="tb-btn" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
         <button class="tb-btn" id="btn-font-family" title="글꼴 고르기" style="font-weight:700">가</button>
+        <button class="tb-btn" id="btn-screen-mode" title="화면 색 (야간·눈 편하게)">🌙</button>
         <button class="tb-btn" id="btn-admin-toggle" title="관리자 모드 켜기/끄기 (수정·내보내기·교정)" onclick="toggleAdminMode()">🔒</button>
 
         <div class="menu-group admin-only">
@@ -19414,7 +19415,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261030-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22590,6 +22591,92 @@ window.FigTags = (function () {
     apply(get());
     var btn = document.getElementById('btn-font-family');
     if (!btn) return;
+    btn.addEventListener('click', function (e) { e.stopPropagation(); if (menu && menu.style.display === 'block') hide(); else show(btn); });
+    document.addEventListener('click', function (e) { if (menu && menu.style.display === 'block' && !menu.contains(e.target) && e.target !== btn) hide(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+
+<style>
+  /* (b20261031-1 kjm 「화면모드 칼라 지정(야간등,눈피곤 하지 않게)」) */
+  html.kjm-scr-night, html.kjm-scr-nightwarm { background: #fff; }
+  /* 야간: 사진·영상·지도 표시는 원래 색으로 되돌린다(지도 바탕 타일은 어두운 채로 둔다) */
+  html.kjm-scr-night img:not(.leaflet-tile), html.kjm-scr-night video, html.kjm-scr-night .marker-cluster, html.kjm-scr-night .leaflet-marker-icon:not(img),
+  html.kjm-scr-nightwarm img:not(.leaflet-tile), html.kjm-scr-nightwarm video, html.kjm-scr-nightwarm .marker-cluster, html.kjm-scr-nightwarm .leaflet-marker-icon:not(img) { filter: invert(1) hue-rotate(180deg); }
+  #screen-mode-menu { position: fixed; z-index: 100000; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 6px 24px rgba(15,23,42,.18);
+    padding: 8px; width: 240px; display: none; font-family: -apple-system, 'Malgun Gothic', sans-serif; color: #1e293b; }
+  #screen-mode-menu .smm-t { font-size: 11px; color: #94a3b8; padding: 2px 6px 6px; }
+  #screen-mode-menu .smm-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  #screen-mode-menu .smm-modes button { border: 2px solid transparent; border-radius: 8px; padding: 10px 6px; cursor: pointer; font-size: 13px; text-align: center; }
+  #screen-mode-menu .smm-modes button.on { border-color: #0284c7; font-weight: 700; }
+  #screen-mode-menu label { display: block; font-size: 12px; margin: 10px 4px 2px; }
+  #screen-mode-menu input[type=range] { width: 100%; }
+  #screen-mode-menu .smm-reset { margin-top: 8px; width: 100%; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 6px; padding: 6px; cursor: pointer; font-size: 12px; }
+</style>
+<script>
+/* (b20261031-1 kjm 「화면모드 칼라 지정(야간등,눈피곤 하지 않게)」) 윗줄 🌙 단추
+   화면 색: 기본 · 종이(누르스름) · 야간(어둡게) · 야간 따뜻하게 · 흑백(채도 낮춤)
+   + 따뜻한 빛(푸른빛 줄이기, 0~50%) + 밝기 낮추기(0~60%). 이 기기에만 남는다(localStorage kjm_screen). */
+(function () {
+  var MODES = [
+    { id: '',          name: '기본',          bg: '#ffffff', fg: '#1e293b', f: '' },
+    { id: 'sepia',     name: '종이',          bg: '#f4ecd8', fg: '#5b4636', f: 'sepia(.35) brightness(.96) contrast(.94)' },
+    { id: 'night',     name: '야간',          bg: '#1b1d22', fg: '#d6d3cc', f: 'invert(.9) hue-rotate(180deg)' },
+    { id: 'nightwarm', name: '야간 따뜻하게', bg: '#231d16', fg: '#e3cfae', f: 'invert(.9) hue-rotate(180deg) sepia(.4)' },
+    { id: 'gray',      name: '흑백',          bg: '#e5e5e5', fg: '#333333', f: 'grayscale(.85) brightness(.95) contrast(.92)' }
+  ];
+  var KEY = 'kjm_screen';
+  function get() { try { return Object.assign({ mode: '', warm: 0, dim: 0 }, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return { mode: '', warm: 0, dim: 0 }; } }
+  function put(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} }
+  function apply(v) {
+    var r = document.documentElement;
+    MODES.forEach(function (m) { if (m.id) r.classList.remove('kjm-scr-' + m.id); });
+    if (v.mode) r.classList.add('kjm-scr-' + v.mode);
+    var m = MODES.filter(function (x) { return x.id === v.mode; })[0] || MODES[0];
+    // 화면 전체에 거르개 하나: 바탕 색 + 따뜻한 빛(sepia) + 밝기
+    var f = [m.f, v.warm > 0 ? 'sepia(' + Math.min(.8, v.warm / 50 * .8).toFixed(2) + ')' : '', v.dim > 0 ? 'brightness(' + (1 - Math.min(.6, v.dim / 100)).toFixed(2) + ')' : ''].filter(Boolean).join(' ');
+    r.style.filter = f;
+    var b = document.getElementById('btn-screen-mode');
+    if (b) { b.title = '화면 색 — 지금: ' + m.name + (v.warm ? ' · 따뜻한 빛 ' + v.warm + '%' : '') + (v.dim ? ' · 어둡게 ' + v.dim + '%' : ''); }
+  }
+  var menu = null;
+  function build() {
+    menu = document.createElement('div'); menu.id = 'screen-mode-menu';
+    menu.innerHTML = '<div class="smm-t">화면 색 (이 기기에만 적용)</div><div class="smm-modes">'
+      + MODES.map(function (m) { return '<button data-m="' + m.id + '" style="background:' + m.bg + ';color:' + m.fg + '">' + m.name + '</button>'; }).join('') + '</div>'
+      + '<label>🔆 따뜻한 빛 (푸른빛 줄이기) <b class="v-warm"></b></label><input type="range" min="0" max="50" step="5" class="r-warm">'
+      + '<label>🌑 밝기 낮추기 <b class="v-dim"></b></label><input type="range" min="0" max="60" step="5" class="r-dim">'
+      + '<button class="smm-reset">처음대로</button>';
+    // 차림표 자신은 야간 필터를 되돌려 제 색으로 보이게
+    document.body.appendChild(menu);
+    menu.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-m]'); var v = get();
+      if (b) { v.mode = b.getAttribute('data-m'); put(v); apply(v); sync(); }
+      if (e.target.classList.contains('smm-reset')) { v = { mode: '', warm: 0, dim: 0 }; put(v); apply(v); sync(); }
+    });
+    menu.querySelector('.r-warm').addEventListener('input', function () { var v = get(); v.warm = +this.value; put(v); apply(v); sync(); });
+    menu.querySelector('.r-dim').addEventListener('input', function () { var v = get(); v.dim = +this.value; put(v); apply(v); sync(); });
+  }
+  function sync() {
+    var v = get();
+    [].forEach.call(menu.querySelectorAll('button[data-m]'), function (b) { b.classList.toggle('on', b.getAttribute('data-m') === v.mode); });
+    menu.querySelector('.r-warm').value = v.warm; menu.querySelector('.v-warm').textContent = v.warm + '%';
+    menu.querySelector('.r-dim').value = v.dim; menu.querySelector('.v-dim').textContent = v.dim + '%';
+    menu.style.filter = /night/.test(v.mode) ? 'invert(1) hue-rotate(180deg)' : '';
+  }
+  function hide() { if (menu) menu.style.display = 'none'; }
+  function show(btn) {
+    if (!menu) build();
+    sync(); menu.style.display = 'block';
+    var r = btn.getBoundingClientRect(), w = menu.offsetWidth, h = menu.offsetHeight;
+    menu.style.left = Math.min(Math.max(8, r.right - w), window.innerWidth - w - 8) + 'px';
+    var top = r.bottom + 4; if (top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 4); menu.style.top = top + 'px';
+  }
+  function init() {
+    apply(get());
+    var btn = document.getElementById('btn-screen-mode'); if (!btn) return;
     btn.addEventListener('click', function (e) { e.stopPropagation(); if (menu && menu.style.display === 'block') hide(); else show(btn); });
     document.addEventListener('click', function (e) { if (menu && menu.style.display === 'block' && !menu.contains(e.target) && e.target !== btn) hide(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
