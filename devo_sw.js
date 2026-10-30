@@ -1,8 +1,8 @@
-/* 묵상 앱 전용 서비스 워커 (2026-10-29) — 범위는 ./devo 로 좁혀 성경지도(sw.js)·ISBE(isbe_sw.js)와 따로 설치된다.
- * 화면 파일과 묵상 네 권(JSON)을 둔다: 인터넷이 되면 늘 새로 받고, 안 되면 마지막 것을 쓴다. */
-const CACHE = 'devo-app-v2';   // 바꿀 때마다 올린다 — 새 워커가 옛 캐시를 지운다
+/* 묵상 앱 전용 서비스 워커 (2026-10-29, 일곱 권 2026-10-30) — 범위는 ./devo 로 좁혀 성경지도(sw.js)·ISBE(isbe_sw.js)와 따로 설치된다.
+ * 화면 파일과 묵상 일곱 권(JSON)을 둔다: 인터넷이 되면 늘 새로 받고, 안 되면 마지막 것을 쓴다. */
+const CACHE = 'devo-app-v4';   // 바꿀 때마다 올린다 — 새 워커가 옛 캐시를 지운다
 const SHELL = ['./devo.html', './devo.webmanifest', './devo-192.png', './devo-512.png'];
-const DATA = ['./spurgeon_me.json', './spurgeon_fc.json', './murray_hc.json', './meyer_dw.json'];
+const DATA = ['./spurgeon_me.json', './spurgeon_fc.json', './murray_hc.json', './meyer_dw.json', './bagster_dl.json', './murray_sp.json', './murray_ab.json'];
 const ALL = SHELL.concat(DATA);
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ALL)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith('devo-app-') && k !== CACHE).map(k => caches.delete(k))))); self.clients.claim(); });

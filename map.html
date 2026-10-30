@@ -36,7 +36,7 @@
   </script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", helvetica, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--kjm-font, 'Pretendard', -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", helvetica, sans-serif); }
 
     /* 원문사전 접기 단추 — 기본 삼각형 표식을 없애고 ▸/▾ 로 바꾼다 */
     details > summary::-webkit-details-marker { display: none; }
@@ -1811,6 +1811,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       <span id="db-status-text" style="white-space:nowrap;flex-shrink:0">준비 중...</span>
       <div class="status-btn-group">
         <button class="tb-btn" id="btn-export-backup" title="지명·용어·인명DB 및 설정 백업 (성경DB·원어분해DB는 제외)">백업</button>
+        <button class="tb-btn" id="btn-font-family" title="글꼴 고르기" style="font-weight:700">가</button>
         <button class="tb-btn" id="btn-admin-toggle" title="관리자 모드 켜기/끄기 (수정·내보내기·교정)" onclick="toggleAdminMode()">🔒</button>
 
         <div class="menu-group admin-only">
@@ -19381,7 +19382,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261029-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261030-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22287,17 +22288,22 @@ window.FigTags = (function () {
 })();
 </script>
 <script>
-/* (b20261029-3 kjm 「마이어 Our Daily Walk」) 묵상 네 권
+/* (b20261030-1 kjm 「새 묵상 세 권」, b20261030-3 책 단추 여러 줄) 묵상 일곱 권
    🌅 스펄전 『아침과 저녁』 732편(spurgeon_me.json) · 📜 스펄전 『믿음의 수표책』 366편(spurgeon_fc.json)
    🕊️ 머레이 『그리스도 안에서 거룩함』 31일(murray_hc.json, 날짜의 '일'로 매달 되풀이)
    👣 마이어 『날마다의 동행』 366편(meyer_dw.json)
+   🕯️ 백스터 엮음 『날마다의 빛』 732편(bagster_dl.json, 아침·저녁 성구 묵상)
+   🙏 머레이 『기도의 학교』 31과(murray_sp.json) · 🍇 머레이 『그리스도 안에 거하라』 31일(murray_ab.json)
    책마다 처음 열 때 한 번 받아 옴. 날짜(◀ 오늘 ▶)·아침/저녁(아침과 저녁만), 낱말·성구 찾기, 「이 장의 묵상」, 성구 누르면 본문으로 */
 (function () {
   var BOOKS = {
     me: { file: './spurgeon_me.json', name: '아침과 저녁', icon: '🌅', ap: true, by: '스펄전', foot: 'C. H. 스펄전 『아침과 저녁』(1865–68) · 한글 번역 © kjm' },
     fc: { file: './spurgeon_fc.json', name: '믿음의 수표책', icon: '📜', ap: false, by: '스펄전', foot: 'C. H. 스펄전 『믿음의 수표책』(1888) · 한글 번역 © kjm' },
     hc: { file: './murray_hc.json', name: '그리스도 안에서 거룩함', icon: '🕊️', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에서 거룩함』(1887) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' },
-    dw: { file: './meyer_dw.json', name: '날마다의 동행', icon: '👣', ap: false, by: 'F. B. 마이어', foot: 'F. B. 마이어 『날마다의 동행』(Our Daily Walk) · 한글 번역 © kjm' }
+    dw: { file: './meyer_dw.json', name: '날마다의 동행', icon: '👣', ap: false, by: 'F. B. 마이어', foot: 'F. B. 마이어 『날마다의 동행』(Our Daily Walk) · 한글 번역 © kjm' },
+    dl: { file: './bagster_dl.json', name: '날마다의 빛', icon: '🕯️', ap: true, by: '새뮤얼 백스터 엮음', foot: '새뮤얼 백스터 엮음 『날마다의 빛』(Daily Light on the Daily Path, 1875) · 성구는 개역개정 · 한글 편집 © kjm' },
+    sp: { file: './murray_sp.json', name: '기도의 학교', icon: '🙏', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도와 함께 기도의 학교에서』(1885) · 31과, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' },
+    ab: { file: './murray_ab.json', name: '그리스도 안에 거하라', icon: '🍇', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에 거하라』(1895) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' }
   };
   var bookId = 'me', D = null, cur = null, ST = {};
   try { var sb = localStorage.getItem('kjm_devo_book'); if (BOOKS[sb]) bookId = sb; } catch (e) {}
@@ -22333,8 +22339,8 @@ window.FigTags = (function () {
       + '#devo-modal .dv-h b{font-size:16px;margin-right:auto}'
       + '#devo-modal button{border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px}'
       + '#devo-modal .dv-h button{background:rgba(255,255,255,.18);color:#fff}#devo-modal .dv-h button.on{background:#fff;color:#7c4a1e;font-weight:bold}'
-      + '#devo-modal .dv-bks{display:flex;gap:4px;padding:6px 12px 0;background:#7c4a1e;overflow-x:auto}#devo-modal .dv-bks button{white-space:nowrap;flex:0 0 auto}'
-      + '#devo-modal .dv-bks button{background:rgba(255,255,255,.12);color:#f5e6d6;border-radius:8px 8px 0 0;padding:6px 12px}'
+      + '#devo-modal .dv-bks{display:flex;flex-wrap:wrap;gap:4px;padding:6px 12px 6px;background:#7c4a1e}#devo-modal .dv-bks button{white-space:nowrap;flex:0 0 auto}'
+      + '#devo-modal .dv-bks button{background:rgba(255,255,255,.12);color:#f5e6d6;border-radius:8px;padding:5px 10px;font-size:13px}'
       + '#devo-modal .dv-bks button.on{background:var(--card,#fff);color:#7c4a1e;font-weight:bold}'
       + '#devo-modal .dv-s{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border,#e5e7eb)}'
       + '#devo-modal .dv-s input{flex:1;padding:6px 8px;border:1px solid var(--border,#ccc);border-radius:6px;font-size:14px;background:var(--card,#fff);color:inherit}'
@@ -22471,6 +22477,93 @@ window.FigTags = (function () {
   });
 })();
 
+</script>
+
+<style>
+  /* (b20261030-2 kjm 「글꼴 고르기」) 「가」 단추 차림표 */
+  #font-family-menu { position: fixed; z-index: 100000; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(15,23,42,.18); padding: 6px; min-width: 190px; display: none; }
+  #font-family-menu .ffm-title { font-size: 11px; color: #94a3b8; padding: 2px 8px 6px; font-family: sans-serif; }
+  #font-family-menu button { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; width: 100%;
+    border: 0; background: none; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 15px; color: #1e293b; text-align: left; }
+  #font-family-menu button:hover { background: #f1f5f9; }
+  #font-family-menu button.on { background: #e0f2fe; color: #075985; font-weight: 600; }
+  #font-family-menu button small { font-size: 11px; color: #94a3b8; font-family: sans-serif; font-weight: 400; }
+</style>
+<script>
+/* (b20261030-2 kjm 「글꼴 고르기」) 윗줄 「백업」 옆 「가」 단추 — 앱 전체 글꼴을 바꾼다.
+   기본은 지금 쓰던 글꼴(맑은 고딕 등 기기 글꼴). 나머지는 구글 웹 글꼴로, 고를 때 처음 한 번만 받아 온다
+   (인터넷이 안 되면 기기 글꼴로 보인다). 원어(히브리어·그리스어)·고정폭 글꼴을 따로 정한 곳은 그대로 둔다.
+   고른 값은 localStorage 'kjm_font_family' 에 남는다. */
+(function () {
+  var FONTS = [
+    { id: '',               name: '기본',      note: '기기 글꼴' },
+    { id: 'Nanum Gothic',   name: '나눔고딕',  gen: 'sans-serif', q: 'Nanum+Gothic:wght@400;700' },
+    { id: 'Noto Sans KR',   name: '본고딕',    gen: 'sans-serif', q: 'Noto+Sans+KR:wght@400;700' },
+    { id: 'Gowun Dodum',    name: '고운돋움',  gen: 'sans-serif', q: 'Gowun+Dodum' },
+    { id: 'Nanum Myeongjo', name: '나눔명조',  gen: 'serif',      q: 'Nanum+Myeongjo:wght@400;700' },
+    { id: 'Noto Serif KR',  name: '본명조',    gen: 'serif',      q: 'Noto+Serif+KR:wght@400;700' },
+    { id: 'Gowun Batang',   name: '고운바탕',  gen: 'serif',      q: 'Gowun+Batang:wght@400;700' },
+    { id: 'Song Myung',     name: '송명',      gen: 'serif',      q: 'Song+Myung' }
+  ];
+  var KEY = 'kjm_font_family';
+  function get() { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } }
+  function put(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+  function find(id) { for (var i = 0; i < FONTS.length; i++) if (FONTS[i].id === id) return FONTS[i]; return FONTS[0]; }
+  function load(f) {
+    if (!f.q) return;
+    var lid = 'gf-' + f.q.split(':')[0];
+    if (document.getElementById(lid)) return;
+    var l = document.createElement('link');
+    l.id = lid; l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=' + f.q + '&display=swap';
+    document.head.appendChild(l);
+  }
+  function apply(id) {
+    var f = find(id), r = document.documentElement;
+    if (!f.id) r.style.removeProperty('--kjm-font');
+    else { load(f); r.style.setProperty('--kjm-font', "'" + f.id + "', " + (f.gen === 'serif' ? "'Batang', '바탕', " : "'Malgun Gothic', '맑은 고딕', ") + f.gen); }
+    var b = document.getElementById('btn-font-family');
+    if (b) b.title = '글꼴 고르기 — 지금: ' + f.name;
+  }
+  var menu = null;
+  function build() {
+    menu = document.createElement('div');
+    menu.id = 'font-family-menu';
+    var h = '<div class="ffm-title">글꼴 (앱 전체)</div>';
+    FONTS.forEach(function (f) {
+      h += '<button data-f="' + f.id + '"' + (f.id ? ' style="font-family:\'' + f.id + '\',' + f.gen + '"' : ' style="font-family:-apple-system,\'Malgun Gothic\',sans-serif"')
+        + '><span>' + f.name + ' 태초에 하나님이</span><small>' + (f.note || (f.gen === 'serif' ? '명조' : '고딕')) + '</small></button>';
+    });
+    menu.innerHTML = h;
+    document.body.appendChild(menu);
+    menu.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-f]'); if (!b) return;
+      var id = b.getAttribute('data-f'); put(id); apply(id); mark(); hide();
+    });
+  }
+  function mark() { var cur = get(); [].forEach.call(menu.querySelectorAll('button[data-f]'), function (b) { b.classList.toggle('on', b.getAttribute('data-f') === cur); }); }
+  function hide() { if (menu) menu.style.display = 'none'; }
+  function show(btn) {
+    if (!menu) build();
+    FONTS.forEach(load);              // 차림표 안 보기 글자를 제 글꼴로 보이려고 이때 한꺼번에 받는다
+    mark();
+    menu.style.display = 'block';
+    var r = btn.getBoundingClientRect(), w = menu.offsetWidth, hgt = menu.offsetHeight;
+    var left = Math.min(Math.max(8, r.right - w), window.innerWidth - w - 8);
+    var top = r.bottom + 4; if (top + hgt > window.innerHeight - 8) top = Math.max(8, r.top - hgt - 4);
+    menu.style.left = left + 'px'; menu.style.top = top + 'px';
+  }
+  function init() {
+    apply(get());
+    var btn = document.getElementById('btn-font-family');
+    if (!btn) return;
+    btn.addEventListener('click', function (e) { e.stopPropagation(); if (menu && menu.style.display === 'block') hide(); else show(btn); });
+    document.addEventListener('click', function (e) { if (menu && menu.style.display === 'block' && !menu.contains(e.target) && e.target !== btn) hide(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') hide(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
 </script>
 </body>
 </html>
