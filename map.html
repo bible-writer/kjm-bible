@@ -19381,7 +19381,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261029-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261029-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22287,15 +22287,17 @@ window.FigTags = (function () {
 })();
 </script>
 <script>
-/* (b20261029-2 kjm 「머레이 Holy in Christ」) 묵상 세 권
+/* (b20261029-3 kjm 「마이어 Our Daily Walk」) 묵상 네 권
    🌅 스펄전 『아침과 저녁』 732편(spurgeon_me.json) · 📜 스펄전 『믿음의 수표책』 366편(spurgeon_fc.json)
    🕊️ 머레이 『그리스도 안에서 거룩함』 31일(murray_hc.json, 날짜의 '일'로 매달 되풀이)
+   👣 마이어 『날마다의 동행』 366편(meyer_dw.json)
    책마다 처음 열 때 한 번 받아 옴. 날짜(◀ 오늘 ▶)·아침/저녁(아침과 저녁만), 낱말·성구 찾기, 「이 장의 묵상」, 성구 누르면 본문으로 */
 (function () {
   var BOOKS = {
     me: { file: './spurgeon_me.json', name: '아침과 저녁', icon: '🌅', ap: true, by: '스펄전', foot: 'C. H. 스펄전 『아침과 저녁』(1865–68) · 한글 번역 © kjm' },
     fc: { file: './spurgeon_fc.json', name: '믿음의 수표책', icon: '📜', ap: false, by: '스펄전', foot: 'C. H. 스펄전 『믿음의 수표책』(1888) · 한글 번역 © kjm' },
-    hc: { file: './murray_hc.json', name: '그리스도 안에서 거룩함', icon: '🕊️', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에서 거룩함』(1887) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' }
+    hc: { file: './murray_hc.json', name: '그리스도 안에서 거룩함', icon: '🕊️', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에서 거룩함』(1887) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' },
+    dw: { file: './meyer_dw.json', name: '날마다의 동행', icon: '👣', ap: false, by: 'F. B. 마이어', foot: 'F. B. 마이어 『날마다의 동행』(Our Daily Walk) · 한글 번역 © kjm' }
   };
   var bookId = 'me', D = null, cur = null, ST = {};
   try { var sb = localStorage.getItem('kjm_devo_book'); if (BOOKS[sb]) bookId = sb; } catch (e) {}
