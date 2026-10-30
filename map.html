@@ -2173,6 +2173,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         <button type="button" id="btn-gdcomm-sync" onclick="gdCommSync(true)" style="width:100%;padding:8px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:0.88em">☁ 구글 드라이브 주석 받기·업데이트</button>
         <label style="display:flex;align-items:center;gap:6px;font-size:0.76em;color:#1e3a8a;margin-top:6px;cursor:pointer"><input type="checkbox" id="gdcomm-auto" onchange="try{localStorage.setItem('gdcomm_auto',this.checked?'1':'0')}catch(e){}"> 앱을 열 때 새 판이 있으면 묻지 않고 저절로 받기 <span style="color:#64748b">(와이파이 쓰는 기기에 권장 · 이 기기에만 적용)</span></label>
         <div id="gdcomm-state" style="font-size:0.74em;color:#475569;margin-top:5px">드라이브 「3_올어바웃_모듈」 폴더(하위 폴더 포함)의 .cdb/.aab 를 읽어, 바뀐 주석만 다시 받습니다. 형광펜·필기·메모는 그대로 둡니다.</div>
+        <details id="gdcomm-vers-box" open style="margin-top:6px"><summary style="font-size:0.78em;font-weight:700;color:#1e3a8a;cursor:pointer">📋 주석 판 확인</summary><div id="gdcomm-vers" style="font-size:0.74em;color:#334155;margin-top:4px">아직 확인 기록이 없습니다 — 위 단추를 한 번 누르세요.</div></details>
       </div>
       <div style="font-weight:600;font-size:0.9em;margin-bottom:8px;color:#334155">➕ 새 주석 추가</div>
       <input type="text" id="commentary-new-name" placeholder="주석 이름 (예: 콘스터블 주석, 매튜헨리)" style="width:100%;box-sizing:border-box;padding:7px 9px;border:1px solid #cbd5e1;border-radius:6px;font-size:0.9em;margin-bottom:6px">
@@ -10113,7 +10114,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     async function gdListAll(q, token) {
       let out = [], pt = "";
       for (let i = 0; i < 20; i++) {
-        const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=nextPageToken,files(id,name,mimeType,md5Checksum,size,modifiedTime)&pageSize=200` + (pt ? `&pageToken=${encodeURIComponent(pt)}` : "");
+        const url = `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=nextPageToken,files(id,name,mimeType,md5Checksum,size,modifiedTime,description)&pageSize=200` + (pt ? `&pageToken=${encodeURIComponent(pt)}` : "");
         const r = await (await appdataApi(url, token)).json();
         out = out.concat(r.files || []);
         if (!r.nextPageToken) break; pt = r.nextPageToken;
@@ -10221,8 +10222,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         gdcommState("드라이브 확인 중…");
         const files = await gdcommFindFiles(token);
         if (files === null) { gdcommState(`드라이브에 「${GDCOMM_FOLDER}」 폴더가 없습니다.`); if (interactive) showToast(`드라이브에 「${GDCOMM_FOLDER}」 폴더가 없습니다`, "warn", 6000); return; }
+        try { localStorage.setItem("gdcomm_last", JSON.stringify({ at: Date.now(), files: files.map(f => ({ id: f.id, name: f.name, md5: f.md5Checksum, size: f.size, mt: f.modifiedTime, desc: f.description || "" })) })); } catch (e) {}
         const map = gdcommMap();
         const groups = await gdcommGroups();
+        try { gdcommRenderVers(groups); } catch (e) { console.warn(e); }
         const gnames = Object.keys(groups);
         const todo = [], fresh = [];
         let renamed = [];
@@ -10303,6 +10306,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           }
         } catch (e) { console.warn(e); }
         gdcommState(`${ok}/${todo.length}개 받음: ${done.join(", ")}`);
+        try { gdcommRenderVers(); } catch (e) {}
         showToast(`☁ 구글 드라이브 주석 ${ok}/${todo.length}개 업데이트`, ok === todo.length ? "success" : "warn", 6000);
       } catch (err) {
         console.error("구글 주석 오류", err);
@@ -10310,6 +10314,34 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (interactive) showToast("구글 드라이브 주석 오류: " + err.message, "warn", 8000);
       } finally { gdcommBusy = false; }
     }
+    /* (b20261030-4 kjm 「주석이 버젼을 확인 못하니가 불편해」) 주석 판 확인 표
+     * 드라이브 파일마다: 앱 안 이름 · 판(드라이브 파일 설명의 「현재 …」, 없으면 드라이브에서 고친 날) · 이 기기에 받은 날 · 상태.
+     * 마지막 확인 목록은 localStorage gdcomm_last 에 남겨, 인터넷 없이도 관리 창을 열면 보인다. */
+    async function gdcommRenderVers(groupsArg) {
+      const box = document.getElementById("gdcomm-vers"); if (!box) return;
+      let last = null; try { last = JSON.parse(localStorage.getItem("gdcomm_last") || "null"); } catch (e) {}
+      if (!last || !last.files || !last.files.length) return;
+      const map = gdcommMap();
+      const groups = groupsArg || await gdcommGroups();
+      const d = t => { if (!t) return "—"; const x = new Date(t); return isNaN(x) ? "—" : `${x.getFullYear() % 100}.${x.getMonth() + 1}.${x.getDate()}`; };
+      const ver = f => { const m = /현재\s*([^\s,(·—]+)/.exec(f.desc || ""); return m ? m[1] : d(f.mt) + " 판"; };
+      const esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+      const rows = last.files.slice().sort((a, b) => a.name.localeCompare(b.name, "ko")).map(f => {
+        const m = map[f.id] || {};
+        let st, col;
+        if (m.skip) { st = "받지 않음"; col = "#94a3b8"; }
+        else if (!m.group || !groups[m.group]) { st = "이 기기에 없음"; col = "#94a3b8"; }
+        else if (m.md5 === f.md5) { st = "✔ 최신"; col = "#15803d"; }
+        else { st = "⬆ 새 판 있음"; col = "#b45309"; }
+        const nm = m.group && groups[m.group] ? m.group : f.name.replace(/\.(cdb|aab)$/i, "").replace(/_/g, " ");
+        return `<tr title="${esc(f.name + (f.desc ? "\n" + f.desc : ""))}"><td style="padding:3px 4px">${esc(nm)}</td><td style="padding:3px 4px;white-space:nowrap">${esc(ver(f))}</td><td style="padding:3px 4px;white-space:nowrap">${m.group && groups[m.group] ? d(m.at) : "—"}</td><td style="padding:3px 4px;white-space:nowrap;color:${col};font-weight:700">${st}</td></tr>`;
+      }).join("");
+      box.innerHTML = `<table style="width:100%;border-collapse:collapse"><thead><tr style="color:#64748b;text-align:left;border-bottom:1px solid #cbd5e1"><th style="padding:3px 4px">주석</th><th style="padding:3px 4px">드라이브 판</th><th style="padding:3px 4px">받은 날</th><th style="padding:3px 4px">상태</th></tr></thead><tbody>${rows}</tbody></table>`
+        + `<div style="color:#94a3b8;margin-top:3px">마지막 확인 ${d(last.at)} ${new Date(last.at).toTimeString().slice(0, 5)} · 줄에 손가락(마우스)을 대면 파일 이름과 설명</div>`;
+    }
+    try { const ob = document.getElementById("btn-open-commentary-manage"); if (ob) ob.addEventListener("click", () => { setTimeout(() => { try { gdcommRenderVers(); } catch (e) {} }, 50); }); } catch (e) {}
+    try { const ob2 = document.getElementById("btn-commentary-empty-add"); if (ob2) ob2.addEventListener("click", () => { setTimeout(() => { try { gdcommRenderVers(); } catch (e) {} }, 50); }); } catch (e) {}
+    setTimeout(() => { try { gdcommRenderVers(); } catch (e) {} }, 1500);
     try { const cb = document.getElementById("gdcomm-auto"); if (cb) cb.checked = localStorage.getItem("gdcomm_auto") === "1"; } catch (e) {}
     // 앱을 열고 10초 뒤, 로그인이 살아 있으면 확인(「저절로 받기」를 켠 기기는 받기까지)
     setTimeout(() => { try { if (gdriveAccessToken && gdriveScopeGranted.indexOf(GDRIVE_RO) >= 0) gdCommSync(false); } catch (e) {} }, 10000);
@@ -19382,7 +19414,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261030-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261030-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
