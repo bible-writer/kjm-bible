@@ -5449,8 +5449,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             : '') +
           `</div>`;
         container.innerHTML = `
-          <div style="margin:6px 0;padding:8px 10px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;position:relative">
-            <button onclick="StrongEngine.closeInline('${container.id}')" style="position:absolute;top:4px;right:6px;border:none;background:none;font-size:0.9em;cursor:pointer;color:#94a3b8">✕</button>
+          <div class="strong-inline-card" style="margin:6px 0;padding:8px 10px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;position:relative">
+            <span style="position:absolute;top:3px;right:6px;display:flex;gap:2px;align-items:center">
+              <button onclick="StrongEngine.cardZoom(-1)" title="원어 설명 글자 작게" style="border:1px solid #a7f3d0;background:#fff;border-radius:4px;font-size:11px;line-height:1;padding:2px 5px;cursor:pointer;color:#047857">가−</button>
+              <button onclick="StrongEngine.cardZoom(1)" title="원어 설명 글자 크게" style="border:1px solid #a7f3d0;background:#fff;border-radius:4px;font-size:13px;line-height:1;padding:2px 5px;cursor:pointer;color:#047857">가+</button>
+              <button onclick="StrongEngine.closeInline('${container.id}')" style="border:none;background:none;font-size:14px;cursor:pointer;color:#94a3b8">✕</button>
+            </span>
             <div style="font-size:0.75em;color:#047857;font-weight:600;margin-bottom:2px">📜 ${escHtml(code)}</div>
             <div style="font-size:1.15em;font-weight:700;color:#065f46;margin-bottom:2px">${escHtml(entry.lemma || '')}</div>
             <div style="font-size:0.85em;color:#059669;margin-bottom:4px">${escHtml(entry.xlit || '')}</div>
@@ -5462,6 +5466,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         `;
       },
 
+      // (b20261031-2 kjm 「원어 설명 글자가 작아」) 지명·인명·용어 창 안 원어 카드 글자 크기 — 이 기기에 기억
+      cardZoom: function(d) {
+        let v = 1.2; try { v = parseFloat(localStorage.getItem('strong_card_scale')) || 1.2; } catch (e) {}
+        v = Math.max(0.9, Math.min(2, Math.round((v + d * 0.1) * 10) / 10));
+        try { localStorage.setItem('strong_card_scale', String(v)); } catch (e) {}
+        document.documentElement.style.setProperty('--strong-card-scale', v + 'em');
+        showToast('원어 설명 글자 ' + Math.round(v * 100) + '%', 'info', 1200);
+      },
       // gloss(짧은 정의)를 그 자리에서 구글 번역 초안으로 보여준다 — 저장하지 않고 볼 때마다 즉석 번역
       translateInline: async function(code, containerId) {
         const entry = this.lookup(code);
@@ -19415,7 +19427,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22684,5 +22696,13 @@ window.FigTags = (function () {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
+
+<style>
+  /* (b20261031-2 kjm 「원어 설명 글자가 작아」) 지명·인명·용어 창 안 원어 카드: 기본 120%, 가−/가+ 로 90~200% */
+  .strong-inline-card { font-size: var(--strong-card-scale, 1.2em); }
+  .strong-inline-card [style*="font-size:0.66em"], .strong-inline-card [style*="font-size:0.7em"],
+  .strong-inline-card [style*="font-size:0.72em"], .strong-inline-card [style*="font-size:0.75em"] { font-size: 0.85em !important; }
+</style>
+<script>try { var _scs = parseFloat(localStorage.getItem('strong_card_scale')); if (_scs) document.documentElement.style.setProperty('--strong-card-scale', _scs + 'em'); } catch (e) {}</script>
 </body>
 </html>
