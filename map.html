@@ -10057,7 +10057,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         showToast("Google 인증 스크립트를 아직 불러오는 중입니다. 잠시 후 다시 시도해 주세요.", "warn");
         return;
       }
-      const needRo = isAdminMode() && gdriveScopeGranted.indexOf(GDRIVE_RO) < 0;
+      const needRo = (isAdminMode() || window._gdriveWantRo) && gdriveScopeGranted.indexOf(GDRIVE_RO) < 0;   // (b20261031-4) 낭독·주석 받기는 관리자 아니어도 읽기 권한을 묻는다
       gdriveTokenClient.requestAccessToken({ prompt: (gdriveAccessToken && !needRo) ? "" : "consent" });
     }
 
@@ -10375,6 +10375,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     function appdataToken(interactive) {
       if (gdriveAccessToken && gdriveScopeGranted.indexOf(GDRIVE_RO) >= 0) return Promise.resolve(gdriveAccessToken);
       if (!interactive) return Promise.resolve(null);
+      window._gdriveWantRo = true;
       return new Promise(res => { window._gdrivePending = res; gdriveSignIn(); if (!gdriveTokenClient) { window._gdrivePending = null; res(null); } });
     }
     async function appdataApi(url, token) {
@@ -10383,6 +10384,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (!r.ok) throw new Error("드라이브 응답 " + r.status);
       return r;
     }
+    // (b20261031-4) 🎧 낭독이 드라이브 폴더를 읽도록 — 관리자 아니어도 씀
+    window._kjmDrive = { token: appdataToken, api: appdataApi, list: gdListAll };
     async function appdataInstallOne(f, entry, blob) {
       const file = new File([blob], entry.name, { type: "application/octet-stream" });
       if (entry.kind === "bdb") { await handleBdbFile(file); return; }
@@ -19434,7 +19437,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21545,6 +21548,21 @@ if ('serviceWorker' in navigator) {
   let dirMap = null;          // key → FileSystemFileHandle
   let dirHandle = null;
   let storedKeys = new Set(); // IndexedDB 에 보관된 장
+  /* (b20261031-4 kjm 「폴더 공유는 안됨 … 지도는 공유됨」) 드라이브 낭독 폴더 — 공유받은 폴더도 됨, 듣는 장만 그때그때 받음 */
+  let gdFolder = null;        // { id, name } — localStorage kjmAudioDrive
+  try { gdFolder = JSON.parse(localStorage.getItem('kjmAudioDrive') || 'null'); } catch (e) {}
+  let gdMap = null;           // key → { id, name, size }
+  let gdPick = null;          // 고를 폴더 목록(창에 보여 줄 때)
+  async function gdScan(interactive) {
+    if (!gdFolder || !window._kjmDrive) return false;
+    if (gdMap) return true;
+    const D = window._kjmDrive;
+    const tk = await D.token(interactive); if (!tk) return false;
+    const fs = await D.list("'" + gdFolder.id + "' in parents and trashed=false", tk);
+    const m = new Map();
+    fs.forEach(function (f) { const k = keyOf(f.name); if (k && !m.has(k)) m.set(k, f); });
+    gdMap = m; return true;
+  }
   let curKey = null, curUrl = null, wantPlay = false;
   const audio = new Audio(); audio.preload = 'auto';
   /* ── UI ── */
@@ -21711,15 +21729,18 @@ if ('serviceWorker' in navigator) {
   try { const r = localStorage.getItem('kjmAudioRate'); if (r) { $('rate').value = r; } } catch (e) {}
   function fmt(s) { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
   function bookName(k) { const p = k.split('-'); const b = (typeof BIBLE_BOOKS !== 'undefined') && BIBLE_BOOKS.find(function (x) { return x.id === +p[0]; }); return (b ? b.name : p[0]) + ' ' + p[1] + (+p[0] === 19 ? '편' : '장'); }
-  function count() { const s = new Set(mem.keys()); storedKeys.forEach(function (k) { s.add(k); }); if (dirMap) dirMap.forEach(function (_, k) { s.add(k); }); return s.size; }
-  function hasKey(k) { return mem.has(k) || storedKeys.has(k) || (dirMap && dirMap.has(k)); }
+  function count() { const s = new Set(mem.keys()); storedKeys.forEach(function (k) { s.add(k); }); if (dirMap) dirMap.forEach(function (_, k) { s.add(k); }); if (gdMap) gdMap.forEach(function (_, k) { s.add(k); }); return s.size; }
+  function hasKey(k) { return mem.has(k) || storedKeys.has(k) || (dirMap && dirMap.has(k)) || (gdMap && gdMap.has(k)); }
   function renderPanel() {
     const n = count();
     panel.innerHTML = '<div style="font-weight:700;margin-bottom:6px;color:#1e293b">🎧 성경 낭독</div>'
       + '<div>올어바웃 낭독과 같은 이름 규칙: <b>01_GEN_01.mp3</b>, 시편 <b>19_PSA_001.mp3</b> (대소문자·2/3자리 모두 됨)</div>'
-      + '<div style="margin-top:6px">준비된 장: <b>' + n + '</b>' + (dirHandle ? ' · 폴더 「' + dirHandle.name + '」' : '') + '</div>'
+      + '<div style="margin-top:6px">준비된 장: <b>' + n + '</b>' + (dirHandle ? ' · 폴더 「' + dirHandle.name + '」' : '') + (gdFolder ? ' · 드라이브 「' + gdFolder.name + '」' : '') + '</div>'
       + (hasKey(cur()) ? '<button class="ap-main" data-p="play">▶ ' + bookName(cur()) + ' 듣기</button>' : '<div style="margin-top:6px;color:#94a3b8">이 장(' + bookName(cur()) + ')의 낭독 파일이 없습니다.</div>')
       + (window.showDirectoryPicker ? '<button data-p="dir">📁 낭독 폴더 연결 (PC · 복사 없이)</button>' : '')
+      + '<button data-p="gd">☁️ 구글 드라이브 낭독 폴더' + (gdFolder ? ' 바꾸기' : ' 연결 (공유받은 폴더도 · 듣는 장만 받음)') + '</button>'
+      + (gdPick ? (gdPick.length ? gdPick.map(function (f, i) { return '<button data-p="gdsel" data-i="' + i + '" style="padding-left:18px">📁 ' + String(f.name).replace(/</g, '&lt;') + '</button>'; }).join('') : '<div style="margin-top:4px;color:#b91c1c">드라이브에 「낭독」이 든 폴더가 없습니다. 폴더를 공유받았는지 확인해 주세요.</div>') : '')
+      + (gdFolder ? '<button data-p="gdoff" style="color:#64748b">드라이브 낭독 연결 끊기</button>' : '')
       + '<button data-p="files">🎵 낭독 파일 고르기 (기기에 보관 · 폰은 opus 가벼운판 권장)</button>'
       + '<button data-p="folder">📂 폴더째 고르기 (기기에 보관)</button>'
       + (storedKeys.size ? '<button data-p="clear" style="color:#b91c1c">보관한 낭독 ' + storedKeys.size + '장 지우기</button>' : '')
@@ -21772,6 +21793,18 @@ if ('serviceWorker' in navigator) {
     if (dirHandle && !dirMap) await ensureDir();
     if (dirMap && dirMap.has(k)) { const f = await dirMap.get(k).getFile(); return f; }
     if (storedKeys.has(k)) { const b = await idb('files', 'readonly', function (s) { return s.get(k); }); if (b) return b; }
+    if (gdFolder && !gdMap) { try { await gdScan(false); } catch (e) {} }
+    if (gdMap && gdMap.has(k)) {
+      try {
+        const D = window._kjmDrive; const tk = await D.token(false) || await D.token(true); if (!tk) return null;
+        if (typeof showToast === 'function') showToast(bookName(k) + ' 낭독 받는 중…', 'info');
+        const f = gdMap.get(k);
+        const b = await (await D.api('https://www.googleapis.com/drive/v3/files/' + f.id + '?alt=media', tk)).blob();
+        mem.set(k, b);                 // 이번 화면에서 다시 들을 때는 다시 받지 않음
+        if (mem.size > 12) { const old = mem.keys().next().value; if (old !== k) mem.delete(old); }
+        return b;
+      } catch (e) { if (typeof showToast === 'function') showToast('드라이브 낭독을 받지 못했습니다: ' + e.message, 'error'); return null; }
+    }
     return null;
   }
 
@@ -21945,7 +21978,7 @@ if ('serviceWorker' in navigator) {
   }
   async function playNext(dir) {
     const nk = dir < 0 ? prevKeyOf(curKey || cur()) : nextKeyOf(curKey || cur()); if (!nk) return;
-    if (!hasKey(nk) && !dirHandle) { if (typeof showToast === 'function') showToast(bookName(nk) + ' 낭독 파일이 없습니다', 'info'); }
+    if (!hasKey(nk) && !dirHandle && !gdFolder) { if (typeof showToast === 'function') showToast(bookName(nk) + ' 낭독 파일이 없습니다', 'info'); }
     const ok = await loadKey(nk, true);
     lastCur = null;   // 본문 넘김은 아래에서
     const p = nk.split('-');
@@ -22030,7 +22063,7 @@ if ('serviceWorker' in navigator) {
     const was = wantPlay || (!audio.paused && curKey);
     wantPlay = false;
     if ((bar.style.display === 'flex' || was) && k !== curKey) {
-      if (hasKey(k) || dirHandle) loadKey(k, !!was).then(function (ok) { if (!ok && was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); });
+      if (hasKey(k) || dirHandle || gdFolder) loadKey(k, !!was).then(function (ok) { if (!ok && was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); });
       else { audio.pause(); if (was && typeof showToast === 'function') showToast(bookName(k) + ' 낭독 파일이 없습니다', 'info'); }
     }
     refreshBtn();
@@ -22040,6 +22073,7 @@ if ('serviceWorker' in navigator) {
   btn.addEventListener('click', async function (ev) {
     ev.stopPropagation();
     if (dirHandle && !dirMap) await ensureDir();
+    if (gdFolder && !gdMap) { try { await gdScan(false); } catch (e) {} }
     if (panel.style.display === 'block') { panel.style.display = 'none'; return; }
     renderPanel(); panel.style.display = 'block';
   });
@@ -22057,6 +22091,29 @@ if ('serviceWorker' in navigator) {
         await idb('meta', 'readwrite', function (s) { return s.put(dirHandle, 'dir'); });
         renderPanel(); refreshBtn(); msg('폴더에서 ' + dirMap.size + '장 찾음');
       } catch (e) { if (e && e.name !== 'AbortError') msg('폴더를 열 수 없습니다: ' + e.message); }
+    }
+    if (p === 'gd') {
+      try {
+        const D = window._kjmDrive; if (!D) { msg('구글 연결 기능을 아직 읽지 못했습니다. 잠시 뒤 다시 눌러 주세요.'); return; }
+        msg('구글 드라이브 확인 중… (처음이면 로그인 창이 뜹니다)');
+        const tk = await D.token(true); if (!tk) { msg('구글 로그인이 필요합니다.'); return; }
+        const fs = await D.list("name contains '낭독' and mimeType='application/vnd.google-apps.folder' and trashed=false", tk);
+        gdPick = fs.sort(function (a, b) { return String(a.name).localeCompare(String(b.name), 'ko'); });
+        renderPanel(); msg(gdPick.length ? '들을 낭독 폴더를 고르세요' : '');
+      } catch (e) { msg('드라이브를 열 수 없습니다: ' + e.message); }
+    }
+    if (p === 'gdsel') {
+      const f = gdPick && gdPick[+ev.target.getAttribute('data-i')]; if (!f) return;
+      gdFolder = { id: f.id, name: f.name }; gdMap = null; gdPick = null;
+      try { localStorage.setItem('kjmAudioDrive', JSON.stringify(gdFolder)); } catch (e) {}
+      msg('폴더 읽는 중…');
+      try { await gdScan(true); } catch (e) { msg('폴더를 읽지 못했습니다: ' + e.message); return; }
+      renderPanel(); refreshBtn(); msg('드라이브 「' + f.name + '」에서 ' + (gdMap ? gdMap.size : 0) + '장 찾음');
+    }
+    if (p === 'gdoff') {
+      gdFolder = null; gdMap = null; gdPick = null;
+      try { localStorage.removeItem('kjmAudioDrive'); } catch (e) {}
+      renderPanel(); refreshBtn();
     }
     if (p === 'clear') {
       await idb('files', 'readwrite', function (s) { return s.clear(); });
