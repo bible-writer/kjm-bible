@@ -129,6 +129,8 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   <div class="top"><strong>글자와 화면</strong><button class="x" aria-label="닫기">✕</button></div>
   <div class="row"><span>글자 크기</span><button data-fs="-1" aria-label="글자 작게">가−</button><button data-fs="1" aria-label="글자 크게">가+</button></div>
   <div class="row"><span>화면</span><button data-th="light">밝게</button><button data-th="dark">어둡게</button><button data-th="auto">기기대로</button></div>
+  <div class="row"><span>성구 <small id="krv-st" style="color:var(--sub)"></small></span><button id="krv-bdb" style="min-width:auto;padding:0 12px">📂 개역개정 DB 넣기</button></div>
+  <input type="file" id="krv-file" accept=".bdb,.db,.sqlite,.cdb" style="display:none">
   <div class="about" id="about"></div>
 </div></div>
 <div class="toast" id="toast"></div>
@@ -230,6 +232,66 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
     return out.join(' … ');
   }
   function vtext(v) { return (KR && v.kf && rb(v.kf, v.verse)) || v.verse; }
+  /* (b20261031-7) 묵상 앱 혼자서도: ① 같은 브라우저 성경지도에 넣어 둔 성경 DB(BibleMapPersistentStorage/appFiles/saved_bdb_binary)를 찾아 쓰고
+     ② 없으면 「글자」 창의 「개역개정 DB 넣기」로 .bdb 파일을 직접 고른다. 개역개정(창 1:2 「하나님의 영은 수면 위에」)일 때만 담는다. */
+  var SQLP = null;
+  function sqlJs() {
+    if (SQLP) return SQLP;
+    SQLP = new Promise(function (res, rej) {
+      if (window.initSqlJs) return res();
+      var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js';
+      sc.onload = function () { res(); }; sc.onerror = function () { SQLP = null; rej(new Error('SQL 엔진을 받지 못했습니다(인터넷 확인)')); }; document.head.appendChild(sc);
+    }).then(function () { return initSqlJs({ locateFile: function (f) { return 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/' + f; } }); });
+    return SQLP;
+  }
+  function krvFromBytes(bytes) {
+    return sqlJs().then(function (SQL) {
+      var db = new SQL.Database(new Uint8Array(bytes));
+      try {
+        var tn = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")[0].values.map(function (r) { return r[0]; });
+        var best = null, mx = -1;
+        tn.forEach(function (t) { try { var c = db.exec('SELECT COUNT(*) FROM "' + t + '"')[0].values[0][0]; if (c > mx) { mx = c; best = t; } } catch (e) {} });
+        var smp = db.exec('SELECT * FROM "' + best + '" LIMIT 1')[0], cols = smp.columns, row = smp.values[0];
+        function pick(re) { for (var i = 0; i < cols.length; i++) if (re.test(cols[i])) return i; return -1; }
+        var ib = pick(/^(book|b|bk|book_?num(ber)?|bnum)$/i), ic = pick(/^(chapter|c|ch|chap)$/i), iv = pick(/^(verse|v|vs|vnum)$/i), it = -1, ml = -1;
+        var nums = []; cols.forEach(function (c, i) { if (typeof row[i] === 'number') nums.push(i); });
+        if (ib < 0) ib = nums[0]; if (ic < 0) ic = nums[1]; if (iv < 0) iv = nums[2];
+        cols.forEach(function (c, i) { var l = String(row[i] == null ? '' : row[i]).length; if (typeof row[i] === 'string' && l > ml) { ml = l; it = i; } });
+        var q = function (w) { return '"' + cols[w] + '"'; };
+        var all = db.exec('SELECT ' + q(ib) + ',' + q(ic) + ',' + q(iv) + ',' + q(it) + ' FROM "' + best + '"')[0].values, o = {};
+        all.forEach(function (w) { var b = +w[0]; (o[b] = o[b] || {})[(+w[1]) + ':' + (+w[2])] = String(w[3] || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); });
+        if (!(o[1] && String(o[1]['1:2'] || '').indexOf('하나님의 영은 수면 위에') >= 0)) throw new Error('개역개정 성경 DB가 아닙니다');
+        return o;
+      } finally { db.close(); }
+    }).then(function (o) {
+      return new Promise(function (res, rej) {
+        var rq = indexedDB.open('kjmKrv', 1);
+        rq.onupgradeneeded = function () { rq.result.createObjectStore('b'); };
+        rq.onerror = function () { rej(new Error('기기 저장 실패')); };
+        rq.onsuccess = function () {
+          var tx = rq.result.transaction('b', 'readwrite'), st = tx.objectStore('b');
+          Object.keys(o).forEach(function (b) { st.put(o[b], +b); });
+          tx.oncomplete = function () { ls('kjm_krv_cache', '1'); KR = o; res(o); };
+          tx.onerror = function () { rej(new Error('기기 저장 실패')); };
+        };
+      });
+    });
+  }
+  function mapBdb() {   // 같은 브라우저 성경지도에 넣어 둔 성경 DB
+    return new Promise(function (res) {
+      try {
+        var made = false, rq = indexedDB.open('BibleMapPersistentStorage', 1);
+        rq.onupgradeneeded = function () { made = true; rq.transaction.abort(); };
+        rq.onerror = function () { res(null); };
+        rq.onsuccess = function () {
+          if (made) return res(null);
+          try { var g = rq.result.transaction('appFiles', 'readonly').objectStore('appFiles').get('saved_bdb_binary'); g.onsuccess = function () { res(g.result || null); }; g.onerror = function () { res(null); }; }
+          catch (e) { res(null); }
+        };
+      } catch (e) { res(null); }
+    });
+  }
+  function krvState() { var e = $('#krv-st'); if (e) e.textContent = KR ? '— 개역개정 (이 기기)' : '— 개역한글'; }
   function ktext(x) {
     if (!KR || !x.kq) return x.text;
     var T = x.text.slice(), by = {};
@@ -273,6 +335,15 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   function go(dir) { if (!cur) return; var k = step(cur, dir), i = find(k); if (i >= 0) show(i); }
   function goToday() { var i = find(todayKey()); show(i >= 0 ? i : 0); }
 
+  KRP.then(function (k) {
+    krvState();
+    if (k || ls('kjm_krv_tried') === '1') return;
+    mapBdb().then(function (buf) {
+      if (!buf) return;
+      ls('kjm_krv_tried', '1');
+      return krvFromBytes(buf).then(function () { krvState(); var i = cur ? find(cur) : -1; if (i >= 0) show(i, true); toast('성경지도의 개역개정 DB로 성구를 바꿨습니다'); });
+    }).catch(function () {});
+  });
   function setBook(id) {
     book = id; ls('devo_book', id); root.dataset.book = id; applyTheme();
     document.querySelectorAll('.books button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === id); });
@@ -308,6 +379,13 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   });
   $('#find').onclick = function () { openSheet('#s-find'); $('#qhint').textContent = '『' + B().name + '』에서 찾습니다.'; setTimeout(function () { $('#q').focus(); }, 50); };
   $('#opt').onclick = function () { openSheet('#s-opt'); };
+  $('#krv-bdb').onclick = function () { $('#krv-file').click(); };
+  $('#krv-file').onchange = function () {
+    var f = this.files && this.files[0]; this.value = ''; if (!f) return;
+    toast('성경 DB 읽는 중…');
+    f.arrayBuffer().then(krvFromBytes).then(function () { krvState(); var i = cur ? find(cur) : -1; if (i >= 0) show(i, true); toast('개역개정으로 바꿨습니다'); })
+      .catch(function (e) { toast(e && e.message ? e.message : '넣지 못했습니다'); });
+  };
   document.querySelectorAll('[data-fs]').forEach(function (b) { b.onclick = function () { fs = Math.max(14, Math.min(28, fs + parseInt(b.dataset.fs, 10))); ls('devo_fs', fs); applyFs(); toast('글자 ' + fs); }; });
   document.querySelectorAll('[data-th]').forEach(function (b) { b.onclick = function () { theme = b.dataset.th; ls('devo_theme', theme); applyTheme(); }; });
   $('#about').innerHTML = '하루 한 편씩 읽는 묵상집 세 권입니다. 본문을 옆으로 밀면 앞 날·다음 날로 넘어갑니다. 성구 아래 「성경에서 읽기」를 누르면 성경지도에서 그 절이 열립니다.<br>홈 화면에 추가하면 앱처럼 쓸 수 있고, 한 번 연 책은 인터넷 없이도 읽힙니다.';
