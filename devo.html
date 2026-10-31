@@ -141,7 +141,7 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
     fc: { file: 'spurgeon_fc.json', name: '믿음의 수표책', by: 'C. H. 스펄전 『믿음의 수표책』(1888)' },
     hc: { file: 'murray_hc.json', name: '그리스도 안에서 거룩함', by: '앤드루 머레이 『그리스도 안에서 거룩함』(1887) · 31일, 날짜의 일에 맞춰 매달 되풀이', d31: true },
     dw: { file: 'meyer_dw.json', name: '날마다의 동행', by: 'F. B. 마이어 『날마다의 동행』(Our Daily Walk)' },
-    dl: { file: 'bagster_dl.json', name: '날마다의 빛', by: '새뮤얼 백스터 엮음 『날마다의 빛』(1875) · 성구는 개역한글', ap: true },
+    dl: { file: 'bagster_dl.json', name: '날마다의 빛', by: '새뮤얼 백스터 엮음 『날마다의 빛』(1875)', ap: true },
     sp: { file: 'murray_sp.json', name: '기도의 학교', by: '앤드루 머레이 『그리스도와 함께 기도의 학교에서』(1885) · 31과, 날짜의 일에 맞춰 매달 되풀이', d31: true },
     ab: { file: 'murray_ab.json', name: '그리스도 안에 거하라', by: '앤드루 머레이 『그리스도 안에 거하라』(1895) · 31일, 날짜의 일에 맞춰 매달 되풀이', d31: true }
   };
@@ -199,6 +199,48 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
 
   /* ── 그리기 ── */
   function vvs(x) { return (x.vv && x.vv.length) ? x.vv : [x]; }
+  /* (b20261031-6) 성경지도에서 개역개정 DB를 넣은 기기면, 지도가 담아 둔 개역개정 본문(IndexedDB kjmKrv)으로 성구를 바꿔 보인다.
+     공개 파일에는 개역한글과 자리(kf·kq)만 있다. */
+  var KR = null;
+  var KRP = new Promise(function (res) {
+    try {
+      if (ls('kjm_krv_cache') !== '1' || !window.indexedDB) return res(null);
+      var rq = indexedDB.open('kjmKrv', 1);
+      rq.onupgradeneeded = function () { rq.result.createObjectStore('b'); };
+      rq.onerror = function () { res(null); };
+      rq.onsuccess = function () {
+        try {
+          var st = rq.result.transaction('b', 'readonly').objectStore('b'), o = {}, cq = st.openCursor();
+          cq.onsuccess = function () { var c = cq.result; if (c) { o[c.key] = c.value; c.continue(); } else { KR = Object.keys(o).length ? o : null; res(KR); } };
+          cq.onerror = function () { res(null); };
+        } catch (e) { res(null); }
+      };
+    } catch (e) { res(null); }
+  });
+  function getV(b, c, v) { var bk = KR && KR[b]; return bk ? bk[c + ':' + v] : undefined; }
+  function rb(kf, pub) {
+    var pp = String(pub).split(' … '); if (pp.length !== kf.length) return null;
+    var out = [];
+    for (var i = 0; i < kf.length; i++) {
+      var fr = kf[i]; if (!fr) { out.push(pp[i]); continue; }
+      var parts = [];
+      for (var j = 0; j < fr.length; j++) { var z = fr[j], t = getV(z[0], z[1], z[2]); if (t == null) return null; parts.push(t.slice(z[3], z[4])); }
+      out.push(parts.join(' '));
+    }
+    return out.join(' … ');
+  }
+  function vtext(v) { return (KR && v.kf && rb(v.kf, v.verse)) || v.verse; }
+  function ktext(x) {
+    if (!KR || !x.kq) return x.text;
+    var T = x.text.slice(), by = {};
+    x.kq.forEach(function (q) { (by[q[0]] = by[q[0]] || []).push(q); });
+    Object.keys(by).forEach(function (pi) {
+      by[pi].sort(function (a, b) { return b[1] - a[1]; }).forEach(function (q) {
+        var t = T[pi], a = t.slice(q[1], q[2]), r = rb(q[3], a); if (r) T[pi] = t.slice(0, q[1]) + r + t.slice(q[2]);
+      });
+    });
+    return T;
+  }
   function para(t) {
     if (t.indexOf('## ') === 0) return '<h2>' + esc(t.slice(3)) + '</h2>';
     if (/^\[\d+\]/.test(t)) return '<p class="fn">' + esc(t) + '</p>';
@@ -218,10 +260,10 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
     var h = '<div class="when">' + when + '</div><div class="author">' + esc(B().by) + '</div>';
     if (x.t) h += '<h1>' + esc(x.t) + '</h1>';
     h += '<div class="read">' + vvs(x).map(function (v) {
-      return '<blockquote class="verse"><q>' + esc(v.verse) + '</q>' +
+      return '<blockquote class="verse"><q>' + esc(vtext(v)) + '</q>' +
         (v.ref ? (v.b ? '<a href="map.html?goto=' + v.b + '.' + (v.c || 1) + '.' + (v.vs || 1) + '">' + esc(v.ref) + ' 성경에서 읽기</a>' : '<a>' + esc(v.ref) + '</a>') : '') + '</blockquote>';
-    }).join('') + '<div class="text">' + x.text.map(para).join('') + '</div></div>';
-    h += '<div class="foot">한글 번역 © kjm · 원문은 저작권이 끝난 책입니다. · 성구: 성경전서 개역한글판(대한성서공회, 공개 저작물)</div>';
+    }).join('') + '<div class="text">' + ktext(x).map(para).join('') + '</div></div>';
+    h += '<div class="foot">한글 번역 © kjm · 원문은 저작권이 끝난 책입니다. · 성구: ' + (KR ? '개역개정(이 기기에 넣은 성경 DB)' : '성경전서 개역한글판(대한성서공회, 공개 저작물)') + '</div>';
     $('#main').innerHTML = h;
     $('#main').querySelectorAll('.ap button').forEach(function (b) { b.onclick = function () { var k = { m: cur.m, d: cur.d, p: b.dataset.p }; var j = find(k); if (j >= 0) show(j, true); }; });
     var tk = todayKey(), isToday = B().d31 ? tk.d === x.d : (tk.m === x.m && tk.d === x.d);
@@ -235,7 +277,7 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
     book = id; ls('devo_book', id); root.dataset.book = id; applyTheme();
     document.querySelectorAll('.books button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === id); });
     $('#main').innerHTML = '<div class="empty">묵상을 불러오는 중입니다…</div>';
-    load(id).then(function () {
+    Promise.all([load(id), KRP]).then(function () {
       if (book !== id) return;
       var last = null; try { last = JSON.parse(ls('devo_last_' + id)); } catch (e) {}
       // 오늘 처음 연 날이면 오늘 묵상, 같은 날 다시 열면 읽던 곳

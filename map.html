@@ -19437,7 +19437,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-6`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22428,8 +22428,7 @@ window.FigTags = (function () {
   function d31() { return !!BOOKS[bookId].d31; }
   function vvs(x) { return (x.vv && x.vv.length) ? x.vv : [x]; }
   /* (b20261031-5 kjm 「일반모드는 묵상에 저작권이 저촉되는 것 보완」) 공개 묵상 파일의 성구는 개역한글(공개 저작물).
-     이 기기에 성경 DB(.bdb)를 넣었으면 머리 성구(「…」)는 그 DB 본문(그 장절 전체)으로 보여 준다(kjm 기기 = 개역개정).
-     본문 속 인용·『날마다의 빛』 본문 성구는 파일 그대로(개역한글). */
+     (b20261031-6) 이 기기 성경 DB가 개역개정이면 kf·kq 자리로 개역개정 글을 꺼내 바꿔 보인다(아래 vtext·ktext). */
   var KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말','마','막','눅','요','행','롬','고전','고후','갈','엡','빌','골','살전','살후','딤전','딤후','딛','몬','히','약','벧전','벧후','요일','요이','요삼','유','계'];
   var ONE = { 31: 1, 57: 1, 63: 1, 64: 1, 65: 1 };
   function dbOn() { try { return !!(sqliteDbInstance && detectedSchema); } catch (e) { return false; } }
@@ -22467,7 +22466,56 @@ window.FigTags = (function () {
     var s = out.join(' … ').trim();
     return s || null;
   }
-  function vtext(v) { return dbText(v.ref) || v.verse; }
+  /* (b20261031-6 kjm 「개역개정 db가 설치된 경우는 개역개정으로, 안 된 경우는 개역한글」)
+     공개 파일에는 개역개정 글 대신 자리(kf: [책,장,절,시작글자,끝글자])만 들어 있다. 이 기기 성경 DB가 개역개정이면 그 자리 글로 바꿔 보인다. */
+  var KRV_OK = null;
+  function krvOK() {
+    if (!dbOn()) return false;
+    if (KRV_OK === null) { var t = dbGet(1, 1, 2, 2)[0] || ''; KRV_OK = t.indexOf('하나님의 영은 수면 위에') >= 0; }
+    return KRV_OK;
+  }
+  var vCache = {};
+  function getV(b, c, v) { var k = b + '.' + c + '.' + v; if (!(k in vCache)) vCache[k] = dbGet(b, c, v, v)[0]; return vCache[k]; }
+  function rb(kf, pub) {
+    var pp = String(pub).split(' … '); if (pp.length !== kf.length) return null;
+    var out = [];
+    for (var i = 0; i < kf.length; i++) {
+      var fr = kf[i]; if (!fr) { out.push(pp[i]); continue; }
+      var parts = [];
+      for (var j = 0; j < fr.length; j++) { var z = fr[j], t = getV(z[0], z[1], z[2]); if (t == null) return null; parts.push(t.slice(z[3], z[4])); }
+      out.push(parts.join(' '));
+    }
+    return out.join(' … ');
+  }
+  function vtext(v) { return (v.kf && krvOK() && rb(v.kf, v.verse)) || v.verse; }
+  function ktext(x) {
+    if (!x.kq || !krvOK()) return x.text;
+    var T = x.text.slice(), by = {};
+    x.kq.forEach(function (q) { (by[q[0]] = by[q[0]] || []).push(q); });
+    Object.keys(by).forEach(function (pi) {
+      by[pi].sort(function (a, b) { return b[1] - a[1]; }).forEach(function (q) {   // 뒤에서부터 바꿔야 자리가 안 밀림
+        var t = T[pi], a = t.slice(q[1], q[2]), r = rb(q[3], a); if (r) T[pi] = t.slice(0, q[1]) + r + t.slice(q[2]);
+      });
+    });
+    return T;
+  }
+  // 묵상 앱(devo.html)도 개역개정으로 보이게: 이 기기에 개역개정 DB가 있으면 본문을 같은 주소의 IndexedDB(kjmKrv)에 한 번 담아 둔다
+  function krvCache() {
+    try {
+      if (!krvOK() || localStorage.getItem('kjm_krv_cache') === '1' || !window.indexedDB) return;
+      var S = detectedSchema, r = sqliteDbInstance.exec('SELECT "' + S.book + '","' + S.chapter + '","' + S.verse + '","' + S.content + '" FROM "' + S.table + '"');
+      if (!r.length) return;
+      var byB = {};
+      r[0].values.forEach(function (w) { var b = +w[0]; (byB[b] = byB[b] || {})[(+w[1]) + ':' + (+w[2])] = String(w[3] || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); });
+      var rq = indexedDB.open('kjmKrv', 1);
+      rq.onupgradeneeded = function () { rq.result.createObjectStore('b'); };
+      rq.onsuccess = function () {
+        var tx = rq.result.transaction('b', 'readwrite'), st = tx.objectStore('b');
+        Object.keys(byB).forEach(function (b) { st.put(byB[b], +b); });
+        tx.oncomplete = function () { try { localStorage.setItem('kjm_krv_cache', '1'); } catch (e) {} };
+      };
+    } catch (e) { console.warn('개역개정 묵상 사본 실패', e); }
+  }
   function find(m, d, p) { if (d31()) { for (var j = 0; j < D.length; j++) if (D[j].d === d) return j; return -1; } for (var i = 0; i < D.length; i++) { var x = D[i]; if (x.m === m && x.d === d && (!ap() || x.p === p)) return i; } return -1; }
   function todayKey() { var t = new Date(); return { m: t.getMonth() + 1, d: t.getDate(), p: t.getHours() < 15 ? 'a' : 'e' }; }
   function step(k, dir) {
@@ -22519,7 +22567,7 @@ window.FigTags = (function () {
       + (x.t ? '<div class="dv-title">' + esc(x.t) + '</div>' : '')
       + vvs(x).map(function (v) { return '<div class="dv-verse">「' + esc(vtext(v)) + '」</div>'
         + (v.ref ? '<span class="dv-ref" data-b="' + (v.b || '') + '" data-c="' + (v.c || '') + '" data-v="' + (v.vs || '') + '">' + esc(v.ref) + ' 본문 보기</span>' : ''); }).join('')
-      + x.text.map(function (t) {
+      + ktext(x).map(function (t) {
           if (t.indexOf('## ') === 0) return '<h4 class="dv-sub">' + esc(t.slice(3)) + '</h4>';
           if (/^\[\d+\]/.test(t)) return '<p class="dv-fn">' + esc(t) + '</p>';
           if (/^\d+\. /.test(t)) return '<p class="dv-pt">' + esc(t) + '</p>';
@@ -22562,7 +22610,7 @@ window.FigTags = (function () {
     bookId = id; try { localStorage.setItem('kjm_devo_book', id); } catch (e) {}
     var m = document.getElementById('devo-modal'), B = BOOKS[id];
     m.querySelector('.dv-name').textContent = B.icon + ' ' + B.name;
-    m.querySelector('.dv-f').textContent = B.foot + (dbOn() ? ' · 머리 성구: 이 기기의 성경 DB, 본문 인용: 개역한글판(대한성서공회)' : ' · 성구: 개역한글판(대한성서공회, 공개 저작물)');
+    m.querySelector('.dv-f').textContent = B.foot + (krvOK() ? ' · 성구: 개역개정(이 기기의 성경 DB)' : ' · 성구: 개역한글판(대한성서공회, 공개 저작물)');
     m.querySelector('.dv-by').textContent = B.by || '';
     m.querySelectorAll('.dv-ap').forEach(function (el) { el.style.display = B.ap ? '' : 'none'; });
     m.querySelectorAll('.dv-bks button').forEach(function (el) { el.classList.toggle('on', el.dataset.k === id); });
@@ -22612,6 +22660,7 @@ window.FigTags = (function () {
     return m;
   }
   window.openDevotional = function () {
+    setTimeout(krvCache, 1500);
     var fresh = !document.getElementById('devo-modal');
     var m = document.getElementById('devo-modal') || build();
     m.style.display = 'flex'; document.getElementById('devo-bk').style.display = 'block';
