@@ -19437,7 +19437,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22410,7 +22410,7 @@ window.FigTags = (function () {
     fc: { file: './spurgeon_fc.json', name: '믿음의 수표책', icon: '📜', ap: false, by: '스펄전', foot: 'C. H. 스펄전 『믿음의 수표책』(1888) · 한글 번역 © kjm' },
     hc: { file: './murray_hc.json', name: '그리스도 안에서 거룩함', icon: '🕊️', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에서 거룩함』(1887) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' },
     dw: { file: './meyer_dw.json', name: '날마다의 동행', icon: '👣', ap: false, by: 'F. B. 마이어', foot: 'F. B. 마이어 『날마다의 동행』(Our Daily Walk) · 한글 번역 © kjm' },
-    dl: { file: './bagster_dl.json', name: '날마다의 빛', icon: '🕯️', ap: true, by: '새뮤얼 백스터 엮음', foot: '새뮤얼 백스터 엮음 『날마다의 빛』(Daily Light on the Daily Path, 1875) · 성구는 개역개정 · 한글 편집 © kjm' },
+    dl: { file: './bagster_dl.json', name: '날마다의 빛', icon: '🕯️', ap: true, by: '새뮤얼 백스터 엮음', foot: '새뮤얼 백스터 엮음 『날마다의 빛』(Daily Light on the Daily Path, 1875) · 한글 편집 © kjm' },
     sp: { file: './murray_sp.json', name: '기도의 학교', icon: '🙏', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도와 함께 기도의 학교에서』(1885) · 31과, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' },
     ab: { file: './murray_ab.json', name: '그리스도 안에 거하라', icon: '🍇', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에 거하라』(1895) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' }
   };
@@ -22427,6 +22427,47 @@ window.FigTags = (function () {
   function ap() { return BOOKS[bookId].ap; }
   function d31() { return !!BOOKS[bookId].d31; }
   function vvs(x) { return (x.vv && x.vv.length) ? x.vv : [x]; }
+  /* (b20261031-5 kjm 「일반모드는 묵상에 저작권이 저촉되는 것 보완」) 공개 묵상 파일의 성구는 개역한글(공개 저작물).
+     이 기기에 성경 DB(.bdb)를 넣었으면 머리 성구(「…」)는 그 DB 본문(그 장절 전체)으로 보여 준다(kjm 기기 = 개역개정).
+     본문 속 인용·『날마다의 빛』 본문 성구는 파일 그대로(개역한글). */
+  var KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말','마','막','눅','요','행','롬','고전','고후','갈','엡','빌','골','살전','살후','딤전','딤후','딛','몬','히','약','벧전','벧후','요일','요이','요삼','유','계'];
+  var ONE = { 31: 1, 57: 1, 63: 1, 64: 1, 65: 1 };
+  function dbOn() { try { return !!(sqliteDbInstance && detectedSchema); } catch (e) { return false; } }
+  function dbGet(b, c, v1, v2) {
+    try {
+      var S = detectedSchema;
+      var q = 'SELECT "' + S.verse + '","' + S.content + '" FROM "' + S.table + '" WHERE "' + S.book + '"=' + (+b) + ' AND "' + S.chapter + '"=' + (+c)
+        + ' AND CAST("' + S.verse + '" AS INTEGER) BETWEEN ' + (+v1) + ' AND ' + (+v2) + ' ORDER BY CAST("' + S.verse + '" AS INTEGER)';
+      var r = sqliteDbInstance.exec(q); if (!r.length) return [];
+      return r[0].values.map(function (row) { return String(row[1] || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); });
+    } catch (e) { return []; }
+  }
+  function dbText(ref) {
+    if (!ref || !dbOn()) return null;
+    var r = String(ref).replace(/\([^)]*\)/g, '').replace(/[\s,]*-\s*$/, '').trim();
+    var pieces = r.split(/\s*;\s*(?=[가-힣]+\s*\d)/), out = [];
+    for (var i = 0; i < pieces.length; i++) {
+      var m = /^(\S+?)\s*(\d.*)$/.exec(pieces[i]); if (!m) return null;
+      var b = KO.indexOf(m[1]); if (b < 1) return null;
+      var c = null, parts = m[2].split(/\s*;\s*/), got = [];
+      for (var j = 0; j < parts.length; j++) {
+        var segs = parts[j].split(/\s*,\s*/);
+        for (var k = 0; k < segs.length; k++) {
+          var sg = segs[k].trim(); if (!sg) continue;
+          var mm = /^(?:(\d+):)?(\d+)(?:\s*[-–~]\s*(?:(\d+):)?(\d+))?$/.exec(sg); if (!mm) return null;
+          if (mm[1]) c = +mm[1]; else if (c === null) { if (ONE[b]) c = 1; else return null; }
+          var v1 = +mm[2];
+          if (mm[3] && +mm[3] !== c) { got.push(dbGet(b, c, v1, 999).join(' ')); c = +mm[3]; got.push(dbGet(b, c, 1, +mm[4]).join(' ')); continue; }
+          var t = dbGet(b, c, v1, mm[4] ? +mm[4] : v1); if (!t.length) return null;
+          got.push(t.join(' '));
+        }
+      }
+      out.push(got.join(' … '));
+    }
+    var s = out.join(' … ').trim();
+    return s || null;
+  }
+  function vtext(v) { return dbText(v.ref) || v.verse; }
   function find(m, d, p) { if (d31()) { for (var j = 0; j < D.length; j++) if (D[j].d === d) return j; return -1; } for (var i = 0; i < D.length; i++) { var x = D[i]; if (x.m === m && x.d === d && (!ap() || x.p === p)) return i; } return -1; }
   function todayKey() { var t = new Date(); return { m: t.getMonth() + 1, d: t.getDate(), p: t.getHours() < 15 ? 'a' : 'e' }; }
   function step(k, dir) {
@@ -22476,7 +22517,7 @@ window.FigTags = (function () {
     var b = document.querySelector('#devo-modal .dv-b');
     b.innerHTML = '<div class="dv-date">' + label(x) + '</div>'
       + (x.t ? '<div class="dv-title">' + esc(x.t) + '</div>' : '')
-      + vvs(x).map(function (v) { return '<div class="dv-verse">「' + esc(v.verse) + '」</div>'
+      + vvs(x).map(function (v) { return '<div class="dv-verse">「' + esc(vtext(v)) + '」</div>'
         + (v.ref ? '<span class="dv-ref" data-b="' + (v.b || '') + '" data-c="' + (v.c || '') + '" data-v="' + (v.vs || '') + '">' + esc(v.ref) + ' 본문 보기</span>' : ''); }).join('')
       + x.text.map(function (t) {
           if (t.indexOf('## ') === 0) return '<h4 class="dv-sub">' + esc(t.slice(3)) + '</h4>';
@@ -22521,7 +22562,7 @@ window.FigTags = (function () {
     bookId = id; try { localStorage.setItem('kjm_devo_book', id); } catch (e) {}
     var m = document.getElementById('devo-modal'), B = BOOKS[id];
     m.querySelector('.dv-name').textContent = B.icon + ' ' + B.name;
-    m.querySelector('.dv-f').textContent = B.foot;
+    m.querySelector('.dv-f').textContent = B.foot + (dbOn() ? ' · 머리 성구: 이 기기의 성경 DB, 본문 인용: 개역한글판(대한성서공회)' : ' · 성구: 개역한글판(대한성서공회, 공개 저작물)');
     m.querySelector('.dv-by').textContent = B.by || '';
     m.querySelectorAll('.dv-ap').forEach(function (el) { el.style.display = B.ap ? '' : 'none'; });
     m.querySelectorAll('.dv-bks button').forEach(function (el) { el.classList.toggle('on', el.dataset.k === id); });
