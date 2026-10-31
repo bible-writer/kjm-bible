@@ -17753,6 +17753,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     document.getElementById('btn-clear-db').onclick = async function() {
       if (confirm("브라우저에 저장된 성경 DB, 지명 데이터, 사용자 설정 전체를 삭제하고 초기화하시겠습니까?")) {
         await clearLocalAll();
+        // (b20261031-7) 묵상 앱용 개역개정 사본(kjmKrv)도 함께 지운다
+        try { localStorage.removeItem('kjm_krv_cache'); localStorage.removeItem('kjm_krv_src'); localStorage.removeItem('kjm_krv_tried'); } catch (e) {}
+        try { await new Promise(function (res) { var r = indexedDB.deleteDatabase('kjmKrv'); r.onsuccess = r.onerror = r.onblocked = function () { res(); }; }); } catch (e) {}
         location.reload();
       }
     };
@@ -19437,7 +19440,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-6`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-7`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22512,7 +22515,7 @@ window.FigTags = (function () {
       rq.onsuccess = function () {
         var tx = rq.result.transaction('b', 'readwrite'), st = tx.objectStore('b');
         Object.keys(byB).forEach(function (b) { st.put(byB[b], +b); });
-        tx.oncomplete = function () { try { localStorage.setItem('kjm_krv_cache', '1'); } catch (e) {} };
+        tx.oncomplete = function () { try { localStorage.setItem('kjm_krv_cache', '1'); localStorage.setItem('kjm_krv_src', 'map'); } catch (e) {} };
       };
     } catch (e) { console.warn('개역개정 묵상 사본 실패', e); }
   }

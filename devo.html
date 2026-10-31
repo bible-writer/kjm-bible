@@ -129,7 +129,7 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   <div class="top"><strong>글자와 화면</strong><button class="x" aria-label="닫기">✕</button></div>
   <div class="row"><span>글자 크기</span><button data-fs="-1" aria-label="글자 작게">가−</button><button data-fs="1" aria-label="글자 크게">가+</button></div>
   <div class="row"><span>화면</span><button data-th="light">밝게</button><button data-th="dark">어둡게</button><button data-th="auto">기기대로</button></div>
-  <div class="row"><span>성구 <small id="krv-st" style="color:var(--sub)"></small></span><button id="krv-bdb" style="min-width:auto;padding:0 12px">📂 개역개정 DB 넣기</button></div>
+  <div class="row"><span>성구 <small id="krv-st" style="color:var(--sub)"></small></span><button id="krv-bdb" style="min-width:auto;padding:0 12px">📂 개역개정 DB 넣기</button><button id="krv-del" style="min-width:auto;padding:0 10px" title="개역개정 사본 지우기">✕</button></div>
   <input type="file" id="krv-file" accept=".bdb,.db,.sqlite,.cdb" style="display:none">
   <div class="about" id="about"></div>
 </div></div>
@@ -244,6 +244,11 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
     }).then(function () { return initSqlJs({ locateFile: function (f) { return 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/' + f; } }); });
     return SQLP;
   }
+  var SRC_NOW = null;
+  function krvDrop() {   // 사본 지우기 → 개역한글
+    KR = null; try { localStorage.removeItem('kjm_krv_cache'); localStorage.removeItem('kjm_krv_src'); localStorage.removeItem('kjm_krv_tried'); } catch (e) {}
+    try { indexedDB.deleteDatabase('kjmKrv'); } catch (e) {}
+  }
   function krvFromBytes(bytes) {
     return sqlJs().then(function (SQL) {
       var db = new SQL.Database(new Uint8Array(bytes));
@@ -271,7 +276,7 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
         rq.onsuccess = function () {
           var tx = rq.result.transaction('b', 'readwrite'), st = tx.objectStore('b');
           Object.keys(o).forEach(function (b) { st.put(o[b], +b); });
-          tx.oncomplete = function () { ls('kjm_krv_cache', '1'); KR = o; res(o); };
+          tx.oncomplete = function () { ls('kjm_krv_cache', '1'); ls('kjm_krv_src', SRC_NOW || 'map'); KR = o; res(o); };
           tx.onerror = function () { rej(new Error('기기 저장 실패')); };
         };
       });
@@ -337,6 +342,13 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
 
   KRP.then(function (k) {
     krvState();
+    if (k && ls('kjm_krv_src') !== 'file') {   // 성경지도에서 온 사본: 지도에 성경 DB가 아직 있나 (지도 초기화하면 개역한글로)
+      mapBdb().then(function (buf) {
+        if (buf) return;
+        krvDrop(); krvState(); var i = cur ? find(cur) : -1; if (i >= 0) show(i, true);
+      });
+      return;
+    }
     if (k || ls('kjm_krv_tried') === '1') return;
     mapBdb().then(function (buf) {
       if (!buf) return;
@@ -380,9 +392,11 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   $('#find').onclick = function () { openSheet('#s-find'); $('#qhint').textContent = '『' + B().name + '』에서 찾습니다.'; setTimeout(function () { $('#q').focus(); }, 50); };
   $('#opt').onclick = function () { openSheet('#s-opt'); };
   $('#krv-bdb').onclick = function () { $('#krv-file').click(); };
+  $('#krv-del').onclick = function () { if (!KR) { toast('지금은 개역한글입니다'); return; } krvDrop(); ls('kjm_krv_tried', '1'); krvState(); var i = cur ? find(cur) : -1; if (i >= 0) show(i, true); toast('개역개정 사본을 지웠습니다'); };
   $('#krv-file').onchange = function () {
     var f = this.files && this.files[0]; this.value = ''; if (!f) return;
     toast('성경 DB 읽는 중…');
+    SRC_NOW = 'file';
     f.arrayBuffer().then(krvFromBytes).then(function () { krvState(); var i = cur ? find(cur) : -1; if (i >= 0) show(i, true); toast('개역개정으로 바꿨습니다'); })
       .catch(function (e) { toast(e && e.message ? e.message : '넣지 못했습니다'); });
   };
