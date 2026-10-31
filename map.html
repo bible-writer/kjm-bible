@@ -17606,9 +17606,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       let _resumed = false;
       if (sqliteDbInstance && detectedSchema) {
         try {
+          // (b20261031-3 kjm) 묵상 화면 「성경에서 읽기」로 map.html?goto=… 로 왔으면
+          // 읽던 곳 대신 그 절을 연다 (전에는 읽던 곳 이어 열기가 덮어써서 엉뚱한 장이 열렸다)
+          const _g = String(new URLSearchParams(location.search).get('goto') || '').split('.');
+          const _gb = parseInt(_g[0], 10);
           const saved = JSON.parse(localStorage.getItem('lastReadPosition') || 'null');
           const bk = saved && BIBLE_BOOKS.find(b => b.id === saved.bookId);
-          if (bk && saved.chapter) {
+          if (_gb >= 1 && _gb <= 66) {
+            navigateToBibleVerse(_gb, parseInt(_g[1] || '1', 10) || 1, parseInt(_g[2] || '1', 10) || 1);
+            _resumed = true;
+          } else if (bk && saved.chapter) {
             setSelectValuesAndLoad(bk.id, saved.chapter);
             if (typeof buildBookGrid === 'function') { try { buildBookGrid(); buildChapGrid(); } catch (e) {} }
             const st = parseInt(saved.scrollTop) || 0;
@@ -19427,7 +19434,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
