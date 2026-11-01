@@ -19303,7 +19303,49 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
     window.renderChapterChips = renderChapterChips;
 
+    /* (b20261101-4) 지명이 없는 장: 앞뒤 가까운 장(같은 책)에 나온 지명으로 무대 지역을 잡고,
+       그 지역 안의 핵심 지명(구절 20개 이상)만 회색 점으로 보인다. 전체 1,368곳 묶음은 숨긴다. */
+    function showRegionKeyPlaces() {
+      try {
+        const bookId = parseInt(document.getElementById('book-select').value), chapter = parseInt(document.getElementById('chapter-select').value);
+        const bk = BIBLE_BOOKS.find(b => b.id === bookId); if (!bk || !bk.osis || !placeDatabase.length) return false;
+        const hasXY = p => !isNaN(parseFloat(p.lat)) && !isNaN(parseFloat(p.lng));
+        const inCh = c => placeDatabase.filter(p => hasXY(p) && String(p.verse_osis || '').includes(bk.osis + '.' + c + '.'));
+        let near = [], used = [];
+        for (let d = 1; d <= Math.max(bk.chapters, 1) && used.length < 2; d++) {          // 앞 장을 먼저, 그다음 뒤 장
+          for (const c of [chapter - d, chapter + d]) {
+            if (c < 1 || c > bk.chapters || used.length >= 2) continue;
+            const ps = inCh(c); if (ps.length) { near = near.concat(ps); used.push(c); }
+          }
+        }
+        if (!near.length) near = placeDatabase.filter(p => hasXY(p) && Array.isArray(p.books) && p.books.includes(bk.abbr));   // 책 전체
+        const keyAll = placeDatabase.filter(p => hasXY(p) && (parseFloat(p.verse_count) || 0) >= 20);
+        let region = near.length ? L.latLngBounds(near.map(p => [parseFloat(p.lat), parseFloat(p.lng)])) : L.latLngBounds(keyAll.map(p => [parseFloat(p.lat), parseFloat(p.lng)]));
+        if (region.getNorthEast().distanceTo(region.getSouthWest()) < 60000) region = region.pad(1.5); else region = region.pad(0.25);
+        let keys = keyAll.filter(p => region.contains([parseFloat(p.lat), parseFloat(p.lng)]));
+        if (keys.length < 3) keys = keyAll.slice().sort((a, b) => region.getCenter().distanceTo([a.lat, a.lng]) - region.getCenter().distanceTo([b.lat, b.lng])).slice(0, 6);
+        if (map.hasLayer(markerClusterGroup)) map.removeLayer(markerClusterGroup);
+        const ms = keys.map(p => {
+          const nm = String(p.name || '').replace(/\s*\(.*$/, '');
+          const m = L.circleMarker([parseFloat(p.lat), parseFloat(p.lng)], { radius: 4, fillColor: '#64748b', color: '#fff', weight: 1.5, fillOpacity: 0.85 });
+          m.bindTooltip(nm, { permanent: true, direction: 'top', offset: [0, -5], className: 'chapter-place-label' });
+          try { m.bindPopup(generatePopupHtml(p), { maxWidth: PLACE_POPUP_W, minWidth: 280, autoPan: false }); } catch (e) {}
+          return m;
+        });
+        chapterPlaceLayer = L.layerGroup(ms); chapterPlaceLayer.addTo(map);
+        try { map.flyToBounds(region, { padding: [30, 30], maxZoom: 9, duration: 0.6 }); } catch (e) { map.fitBounds(region); }
+        const panel = document.getElementById('chapter-places-panel'), tl = document.getElementById('cp-tags-list'), tt = document.getElementById('cp-title-text');
+        if (panel && tl) {
+          tl.innerHTML = '<span style="font-size:11px;color:#64748b">이 장에는 지명이 없어 ' + (used.length ? bk.name + ' ' + used.sort((a, b) => a - b).join('·') + (bookId === 19 ? '편' : '장') + ' 지역의 ' : '') + '핵심 지명만 보입니다</span>';
+          if (tt) tt.textContent = '📍 이 장의 지역';
+          panel.style.display = 'block';
+        }
+        return true;
+      } catch (e) { console.warn('지역 핵심 지명 실패', e); return false; }
+    }
+
     function showChapterPlaces(container) {
+      { const tt = document.getElementById('cp-title-text'); if (tt) tt.textContent = '📍 이 장의 지명'; }
       // 기존 장 지명 레이어 제거
       if (chapterPlaceLayer) {
         map.removeLayer(chapterPlaceLayer);
@@ -19318,10 +19360,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       // 본문에서 하이라이트된 지명 태그 추출
       const tags = container.querySelectorAll('.bible-place-tag');
       if (tags.length === 0) {
-        // 지명 없는 장 → 전체 마커 다시 표시
-        if (!map.hasLayer(markerClusterGroup)) {
-          markerClusterGroup.addTo(map);
-        }
+        // (b20261101-4 kjm 「본문에 지명이 없으면 핵심 지명만, 나머지는 안 보이게 — 지명이 없어도 해당 지역과는 맞추어야」)
+        if (showRegionKeyPlaces()) return;
+        if (!map.hasLayer(markerClusterGroup)) markerClusterGroup.addTo(map);
         document.getElementById('chapter-places-panel').style.display = 'none';
         return;
       }
@@ -19369,6 +19410,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       });
 
       if (markers.length === 0) {
+        if (showRegionKeyPlaces()) return;
         // 매칭 마커 없으면 전체 마커 복원
         if (!map.hasLayer(markerClusterGroup)) {
           markerClusterGroup.addTo(map);
@@ -19460,7 +19502,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
