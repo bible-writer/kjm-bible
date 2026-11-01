@@ -13266,6 +13266,14 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           </div>
         </div>
       `;
+      // (b20261031-8 kjm 「중앙에 bdb 읽지 못함」) 성경 DB 없이 열면(초기화 뒤 등) 사전이 다 읽힐 때까지 시작 화면을 다시 그린다
+      //  — 전에는 사전을 받기 전에 한 번만 그려서 「사전을 아직 다 읽지 못했습니다」·「불러오는 중…」이 그대로 남았다
+      const st = document.getElementById('db-status-text');
+      if (!dbReady && st) st.innerText = allReady ? `지명 ${fmt(nPlace)} · 성경 DB 없음` : '사전 받는 중…';
+      clearTimeout(window._welcomeRetry);
+      if (!allReady && !dbReady && (window._welcomeTries = (window._welcomeTries || 0) + 1) < 60) {
+        window._welcomeRetry = setTimeout(() => { if (document.getElementById('welcome-screen') && !(sqliteDbInstance && detectedSchema)) renderWelcomeScreen(); }, 1000);
+      }
     }
 
     // 본문 이동 히스토리 스택 (되돌리기 기능)
@@ -17351,6 +17359,11 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
 
     // [통합업로드] bdb-file-input 핸들러 → routeFile()로 통합됨
+    // (b20261031-8 kjm 「bdb 읽지 못함」) 그런데 정작 bdb-file-input 에 받는 곳이 없어 시작 화면 「성경 DB(.bdb) 열기」로 고른 파일이 버려졌다 — 다시 잇는다
+    document.getElementById('bdb-file-input').addEventListener('change', async function () {
+      const files = Array.from(this.files || []); this.value = '';
+      for (const f of files) { try { await routeFile(f); } catch (e) { console.error(e); showToast('성경 DB를 열지 못했습니다: ' + (e && e.message || e), 'error'); } }
+    });
 
     // [통합업로드] sheet-file-input → routeFile()로 통합
     document.getElementById('sheet-file-input').addEventListener('change', async function(e) {
@@ -19440,7 +19453,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-7`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-8`;
         document.title = `바이블 맵 스터디`;
       }
     }
