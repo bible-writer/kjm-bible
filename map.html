@@ -4846,7 +4846,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             ${entityStrongLine('term', t, 'term-strong-box')}
           </div>
           <div id="term-strong-box"></div>`;
-        const def = t.definition_ko || '';
+        const def = krvDef(t) || '';
         const rawSource = t.source || '';
         const urlMatch = rawSource.match(/https?:\/\/\S+/);
         const source = urlMatch
@@ -4953,7 +4953,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         };
         function dictKoSection(entry, label, open) {
           if (!entry) return '';
-          const ko = String(entry.definition_ko || '').trim();
+          const ko = String(krvDef(entry) || '').trim();
           if (!ko) return '';
           const bid = 'term-dictko-' + label;
           const col = DICTBAR[label];
@@ -7376,7 +7376,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const safeId = `rawdict-ko-${rawdictSrc}-${e.id}`;
         const editKey = `${rawdictSrc}:${e.id}`;
         const isEditing = rawdictEditingSet.has(editKey);
-        const koParts = splitKoNotes(e.definition_ko);
+        const koParts = splitKoNotes(krvDef(e));
         // 주석 덩이는 본문 div(white-space:pre-wrap) 바깥에 형제로 둔다.
         // 안에 넣으면 템플릿 문자열의 줄바꿈·들여쓰기가 그대로 찍혀 빈 줄이 생긴다.
         const noteBlock = koParts.notes
@@ -7412,7 +7412,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
                  <div style="margin-bottom:6px">
                    <div style="font-size:0.7em;font-weight:700;color:#475569">— ${escHtml(v.origin)} —</div>
                    <div class="en-gloss" style="font-size:0.82em;color:#64748b;line-height:1.5">${linkifyVerseRefs(escHtml(v.definition || ''))}</div>
-                   ${v.definition_ko ? `<div style="font-size:0.85em;color:#1e293b;line-height:1.6;margin-top:3px">${linkifyVerseRefs(escHtml(v.definition_ko))}</div>` : ''}
+                   ${v.definition_ko ? `<div style="font-size:0.85em;color:#1e293b;line-height:1.6;margin-top:3px">${linkifyVerseRefs(escHtml(krvDef(v)))}</div>` : ''}
                  </div>`).join('')}
              </div>`
           : '';
@@ -8842,12 +8842,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (!ents.length && !stubs.length && !(it.isbe && it.isbe.length)) h += `<div style="color:#94a3b8;padding:10px 0">이 줄에 붙은 이스턴·스미스 항목이 없습니다.</div>`;
       ents.forEach(x => {
         h += `<div style="border-top:1px solid #eadbd2;padding-top:8px;margin-top:8px"><div style="font-size:.8em;color:#a0522d;font-weight:700;margin-bottom:4px">▣ ${x.src === 'easton' ? '이스턴' : '스미스'} 성경사전 <span style="font-weight:400;color:#94a3b8">${escHtml(x.e.term || '')}</span></div>`
-          + `<div style="font-family:'Gowun Batang',serif;font-size:1em">${_dictParas(x.e.definition_ko)}</div></div>`;
+          + `<div style="font-family:'Gowun Batang',serif;font-size:1em">${_dictParas(krvDef(x.e))}</div></div>`;
       });
       // (b20261013-2) ISBE — 이스턴·스미스 아래, 길어서 접어 둔다(한 개뿐이고 앞 단락이 없으면 펼침)
       (it.isbe || []).forEach((e, k) => {
         const open = (!ents.length && (it.isbe.length === 1)) ? ' open' : '';
-        const body = e.definition_ko ? _dictParas(e.definition_ko) : `<div style="color:#94a3b8;font-size:.9em">(한글 번역 없음 — 영문)</div>` + _dictParas(e.definition || '');
+        const body = e.definition_ko ? _dictParas(krvDef(e)) : `<div style="color:#94a3b8;font-size:.9em">(한글 번역 없음 — 영문)</div>` + _dictParas(e.definition || '');
         h += `<details${open} style="border-top:1px solid #eadbd2;padding-top:8px;margin-top:8px"><summary style="cursor:pointer;font-size:.8em;color:#475569;font-weight:700">▣ ISBE 국제 표준 성경 백과사전 — ${escHtml(e.term || '')}${e.hebrew_greek ? ' <span style="font-weight:400;color:#94a3b8"># ' + escHtml(e.hebrew_greek) + '</span>' : ''}</summary>`
           + `<div style="font-family:'Gowun Batang',serif;font-size:1em;margin-top:6px">${body}</div></details>`;
       });
@@ -8886,7 +8886,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         list.push({
           type: 'TERM', sortKey: ko || en,
           nameKo: ko || en, nameEn: ko ? en : '',
-          def: t.definition_ko || '', strong: t.hebrew_greek || t.original_note || '',
+          def: krvDef(t) || '', strong: t.hebrew_greek || t.original_note || '',
           srcDict: t.dict || '',
           ref: t
         });
@@ -8936,7 +8936,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             const ko = m ? m[2].trim() : term;
             const type = e.category === '인명' ? 'PERSON' : (e.category === '지명' ? 'PLACE' : 'TERM');
             list.push({ type, sortKey: ko || en, nameKo: ko || en, nameEn: ko ? en : '',
-                        def: e.definition_ko || '', strong: e.hebrew_greek || '', srcDict: 'ISBE', isbe: true, ref: e });
+                        def: krvDef(e) || '', strong: e.hebrew_greek || '', srcDict: 'ISBE', isbe: true, ref: e });
           });
         }
       } catch (err) { console.warn('ISBE 통합 검색 목록 실패', err); }
@@ -15511,7 +15511,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const e0 = placeDictIndex()[which][id];
         const e = which === 'isbe' ? e0 : placeFollowRef(e0, which);
         if (e) {
-          const ko = String(e.definition_ko || '').trim();
+          const ko = String(krvDef(e) || '').trim();
           const en = String(e.definition    || '').trim();
           if (ko || en) return { ko: ko, en: en };
         }
@@ -19453,7 +19453,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22893,5 +22893,48 @@ window.FigTags = (function () {
   .strong-inline-card [style*="font-size:0.72em"], .strong-inline-card [style*="font-size:0.75em"] { font-size: 0.85em !important; }
 </style>
 <script>try { var _scs = parseFloat(localStorage.getItem('strong_card_scale')); if (_scs) document.documentElement.style.setProperty('--strong-card-scale', _scs + 'em'); } catch (e) {}</script>
+<script>
+/* (b20261101-2 kjm 「공개사전도(원문 포함) 일반모드·개역개정 설치 전까지 개역한글」)
+   공개 사전 잠금본의 번역문 속 성경 인용은 개역한글이고, 항목마다 kq = {칸: {n: 글자수, q: [[시작, 끝, kf], …]}} 에 개역개정 자리만 있다.
+   이 기기 성경 DB가 개역개정(창 1:2 「하나님의 영은 수면 위에」)이면 보여 줄 때만 그 자리 글로 바꾼다 — 저장·내보내기·편집 칸은 원래 글 그대로.
+   글자 수(n)가 다르면(관리자가 고친 항목) 바꾸지 않는다. */
+function krvDef(e, field) {
+  field = field || 'definition_ko';
+  var t = e && e[field];
+  try {
+    if (!t || !e.kq || !e.kq[field]) return t;
+    var k = e.kq[field]; if (!k.q || k.n !== t.length) return t;
+    if (typeof sqliteDbInstance === 'undefined' || !sqliteDbInstance || !detectedSchema) return t;
+    var S = detectedSchema;
+    if (krvDef._db !== sqliteDbInstance) {
+      krvDef._db = sqliteDbInstance; krvDef._v = {}; krvDef._memo = new WeakMap();
+      var r0 = sqliteDbInstance.exec('SELECT "' + S.content + '" FROM "' + S.table + '" WHERE "' + S.book + '"=1 AND "' + S.chapter + '"=1 AND CAST("' + S.verse + '" AS INTEGER)=2');
+      krvDef._ok = !!(r0.length && String(r0[0].values[0][0] || '').replace(/<[^>]+>/g, '').indexOf('하나님의 영은 수면 위에') >= 0);
+    }
+    if (!krvDef._ok) return t;
+    var memo = krvDef._memo.get(e); if (memo && memo[field] && memo[field][0] === t) return memo[field][1];
+    function V(b, c, v) {
+      var key = b + '.' + c + '.' + v; if (key in krvDef._v) return krvDef._v[key];
+      var r = sqliteDbInstance.exec('SELECT "' + S.content + '" FROM "' + S.table + '" WHERE "' + S.book + '"=' + (+b) + ' AND "' + S.chapter + '"=' + (+c) + ' AND CAST("' + S.verse + '" AS INTEGER)=' + (+v));
+      return (krvDef._v[key] = r.length ? String(r[0].values[0][0] || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : null);
+    }
+    var out = t, qs = k.q.slice().sort(function (a, b) { return b[0] - a[0]; });
+    for (var i = 0; i < qs.length; i++) {
+      var q = qs[i], pub = out.slice(q[0], q[1]), pp = pub.split(' … '), kf = q[2];
+      if (pp.length !== kf.length) continue;
+      var parts = [], bad = false;
+      for (var j = 0; j < kf.length; j++) {
+        if (!kf[j]) { parts.push(pp[j]); continue; }
+        var seg = [];
+        for (var z = 0; z < kf[j].length; z++) { var w = kf[j][z], tx = V(w[0], w[1], w[2]); if (tx == null) { bad = true; break; } seg.push(tx.slice(w[3], w[4])); }
+        if (bad) break; parts.push(seg.join(' '));
+      }
+      if (!bad) out = out.slice(0, q[0]) + parts.join(' … ') + out.slice(q[1]);
+    }
+    if (!memo) { memo = {}; krvDef._memo.set(e, memo); } memo[field] = [t, out];
+    return out;
+  } catch (err) { return t; }
+}
+</script>
 </body>
 </html>

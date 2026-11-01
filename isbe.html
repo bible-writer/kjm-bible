@@ -225,6 +225,32 @@ function prepare(list) {
   ENTRIES.sort((a, b) => a._ko.localeCompare(b._ko, 'ko'));
   BY_ID = new Map(ENTRIES.map(e => [String(e.id), e]));
   REFIDX = null;
+  setTimeout(krvIsbe, 0);
+}
+/* (b20261101-2 kjm 「공개사전도 일반모드·개역개정 설치 전까지 개역한글」) 공개판 번역문 속 성경 인용은 개역한글.
+   같은 브라우저 성경지도에 넣은 성경 DB가 개역개정이면 kq 자리대로 개역개정 글로 바꿔 보인다(이 앱은 고치지 않으니 메모리에서 바꿈). */
+async function krvIsbe() {
+  try {
+    const db = await bible(); if (!db) return;
+    const t0 = db.exec('SELECT btext FROM Bible WHERE book=1 AND chapter=1 AND verse=2');
+    if (!(t0[0] && String(t0[0].values[0][0]).replace(/<[^>]+>/g, '').indexOf('하나님의 영은 수면 위에') >= 0)) return;
+    const vc = {};
+    const V = (b, c, v) => { const k = b + '.' + c + '.' + v; if (k in vc) return vc[k];
+      const r = db.exec(`SELECT btext FROM Bible WHERE book=${+b} AND chapter=${+c} AND verse=${+v}`);
+      return (vc[k] = r[0] ? String(r[0].values[0][0] || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim() : null); };
+    let n = 0;
+    for (const e of ENTRIES) {
+      const k = e.kq && e.kq.definition_ko; if (!k || e._krv || k.n !== String(e.definition_ko).length) continue;
+      let out = e.definition_ko;
+      for (const q of k.q.slice().sort((a, b) => b[0] - a[0])) {
+        const pp = out.slice(q[0], q[1]).split(' … '); if (pp.length !== q[2].length) continue;
+        let bad = false; const parts = q[2].map((fr, j) => { if (!fr) return pp[j]; return fr.map(w => { const tx = V(w[0], w[1], w[2]); if (tx == null) { bad = true; return ''; } return tx.slice(w[3], w[4]); }).join(' '); });
+        if (!bad) out = out.slice(0, q[0]) + parts.join(' … ') + out.slice(q[1]);
+      }
+      e.definition_ko = out; e._krv = 1; n++;
+    }
+    if (n && location.hash) openFromHash();
+  } catch (e) {}
 }
 
 /* ── 번역 사전 잠금 풀기 (418차, kjm 「읽는 것은 하되 통째로 가져가는 것 방지」) ──
@@ -304,7 +330,7 @@ async function load() {
   }
 }
 function setStatus(t) { $('status').textContent = t; }
-const APP_BUILD = 'b20260926-1';   // 화면 판 — 폰에서 새 판이 들어왔는지 보는 표
+const APP_BUILD = 'b20261101-2';   // 화면 판 — 폰에서 새 판이 들어왔는지 보는 표
 function status() { if (META) setStatus(`판 ${META.version} · ${ENTRIES.length.toLocaleString()} 항목 · 앱 ${APP_BUILD}`); }
 function ready(why) { status(); render(true); openFromHash(); }
 $('open-file').onclick = () => $('file').click();
