@@ -16,8 +16,8 @@ The materials in this repository (bible-writer/kjm-bible) are based on the sourc
 
 ## 2. 성경 본문 인용 · Bible Quotations
 
-- 번역문 안에 인용된 성경 구절은 **개역개정판**입니다. **© 대한성서공회.** 이 인용은 뜻풀이를 위해 구절 출처(권 장:절)와 함께 짧게 인용한 것이며, 위 1의 저작권에 포함되지 않습니다.
-  Bible verses quoted in the translations are from the **Korean Revised Version, New Edition (개역개정판), © Korean Bible Society**. They are short quotations with references (book chapter:verse) for explanation, and are not covered by section 1.
+- 공개 파일(사전 잠금본·묵상집)의 번역문 안에 인용된 성경 구절은 **성경전서 개역한글판(대한성서공회, 저작권 보호기간 만료 — 공개 저작물)**입니다. 기기에 개역개정 성경 DB를 직접 넣은 경우에만, 앱이 그 DB에서 같은 자리의 개역개정 글을 꺼내 보여 줍니다(공개 파일에는 장·절·글자 위치만 있음). 번역본끼리 견주려고 「개역개정 「…」」처럼 밝혀 적은 짧은 인용은 **개역개정판 © 대한성서공회**이며, 출처와 함께 짧게 인용한 것으로 위 1의 저작권에 포함되지 않습니다. (2026-11-01)
+  Bible verses quoted in the public translations are from the **Korean Revised Version (개역한글판, 1961), Korean Bible Society — public domain**. Only when a user installs their own 개역개정 Bible database does the app show 개역개정 text, taken from that local database (the public files contain only book/chapter/verse/character positions). A few short quotations explicitly labelled 「개역개정 …」 for version comparison are **© Korean Bible Society** and are quoted briefly with references; they are not covered by section 1.
 - 개역개정판 성경 본문 전체는 이 저장소에 올리지 않습니다.
   The full text of the 개역개정판 is not included in this repository.
 
