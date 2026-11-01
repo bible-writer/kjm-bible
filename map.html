@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>바이블 맵 스터디</title>
+<script>
+/* (b20261101-3 kjm 「map 검색이 키보드 입력이 느리다」) 검색 칸은 글자마다 바로 찾지 않고 손을 잠깐 멈춘 뒤(기본 250ms) 한 번만 찾는다.
+   한글은 자모 하나하나가 input 을 일으켜, 큰 사전(ISBE 9천여 항목)을 글자마다 훑느라 입력이 밀렸다. */
+function kjmDebounce(fn, ms) { var t = null; return function () { var self = this, a = arguments; clearTimeout(t); t = setTimeout(function () { fn.apply(self, a); }, ms || 250); }; }
+</script>
+
   <!-- PWA 설정 -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1e40af">
@@ -7997,7 +8004,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const backdrop = document.getElementById('rawdict-modal-backdrop');
       if (backdrop) backdrop.onclick = closeRawDictModal;
       const searchInput = document.getElementById('rawdict-search-input');
-      if (searchInput) searchInput.addEventListener('input', () => { rawdictBackStack = []; renderRawDictResults(true); }); // 손으로 새로 찾으면 되돌아가기 기록은 비운다
+      if (searchInput) searchInput.addEventListener('input', kjmDebounce(() => { rawdictBackStack = []; renderRawDictResults(true); }, 300)); // 손으로 새로 찾으면 되돌아가기 기록은 비운다
       // 사전 탭은 창을 열 때마다 새로 만들어지므로, 그때마다 다시 연결한다 (bindRawDictSrcTabs)
       bindRawDictSrcTabs();
       document.querySelectorAll('#rawdict-category-tabs .dict-filter-btn').forEach(btn => {
@@ -9114,7 +9121,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const backdrop = document.getElementById('dict-modal-backdrop');
       if (backdrop) backdrop.onclick = closeDictModal;
       const searchInput = document.getElementById('dict-search-input');
-      if (searchInput) searchInput.addEventListener('input', () => { closeDictCard(); renderDictResults(true); });
+      if (searchInput) searchInput.addEventListener('input', kjmDebounce(() => { closeDictCard(); renderDictResults(true); }, 300));
       document.querySelectorAll('#dict-filter-tabs .dict-filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('#dict-filter-tabs .dict-filter-btn').forEach(b => b.classList.remove('active'));
@@ -9314,9 +9321,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     }
 
     // 필터 이벤트 바인딩
-    document.getElementById("catalog-search-input").addEventListener("input", function() {
+    document.getElementById("catalog-search-input").addEventListener("input", kjmDebounce(function() {
       renderCatalogList();
-    });
+    }, 250));
     document.getElementById("catalog-country-filter").addEventListener("change", function() {
       populateRegionFilter();
       populateBookFilter();
@@ -9588,8 +9595,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       }
     }
 
-    searchBox.addEventListener("input", function() {
-      const val = this.value.trim().toLowerCase();
+    searchBox.addEventListener("input", kjmDebounce(function() {
+      const val = searchBox.value.trim().toLowerCase();
       const nval = val.replace(/\s+/g, '');
       const nsv = v => (v || '').toLowerCase().replace(/\s+/g, '');
       if (!val || placeDatabase.length === 0) {
@@ -9640,7 +9647,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       } else {
         acList.style.display = "none";
       }
-    });
+    }, 200));
 
     searchBox.addEventListener("keydown", function(e) {
       if (e.key === "Enter") executeUniversalSearch();
@@ -11823,7 +11830,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const searchInput = document.getElementById('commentary-list-search');
       if (searchInput && !searchInput.dataset.wired) {
         searchInput.dataset.wired = '1';
-        searchInput.addEventListener('input', () => renderCommentaryList());
+        searchInput.addEventListener('input', kjmDebounce(() => renderCommentaryList(), 250));
         document.getElementById('btn-commentary-export').onclick = () => {
           exportTextCommentaries().catch(err => {
             console.error('[주석 백업 실패]', err);
@@ -19453,7 +19460,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
