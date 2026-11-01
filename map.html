@@ -19453,7 +19453,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261031-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22416,7 +22416,7 @@ window.FigTags = (function () {
 /* (b20261030-1 kjm 「새 묵상 세 권」, b20261030-3 책 단추 여러 줄) 묵상 일곱 권
    🌅 스펄전 『아침과 저녁』 732편(spurgeon_me.json) · 📜 스펄전 『믿음의 수표책』 366편(spurgeon_fc.json)
    🕊️ 머레이 『그리스도 안에서 거룩함』 31일(murray_hc.json, 날짜의 '일'로 매달 되풀이)
-   👣 마이어 『날마다의 동행』 366편(meyer_dw.json)
+   👣 마이어 『날마다의 동행』 366편 — 관리자 전용, 구글 드라이브 meyer_dw.json(b20261101-1)
    🕯️ 백스터 엮음 『날마다의 빛』 732편(bagster_dl.json, 아침·저녁 성구 묵상)
    🙏 머레이 『기도의 학교』 31과(murray_sp.json) · 🍇 머레이 『그리스도 안에 거하라』 31일(murray_ab.json)
    책마다 처음 열 때 한 번 받아 옴. 날짜(◀ 오늘 ▶)·아침/저녁(아침과 저녁만), 낱말·성구 찾기, 「이 장의 묵상」, 성구 누르면 본문으로 */
@@ -22425,15 +22425,31 @@ window.FigTags = (function () {
     me: { file: './spurgeon_me.json', name: '아침과 저녁', icon: '🌅', ap: true, by: '스펄전', foot: 'C. H. 스펄전 『아침과 저녁』(1865–68) · 한글 번역 © kjm' },
     fc: { file: './spurgeon_fc.json', name: '믿음의 수표책', icon: '📜', ap: false, by: '스펄전', foot: 'C. H. 스펄전 『믿음의 수표책』(1888) · 한글 번역 © kjm' },
     hc: { file: './murray_hc.json', name: '그리스도 안에서 거룩함', icon: '🕊️', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에서 거룩함』(1887) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' },
-    dw: { file: './meyer_dw.json', name: '날마다의 동행', icon: '👣', ap: false, by: 'F. B. 마이어', foot: 'F. B. 마이어 『날마다의 동행』(Our Daily Walk) · 한글 번역 © kjm' },
+    dw: { file: './meyer_dw.json', drive: 'meyer_dw.json', priv: true, name: '날마다의 동행', icon: '👣', ap: false, by: 'F. B. 마이어', foot: 'F. B. 마이어 『날마다의 동행』(Our Daily Walk) · 한글 번역 © kjm · 관리자 전용(판권 확인 전, 구글 드라이브 비공개 파일)' },
     dl: { file: './bagster_dl.json', name: '날마다의 빛', icon: '🕯️', ap: true, by: '새뮤얼 백스터 엮음', foot: '새뮤얼 백스터 엮음 『날마다의 빛』(Daily Light on the Daily Path, 1875) · 한글 편집 © kjm' },
     sp: { file: './murray_sp.json', name: '기도의 학교', icon: '🙏', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도와 함께 기도의 학교에서』(1885) · 31과, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' },
     ab: { file: './murray_ab.json', name: '그리스도 안에 거하라', icon: '🍇', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에 거하라』(1895) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' }
   };
   var bookId = 'me', D = null, cur = null, ST = {};
+  /* (b20261101-1 kjm 「묵상집에서 저작권 위험 있는 거 제외, 일반모드에서도 제외」)
+     판권이 확실하지 않은 책(priv: 마이어 『날마다의 동행』, 1955년 사후 편집본)은 GitHub에 두지 않고,
+     관리자 모드에서만 kjm 구글 드라이브의 비공개 파일(이름 meyer_dw.json)을 받아 보여 준다. */
+  function adm() { return document.body.classList.contains('admin-mode'); }
+  function vis(k) { return BOOKS[k] && (!BOOKS[k].priv || adm()); }
   try { var sb = localStorage.getItem('kjm_devo_book'); if (BOOKS[sb]) bookId = sb; } catch (e) {}
+  if (!vis(bookId)) bookId = 'me';
   function load(id) {
     var s = ST[id] || (ST[id] = { D: null, P: null, cur: null });
+    if (!s.P && BOOKS[id].priv) {
+      s.P = (async function () {
+        var Dv = window._kjmDrive; if (!Dv) throw new Error('구글 연결 기능을 아직 읽지 못했습니다');
+        var tk = await Dv.token(false) || await Dv.token(true); if (!tk) throw new Error('구글 로그인이 필요합니다');
+        var fs = await Dv.list("name='" + BOOKS[id].drive + "' and trashed=false", tk);
+        if (!fs.length) throw new Error('구글 드라이브에 ' + BOOKS[id].drive + ' 파일이 없습니다');
+        fs.sort(function (a, b) { return String(b.modifiedTime).localeCompare(String(a.modifiedTime)); });
+        return await (await Dv.api('https://www.googleapis.com/drive/v3/files/' + fs[0].id + '?alt=media', tk)).json();
+      })().then(function (j) { s.D = (j && j.items) || []; return s.D; }).catch(function (e) { s.err = e && e.message; s.D = []; s.P = null; return s.D; });
+    }
     if (!s.P) s.P = fetch(BOOKS[id].file, { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { s.D = (j && j.items) || []; return s.D; }).catch(function () { s.D = []; return s.D; });
     return s.P;
@@ -22623,6 +22639,7 @@ window.FigTags = (function () {
     list(out, (bk.name || '') + ' ' + c + '장의 묵상', null);
   }
   function setBook(id) {
+    if (!vis(id)) id = 'me';
     bookId = id; try { localStorage.setItem('kjm_devo_book', id); } catch (e) {}
     var m = document.getElementById('devo-modal'), B = BOOKS[id];
     m.querySelector('.dv-name').textContent = B.icon + ' ' + B.name;
@@ -22634,7 +22651,7 @@ window.FigTags = (function () {
     load(id).then(function (arr) {
       if (bookId !== id) return;
       D = arr;
-      if (!D.length) { m.querySelector('.dv-b').innerHTML = '묵상 자료(' + B.file.replace('./', '') + ')를 받지 못했습니다.'; return; }
+      if (!D.length) { m.querySelector('.dv-b').innerHTML = '묵상 자료(' + (B.drive || B.file.replace('./', '')) + ')를 받지 못했습니다.' + (ST[id].err ? '<br><small>' + esc(ST[id].err) + '</small>' : ''); return; }
       var c = ST[id].cur; if (!c) { var k = todayKey(); c = k; }
       var i = find(c.m, c.d, c.p); show(i >= 0 ? i : 0);
     });
@@ -22648,7 +22665,7 @@ window.FigTags = (function () {
       + '<button class="dv-ap" data-p="a">아침</button><button class="dv-ap" data-p="e">저녁</button>'
       + '<button class="dv-fs" data-d="-1" title="글자 줄이기">A−</button><button class="dv-fs" data-d="1" title="글자 키우기">A+</button>'
       + '<button class="dv-x" title="닫기">✕</button></div>'
-      + '<div class="dv-bks">' + Object.keys(BOOKS).map(function (k) { return '<button data-k="' + k + '">' + BOOKS[k].icon + ' ' + BOOKS[k].name + '</button>'; }).join('') + '</div></div>'
+      + '<div class="dv-bks">' + Object.keys(BOOKS).map(function (k) { return '<button data-k="' + k + '"' + (BOOKS[k].priv ? ' data-priv="1"' : '') + '>' + BOOKS[k].icon + ' ' + BOOKS[k].name + (BOOKS[k].priv ? ' 🔒' : '') + '</button>'; }).join('') + '</div></div>'
       + '<div class="dv-s"><input placeholder="낱말 또는 성구 찾기 (예: 위로, 시 23)"><button class="dv-go">찾기</button><button class="dv-ch" title="지금 읽는 장을 다룬 묵상">이 장</button></div>'
       + '<div class="dv-b">불러오는 중…</div>'
       + '<div class="dv-f"></div>';
@@ -22680,6 +22697,8 @@ window.FigTags = (function () {
     var fresh = !document.getElementById('devo-modal');
     var m = document.getElementById('devo-modal') || build();
     m.style.display = 'flex'; document.getElementById('devo-bk').style.display = 'block';
+    m.querySelectorAll('.dv-bks button[data-priv]').forEach(function (el) { el.style.display = adm() ? '' : 'none'; });   // 일반모드에선 숨김
+    if (!vis(bookId)) { setBook('me'); return; }
     if (fresh || !D) setBook(bookId);
   };
   document.addEventListener('DOMContentLoaded', function () {
@@ -22687,7 +22706,7 @@ window.FigTags = (function () {
     if (!ref || document.getElementById('btn-open-devo')) return;
     var b = document.createElement('button');
     b.className = 'btn-catalog-trigger'; b.id = 'btn-open-devo'; b.style.marginLeft = '4px'; b.style.background = '#7c4a1e';
-    b.title = '묵상 — 스펄전 『아침과 저녁』·『믿음의 수표책』, 머레이 『그리스도 안에서 거룩함』'; b.textContent = '🌅 묵상'; b.onclick = window.openDevotional;
+    b.title = '묵상 — 스펄전·머레이·백스터'; b.textContent = '🌅 묵상'; b.onclick = window.openDevotional;
     ref.parentNode.insertBefore(b, ref.nextSibling);
   });
 })();
