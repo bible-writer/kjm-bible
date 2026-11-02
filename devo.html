@@ -105,6 +105,9 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
 .about{font-size:12.5px;color:var(--sub);line-height:1.7;margin-top:12px}
 .toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:13px;padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:30;white-space:nowrap}
 .toast.on{opacity:.92}
+/* (2026-11-03 kjm 「묵상앱 읽기 기능?」) 소리로 읽기 — 읽는 문단 표시 */
+.speaking{background:var(--ac-soft);border-radius:6px;box-shadow:0 0 0 6px var(--ac-soft)}
+nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
 </style>
 </head>
 <body>
@@ -114,6 +117,7 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   <button id="prev" aria-label="앞 날"><b>‹</b>앞 날</button>
   <button id="today" class="today" aria-label="오늘 묵상"><b>오늘</b>&nbsp;</button>
   <button id="next" aria-label="다음 날"><b>›</b>다음 날</button>
+  <button id="say" aria-label="소리로 읽기" aria-pressed="false"><b>🔊</b>듣기</button>
   <button id="find" aria-label="찾기"><b>⌕</b>찾기</button>
   <button id="opt" aria-label="글자와 화면"><b>가</b>글자</button>
 </div></nav>
@@ -130,6 +134,7 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   <div class="row"><span>글자 크기</span><button data-fs="-1" aria-label="글자 작게">가−</button><button data-fs="1" aria-label="글자 크게">가+</button></div>
   <div class="row"><span>화면</span><button data-th="light">밝게</button><button data-th="dark">어둡게</button><button data-th="auto">기기대로</button></div>
   <div class="row"><span>성구 <small id="krv-st" style="color:var(--sub)"></small></span><button id="krv-bdb" style="min-width:auto;padding:0 12px">📂 개역개정 DB 넣기</button><button id="krv-del" style="min-width:auto;padding:0 10px" title="개역개정 사본 지우기">✕</button></div>
+  <div class="row"><span>읽기 빠르기</span><button data-rt="0.85">느리게</button><button data-rt="1">보통</button><button data-rt="1.2">빠르게</button></div>
   <input type="file" id="krv-file" accept=".bdb,.db,.sqlite,.cdb" style="display:none">
   <div class="about" id="about"></div>
 </div></div>
@@ -315,6 +320,7 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
     return '<p' + (poem ? ' class="poem"' : '') + '>' + esc(t) + '</p>';
   }
   function show(i, keepScroll) {
+    if (window._sayStop) window._sayStop();
     var D = DATA[book] || [], x = D[i];
     if (!x) { $('#main').innerHTML = '<div class="empty">이 날의 묵상이 없습니다. 「오늘」을 눌러 보세요.</div>'; return; }
     cur = { m: x.m, d: x.d, p: x.p || 'a' };
@@ -401,7 +407,67 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
   };
   document.querySelectorAll('[data-fs]').forEach(function (b) { b.onclick = function () { fs = Math.max(14, Math.min(28, fs + parseInt(b.dataset.fs, 10))); ls('devo_fs', fs); applyFs(); toast('글자 ' + fs); }; });
   document.querySelectorAll('[data-th]').forEach(function (b) { b.onclick = function () { theme = b.dataset.th; ls('devo_theme', theme); applyTheme(); }; });
-  $('#about').innerHTML = '하루 한 편씩 읽는 묵상집 여섯 권입니다. 본문을 옆으로 밀면 앞 날·다음 날로 넘어갑니다. 성구 아래 「성경에서 읽기」를 누르면 성경지도에서 그 절이 열립니다.<br>홈 화면에 추가하면 앱처럼 쓸 수 있고, 한 번 연 책은 인터넷 없이도 읽힙니다.';
+  $('#about').innerHTML = '하루 한 편씩 읽는 묵상집 여섯 권입니다. 본문을 옆으로 밀면 앞 날·다음 날로 넘어갑니다. 성구 아래 「성경에서 읽기」를 누르면 성경지도에서 그 절이 열립니다. 아래 「🔊 듣기」를 누르면 소리로 읽어 주고(문단을 두 번 누르면 그 문단부터), 빠르기는 여기서 고릅니다.<br>홈 화면에 추가하면 앱처럼 쓸 수 있고, 한 번 연 책은 인터넷 없이도 읽힙니다.';
+
+  /* ── 🔊 소리로 읽기 (2026-11-03 kjm 「묵상앱 읽기 기능?」) ──
+     기기의 음성 읽기(speechSynthesis, 한국어)로 제목 → 성구 → 본문을 차례로 읽는다. 각주는 건너뛴다.
+     읽는 문단은 옅은 바탕으로 표시하고 화면을 따라 내린다. 한 번 누르면 읽기, 다시 누르면 멈춤(그 자리에서 다시 시작).
+     크롬은 긴 문장을 중간에 끊는 버릇이 있어 180자 안쪽으로 잘라 읽는다. 날을 넘기면 멈춘다. */
+  var SY = window.speechSynthesis, sayOn = false, sayQ = [], sayI = 0, sayEl = null, sayGen = 0;
+  var rate = parseFloat(ls('devo_rate')) || 1;
+  function applyRate() { document.querySelectorAll('[data-rt]').forEach(function (b) { b.setAttribute('aria-pressed', parseFloat(b.dataset.rt) === rate); }); }
+  applyRate();
+  document.querySelectorAll('[data-rt]').forEach(function (b) { b.onclick = function () { rate = parseFloat(b.dataset.rt); ls('devo_rate', rate); applyRate(); toast('읽기 ' + b.textContent); if (sayOn) { var i = sayI; sayStop(); sayStart(i); } }; });
+  function koVoice() { var vs = SY ? SY.getVoices() : []; var ko = vs.filter(function (v) { return /^ko/i.test(v.lang); }); return ko.filter(function (v) { return /google|natural|online/i.test(v.name); })[0] || ko[0] || null; }
+  function chunks(t) {
+    t = t.replace(/\s+/g, ' ').trim(); if (!t) return [];
+    var out = [], parts = t.split(/(?<=[.?!。」”’…])\s+/);
+    parts.forEach(function (p) { while (p.length > 180) { var k = p.lastIndexOf(' ', 180); if (k < 60) k = 180; out.push(p.slice(0, k)); p = p.slice(k).trim(); } if (p) out.push(p); });
+    return out;
+  }
+  function sayBuild() {
+    var q = [], m = $('#main');
+    m.querySelectorAll('h1, .verse q, .verse a, .text p:not(.fn), .text h2').forEach(function (el) {
+      var t = el.textContent; if (el.matches('.verse a')) t = t.replace(/ 성경에서 읽기$/, '');
+      chunks(t).forEach(function (c) { q.push({ el: el.matches('.verse a') ? el.parentNode : el, t: c }); });
+    });
+    return q;
+  }
+  function sayMark(el) {
+    if (sayEl === el) return; if (sayEl) sayEl.classList.remove('speaking'); sayEl = el;
+    if (el) { el.classList.add('speaking'); var r = el.getBoundingClientRect(); if (r.top < 70 || r.bottom > innerHeight - 90) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  }
+  function sayNext(gen) {
+    if (gen !== sayGen || !sayOn) return;
+    if (sayI >= sayQ.length) { sayStop(); toast('다 읽었습니다'); return; }
+    var it = sayQ[sayI], u = new SpeechSynthesisUtterance(it.t), v = koVoice();
+    u.lang = 'ko-KR'; if (v) u.voice = v; u.rate = rate;
+    u.onend = function () { if (gen !== sayGen) return; sayI++; sayNext(gen); };
+    u.onerror = function (e) { if (gen !== sayGen) return; if (e.error === 'interrupted' || e.error === 'canceled') return; sayI++; sayNext(gen); };
+    sayMark(it.el); SY.speak(u);
+  }
+  function sayStart(from) {
+    if (!SY) { toast('이 기기는 소리로 읽기를 지원하지 않습니다'); return; }
+    sayQ = sayBuild(); if (!sayQ.length) return;
+    sayI = Math.min(from || 0, sayQ.length - 1); sayOn = true; sayGen++;
+    $('#say').setAttribute('aria-pressed', 'true'); $('#say').innerHTML = '<b>⏸</b>멈춤';
+    SY.cancel(); setTimeout(function () { sayNext(sayGen); }, 60);
+  }
+  function sayStop() {
+    sayGen++; sayOn = false; if (SY) SY.cancel(); sayMark(null);
+    var b = $('#say'); if (b) { b.setAttribute('aria-pressed', 'false'); b.innerHTML = '<b>🔊</b>듣기'; }
+  }
+  window._sayStop = function () { if (sayOn || sayEl) { sayStop(); sayLast = 0; } };
+  var sayLast = 0;   // 멈춘 자리 — 다시 누르면 그 문장부터
+  $('#say').onclick = function () { if (sayOn) { sayLast = sayI; sayStop(); toast('멈췄습니다 — 다시 누르면 이어서 읽습니다'); } else { sayStart(sayLast); } };
+  if (SY && SY.onvoiceschanged !== undefined) SY.onvoiceschanged = function () {};
+  // 본문 문단을 길게 눌러(또는 두 번 눌러) 그 문단부터 읽기
+  $('#main').addEventListener('dblclick', function (e) {
+    var el = e.target.closest('h1, .verse, .text p, .text h2'); if (!el || !SY) return;
+    var q = sayBuild(), i = q.findIndex(function (x) { return x.el === el || el.contains(x.el); });
+    if (i >= 0) { sayStop(); sayStart(i); }
+  });
+  window.addEventListener('pagehide', function () { if (SY) SY.cancel(); });
 
   /* ── 찾기 ── */
   var qt = null;
