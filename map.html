@@ -19458,9 +19458,12 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         tag.style.cssText = `background:${tagBg};color:#fff;border-radius:9px;padding:2px 9px;font-size:11px;cursor:pointer;white-space:nowrap;line-height:18px;display:inline-block;margin:0;`;
         tag.textContent = name;
         const hidM = cpHidden.get(name);
-        if (hidM) { tag.style.background = '#fff'; tag.style.color = tagBg; tag.style.boxShadow = 'inset 0 0 0 1px ' + tagBg; tag.title = '누르면 지도에 보입니다'; }
+        // (b20261102-2 kjm 「글자가 잘 안보여」) 흰 칸 → 옅은 바탕 + 진한 글자 + 굵게
+        const hidBg = tagKey ? '#fee2e2' : '#dbeafe', hidFg = tagKey ? '#7f1d1d' : '#1e3a8a';
+        tag.style.fontSize = '12px'; tag.style.fontWeight = '600';
+        if (hidM) { tag.style.background = hidBg; tag.style.color = hidFg; tag.style.boxShadow = 'inset 0 0 0 1.5px ' + tagBg; tag.title = '누르면 지도에 보입니다'; }
         tag.onmouseover = () => { tag.style.background = tagHover; tag.style.color = '#fff'; };
-        tag.onmouseout  = () => { if (cpHidden.has(name)) { tag.style.background = '#fff'; tag.style.color = tagBg; } else { tag.style.background = tagBg; tag.style.color = '#fff'; } };
+        tag.onmouseout  = () => { if (cpHidden.has(name)) { tag.style.background = hidBg; tag.style.color = hidFg; } else { tag.style.background = tagBg; tag.style.color = '#fff'; } };
         tag.onclick = () => {
           const hm = cpHidden.get(name);
           if (hm && chapterPlaceLayer) {   // 숨겨 둔 지명 → 지도에 올리고 칩을 채운 색으로
@@ -19505,7 +19508,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const curChap = document.getElementById('chapter-select');
       const bookName = curBook ? curBook.options[curBook.selectedIndex]?.text || '' : '';
       const chapNum = curChap ? curChap.value : '';
-      document.getElementById('cp-title-text').textContent = `📍 ${bookName} ${chapNum}장의 지명 (${sortedNames.length}개)` + (cpHidden.size ? ` · 지도에는 핵심 ${cpShown.length}곳 — 흰 칸을 누르면 보입니다` : '');
+      document.getElementById('cp-title-text').textContent = `📍 ${bookName} ${chapNum}장의 지명 (${sortedNames.length}개)` + (cpHidden.size ? ` · 지도에는 핵심 ${cpShown.length}곳 — 옅은 칸을 누르면 보입니다` : '');
       panel.style.display = sortedNames.length > 0 ? 'block' : 'none';
 
       // fitBounds: 모든 마커가 보이도록 지도 줌/이동
@@ -19525,7 +19528,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261102-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261102-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
