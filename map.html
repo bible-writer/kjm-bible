@@ -19324,6 +19324,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (region.getNorthEast().distanceTo(region.getSouthWest()) < 60000) region = region.pad(1.5); else region = region.pad(0.25);
         let keys = keyAll.filter(p => region.contains([parseFloat(p.lat), parseFloat(p.lng)]));
         if (keys.length < 3) keys = keyAll.slice().sort((a, b) => region.getCenter().distanceTo([a.lat, a.lng]) - region.getCenter().distanceTo([b.lat, b.lng])).slice(0, 6);
+        if (keys.length > 12) keys = keys.slice().sort((a, b) => (parseFloat(b.verse_count) || 0) - (parseFloat(a.verse_count) || 0)).slice(0, 12);   // (b20261102-1) 지역 핵심도 12곳까지만
         if (map.hasLayer(markerClusterGroup)) map.removeLayer(markerClusterGroup);
         const ms = keys.map(p => {
           const nm = String(p.name || '').replace(/\s*\(.*$/, '');
@@ -19405,9 +19406,24 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           offset: [0, -6],
           className: labelClass
         });
+        m._kjmName = name; m._kjmVc = vc;
         markers.push(m);
         bounds.push([lat, lng]);
       });
+      /* (b20261102-1 kjm 「아직도 너무 복잡해 — 핵심만 추려. 빨간 칸(아래 목록)의 지명을 누르면 나오게」)
+         지명이 15곳이 넘는 장은 지도에 핵심만 보인다: 빨강(구절 20개+)을 구절 수 순으로 최대 12곳,
+         모자라면 파랑에서 구절 수 많은 순으로 채워 최소 8곳. 나머지는 아래 목록에서 누르면 지도에 나타난다. */
+      const CP_LIMIT = 15;
+      let cpShown = markers;
+      const cpHidden = new Map();
+      if (markers.length > CP_LIMIT) {
+        const byVc = markers.slice().sort((a, b) => b._kjmVc - a._kjmVc);
+        let core = byVc.filter(m => m._kjmVc >= 20).slice(0, 12);
+        if (core.length < 8) core = core.concat(byVc.filter(m => m._kjmVc < 20).slice(0, 8 - core.length));
+        const coreSet = new Set(core);
+        cpShown = markers.filter(m => coreSet.has(m));
+        markers.forEach(m => { if (!coreSet.has(m)) cpHidden.set(m._kjmName, m); });
+      }
 
       if (markers.length === 0) {
         if (showRegionKeyPlaces()) return;
@@ -19419,7 +19435,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         return;
       }
 
-      chapterPlaceLayer = L.layerGroup(markers);
+      chapterPlaceLayer = L.layerGroup(cpShown);
       chapterPlaceLayer.addTo(map);
 
       // 지명 목록 패널 업데이트
@@ -19441,9 +19457,16 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         const tagHover = tagKey ? '#b91c1c' : '#1d4ed8';
         tag.style.cssText = `background:${tagBg};color:#fff;border-radius:9px;padding:2px 9px;font-size:11px;cursor:pointer;white-space:nowrap;line-height:18px;display:inline-block;margin:0;`;
         tag.textContent = name;
-        tag.onmouseover = () => tag.style.background = tagHover;
-        tag.onmouseout  = () => tag.style.background = tagBg;
+        const hidM = cpHidden.get(name);
+        if (hidM) { tag.style.background = '#fff'; tag.style.color = tagBg; tag.style.boxShadow = 'inset 0 0 0 1px ' + tagBg; tag.title = '누르면 지도에 보입니다'; }
+        tag.onmouseover = () => { tag.style.background = tagHover; tag.style.color = '#fff'; };
+        tag.onmouseout  = () => { if (cpHidden.has(name)) { tag.style.background = '#fff'; tag.style.color = tagBg; } else { tag.style.background = tagBg; tag.style.color = '#fff'; } };
         tag.onclick = () => {
+          const hm = cpHidden.get(name);
+          if (hm && chapterPlaceLayer) {   // 숨겨 둔 지명 → 지도에 올리고 칩을 채운 색으로
+            chapterPlaceLayer.addLayer(hm); cpHidden.delete(name);
+            tag.style.background = tagBg; tag.style.color = '#fff'; tag.style.boxShadow = 'none'; tag.title = '';
+          }
               let places = placeKeywordMap[name] || [];
           if (places.length === 0) places = placeDatabase.filter(p => p.name && p.name === name);
           // 부분 매칭 시도
@@ -19482,7 +19505,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       const curChap = document.getElementById('chapter-select');
       const bookName = curBook ? curBook.options[curBook.selectedIndex]?.text || '' : '';
       const chapNum = curChap ? curChap.value : '';
-      document.getElementById('cp-title-text').textContent = `📍 ${bookName} ${chapNum}장의 지명 (${sortedNames.length}개)`;
+      document.getElementById('cp-title-text').textContent = `📍 ${bookName} ${chapNum}장의 지명 (${sortedNames.length}개)` + (cpHidden.size ? ` · 지도에는 핵심 ${cpShown.length}곳 — 흰 칸을 누르면 보입니다` : '');
       panel.style.display = sortedNames.length > 0 ? 'block' : 'none';
 
       // fitBounds: 모든 마커가 보이도록 지도 줌/이동
@@ -19502,7 +19525,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261101-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261102-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
