@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-13`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-14`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23261,6 +23261,9 @@ function krvDef(e, field) {
       사건을 누르면 시간 지도로 그 사건을 비춘다. */
 (function () {
   var D = null, ORD = [], PIDX = null, layer = null, cur = 0, playT = null, follow = true, sync = false, navLock = 0, revLock = 0;
+  /* (b20261107-14 kjm 「타임 라인이 너무 빨라」) 저절로 흐르기 빠르기 고르기 — 기본 6초, 🐢 10초 · 6초 · 3초 돌려 고름(기억) */
+  var SPEEDS = [10, 6, 3], spd = 6;
+  try { var sv = +localStorage.getItem('kjm_tmap_speed'); if (SPEEDS.indexOf(sv) >= 0) spd = sv; } catch (e) {}
   try { sync = localStorage.getItem('kjm_tmap_sync') !== '0'; } catch (e) { sync = true; }   // (b20261107-11) 기본 켬
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function eraColor(i, nt) { var h = (i * 47 + (nt ? 190 : 20)) % 360; return 'hsl(' + h + ',42%,' + (nt ? 42 : 40) + '%)'; }
@@ -23341,7 +23344,7 @@ function krvDef(e, field) {
     var mp = document.getElementById('map-pane') || document.body;
     b = document.createElement('div'); b.id = 'tmap-bar';
     b.innerHTML = '<div class="tm-top"><span class="tm-grip" title="끌어서 옮기기">⠿</span><span class="tm-y"></span><span class="tm-e"></span>'
-      + '<button class="tm-prev" title="앞 사건">◀</button><button class="tm-play" title="저절로 흐르기">▶</button><button class="tm-next" title="다음 사건">▶|</button>'
+      + '<button class="tm-prev" title="앞 사건">◀</button><button class="tm-play" title="저절로 흐르기">▶</button><button class="tm-spd" title="저절로 흐르는 빠르기 — 누를 때마다 10초·6초·3초">🐢6초</button><button class="tm-next" title="다음 사건">▶|</button>'
       + '<button class="tm-fol on" title="지명 따라 지도 옮기기">📍따라가기</button>'
       + '<button class="tm-sync" title="켜면 사건을 옮길 때 왼쪽 본문도 그 성구로 같이 가고, 본문 장을 넘기면 시간도 그 장 사건으로 따라옴">📖본문 같이</button>'
       + '<button class="tm-list" title="연대기 창">🕰</button><button class="tm-min" title="접기/펴기">▁</button><button class="tm-x" title="닫기">✕</button></div>'
@@ -23385,6 +23388,8 @@ function krvDef(e, field) {
     b.querySelector('.tm-prev').onclick = function () { stop(); go(cur - 1, true); };
     b.querySelector('.tm-next').onclick = function () { stop(); go(cur + 1, true); };
     b.querySelector('.tm-play').onclick = function () { if (playT) stop(); else play(); };
+    var spb = b.querySelector('.tm-spd'); spb.textContent = '🐢' + spd + '초';
+    spb.onclick = function () { spd = SPEEDS[(SPEEDS.indexOf(spd) + 1) % SPEEDS.length]; this.textContent = '🐢' + spd + '초'; try { localStorage.setItem('kjm_tmap_speed', String(spd)); } catch (e) {} if (playT) play(); };
     b.querySelector('.tm-fol').onclick = function () { follow = !follow; this.classList.toggle('on', follow); if (follow) go(cur, true); };
     b.querySelector('.tm-list').onclick = function () { if (window.openChronology) window.openChronology(ORD[cur].n); };
     var sb = b.querySelector('.tm-sync'); sb.classList.toggle('on', sync);
@@ -23453,7 +23458,7 @@ function krvDef(e, field) {
     for (var j = 0; j < ORD.length; j++) if ((ORD[j].R || []).some(function (R) { return R[0] === b && R[1] <= c && c <= R[3]; })) { revLock = 1; go(j, true); revLock = 0; return; }
   };
   function stop() { if (playT) { clearInterval(playT); playT = null; } var p = document.querySelector('#tmap-bar .tm-play'); if (p) { p.textContent = '▶'; p.classList.remove('on'); } }
-  function play() { stop(); var p = document.querySelector('#tmap-bar .tm-play'); p.textContent = '⏸'; p.classList.add('on'); playT = setInterval(function () { if (cur >= ORD.length - 1) stop(); else go(cur + 1, true); }, 1800); }
+  function play() { stop(); var p = document.querySelector('#tmap-bar .tm-play'); p.textContent = '⏸'; p.classList.add('on'); playT = setInterval(function () { if (cur >= ORD.length - 1) stop(); else go(cur + 1, true); }, spd * 1000); }
   function closeMap() { stop(); var b = document.getElementById('tmap-bar'); if (b) b.style.display = 'none'; if (layer && typeof map !== 'undefined') { map.removeLayer(layer); layer = null; } }
   var flyT = null;
   function go(k, settle) {
