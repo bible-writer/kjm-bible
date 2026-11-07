@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-9`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-10`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23214,6 +23214,7 @@ function krvDef(e, field) {
     var b = bs ? parseInt(bs.value, 10) : 0, c = cs ? parseInt(cs.value, 10) : 0;
     title.dataset.chrono = '1';
     if (!b || !c) return;
+    if (window._tmapChapterChanged) { try { window._tmapChapterChanged(b, c); } catch (e) {} }
     load().then(function (d) {
       if (!d || !title.isConnected) return;
       var hits = d.items.filter(function (x) { return (x.R || []).some(function (R) { return R[0] === b && R[1] <= c && c <= R[3]; }); });
@@ -23258,7 +23259,8 @@ function krvDef(e, field) {
    ② 🌊 강줄기 — 연대기 창 안 세로 연표: 가운데 시대 색 줄기, 연도가 바뀌는 곳에 연도 마디, 사건은 좌우로 번갈아.
       사건을 누르면 시간 지도로 그 사건을 비춘다. */
 (function () {
-  var D = null, ORD = [], PIDX = null, layer = null, cur = 0, playT = null, follow = true;
+  var D = null, ORD = [], PIDX = null, layer = null, cur = 0, playT = null, follow = true, sync = false, navLock = 0, revLock = 0;
+  try { sync = localStorage.getItem('kjm_tmap_sync') === '1'; } catch (e) {}
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function eraColor(i, nt) { var h = (i * 47 + (nt ? 190 : 20)) % 360; return 'hsl(' + h + ',42%,' + (nt ? 42 : 40) + '%)'; }
   function ready() {
@@ -23306,6 +23308,9 @@ function krvDef(e, field) {
       + '#chrono-modal .rv-card b{font-weight:700}#chrono-modal .rv-card .ch-ref{margin:0 0 0 5px}#chrono-modal .rv-card.l .ch-ref{margin:0 5px 0 0}'
       + '#chrono-modal .rv-card .rv-p{display:block;font-size:11px;color:#b42318;margin-top:1px}'
       + '#chrono-modal .rv-card.hit{outline:2px solid #f59e0b;background:#fde68a55}'
+      + '#tmap-bar .tm-go{display:flex;gap:5px;align-items:center;margin:0 0 6px;flex-wrap:wrap}'
+      + '#tmap-bar .tm-go select,#tmap-bar .tm-go input{border:1px solid #d8cdb8;border-radius:7px;padding:3px 7px;font-size:12.5px;background:#fff;color:#2e2922}'
+      + '#tmap-bar .tm-go select{max-width:220px}#tmap-bar .tm-yr{width:160px}#tmap-bar .tm-q{flex:1;min-width:140px}'
       + '#tmap-bar .tm-w{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:5px 1px 0;font-size:12px;scrollbar-width:thin}#tmap-bar .tm-w:empty{display:none}'
       + '#tmap-bar .tm-w .wl{flex:0 0 auto;color:#4b5563;font-weight:700}'
       + '.w-c{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;border:1px dashed #b8c2cc;background:#f4f7f9;color:#334155;border-radius:999px;padding:2px 9px;white-space:nowrap;font-size:12px}'
@@ -23334,7 +23339,12 @@ function krvDef(e, field) {
     b = document.createElement('div'); b.id = 'tmap-bar';
     b.innerHTML = '<div class="tm-top"><span class="tm-y"></span><span class="tm-e"></span>'
       + '<button class="tm-prev" title="앞 사건">◀</button><button class="tm-play" title="저절로 흐르기">▶</button><button class="tm-next" title="다음 사건">▶|</button>'
-      + '<button class="tm-fol on" title="지명 따라 지도 옮기기">📍따라가기</button><button class="tm-list" title="연대기 창">🕰</button><button class="tm-x" title="닫기">✕</button></div>'
+      + '<button class="tm-fol on" title="지명 따라 지도 옮기기">📍따라가기</button>'
+      + '<button class="tm-sync" title="켜면 사건을 옮길 때 왼쪽 본문도 그 성구로 같이 가고, 본문 장을 넘기면 시간도 그 장 사건으로 따라옴">📖본문 같이</button>'
+      + '<button class="tm-list" title="연대기 창">🕰</button><button class="tm-x" title="닫기">✕</button></div>'
+      + '<div class="tm-go"><select class="tm-era" title="시대로 건너뛰기"></select>'
+      + '<input class="tm-yr" placeholder="연도 (예: BC 586, AD 30)" title="그 해에 가장 가까운 사건으로"><button class="tm-yrgo">이동</button>'
+      + '<input class="tm-q" placeholder="사건·지명·성구 찾기 (예: 갈멜, 왕하 25)"><button class="tm-qgo">찾기</button></div>'
       + '<div class="tm-rib"></div><div class="tm-ev"></div><div class="tm-w"></div>';
     mp.appendChild(b);
     var rib = b.querySelector('.tm-rib');
@@ -23348,6 +23358,35 @@ function krvDef(e, field) {
     b.querySelector('.tm-play').onclick = function () { if (playT) stop(); else play(); };
     b.querySelector('.tm-fol').onclick = function () { follow = !follow; this.classList.toggle('on', follow); if (follow) go(cur, true); };
     b.querySelector('.tm-list').onclick = function () { if (window.openChronology) window.openChronology(ORD[cur].n); };
+    var sb = b.querySelector('.tm-sync'); sb.classList.toggle('on', sync);
+    sb.onclick = function () { sync = !sync; this.classList.toggle('on', sync); try { localStorage.setItem('kjm_tmap_sync', sync ? '1' : '0'); } catch (e) {} if (sync) toVerse(); };
+    var es = b.querySelector('.tm-era');
+    es.innerHTML = '<option value="">⏩ 시대로 건너뛰기</option>' + D.eras.map(function (e, i) { return '<option value="' + i + '">' + (i >= (D.ntEra || 1e9) ? '신약 · ' : '구약 · ') + esc(e) + '</option>'; }).join('');
+    es.onchange = function () { if (this.value === '') return; var e = +this.value; for (var i = 0; i < ORD.length; i++) if (ORD[i].e === e) { stop(); go(i, true); break; } this.value = ''; };
+    function yearGo() {
+      var v = b.querySelector('.tm-yr').value.trim(); if (!v) return;
+      var m = /(-?\d{1,4})/.exec(v); if (!m) return;
+      var y = +m[1];
+      if (/BC|주전|기원전/i.test(v)) y = -Math.abs(y);
+      else if (/AD|주후|기원후/i.test(v)) y = Math.abs(y);
+      else if (y > 100) y = -y;   // 100 넘는 맨 숫자는 BC 로 본다
+      var best = -1, bd = 1e9;
+      for (var i = 0; i < ORD.length; i++) { var Y = ORD[i].Y; if (!Y) continue; var a = Math.min(Y[0], Y[Y.length - 1]), z = Math.max(Y[0], Y[Y.length - 1]); var d = (y < a ? a - y : (y > z ? y - z : 0)) * 1000 + (z - a); if (d < bd) { bd = d; best = i; } }   // 겹치면 기간 짧은 사건 먼저
+      if (best >= 0) { stop(); go(best, true); }
+    }
+    b.querySelector('.tm-yrgo').onclick = yearGo;
+    b.querySelector('.tm-yr').addEventListener('keydown', function (e) { if (e.key === 'Enter') yearGo(); });
+    function qGo() {
+      var q = b.querySelector('.tm-q').value.trim().toLowerCase(); if (!q) return;
+      var P = places();
+      for (var t = 1; t <= ORD.length; t++) {
+        var i = (cur + t) % ORD.length, x = ORD[i];
+        var txt = (x.t + ' ' + x.i + ' ' + x.d + ' ' + x.r + ' ' + (x.P || []).map(function (p) { return P[p] ? P[p].name : ''; }).join(' ')).toLowerCase();
+        if (txt.indexOf(q) >= 0) { stop(); go(i, true); return; }
+      }
+    }
+    b.querySelector('.tm-qgo').onclick = qGo;
+    b.querySelector('.tm-q').addEventListener('keydown', function (e) { if (e.key === 'Enter') qGo(); });
     b.querySelector('.tm-x').onclick = closeMap;
     b.querySelector('.tm-ev').addEventListener('click', function (e) {
       var c = e.target.closest('.tm-c'); if (!c) return;
@@ -23364,6 +23403,26 @@ function krvDef(e, field) {
     }).join('') + '<span class="tm-cur"></span>';
     return b;
   }
+  /* (b20261107-10 kjm 「타임 이동 할 수 있는 거 없나? 관련성구 이동도 옵션을 넣어서 같이 움직이게」)
+     ⏩ 시대로 건너뛰기 · 연도 칸 · 사건 찾기, 그리고 📖본문 같이: 사건을 옮기면(끌기를 놓을 때·◀▶·재생·건너뛰기)
+     왼쪽 본문이 그 사건 첫 성구로 가고, 거꾸로 본문 장을 넘기면 시간 띠가 그 장의 첫 사건으로 따라온다(맴돌지 않게 잠금). */
+  var vT = null;
+  function toVerse() {
+    var x = ORD[cur]; if (!x || !x.R || !x.R[0] || typeof navigateToBibleVerse !== 'function') return;
+    var R = x.R[0];
+    clearTimeout(vT);
+    vT = setTimeout(function () {
+      navLock = Date.now();   // 이 이동으로 바뀐 장은 거꾸로 따라오지 않게
+      try { navigateToBibleVerse(R[0], R[1], R[2] || 1); } catch (e) {}
+      setTimeout(function () { if (Date.now() - navLock >= 1400) navLock = 0; }, 1500);
+    }, 250);
+  }
+  window._tmapChapterChanged = function (b, c) {   // 본문 장이 바뀌면 불림
+    var bar = document.getElementById('tmap-bar');
+    if (!sync || navLock || !bar || bar.style.display === 'none' || !ORD.length) return;
+    var x = ORD[cur]; if (x && (x.R || []).some(function (R) { return R[0] === b && R[1] <= c && c <= R[3]; })) return;
+    for (var j = 0; j < ORD.length; j++) if ((ORD[j].R || []).some(function (R) { return R[0] === b && R[1] <= c && c <= R[3]; })) { revLock = 1; go(j, true); revLock = 0; return; }
+  };
   function stop() { if (playT) { clearInterval(playT); playT = null; } var p = document.querySelector('#tmap-bar .tm-play'); if (p) { p.textContent = '▶'; p.classList.remove('on'); } }
   function play() { stop(); var p = document.querySelector('#tmap-bar .tm-play'); p.textContent = '⏸'; p.classList.add('on'); playT = setInterval(function () { if (cur >= ORD.length - 1) stop(); else go(cur + 1, true); }, 1800); }
   function closeMap() { stop(); var b = document.getElementById('tmap-bar'); if (b) b.style.display = 'none'; if (layer && typeof map !== 'undefined') { map.removeLayer(layer); layer = null; } }
@@ -23383,6 +23442,7 @@ function krvDef(e, field) {
     }
     var ev = b.querySelector('.tm-ev'); ev.innerHTML = h.join('');
     var nw = ev.querySelector('.now'); if (nw) ev.scrollLeft = nw.offsetLeft - ev.clientWidth / 2 + nw.clientWidth / 2;
+    if (settle && sync && !revLock) toVerse();
     var wy = x.Y ? x.Y[0] : null, ww = worldNear(wy, 6);
     b.querySelector('.tm-w').innerHTML = ww.length ? '<span class="wl">🌍 같은 무렵</span>' + ww.map(wchip).join('') : '';
     drawPlaces(lo, hi, settle);
