@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261108-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261108-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23066,7 +23066,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=b20261108-3', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=b20261108-4', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -23229,6 +23229,15 @@ function krvDef(e, field) {
     m.style.display = 'flex'; document.getElementById('chrono-bk').style.display = 'block';
     load().then(function (d) {
       if (!d) { m.querySelector('.ch-b').innerHTML = '연대기 자료(chronology.json)를 받지 못했습니다.'; return; }
+      if (!focusN) {   // (b20261108-4 kjm 화면: 누가복음 3장인데 연대기가 느헤미야에 머묾) 위 단추로 열면 지금 읽는 장의 사건으로
+        var bs0 = document.getElementById('book-select'), cs0 = document.getElementById('chapter-select');
+        var b0 = bs0 ? parseInt(bs0.value, 10) : 0, c0 = cs0 ? parseInt(cs0.value, 10) : 0;
+        for (var cc0 = c0; b0 && cc0 >= 1 && !focusN; cc0--) {
+          var bestV = 1e9;   // 그 장에서 가장 앞 절에서 시작하는 사건(눅 3장 → 3:1 요한 사역, 3:23 족보가 아니라)
+          d.items.forEach(function (x) { (x.R || []).forEach(function (R) { if (R[0] === b0 && R[1] <= cc0 && cc0 <= R[3]) { var v = R[1] === cc0 ? (R[2] || 0) : 0; if (v < bestV) { bestV = v; focusN = x.n; } } }); });
+        }
+        if (!focusN && b0) { var h1 = d.items.find(function (x) { return (x.R || []).some(function (R) { return R[0] === b0; }); }); if (h1) focusN = h1.n; }
+      }
       if (focusN) {
         var it = d.items.find(function (x) { return x.n === focusN; });
         if (it) { curEra = it.e; curT = it.e >= (d.ntEra || 1e9) ? 'nt' : 'ot'; m.querySelector('.ch-q').value = ''; }
@@ -23379,7 +23388,7 @@ function krvDef(e, field) {
       .filter(function (o) { return o.d <= 30; }).sort(function (p, q) { return p.d - q.d || p.span - q.span; }).slice(0, k).map(function (o) { return o.w; });
   }
   window.chronoWorldChip = wchip;
-  /* (b20261108-3 kjm 「연대기 고고학에서 찾을 수 있잖아」「참고하고」) 층 더함:
+  /* (b20261108-4 kjm 「연대기 고고학에서 찾을 수 있잖아」「참고하고」) 층 더함:
      👑 왕(통일·이스라엘·유다, 틸레 연대) · 📣 선지자 · 📜 성경 기록 연대 · ⚓ 고고학 유물(발견지 좌표) · ✝ 사본·초대 교회(~AD 500) */
   function inY(Y, y) { var a = Math.min(Y[0], Y[Y.length - 1]), b = Math.max(Y[0], Y[Y.length - 1]); return y >= a && y <= b; }
   function kchip(k) { var c = k.k === '유다' ? '#3730a3' : (k.k === '이스라엘' ? '#0f766e' : '#92400e'); return '<span class="w-c k-c" style="border-color:' + c + ';color:' + c + '" title="' + esc((k.k === '통일' ? '통일 왕국' : k.k) + ' 왕 ' + k.n + ' · ' + k.y + (k.q ? ' · ' + (k.q === '선' ? '여호와 보시기에 정직' : '여호와 보시기에 악') : '') + (k.x ? ' · ' + k.x : '') + ' · ' + k.r) + '">👑 ' + (k.k === '통일' ? '' : '<small>' + (k.k === '유다' ? '남' : '북') + '</small> ') + esc(k.n) + ' <small>' + esc(k.y.replace(/^BC /, '')) + '</small>' + (k.q ? (k.q === '선' ? ' <small>👍</small>' : '') : '') + '</span>'; }
