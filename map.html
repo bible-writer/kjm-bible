@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-4`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23059,5 +23059,165 @@ function krvDef(e, field) {
   } catch (err) { return t; }
 }
 </script>
+<script>
+/* (b20261107-4 kjm 「성경사건연대기 — 우리 지도에 맞게」) 구약 사건 2,020개(chronology.json)
+   ① 위 줄 「🕰 연대기」 단추 → 시대 단추·검색·주제별 목록, 성구를 누르면 그 장으로 간다.
+   ② 장을 읽으면 제목 아래에 그 장의 사건을 한 줄로 보인다 → 누르면 연대기 창에서 그 항목을 비춘다. */
+(function () {
+  var DATA = null, P = null, curEra = -1, KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
+  function load() {
+    if (!P) P = fetch('./chronology.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { DATA = j; return j; }).catch(function () { return null; });
+    return P;
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function css() {
+    if (document.getElementById('chrono-css')) return;
+    var st = document.createElement('style'); st.id = 'chrono-css';
+    st.textContent = '#chrono-modal{position:fixed;z-index:10050;left:50%;top:50%;transform:translate(-50%,-50%);width:min(760px,96vw);height:min(88vh,920px);background:var(--card,#fffdf8);color:var(--text,#2e2922);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden}'
+      + '#chrono-bk{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10049;display:none}'
+      + '#chrono-modal .ch-h{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#7d3529 !important;color:#fff !important;cursor:move}'
+      + '#chrono-modal .ch-h b{font-size:16px;margin-right:auto}#chrono-modal .ch-h small{opacity:.8;font-size:11px}'
+      + '#chrono-modal button{border:none;border-radius:6px;padding:5px 10px;cursor:pointer;font-size:13px}'
+      + '#chrono-modal .ch-h button{background:rgba(255,255,255,.18);color:#fff}'
+      + '#chrono-modal .ch-s{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border,#e5dccb)}'
+      + '#chrono-modal .ch-s input{flex:1;padding:7px 9px;border:1px solid var(--border,#d8cdb8);border-radius:7px;font-size:14px;background:var(--card,#fff);color:inherit}'
+      + '#chrono-modal .ch-s button{background:#f3e7dc;color:#7d3529;white-space:nowrap}'
+      + '#chrono-modal .ch-e{display:flex;gap:5px;overflow-x:auto;padding:7px 12px;background:var(--bg2,#f7f1e7);border-bottom:1px solid var(--border,#e5dccb);flex:0 0 auto}'
+      + '#chrono-modal .ch-e button{white-space:nowrap;flex:0 0 auto;border:1px solid #d8cdb8;background:var(--card,#fffdf8);color:inherit;border-radius:999px;font-size:12px;padding:4px 10px}'
+      + '#chrono-modal .ch-e button.on{background:#7d3529;color:#fff;border-color:#7d3529}#chrono-modal .ch-e button span{opacity:.6;margin-left:3px}'
+      + '#chrono-modal .ch-n{font-size:11px;color:#8a7f70;padding:4px 14px}'
+      + '#chrono-modal .ch-b{flex:1;overflow:auto;padding:4px 14px 30px}'
+      + '#chrono-modal .ch-era{margin:14px 0 4px;font-weight:800;color:#7d3529;font-size:15px;border-bottom:2px solid #e2c9bd;padding-bottom:3px}'
+      + '#chrono-modal .ch-t{margin:10px 0 2px;font-weight:700;color:#6e4e36;font-size:13.5px}'
+      + '#chrono-modal .ch-i{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;padding:6px 8px;border-radius:8px;font-size:13.5px;line-height:1.6}'
+      + '#chrono-modal .ch-i:hover{background:rgba(125,53,41,.06)}#chrono-modal .ch-i.hit{background:#fde68a55;outline:2px solid #f59e0b}'
+      + '#chrono-modal .ch-i .ch-no{color:#a39886;font-size:11px;text-align:right;min-width:34px;padding-top:2px}'
+      + '#chrono-modal .ch-i .ch-it{font-weight:700}#chrono-modal .ch-i .ch-y{color:#79552f;font-size:12px;margin-left:6px;font-weight:400}'
+      + '#chrono-modal .ch-i .ch-d{grid-column:2;color:#5c544a;font-size:13px}'
+      + '#chrono-modal .ch-ref{color:#355d82;font-weight:700;cursor:pointer;margin-left:6px;white-space:nowrap;text-decoration:underline dotted}'
+      + '#chrono-modal .ch-ref:hover{color:#1d4ed8}'
+      + '#chrono-strip{display:flex;gap:5px;align-items:center;overflow-x:auto;padding:2px 2px 8px;margin:-2px 0 6px;scrollbar-width:thin}'
+      + '#chrono-strip:empty{display:none}#chrono-strip .cs-l{flex:0 0 auto;font-size:12px;color:#7d3529;font-weight:700;margin-right:2px;cursor:pointer}'
+      + '#chrono-strip .cs-c{flex:0 0 auto;font-size:12.5px;border:1px solid #e2c9bd;background:#fbf3ee;color:#7d3529;border-radius:999px;padding:3px 10px;cursor:pointer;white-space:nowrap}'
+      + '#chrono-strip .cs-c:hover{background:#7d3529;color:#fff}#chrono-strip .cs-c small{opacity:.65;margin-left:4px}'
+      + 'body.dark-mode #chrono-strip .cs-c,body.dark #chrono-strip .cs-c{background:#3a2420;border-color:#6b3a30;color:#f0c9bd}'
+      + '@media (max-width:768px){#chrono-modal{width:100vw;height:100vh;border-radius:0}}';
+    document.head.appendChild(st);
+  }
+  function refTxt(x) { return x.r || ''; }
+  function build() {
+    css();
+    var bk = document.createElement('div'); bk.id = 'chrono-bk'; document.body.appendChild(bk);
+    var m = document.createElement('div'); m.id = 'chrono-modal';
+    m.innerHTML = '<div class="ch-h"><b>🕰 성경사건연대기</b><small>구약 · 시대 → 주제 → 사건</small><button class="ch-x" title="닫기">✕</button></div>'
+      + '<div class="ch-s"><input class="ch-q" placeholder="사건·인물·지명·성구 찾기 (예: 엘리야, 왕상 18)"><button class="ch-all">전체</button></div>'
+      + '<div class="ch-e"></div><div class="ch-n"></div><div class="ch-b">불러오는 중…</div>';
+    document.body.appendChild(m);
+    function close() { m.style.display = 'none'; bk.style.display = 'none'; }
+    bk.onclick = close; m.querySelector('.ch-x').onclick = close;
+    var q = m.querySelector('.ch-q'), t = null;
+    q.addEventListener('input', function () { clearTimeout(t); t = setTimeout(render, 250); });
+    m.querySelector('.ch-all').onclick = function () { q.value = ''; curEra = -1; render(); };
+    m.addEventListener('click', function (e) {
+      var r = e.target.closest('.ch-ref');
+      if (r && typeof navigateToBibleVerse === 'function') {
+        if (window.innerWidth <= 768) close();
+        navigateToBibleVerse(+r.dataset.b, +r.dataset.c, +r.dataset.v || 1);
+        return;
+      }
+      var eb = e.target.closest('.ch-e button');
+      if (eb) { curEra = +eb.dataset.e; render(); m.querySelector('.ch-b').scrollTop = 0; }
+    });
+    if (typeof makeDraggable === 'function') { try { makeDraggable(m, '.ch-h'); } catch (e) {} }
+    return m;
+  }
+  function render(focusN) {
+    var m = document.getElementById('chrono-modal'); if (!m || !DATA) return;
+    var cnt = {}; DATA.items.forEach(function (x) { cnt[x.e] = (cnt[x.e] || 0) + 1; });
+    m.querySelector('.ch-e').innerHTML = '<button data-e="-1" class="' + (curEra < 0 ? 'on' : '') + '">전체</button>'
+      + DATA.eras.map(function (e, i) { return '<button data-e="' + i + '" class="' + (curEra === i ? 'on' : '') + '">' + esc(e) + '<span>' + (cnt[i] || 0) + '</span></button>'; }).join('');
+    var q = m.querySelector('.ch-q').value.trim().toLowerCase().replace(/\s+/g, ' ');
+    var list = DATA.items.filter(function (x) {
+      if (curEra >= 0 && x.e !== curEra) return false;
+      if (!q) return true;
+      return (x.t + ' ' + x.i + ' ' + x.d + ' ' + x.r + ' ' + x.y + ' ' + DATA.eras[x.e]).toLowerCase().indexOf(q) >= 0;
+    });
+    m.querySelector('.ch-n').textContent = '표시 ' + list.length.toLocaleString() + '개 / 전체 ' + DATA.items.length.toLocaleString() + '개';
+    var h = [], le = -1, lt = null;
+    list.forEach(function (x) {
+      if (x.e !== le) { h.push('<div class="ch-era">' + esc(DATA.eras[x.e]) + '</div>'); le = x.e; lt = null; }
+      if (x.t !== lt) { if (x.t !== x.i) h.push('<div class="ch-t">' + esc(x.t) + '</div>'); lt = x.t; }   // 주제와 항목이 같으면 주제 줄은 생략
+      var ref = '';
+      if (x.R && x.R.length) {
+        var R0 = x.R[0];
+        ref = '<span class="ch-ref" data-b="' + R0[0] + '" data-c="' + R0[1] + '" data-v="' + (R0[2] || 1) + '" title="이 장으로 가기">' + esc(x.r) + '</span>';
+      }
+      h.push('<div class="ch-i" data-n="' + x.n + '"><div class="ch-no">' + x.n + '</div><div><span class="ch-it">' + esc(x.i) + '</span>'
+        + (x.y ? '<span class="ch-y">' + esc(x.y) + '</span>' : '') + ref + '</div>' + (x.d ? '<div class="ch-d">' + esc(x.d) + '</div>' : '') + '</div>');
+    });
+    var b = m.querySelector('.ch-b');
+    b.innerHTML = h.join('') || '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>';
+    if (focusN) {
+      var el = b.querySelector('.ch-i[data-n="' + focusN + '"]');
+      if (el) { el.classList.add('hit'); setTimeout(function () { el.scrollIntoView({ block: 'center' }); }, 30); }
+    }
+  }
+  window.openChronology = function (focusN) {
+    var m = document.getElementById('chrono-modal') || build();
+    m.style.display = 'flex'; document.getElementById('chrono-bk').style.display = 'block';
+    load().then(function (d) {
+      if (!d) { m.querySelector('.ch-b').innerHTML = '연대기 자료(chronology.json)를 받지 못했습니다.'; return; }
+      if (focusN) {
+        var it = d.items.find(function (x) { return x.n === focusN; });
+        if (it) { curEra = it.e; m.querySelector('.ch-q').value = ''; }
+      }
+      render(focusN);
+    });
+  };
+  /* ② 장 사건 줄 */
+  function strip() {
+    var bc = document.getElementById('bible-content'); if (!bc) return;
+    var title = bc.querySelector('.chapter-title'); if (!title || title.dataset.chrono) return;
+    var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
+    var b = bs ? parseInt(bs.value, 10) : 0, c = cs ? parseInt(cs.value, 10) : 0;
+    title.dataset.chrono = '1';
+    if (!b || b > 39 || !c) return;
+    load().then(function (d) {
+      if (!d || !title.isConnected) return;
+      var hits = d.items.filter(function (x) { return (x.R || []).some(function (R) { return R[0] === b && R[1] <= c && c <= R[3]; }); });
+      if (!hits.length) return;
+      var old = document.getElementById('chrono-strip'); if (old) old.remove();
+      var s = document.createElement('div'); s.id = 'chrono-strip';
+      var era = d.eras[hits[0].e];
+      s.innerHTML = '<span class="cs-l" title="연대기 열기">🕰 ' + esc(era) + ' · ' + hits.length + '</span>'
+        + hits.map(function (x) {
+          var v = '';
+          x.R.forEach(function (R) { if (!v && R[0] === b && R[1] <= c && c <= R[3] && R[2] && R[1] === c) v = R[2] + (R[3] === c && R[4] !== R[2] && R[4] < 999 ? '-' + R[4] : '') + '절'; });
+          return '<span class="cs-c" data-n="' + x.n + '" title="' + esc(x.t + ' — ' + x.d) + '">' + esc(x.i) + (v ? '<small>' + v + '</small>' : '') + '</span>';
+        }).join('');
+      s.onclick = function (e) {
+        var cc = e.target.closest('.cs-c');
+        if (cc) window.openChronology(+cc.dataset.n);
+        else if (e.target.closest('.cs-l')) window.openChronology(hits[0].n);
+      };
+      title.insertAdjacentElement('afterend', s);
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    var bc = document.getElementById('bible-content');
+    if (bc) new MutationObserver(function () { strip(); }).observe(bc, { childList: true });
+    setTimeout(function () {
+      var ref = document.getElementById('btn-open-devo') || document.getElementById('btn-open-dict');
+      if (!ref || document.getElementById('btn-open-chrono')) return;
+      var bt = document.createElement('button');
+      bt.className = 'btn-catalog-trigger'; bt.id = 'btn-open-chrono'; bt.style.marginLeft = '4px'; bt.style.background = '#7d3529';
+      bt.title = '성경사건연대기 — 구약 사건 2,020개'; bt.textContent = '🕰 연대기'; bt.onclick = function () { window.openChronology(); };
+      ref.parentNode.insertBefore(bt, ref.nextSibling);
+    }, 0);
+  });
+})();
+</script>
+
 </body>
 </html>
