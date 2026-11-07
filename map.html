@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-12`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-13`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23208,6 +23208,7 @@ function krvDef(e, field) {
   };
   /* ② 장 사건 줄 */
   function strip() {
+    css();   // (b20261107-13 kjm 「이건 뭐지??」) 장 사건 줄 모양 CSS 가 연대기 창을 열어야 들어가서 맨 글자로 붙어 보였다
     var bc = document.getElementById('bible-content'); if (!bc) return;
     var title = bc.querySelector('.chapter-title'); if (!title || title.dataset.chrono) return;
     var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
@@ -23222,7 +23223,7 @@ function krvDef(e, field) {
       var old = document.getElementById('chrono-strip'); if (old) old.remove();
       var s = document.createElement('div'); s.id = 'chrono-strip';
       var era = d.eras[hits[0].e];
-      s.innerHTML = '<span class="cs-l" title="연대기 열기">🕰 ' + esc(era) + ' · ' + hits.length + '</span>'
+      s.innerHTML = '<span class="cs-l" title="누르면 성경사건연대기 창이 열림">🕰 이 장의 사건 <small style="font-weight:400;opacity:.75">' + esc(era) + ' · ' + hits.length + '</small></span>'
         + hits.map(function (x) {
           var v = '';
           x.R.forEach(function (R) { if (!v && R[0] === b && R[1] <= c && c <= R[3] && R[2] && R[1] === c) v = R[2] + (R[3] === c && R[4] !== R[2] && R[4] < 999 ? '-' + R[4] : '') + '절'; });
