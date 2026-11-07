@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-7`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-8`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23067,7 +23067,7 @@ function krvDef(e, field) {
   var DATA = null, P = null, curEra = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
     if (!P) P = fetch('./chronology.json?v=b20261107-7', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { DATA = j; return j; }).catch(function () { return null; });
+      .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
   window.loadChronology = load;
@@ -23160,7 +23160,7 @@ function krvDef(e, field) {
       return (x.t + ' ' + x.i + ' ' + x.d + ' ' + x.r + ' ' + x.y + ' ' + DATA.eras[x.e]).toLowerCase().indexOf(q) >= 0;
     });
     m.querySelector('.ch-n').textContent = '표시 ' + list.length.toLocaleString() + '개 / 전체 ' + DATA.items.length.toLocaleString() + '개';
-    var h = [], le = -1, lt = null;
+    var h = [], le = -1, lt = null, fIdx = -1;
     list.forEach(function (x) {
       if (x.e !== le) { h.push('<div class="ch-era">' + esc(DATA.eras[x.e]) + '</div>'); le = x.e; lt = null; }
       if (x.t !== lt) { if (x.t !== x.i) h.push('<div class="ch-t">' + esc(x.t) + '</div>'); lt = x.t; }   // 주제와 항목이 같으면 주제 줄은 생략
@@ -23170,12 +23170,23 @@ function krvDef(e, field) {
         ref = '<span class="ch-ref" data-b="' + R0[0] + '" data-c="' + R0[1] + '" data-v="' + (R0[2] || 1) + '" title="이 장으로 가기">' + esc(x.r) + '</span>';
       }
       /* (b20261107-6 kjm 「년도를 앞으로 빼면 잘 보여 (색상 넣어서)」) 연도를 사건 앞 색 칸으로 */
+      if (x.n === focusN) fIdx = h.length;
       h.push('<div class="ch-i" data-n="' + x.n + '"><div class="ch-no">' + x.n + '</div><div>' + (x.y ? '<span class="ch-y' + (/^AD/.test(x.y) ? ' ad' : '') + '">' + esc(x.y) + '</span>' : '') + '<span class="ch-it">' + esc(x.i) + '</span>'
         + ref + '</div>' + (x.d ? '<div class="ch-d">' + esc(x.d) + '</div>' : '') + '</div>');
     });
     var b = m.querySelector('.ch-b');
-    if (VIEW === 'river' && window.renderChronoRiver) b.innerHTML = list.length ? window.renderChronoRiver(list, focusN) : '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>';
-    else b.innerHTML = h.join('') || '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>';
+    if (VIEW === 'river' && window.fillChronoRiver) { if (list.length) window.fillChronoRiver(b, list, focusN); else b.innerHTML = '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>'; }
+    else if (!h.length) b.innerHTML = '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>';
+    else {   // (b20261107-8) 목록도 나눠 그림 — 처음 200칸, 끝에 닿으면 300칸씩
+      b.innerHTML = '<div class="ch-lst"></div><div class="ch-more" style="height:40px"></div>';
+      var lst = b.querySelector('.ch-lst'), more = b.querySelector('.ch-more'), k = 0;
+      var addL = function (c) { if (k >= h.length) return; var e = Math.min(h.length, k + c); lst.insertAdjacentHTML('beforeend', h.slice(k, e).join('')); k = e; if (k >= h.length && more.parentNode) more.remove(); };
+      addL(Math.max(200, fIdx + 40));
+      if (k < h.length && 'IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (es) { if (es.some(function (z) { return z.isIntersecting; })) { addL(300); if (k >= h.length) io.disconnect(); } }, { root: b, rootMargin: '600px' });
+        io.observe(more);
+      } else addL(h.length);
+    }
     if (focusN) {
       var el = b.querySelector('.ch-i[data-n="' + focusN + '"], .rv-card[data-n="' + focusN + '"]');
       if (el) { el.classList.add('hit'); setTimeout(function () { el.scrollIntoView({ block: 'center' }); }, 30); }
@@ -23407,9 +23418,10 @@ function krvDef(e, field) {
   /* ───── ② 강줄기 (연대기 창 안) ───── */
   window.renderChronoRiver = function (list, focusN) {
     css();
-    var m = document.getElementById('chrono-modal'); if (!m || !D) return '';
+    if (!D && window._chronoData) { D = window._chronoData; ORD = D.items; }
+    var m = document.getElementById('chrono-modal'); if (!m || !D) return { rows: [], focus: -1 };
     var P = places(), NT = D.ntEra || 1e9;
-    var h = ['<div class="rv">'], le = -1, ly = null, side = 0;
+    var h = [], le = -1, ly = null, side = 0, fr = -1;
     list.forEach(function (x) {
       var col = eraColor(x.e, x.e >= NT);
       if (x.e !== le) { h.push('<div class="rv-row"><div class="rv-era"><span style="background:' + col + '">' + esc(D.eras[x.e]) + '</span></div></div>'); le = x.e; ly = null; }
@@ -23420,13 +23432,27 @@ function krvDef(e, field) {
         + (side ? '<b>' + esc(x.i) + '</b>' + ref : ref + '<b>' + esc(x.i) + '</b>')
         + (pl.length ? '<span class="rv-p">📍 ' + esc(pl.join(' · ')) + '</span>' : '') + '</div>';
       var mid = '<div class="rv-rail" style="color:' + col + '"><i style="background:' + col + '"></i>' + (yrChange ? '<span class="rv-yr' + (/^AD/.test(x.y) ? ' ad' : '') + '">' + esc(String(x.y).replace(/\s*\(.*\)/, '').replace(/^(BC|AD) /, '$1 ')) + '</span>' : '<span class="rv-dot"></span>') + '</div>';
+      if (x.n === focusN) fr = h.length;
       h.push('<div class="rv-row">' + (side ? '<div></div>' + mid + card : card + mid + '<div></div>') + '</div>');
       side = 1 - side;
     });
-    h.push('</div>');
-    return h.join('');
+    return { rows: h, focus: fr };
+  };
+  /* (b20261107-8 kjm 「강줄기 나오는데 시간이 걸리네」) 3천 줄을 한꺼번에 그리지 않고 처음 160줄만 넣고,
+     아래로 내려 끝에 닿으면 240줄씩 이어 붙인다(찾는 사건이 있으면 그 줄까지는 먼저). */
+  window.fillChronoRiver = function (box, list, focusN) {
+    var R = window.renderChronoRiver(list, focusN), rows = R.rows, n = 0;
+    box.innerHTML = '<div class="rv"></div><div class="rv-more" style="height:40px"></div>';
+    var rv = box.querySelector('.rv'), more = box.querySelector('.rv-more');
+    function add(k) { if (n >= rows.length) return; var e = Math.min(rows.length, n + k); rv.insertAdjacentHTML('beforeend', rows.slice(n, e).join('')); n = e; if (n >= rows.length) more.remove(); }
+    add(Math.max(160, R.focus + 40));
+    if (n < rows.length && 'IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) { if (es.some(function (x) { return x.isIntersecting; })) { add(240); if (n >= rows.length) io.disconnect(); } }, { root: box, rootMargin: '600px' });
+      io.observe(more);
+    } else add(rows.length);
   };
   document.addEventListener('DOMContentLoaded', function () {
+    css();   // 연대기 창 「목록·강줄기·지도」 단추 모양도 여기 있음
     setTimeout(function () {
       var ref = document.getElementById('btn-open-chrono');
       if (!ref || document.getElementById('btn-open-tmap')) return;
