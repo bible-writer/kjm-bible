@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23064,7 +23064,7 @@ function krvDef(e, field) {
    ① 위 줄 「🕰 연대기」 단추 → 시대 단추·검색·주제별 목록, 성구를 누르면 그 장으로 간다.
    ② 장을 읽으면 제목 아래에 그 장의 사건을 한 줄로 보인다 → 누르면 연대기 창에서 그 항목을 비춘다. */
 (function () {
-  var DATA = null, P = null, curEra = -1, KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
+  var DATA = null, P = null, curEra = -1, curT = '', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
     if (!P) P = fetch('./chronology.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; return j; }).catch(function () { return null; });
@@ -23110,7 +23110,7 @@ function krvDef(e, field) {
     css();
     var bk = document.createElement('div'); bk.id = 'chrono-bk'; document.body.appendChild(bk);
     var m = document.createElement('div'); m.id = 'chrono-modal';
-    m.innerHTML = '<div class="ch-h"><b>🕰 성경사건연대기</b><small>구약 · 시대 → 주제 → 사건</small><button class="ch-x" title="닫기">✕</button></div>'
+    m.innerHTML = '<div class="ch-h"><b>🕰 성경사건연대기</b><small>시대 → 주제 → 사건</small><button class="ch-x" title="닫기">✕</button></div>'
       + '<div class="ch-s"><input class="ch-q" placeholder="사건·인물·지명·성구 찾기 (예: 엘리야, 왕상 18)"><button class="ch-all">전체</button></div>'
       + '<div class="ch-e"></div><div class="ch-n"></div><div class="ch-b">불러오는 중…</div>';
     document.body.appendChild(m);
@@ -23118,7 +23118,7 @@ function krvDef(e, field) {
     bk.onclick = close; m.querySelector('.ch-x').onclick = close;
     var q = m.querySelector('.ch-q'), t = null;
     q.addEventListener('input', function () { clearTimeout(t); t = setTimeout(render, 250); });
-    m.querySelector('.ch-all').onclick = function () { q.value = ''; curEra = -1; render(); };
+    m.querySelector('.ch-all').onclick = function () { q.value = ''; curEra = -1; curT = ''; render(); };
     m.addEventListener('click', function (e) {
       var r = e.target.closest('.ch-ref');
       if (r && typeof navigateToBibleVerse === 'function') {
@@ -23127,7 +23127,7 @@ function krvDef(e, field) {
         return;
       }
       var eb = e.target.closest('.ch-e button');
-      if (eb) { curEra = +eb.dataset.e; render(); m.querySelector('.ch-b').scrollTop = 0; }
+      if (eb) { if (eb.dataset.t !== undefined) { curT = eb.dataset.t; curEra = -1; } else curEra = +eb.dataset.e; render(); m.querySelector('.ch-b').scrollTop = 0; }
     });
     if (typeof makeDraggable === 'function') { try { makeDraggable(m, '.ch-h'); } catch (e) {} }
     return m;
@@ -23135,11 +23135,18 @@ function krvDef(e, field) {
   function render(focusN) {
     var m = document.getElementById('chrono-modal'); if (!m || !DATA) return;
     var cnt = {}; DATA.items.forEach(function (x) { cnt[x.e] = (cnt[x.e] || 0) + 1; });
-    m.querySelector('.ch-e').innerHTML = '<button data-e="-1" class="' + (curEra < 0 ? 'on' : '') + '">전체</button>'
-      + DATA.eras.map(function (e, i) { return '<button data-e="' + i + '" class="' + (curEra === i ? 'on' : '') + '">' + esc(e) + '<span>' + (cnt[i] || 0) + '</span></button>'; }).join('');
+    /* (b20261107-5 kjm 「신약도 넣어」) 구약·신약 단추 — 시대 번호 ntEra 부터가 신약 */
+    var NT = DATA.ntEra || DATA.eras.length;
+    function inT(i) { return !curT || (curT === 'nt' ? i >= NT : i < NT); }
+    m.querySelector('.ch-e').innerHTML = '<button data-t="" class="' + (!curT && curEra < 0 ? 'on' : '') + '">전체</button>'
+      + '<button data-t="ot" class="' + (curT === 'ot' && curEra < 0 ? 'on' : '') + '">구약</button>'
+      + (NT < DATA.eras.length ? '<button data-t="nt" class="' + (curT === 'nt' && curEra < 0 ? 'on' : '') + '">신약</button>' : '')
+      + '<span style="flex:0 0 1px;background:#d8cdb8;margin:0 3px"></span>'
+      + DATA.eras.map(function (e, i) { return inT(i) ? '<button data-e="' + i + '" class="' + (curEra === i ? 'on' : '') + '">' + esc(e) + '<span>' + (cnt[i] || 0) + '</span></button>' : ''; }).join('');
     var q = m.querySelector('.ch-q').value.trim().toLowerCase().replace(/\s+/g, ' ');
     var list = DATA.items.filter(function (x) {
       if (curEra >= 0 && x.e !== curEra) return false;
+      if (curEra < 0 && !inT(x.e)) return false;
       if (!q) return true;
       return (x.t + ' ' + x.i + ' ' + x.d + ' ' + x.r + ' ' + x.y + ' ' + DATA.eras[x.e]).toLowerCase().indexOf(q) >= 0;
     });
@@ -23170,7 +23177,7 @@ function krvDef(e, field) {
       if (!d) { m.querySelector('.ch-b').innerHTML = '연대기 자료(chronology.json)를 받지 못했습니다.'; return; }
       if (focusN) {
         var it = d.items.find(function (x) { return x.n === focusN; });
-        if (it) { curEra = it.e; m.querySelector('.ch-q').value = ''; }
+        if (it) { curEra = it.e; curT = it.e >= (d.ntEra || 1e9) ? 'nt' : 'ot'; m.querySelector('.ch-q').value = ''; }
       }
       render(focusN);
     });
@@ -23182,7 +23189,7 @@ function krvDef(e, field) {
     var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
     var b = bs ? parseInt(bs.value, 10) : 0, c = cs ? parseInt(cs.value, 10) : 0;
     title.dataset.chrono = '1';
-    if (!b || b > 39 || !c) return;
+    if (!b || !c) return;
     load().then(function (d) {
       if (!d || !title.isConnected) return;
       var hits = d.items.filter(function (x) { return (x.R || []).some(function (R) { return R[0] === b && R[1] <= c && c <= R[3]; }); });
@@ -23212,7 +23219,7 @@ function krvDef(e, field) {
       if (!ref || document.getElementById('btn-open-chrono')) return;
       var bt = document.createElement('button');
       bt.className = 'btn-catalog-trigger'; bt.id = 'btn-open-chrono'; bt.style.marginLeft = '4px'; bt.style.background = '#7d3529';
-      bt.title = '성경사건연대기 — 구약 사건 2,020개'; bt.textContent = '🕰 연대기'; bt.onclick = function () { window.openChronology(); };
+      bt.title = '성경사건연대기 — 구약·신약 사건'; bt.textContent = '🕰 연대기'; bt.onclick = function () { window.openChronology(); };
       ref.parentNode.insertBefore(bt, ref.nextSibling);
     }, 0);
   });
