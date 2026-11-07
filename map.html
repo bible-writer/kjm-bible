@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261108-4`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261108-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23066,7 +23066,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=b20261108-4', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=b20261108-5', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -23104,6 +23104,12 @@ function krvDef(e, field) {
       + '#chrono-strip .cs-c{flex:0 0 auto;font-size:12.5px;border:1px solid #e2c9bd;background:#fbf3ee;color:#7d3529;border-radius:999px;padding:3px 10px;cursor:pointer;white-space:nowrap}'
       + '#chrono-strip .cs-c:hover{background:#7d3529;color:#fff}#chrono-strip .cs-c small{opacity:.65;margin-left:4px}'
       + 'body.dark-mode #chrono-strip .cs-c,body.dark #chrono-strip .cs-c{background:#3a2420;border-color:#6b3a30;color:#f0c9bd}'
+      + '#chrono-modal{min-width:380px;min-height:280px}#chrono-modal .ch-h{flex-wrap:wrap;row-gap:6px;user-select:none}#chrono-modal .ch-h b{white-space:nowrap}'
+      + '#chrono-modal .ch-view button{white-space:nowrap}'
+      + '#chrono-modal .ch-grip{position:absolute;right:0;bottom:0;width:22px;height:22px;cursor:nwse-resize;z-index:5;background:linear-gradient(135deg,transparent 50%,#b08a7a 50%,#b08a7a 58%,transparent 58%,transparent 70%,#b08a7a 70%,#b08a7a 78%,transparent 78%);border-bottom-right-radius:12px}'
+      + '#chrono-modal .ch-grip:hover{background-color:rgba(125,53,41,.12)}'
+      + '#chrono-modal .ch-edge{position:absolute;z-index:4}#chrono-modal .ch-edge.r{top:40px;right:0;bottom:22px;width:6px;cursor:ew-resize}#chrono-modal .ch-edge.b{left:0;right:22px;bottom:0;height:6px;cursor:ns-resize}#chrono-modal .ch-edge.l{top:40px;left:0;bottom:0;width:6px;cursor:ew-resize}'
+      + '@media (max-width:768px){#chrono-modal .ch-grip,#chrono-modal .ch-edge{display:none}}'
       + '@media (max-width:768px){#chrono-modal{width:100vw;height:100vh;border-radius:0}}';
     document.head.appendChild(st);
   }
@@ -23118,6 +23124,49 @@ function krvDef(e, field) {
       + '<div class="ch-e"></div><div class="ch-n"></div><details class="ch-src"><summary>ⓘ 연도 기준·출처</summary>구약 사건: kjm 정리 표 · 출애굽 BC 1446(이른 출애굽설) · 분열 BC 931 이후 왕 연대: 틸레 연대 · 예루살렘 함락 BC 586(포위는 588부터, 표시는 588~586경) · 신약 연대·세계사: 학계 통설 · ⚓ 유물: 성경 연대를 받쳐 주는 고고학 발견(통설 기준) · 학자에 따라 몇 년씩 다를 수 있음</details><div class="ch-b">불러오는 중…</div>';
     document.body.appendChild(m);
     function close() { m.style.display = 'none'; bk.style.display = 'none'; }
+    /* (b20261108-5 kjm 「연대기 칸을 조정할수 있도록」) 머리 끌어 옮기기 · 오른쪽 아래 모서리·가장자리 끌어 크기 · 머리 두 번 누르면 처음 자리 · 기억 kjm_chrono_box */
+    (function () {
+      var KEY = 'kjm_chrono_box';
+      ['ch-grip', 'ch-edge r', 'ch-edge b', 'ch-edge l'].forEach(function (c) { var d = document.createElement('div'); d.className = c; m.appendChild(d); });
+      function small() { return window.innerWidth <= 768; }
+      function clamp(bx) {
+        var W = window.innerWidth, H = window.innerHeight;
+        bx.w = Math.max(380, Math.min(bx.w, W - 8)); bx.h = Math.max(280, Math.min(bx.h, H - 8));
+        bx.l = Math.max(4 - bx.w + 120, Math.min(bx.l, W - 120)); bx.t = Math.max(0, Math.min(bx.t, H - 50));
+        return bx;
+      }
+      function apply(bx) { bx = clamp(bx); m.style.transform = 'none'; m.style.left = bx.l + 'px'; m.style.top = bx.t + 'px'; m.style.width = bx.w + 'px'; m.style.height = bx.h + 'px'; }
+      function cur() { var r = m.getBoundingClientRect(); return { l: r.left, t: r.top, w: r.width, h: r.height }; }
+      function save() { try { localStorage.setItem(KEY, JSON.stringify(cur())); } catch (e) {} }
+      function reset() { ['transform', 'left', 'top', 'width', 'height'].forEach(function (p) { m.style[p] = ''; }); try { localStorage.removeItem(KEY); } catch (e) {} }
+      m._chronoBox = function () { if (small()) { reset(); return; } var bx = null; try { bx = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {} if (bx && bx.w) apply(bx); };
+      function drag(e, mode) {
+        if (small() || e.button > 0) return;
+        e.preventDefault();
+        var s0 = cur(), x0 = e.clientX, y0 = e.clientY;
+        apply(s0);
+        function mv(ev) {
+          var dx = ev.clientX - x0, dy = ev.clientY - y0, bx = { l: s0.l, t: s0.t, w: s0.w, h: s0.h };
+          if (mode === 'move') { bx.l += dx; bx.t += dy; }
+          if (mode === 'grip' || mode === 'r') bx.w += dx;
+          if (mode === 'grip' || mode === 'b') bx.h += dy;
+          if (mode === 'l') { var w = Math.max(380, s0.w - dx); bx.l = s0.l + s0.w - w; bx.w = w; }
+          apply(bx);
+        }
+        function up() { document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); document.body.style.cursor = ''; save(); }
+        document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up);
+      }
+      var hd = m.querySelector('.ch-h');
+      hd.title = '끌어서 옮기기 · 두 번 누르면 처음 자리와 크기';
+      hd.addEventListener('pointerdown', function (e) { if (e.target.closest('button,input,select,a')) return; drag(e, 'move'); });
+      hd.addEventListener('dblclick', function (e) { if (e.target.closest('button,input,select,a')) return; reset(); });
+      m.querySelector('.ch-grip').title = '끌어서 크기 바꾸기';
+      m.querySelector('.ch-grip').addEventListener('pointerdown', function (e) { drag(e, 'grip'); });
+      m.querySelector('.ch-edge.r').addEventListener('pointerdown', function (e) { drag(e, 'r'); });
+      m.querySelector('.ch-edge.b').addEventListener('pointerdown', function (e) { drag(e, 'b'); });
+      m.querySelector('.ch-edge.l').addEventListener('pointerdown', function (e) { drag(e, 'l'); });
+      window.addEventListener('resize', function () { if (m.style.display !== 'none' && m.style.left) apply(cur()); });
+    })();
     bk.onclick = close; m.querySelector('.ch-x').onclick = close;
     var q = m.querySelector('.ch-q'), t = null;
     q.addEventListener('input', function () { clearTimeout(t); t = setTimeout(render, 250); });
@@ -23226,10 +23275,10 @@ function krvDef(e, field) {
   }
   window.openChronology = function (focusN) {
     var m = document.getElementById('chrono-modal') || build();
-    m.style.display = 'flex'; document.getElementById('chrono-bk').style.display = 'block';
+    m.style.display = 'flex'; document.getElementById('chrono-bk').style.display = 'block'; if (m._chronoBox) m._chronoBox();
     load().then(function (d) {
       if (!d) { m.querySelector('.ch-b').innerHTML = '연대기 자료(chronology.json)를 받지 못했습니다.'; return; }
-      if (!focusN) {   // (b20261108-4 kjm 화면: 누가복음 3장인데 연대기가 느헤미야에 머묾) 위 단추로 열면 지금 읽는 장의 사건으로
+      if (!focusN) {   // (b20261108-5 kjm 화면: 누가복음 3장인데 연대기가 느헤미야에 머묾) 위 단추로 열면 지금 읽는 장의 사건으로
         var bs0 = document.getElementById('book-select'), cs0 = document.getElementById('chapter-select');
         var b0 = bs0 ? parseInt(bs0.value, 10) : 0, c0 = cs0 ? parseInt(cs0.value, 10) : 0;
         for (var cc0 = c0; b0 && cc0 >= 1 && !focusN; cc0--) {
@@ -23388,7 +23437,7 @@ function krvDef(e, field) {
       .filter(function (o) { return o.d <= 30; }).sort(function (p, q) { return p.d - q.d || p.span - q.span; }).slice(0, k).map(function (o) { return o.w; });
   }
   window.chronoWorldChip = wchip;
-  /* (b20261108-4 kjm 「연대기 고고학에서 찾을 수 있잖아」「참고하고」) 층 더함:
+  /* (b20261108-5 kjm 「연대기 고고학에서 찾을 수 있잖아」「참고하고」) 층 더함:
      👑 왕(통일·이스라엘·유다, 틸레 연대) · 📣 선지자 · 📜 성경 기록 연대 · ⚓ 고고학 유물(발견지 좌표) · ✝ 사본·초대 교회(~AD 500) */
   function inY(Y, y) { var a = Math.min(Y[0], Y[Y.length - 1]), b = Math.max(Y[0], Y[Y.length - 1]); return y >= a && y <= b; }
   function kchip(k) { var c = k.k === '유다' ? '#3730a3' : (k.k === '이스라엘' ? '#0f766e' : '#92400e'); return '<span class="w-c k-c" style="border-color:' + c + ';color:' + c + '" title="' + esc((k.k === '통일' ? '통일 왕국' : k.k) + ' 왕 ' + k.n + ' · ' + k.y + (k.q ? ' · ' + (k.q === '선' ? '여호와 보시기에 정직' : '여호와 보시기에 악') : '') + (k.x ? ' · ' + k.x : '') + ' · ' + k.r) + '">👑 ' + (k.k === '통일' ? '' : '<small>' + (k.k === '유다' ? '남' : '북') + '</small> ') + esc(k.n) + ' <small>' + esc(k.y.replace(/^BC /, '')) + '</small>' + (k.q ? (k.q === '선' ? ' <small>👍</small>' : '') : '') + '</span>'; }
