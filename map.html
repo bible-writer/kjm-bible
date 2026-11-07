@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-6`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23066,7 +23066,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curT = '', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=b20261107-6', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -23093,7 +23093,8 @@ function krvDef(e, field) {
       + '#chrono-modal .ch-i{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;padding:6px 8px;border-radius:8px;font-size:13.5px;line-height:1.6}'
       + '#chrono-modal .ch-i:hover{background:rgba(125,53,41,.06)}#chrono-modal .ch-i.hit{background:#fde68a55;outline:2px solid #f59e0b}'
       + '#chrono-modal .ch-i .ch-no{color:#a39886;font-size:11px;text-align:right;min-width:34px;padding-top:2px}'
-      + '#chrono-modal .ch-i .ch-it{font-weight:700}#chrono-modal .ch-i .ch-y{color:#79552f;font-size:12px;margin-left:6px;font-weight:400}'
+      + '#chrono-modal .ch-i .ch-it{font-weight:700}#chrono-modal .ch-i .ch-y{display:inline-block;background:#8a4b14;color:#fff;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 7px;margin-right:7px;vertical-align:1px;white-space:nowrap}'
+      + '#chrono-modal .ch-i .ch-y.ad{background:#1d5f8a}'
       + '#chrono-modal .ch-i .ch-d{grid-column:2;color:#5c544a;font-size:13px}'
       + '#chrono-modal .ch-ref{color:#355d82;font-weight:700;cursor:pointer;margin-left:6px;white-space:nowrap;text-decoration:underline dotted}'
       + '#chrono-modal .ch-ref:hover{color:#1d4ed8}'
@@ -23160,8 +23161,9 @@ function krvDef(e, field) {
         var R0 = x.R[0];
         ref = '<span class="ch-ref" data-b="' + R0[0] + '" data-c="' + R0[1] + '" data-v="' + (R0[2] || 1) + '" title="이 장으로 가기">' + esc(x.r) + '</span>';
       }
-      h.push('<div class="ch-i" data-n="' + x.n + '"><div class="ch-no">' + x.n + '</div><div><span class="ch-it">' + esc(x.i) + '</span>'
-        + (x.y ? '<span class="ch-y">' + esc(x.y) + '</span>' : '') + ref + '</div>' + (x.d ? '<div class="ch-d">' + esc(x.d) + '</div>' : '') + '</div>');
+      /* (b20261107-6 kjm 「년도를 앞으로 빼면 잘 보여 (색상 넣어서)」) 연도를 사건 앞 색 칸으로 */
+      h.push('<div class="ch-i" data-n="' + x.n + '"><div class="ch-no">' + x.n + '</div><div>' + (x.y ? '<span class="ch-y' + (/^AD/.test(x.y) ? ' ad' : '') + '">' + esc(x.y) + '</span>' : '') + '<span class="ch-it">' + esc(x.i) + '</span>'
+        + ref + '</div>' + (x.d ? '<div class="ch-d">' + esc(x.d) + '</div>' : '') + '</div>');
     });
     var b = m.querySelector('.ch-b');
     b.innerHTML = h.join('') || '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>';
