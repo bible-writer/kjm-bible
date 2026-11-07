@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-10`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-11`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23260,7 +23260,7 @@ function krvDef(e, field) {
       사건을 누르면 시간 지도로 그 사건을 비춘다. */
 (function () {
   var D = null, ORD = [], PIDX = null, layer = null, cur = 0, playT = null, follow = true, sync = false, navLock = 0, revLock = 0;
-  try { sync = localStorage.getItem('kjm_tmap_sync') === '1'; } catch (e) {}
+  try { sync = localStorage.getItem('kjm_tmap_sync') !== '0'; } catch (e) { sync = true; }   // (b20261107-11) 기본 켬
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function eraColor(i, nt) { var h = (i * 47 + (nt ? 190 : 20)) % 360; return 'hsl(' + h + ',42%,' + (nt ? 42 : 40) + '%)'; }
   function ready() {
@@ -23278,7 +23278,7 @@ function krvDef(e, field) {
     if (document.getElementById('tl-css')) return;
     var st = document.createElement('style'); st.id = 'tl-css';
     st.textContent =
-      '#tmap-bar{position:absolute;left:8px;right:8px;bottom:8px;z-index:1200;background:rgba(255,253,248,.97);border:1px solid #d8cdb8;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.22);padding:8px 10px 8px;display:none;font-family:inherit;color:#2e2922}'
+      '#tmap-bar{position:fixed;left:8px;width:600px;bottom:8px;z-index:1200;background:rgba(255,253,248,.97);border:1px solid #d8cdb8;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.22);padding:8px 10px 8px;display:none;font-family:inherit;color:#2e2922}'
       + '#tmap-bar .tm-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}'
       + '#tmap-bar .tm-y{background:#8a4b14;color:#fff;font-weight:800;border-radius:6px;padding:2px 9px;font-size:13px;white-space:nowrap}#tmap-bar .tm-y.ad{background:#1d5f8a}'
       + '#tmap-bar .tm-e{font-weight:700;color:#7d3529;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}'
@@ -23308,6 +23308,8 @@ function krvDef(e, field) {
       + '#chrono-modal .rv-card b{font-weight:700}#chrono-modal .rv-card .ch-ref{margin:0 0 0 5px}#chrono-modal .rv-card.l .ch-ref{margin:0 5px 0 0}'
       + '#chrono-modal .rv-card .rv-p{display:block;font-size:11px;color:#b42318;margin-top:1px}'
       + '#chrono-modal .rv-card.hit{outline:2px solid #f59e0b;background:#fde68a55}'
+      + '#tmap-bar .tm-grip{cursor:move;color:#a39886;font-size:16px;padding:0 2px;user-select:none;touch-action:none}'
+      + '#tmap-bar.mini .tm-go,#tmap-bar.mini .tm-ev,#tmap-bar.mini .tm-w{display:none}'
       + '#tmap-bar .tm-go{display:flex;gap:5px;align-items:center;margin:0 0 6px;flex-wrap:wrap}'
       + '#tmap-bar .tm-go select,#tmap-bar .tm-go input{border:1px solid #d8cdb8;border-radius:7px;padding:3px 7px;font-size:12.5px;background:#fff;color:#2e2922}'
       + '#tmap-bar .tm-go select{max-width:220px}#tmap-bar .tm-yr{width:160px}#tmap-bar .tm-q{flex:1;min-width:140px}'
@@ -23337,16 +23339,38 @@ function krvDef(e, field) {
     css();
     var mp = document.getElementById('map-pane') || document.body;
     b = document.createElement('div'); b.id = 'tmap-bar';
-    b.innerHTML = '<div class="tm-top"><span class="tm-y"></span><span class="tm-e"></span>'
+    b.innerHTML = '<div class="tm-top"><span class="tm-grip" title="끌어서 옮기기">⠿</span><span class="tm-y"></span><span class="tm-e"></span>'
       + '<button class="tm-prev" title="앞 사건">◀</button><button class="tm-play" title="저절로 흐르기">▶</button><button class="tm-next" title="다음 사건">▶|</button>'
       + '<button class="tm-fol on" title="지명 따라 지도 옮기기">📍따라가기</button>'
       + '<button class="tm-sync" title="켜면 사건을 옮길 때 왼쪽 본문도 그 성구로 같이 가고, 본문 장을 넘기면 시간도 그 장 사건으로 따라옴">📖본문 같이</button>'
-      + '<button class="tm-list" title="연대기 창">🕰</button><button class="tm-x" title="닫기">✕</button></div>'
+      + '<button class="tm-list" title="연대기 창">🕰</button><button class="tm-min" title="접기/펴기">▁</button><button class="tm-x" title="닫기">✕</button></div>'
       + '<div class="tm-go"><select class="tm-era" title="시대로 건너뛰기"></select>'
       + '<input class="tm-yr" placeholder="연도 (예: BC 586, AD 30)" title="그 해에 가장 가까운 사건으로"><button class="tm-yrgo">이동</button>'
       + '<input class="tm-q" placeholder="사건·지명·성구 찾기 (예: 갈멜, 왕하 25)"><button class="tm-qgo">찾기</button></div>'
       + '<div class="tm-rib"></div><div class="tm-ev"></div><div class="tm-w"></div>';
-    mp.appendChild(b);
+    document.body.appendChild(b);
+    /* (b20261107-11 kjm 「움직일 수 있나? 성경말씀이 다 안나와」) 띠가 왼쪽 본문까지 덮던 것 → 지도 칸 위에만 놓고(칸 크기 따라감),
+       ⠿ 잡고 끌어 옮기기, ▁ 로 접기(색 띠만 남김) */
+    var moved = null;
+    function place() {
+      if (b.style.display === 'none') return;
+      if (window.innerWidth <= 768) { b.style.left = '6px'; b.style.width = (window.innerWidth - 12) + 'px'; b.style.top = ''; b.style.bottom = '6px'; return; }
+      var r = mp.getBoundingClientRect();
+      if (moved) {
+        var w = Math.min(moved.w, window.innerWidth - 16), l = Math.max(4, Math.min(moved.l, window.innerWidth - w - 4)), t = Math.max(4, Math.min(moved.t, window.innerHeight - b.offsetHeight - 4));
+        b.style.width = w + 'px'; b.style.left = l + 'px'; b.style.top = t + 'px'; b.style.bottom = 'auto'; return;
+      }
+      b.style.left = (r.left + 8) + 'px'; b.style.width = Math.max(320, r.width - 16) + 'px'; b.style.top = 'auto'; b.style.bottom = Math.max(6, window.innerHeight - r.bottom + 8) + 'px';
+    }
+    b._place = place;
+    window.addEventListener('resize', place);
+    try { new ResizeObserver(place).observe(mp); } catch (e) {}
+    var grip = b.querySelector('.tm-grip'), dg = null;
+    grip.addEventListener('pointerdown', function (e) { var r = b.getBoundingClientRect(); dg = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, w: r.width }; try { grip.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
+    grip.addEventListener('pointermove', function (e) { if (!dg) return; moved = { l: dg.l + e.clientX - dg.x, t: dg.t + e.clientY - dg.y, w: dg.w }; place(); });
+    grip.addEventListener('pointerup', function () { dg = null; });
+    grip.addEventListener('dblclick', function () { moved = null; place(); });   // 두 번 누르면 제자리
+    b.querySelector('.tm-min').onclick = function () { b.classList.toggle('mini'); this.textContent = b.classList.contains('mini') ? '▔' : '▁'; place(); };
     var rib = b.querySelector('.tm-rib');
     function at(ev) { var r = rib.getBoundingClientRect(); var x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left; return Math.max(0, Math.min(ORD.length - 1, Math.round(x / r.width * (ORD.length - 1)))); }
     var drag = false;
@@ -23484,7 +23508,7 @@ function krvDef(e, field) {
   window.openTimeMap = function (n) {
     ready().then(function () {
       if (window.innerWidth <= 768 && typeof switchMobileTab === 'function') { try { switchMobileTab('map'); } catch (e) {} }
-      var b = bar(); b.style.display = 'block';
+      var b = bar(); b.style.display = 'block'; if (b._place) b._place();
       var k = 0;
       if (n) { for (var i = 0; i < ORD.length; i++) if (ORD[i].n === n) { k = i; break; } }
       else {
