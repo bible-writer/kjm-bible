@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23066,7 +23066,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=b20261107-7', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=b20261107-9', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -23112,7 +23112,7 @@ function krvDef(e, field) {
     css();
     var bk = document.createElement('div'); bk.id = 'chrono-bk'; document.body.appendChild(bk);
     var m = document.createElement('div'); m.id = 'chrono-modal';
-    m.innerHTML = '<div class="ch-h"><b>🕰 성경사건연대기</b><span class="ch-view"><button data-v="list" class="on" title="시대 → 주제 → 사건 목록">📜 목록</button><button data-v="river" title="세로 연표 — 시대 색 줄기와 연도 마디">🌊 강줄기</button><button data-v="map" title="시간 지도 — 사건 띠를 끌면 지명이 지도에 켜짐">⏳ 지도</button></span><button class="ch-x" title="닫기">✕</button></div>'
+    m.innerHTML = '<div class="ch-h"><b>🕰 성경사건연대기</b><span class="ch-view"><button data-v="list" class="on" title="시대 → 주제 → 사건 목록">📜 목록</button><button data-v="river" title="세로 연표 — 시대 색 줄기와 연도 마디">🌊 강줄기</button><button data-v="map" title="시간 지도 — 사건 띠를 끌면 지명이 지도에 켜짐">⏳ 지도</button><button class="ch-wbtn on" data-w="1" title="강줄기에 같은 무렵 세계사 끼우기">🌍 세계사</button></span><button class="ch-x" title="닫기">✕</button></div>'
       + '<div class="ch-s"><input class="ch-q" placeholder="사건·인물·지명·성구 찾기 (예: 엘리야, 왕상 18)"><button class="ch-all">전체</button></div>'
       + '<div class="ch-e"></div><div class="ch-n"></div><div class="ch-b">불러오는 중…</div>';
     document.body.appendChild(m);
@@ -23128,10 +23128,12 @@ function krvDef(e, field) {
         navigateToBibleVerse(+r.dataset.b, +r.dataset.c, +r.dataset.v || 1);
         return;
       }
+      var wb = e.target.closest('.ch-wbtn');
+      if (wb) { window.chronoWorldOn = window.chronoWorldOn === false; wb.classList.toggle('on', window.chronoWorldOn !== false); if (VIEW !== 'river') { VIEW = 'river'; m.querySelectorAll('.ch-view button[data-v]').forEach(function (z) { z.classList.toggle('on', z.dataset.v === VIEW); }); } render(); return; }
       var vb = e.target.closest('.ch-view button');
       if (vb) {
         if (vb.dataset.v === 'map') { var hn = m.querySelector('.ch-i.hit, .rv-card.hit'); close(); if (window.openTimeMap) window.openTimeMap(hn ? +hn.dataset.n : 0); return; }
-        VIEW = vb.dataset.v; m.querySelectorAll('.ch-view button').forEach(function (z) { z.classList.toggle('on', z.dataset.v === VIEW); }); render(); return;
+        VIEW = vb.dataset.v; m.querySelectorAll('.ch-view button[data-v]').forEach(function (z) { z.classList.toggle('on', z.dataset.v === VIEW); }); render(); return;
       }
       var rc = e.target.closest('.rv-card');
       if (rc && window.openTimeMap) { if (window.innerWidth <= 768) close(); m.querySelectorAll('.rv-card.hit').forEach(function (z) { z.classList.remove('hit'); }); rc.classList.add('hit'); window.openTimeMap(+rc.dataset.n); return; }
@@ -23304,9 +23306,26 @@ function krvDef(e, field) {
       + '#chrono-modal .rv-card b{font-weight:700}#chrono-modal .rv-card .ch-ref{margin:0 0 0 5px}#chrono-modal .rv-card.l .ch-ref{margin:0 5px 0 0}'
       + '#chrono-modal .rv-card .rv-p{display:block;font-size:11px;color:#b42318;margin-top:1px}'
       + '#chrono-modal .rv-card.hit{outline:2px solid #f59e0b;background:#fde68a55}'
+      + '#tmap-bar .tm-w{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:5px 1px 0;font-size:12px;scrollbar-width:thin}#tmap-bar .tm-w:empty{display:none}'
+      + '#tmap-bar .tm-w .wl{flex:0 0 auto;color:#4b5563;font-weight:700}'
+      + '.w-c{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;border:1px dashed #b8c2cc;background:#f4f7f9;color:#334155;border-radius:999px;padding:2px 9px;white-space:nowrap;font-size:12px}'
+      + '.w-c i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 auto}.w-c small{color:#64748b}'
+      + '#chrono-modal .rv-w{grid-column:1/4;display:flex;justify-content:center;margin:3px 0}'
+      + '#chrono-modal .rv-w .w-c{cursor:default;font-size:11.5px}'
+      + '#chrono-modal .ch-wbtn{background:rgba(255,255,255,.15);color:#fff}#chrono-modal .ch-wbtn.on{background:#dbeafe;color:#1e3a8a;font-weight:700}'
       + '@media (max-width:768px){#tmap-bar .tm-rib div{font-size:0}}';
     document.head.appendChild(st);
   }
+  /* ───── 🌍 같은 무렵 세계사 (b20261107-9 kjm 「세계사 연결 가능해」) ───── */
+  var WC = { '이집트': '#c2410c', '메소포타미아': '#a16207', '앗수르': '#7c2d12', '바벨론': '#9333ea', '페르시아': '#0f766e', '그리스': '#2563eb', '로마': '#b91c1c', '중국': '#dc2626', '한국': '#0ea5e9', '인도': '#ea580c', '아나톨리아·히타이트': '#65a30d', '가나안·시리아': '#78716c', '기타': '#64748b' };
+  function wchip(w) { return '<span class="w-c" title="' + esc(w.a + ' · ' + w.y + ' — ' + w.d + (w.b ? ' (성경: ' + w.b + ')' : '')) + '"><i style="background:' + (WC[w.a] || '#64748b') + '"></i>' + esc(w.t) + ' <small>' + esc(w.y) + '</small>' + (w.b ? ' <small>📖</small>' : '') + '</span>'; }
+  function worldNear(y, k) {   // 그 해와 겹치거나 가까운 세계사 k개
+    var W = (D && D.world) || []; if (y == null) return [];
+    return W.map(function (w) { var a = w.Y[0], b = w.Y[w.Y.length - 1], d = y < a ? a - y : (y > b ? y - b : 0); return { w: w, d: d, span: b - a }; })
+      .filter(function (o) { return o.d <= 30; }).sort(function (p, q) { return p.d - q.d || p.span - q.span; }).slice(0, k).map(function (o) { return o.w; });
+  }
+  window.chronoWorldChip = wchip;
+
   /* ───── ① 시간 지도 ───── */
   function bar() {
     var b = document.getElementById('tmap-bar'); if (b) return b;
@@ -23316,7 +23335,7 @@ function krvDef(e, field) {
     b.innerHTML = '<div class="tm-top"><span class="tm-y"></span><span class="tm-e"></span>'
       + '<button class="tm-prev" title="앞 사건">◀</button><button class="tm-play" title="저절로 흐르기">▶</button><button class="tm-next" title="다음 사건">▶|</button>'
       + '<button class="tm-fol on" title="지명 따라 지도 옮기기">📍따라가기</button><button class="tm-list" title="연대기 창">🕰</button><button class="tm-x" title="닫기">✕</button></div>'
-      + '<div class="tm-rib"></div><div class="tm-ev"></div>';
+      + '<div class="tm-rib"></div><div class="tm-ev"></div><div class="tm-w"></div>';
     mp.appendChild(b);
     var rib = b.querySelector('.tm-rib');
     function at(ev) { var r = rib.getBoundingClientRect(); var x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left; return Math.max(0, Math.min(ORD.length - 1, Math.round(x / r.width * (ORD.length - 1)))); }
@@ -23364,6 +23383,8 @@ function krvDef(e, field) {
     }
     var ev = b.querySelector('.tm-ev'); ev.innerHTML = h.join('');
     var nw = ev.querySelector('.now'); if (nw) ev.scrollLeft = nw.offsetLeft - ev.clientWidth / 2 + nw.clientWidth / 2;
+    var wy = x.Y ? x.Y[0] : null, ww = worldNear(wy, 6);
+    b.querySelector('.tm-w').innerHTML = ww.length ? '<span class="wl">🌍 같은 무렵</span>' + ww.map(wchip).join('') : '';
     drawPlaces(lo, hi, settle);
   }
   function drawPlaces(lo, hi, settle) {
@@ -23422,10 +23443,16 @@ function krvDef(e, field) {
     var m = document.getElementById('chrono-modal'); if (!m || !D) return { rows: [], focus: -1 };
     var P = places(), NT = D.ntEra || 1e9;
     var h = [], le = -1, ly = null, side = 0, fr = -1;
+    var W = (window.chronoWorldOn !== false && D.world) ? D.world : [], wi = 0, wDone = {};
     list.forEach(function (x) {
       var col = eraColor(x.e, x.e >= NT);
       if (x.e !== le) { h.push('<div class="rv-row"><div class="rv-era"><span style="background:' + col + '">' + esc(D.eras[x.e]) + '</span></div></div>'); le = x.e; ly = null; }
       var yrChange = x.y && x.y !== ly; ly = x.y || ly;
+      if (W.length && x.Y) {   // 이 사건 해까지 온 세계사를 줄기 가운데에 회색 칸으로
+        var y0 = x.Y[0], add = [];
+        for (var q = 0; q < W.length; q++) { var w = W[q]; if (wDone[q]) continue; if (w.Y[0] > y0) break; wDone[q] = 1; if (y0 - w.Y[0] <= 60) add.push(w); }
+        add.slice(-4).forEach(function (w) { h.push('<div class="rv-row"><div class="rv-w">' + wchip(w) + '</div></div>'); });
+      }
       var pl = (x.P || []).map(function (pid) { return P[pid] ? String(P[pid].name).replace(/\s*\(.*\)/, '') : null; }).filter(Boolean);
       var ref = x.R && x.R.length ? '<span class="ch-ref" data-b="' + x.R[0][0] + '" data-c="' + x.R[0][1] + '" data-v="' + (x.R[0][2] || 1) + '">' + esc(x.r) + '</span>' : '';
       var card = '<div class="rv-card ' + (side ? 'r' : 'l') + (x.n === focusN ? ' hit' : '') + '" data-n="' + x.n + '" title="' + esc(x.t + ' — ' + x.d) + '">'
