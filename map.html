@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-14`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-15`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23312,6 +23312,7 @@ function krvDef(e, field) {
       + '#chrono-modal .rv-card b{font-weight:700}#chrono-modal .rv-card .ch-ref{margin:0 0 0 5px}#chrono-modal .rv-card.l .ch-ref{margin:0 5px 0 0}'
       + '#chrono-modal .rv-card .rv-p{display:block;font-size:11px;color:#b42318;margin-top:1px}'
       + '#chrono-modal .rv-card.hit{outline:2px solid #f59e0b;background:#fde68a55}'
+      + '.tm-vhl{background:rgba(253,230,138,.45) !important;box-shadow:inset 4px 0 0 #d97706;border-radius:4px}'
       + '#tmap-bar .tm-grip{cursor:move;color:#a39886;font-size:16px;padding:0 2px;user-select:none;touch-action:none}'
       + '#tmap-bar.mini .tm-go,#tmap-bar.mini .tm-ev,#tmap-bar.mini .tm-w{display:none}'
       + '#tmap-bar .tm-go{display:flex;gap:5px;align-items:center;margin:0 0 6px;flex-wrap:wrap}'
@@ -23449,6 +23450,15 @@ function krvDef(e, field) {
       navLock = Date.now();   // 이 이동으로 바뀐 장은 거꾸로 따라오지 않게
       try { navigateToBibleVerse(R[0], R[1], R[2] || 1); } catch (e) {}
       setTimeout(function () { if (Date.now() - navLock >= 1400) navLock = 0; }, 1500);
+      /* (b20261107-15 kjm 화면: 신 34장 — 1절이 맨 위로 붙어 장 제목·「이 장의 사건」 줄이 안 보이고, 사건 절이 어디까지인지 모름)
+         사건 절 범위(예 34:1–4)를 옅은 색 띠로 칠해 두고(다음 사건까지), 1절부터면 장 제목이 보이게 맨 위로, 아니면 가운데로 */
+      setTimeout(function () {
+        document.querySelectorAll('.tm-vhl').forEach(function (e) { e.classList.remove('tm-vhl'); });
+        var v1 = R[2] || 1, v2 = (R[3] === R[1]) ? (R[4] >= 999 ? 200 : R[4]) : 200, first = null;
+        for (var v = v1; v <= v2; v++) { var el = document.getElementById('verse-row-' + v); if (!el) { if (v > v1 + 2) break; continue; } el.classList.add('tm-vhl'); if (!first) first = el; }
+        if (v1 <= 1) { var t = document.querySelector('#bible-content .chapter-title'); if (t) t.scrollIntoView({ block: 'start' }); }
+        else if (first) first.scrollIntoView({ block: 'center' });
+      }, 700);
     }, 250);
   }
   window._tmapChapterChanged = function (b, c) {   // 본문 장이 바뀌면 불림
