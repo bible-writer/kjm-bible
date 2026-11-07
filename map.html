@@ -19545,7 +19545,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22743,7 +22743,23 @@ window.FigTags = (function () {
     load(id).then(function (arr) {
       if (bookId !== id) return;
       D = arr;
-      if (!D.length) { m.querySelector('.dv-b').innerHTML = '묵상 자료(' + (B.drive || B.file.replace('./', '')) + ')를 받지 못했습니다.' + (ST[id].err ? '<br><small>' + esc(ST[id].err) + '</small>' : ''); return; }
+      if (!D.length) {
+        /* (b20261107-2 kjm 화면: 날마다의 동행 「구글 로그인이 필요합니다」) 새로 연 화면은 구글 표가 없고, 자동으로 띄운 로그인 창은
+           누른 손길 없이 열려 브라우저가 막는다 → 로그인 단추를 보여 주고, 누르면 그 자리에서 로그인 창을 열어 다시 받는다. */
+        var needLogin = B.priv && ST[id].err && /로그인|연결 기능/.test(ST[id].err);
+        m.querySelector('.dv-b').innerHTML = '묵상 자료(' + (B.drive || B.file.replace('./', '')) + ')를 받지 못했습니다.' + (ST[id].err ? '<br><small>' + esc(ST[id].err) + '</small>' : '')
+          + (needLogin ? '<br><br><button type="button" class="dv-login" style="padding:6px 14px;border-radius:8px;border:1px solid #8a5a2b;background:#8a5a2b;color:#fff;cursor:pointer;font-size:14px">🔑 구글 로그인하고 받기</button>' : '');
+        var lb = m.querySelector('.dv-login');
+        if (lb) lb.onclick = function () {
+          var Dv = window._kjmDrive; if (!Dv) return;
+          lb.disabled = true; lb.textContent = '로그인 창을 여는 중…';
+          Dv.token(true).then(function (tk) {
+            if (!tk) { lb.disabled = false; lb.textContent = '🔑 구글 로그인하고 받기'; return; }
+            ST[id] = { D: null, P: null, cur: ST[id].cur }; setBook(id);
+          });
+        };
+        return;
+      }
       var c = ST[id].cur; if (!c) { var k = todayKey(); c = k; }
       var i = find(c.m, c.d, c.p); show(i >= 0 ? i : 0);
     });
