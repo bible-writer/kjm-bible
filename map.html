@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-15`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-16`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23313,7 +23313,9 @@ function krvDef(e, field) {
       + '#chrono-modal .rv-card .rv-p{display:block;font-size:11px;color:#b42318;margin-top:1px}'
       + '#chrono-modal .rv-card.hit{outline:2px solid #f59e0b;background:#fde68a55}'
       + '.tm-vhl{background:rgba(253,230,138,.45) !important;box-shadow:inset 4px 0 0 #d97706;border-radius:4px}'
-      + '#tmap-bar .tm-grip{cursor:move;color:#a39886;font-size:16px;padding:0 2px;user-select:none;touch-action:none}'
+      + '#tmap-bar .tm-grip{cursor:move;color:#7d3529;font-size:12px;font-weight:700;padding:2px 6px;user-select:none;border:1px dashed #c9b49f;border-radius:6px;white-space:nowrap}'
+      + '#tmap-bar{cursor:move;touch-action:none}#tmap-bar button,#tmap-bar input,#tmap-bar select,#tmap-bar .tm-rib,#tmap-bar .tm-ev,#tmap-bar .tm-w{cursor:pointer}#tmap-bar input{cursor:text}#tmap-bar .tm-ev,#tmap-bar .tm-w{touch-action:pan-x}'
+      + '#tmap-bar.drag{box-shadow:0 10px 32px rgba(0,0,0,.35);opacity:.92;user-select:none}'
       + '#tmap-bar.mini .tm-go,#tmap-bar.mini .tm-ev,#tmap-bar.mini .tm-w{display:none}'
       + '#tmap-bar .tm-go{display:flex;gap:5px;align-items:center;margin:0 0 6px;flex-wrap:wrap}'
       + '#tmap-bar .tm-go select,#tmap-bar .tm-go input{border:1px solid #d8cdb8;border-radius:7px;padding:3px 7px;font-size:12.5px;background:#fff;color:#2e2922}'
@@ -23344,7 +23346,7 @@ function krvDef(e, field) {
     css();
     var mp = document.getElementById('map-pane') || document.body;
     b = document.createElement('div'); b.id = 'tmap-bar';
-    b.innerHTML = '<div class="tm-top"><span class="tm-grip" title="끌어서 옮기기">⠿</span><span class="tm-y"></span><span class="tm-e"></span>'
+    b.innerHTML = '<div class="tm-top"><span class="tm-grip" title="띠의 빈 곳 아무 데나 잡고 끌면 옮겨짐 · 두 번 누르면 제자리">⠿ 끌기</span><span class="tm-y"></span><span class="tm-e"></span>'
       + '<button class="tm-prev" title="앞 사건">◀</button><button class="tm-play" title="저절로 흐르기">▶</button><button class="tm-spd" title="저절로 흐르는 빠르기 — 누를 때마다 10초·6초·3초">🐢6초</button><button class="tm-next" title="다음 사건">▶|</button>'
       + '<button class="tm-fol on" title="지명 따라 지도 옮기기">📍따라가기</button>'
       + '<button class="tm-sync" title="켜면 사건을 옮길 때 왼쪽 본문도 그 성구로 같이 가고, 본문 장을 넘기면 시간도 그 장 사건으로 따라옴">📖본문 같이</button>'
@@ -23374,11 +23376,15 @@ function krvDef(e, field) {
     window.addEventListener('resize', place);
     try { var ro = new ResizeObserver(place); ro.observe(mp); var cpp = document.getElementById('chapter-places-panel'); if (cpp) ro.observe(cpp); } catch (e) {}
     try { var cpm = document.getElementById('chapter-places-panel'); if (cpm) new MutationObserver(function () { setTimeout(place, 30); }).observe(cpm, { attributes: true, attributeFilter: ['style', 'class'] }); } catch (e) {}
+    /* (b20261107-16 kjm 「Drag해서 옮길 수 있나? 타임라인」) 작은 ⠿ 만 잡혔음 → 띠의 빈 곳(윗줄 글자·바탕)은 어디를 잡아도 끌림.
+       단추·입력칸·색 띠·사건 칸은 원래 일. 두 번 누르면 제자리. */
     var grip = b.querySelector('.tm-grip'), dg = null;
-    grip.addEventListener('pointerdown', function (e) { var r = b.getBoundingClientRect(); dg = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, w: r.width }; try { grip.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
-    grip.addEventListener('pointermove', function (e) { if (!dg) return; moved = { l: dg.l + e.clientX - dg.x, t: dg.t + e.clientY - dg.y, w: dg.w }; place(); });
-    grip.addEventListener('pointerup', function () { dg = null; });
-    grip.addEventListener('dblclick', function () { moved = null; place(); });   // 두 번 누르면 제자리
+    function canDrag(t) { return !t.closest('button,input,select,.tm-rib,.tm-ev,.tm-w,a'); }
+    b.addEventListener('pointerdown', function (e) { if (!canDrag(e.target) || e.button > 0) return; var r = b.getBoundingClientRect(); dg = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, w: r.width, id: e.pointerId }; b.classList.add('drag'); try { b.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
+    b.addEventListener('pointermove', function (e) { if (!dg || e.pointerId !== dg.id) return; moved = { l: dg.l + e.clientX - dg.x, t: dg.t + e.clientY - dg.y, w: dg.w }; place(); });
+    function endDrag() { if (dg) { dg = null; b.classList.remove('drag'); } }
+    b.addEventListener('pointerup', endDrag); b.addEventListener('pointercancel', endDrag);
+    b.addEventListener('dblclick', function (e) { if (canDrag(e.target)) { moved = null; place(); } });
     b.querySelector('.tm-min').onclick = function () { b.classList.toggle('mini'); this.textContent = b.classList.contains('mini') ? '▔' : '▁'; place(); };
     var rib = b.querySelector('.tm-rib');
     function at(ev) { var r = rib.getBoundingClientRect(); var x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left; return Math.max(0, Math.min(ORD.length - 1, Math.round(x / r.width * (ORD.length - 1)))); }
