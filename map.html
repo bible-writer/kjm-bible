@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-11`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-12`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23360,11 +23360,15 @@ function krvDef(e, field) {
         var w = Math.min(moved.w, window.innerWidth - 16), l = Math.max(4, Math.min(moved.l, window.innerWidth - w - 4)), t = Math.max(4, Math.min(moved.t, window.innerHeight - b.offsetHeight - 4));
         b.style.width = w + 'px'; b.style.left = l + 'px'; b.style.top = t + 'px'; b.style.bottom = 'auto'; return;
       }
-      b.style.left = (r.left + 8) + 'px'; b.style.width = Math.max(320, r.width - 16) + 'px'; b.style.top = 'auto'; b.style.bottom = Math.max(6, window.innerHeight - r.bottom + 8) + 'px';
+      /* (b20261107-12 kjm 「지명이 가림」) 지도 아래 「이 장의 지명」 칸이 떠 있으면 그 위에 놓는다 */
+      var bot = r.bottom, cp = document.getElementById('chapter-places-panel');
+      if (cp && getComputedStyle(cp).display !== 'none' && getComputedStyle(cp).visibility !== 'hidden') { var cr = cp.getBoundingClientRect(); if (cr.height > 0 && cr.top < bot && cr.bottom > r.top) bot = Math.min(bot, cr.top); }
+      b.style.left = (r.left + 8) + 'px'; b.style.width = Math.max(320, r.width - 16) + 'px'; b.style.top = 'auto'; b.style.bottom = Math.max(6, window.innerHeight - bot + 6) + 'px';
     }
     b._place = place;
     window.addEventListener('resize', place);
-    try { new ResizeObserver(place).observe(mp); } catch (e) {}
+    try { var ro = new ResizeObserver(place); ro.observe(mp); var cpp = document.getElementById('chapter-places-panel'); if (cpp) ro.observe(cpp); } catch (e) {}
+    try { var cpm = document.getElementById('chapter-places-panel'); if (cpm) new MutationObserver(function () { setTimeout(place, 30); }).observe(cpm, { attributes: true, attributeFilter: ['style', 'class'] }); } catch (e) {}
     var grip = b.querySelector('.tm-grip'), dg = null;
     grip.addEventListener('pointerdown', function (e) { var r = b.getBoundingClientRect(); dg = { x: e.clientX, y: e.clientY, l: r.left, t: r.top, w: r.width }; try { grip.setPointerCapture(e.pointerId); } catch (x) {} e.preventDefault(); });
     grip.addEventListener('pointermove', function (e) { if (!dg) return; moved = { l: dg.l + e.clientX - dg.x, t: dg.t + e.clientY - dg.y, w: dg.w }; place(); });
