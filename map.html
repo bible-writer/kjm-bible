@@ -19555,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-16`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261108-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23066,7 +23066,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=b20261107-9', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=b20261108-3', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -23087,7 +23087,7 @@ function krvDef(e, field) {
       + '#chrono-modal .ch-e{display:flex;gap:5px;overflow-x:auto;padding:7px 12px;background:var(--bg2,#f7f1e7);border-bottom:1px solid var(--border,#e5dccb);flex:0 0 auto}'
       + '#chrono-modal .ch-e button{white-space:nowrap;flex:0 0 auto;border:1px solid #d8cdb8;background:var(--card,#fffdf8);color:inherit;border-radius:999px;font-size:12px;padding:4px 10px}'
       + '#chrono-modal .ch-e button.on{background:#7d3529;color:#fff;border-color:#7d3529}#chrono-modal .ch-e button span{opacity:.6;margin-left:3px}'
-      + '#chrono-modal .ch-n{font-size:11px;color:#8a7f70;padding:4px 14px}'
+      + '#chrono-modal .ch-n{font-size:11px;color:#8a7f70;padding:4px 14px}.ch-src{font-size:11px;color:#7a6f60;padding:0 14px 4px;line-height:1.5}.ch-src summary{cursor:pointer;color:#8b3a2b;font-weight:600}'
       + '#chrono-modal .ch-b{flex:1;overflow:auto;padding:4px 14px 30px}'
       + '#chrono-modal .ch-era{margin:14px 0 4px;font-weight:800;color:#7d3529;font-size:15px;border-bottom:2px solid #e2c9bd;padding-bottom:3px}'
       + '#chrono-modal .ch-t{margin:10px 0 2px;font-weight:700;color:#6e4e36;font-size:13.5px}'
@@ -23112,9 +23112,10 @@ function krvDef(e, field) {
     css();
     var bk = document.createElement('div'); bk.id = 'chrono-bk'; document.body.appendChild(bk);
     var m = document.createElement('div'); m.id = 'chrono-modal';
-    m.innerHTML = '<div class="ch-h"><b>🕰 성경사건연대기</b><span class="ch-view"><button data-v="list" class="on" title="시대 → 주제 → 사건 목록">📜 목록</button><button data-v="river" title="세로 연표 — 시대 색 줄기와 연도 마디">🌊 강줄기</button><button data-v="map" title="시간 지도 — 사건 띠를 끌면 지명이 지도에 켜짐">⏳ 지도</button><button class="ch-wbtn on" data-w="1" title="강줄기에 같은 무렵 세계사 끼우기">🌍 세계사</button></span><button class="ch-x" title="닫기">✕</button></div>'
+    m.innerHTML = '<div class="ch-h"><b>🕰 성경사건연대기</b><span class="ch-view"><button data-v="list" class="on" title="시대 → 주제 → 사건 목록">📜 목록</button><button data-v="river" title="세로 연표 — 시대 색 줄기와 연도 마디">🌊 강줄기</button><button data-v="map" title="시간 지도 — 사건 띠를 끌면 지명이 지도에 켜짐">⏳ 지도</button><button data-v="arch" title="연대를 고정해 주는 고고학 유물·외부 기록">⚓ 고고학</button><button data-v="canon" title="성경 각 권 기록 연대 · 사본 · 초대 교회(~AD 500)">📜 기록·사본</button></span>'
+      + '<span class="ch-view" style="margin-left:6px"><button class="ch-wbtn on" data-w="1" title="강줄기·시간 지도에 같은 무렵 세계사">🌍</button><button class="ly-btn on" data-l="k" title="왕·선지자 표시">👑</button><button class="ly-btn on" data-l="a" title="고고학 유물 표시">⚓</button><button class="ly-btn on" data-l="b" title="성경 기록 연대 표시">📜</button></span><button class="ch-x" title="닫기">✕</button></div>'
       + '<div class="ch-s"><input class="ch-q" placeholder="사건·인물·지명·성구 찾기 (예: 엘리야, 왕상 18)"><button class="ch-all">전체</button></div>'
-      + '<div class="ch-e"></div><div class="ch-n"></div><div class="ch-b">불러오는 중…</div>';
+      + '<div class="ch-e"></div><div class="ch-n"></div><details class="ch-src"><summary>ⓘ 연도 기준·출처</summary>구약 사건: kjm 정리 표 · 출애굽 BC 1446(이른 출애굽설) · 분열 BC 931 이후 왕 연대: 틸레 연대 · 예루살렘 함락 BC 586(포위는 588부터, 표시는 588~586경) · 신약 연대·세계사: 학계 통설 · ⚓ 유물: 성경 연대를 받쳐 주는 고고학 발견(통설 기준) · 학자에 따라 몇 년씩 다를 수 있음</details><div class="ch-b">불러오는 중…</div>';
     document.body.appendChild(m);
     function close() { m.style.display = 'none'; bk.style.display = 'none'; }
     bk.onclick = close; m.querySelector('.ch-x').onclick = close;
@@ -23128,8 +23129,12 @@ function krvDef(e, field) {
         navigateToBibleVerse(+r.dataset.b, +r.dataset.c, +r.dataset.v || 1);
         return;
       }
+      var lb2 = e.target.closest('.ly-btn');
+      if (lb2) { var LY = window.chronoLayers = window.chronoLayers || {}; LY[lb2.dataset.l] = LY[lb2.dataset.l] === false; lb2.classList.toggle('on', LY[lb2.dataset.l] !== false); render(); if (window._tmapRefresh) window._tmapRefresh(); return; }
+      var ac = e.target.closest('.ar-go');
+      if (ac && window.openTimeMap) { var yv = +ac.dataset.y, best = 0, bd = 1e9; DATA.items.forEach(function (it) { if (!it.Y) return; var dd = Math.abs(it.Y[0] - yv); if (dd < bd) { bd = dd; best = it.n; } }); close(); window.openTimeMap(best); if (ac.dataset.lat && typeof map !== 'undefined') setTimeout(function () { try { map.flyTo([+ac.dataset.lat, +ac.dataset.lng], 7, { duration: .8 }); } catch (x) {} }, 900); return; }
       var wb = e.target.closest('.ch-wbtn');
-      if (wb) { window.chronoWorldOn = window.chronoWorldOn === false; wb.classList.toggle('on', window.chronoWorldOn !== false); if (VIEW !== 'river') { VIEW = 'river'; m.querySelectorAll('.ch-view button[data-v]').forEach(function (z) { z.classList.toggle('on', z.dataset.v === VIEW); }); } render(); return; }
+      if (wb) { window.chronoWorldOn = window.chronoWorldOn === false; wb.classList.toggle('on', window.chronoWorldOn !== false); render(); if (window._tmapRefresh) window._tmapRefresh(); return; }
       var vb = e.target.closest('.ch-view button');
       if (vb) {
         if (vb.dataset.v === 'map') { var hn = m.querySelector('.ch-i.hit, .rv-card.hit'); close(); if (window.openTimeMap) window.openTimeMap(hn ? +hn.dataset.n : 0); return; }
@@ -23174,9 +23179,10 @@ function krvDef(e, field) {
       /* (b20261107-6 kjm 「년도를 앞으로 빼면 잘 보여 (색상 넣어서)」) 연도를 사건 앞 색 칸으로 */
       if (x.n === focusN) fIdx = h.length;
       h.push('<div class="ch-i" data-n="' + x.n + '"><div class="ch-no">' + x.n + '</div><div>' + (x.y ? '<span class="ch-y' + (/^AD/.test(x.y) ? ' ad' : '') + '">' + esc(x.y) + '</span>' : '') + '<span class="ch-it">' + esc(x.i) + '</span>'
-        + ref + '</div>' + (x.d ? '<div class="ch-d">' + esc(x.d) + '</div>' : '') + '</div>');
+        + ref + anc(x) + '</div>' + (x.d ? '<div class="ch-d">' + esc(x.d) + '</div>' : '') + '</div>');
     });
     var b = m.querySelector('.ch-b');
+    if (VIEW === 'arch' || VIEW === 'canon') { b.innerHTML = layerView(VIEW, q); m.querySelector('.ch-n').textContent = VIEW === 'arch' ? '⚓ 성경 연대를 고정해 주는 유물·외부 기록 — 누르면 시간 지도에서 그 무렵과 발견지를 보여 줌' : '📜 성경 각 권 기록 연대(전통적 견해) · 사본 · 초대 교회(~AD 500)'; return; }
     if (VIEW === 'river' && window.fillChronoRiver) { if (list.length) window.fillChronoRiver(b, list, focusN); else b.innerHTML = '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>'; }
     else if (!h.length) b.innerHTML = '<div style="padding:20px;color:#888">찾은 사건이 없습니다.</div>';
     else {   // (b20261107-8) 목록도 나눠 그림 — 처음 200칸, 끝에 닿으면 300칸씩
@@ -23193,6 +23199,30 @@ function krvDef(e, field) {
       var el = b.querySelector('.ch-i[data-n="' + focusN + '"], .rv-card[data-n="' + focusN + '"]');
       if (el) { el.classList.add('hit'); setTimeout(function () { el.scrollIntoView({ block: 'center' }); }, 30); }
     }
+  }
+  function anc(x) { if (!x.A || !x.A.length || !DATA.arch) return ''; var nm = x.A.map(function (i) { return DATA.arch[i] ? DATA.arch[i].n : ''; }).join(', '); return ' <span class="ch-anc" title="⚓ 고고학 근거: ' + esc(nm) + ' — 「⚓ 고고학」 보기에서 자세히">⚓</span>'; }
+  window.chronoAnc = anc;
+  function layerView(v, q) {
+    var L = window.chronoLayer; if (!L) return '';
+    function hit(t) { return !q || t.toLowerCase().indexOf(q) >= 0; }
+    if (v === 'arch') {
+      var A = (DATA.arch || []).map(function (a, i) { return { a: a, i: i }; }).sort(function (p, r) { return p.a.Y[0] - r.a.Y[0]; });
+      return A.filter(function (o) { return hit(o.a.n + ' ' + o.a.d + ' ' + (o.a.r || '') + ' ' + (o.a.fix || '')); }).map(function (o) { var a = o.a;
+        return '<div class="ar-card"><b>⚓ ' + esc(a.n) + '</b> <span class="ch-y' + (/^AD/.test(a.y) ? ' ad' : '') + '">' + esc(a.y) + '</span><br>' + esc(a.d)
+          + (a.fix ? '<br><span class="ar-fix">▶ 고정되는 연대: ' + esc(a.fix) + '</span>' : '')
+          + '<br><small>발견: ' + esc(a.found || '') + ' · 소장: ' + esc(a.at || '') + '</small>' + (a.r ? '<br><small>📖 ' + esc(a.r) + '</small>' : '')
+          + '<br><button class="ar-go" data-y="' + a.Y[0] + '"' + (a.lat != null ? ' data-lat="' + a.lat + '" data-lng="' + a.lng + '"' : '') + ' style="margin-top:4px;background:#1d4ed8;color:#fff">🗺 시간 지도에서 보기</button></div>'; }).join('') || '<div style="padding:20px;color:#888">자료가 없습니다.</div>';
+    }
+    var h = ['<div class="ch-era">📜 성경 각 권 기록 연대</div>'];
+    (DATA.books || []).filter(function (x) { return hit(x.b + ' ' + (x.w || '') + ' ' + (x.x || '')); }).forEach(function (x, i) {
+      if (i === 39 && !q) h.push('<div class="ch-t">신약</div>');
+      h.push('<div class="ch-i"><div class="ch-no">' + (DATA.books.indexOf(x) + 1) + '</div><div><span class="ch-y' + (/^AD/.test(x.y) ? ' ad' : '') + '">' + esc(x.y) + '</span><span class="ch-it">' + esc(x.b) + '</span> <small style="color:#6e4e36">' + esc(x.w || '') + '</small></div><div class="ch-d">' + esc(x.x || '') + '</div></div>');
+    });
+    h.push('<div class="ch-era">✝ 사본과 초대 교회 (AD 100~500)</div>');
+    (DATA.church || []).filter(function (x) { return hit(x.n + ' ' + x.d + ' ' + x.t); }).forEach(function (x) {
+      h.push('<div class="ch-i"><div class="ch-no">' + esc(x.t) + '</div><div><span class="ch-y ad">' + esc(x.y) + '</span><span class="ch-it">' + esc(x.n) + '</span></div><div class="ch-d">' + esc(x.d) + '</div></div>');
+    });
+    return h.join('');
   }
   window.openChronology = function (focusN) {
     var m = document.getElementById('chrono-modal') || build();
@@ -23324,6 +23354,16 @@ function krvDef(e, field) {
       + '#tmap-bar .tm-w .wl{flex:0 0 auto;color:#4b5563;font-weight:700}'
       + '.w-c{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;border:1px dashed #b8c2cc;background:#f4f7f9;color:#334155;border-radius:999px;padding:2px 9px;white-space:nowrap;font-size:12px}'
       + '.w-c i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 auto}.w-c small{color:#64748b}'
+      + '#tmap-bar .tm-k{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:5px 1px 0;font-size:12px;scrollbar-width:thin}#tmap-bar .tm-k:empty{display:none}'
+      + '.k-c{background:#fff;border-style:solid}.p-c{border:1px solid #f59e0b;background:#fff7ed;color:#9a3412}.b-c{border:1px solid #94a3b8;background:#f1f5f9;color:#334155}'
+      + '.a-c{border:1px solid #1d4ed8;background:#eff6ff;color:#1e3a8a;cursor:pointer}.c-c{border:1px solid #a855f7;background:#faf5ff;color:#6b21a8}'
+      + '.tm-arch{background:#1d4ed8;color:#fff;border:2px solid #fff;border-radius:6px;font-size:13px;line-height:18px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.35)}'
+      + '.tm-alb{background:#1e3a8a !important;color:#fff !important;border:none !important;font-size:11px;padding:1px 6px !important}.tm-alb:before{display:none}'
+      + '#chrono-modal .ar-card{border:1px solid #c7d2fe;background:#f8faff;border-radius:10px;padding:8px 11px;margin:7px 0;font-size:13px;line-height:1.6}'
+      + '#chrono-modal .ar-card .ch-y{display:inline-block;background:#8a4b14;color:#fff;font-size:11.5px;font-weight:700;border-radius:5px;padding:1px 7px}#chrono-modal .ar-card .ch-y.ad{background:#1d5f8a}'
+      + '#chrono-modal .ar-card b{color:#1e3a8a}#chrono-modal .ar-card .ar-fix{color:#1d4ed8}#chrono-modal .ar-card small{color:#64748b}'
+      + '#chrono-modal .ch-anc{display:inline-block;background:#1d4ed8;color:#fff;border-radius:5px;font-size:11px;padding:0 5px;margin-left:5px;cursor:help}'
+      + '#chrono-modal .ly-btn{background:rgba(255,255,255,.15);color:#fff}#chrono-modal .ly-btn.on{background:#fef3c7;color:#7c2d12;font-weight:700}'
       + '#chrono-modal .rv-w{grid-column:1/4;display:flex;justify-content:center;margin:3px 0}'
       + '#chrono-modal .rv-w .w-c{cursor:default;font-size:11.5px}'
       + '#chrono-modal .ch-wbtn{background:rgba(255,255,255,.15);color:#fff}#chrono-modal .ch-wbtn.on{background:#dbeafe;color:#1e3a8a;font-weight:700}'
@@ -23339,6 +23379,26 @@ function krvDef(e, field) {
       .filter(function (o) { return o.d <= 30; }).sort(function (p, q) { return p.d - q.d || p.span - q.span; }).slice(0, k).map(function (o) { return o.w; });
   }
   window.chronoWorldChip = wchip;
+  /* (b20261108-3 kjm 「연대기 고고학에서 찾을 수 있잖아」「참고하고」) 층 더함:
+     👑 왕(통일·이스라엘·유다, 틸레 연대) · 📣 선지자 · 📜 성경 기록 연대 · ⚓ 고고학 유물(발견지 좌표) · ✝ 사본·초대 교회(~AD 500) */
+  function inY(Y, y) { var a = Math.min(Y[0], Y[Y.length - 1]), b = Math.max(Y[0], Y[Y.length - 1]); return y >= a && y <= b; }
+  function kchip(k) { var c = k.k === '유다' ? '#3730a3' : (k.k === '이스라엘' ? '#0f766e' : '#92400e'); return '<span class="w-c k-c" style="border-color:' + c + ';color:' + c + '" title="' + esc((k.k === '통일' ? '통일 왕국' : k.k) + ' 왕 ' + k.n + ' · ' + k.y + (k.q ? ' · ' + (k.q === '선' ? '여호와 보시기에 정직' : '여호와 보시기에 악') : '') + (k.x ? ' · ' + k.x : '') + ' · ' + k.r) + '">👑 ' + (k.k === '통일' ? '' : '<small>' + (k.k === '유다' ? '남' : '북') + '</small> ') + esc(k.n) + ' <small>' + esc(k.y.replace(/^BC /, '')) + '</small>' + (k.q ? (k.q === '선' ? ' <small>👍</small>' : '') : '') + '</span>'; }
+  function pchip(p) { return '<span class="w-c p-c" title="' + esc('선지자 ' + p.n + ' · ' + p.y + ' · ' + (p.to || '') + ' · ' + (p.x || '') + ' · ' + (p.r || '')) + '">📣 ' + esc(p.n) + ' <small>' + esc(String(p.y).replace(/^BC /, '')) + '</small></span>'; }
+  function bchip(b) { return '<span class="w-c b-c" title="' + esc(b.b + ' 기록 · ' + b.y + ' · ' + (b.w || '') + ' · ' + (b.x || '')) + '">📜 ' + esc(b.b) + ' <small>' + esc(b.y) + '</small></span>'; }
+  function achip(a, i) { return '<span class="w-c a-c" data-ai="' + i + '" title="' + esc(a.n + ' · ' + a.y + ' — ' + a.d + ' · 고정: ' + (a.fix || '') + ' · ' + (a.found || '') + ' · ' + (a.at || '') + (a.r ? ' · ' + a.r : '')) + '">⚓ ' + esc(a.n) + ' <small>' + esc(a.y) + '</small></span>'; }
+  function cchip(c) { return '<span class="w-c c-c" title="' + esc(c.t + ' · ' + c.y + ' — ' + c.d) + '">' + (c.t === '사본' ? '📄' : (c.t === '공의회' ? '🏛' : (c.t === '정경' ? '📚' : '✝'))) + ' ' + esc(c.n) + ' <small>' + esc(c.y) + '</small></span>'; }
+  window.chronoLayer = { kchip: kchip, pchip: pchip, bchip: bchip, achip: achip, cchip: cchip, inY: inY };
+  function layerLine(y) {
+    if (y == null || !D) return '';
+    var on = window.chronoLayers || {}, h = [];
+    if (on.k !== false) {
+      (D.kings || []).filter(function (k) { return inY(k.Y, y); }).forEach(function (k) { h.push(kchip(k)); });
+      (D.prophets || []).filter(function (p) { return inY(p.Y, y); }).forEach(function (p) { h.push(pchip(p)); });
+    }
+    if (on.b !== false) (D.books || []).filter(function (b) { return inY(b.Y, y) && (b.Y[b.Y.length - 1] - b.Y[0] <= 120); }).forEach(function (b) { h.push(bchip(b)); });
+    if (on.a !== false) (D.arch || []).forEach(function (a, i) { var a0 = Math.min(a.Y[0], a.Y[a.Y.length - 1]), a1 = Math.max(a.Y[0], a.Y[a.Y.length - 1]); if (y >= a0 - 12 && y <= a1 + 12) h.push(achip(a, i)); });
+    return h.join('');
+  }
 
   /* ───── ① 시간 지도 ───── */
   function bar() {
@@ -23354,7 +23414,7 @@ function krvDef(e, field) {
       + '<div class="tm-go"><select class="tm-era" title="시대로 건너뛰기"></select>'
       + '<input class="tm-yr" placeholder="연도 (예: BC 586, AD 30)" title="그 해에 가장 가까운 사건으로"><button class="tm-yrgo">이동</button>'
       + '<input class="tm-q" placeholder="사건·지명·성구 찾기 (예: 갈멜, 왕하 25)"><button class="tm-qgo">찾기</button></div>'
-      + '<div class="tm-rib"></div><div class="tm-ev"></div><div class="tm-w"></div>';
+      + '<div class="tm-rib"></div><div class="tm-ev"></div><div class="tm-k"></div><div class="tm-w"></div>';
     document.body.appendChild(b);
     /* (b20261107-11 kjm 「움직일 수 있나? 성경말씀이 다 안나와」) 띠가 왼쪽 본문까지 덮던 것 → 지도 칸 위에만 놓고(칸 크기 따라감),
        ⠿ 잡고 끌어 옮기기, ▁ 로 접기(색 띠만 남김) */
@@ -23475,7 +23535,7 @@ function krvDef(e, field) {
   };
   function stop() { if (playT) { clearInterval(playT); playT = null; } var p = document.querySelector('#tmap-bar .tm-play'); if (p) { p.textContent = '▶'; p.classList.remove('on'); } }
   function play() { stop(); var p = document.querySelector('#tmap-bar .tm-play'); p.textContent = '⏸'; p.classList.add('on'); playT = setInterval(function () { if (cur >= ORD.length - 1) stop(); else go(cur + 1, true); }, spd * 1000); }
-  function closeMap() { stop(); var b = document.getElementById('tmap-bar'); if (b) b.style.display = 'none'; if (layer && typeof map !== 'undefined') { map.removeLayer(layer); layer = null; } }
+  function closeMap() { stop(); var b = document.getElementById('tmap-bar'); if (b) b.style.display = 'none'; if (layer && typeof map !== 'undefined') { map.removeLayer(layer); layer = null; } if (aLayer && typeof map !== 'undefined') { map.removeLayer(aLayer); aLayer = null; } }
   var flyT = null;
   function go(k, settle) {
     if (!ORD.length) return;
@@ -23494,8 +23554,29 @@ function krvDef(e, field) {
     var nw = ev.querySelector('.now'); if (nw) ev.scrollLeft = nw.offsetLeft - ev.clientWidth / 2 + nw.clientWidth / 2;
     if (settle && sync && !revLock) toVerse();
     var wy = x.Y ? x.Y[0] : null, ww = worldNear(wy, 6);
+    var kl = layerLine(wy); b.querySelector('.tm-k').innerHTML = kl ? '<span class="wl">🕯 이 무렵</span>' + kl : '';
+    drawArch(wy);
     b.querySelector('.tm-w').innerHTML = ww.length ? '<span class="wl">🌍 같은 무렵</span>' + ww.map(wchip).join('') : '';
     drawPlaces(lo, hi, settle);
+  }
+  var aLayer = null;
+  function drawArch(y) {
+    if (typeof map === 'undefined' || typeof L === 'undefined') return;
+    if (aLayer) { map.removeLayer(aLayer); aLayer = null; }
+    if (y == null || !D || !D.arch || (window.chronoLayers || {}).a === false) return;
+    aLayer = L.layerGroup();
+    D.arch.forEach(function (a) {
+      if (a.lat == null) return;
+      var a0 = Math.min(a.Y[0], a.Y[a.Y.length - 1]), a1 = Math.max(a.Y[0], a.Y[a.Y.length - 1]);
+      if (!(y >= a0 - 12 && y <= a1 + 12)) return;
+      var m = L.marker([a.lat, a.lng], { icon: L.divIcon({ className: 'tm-arch', html: '⚓', iconSize: [22, 22] }), zIndexOffset: 900 });
+      m.bindTooltip('⚓ ' + esc(a.n), { permanent: true, direction: 'right', offset: [10, 0], className: 'tm-alb' });
+      m.bindPopup('<div style="max-width:300px;font-size:13px;line-height:1.55"><b>⚓ ' + esc(a.n) + '</b> <span style="color:#8a4b14;font-weight:700">' + esc(a.y) + '</span><br>' + esc(a.d)
+        + (a.fix ? '<br><span style="color:#1d4ed8">▶ 고정되는 연대: ' + esc(a.fix) + '</span>' : '') + '<br><small style="color:#64748b">발견: ' + esc(a.found || '') + '<br>소장: ' + esc(a.at || '') + '</small>'
+        + (a.r ? '<br><small>📖 ' + esc(a.r) + '</small>' : '') + '</div>');
+      aLayer.addLayer(m);
+    });
+    aLayer.addTo(map);
   }
   function drawPlaces(lo, hi, settle) {
     if (typeof map === 'undefined' || typeof L === 'undefined') return;
@@ -23531,6 +23612,7 @@ function krvDef(e, field) {
       }, 120);
     }
   }
+  window._tmapRefresh = function () { var b = document.getElementById('tmap-bar'); if (b && b.style.display !== 'none' && ORD.length) go(cur, false); };
   window.openTimeMap = function (n) {
     ready().then(function () {
       if (window.innerWidth <= 768 && typeof switchMobileTab === 'function') { try { switchMobileTab('map'); } catch (e) {} }
@@ -23554,6 +23636,12 @@ function krvDef(e, field) {
     var P = places(), NT = D.ntEra || 1e9;
     var h = [], le = -1, ly = null, side = 0, fr = -1;
     var W = (window.chronoWorldOn !== false && D.world) ? D.world : [], wi = 0, wDone = {};
+    var ON = window.chronoLayers || {}, EX = [];
+    if (ON.k !== false) { (D.kings || []).forEach(function (k) { EX.push({ y: Math.min(k.Y[0], k.Y[k.Y.length - 1]), h: kchip(k), t: '즉위' }); }); (D.prophets || []).forEach(function (p) { EX.push({ y: Math.min(p.Y[0], p.Y[p.Y.length - 1]), h: pchip(p) }); }); }
+    if (ON.b !== false) (D.books || []).forEach(function (b) { EX.push({ y: Math.min(b.Y[0], b.Y[b.Y.length - 1]), h: bchip(b) }); });
+    if (ON.a !== false) (D.arch || []).forEach(function (a, i) { EX.push({ y: Math.min(a.Y[0], a.Y[a.Y.length - 1]), h: achip(a, i) }); });
+    EX.sort(function (p, q) { return p.y - q.y; });
+    var exDone = {};
     list.forEach(function (x) {
       var col = eraColor(x.e, x.e >= NT);
       if (x.e !== le) { h.push('<div class="rv-row"><div class="rv-era"><span style="background:' + col + '">' + esc(D.eras[x.e]) + '</span></div></div>'); le = x.e; ly = null; }
@@ -23563,11 +23651,16 @@ function krvDef(e, field) {
         for (var q = 0; q < W.length; q++) { var w = W[q]; if (wDone[q]) continue; if (w.Y[0] > y0) break; wDone[q] = 1; if (y0 - w.Y[0] <= 60) add.push(w); }
         add.slice(-4).forEach(function (w) { h.push('<div class="rv-row"><div class="rv-w">' + wchip(w) + '</div></div>'); });
       }
+      if (EX.length && x.Y) {   // 왕 즉위·선지자·기록·유물도 그 해 자리에
+        var yy = x.Y[0], ex = [];
+        for (var q2 = 0; q2 < EX.length; q2++) { var o = EX[q2]; if (exDone[q2]) continue; if (o.y > yy) break; exDone[q2] = 1; if (yy - o.y <= 40) ex.push(o.h); }
+        if (ex.length) h.push('<div class="rv-row"><div class="rv-w" style="flex-wrap:wrap;gap:4px">' + ex.slice(-8).join('') + '</div></div>');
+      }
       var pl = (x.P || []).map(function (pid) { return P[pid] ? String(P[pid].name).replace(/\s*\(.*\)/, '') : null; }).filter(Boolean);
       var ref = x.R && x.R.length ? '<span class="ch-ref" data-b="' + x.R[0][0] + '" data-c="' + x.R[0][1] + '" data-v="' + (x.R[0][2] || 1) + '">' + esc(x.r) + '</span>' : '';
       var card = '<div class="rv-card ' + (side ? 'r' : 'l') + (x.n === focusN ? ' hit' : '') + '" data-n="' + x.n + '" title="' + esc(x.t + ' — ' + x.d) + '">'
         + (side ? '<b>' + esc(x.i) + '</b>' + ref : ref + '<b>' + esc(x.i) + '</b>')
-        + (pl.length ? '<span class="rv-p">📍 ' + esc(pl.join(' · ')) + '</span>' : '') + '</div>';
+        + (window.chronoAnc ? window.chronoAnc(x) : '') + (pl.length ? '<span class="rv-p">📍 ' + esc(pl.join(' · ')) + '</span>' : '') + '</div>';
       var mid = '<div class="rv-rail" style="color:' + col + '"><i style="background:' + col + '"></i>' + (yrChange ? '<span class="rv-yr' + (/^AD/.test(x.y) ? ' ad' : '') + '">' + esc(String(x.y).replace(/\s*\(.*\)/, '').replace(/^(BC|AD) /, '$1 ')) + '</span>' : '<span class="rv-dot"></span>') + '</div>';
       if (x.n === focusN) fr = h.length;
       h.push('<div class="rv-row">' + (side ? '<div></div>' + mid + card : card + mid + '<div></div>') + '</div>');
