@@ -6720,10 +6720,20 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
 
         if (targetMarker) {
           // 클러스터가 숨겨진 경우 복원 후 이동
-          if (!map.hasLayer(markerClusterGroup)) {
+          /* (b20261107-3 kjm 「본문에서 지명 클릭하고 지도에서 닫기하고 축소하면 다른 곳이 보임」) 장 지명만 보이던 때(전체 묶음 숨김)
+             찾아가려고 전체 1,368곳 묶음을 잠깐 올렸는데 닫은 뒤에도 남아 있었다 → 팝업을 닫으면 다시 숨겨 장 지명만 보이게 한다. */
+          const _cpWasHidden = !map.hasLayer(markerClusterGroup);
+          if (_cpWasHidden) {
             markerClusterGroup.addTo(map);
           }
           targetMarker.bindPopup(generatePopupHtml(p), {autoPan: false, maxWidth: PLACE_POPUP_W, minWidth: 280});   // b20261002-1: 폭을 안 주면 Leaflet 기본 300px 로 좁고 길쭉해짐
+          if (_cpWasHidden) {
+            targetMarker.once('popupclose', function () {
+              setTimeout(function () {
+                if (chapterPlaceLayer && map.hasLayer(chapterPlaceLayer) && map.hasLayer(markerClusterGroup) && !targetMarker.isPopupOpen()) map.removeLayer(markerClusterGroup);
+              }, 50);
+            });
+          }
           markerClusterGroup.zoomToShowLayer(targetMarker, function() {
             targetMarker.openPopup();
           });
@@ -10392,7 +10402,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       return r;
     }
     // (b20261031-4) 🎧 낭독이 드라이브 폴더를 읽도록 — 관리자 아니어도 씀
-    window._kjmDrive = { token: appdataToken, api: appdataApi, list: gdListAll };
+    window._kjmDrive = { token: appdataToken, api: appdataApi, list: gdListAll, scope: function () { return gdriveScopeGranted || ''; }, hasRo: function () { return (gdriveScopeGranted || '').indexOf(GDRIVE_RO) >= 0; } };
     async function appdataInstallOne(f, entry, blob) {
       const file = new File([blob], entry.name, { type: "application/octet-stream" });
       if (entry.kind === "bdb") { await handleBdbFile(file); return; }
@@ -19545,7 +19555,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261107-3`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22535,9 +22545,13 @@ window.FigTags = (function () {
     if (!s.P && BOOKS[id].priv) {
       s.P = (async function () {
         var Dv = window._kjmDrive; if (!Dv) throw new Error('구글 연결 기능을 아직 읽지 못했습니다');
-        var tk = await Dv.token(false) || await Dv.token(true); if (!tk) throw new Error('구글 로그인이 필요합니다');
-        var fs = await Dv.list("name='" + BOOKS[id].drive + "' and trashed=false", tk);
-        if (!fs.length) throw new Error('구글 드라이브에 ' + BOOKS[id].drive + ' 파일이 없습니다');
+        /* (b20261107-3 kjm 「로그온 안됨」) 단추로 받은 표(s.tk)를 그대로 쓴다 — 다시 token() 을 부르면 「모든 파일 보기」 권한 확인에 걸려
+           손길 없는 로그인 창을 또 열려다 막혔다. 권한이 빠졌으면 그렇다고 알린다. */
+        var tk = s.tk || await Dv.token(false); if (!tk) throw new Error('구글 로그인이 필요합니다');
+        var fs;
+        try { fs = await Dv.list("name='" + BOOKS[id].drive + "' and trashed=false", tk); }
+        catch (e) { throw new Error((Dv.hasRo && !Dv.hasRo() ? '구글 드라이브 「모든 파일 보기」 권한이 없습니다 — 로그인 창에서 그 칸을 체크해 주세요. ' : '') + (e && e.message || e)); }
+        if (!fs.length) throw new Error(Dv.hasRo && !Dv.hasRo() ? '구글 드라이브 「모든 파일 보기」 권한이 없어 ' + BOOKS[id].drive + ' 를 못 찾습니다 — 다시 로그인하며 그 칸을 체크해 주세요' : '구글 드라이브에 ' + BOOKS[id].drive + ' 파일이 없습니다');
         fs.sort(function (a, b) { return String(b.modifiedTime).localeCompare(String(a.modifiedTime)); });
         return await (await Dv.api('https://www.googleapis.com/drive/v3/files/' + fs[0].id + '?alt=media', tk)).json();
       })().then(function (j) { s.D = (j && j.items) || []; return s.D; }).catch(function (e) { s.err = e && e.message; s.D = []; s.P = null; return s.D; });
@@ -22746,17 +22760,18 @@ window.FigTags = (function () {
       if (!D.length) {
         /* (b20261107-2 kjm 화면: 날마다의 동행 「구글 로그인이 필요합니다」) 새로 연 화면은 구글 표가 없고, 자동으로 띄운 로그인 창은
            누른 손길 없이 열려 브라우저가 막는다 → 로그인 단추를 보여 주고, 누르면 그 자리에서 로그인 창을 열어 다시 받는다. */
-        var needLogin = B.priv && ST[id].err && /로그인|연결 기능/.test(ST[id].err);
+        var needLogin = B.priv && ST[id].err && /로그인|연결 기능|권한/.test(ST[id].err);
         m.querySelector('.dv-b').innerHTML = '묵상 자료(' + (B.drive || B.file.replace('./', '')) + ')를 받지 못했습니다.' + (ST[id].err ? '<br><small>' + esc(ST[id].err) + '</small>' : '')
           + (needLogin ? '<br><br><button type="button" class="dv-login" style="padding:6px 14px;border-radius:8px;border:1px solid #8a5a2b;background:#8a5a2b;color:#fff;cursor:pointer;font-size:14px">🔑 구글 로그인하고 받기</button>' : '');
         var lb = m.querySelector('.dv-login');
         if (lb) lb.onclick = function () {
           var Dv = window._kjmDrive; if (!Dv) return;
           lb.disabled = true; lb.textContent = '로그인 창을 여는 중…';
-          Dv.token(true).then(function (tk) {
-            if (!tk) { lb.disabled = false; lb.textContent = '🔑 구글 로그인하고 받기'; return; }
-            ST[id] = { D: null, P: null, cur: ST[id].cur }; setBook(id);
-          });
+          var go = function (tk) {
+            if (!tk) { lb.disabled = false; lb.textContent = '🔑 구글 로그인하고 받기'; var sm = m.querySelector('.dv-b small'); if (sm) sm.textContent = '로그인 창을 열지 못했거나 닫혔습니다 — 브라우저 팝업 차단을 풀고, 잠시 뒤 다시 눌러 주세요'; return; }
+            ST[id] = { D: null, P: null, cur: ST[id].cur, tk: tk }; setBook(id);
+          };
+          Dv.token(true).then(go);   // 「모든 파일 보기」 권한이 빠진 표면 동의 창을 다시 연다(appdataToken 이 판단)
         };
         return;
       }
