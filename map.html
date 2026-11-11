@@ -19639,7 +19639,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261110-5`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261111-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20606,7 +20606,7 @@ function initRegionPanel() {
 }
 
 // ===== 성경 경로 =====
-var BIBLE_ROUTES = {"아브라함 여정 (우르→가나안)":{"color":"#8c564b","weight":3,"dashArray":"10,6","points":[[30.96,46.1,"우르 (갈대아)"],[36.86,39.03,"하란"],[32.57,35.68,"세겜"],[31.93,35.5,"벧엘"],[30.05,31.23,"애굽"],[31.25,34.84,"브엘세바"],[31.52,35.27,"헤브론 (마므레)"]]},"야곱 여정 (브엘세바→하란→세겜)":{"color":"#e377c2","weight":3,"dashArray":"10,6","points":[[31.25,34.84,"브엘세바"],[31.93,35.5,"벧엘 (야곱의 사닥다리)"],[36.86,39.03,"하란 (라반)"],[32.32,35.62,"마하나임"],[32.38,35.75,"브니엘 (씨름)"],[32.22,35.29,"세겜"]]},"요셉 애굽행":{"color":"#bcbd22","weight":2.5,"dashArray":"6,6","points":[[32.4,35.23,"도단 (형제에게 팔림)"],[30.05,31.23,"애굽 (바로 궁)"],[30.85,32.35,"고센 (가족 정착)"]]},"출애굽 (이집트→가나안)":{"color":"#e6550d","weight":3,"dashArray":"8,6","points":[[30.05,31.23,"라암셋"],[30.55,32.0,"숙곳"],[30.45,32.35,"에담"],[29.95,32.55,"비하히롯 (홍해 도하)"],[29.57,32.66,"마라"],[29.25,32.98,"엘림"],[28.7,33.62,"르비딤"],[28.54,33.98,"시내산"],[30.62,34.39,"가데스바네아"],[30.83,35.39,"에시온게벨"],[31.77,35.6,"여리고"]]},"포로기 (예루살렘→바벨론)":{"color":"#7f7f7f","weight":3,"dashArray":"12,8","points":[[31.78,35.23,"예루살렘 (멸망 BC586)"],[34.45,36.72,"리블라 (시드기야 심판)"],[36.2,36.15,"안디옥 경유"],[36.86,39.03,"하란 경유"],[32.54,44.42,"바벨론 (포로)"]]},"에스라 귀환 (바벨론→예루살렘)":{"color":"#17becf","weight":3,"dashArray":"10,5","points":[[32.54,44.42,"바벨론 (출발)"],[36.86,39.03,"하란 경유"],[36.2,36.15,"안디옥 경유"],[33.87,35.51,"시돈"],[32.82,35.0,"가이사랴"],[31.78,35.23,"예루살렘 (성전 재건)"]]},"예수님 공생애":{"color":"#ff7f0e","weight":3,"dashArray":"6,4","points":[[31.7,35.21,"베들레헴 (탄생)"],[30.05,31.23,"애굽 (피난)"],[32.7,35.3,"나사렛 (성장)"],[32.88,35.55,"가나 (첫 기적)"],[32.84,35.52,"갈릴리 호수"],[32.88,35.53,"가버나움 (사역 본부)"],[33.27,35.22,"두로시돈 지역"],[32.9,35.7,"벳새다"],[32.76,35.69,"데가볼리"],[33.25,35.6,"가이사랴 빌립보"],[32.37,35.54,"사마리아"],[31.86,35.46,"베다니"],[31.78,35.23,"예루살렘 (수난·부활)"],[31.78,35.24,"감람산 (승천)"]]},"빌립 전도 여행":{"color":"#aec7e8","weight":2.5,"dashArray":"6,6","points":[[31.78,35.23,"예루살렘 (출발)"],[32.28,35.25,"사마리아"],[31.5,34.46,"가사 광야 (에디오피아 내시)"],[31.82,34.65,"아소도"],[32.82,35.0,"가이사랴 (정착)"]]},"바울 1차 선교여행":{"color":"#1f77b4","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[36.12,35.92,"실루기아"],[35.18,33.92,"살라미"],[34.77,32.4,"바보"],[36.97,30.85,"버가"],[38.3,31.17,"비시디아안디옥"],[37.87,32.49,"이고니온"],[37.58,32.45,"루스드라"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라(복귀)"],[38.3,31.17,"비시디아안디옥(복귀)"],[36.97,30.85,"버가(복귀)"],[36.88,30.63,"앗달리아"],[36.2,36.15,"안디옥(귀환)"]]},"바울 2차 선교여행":{"color":"#2ca02c","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[37.0,35.32,"다소"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라"],[39.76,26.18,"드로아"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[40.47,22.35,"베뢰아"],[37.97,23.72,"아덴"],[37.94,22.93,"고린도"],[37.94,27.34,"에베소"],[32.82,35.0,"가이사랴"],[31.78,35.23,"예루살렘"],[36.2,36.15,"안디옥(귀환)"]]},"바울 3차 선교여행":{"color":"#9467bd","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[37.87,32.49,"이고니온"],[37.94,27.34,"에베소"],[39.76,26.18,"트로아스"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[37.94,22.93,"고린도"],[40.94,24.41,"빌립보(복귀)"],[39.76,26.18,"트로아스(복귀)"],[39.1,26.55,"미둘레네"],[37.53,27.28,"밀레도"],[36.41,28.22,"로도"],[36.83,35.5,"두로"],[32.82,35.0,"가이사랴"],[31.78,35.23,"예루살렘"]]},"바울 로마 호송 항해":{"color":"#d62728","weight":3,"dashArray":"5,8","points":[[32.82,35.0,"가이사랴"],[33.87,35.51,"시돈"],[36.6,34.63,"미라"],[35.2,24.47,"미항"],[35.93,15.1,"멜리데"],[37.06,15.28,"수라구사"],[38.9,16.5,"레기온"],[40.9,14.27,"보디올"],[41.9,12.5,"로마"]]}};
+var BIBLE_ROUTES = {"아브라함 여정 (우르→가나안)":{"color":"#8c564b","weight":3,"dashArray":"10,6","points":[[30.96,46.1,"우르 (갈대아)"],[36.86,39.03,"하란"],[32.57,35.68,"세겜"],[31.93,35.5,"벧엘"],[30.05,31.23,"애굽"],[31.25,34.84,"브엘세바"],[31.52,35.27,"헤브론 (마므레)"]]},"야곱 여정 (브엘세바→하란→세겜)":{"color":"#e377c2","weight":3,"dashArray":"10,6","points":[[31.25,34.84,"브엘세바"],[31.93,35.5,"벧엘 (야곱의 사닥다리)"],[36.86,39.03,"하란 (라반)"],[32.32,35.62,"마하나임"],[32.38,35.75,"브니엘 (씨름)"],[32.22,35.29,"세겜"]]},"요셉 애굽행":{"color":"#bcbd22","weight":2.5,"dashArray":"6,6","points":[[32.4,35.23,"도단 (형제에게 팔림)"],[30.05,31.23,"애굽 (바로 궁)"],[30.85,32.35,"고센 (가족 정착)"]]},"출애굽 (이집트→가나안)":{"color":"#e6550d","weight":3,"dashArray":"8,6","points":[[30.05,31.23,"라암셋"],[30.55,32.0,"숙곳"],[30.45,32.35,"에담"],[29.95,32.55,"비하히롯 (홍해 도하)"],[29.57,32.66,"마라"],[29.25,32.98,"엘림"],[28.7,33.62,"르비딤"],[28.54,33.98,"시내산"],[30.62,34.39,"가데스바네아"],[30.83,35.39,"에시온게벨"],[31.77,35.6,"여리고"]]},"포로기 (예루살렘→바벨론)":{"color":"#7f7f7f","weight":3,"dashArray":"12,8","points":[[31.78,35.23,"예루살렘 (멸망 BC586)"],[34.45,36.72,"리블라 (시드기야 심판)"],[36.83,38.01,"갈그미스 경유"],[36.86,39.03,"하란 경유"],[32.54,44.42,"바벨론 (포로)"]]},"에스라 귀환 (바벨론→예루살렘)":{"color":"#17becf","weight":3,"dashArray":"10,5","points":[[32.54,44.42,"바벨론 (출발)"],[36.83,38.01,"갈그미스 경유"],[35.13,36.75,"하맛 경유"],[33.51,36.29,"다메섹 경유"],[31.78,35.23,"예루살렘 (성전 재건)"]]},"예수님 공생애":{"color":"#ff7f0e","weight":3,"dashArray":"6,4","points":[[31.7,35.21,"베들레헴 (탄생)"],[30.05,31.23,"애굽 (피난)"],[32.7,35.3,"나사렛 (성장)"],[32.88,35.55,"가나 (첫 기적)"],[32.84,35.52,"갈릴리 호수"],[32.88,35.53,"가버나움 (사역 본부)"],[33.27,35.22,"두로시돈 지역"],[32.9,35.7,"벳새다"],[32.76,35.69,"데가볼리"],[33.25,35.6,"가이사랴 빌립보"],[32.37,35.54,"사마리아"],[31.86,35.46,"베다니"],[31.78,35.23,"예루살렘 (수난·부활)"],[31.78,35.24,"감람산 (승천)"]]},"빌립 전도 여행":{"color":"#aec7e8","weight":2.5,"dashArray":"6,6","points":[[31.78,35.23,"예루살렘 (출발)"],[32.28,35.25,"사마리아"],[31.5,34.46,"가사 광야 (에디오피아 내시)"],[31.82,34.65,"아소도"],[32.82,35.0,"가이사랴 (정착)"]]},"바울 1차 선교여행":{"color":"#1f77b4","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[36.12,35.92,"실루기아"],[35.18,33.92,"살라미"],[34.77,32.4,"바보"],[36.97,30.85,"버가"],[38.3,31.17,"비시디아안디옥"],[37.87,32.49,"이고니온"],[37.58,32.45,"루스드라"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라(복귀)"],[38.3,31.17,"비시디아안디옥(복귀)"],[36.97,30.85,"버가(복귀)"],[36.88,30.63,"앗달리아"],[36.2,36.15,"안디옥(귀환)"]]},"바울 2차 선교여행":{"color":"#2ca02c","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[37.0,35.32,"다소"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라"],[39.76,26.18,"드로아"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[40.47,22.35,"베뢰아"],[37.97,23.72,"아덴"],[37.94,22.93,"고린도"],[37.94,27.34,"에베소"],[32.82,35.0,"가이사랴"],[31.78,35.23,"예루살렘"],[36.2,36.15,"안디옥(귀환)"]]},"바울 3차 선교여행":{"color":"#9467bd","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[37.87,32.49,"이고니온"],[37.94,27.34,"에베소"],[39.76,26.18,"드로아"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[37.94,22.93,"고린도"],[40.94,24.41,"빌립보(복귀)"],[39.76,26.18,"드로아(복귀)"],[39.1,26.55,"미둘레네"],[37.53,27.28,"밀레도"],[36.41,28.22,"로도"],[36.83,35.5,"두로"],[32.82,35.0,"가이사랴"],[31.78,35.23,"예루살렘"]]},"바울 로마 호송 항해":{"color":"#d62728","weight":3,"dashArray":"5,8","points":[[32.82,35.0,"가이사랴"],[33.87,35.51,"시돈"],[36.6,34.63,"미라"],[35.2,24.47,"미항"],[35.93,15.1,"멜리데"],[37.06,15.28,"수라구사"],[38.9,16.5,"레기온"],[40.9,14.27,"보디올"],[41.9,12.5,"로마"]]}};
 
 var routeIndividualLayers = {};
 
@@ -20668,7 +20668,7 @@ function initRoutePanel() {
     {name:'요셉 애굽행', color:'#bcbd22', desc:'도단→애굽→고센'},
     {name:'출애굽 (이집트→가나안)', color:'#e6550d', desc:'라암셋→시내산→가데스바네아→여리고'},
     {name:'포로기 (예루살렘→바벨론)', color:'#7f7f7f', desc:'예루살렘→리블라→바벨론'},
-    {name:'에스라 귀환 (바벨론→예루살렘)', color:'#17becf', desc:'바벨론→하란→예루살렘 성전 재건'},
+    {name:'에스라 귀환 (바벨론→예루살렘)', color:'#17becf', desc:'바벨론→갈그미스→하맛→다메섹→예루살렘'},
     {name:'예수님 공생애', color:'#ff7f0e', desc:'베들레헴→나사렛→갈릴리→예루살렘'},
     {name:'빌립 전도 여행', color:'#aec7e8', desc:'예루살렘→사마리아→가사→가이사랴'},
     {name:'바울 1차 선교여행', color:'#1f77b4', desc:'안디옥→구브로→비시디아→더베'},
@@ -20679,15 +20679,22 @@ function initRoutePanel() {
   var h='<div style="display:flex;gap:6px;margin-bottom:8px">'
     +'<button onclick="showAllRoutes()" style="flex:1;padding:4px;border-radius:4px;border:1px solid #ccc;background:#e8f4e8;cursor:pointer;font-size:11px">전체 선택</button>'
     +'<button onclick="hideAllRoutes()" style="flex:1;padding:4px;border-radius:4px;border:1px solid #ccc;background:#f4e8e8;cursor:pointer;font-size:11px">전체 해제</button></div>';
+  h+='<div style="font-size:11px;color:#7c2d12;background:#fff7ed;border-radius:5px;padding:4px 6px;margin-bottom:6px">▶ 를 누르면 길이 지도 위에 차례로 그려져요</div>';
   routes.forEach(function(r) {
     if (!routeIndividualLayers[r.name]) return;
-    h+='<label style="display:flex;align-items:center;gap:4px;padding:4px 0;cursor:pointer;font-size:12px;border-bottom:1px solid #f0f0f0">'
+    h+='<div style="display:flex;align-items:center;gap:4px;border-bottom:1px solid #f0f0f0">'
+      +'<label style="flex:1;display:flex;align-items:center;gap:4px;padding:4px 0;cursor:pointer;font-size:12px">'
       +'<input type="checkbox" class="rte-chk" data-route="'+r.name+'" style="margin:0">'
       +'<span style="display:inline-block;width:20px;height:3px;background:'+r.color+';flex-shrink:0;border-radius:1px"></span>'
-      +'<span><b>'+r.name+'</b><br><span style="color:#888;font-size:10px">'+r.desc+'</span></span></label>';
+      +'<span><b>'+r.name+'</b><br><span style="color:#888;font-size:10px">'+r.desc+'</span></span></label>'
+      +'<button class="rte-play" data-route="'+r.name+'" title="길이 그려지는 모습 보기" style="flex:none;width:30px;height:30px;border-radius:50%;border:2px solid '+r.color+';background:#fff;color:'+r.color+';font-size:13px;cursor:pointer;padding:0">▶</button></div>';
   });
   var body = document.getElementById('route-panel-body');
   body.innerHTML = h;
+  body.addEventListener('click', function(e) {
+    var pb = e.target.closest && e.target.closest('.rte-play');
+    if (pb && window.RoutePlay) { e.preventDefault(); RoutePlay.start(pb.getAttribute('data-route')); }
+  });
   body.addEventListener('change', function(e) {
     var t = e.target;
     if (t.classList && t.classList.contains('rte-chk')) {
@@ -23199,7 +23206,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curSub = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=b20261110-5', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=b20261111-2', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -23532,6 +23539,11 @@ function krvDef(e, field) {
       + '#tmap-bar .tm-c.now{opacity:1;border-color:#b42318;box-shadow:0 0 0 2px #fecaca;font-weight:700}'
       + '#tmap-bar .tm-c small{color:#355d82;margin-left:5px;font-weight:600}'
       + '.tm-pl{background:#b42318;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 2px rgba(180,35,24,.35)}'
+      + '.tm-ring{pointer-events:none;border-radius:50%;border:3px solid #b42318;animation:tmRing 1.1s ease-out 2 both}'
+      + '@keyframes tmRing{0%{transform:scale(.15);opacity:.95}100%{transform:scale(1);opacity:0}}'
+      + '#tm-era-ban{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) scale(.85);z-index:950;pointer-events:none;background:rgba(255,253,248,.94);border:3px solid #7d3529;border-radius:16px;padding:10px 26px;text-align:center;font-size:26px;font-weight:800;color:#3b2a1e;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transition:opacity .45s,transform .45s;white-space:nowrap}'
+      + '#tm-era-ban.on{opacity:1;transform:translate(-50%,-50%) scale(1)}#tm-era-ban small{display:block;font-size:13px;font-weight:700;color:#8a4b14;margin:2px 0}'
+      + '@media (max-width:768px){#tm-era-ban{font-size:19px;padding:8px 16px}}'
       + '.tm-lb{background:#b42318 !important;color:#fff !important;border:none !important;font-weight:700;font-size:12px;padding:1px 6px !important;box-shadow:0 1px 4px rgba(0,0,0,.3) !important}'
       + '.tm-lb:before{display:none}.tm-lb2{background:rgba(255,255,255,.9) !important;color:#7d3529 !important;border:1px solid #e2c9bd !important;font-size:11px;padding:0 5px !important}.tm-lb2:before{display:none}'
       + '#chrono-modal .ch-view{display:flex;gap:4px;margin-left:auto}#chrono-modal .ch-view button{background:rgba(255,255,255,.15);color:#fff}#chrono-modal .ch-view button.on{background:#fff;color:#7d3529;font-weight:700}'
@@ -23784,7 +23796,7 @@ function krvDef(e, field) {
   };
   function stop() { if (playT) { clearInterval(playT); playT = null; } var p = document.querySelector('#tmap-bar .tm-play'); if (p) { p.textContent = '▶'; p.classList.remove('on'); } }
   function play() { stop(); var p = document.querySelector('#tmap-bar .tm-play'); p.textContent = '⏸'; p.classList.add('on'); playT = setInterval(function () { if (cur >= ORD.length - 1) stop(); else go(cur + 1, true); }, spd * 1000); }
-  function closeMap() { stop(); var b = document.getElementById('tmap-bar'); if (b) b.style.display = 'none'; if (layer && typeof map !== 'undefined') { map.removeLayer(layer); layer = null; } if (aLayer && typeof map !== 'undefined') { map.removeLayer(aLayer); aLayer = null; } }
+  function closeMap() { stop(); try { clearMotion(); } catch (e) {} var b = document.getElementById('tmap-bar'); if (b) b.style.display = 'none'; if (layer && typeof map !== 'undefined') { map.removeLayer(layer); layer = null; } if (aLayer && typeof map !== 'undefined') { map.removeLayer(aLayer); aLayer = null; } }
   var flyT = null, tipMode = null, tipSrc = '';
   function tip(s, head) {
     var t = document.querySelector('#tmap-bar .tm-tip'); if (!t) return;
@@ -23821,8 +23833,55 @@ function krvDef(e, field) {
     b.querySelector('.tm-w').innerHTML = ww.length ? '<span class="wl">🌍 같은 무렵</span>' + ww.map(wchip).join('') : '';
     if (tipMode === 'cur') curTip();
     else if (tipMode === 'chip') { tipMode = null; tip(''); }
+    if (settle) { try { eraBanner(x); } catch (e) {} }
     drawPlaces(lo, hi, settle);
   }
+  /* (b20261111-1 kjm 「모션그래픽 — 2. 연대기 재생」) 사건이 옮겨 갈 때 지도 위에 움직임을 준다.
+     ① 앞 사건 자리에서 새 사건 자리로 굽은 선이 자라나며 이어짐(이야기가 어디로 흘렀는지) — 지난 선 5개는 옅게 남김
+     ② 지금 사건 자리에 물결 고리
+     ③ 시대가 바뀌면 지도 가운데에 시대 이름이 크게 떴다 사라짐 */
+  var trailL = null, lastPt = null, lastEra = null, trailN = 0, eraT = null;
+  function motionTrail(mine) {
+    if (typeof map === 'undefined' || typeof L === 'undefined' || !mine.length) return;
+    if (!trailL) trailL = L.layerGroup().addTo(map);
+    if (!map.hasLayer(trailL)) trailL.addTo(map);
+    var to = mine[0], from = lastPt; lastPt = to;
+    // 물결 고리
+    var ring = L.marker(to, { icon: L.divIcon({ className: 'tm-ring', iconSize: [70, 70] }), interactive: false, zIndexOffset: 800 });
+    trailL.addLayer(ring); setTimeout(function () { trailL.removeLayer(ring); }, 2300);
+    if (!from || (Math.abs(from[0] - to[0]) < 0.02 && Math.abs(from[1] - to[1]) < 0.02)) return;
+    // 지난 선들은 옅게, 5개 넘으면 지움
+    trailL.eachLayer(function (l) { if (l._tmTrail) { l._tmAge = (l._tmAge || 0) + 1; if (l._tmAge > 5) trailL.removeLayer(l); else l.setStyle({ opacity: Math.max(.12, .55 - l._tmAge * .09), weight: 2.5 }); } });
+    // 굽은 선(가운데를 옆으로 조금 띄움)
+    var mx = (from[0] + to[0]) / 2, my = (from[1] + to[1]) / 2, dx = to[0] - from[0], dy = to[1] - from[1];
+    var cx = mx - dy * .22, cy = my + dx * .22, pts = [];
+    for (var i = 0; i <= 40; i++) { var t = i / 40, a = (1 - t) * (1 - t), b2 = 2 * (1 - t) * t, c = t * t; pts.push([a * from[0] + b2 * cx + c * to[0], a * from[1] + b2 * cy + c * to[1]]); }
+    var line = L.polyline([pts[0]], { color: '#b42318', weight: 3.5, opacity: .85, dashArray: '7,6', interactive: false });
+    line._tmTrail = true; trailL.addLayer(line);
+    var dot = L.circleMarker(pts[0], { radius: 5, color: '#fff', weight: 2, fillColor: '#b42318', fillOpacity: 1, interactive: false });
+    trailL.addLayer(dot);
+    var t0 = null, dur = 900, my_n = ++trailN;
+    function step(ts) {
+      if (my_n !== trailN) { trailL.removeLayer(dot); line.setLatLngs(pts); return; }
+      if (!t0) t0 = ts; var p = Math.min(1, (ts - t0) / dur), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      var k = Math.max(1, Math.round(e * 40)); line.setLatLngs(pts.slice(0, k + 1)); dot.setLatLng(pts[k]);
+      if (p < 1) requestAnimationFrame(step); else setTimeout(function () { trailL.removeLayer(dot); }, 250);
+    }
+    requestAnimationFrame(step);
+  }
+  function eraBanner(x) {
+    if (lastEra === x.e) return; var first = lastEra === null; lastEra = x.e;
+    if (first) return;
+    var mp = (typeof map !== 'undefined' && map.getContainer) ? map.getContainer() : null; if (!mp) return;
+    var el = document.getElementById('tm-era-ban');
+    if (!el) { el = document.createElement('div'); el.id = 'tm-era-ban'; mp.appendChild(el); }
+    var nt = x.e >= (D.ntEra || 1e9);
+    el.innerHTML = '<small>' + (nt ? '신약' : '구약') + '</small>' + esc(D.eras[x.e]) + (x.y ? '<small>' + esc(x.y) + '</small>' : '');
+    el.style.borderColor = eraColor(x.e, nt);
+    el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
+    clearTimeout(eraT); eraT = setTimeout(function () { el.classList.remove('on'); }, 2600);
+  }
+  function clearMotion() { if (trailL && typeof map !== 'undefined') { trailL.clearLayers(); } lastPt = null; lastEra = null; trailN++; }
   var aLayer = null;
   // (b20261110-5 kjm 고고학 정리) 기록(글이 있는 것)·유물(물건)·유적(장소) 구분, 학계 논란 표시
   window.archKind = function (a) { return a && a.kind === '유적' ? '🏛' : a && a.kind === '유물' ? '🏺' : '📜'; };
@@ -23868,6 +23927,7 @@ function krvDef(e, field) {
       });
     }
     layer.addTo(map);
+    if (settle) { try { motionTrail(mine); } catch (e) {} }
     if (settle && follow && mine.length) {
       clearTimeout(flyT);
       flyT = setTimeout(function () {
@@ -24060,6 +24120,138 @@ window.HebNT = (function () {
   });
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') hide(); });
   return { wrap: wrap, tap: tap, pick: pick, hide: hide };
+})();
+
+</script>
+<style>
+/* (b20261111-1) 경로 움직임 */
+#rplay-box{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:1000;width:min(420px,calc(100% - 24px));background:rgba(255,255,255,.97);border:2px solid #1f77b4;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.25);padding:8px 10px;font-size:13px;color:#1f2937;display:none}
+#rplay-box .rp-top{display:flex;align-items:center;gap:6px}#rplay-box .rp-sw{width:18px;height:4px;border-radius:2px;flex:none}
+#rplay-box .rp-n{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#rplay-box .rp-c{color:#6b7280;font-size:12px;flex:none}
+#rplay-box .rp-stop{margin:6px 0 5px;font-size:15px;min-height:22px}#rplay-box .rp-stop.pop{animation:rpPop .45s ease-out}
+@keyframes rpPop{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:none}}
+#rplay-box .rp-no{display:inline-block;min-width:20px;height:20px;line-height:20px;border-radius:10px;color:#fff;text-align:center;font-size:12px;font-weight:700;padding:0 4px}
+#rplay-box .rp-ref{margin-left:6px;color:#1d4ed8;cursor:pointer;text-decoration:underline;font-size:13px;white-space:nowrap}
+#rplay-box .rp-bar{height:4px;background:#e5e7eb;border-radius:2px;overflow:hidden}#rplay-box .rp-bar i{display:block;height:100%;width:0;background:#64748b;transition:width .5s}
+#rplay-box .rp-btns{display:flex;gap:6px;margin-top:7px}#rplay-box button{flex:1;border:1px solid #d1d5db;background:#fff;border-radius:7px;padding:4px 0;cursor:pointer;font-size:13px;color:#1f2937}
+.rp-mover i{display:block;width:16px;height:16px;margin:3px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px rgba(0,0,0,.18),0 2px 6px rgba(0,0,0,.4);animation:rpBeat 1s ease-in-out infinite}
+@keyframes rpBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.tm-ring{pointer-events:none;border-radius:50%;border:3px solid #b42318;animation:tmRing 1.1s ease-out 2 both}
+.rp-ring{border-color:#2563eb}
+@media (max-width:768px){#rplay-box{bottom:70px}}
+@keyframes tmRing{0%{transform:scale(.15);opacity:.95}100%{transform:scale(1);opacity:0}}
+body.dark #rplay-box,body.dark-mode #rplay-box{background:rgba(17,24,39,.96);color:#f3f4f6}body.dark #rplay-box button,body.dark-mode #rplay-box button{background:#1f2937;color:#f3f4f6;border-color:#374151}
+</style>
+<script>
+/* (b20261111-1 kjm 「모션그래픽 — 1. 경로가 그려지는 움직임」)
+   🛤 경로 창에서 ▶ 를 누르면 그 길이 지도 위에 천천히 그려지고, 점이 길을 따라 움직이며
+   멈추는 곳마다 번호·이름이 붙고 아래 작은 창에 그곳 성경 구절이 뜬다. 구절을 누르면 본문으로. */
+var ROUTE_REFS = {
+  '아브라함 여정 (우르→가나안)': ['창 11:31','창 11:31','창 12:6','창 12:8','창 12:10','창 21:31','창 13:18'],
+  '야곱 여정 (브엘세바→하란→세겜)': ['창 28:10','창 28:19','창 29:4','창 32:2','창 32:30','창 33:18'],
+  '요셉 애굽행': ['창 37:17','창 39:1','창 47:6'],
+  '출애굽 (이집트→가나안)': ['출 12:37','출 12:37','출 13:20','출 14:2','출 15:23','출 15:27','출 17:1','출 19:2','민 13:26','민 33:35','수 6:1'],
+  '포로기 (예루살렘→바벨론)': ['왕하 25:9','왕하 25:6','','','왕하 25:11'],
+  '에스라 귀환 (바벨론→예루살렘)': ['스 7:9','','','','스 8:32'],
+  '예수님 공생애': ['마 2:1','마 2:14','마 2:23','요 2:1','마 4:18','마 4:13','마 15:21','막 8:22','막 7:31','마 16:13','요 4:4','요 11:1','마 21:10','행 1:12'],
+  '빌립 전도 여행': ['행 8:1','행 8:5','행 8:26','행 8:40','행 21:8'],
+  '바울 1차 선교여행': ['행 13:1','행 13:4','행 13:5','행 13:6','행 13:13','행 13:14','행 14:1','행 14:8','행 14:20','행 14:21','행 14:21','행 14:25','행 14:25','행 14:26'],
+  '바울 2차 선교여행': ['행 15:35','행 15:41','행 16:1','행 16:1','행 16:8','행 16:12','행 17:1','행 17:10','행 17:15','행 18:1','행 18:19','행 18:22','행 18:22','행 18:22'],
+  '바울 3차 선교여행': ['행 18:23','행 18:23','행 19:1','고후 2:12','행 20:1','행 20:2','행 20:2','행 20:6','행 20:6','행 20:14','행 20:15','행 21:1','행 21:3','행 21:8','행 21:17'],
+  '바울 로마 호송 항해': ['행 27:1','행 27:3','행 27:5','행 27:8','행 28:1','행 28:12','행 28:13','행 28:13','행 28:16']
+};
+window.RoutePlay = (function () {
+  var BK = { '창': 1, '출': 2, '민': 4, '수': 6, '왕하': 12, '스': 15, '마': 40, '막': 41, '요': 43, '행': 44, '고후': 47 };
+  var SPD = [{ k: '느리게', f: 1.6 }, { k: '보통', f: 1 }, { k: '빠르게', f: .55 }];
+  var st = null, spdI = 1, box = null;
+  try { var s0 = +localStorage.getItem('kjm_rplay_spd'); if (s0 >= 0 && s0 < 3) spdI = s0; } catch (e) {}
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function ref(name, i) { var a = ROUTE_REFS[name]; return a && a[i] ? a[i] : ''; }
+  function goRef(r) {
+    var m = /^(\S+)\s+(\d+):(\d+)/.exec(r || ''); if (!m || !BK[m[1]] || typeof navigateToBibleVerse !== 'function') return;
+    if (window.innerWidth <= 768 && typeof switchMobileTab === 'function') { try { switchMobileTab('bible'); } catch (e) {} }
+    try { navigateToBibleVerse(BK[m[1]], +m[2], +m[3]); } catch (e) {}
+  }
+  function dist(a, b) { var dx = (a[1] - b[1]) * Math.cos((a[0] + b[0]) / 2 * Math.PI / 180), dy = a[0] - b[0]; return Math.sqrt(dx * dx + dy * dy); }
+  function ui() {
+    if (box) return box;
+    box = document.createElement('div'); box.id = 'rplay-box';
+    box.innerHTML = '<div class="rp-top"><span class="rp-sw"></span><b class="rp-n"></b><span class="rp-c"></span></div>'
+      + '<div class="rp-stop"></div><div class="rp-bar"><i></i></div>'
+      + '<div class="rp-btns"><button class="rp-pp" title="멈춤/계속">⏸</button><button class="rp-re" title="처음부터 다시">⟲</button>'
+      + '<button class="rp-sp" title="빠르기"></button><button class="rp-x" title="끝내고 지우기">✕</button></div>';
+    map.getContainer().appendChild(box);
+    if (L.DomEvent) { L.DomEvent.disableClickPropagation(box); L.DomEvent.disableScrollPropagation(box); }
+    box.querySelector('.rp-pp').onclick = function () { if (!st) return; if (st.done) { start(st.name); return; } st.paused = !st.paused; this.textContent = st.paused ? '▶' : '⏸'; if (!st.paused) tick(); };
+    box.querySelector('.rp-re').onclick = function () { if (st) start(st.name); };
+    var sp = box.querySelector('.rp-sp'); sp.textContent = SPD[spdI].k;
+    sp.onclick = function () { spdI = (spdI + 1) % SPD.length; this.textContent = SPD[spdI].k; try { localStorage.setItem('kjm_rplay_spd', String(spdI)); } catch (e) {} };
+    box.querySelector('.rp-x').onclick = clear;
+    box.querySelector('.rp-stop').addEventListener('click', function (e) { var a = e.target.closest('[data-ref]'); if (a) goRef(a.getAttribute('data-ref')); });
+    return box;
+  }
+  function clear() {
+    if (st) { st.dead = true; if (st.g && map.hasLayer(st.g)) map.removeLayer(st.g); }
+    st = null; if (box) box.style.display = 'none';
+  }
+  function showStop(i) {
+    var p = st.pts[i], r = ref(st.name, i);
+    box.querySelector('.rp-c').textContent = (i + 1) + ' / ' + st.pts.length;
+    var s = box.querySelector('.rp-stop');
+    s.innerHTML = '<span class="rp-no" style="background:' + st.color + '">' + (i + 1) + '</span> <b>' + esc(p[2]) + '</b>'
+      + (r ? ' <a class="rp-ref" data-ref="' + esc(r) + '" title="본문으로">📖 ' + esc(r) + '</a>' : '');
+    s.classList.remove('pop'); void s.offsetWidth; s.classList.add('pop');
+    box.querySelector('.rp-bar i').style.width = (st.pts.length > 1 ? i / (st.pts.length - 1) * 100 : 100) + '%';
+    var c = L.circleMarker([p[0], p[1]], { radius: 7, color: st.color, fillColor: '#fff', fillOpacity: 1, weight: 3 });
+    c.bindTooltip((i + 1) + '. ' + esc(p[2]), { permanent: true, direction: 'top', offset: [0, -7], className: 'route-tooltip rp-tt' });
+    c.bindPopup('<div style="font-size:13px"><b style="color:' + st.color + '">' + (i + 1) + '. ' + esc(p[2]) + '</b>' + (r ? '<br><a href="#" onclick="RoutePlay.goRef(\'' + esc(r) + '\');return false">📖 ' + esc(r) + '</a>' : '') + '<div style="font-size:11px;color:#94a3b8;margin-top:3px">' + esc(st.name) + '</div></div>');
+    st.g.addLayer(c);
+    var ring = L.marker([p[0], p[1]], { icon: L.divIcon({ className: 'tm-ring rp-ring', iconSize: [60, 60] }), interactive: false });
+    st.g.addLayer(ring); setTimeout(function () { if (st && st.g) st.g.removeLayer(ring); }, 2200);
+    try { if (!map.getBounds().pad(-.08).contains([p[0], p[1]])) map.panTo([p[0], p[1]], { animate: true, duration: .6 }); } catch (e) {}
+  }
+  // 한 단계: 멈춘 곳에서 잠깐 쉬고 → 다음 곳까지 선을 그리며 이동
+  function tick() {
+    if (!st || st.dead || st.paused || st.busy) return;
+    var i = st.i;
+    if (i >= st.pts.length - 1) { st.done = true; box.querySelector('.rp-pp').textContent = '▶'; box.querySelector('.rp-pp').title = '다시 보기'; if (st.mover) st.g.removeLayer(st.mover); return; }
+    var a = st.pts[i], b = st.pts[i + 1], A = [a[0], a[1]], B = [b[0], b[1]];
+    var f = SPD[spdI].f, dur = Math.max(700, Math.min(3600, 500 + dist(A, B) * 260)) * f, t0 = null, my = st;
+    st.busy = true;
+    function step(ts) {
+      if (my.dead) return;
+      if (my.paused) { my.busy = false; my.resumeAt = null; t0 = null; my._step = step; return; }
+      if (!t0) t0 = ts - (my.prog || 0) * dur;
+      var p = Math.min(1, (ts - t0) / dur); my.prog = p;
+      var e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      var cur = [A[0] + (B[0] - A[0]) * e, A[1] + (B[1] - A[1]) * e];
+      my.line.setLatLngs(my.done_ll.concat([cur])); my.mover.setLatLng(cur);
+      if (p < 1) { requestAnimationFrame(step); return; }
+      my.prog = 0; my.done_ll.push(B); my.i++; my.busy = false; showStop(my.i);
+      setTimeout(tick, 1300 * SPD[spdI].f);
+    }
+    requestAnimationFrame(step);
+  }
+  function start(name) {
+    if (typeof map === 'undefined' || typeof L === 'undefined') return;
+    var R = (typeof BIBLE_ROUTES !== 'undefined') && BIBLE_ROUTES[name]; if (!R) return;
+    clear();
+    // 같은 길이 그냥 켜져 있으면 잠깐 끔(겹치지 않게)
+    try { if (routeIndividualLayers[name] && map.hasLayer(routeIndividualLayers[name])) toggleSingleRoute(name); } catch (e) {}
+    var pts = R.points;
+    st = { name: name, pts: pts, color: R.color, i: 0, g: L.layerGroup().addTo(map), done_ll: [[pts[0][0], pts[0][1]]] };
+    st.line = L.polyline(st.done_ll.slice(), { color: R.color, weight: 4.5, opacity: .9, lineCap: 'round' }).addTo(st.g);
+    st.mover = L.marker([pts[0][0], pts[0][1]], { icon: L.divIcon({ className: 'rp-mover', html: '<i style="background:' + R.color + '"></i>', iconSize: [22, 22] }), zIndexOffset: 2000, interactive: false }).addTo(st.g);
+    var b = ui(); b.style.display = 'block'; b.style.borderColor = R.color;
+    b.querySelector('.rp-sw').style.background = R.color; b.querySelector('.rp-n').textContent = name;
+    var pp = b.querySelector('.rp-pp'); pp.textContent = '⏸'; pp.title = '멈춤/계속';
+    if (window.innerWidth <= 768 && typeof switchMobileTab === 'function') { try { switchMobileTab('map'); } catch (e) {} }
+    var rp = document.getElementById('route-select-panel'); if (rp) rp.style.display = 'none';   // 길이 가리지 않게 경로 창은 닫음(🛤 경로로 다시 열기)
+    try { map.flyToBounds(L.latLngBounds(pts.map(function (p) { return [p[0], p[1]]; })).pad(.18), { duration: 1, maxZoom: 9 }); } catch (e) {}
+    var my = st;
+    setTimeout(function () { if (my.dead) return; showStop(0); setTimeout(tick, 1100 * SPD[spdI].f); }, 1150);
+  }
+  return { start: start, clear: clear, goRef: goRef };
 })();
 
 </script>
