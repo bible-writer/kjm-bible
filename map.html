@@ -19642,7 +19642,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-1`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22679,12 +22679,24 @@ window.FigTags = (function () {
      글을 쓰면 저절로 저장, ⋯ 백업에 함께 담김. 단계 이름은 권호 『본문 중심의 말씀 묵상』(두란노, 2022)을 참고했고 질문은 새로 씀. */
   var QT = (function () {
     var KEY = 'kjm_qt_notes', day = null, T = null;
-    var STEPS = [
+    var M4 = [
       { k: 's1', t: '1. 본문 파악 — 무엇이 쓰여 있나', q: ['누가 누구에게 말하고, 무슨 일이 일어나나요?', '되풀이되거나 눈에 띄는 말은 무엇인가요?', '이 본문에서 하나님(예수님)은 어떤 분으로 나오나요?'] },
       { k: 's2', t: '2. 오늘과 연결 — 그때의 뜻이 오늘 나에게', q: ['처음 들은 사람들에게 이 말씀은 무슨 뜻이었을까요?', '같은 진리가 오늘 내 삶·가정·교회·일터의 어디에 닿나요?', '하나님에 대해, 나에 대해 새로 깨달은 것은?'] },
       { k: 's3', t: '3. 적용 — 오늘 할 일 하나', q: ['오늘(이번 주) 실제로 할 일 한 가지를 적으세요.', '누구에게, 언제, 어떻게? 작고 분명하게.'] },
       { k: 's4', t: '4. 기도와 기록 — 말씀으로 드리는 기도', q: ['깨달은 것을 감사·회개·간구로 하나님께 아뢰세요.', '오늘 마음에 새길 한 구절을 적어 두세요.'] }
     ];
+    /* (b20261114-2 kjm) 생명의 삶(두란노) 6단계도 고를 수 있게 — 질문은 새로 씀. 노트마다 n.mt('4'|'6') */
+    var M6 = [
+      { k: 'p1', t: '1. 찬양과 기도 — 마음 열기', q: ['찬송 한 곡이나 짧은 기도로 시작하세요.', '염려를 내려놓고, 오늘 말씀에 순종할 마음을 구하세요.'] },
+      { k: 'p2', t: '2. 본문 읽기 — 오늘 주시는 말씀', q: ['본문을 두세 번 천천히 읽으세요.', '마음에 와닿거나 궁금한 구절을 적어 두세요.'] },
+      { k: 'p3', t: '3. 묵상하기 — 왜 이 말씀을 주셨나', q: ['이 말씀으로 하나님은 내게 무엇을 말씀하시나요?', '하나님은 어떤 분이시고, 나는 어떤 사람인가요?'] },
+      { k: 'p4', t: '4. 적용하기 — 오늘 할 일', q: ['오늘 실제로 할 일 한 가지를 구체적으로 적으세요.'] },
+      { k: 'p5', t: '5. 기도 — 순종할 힘을 구함', q: ['깨달은 대로 살 지혜와 용기를 구하세요.', '오늘 하루를 맡기는 기도를 적으세요.'] },
+      { k: 'p6', t: '6. 나눔 — 함께 나눌 말', q: ['소그룹이나 가족에게 나눌 말씀과 결단을 짧게 적으세요.'] }
+    ];
+    var MT = '4'; try { MT = localStorage.getItem('kjm_qt_mt') === '6' ? '6' : '4'; } catch (e) {}
+    function stepsOf(n) { var t = n && n.at ? (n.mt || '4') : MT; return t === '6' ? M6 : M4; }   // 방식 표시 없는 옛 노트는 4단계
+    var STEPS = M4;
     function all() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } }
     function put(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); return true; } catch (e) { return false; } }
     function ymd(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
@@ -22702,6 +22714,7 @@ window.FigTags = (function () {
       var A = all(), n = A[day] || {}, r = readerBC();
       n.b = +m.querySelector('.qt-b').dataset.b || n.b || r.b; n.c = +m.querySelector('.qt-b').dataset.c || n.c || r.c;
       n.v = m.querySelector('.qt-v').value.trim();
+      n.mt = STEPS === M6 ? '6' : '4';
       STEPS.forEach(function (S) { n[S.k] = m.querySelector('.qt-' + S.k).value; });
       var empty = !n.v && STEPS.every(function (S) { return !String(n[S.k] || '').trim(); });
       if (empty) delete A[day]; else { n.at = new Date().toISOString(); A[day] = n; }
@@ -22716,13 +22729,16 @@ window.FigTags = (function () {
     function render(m) {
       var b = m.querySelector('.dv-b'), n = note() || {}, r = readerBC();
       var B = n.b || r.b, C = n.c || r.c;
-      b.innerHTML = '<div class="dv-date">' + dlabel(day) + (day === today() ? ' · 오늘' : '') + ' · ✍️ QT 노트 (본문 중심 4단계)</div>'
+      STEPS = stepsOf(n);
+      m.querySelector('.dv-by').textContent = STEPS === M6 ? '생명의 삶 6단계' : '본문 중심 4단계';
+      b.innerHTML = '<div class="dv-date">' + dlabel(day) + (day === today() ? ' · 오늘' : '') + ' · ✍️ QT 노트'
+        + ' <select class="qt-mt" title="QT 방식"><option value="4"' + (STEPS === M4 ? ' selected' : '') + '>본문 중심 4단계</option><option value="6"' + (STEPS === M6 ? ' selected' : '') + '>생명의 삶 6단계</option></select></div>'
         + '<div class="qt-row"><span class="qt-b" data-b="' + B + '" data-c="' + C + '">' + esc(bname(B)) + ' ' + C + '장</span>'
         + ' <input class="qt-v" placeholder="절 (예: 1-12)" value="' + esc(n.v || '') + '">'
         + ' <button class="qt-here" title="지금 성경 창에서 읽는 책·장으로 바꾸기">📖 지금 읽는 장</button>'
         + ' <button class="qt-go" title="이 본문을 성경 창에서 열기">본문 열기</button></div>'
         + '<div class="qt-txt">' + verses({ b: B, c: C, v: n.v }) + '</div>'
-        + '<div class="qt-hint">막히면 주석 탭에서 이 본문의 주석을 함께 보세요. 주석은 1단계(본문 파악)를 돕고, 2–4단계는 내 말로 적습니다.</div>'
+        + '<div class="qt-hint">' + (STEPS === M6 ? '본문을 읽으며 와닿는 말씀을 붙잡고, 적용과 나눔까지 이어 가 보세요.' : '막히면 주석 탭에서 이 본문의 주석을 함께 보세요. 주석은 1단계(본문 파악)를 돕고, 2–4단계는 내 말로 적습니다.') + '</div>'
         + STEPS.map(function (S) {
             return '<div class="qt-step"><div class="qt-t">' + esc(S.t) + '</div><ul>' + S.q.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ul>'
               + '<textarea class="qt-' + S.k + '" rows="4">' + esc(n[S.k] || '') + '</textarea></div>';
@@ -22753,12 +22769,20 @@ window.FigTags = (function () {
         else window.prompt('복사해 가세요', s);
       };
       b.querySelector('.qt-list').onclick = function () { history(m); };
+      b.querySelector('.qt-mt').onchange = function () {
+        var v = this.value, cur = note() || {};
+        var has = (stepsOf(cur) === M6 ? '6' : '4') !== v && stepsOf(cur).some(function (S) { return String(cur[S.k] || '').trim(); });
+        if (has && !confirm('이 날 노트는 다른 방식으로 적혀 있습니다. 바꾸면 그 칸들은 숨겨집니다(지우지는 않음). 바꿀까요?')) { this.value = stepsOf(cur) === M6 ? '6' : '4'; return; }
+        MT = v; try { localStorage.setItem('kjm_qt_mt', v); } catch (e) {}
+        var A = all(); if (A[day]) { A[day].mt = v; put(A); }
+        render(m);
+      };
     }
     function history(m) {
       var A = all(), ks = Object.keys(A).sort().reverse(), b = m.querySelector('.dv-b');
       if (!ks.length) { b.innerHTML = '<div style="color:#888">아직 적은 QT 노트가 없습니다.</div>'; return; }
       b.innerHTML = '<div class="dv-date">🗂 지난 QT 노트 · ' + ks.length + '장</div>' + ks.map(function (k) {
-        var n = A[k], first = String(n.s1 || n.s2 || n.s4 || '').trim().slice(0, 60);
+        var n = A[k], first = String(n.s1 || n.s2 || n.s3 || n.s4 || n.p3 || n.p2 || n.p4 || n.p5 || n.p6 || n.p1 || '').trim().slice(0, 60);
         return '<div class="dv-li qt-li" data-day="' + k + '"><small>' + dlabel(k) + ' · ' + esc(bname(n.b)) + ' ' + n.c + (n.v ? ':' + esc(n.v) : '장') + '</small><br>' + esc(first) + (first ? '…' : '') + '</div>';
       }).join('');
       b.querySelectorAll('.qt-li').forEach(function (el) { el.onclick = function (e) { e.stopPropagation(); day = el.dataset.day; render(m); }; });
@@ -22767,7 +22791,7 @@ window.FigTags = (function () {
       if (document.getElementById('qt-style')) return;
       var st = document.createElement('style'); st.id = 'qt-style';
       st.textContent = '#devo-modal .qt-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 8px}'
-        + '#devo-modal .qt-b{font-weight:bold;color:#5b3412}'
+        + '#devo-modal .qt-b{font-weight:bold;color:#5b3412}#devo-modal .qt-mt{font-size:12px;padding:2px 4px;border-radius:6px;border:1px solid #d9c3aa;background:var(--card,#fff);color:#7c4a1e}'
         + '#devo-modal .qt-v{width:7.5em;padding:4px 6px;border:1px solid var(--border,#ccc);border-radius:6px;font-size:14px;background:var(--card,#fff);color:inherit}'
         + '#devo-modal .qt-row button,#devo-modal .qt-bar button{background:#f1e4d6;color:#7c4a1e}'
         + '#devo-modal .qt-txt{font-size:.95em;color:#5b3412;margin:0 0 8px;line-height:1.7}#devo-modal .qt-txt sup{color:#9a6b3f}'
@@ -22786,11 +22810,11 @@ window.FigTags = (function () {
         var m = document.getElementById('devo-modal'); if (!m) return;
         css(); api.on = true; if (!day) day = today();
         try { localStorage.setItem('kjm_devo_qt', '1'); } catch (e) {}
-        m.querySelector('.dv-name').textContent = '✍️ QT 노트'; m.querySelector('.dv-by').textContent = '본문 중심 4단계';
+        m.querySelector('.dv-name').textContent = '✍️ QT 노트';
         m.querySelectorAll('.dv-ap').forEach(function (el) { el.style.display = 'none'; });
         var s = m.querySelector('.dv-s'); if (s) s.style.display = 'none';
         m.querySelectorAll('.dv-bks button').forEach(function (el) { el.classList.toggle('on', el.dataset.k === 'qt'); });
-        m.querySelector('.dv-f').textContent = '본문 중심 4단계 — 권호 『본문 중심의 말씀 묵상』(두란노, 2022)의 단계를 참고해 질문은 새로 씀 · 노트는 이 기기에 저장되고 ⋯ 백업에 함께 담깁니다';
+        m.querySelector('.dv-f').textContent = '본문 중심 4단계(권호 『본문 중심의 말씀 묵상』, 두란노 2022) · 생명의 삶 6단계(두란노) — 단계 이름만 참고하고 질문은 새로 씀 · 노트는 이 기기에 저장되고 ⋯ 백업에 함께 담깁니다';
         render(m);
       },
       leave: function (m) {
