@@ -2912,6 +2912,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             if (pkg.userBlacklist)      { userBlacklist = new Set(pkg.userBlacklist); await setLocalItem('saved_user_blacklist', pkg.userBlacklist); }
             if (pkg.userTermSkip)       { userTermSkip = { verse: pkg.userTermSkip.verse || {}, book: pkg.userTermSkip.book || {} }; await setLocalItem('saved_user_term_skip', userTermSkip); }
             if (pkg.userCustomKeywordMap) { userCustomKeywordMap = pkg.userCustomKeywordMap; await setLocalItem('saved_custom_keyword_map', pkg.userCustomKeywordMap); }
+            if (pkg.qtNotes && typeof pkg.qtNotes === 'object') { try { var _q = JSON.parse(localStorage.getItem('kjm_qt_notes') || '{}') || {}; Object.keys(pkg.qtNotes).forEach(function (k) { var a = _q[k], b = pkg.qtNotes[k]; if (!a || String(b.at || '') > String(a.at || '')) _q[k] = b; }); localStorage.setItem('kjm_qt_notes', JSON.stringify(_q)); } catch (e) {} }   // (b20261114-1) QT 노트: 날짜마다 더 새것을 남김
             if (pkg.savedPaneWidth)     { document.getElementById('left-pane').style.width = pkg.savedPaneWidth; }
             if (pkg.savedFontSize)      { applyFontSize(pkg.savedFontSize); }
             // [보정A] 백업에 담긴 좌표 보정 이력 복원
@@ -12932,6 +12933,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         entityStrongOverrides: entityStrongOverrides,
         strongOverrides: strongOverrides,
         termDatabaseMeta: termDatabaseMeta,
+        qtNotes: (function () { try { return JSON.parse(localStorage.getItem('kjm_qt_notes') || 'null'); } catch (e) { return null; } })(),   // (b20261114-1) ✍️ QT 노트
         deltas: {
           place: await BackupDelta.delta('place'),
           term: await BackupDelta.delta('term'),
@@ -13021,6 +13023,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             userCustomKeywordMap = pkg.userCustomKeywordMap;
             await setLocalItem("saved_custom_keyword_map", pkg.userCustomKeywordMap);
           }
+          if (pkg.qtNotes && typeof pkg.qtNotes === 'object') { try { var _q = JSON.parse(localStorage.getItem('kjm_qt_notes') || '{}') || {}; Object.keys(pkg.qtNotes).forEach(function (k) { var a = _q[k], b = pkg.qtNotes[k]; if (!a || String(b.at || '') > String(a.at || '')) _q[k] = b; }); localStorage.setItem('kjm_qt_notes', JSON.stringify(_q)); } catch (e) {} }   // (b20261114-1) QT 노트: 날짜마다 더 새것을 남김
           if (pkg.savedPaneWidth) {
             leftPane.style.width = pkg.savedPaneWidth;
             await setLocalItem("saved_pane_width", pkg.savedPaneWidth);
@@ -19639,7 +19642,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261113-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-1`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -22671,6 +22674,141 @@ window.FigTags = (function () {
     ab: { file: './murray_ab.json', name: '그리스도 안에 거하라', icon: '🍇', ap: false, d31: true, by: '앤드루 머레이', foot: '앤드루 머레이 『그리스도 안에 거하라』(1895) · 31일 묵상, 날짜의 「일」에 맞춰 매달 되풀이 · 한글 번역 © kjm' }
   };
   var bookId = 'me', D = null, cur = null, ST = {};
+  /* (b20261114-1 kjm 「QT 방식을 map 묵상 메뉴에 — 본문 중심 4단계」)
+     ✍️ QT 노트: 본문 파악 → 오늘과 연결 → 적용 → 기도와 기록. 날짜마다 한 장(localStorage kjm_qt_notes {날짜:{b,c,v,s1..s4,at}}),
+     글을 쓰면 저절로 저장, ⋯ 백업에 함께 담김. 단계 이름은 권호 『본문 중심의 말씀 묵상』(두란노, 2022)을 참고했고 질문은 새로 씀. */
+  var QT = (function () {
+    var KEY = 'kjm_qt_notes', day = null, T = null;
+    var STEPS = [
+      { k: 's1', t: '1. 본문 파악 — 무엇이 쓰여 있나', q: ['누가 누구에게 말하고, 무슨 일이 일어나나요?', '되풀이되거나 눈에 띄는 말은 무엇인가요?', '이 본문에서 하나님(예수님)은 어떤 분으로 나오나요?'] },
+      { k: 's2', t: '2. 오늘과 연결 — 그때의 뜻이 오늘 나에게', q: ['처음 들은 사람들에게 이 말씀은 무슨 뜻이었을까요?', '같은 진리가 오늘 내 삶·가정·교회·일터의 어디에 닿나요?', '하나님에 대해, 나에 대해 새로 깨달은 것은?'] },
+      { k: 's3', t: '3. 적용 — 오늘 할 일 하나', q: ['오늘(이번 주) 실제로 할 일 한 가지를 적으세요.', '누구에게, 언제, 어떻게? 작고 분명하게.'] },
+      { k: 's4', t: '4. 기도와 기록 — 말씀으로 드리는 기도', q: ['깨달은 것을 감사·회개·간구로 하나님께 아뢰세요.', '오늘 마음에 새길 한 구절을 적어 두세요.'] }
+    ];
+    function all() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } }
+    function put(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); return true; } catch (e) { return false; } }
+    function ymd(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+    function today() { return ymd(new Date()); }
+    var WD = '일월화수목금토';
+    function dlabel(s) { var d = new Date(s + 'T12:00:00'); return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + WD[d.getDay()] + ')'; }
+    function bname(b) { var bk = (typeof BIBLE_BOOKS !== 'undefined' && BIBLE_BOOKS.find(function (o) { return o.id === b; })) || {}; return bk.name || (KO[b] || ''); }
+    function readerBC() {
+      var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
+      return { b: bs ? parseInt(bs.value, 10) || 1 : 1, c: cs ? parseInt(cs.value, 10) || 1 : 1 };
+    }
+    function vr(s) { var m = /^\s*(\d+)\s*(?:[-–~]\s*(\d+))?\s*$/.exec(s || ''); return m ? [+m[1], m[2] ? +m[2] : +m[1]] : null; }
+    function note() { var A = all(); return A[day] || null; }
+    function save(m) {
+      var A = all(), n = A[day] || {}, r = readerBC();
+      n.b = +m.querySelector('.qt-b').dataset.b || n.b || r.b; n.c = +m.querySelector('.qt-b').dataset.c || n.c || r.c;
+      n.v = m.querySelector('.qt-v').value.trim();
+      STEPS.forEach(function (S) { n[S.k] = m.querySelector('.qt-' + S.k).value; });
+      var empty = !n.v && STEPS.every(function (S) { return !String(n[S.k] || '').trim(); });
+      if (empty) delete A[day]; else { n.at = new Date().toISOString(); A[day] = n; }
+      var ok = put(A), st = m.querySelector('.qt-st');
+      if (st) st.textContent = ok ? (empty ? '빈 노트(저장 안 함)' : '✔ 이 기기에 저장됨 ' + new Date().toTimeString().slice(0, 5)) : '⚠ 저장 실패 — 브라우저 저장 공간을 확인하세요';
+    }
+    function verses(n) {
+      var r = vr(n.v); if (!r || !dbOn()) return '';
+      var t = dbGet(n.b, n.c, r[0], r[1]); if (!t.length) return '';
+      return t.map(function (s, i) { return '<sup>' + (r[0] + i) + '</sup> ' + esc(s); }).join(' ');
+    }
+    function render(m) {
+      var b = m.querySelector('.dv-b'), n = note() || {}, r = readerBC();
+      var B = n.b || r.b, C = n.c || r.c;
+      b.innerHTML = '<div class="dv-date">' + dlabel(day) + (day === today() ? ' · 오늘' : '') + ' · ✍️ QT 노트 (본문 중심 4단계)</div>'
+        + '<div class="qt-row"><span class="qt-b" data-b="' + B + '" data-c="' + C + '">' + esc(bname(B)) + ' ' + C + '장</span>'
+        + ' <input class="qt-v" placeholder="절 (예: 1-12)" value="' + esc(n.v || '') + '">'
+        + ' <button class="qt-here" title="지금 성경 창에서 읽는 책·장으로 바꾸기">📖 지금 읽는 장</button>'
+        + ' <button class="qt-go" title="이 본문을 성경 창에서 열기">본문 열기</button></div>'
+        + '<div class="qt-txt">' + verses({ b: B, c: C, v: n.v }) + '</div>'
+        + '<div class="qt-hint">막히면 주석 탭에서 이 본문의 주석을 함께 보세요. 주석은 1단계(본문 파악)를 돕고, 2–4단계는 내 말로 적습니다.</div>'
+        + STEPS.map(function (S) {
+            return '<div class="qt-step"><div class="qt-t">' + esc(S.t) + '</div><ul>' + S.q.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ul>'
+              + '<textarea class="qt-' + S.k + '" rows="4">' + esc(n[S.k] || '') + '</textarea></div>';
+          }).join('')
+        + '<div class="qt-bar"><span class="qt-st">' + (n.at ? '✔ 저장됨 ' + n.at.slice(0, 16).replace('T', ' ') : '쓰면 저절로 저장됩니다') + '</span>'
+        + '<button class="qt-copy" title="나눔방에 붙여 넣을 수 있게 글로 복사">📋 복사</button><button class="qt-list">🗂 지난 노트</button></div>';
+      b.scrollTop = 0;
+      m.querySelector('.dv-today').textContent = (+day.slice(5, 7)) + '/' + (+day.slice(8, 10));
+      var tm = null, go = function () { clearTimeout(tm); tm = setTimeout(function () { save(m); }, 600); };
+      b.querySelectorAll('textarea').forEach(function (t) { t.addEventListener('input', go); });
+      var vi = b.querySelector('.qt-v');
+      vi.addEventListener('input', go);
+      vi.addEventListener('change', function () { save(m); b.querySelector('.qt-txt').innerHTML = verses({ b: +b.querySelector('.qt-b').dataset.b, c: +b.querySelector('.qt-b').dataset.c, v: vi.value }); });
+      b.querySelector('.qt-here').onclick = function () {
+        var rr = readerBC(), sp = b.querySelector('.qt-b'); sp.dataset.b = rr.b; sp.dataset.c = rr.c; sp.textContent = bname(rr.b) + ' ' + rr.c + '장';
+        save(m); b.querySelector('.qt-txt').innerHTML = verses({ b: rr.b, c: rr.c, v: vi.value });
+      };
+      b.querySelector('.qt-go').onclick = function () {
+        var sp = b.querySelector('.qt-b'), rv = vr(vi.value);
+        if (typeof navigateToBibleVerse === 'function') { m.style.display = 'none'; document.getElementById('devo-bk').style.display = 'none'; navigateToBibleVerse(+sp.dataset.b, +sp.dataset.c, rv ? rv[0] : 1); }
+      };
+      b.querySelector('.qt-copy').onclick = function () {
+        save(m); var x = note() || {};
+        var s = dlabel(day) + ' QT · ' + bname(+b.querySelector('.qt-b').dataset.b) + ' ' + b.querySelector('.qt-b').dataset.c + ':' + (x.v || '') + '\n\n'
+          + STEPS.map(function (S) { return '■ ' + S.t + '\n' + (x[S.k] || '').trim(); }).join('\n\n');
+        var done = function () { var st = m.querySelector('.qt-st'); if (st) st.textContent = '📋 복사했습니다'; };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(s).then(done, function () { window.prompt('복사해 가세요', s); });
+        else window.prompt('복사해 가세요', s);
+      };
+      b.querySelector('.qt-list').onclick = function () { history(m); };
+    }
+    function history(m) {
+      var A = all(), ks = Object.keys(A).sort().reverse(), b = m.querySelector('.dv-b');
+      if (!ks.length) { b.innerHTML = '<div style="color:#888">아직 적은 QT 노트가 없습니다.</div>'; return; }
+      b.innerHTML = '<div class="dv-date">🗂 지난 QT 노트 · ' + ks.length + '장</div>' + ks.map(function (k) {
+        var n = A[k], first = String(n.s1 || n.s2 || n.s4 || '').trim().slice(0, 60);
+        return '<div class="dv-li qt-li" data-day="' + k + '"><small>' + dlabel(k) + ' · ' + esc(bname(n.b)) + ' ' + n.c + (n.v ? ':' + esc(n.v) : '장') + '</small><br>' + esc(first) + (first ? '…' : '') + '</div>';
+      }).join('');
+      b.querySelectorAll('.qt-li').forEach(function (el) { el.onclick = function (e) { e.stopPropagation(); day = el.dataset.day; render(m); }; });
+    }
+    function css() {
+      if (document.getElementById('qt-style')) return;
+      var st = document.createElement('style'); st.id = 'qt-style';
+      st.textContent = '#devo-modal .qt-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 8px}'
+        + '#devo-modal .qt-b{font-weight:bold;color:#5b3412}'
+        + '#devo-modal .qt-v{width:7.5em;padding:4px 6px;border:1px solid var(--border,#ccc);border-radius:6px;font-size:14px;background:var(--card,#fff);color:inherit}'
+        + '#devo-modal .qt-row button,#devo-modal .qt-bar button{background:#f1e4d6;color:#7c4a1e}'
+        + '#devo-modal .qt-txt{font-size:.95em;color:#5b3412;margin:0 0 8px;line-height:1.7}#devo-modal .qt-txt sup{color:#9a6b3f}'
+        + '#devo-modal .qt-hint{font-size:12px;color:#8a7a6a;margin:0 0 12px}'
+        + '#devo-modal .qt-step{margin:0 0 14px;padding:10px 12px;border:1px solid #ead8c4;border-radius:10px;background:rgba(234,216,196,.15)}'
+        + '#devo-modal .qt-t{font-weight:bold;color:#7c4a1e;margin:0 0 4px}'
+        + '#devo-modal .qt-step ul{margin:0 0 6px 1.1em;padding:0;font-size:.82em;color:#6b5b4b;line-height:1.6}'
+        + '#devo-modal .qt-step textarea{width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--border,#ccc);border-radius:6px;font-size:15px;line-height:1.6;background:var(--card,#fff);color:inherit;resize:vertical}'
+        + '#devo-modal .qt-bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}#devo-modal .qt-st{margin-right:auto;font-size:12px;color:#7c6a5a}'
+        + '#devo-modal .dv-bks button.dv-qtb{background:rgba(255,255,255,.22);color:#fff}#devo-modal .dv-bks button.dv-qtb.on{background:var(--card,#fff);color:#7c4a1e;font-weight:bold}';
+      document.head.appendChild(st);
+    }
+    var api = {
+      on: false,
+      open: function () {
+        var m = document.getElementById('devo-modal'); if (!m) return;
+        css(); api.on = true; if (!day) day = today();
+        try { localStorage.setItem('kjm_devo_qt', '1'); } catch (e) {}
+        m.querySelector('.dv-name').textContent = '✍️ QT 노트'; m.querySelector('.dv-by').textContent = '본문 중심 4단계';
+        m.querySelectorAll('.dv-ap').forEach(function (el) { el.style.display = 'none'; });
+        var s = m.querySelector('.dv-s'); if (s) s.style.display = 'none';
+        m.querySelectorAll('.dv-bks button').forEach(function (el) { el.classList.toggle('on', el.dataset.k === 'qt'); });
+        m.querySelector('.dv-f').textContent = '본문 중심 4단계 — 권호 『본문 중심의 말씀 묵상』(두란노, 2022)의 단계를 참고해 질문은 새로 씀 · 노트는 이 기기에 저장되고 ⋯ 백업에 함께 담깁니다';
+        render(m);
+      },
+      leave: function (m) {
+        if (!api.on) return; api.on = false;
+        try { localStorage.removeItem('kjm_devo_qt'); } catch (e) {}
+        var s = m.querySelector('.dv-s'); if (s) s.style.display = '';
+      },
+      move: function (dir) {
+        var m = document.getElementById('devo-modal');
+        if (dir === 0) day = today();
+        else { var d = new Date(day + 'T12:00:00'); d.setDate(d.getDate() + dir); day = ymd(d); }
+        render(m);
+      }
+    };
+    window._kjmQT = { all: all, put: put };
+    return api;
+  })();
+
   /* (b20261101-1 kjm 「묵상집에서 저작권 위험 있는 거 제외, 일반모드에서도 제외」)
      판권이 확실하지 않은 책(priv: 마이어 『날마다의 동행』, 1955년 사후 편집본)은 GitHub에 두지 않고,
      관리자 모드에서만 kjm 구글 드라이브의 비공개 파일(이름 meyer_dw.json)을 받아 보여 준다. */
@@ -22886,6 +23024,7 @@ window.FigTags = (function () {
     if (!vis(id)) id = 'me';
     bookId = id; try { localStorage.setItem('kjm_devo_book', id); } catch (e) {}
     var m = document.getElementById('devo-modal'), B = BOOKS[id];
+    QT.leave(m);
     m.querySelector('.dv-name').textContent = B.icon + ' ' + B.name;
     m.querySelector('.dv-f').textContent = B.foot + (krvOK() ? ' · 성구: 개역개정(이 기기의 성경 DB)' : ' · 성구: 개역한글판(대한성서공회, 공개 저작물)');
     m.querySelector('.dv-by').textContent = B.by || '';
@@ -22928,17 +23067,17 @@ window.FigTags = (function () {
       + '<button class="dv-ap" data-p="a">아침</button><button class="dv-ap" data-p="e">저녁</button>'
       + '<button class="dv-fs" data-d="-1" title="글자 줄이기">A−</button><button class="dv-fs" data-d="1" title="글자 키우기">A+</button>'
       + '<button class="dv-x" title="닫기">✕</button></div>'
-      + '<div class="dv-bks">' + Object.keys(BOOKS).map(function (k) { return '<button data-k="' + k + '"' + (BOOKS[k].priv ? ' data-priv="1"' : '') + '>' + BOOKS[k].icon + ' ' + BOOKS[k].name + (BOOKS[k].priv ? ' 🔒' : '') + '</button>'; }).join('') + '</div></div>'
+      + '<div class="dv-bks">' + Object.keys(BOOKS).map(function (k) { return '<button data-k="' + k + '"' + (BOOKS[k].priv ? ' data-priv="1"' : '') + '>' + BOOKS[k].icon + ' ' + BOOKS[k].name + (BOOKS[k].priv ? ' 🔒' : '') + '</button>'; }).join('') + '<button data-k="qt" class="dv-qtb" title="본문 중심 4단계로 오늘의 QT를 적는 노트">✍️ QT 노트</button></div></div>'
       + '<div class="dv-s"><input placeholder="낱말 또는 성구 찾기 (예: 위로, 시 23)"><button class="dv-go">찾기</button><button class="dv-ch" title="지금 읽는 장을 다룬 묵상">이 장</button></div>'
       + '<div class="dv-b">불러오는 중…</div>'
       + '<div class="dv-f"></div>';
     document.body.appendChild(bk); document.body.appendChild(m);
     var close = function () { m.style.display = 'none'; bk.style.display = 'none'; };
     bk.onclick = close; m.querySelector('.dv-x').onclick = close;
-    m.querySelectorAll('.dv-bks button').forEach(function (el) { el.onclick = function () { if (el.dataset.k !== bookId) setBook(el.dataset.k); }; });
-    m.querySelector('.dv-prev').onclick = function () { if (!cur) return; var k = step(cur, -1); show(find(k.m, k.d, k.p)); };
-    m.querySelector('.dv-next').onclick = function () { if (!cur) return; var k = step(cur, 1); show(find(k.m, k.d, k.p)); };
-    m.querySelector('.dv-today').onclick = function () { var k = todayKey(); show(find(k.m, k.d, k.p)); };
+    m.querySelectorAll('.dv-bks button').forEach(function (el) { el.onclick = function () { if (el.dataset.k === 'qt') { QT.open(); return; } if (el.dataset.k !== bookId || QT.on) setBook(el.dataset.k); }; });
+    m.querySelector('.dv-prev').onclick = function () { if (QT.on) { QT.move(-1); return; } if (!cur) return; var k = step(cur, -1); show(find(k.m, k.d, k.p)); };
+    m.querySelector('.dv-next').onclick = function () { if (QT.on) { QT.move(1); return; } if (!cur) return; var k = step(cur, 1); show(find(k.m, k.d, k.p)); };
+    m.querySelector('.dv-today').onclick = function () { if (QT.on) { QT.move(0); return; } var k = todayKey(); show(find(k.m, k.d, k.p)); };
     m.querySelectorAll('.dv-ap').forEach(function (el) { el.onclick = function () { if (cur) show(find(cur.m, cur.d, el.dataset.p)); }; });
     var fs = 17; try { fs = parseInt(localStorage.getItem('kjm_devo_fs'), 10) || 17; } catch (e) {}
     m.style.setProperty('--devo-fs', fs + 'px');
@@ -22961,6 +23100,8 @@ window.FigTags = (function () {
     var m = document.getElementById('devo-modal') || build();
     m.style.display = 'flex'; document.getElementById('devo-bk').style.display = 'block';
     m.querySelectorAll('.dv-bks button[data-priv]').forEach(function (el) { el.style.display = adm() ? '' : 'none'; });   // 일반모드에선 숨김
+    if (QT.on) return;
+    if (fresh) { var wasQT = false; try { wasQT = localStorage.getItem('kjm_devo_qt') === '1'; } catch (e) {} if (wasQT) { QT.open(); return; } }
     if (!vis(bookId)) { setBook('me'); return; }
     if (fresh || !D) setBook(bookId);
   };
