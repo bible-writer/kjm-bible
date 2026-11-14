@@ -19642,7 +19642,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-3`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-5`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -24455,6 +24455,20 @@ window.RoutePlay = (function () {
   #conc-modal .cc-sug small { color: #94a3b8; margin-left: 3px; }
   #conc-modal .cc-sug button.on small { color: #cbd5e1; }
   #conc-modal .cc-info { padding: 4px 14px; font-size: 13px; color: #475569; border-top: 1px solid #e2e8f0; }
+  #conc-modal .cc-rel { padding: 4px 14px 6px; font-size: 13px; display: none; border-top: 1px solid #e2e8f0; background: #fafaf9; }
+  #conc-modal .cc-rel .row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin: 3px 0; }
+  #conc-modal .cc-rel .lab { color: #64748b; font-weight: 700; margin-right: 2px; min-width: 52px; }
+  #conc-modal .cc-rel button { border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; padding: 2px 8px; cursor: pointer; font-size: 13px; color: #1e293b; }
+  #conc-modal .cc-rel button small { color: #94a3b8; margin-left: 3px; }
+  #conc-modal .cc-rel button.P { border-color: #c4b5fd; color: #6D28D9; } #conc-modal .cc-rel button.L { border-color: #86efac; color: #15803D; }
+  #conc-modal .cc-rel button.T { border-color: #fdba74; color: #C2410C; } #conc-modal .cc-rel button.S { border-color: #f9a8d4; color: #A8336A; }
+  #conc-modal .cc-rel button.N { border-color: #93c5fd; color: #1d4ed8; }
+  #conc-modal .cc-sug button.N { border-color: #93c5fd; color: #1d4ed8; background: #eff6ff; }
+  #conc-modal .tp-h { margin: 12px 0 4px; font-weight: 700; color: #1e3a8a; font-size: 15px; }
+  #conc-modal .tp-h.d1 { margin-left: 16px; font-size: 14px; color: #1d4ed8; } #conc-modal .tp-h.d2 { margin-left: 32px; font-size: 13.5px; color: #2563eb; }
+  #conc-modal .tp-v { margin-left: 8px; } #conc-modal .tp-h.see { cursor: pointer; text-decoration: underline dotted; }
+  #conc-modal .tp-ch { display: inline-block; margin: 2px 4px 2px 8px; padding: 1px 8px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; cursor: pointer; font-size: 13px; }
+  #conc-modal .tp-src { font-size: 12px; color: #94a3b8; margin: 14px 0 4px; }
   #conc-modal .cc-bks { padding: 4px 14px 6px; display: flex; flex-wrap: wrap; gap: 3px; max-height: 92px; overflow: auto; border-bottom: 1px solid #e2e8f0; }
   #conc-modal .cc-bks button { border: 0; border-radius: 4px; padding: 2px 6px; font-size: 12px; cursor: pointer; background: #e0f2fe; color: #075985; }
   #conc-modal .cc-bks button.nt { background: #fef3c7; color: #92400e; }
@@ -24469,7 +24483,7 @@ window.RoutePlay = (function () {
   @media (max-width: 768px) { #conc-modal { width: 100vw; height: 100vh; border-radius: 0; } }
 </style>
 <script>
-/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」)
+/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제)
    📇 성구사전: 낱말을 넣으면 그 낱말이 나오는 모든 구절을 찾는다.
    - 공개 파일 concord_lemma.json 은 낱말꼴 → 기본형 표만 들어 있다(kiwi 형태소 분석, 개역한글·개역개정 낱말꼴). 성경 본문은 없다.
    - 색인은 이 기기에 연 성경 DB(.bdb)로 처음 열 때 한 번 만든다 → 개역개정 DB면 개역개정으로, 개역한글 DB면 개역한글로 찾는다.
@@ -24491,6 +24505,26 @@ window.RoutePlay = (function () {
     }).catch(function () { return null; });
     return LP;
   }
+  /* (b20261114-5) 📑 주제: 네이브 『주제별 성경』(1896, 공개) — 주제·소제목은 우리말로 옮김, 장절만 들어 있음(본문 없음) */
+  var TPP = null, TOP = null;
+  function loadTop() {
+    if (!TPP) TPP = fetch('./concord_topic.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (!j || !j.T) return null;
+      TOP = j.T.map(function (t) { return { k: t[0], e: t[1], s: t[2].map(function (x) { return [x[0], x[1], x[2] ? x[2].split(' ').map(function (r) { return r.split('.').map(Number); }) : []]; }) }; });
+      TOP.src = j.src || ''; return TOP;
+    }).catch(function () { return null; });
+    return TPP;
+  }
+  function topicsFor(w, prefix) {
+    if (!TOP) return [];
+    var al = ALIAS[w] || [], ex = [], pre = [];
+    TOP.forEach(function (t, i) {
+      var k = baseName(t.k);
+      if (k === w || al.indexOf(k) >= 0 || k === w + '하다' || k === w + '함') ex.push(i);
+      else if (prefix && w.length > 1 && k.indexOf(w) === 0) pre.push(i);
+    });
+    return ex.concat(pre.slice(0, 6));
+  }
   function dbReady() { try { return !!(sqliteDbInstance && detectedSchema); } catch (e) { return false; } }
   function build() {
     if (IDX && IDXDB === sqliteDbInstance) return IDX;
@@ -24507,7 +24541,8 @@ window.RoutePlay = (function () {
         for (var q = 0; q < ids.length; q++) { var p = P[ids[q]]; if (p[p.length - 1] !== i) p.push(i); }
       }
     }
-    IDX = { B: B, C: C, V: V, T: T, P: P, n: n }; IDXDB = sqliteDbInstance;
+    var K = new Map(); for (var z = 0; z < n; z++) K.set(B[z] * 1000000 + C[z] * 1000 + V[z], z);
+    IDX = { B: B, C: C, V: V, T: T, P: P, n: n, K: K }; IDXDB = sqliteDbInstance;
     return IDX;
   }
   function suggest(q) {
@@ -24517,7 +24552,7 @@ window.RoutePlay = (function () {
       var w = LEM[i]; if (!IDX.P[i].length) continue;
       if (w === q) out.push(i); else if (w.indexOf(q) === 0) pre.push(i); else if (q.length > 1 && w.indexOf(q) > 0) mid.push(i);
     }
-    var ids = S2L.get(strip(q)); if (ids) ids.forEach(function (i) { if (out.indexOf(i) < 0 && IDX.P[i].length) out.unshift(i); });
+    var ids = S2L.get(strip(q)); if (ids) ids.forEach(function (i) { if (out.indexOf(i) < 0 && IDX.P[i].length) out.push(i); });   // 넣은 낱말 그대로인 기본형이 맨 앞, 그 꼴이 속한 기본형이 다음
     function byN(a, b) { return IDX.P[b].length - IDX.P[a].length; }
     pre.sort(byN); mid.sort(byN);
     return out.concat(pre, mid).slice(0, 40);
@@ -24534,9 +24569,80 @@ window.RoutePlay = (function () {
     var i0 = cur.i;
     return t.split(' ').map(function (w) { var ids = S2L.get(strip(w)); return ids && ids.indexOf(i0) >= 0 ? '<mark>' + esc(w) + '</mark>' : esc(w); }).join(' ');
   }
+
+  /* (b20261114-4 kjm 「데모로 보여줘」) 고른 낱말의 사전·원어 줄 — 인명·지명·용어 DB와 성경사전(통합 사전), strongKo 짧은 뜻 */
+  /* 다른 이름 짝 (kjm 확인 2026-11-14): 성경 낱말 → 사전 용어 이름 */
+  var ALIAS = { '문둥병': ['나병'], '회막': ['성막'], '백합화': ['백합'], '늑대': ['이리'], '여름': ['계절'], '겨울': ['계절'], '포도원': ['포도'],
+    '범죄': ['죄'], '죄악': ['죄'], '죄인': ['죄'], '의인': ['의'], '공의': ['의'], '영혼': ['혼'], '심령': ['영'], '표적': ['기적'], '이적': ['기적'],
+    '법궤': ['언약궤'], '증거궤': ['언약궤'], '장막절': ['초막절'], '타작마당': ['타작'], '침례': ['세례'], '아브람': ['아브라함'], '장자': ['장자권'],
+    '방언': ['방언의 은사'], '파종': ['씨 뿌리는 자'], '계명': ['십계명'], '감람산': ['감람 산'], '이방': ['이방인'], '결혼': ['혼인'] };
+  function baseName(n) { return String(n || '').replace(/\s*\([^()]*\)\s*$/, '').trim(); }
+  var SKI = null;
+  function strongIdx() {
+    if (SKI) return SKI;
+    var d = (typeof strongKoDict !== 'undefined') ? strongKoDict : null; if (!d) return null;
+    SKI = new Map();
+    Object.keys(d).forEach(function (k) {
+      if (k === '_meta') return; var e = d[k];
+      String(e.m || '').replace(/\([^()]*\)/g, '').split(/[:;,·/]/).forEach(function (p) { p = p.trim(); if (!p) return; var a = SKI.get(p); if (a) { if (a.indexOf(k) < 0) a.push(k); } else SKI.set(p, [k]); });
+    });
+    return SKI;
+  }
+  function codeSort(a, b) { var A = /^([HG])(\d+)/.exec(a), B = /^([HG])(\d+)/.exec(b); if (A[1] !== B[1]) return A[1] === 'H' ? -1 : 1; return (+A[2]) - (+B[2]); }
+  function relRender() {
+    var m = document.getElementById('conc-modal'), box = m.querySelector('.cc-rel');
+    if (!cur || cur.k !== 'lem') { box.style.display = 'none'; box.innerHTML = ''; return; }
+    var w = LEM[cur.i], noun = !/다$/.test(w), h = '';   // (주제 보기일 때는 위에서 돌아감)
+    // ① 사전
+    var items = [], rel = [];
+    try {
+      if (typeof dictCombinedCache !== 'undefined' && !dictCombinedCache && typeof buildDictCombined === 'function' && (personDatabase.length || placeDatabase.length || termDatabase.length)) dictCombinedCache = buildDictCombined();
+      // 이름 맞추기: 그대로 → 괄호 뗀 이름(「사마리아 (세바스테 궁성)」) → +하다·+함·+한 자(거룩→거룩함) → 다른 이름 짝(ALIAS, 용어만)
+      var keys = [w, w + '하다', w + '함', w + '한 자'], al = ALIAS[w] || [];
+      (dictCombinedCache || []).forEach(function (it, i) {
+        var nm = baseName(it.nameKo), alt = (Array.isArray(it.alt) ? it.alt : []).map(baseName);
+        if (keys.indexOf(nm) >= 0 || keys.some(function (k) { return alt.indexOf(k) >= 0; })) items.push(i);
+        else if (it.type === 'TERM' && al.indexOf(nm) >= 0) items.push(i);
+        else if (it.type === 'TERM' && w.length > 1 && nm.length > w.length && nm.indexOf(w) === 0 && noun) rel.push(i);   // 한 글자(비·금)는 관련을 안 붙임 — 비누·비단이 섞임
+      });
+      rel = rel.filter(function (i) { return items.indexOf(i) < 0; }).slice(0, 8);
+    } catch (e) { console.warn('[성구사전] 사전 잇기:', e); }
+    var q0 = (document.querySelector('#conc-modal .cc-q') || {}).value || '', tps = topicsFor(w, true);
+    q0 = q0.trim(); if (q0 && q0 !== w) topicsFor(q0, true).forEach(function (i) { if (tps.indexOf(i) < 0) tps.unshift(i); });   // 넣은 낱말 그대로인 주제도(성막 → 기본형은 다른데 주제는 있음)
+    if (tps.length) h += '<div class="row"><span class="lab">주제</span>' + tps.map(function (i) { return '<button class="N" data-t="' + i + '">📑 ' + esc(TOP[i].k) + '<small>' + TOP[i].s.length + '</small></button>'; }).join('') + '</div>';
+    else if (!TOP) loadTop().then(function (x) { if (x) relRender(); });
+    var T = { PERSON: ['P', '👤 인물'], PLACE: ['L', '📍 지명'], TERM: ['T', '📚 용어'] };
+    if (items.length) h += '<div class="row"><span class="lab">사전</span>' + items.slice(0, 12).map(function (i) {
+      var it = dictCombinedCache[i], t = T[it.type] || ['T', it.type];
+      var src = (it.entries || []).map(function (x) { return x.src === 'easton' ? '이스턴' : x.src === 'smith' ? '스미스' : x.src; }).filter(function (x, j, a) { return a.indexOf(x) === j; });
+      if (it.isbe && it.isbe.length) src.push('ISBE');
+      var dup = items.filter(function (j) { var x = dictCombinedCache[j]; return x.type === it.type && x.nameKo === it.nameKo; }).length > 1;
+      var note = (dup && it.nameEn ? it.nameEn + ' · ' : '') + (it.people && it.people.length > 1 ? it.people.length + '명' : src.join('·'));
+      return '<button class="' + t[0] + '" data-d="' + i + '">' + t[1] + ' ' + esc(it.nameKo) + (note ? '<small>' + esc(note) + '</small>' : '') + '</button>';
+    }).join('') + '</div>';
+    if (rel.length) h += '<div class="row"><span class="lab">관련</span>' + rel.map(function (i) {
+      var it = dictCombinedCache[i]; return '<button class="T" data-d="' + i + '">' + esc(it.nameKo) + '</button>';
+    }).join('') + '</div>';
+    // ② 원어
+    var I = strongIdx();
+    if (I) {
+      var keys = noun ? [w, w + '하다'] : [w], codes = [];
+      keys.forEach(function (k) { (I.get(k) || []).forEach(function (c) { if (codes.indexOf(c) < 0) codes.push(c); }); });
+      codes = codes.filter(function (c) { return /^[HG]\d{1,4}[a-z]?$/.test(c); }).sort(codeSort).slice(0, 14);
+      if (codes.length) h += '<div class="row"><span class="lab">원어</span>' + codes.map(function (c) {
+        var e = strongKoDict[c] || {};
+        return '<button class="S" data-s="' + c + '" title="' + esc((e.w || '') + ' — ' + (e.m || '')) + '">' + c + ' ' + esc(e.k || '') + '<small>' + esc(String(e.m || '').slice(0, 14)) + '</small></button>';
+      }).join('') + '</div>';
+    } else if (typeof ensureStrongKo === 'function') {
+      ensureStrongKo().then(function (d) { if (d) relRender(); });
+    }
+    box.innerHTML = h; box.style.display = h ? 'block' : 'none';
+  }
   function render() {
     var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
-    if (!cur) { info.textContent = ''; bks.innerHTML = ''; L.innerHTML = '<div class="cc-note">낱말을 넣고 아래에서 기본형을 고르십시오. 예: 사랑, 믿음, 은혜, 여호와, 회개<br>「글자 그대로」를 고르면 넣은 글자가 그대로 들어 있는 구절을 찾습니다(두 낱말 이상도 됩니다).</div>'; return; }
+    if (!cur) { relRender(); info.textContent = ''; bks.innerHTML = ''; L.innerHTML = '<div class="cc-note">낱말을 넣고 아래에서 기본형을 고르십시오. 예: 사랑, 믿음, 은혜, 여호와, 회개<br>「글자 그대로」를 고르면 넣은 글자가 그대로 들어 있는 구절을 찾습니다(두 낱말 이상도 됩니다).</div>'; return; }
+    relRender();
+    if (cur.k === 'topic') { topicRender(); return; }
     var all = hitList(), cnt = {}, ot = 0;
     all.forEach(function (i) { var b = IDX.B[i]; cnt[b] = (cnt[b] || 0) + 1; if (b <= 39) ot++; });
     var name = cur.k === 'lem' ? '「' + LEM[cur.i] + '」' : '글자 그대로 「' + cur.q + '」';
@@ -24547,6 +24653,31 @@ window.RoutePlay = (function () {
     var list = curBk ? all.filter(function (i) { return IDX.B[i] === curBk; }) : all;
     shown = 0; L.innerHTML = list.length ? '' : '<div class="cc-note">찾은 구절이 없습니다.</div>';
     more(list);
+  }
+  function vline(b, c, v1, v2) {
+    var out = '', n = 0;
+    for (var v = v1; v <= v2; v++) { var i = IDX.K.get(b * 1000000 + c * 1000 + v); if (i == null) continue; n++;
+      if (n > 6) { out += '<div class="cc-v tp-v" data-i="' + i + '"><span class="r">…</span>' + AB[b] + ' ' + c + ':' + v + '-' + v2 + ' 이어짐</div>'; break; }
+      out += '<div class="cc-v tp-v" data-i="' + i + '"><span class="r">' + AB[b] + ' ' + c + ':' + v + '</span>' + esc(IDX.T[i]) + '</div>'; }
+    return out;
+  }
+  function topicRender() {
+    var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
+    var t = TOP[cur.t], nref = 0; t.s.forEach(function (x) { nref += x[2].length; });
+    info.innerHTML = (cur.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 「' + esc(cur.from.k === 'lem' ? LEM[cur.from.i] : cur.from.q || '') + '」</button>' : '') + '<b>📑 주제 「' + esc(t.k) + '」</b> — 소제목 ' + t.s.length + ' · 성구 ' + nref + '곳';
+    bks.innerHTML = '';
+    var h = '';
+    t.s.forEach(function (x) {
+      var lab = x[1] || '', see = /^→\s*/.test(lab), seeT = see ? lab.replace(/^→\s*/, '').trim() : '';
+      var ti = see ? TOP.findIndex(function (y) { return y.k === seeT; }) : -1;
+      if (lab) h += '<div class="tp-h d' + Math.min(2, x[0]) + (ti >= 0 ? ' see" data-t="' + ti : '') + '">' + esc(lab) + '</div>';
+      x[2].forEach(function (r) {
+        if (!r[2]) h += '<span class="tp-ch" data-bc="' + r[0] + ',' + r[1] + '">📖 ' + AB[r[0]] + ' ' + r[1] + (r[0] === 19 ? '편' : '장') + ' 전체</span>';
+        else h += vline(r[0], r[1], r[2], r[3]);
+      });
+    });
+    h += '<div class="tp-src">' + esc(TOP.src || '') + '</div>';
+    L.innerHTML = h; L.scrollTop = 0;
   }
   function more(list) {
     var L = document.getElementById('conc-modal').querySelector('.cc-l');
@@ -24567,15 +24698,18 @@ window.RoutePlay = (function () {
     var raw = m.querySelector('.cc-raw').checked;
     if (!q) { box.innerHTML = ''; return; }
     if (raw) { box.innerHTML = ''; return; }
-    var ids = suggest(q);
-    box.innerHTML = ids.length ? ids.map(function (i) { return '<button data-i="' + i + '"' + (cur && cur.k === 'lem' && cur.i === i ? ' class="on"' : '') + '>' + esc(LEM[i]) + '<small>' + IDX.P[i].length + '</small></button>'; }).join('')
+    var ids = suggest(q), tq = TOP ? topicsFor(q, true) : [];
+    if (!TOP) loadTop().then(function (x) { if (x) sugRender(); });
+    box.innerHTML = (ids.length || tq.length) ? ids.map(function (i) { return '<button data-i="' + i + '"' + (cur && cur.k === 'lem' && cur.i === i ? ' class="on"' : '') + '>' + esc(LEM[i]) + '<small>' + IDX.P[i].length + '</small></button>'; }).join('')
+      + tq.map(function (i) { return '<button class="N' + (cur && cur.k === 'topic' && cur.t === i ? ' on' : '') + '" data-t="' + i + '">📑 ' + esc(TOP[i].k) + '</button>'; }).join('')
       : '<span style="font-size:13px;color:#94a3b8">기본형에 없는 낱말입니다 — 「글자 그대로」로 찾아 보십시오.</span>';
   }
   function go() {
     var m = document.getElementById('conc-modal'), q = m.querySelector('.cc-q').value.trim();
     if (!q) return;
     if (m.querySelector('.cc-raw').checked) { cur = { k: 'raw', q: q }; curBk = 0; sugRender(); render(); return; }
-    var ids = suggest(q); if (!ids.length) { cur = { k: 'raw', q: q }; } else cur = { k: 'lem', i: ids[0] };
+    var ids = suggest(q), tq = TOP ? topicsFor(q, false) : [];
+    if (ids.length) cur = { k: 'lem', i: ids[0] }; else if (tq.length) cur = { k: 'topic', t: tq[0] }; else cur = { k: 'raw', q: q };
     curBk = 0; sugRender(); render();
   }
   function ui() {
@@ -24583,7 +24717,7 @@ window.RoutePlay = (function () {
     var m = document.createElement('div'); m.id = 'conc-modal';
     m.innerHTML = '<div class="cc-h"><b>📇 성구사전</b><button class="cc-x" title="닫기">✕</button></div>'
       + '<div class="cc-s"><input class="cc-q" placeholder="낱말 넣기 (예: 사랑, 믿음으로, 은혜)" autocomplete="off"><label class="cc-mode"><input type="checkbox" class="cc-raw">글자 그대로</label></div>'
-      + '<div class="cc-sug"></div><div class="cc-info"></div><div class="cc-bks"></div><div class="cc-l"></div>';
+      + '<div class="cc-sug"></div><div class="cc-info"></div><div class="cc-rel"></div><div class="cc-bks"></div><div class="cc-l"></div>';
     document.body.appendChild(m);
     function close() { m.style.display = 'none'; bk.style.display = 'none'; }
     bk.onclick = close; m.querySelector('.cc-x').onclick = close;
@@ -24591,9 +24725,20 @@ window.RoutePlay = (function () {
     qi.oninput = function () { clearTimeout(tm); tm = setTimeout(sugRender, 150); };
     qi.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } if (e.key === 'Escape') close(); };
     m.querySelector('.cc-raw').onchange = function () { sugRender(); if (qi.value.trim()) go(); };
-    m.querySelector('.cc-sug').onclick = function (e) { var b = e.target.closest('button[data-i]'); if (!b) return; cur = { k: 'lem', i: +b.dataset.i }; curBk = 0; sugRender(); render(); };
+    m.querySelector('.cc-sug').onclick = function (e) {
+      var b = e.target.closest('button[data-i],button[data-t]'); if (!b) return;
+      cur = b.dataset.t != null ? { k: 'topic', t: +b.dataset.t } : { k: 'lem', i: +b.dataset.i }; curBk = 0; sugRender(); render(); };
+    m.querySelector('.cc-rel').onclick = function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.d != null) { var it = dictCombinedCache && dictCombinedCache[+b.dataset.d]; if (!it) return; close(); try { openDictModal(); openDictCard(it); } catch (er) { console.error(er); } return; }
+      if (b.dataset.s) { try { StrongEngine.handleClick(b.dataset.s); } catch (er) { console.error(er); } return; }
+      if (b.dataset.t != null) { cur = { k: 'topic', t: +b.dataset.t, from: cur }; curBk = 0; sugRender(); render(); }
+    };
+    m.querySelector('.cc-info').onclick = function (e) { if (e.target.closest('.tp-back') && cur && cur.from) { cur = cur.from; render(); } };
     m.querySelector('.cc-bks').onclick = function (e) { var b = e.target.closest('button[data-b]'); if (!b) return; curBk = +b.dataset.b; render(); };
     m.querySelector('.cc-l').onclick = function (e) {
+      var sh = e.target.closest('.tp-h.see'); if (sh) { cur = { k: 'topic', t: +sh.dataset.t }; render(); return; }
+      var ch = e.target.closest('.tp-ch'); if (ch) { var bc = ch.dataset.bc.split(',').map(Number); if (window.innerWidth <= 768) close(); try { navigateToBibleVerse(bc[0], bc[1], 1); } catch (er) {} return; }
       var v = e.target.closest('.cc-v'); if (!v) return; var i = +v.dataset.i;
       if (window.innerWidth <= 768) close();
       try { navigateToBibleVerse(IDX.B[i], IDX.C[i], IDX.V[i]); } catch (er) { console.error(er); }
@@ -24606,6 +24751,7 @@ window.RoutePlay = (function () {
     var L = m.querySelector('.cc-l');
     if (!dbReady()) { L.innerHTML = '<div class="cc-note">성경 DB를 먼저 열어 주십시오.<br>성구사전은 이 기기에 연 성경 DB(.bdb)로 색인을 만듭니다 — 개역개정 DB를 열면 개역개정으로, 개역한글 DB를 열면 개역한글로 찾습니다.</div>'; return; }
     if (!(IDX && IDXDB === sqliteDbInstance)) L.innerHTML = '<div class="cc-note">색인을 만드는 중입니다… (처음 한 번, 몇 초)</div>';
+    loadTop();
     loadLem().then(function (j) {
       if (!j) { L.innerHTML = '<div class="cc-note">낱말표(concord_lemma.json)를 받지 못했습니다. 인터넷 연결을 확인해 주십시오.</div>'; return; }
       setTimeout(function () {
