@@ -19642,7 +19642,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-9`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-10`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -24517,7 +24517,7 @@ window.RoutePlay = (function () {
   }
 </style>
 <script>
-/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제)
+/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제 · b20261114-10 점검 고침)
    📇 성구사전: 낱말을 넣으면 그 낱말이 나오는 모든 구절을 찾는다.
    - 공개 파일 concord_lemma.json 은 낱말꼴 → 기본형 표만 들어 있다(kiwi 형태소 분석, 개역한글·개역개정 낱말꼴). 성경 본문은 없다.
    - 색인은 이 기기에 연 성경 DB(.bdb)로 처음 열 때 한 번 만든다 → 개역개정 DB면 개역개정으로, 개역한글 DB면 개역한글로 찾는다.
@@ -24807,8 +24807,10 @@ window.RoutePlay = (function () {
     var h = '';
     t.s.forEach(function (x) {
       var lab = x[1] || '', see = /^→\s*/.test(lab), seeT = see ? lab.replace(/^→\s*/, '').trim() : '';
-      var ti = see ? TOP.findIndex(function (y) { return y.k === seeT && y.w === t.w; }) : -1; if (see && ti < 0) ti = TOP.findIndex(function (y) { return y.k === seeT; });
-      if (lab) h += '<div class="tp-h d' + Math.min(2, x[0]) + (ti >= 0 ? ' see" data-t="' + ti : '') + '">' + esc(lab) + '</div>';
+      function findT(nm) { var i = TOP.findIndex(function (y) { return y.k === nm && y.w === t.w; }); return i >= 0 ? i : TOP.findIndex(function (y) { return y.k === nm; }); }
+      if (see) {   // (b20261114-10) 「→ 가 · 나」 여러 주제로 이어짐 — 이름마다 누르는 고리
+        h += '<div class="tp-h d' + Math.min(2, x[0]) + '">→ ' + seeT.split(/\s*·\s*/).map(function (nm) { var ti = findT(nm); return ti >= 0 ? '<span class="see" data-t="' + ti + '" style="cursor:pointer;text-decoration:underline dotted">' + esc(nm) + '</span>' : esc(nm); }).join(' · ') + '</div>';
+      } else if (lab) h += '<div class="tp-h d' + Math.min(2, x[0]) + '">' + esc(lab) + '</div>';
       x[2].forEach(function (r) {
         if (!r[2]) h += '<span class="tp-ch" data-bc="' + r[0] + ',' + r[1] + '">📖 ' + AB[r[0]] + ' ' + r[1] + (r[0] === 19 ? '편' : '장') + ' 전체</span>';
         else h += vline(r[0], r[1], r[2], r[3]);
@@ -24926,7 +24928,7 @@ window.RoutePlay = (function () {
     m.querySelector('.cc-bks').onclick = function (e) { var b = e.target.closest('button[data-b]'); if (!b) return; curBk = +b.dataset.b; render(); };
     m.querySelector('.cc-l').onclick = function (e) {
       var xb = e.target.closest('.xr'); if (xb) { var q3 = xb.dataset.x.split(',').map(Number); loadXr().then(function () { cur = { k: 'xref', b: q3[0], c: q3[1], v: q3[2], from: cur }; render(); }); return; }
-      var sh = e.target.closest('.tp-h.see'); if (sh) { cur = { k: 'topic', t: +sh.dataset.t }; render(); return; }
+      var sh = e.target.closest('.tp-h .see, .tp-h.see'); if (sh) { cur = { k: 'topic', t: +sh.dataset.t }; render(); return; }
       var ch = e.target.closest('.tp-ch'); if (ch) { var bc = ch.dataset.bc.split(',').map(Number); if (window.innerWidth <= 768) close(); try { navigateToBibleVerse(bc[0], bc[1], 1); } catch (er) {} return; }
       var v = e.target.closest('.cc-v'); if (!v) return; var i = +v.dataset.i;
       if (window.innerWidth <= 768 && !m.classList.contains('sheet')) close();
