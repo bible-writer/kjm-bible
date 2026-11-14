@@ -19642,7 +19642,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-8`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-9`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -24517,7 +24517,7 @@ window.RoutePlay = (function () {
   }
 </style>
 <script>
-/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림)
+/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제)
    📇 성구사전: 낱말을 넣으면 그 낱말이 나오는 모든 구절을 찾는다.
    - 공개 파일 concord_lemma.json 은 낱말꼴 → 기본형 표만 들어 있다(kiwi 형태소 분석, 개역한글·개역개정 낱말꼴). 성경 본문은 없다.
    - 색인은 이 기기에 연 성경 DB(.bdb)로 처음 열 때 한 번 만든다 → 개역개정 DB면 개역개정으로, 개역한글 DB면 개역한글로 찾는다.
@@ -24539,13 +24539,13 @@ window.RoutePlay = (function () {
     }).catch(function () { return null; });
     return LP;
   }
-  /* (b20261114-5) 📑 주제: 네이브 『주제별 성경』(1896, 공개) — 주제·소제목은 우리말로 옮김, 장절만 들어 있음(본문 없음) */
+  /* (b20261114-5) 📑 주제: 네이브 『주제별 성경』(1896, 공개) + (b20261114-9) 토리 『새 주제별 교본』(1897, 공개 — T[3]==='T') — 주제·소제목은 우리말로 옮김, 장절만 들어 있음(본문 없음) */
   var TPP = null, TOP = null;
   function loadTop() {
     if (!TPP) TPP = fetch('./concord_topic.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
       if (!j || !j.T) return null;
-      TOP = j.T.map(function (t) { return { k: t[0], e: t[1], s: t[2].map(function (x) { return [x[0], x[1], x[2] ? x[2].split(' ').map(function (r) { return r.split('.').map(Number); }) : []]; }) }; });
-      TOP.src = j.src || ''; return TOP;
+      TOP = j.T.map(function (t) { return { k: t[0], e: t[1], w: t[3] === 'T' ? 'T' : 'N', s: t[2].map(function (x) { return [x[0], x[1], x[2] ? x[2].split(' ').map(function (r) { return r.split('.').map(Number); }) : []]; }) }; });
+      TOP.src = j.src || ''; TOP.srcT = j.srcT || ''; return TOP;
     }).catch(function () { return null; });
     return TPP;
   }
@@ -24744,7 +24744,7 @@ window.RoutePlay = (function () {
     } catch (e) { console.warn('[성구사전] 사전 잇기:', e); }
     var q0 = (document.querySelector('#conc-modal .cc-q') || {}).value || '', tps = topicsFor(w, true);
     q0 = q0.trim(); if (q0 && q0 !== w) topicsFor(q0, true).forEach(function (i) { if (tps.indexOf(i) < 0) tps.unshift(i); });   // 넣은 낱말 그대로인 주제도(성막 → 기본형은 다른데 주제는 있음)
-    if (tps.length) h += '<div class="row"><span class="lab">주제</span>' + tps.map(function (i) { return '<button class="N" data-t="' + i + '">📑 ' + esc(TOP[i].k) + '<small>' + TOP[i].s.length + '</small></button>'; }).join('') + '</div>';
+    if (tps.length) h += '<div class="row"><span class="lab">주제</span>' + tps.map(function (i) { return '<button class="N" data-t="' + i + '">📑 ' + esc(TOP[i].k) + '<small>' + (TOP[i].w === 'T' ? '토리 ' : '네이브 ') + TOP[i].s.length + '</small></button>'; }).join('') + '</div>';
     else if (!TOP) loadTop().then(function (x) { if (x) relRender(); });
     var T = { PERSON: ['P', '👤 인물'], PLACE: ['L', '📍 지명'], TERM: ['T', '📚 용어'] };
     if (items.length) h += '<div class="row"><span class="lab">사전</span>' + items.slice(0, 12).map(function (i) {
@@ -24802,19 +24802,19 @@ window.RoutePlay = (function () {
   function topicRender() {
     var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
     var t = TOP[cur.t], nref = 0; t.s.forEach(function (x) { nref += x[2].length; });
-    info.innerHTML = (cur.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 「' + esc(cur.from.k === 'lem' ? LEM[cur.from.i] : cur.from.q || '') + '」</button>' : '') + '<b>📑 주제 「' + esc(t.k) + '」</b> — 소제목 ' + t.s.length + ' · 성구 ' + nref + '곳';
+    info.innerHTML = (cur.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 「' + esc(cur.from.k === 'lem' ? LEM[cur.from.i] : cur.from.q || '') + '」</button>' : '') + '<b>📑 주제 「' + esc(t.k) + '」 <small>' + (t.w === 'T' ? '토리' : '네이브') + '</small></b> — 소제목 ' + t.s.length + ' · 성구 ' + nref + '곳';
     bks.innerHTML = '';
     var h = '';
     t.s.forEach(function (x) {
       var lab = x[1] || '', see = /^→\s*/.test(lab), seeT = see ? lab.replace(/^→\s*/, '').trim() : '';
-      var ti = see ? TOP.findIndex(function (y) { return y.k === seeT; }) : -1;
+      var ti = see ? TOP.findIndex(function (y) { return y.k === seeT && y.w === t.w; }) : -1; if (see && ti < 0) ti = TOP.findIndex(function (y) { return y.k === seeT; });
       if (lab) h += '<div class="tp-h d' + Math.min(2, x[0]) + (ti >= 0 ? ' see" data-t="' + ti : '') + '">' + esc(lab) + '</div>';
       x[2].forEach(function (r) {
         if (!r[2]) h += '<span class="tp-ch" data-bc="' + r[0] + ',' + r[1] + '">📖 ' + AB[r[0]] + ' ' + r[1] + (r[0] === 19 ? '편' : '장') + ' 전체</span>';
         else h += vline(r[0], r[1], r[2], r[3]);
       });
     });
-    h += '<div class="tp-src">' + esc(TOP.src || '') + '</div>';
+    h += '<div class="tp-src">' + esc((t.w === 'T' ? TOP.srcT : TOP.src) || '') + '</div>';
     L.innerHTML = h; L.scrollTop = 0;
   }
   function more(list) {
@@ -24841,7 +24841,7 @@ window.RoutePlay = (function () {
     var ids = suggest(q), tq = TOP ? topicsFor(q, true) : [];
     if (!TOP) loadTop().then(function (x) { if (x) sugRender(); });
     box.innerHTML = (ids.length || tq.length) ? ids.map(function (i) { return '<button data-i="' + i + '"' + (cur && cur.k === 'lem' && cur.i === i ? ' class="on"' : '') + '>' + esc(LEM[i]) + '<small>' + IDX.P[i].length + '</small></button>'; }).join('')
-      + tq.map(function (i) { return '<button class="N' + (cur && cur.k === 'topic' && cur.t === i ? ' on' : '') + '" data-t="' + i + '">📑 ' + esc(TOP[i].k) + '</button>'; }).join('')
+      + tq.map(function (i) { return '<button class="N' + (cur && cur.k === 'topic' && cur.t === i ? ' on' : '') + '" data-t="' + i + '">📑 ' + esc(TOP[i].k) + '<small>' + (TOP[i].w === 'T' ? '토리' : '네이브') + '</small></button>'; }).join('')
       : '<span style="font-size:13px;color:#94a3b8">기본형에 없는 낱말입니다 — 「글자 그대로」로 찾아 보십시오.</span>';
   }
   function go() {
