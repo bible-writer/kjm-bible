@@ -19642,7 +19642,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-6`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-7`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -24476,6 +24476,11 @@ window.RoutePlay = (function () {
   #conc-modal .cc-org button small { color: #94a3b8; margin-left: 3px; }
   #conc-modal .cc-org button.on { background: #A8336A; color: #fff; border-color: #A8336A; } #conc-modal .cc-org button.on small { color: #fde2ef; }
   #conc-modal .cc-v .og { font-size: 11px; color: #A8336A; margin-left: 4px; white-space: nowrap; }
+  #conc-modal .xr { border: 0; background: #ecfeff; color: #0e7490; border-radius: 8px; padding: 0 6px; margin-left: 6px; font-size: 11.5px; cursor: pointer; }
+  #conc-modal .xr-me { background: #ecfeff; border-left: 3px solid #0e7490; padding: 8px 10px; margin: 6px 0 10px; line-height: 1.7; }
+  #conc-modal .xr-me .r { color: #0e7490; font-weight: 700; margin-right: 6px; }
+  #conc-modal .cc-h .cc-xb { font-size: 12px; }
+  .xref-btn { margin-left: 4px; font-size: 0.68em; color: #0e7490; background: #ecfeff; border: 1px solid #a5f3fc; border-radius: 8px; padding: 0 5px; cursor: pointer; vertical-align: 1px; }
   #conc-modal .cc-bks { padding: 4px 14px 6px; display: flex; flex-wrap: wrap; gap: 3px; max-height: 92px; overflow: auto; border-bottom: 1px solid #e2e8f0; }
   #conc-modal .cc-bks button { border: 0; border-radius: 4px; padding: 2px 6px; font-size: 12px; cursor: pointer; background: #e0f2fe; color: #075985; }
   #conc-modal .cc-bks button.nt { background: #fef3c7; color: #92400e; }
@@ -24504,7 +24509,7 @@ window.RoutePlay = (function () {
   }
 </style>
 <script>
-/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰)
+/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주)
    📇 성구사전: 낱말을 넣으면 그 낱말이 나오는 모든 구절을 찾는다.
    - 공개 파일 concord_lemma.json 은 낱말꼴 → 기본형 표만 들어 있다(kiwi 형태소 분석, 개역한글·개역개정 낱말꼴). 성경 본문은 없다.
    - 색인은 이 기기에 연 성경 DB(.bdb)로 처음 열 때 한 번 만든다 → 개역개정 DB면 개역개정으로, 개역한글 DB면 개역한글로 찾는다.
@@ -24546,6 +24551,73 @@ window.RoutePlay = (function () {
     });
     return ex.concat(pre.slice(0, 6));
   }
+  /* (b20261114-7 kjm 「1」 관주) OpenBible.info 관주(TSK 바탕, CC BY) — 절마다 관련도 높은 차례 40곳. 장절만(본문 없음) */
+  var XRP = null, XR = null;
+  function loadXr() {
+    if (!XRP) XRP = fetch('./concord_xref.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (!j || !j.X) return null;
+      var n = 0; j.cv.forEach(function (chs) { chs.forEach(function (k) { n += k; }); });
+      var B = new Uint8Array(n), C = new Uint16Array(n), V = new Uint16Array(n), OFF = {}, z = 0;
+      j.cv.forEach(function (chs, bi) { chs.forEach(function (k, ci) { OFF[(bi + 1) * 1000 + ci + 1] = z; for (var v = 1; v <= k; v++) { B[z] = bi + 1; C[z] = ci + 1; V[z] = v; z++; } }); });
+      XR = { B: B, C: C, V: V, OFF: OFF, X: j.X, src: j.src || '' }; return XR;
+    }).catch(function () { return null; });
+    return XRP;
+  }
+  function xIdx(b, c, v) { if (!XR) return -1; var o = XR.OFF[b * 1000 + c]; return o == null ? -1 : o + v - 1; }
+  function xList(b, c, v) {
+    var i = xIdx(b, c, v); if (i < 0) return [];
+    var s = XR.X[i.toString(36)]; if (!s) return [];
+    return s.split(',').map(function (t) { var p = t.split('+'); return [parseInt(p[0], 36), p[1] ? +p[1] : 0]; });
+  }
+  function parseRef(q) {
+    var m = /^([1-3]?\s*[가-힣]+)\s*(\d+)\s*[:장]\s*(\d+)\s*절?$/.exec(String(q).trim()); if (!m) return null;
+    var nm = m[1].replace(/\s+/g, ''), b = AB.indexOf(nm);
+    if (b < 1) { try { var bb = BIBLE_BOOKS.find(function (x) { return x.name === nm || x.abbr === nm; }); if (bb) b = bb.id; } catch (e) {} }
+    return b > 0 ? { b: b, c: +m[2], v: +m[3] } : null;
+  }
+  function xrBadge(b, c, v) { if (!XR) return ''; var n = xList(b, c, v).length; return n ? '<button class="xr" data-x="' + b + ',' + c + ',' + v + '" title="관주 — 이어진 성구">🔗' + n + '</button>' : ''; }
+  function xrefRender() {
+    var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
+    bks.innerHTML = '';
+    if (!XR) { L.innerHTML = '<div class="cc-note">관주 자료(concord_xref.json)를 받는 중입니다…</div>'; loadXr().then(function (x) { if (x) render(); else L.innerHTML = '<div class="cc-note">관주 자료를 받지 못했습니다.</div>'; }); return; }
+    var x = cur, lst = xList(x.b, x.c, x.v), me = IDX.K.get(x.b * 1000000 + x.c * 1000 + x.v);
+    info.innerHTML = (x.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 돌아가기</button>' : '')
+      + '<b>🔗 ' + AB[x.b] + ' ' + x.c + ':' + x.v + ' 관주</b> — ' + lst.length + '곳 <small style="color:#94a3b8">(관련도 높은 차례)</small>';
+    var h = me != null ? '<div class="xr-me cc-v" data-i="' + me + '"><span class="r">' + AB[x.b] + ' ' + x.c + ':' + x.v + '</span>' + esc(IDX.T[me]) + '</div>' : '';
+    lst.forEach(function (t) {
+      var b = XR.B[t[0]], c = XR.C[t[0]], v1 = XR.V[t[0]], j = t[0] + t[1], c2 = XR.C[j], v2 = XR.V[j];
+      if (c2 !== c) v2 = 999;   // 장을 넘는 범위는 그 장 끝까지
+      var row = vline(b, c, v1, Math.max(v1, v2));
+      h += row.replace('<div class="cc-v tp-v"', '<div class="cc-v"');
+    });
+    if (!lst.length) h += '<div class="cc-note">이 절에는 관주가 없습니다.</div>';
+    h += '<div class="tp-src">' + esc(XR.src) + '</div>';
+    L.innerHTML = h; L.scrollTop = 0;
+  }
+  window.openXref = function (b, c, v) { window.openConcordance(); var go2 = function () { if (!IDX) return setTimeout(go2, 200); loadXr().then(function () { var prev = cur && cur.k !== 'xref' ? cur : (cur && cur.from) || null; cur = { k: 'xref', b: +b, c: +c, v: +v, from: prev }; curBk = 0; render(); }); }; setTimeout(go2, 60); };
+  /* 본문에 🔗 단추 (켜고 끄기: 성구사전 머리 「🔗 본문」, localStorage kjm_xref_btn) */
+  function xrOn() { try { return localStorage.getItem('kjm_xref_btn') === '1'; } catch (e) { return false; } }
+  function xrDecorate() {
+    var bc = document.getElementById('bible-content'); if (!bc) return;
+    bc.querySelectorAll('.xref-btn').forEach(function (e) { e.remove(); });
+    if (!xrOn()) return;
+    loadXr().then(function (x) {
+      if (!x) return;
+      bc.querySelectorAll('.verse-row[data-bc]').forEach(function (row) {
+        var p = row.dataset.bc.split('-').map(Number), v = parseInt(String(row.id).replace('verse-row-', ''), 10); if (!v) return;
+        var n = xList(p[0], p[1], v).length; if (!n) return;
+        var vt = row.querySelector(':scope > .verse-text'); if (!vt || row.querySelector(':scope > .xref-btn')) return;
+        var bt = document.createElement('button'); bt.className = 'xref-btn'; bt.textContent = '🔗' + n; bt.title = '관주 — 이어진 성구';
+        bt.onclick = function (e) { e.stopPropagation(); window.openXref(p[0], p[1], v); };
+        vt.insertAdjacentElement('afterend', bt);
+      });
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    var bc = document.getElementById('bible-content'); var tm = null;
+    if (bc) new MutationObserver(function (ml) { if (!xrOn()) return; if (ml.every(function (r) { return Array.from(r.addedNodes).every(function (n) { return n.classList && n.classList.contains('xref-btn'); }); })) return; clearTimeout(tm); tm = setTimeout(xrDecorate, 120); }).observe(bc, { childList: true });
+    if (xrOn()) setTimeout(xrDecorate, 1500);
+  });
   function dbReady() { try { return !!(sqliteDbInstance && detectedSchema); } catch (e) { return false; } }
   function build() {
     if (IDX && IDXDB === sqliteDbInstance) return IDX;
@@ -24698,6 +24770,7 @@ window.RoutePlay = (function () {
     if (!cur) { relRender(); orgRender(null); info.textContent = ''; bks.innerHTML = ''; L.innerHTML = '<div class="cc-note">낱말을 넣고 아래에서 기본형을 고르십시오. 예: 사랑, 믿음, 은혜, 여호와, 회개<br>「글자 그대로」를 고르면 넣은 글자가 그대로 들어 있는 구절을 찾습니다(두 낱말 이상도 됩니다).</div>'; return; }
     relRender();
     if (cur.k === 'topic') { orgRender(null); topicRender(); return; }
+    if (cur.k === 'xref') { orgRender(null); xrefRender(); return; }
     var all = hitList(), cnt = {}, ot = 0, cs = codeSplit();
     orgRender(cs);
     if (cs && cur.code) all = cs.by.get(cur.code) || [];
@@ -24715,7 +24788,7 @@ window.RoutePlay = (function () {
     var out = '', n = 0;
     for (var v = v1; v <= v2; v++) { var i = IDX.K.get(b * 1000000 + c * 1000 + v); if (i == null) continue; n++;
       if (n > 6) { out += '<div class="cc-v tp-v" data-i="' + i + '"><span class="r">…</span>' + AB[b] + ' ' + c + ':' + v + '-' + v2 + ' 이어짐</div>'; break; }
-      out += '<div class="cc-v tp-v" data-i="' + i + '"><span class="r">' + AB[b] + ' ' + c + ':' + v + '</span>' + esc(IDX.T[i]) + '</div>'; }
+      out += '<div class="cc-v tp-v" data-i="' + i + '"><span class="r">' + AB[b] + ' ' + c + ':' + v + '</span>' + esc(IDX.T[i]) + xrBadge(b, c, v) + '</div>'; }
     return out;
   }
   function topicRender() {
@@ -24743,7 +24816,7 @@ window.RoutePlay = (function () {
     for (var k = shown; k < Math.min(list.length, shown + PAGE); k++) {
       var i = list[k];
       var og = cur && cur.cs && cur.cs.vc.get(i);
-      h += '<div class="cc-v" data-i="' + i + '"><span class="r">' + AB[IDX.B[i]] + ' ' + IDX.C[i] + ':' + IDX.V[i] + '</span>' + mark(IDX.T[i]) + (og && og[0] !== '-' ? '<span class="og">' + og.join(' ') + '</span>' : '') + '</div>';
+      h += '<div class="cc-v" data-i="' + i + '"><span class="r">' + AB[IDX.B[i]] + ' ' + IDX.C[i] + ':' + IDX.V[i] + '</span>' + mark(IDX.T[i]) + (og && og[0] !== '-' ? '<span class="og">' + og.join(' ') + '</span>' : '') + xrBadge(IDX.B[i], IDX.C[i], IDX.V[i]) + '</div>';
     }
     L.insertAdjacentHTML('beforeend', h); shown = Math.min(list.length, shown + PAGE);
     if (shown < list.length) {
@@ -24756,6 +24829,7 @@ window.RoutePlay = (function () {
     var raw = m.querySelector('.cc-raw').checked;
     if (!q) { box.innerHTML = ''; return; }
     if (raw) { box.innerHTML = ''; return; }
+    if (parseRef(q)) { box.innerHTML = '<span style="font-size:13px;color:#0e7490">🔗 장절입니다 — Enter를 누르면 이 절의 관주가 나옵니다.</span>'; return; }
     var ids = suggest(q), tq = TOP ? topicsFor(q, true) : [];
     if (!TOP) loadTop().then(function (x) { if (x) sugRender(); });
     box.innerHTML = (ids.length || tq.length) ? ids.map(function (i) { return '<button data-i="' + i + '"' + (cur && cur.k === 'lem' && cur.i === i ? ' class="on"' : '') + '>' + esc(LEM[i]) + '<small>' + IDX.P[i].length + '</small></button>'; }).join('')
@@ -24765,6 +24839,7 @@ window.RoutePlay = (function () {
   function go() {
     var m = document.getElementById('conc-modal'), q = m.querySelector('.cc-q').value.trim();
     if (!q) return;
+    var rf = parseRef(q); if (rf) { loadXr().then(function () { cur = { k: 'xref', b: rf.b, c: rf.c, v: rf.v }; curBk = 0; sugRender(); render(); }); return; }
     if (m.querySelector('.cc-raw').checked) { cur = { k: 'raw', q: q }; curBk = 0; sugRender(); render(); return; }
     var ids = suggest(q), tq = TOP ? topicsFor(q, false) : [];
     if (ids.length) cur = { k: 'lem', i: ids[0] }; else if (tq.length) cur = { k: 'topic', t: tq[0] }; else cur = { k: 'raw', q: q };
@@ -24773,12 +24848,13 @@ window.RoutePlay = (function () {
   function ui() {
     var bk = document.createElement('div'); bk.id = 'conc-bk'; document.body.appendChild(bk);
     var m = document.createElement('div'); m.id = 'conc-modal';
-    m.innerHTML = '<div class="cc-h"><b>📇 성구사전</b><button class="cc-x" title="닫기">✕</button></div>'
-      + '<div class="cc-s"><input class="cc-q" placeholder="낱말 넣기 (예: 사랑, 믿음으로, 은혜)" autocomplete="off"><label class="cc-mode"><input type="checkbox" class="cc-raw">글자 그대로</label></div>'
+    m.innerHTML = '<div class="cc-h"><b>📇 성구사전</b><button class="cc-xb" title="본문 각 절 끝에 🔗 관주 단추 보이기/숨기기">🔗 본문 ' + (xrOn() ? '켬' : '끔') + '</button><button class="cc-x" title="닫기">✕</button></div>'
+      + '<div class="cc-s"><input class="cc-q" placeholder="낱말·주제·장절 (예: 사랑, 은혜, 요 3:16)" autocomplete="off"><label class="cc-mode"><input type="checkbox" class="cc-raw">글자 그대로</label></div>'
       + '<div class="cc-sug"></div><div class="cc-info"></div><div class="cc-rel"></div><div class="cc-org"></div><div class="cc-bks"></div><div class="cc-l"></div>';
     document.body.appendChild(m);
     function close() { m.style.display = 'none'; bk.style.display = 'none'; }
     bk.onclick = close; m.querySelector('.cc-x').onclick = close;
+    m.querySelector('.cc-xb').onclick = function () { var on = !xrOn(); try { localStorage.setItem('kjm_xref_btn', on ? '1' : '0'); } catch (e) {} this.textContent = '🔗 본문 ' + (on ? '켬' : '끔'); xrDecorate(); };
     var qi = m.querySelector('.cc-q'), tm = null;
     qi.oninput = function () { clearTimeout(tm); tm = setTimeout(sugRender, 150); };
     qi.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } if (e.key === 'Escape') close(); };
@@ -24796,6 +24872,7 @@ window.RoutePlay = (function () {
     m.querySelector('.cc-org').onclick = function (e) { var b = e.target.closest('button[data-c]'); if (!b || !cur) return; cur.code = b.dataset.c || ''; curBk = 0; render(); };
     m.querySelector('.cc-bks').onclick = function (e) { var b = e.target.closest('button[data-b]'); if (!b) return; curBk = +b.dataset.b; render(); };
     m.querySelector('.cc-l').onclick = function (e) {
+      var xb = e.target.closest('.xr'); if (xb) { var q3 = xb.dataset.x.split(',').map(Number); loadXr().then(function () { cur = { k: 'xref', b: q3[0], c: q3[1], v: q3[2], from: cur }; render(); }); return; }
       var sh = e.target.closest('.tp-h.see'); if (sh) { cur = { k: 'topic', t: +sh.dataset.t }; render(); return; }
       var ch = e.target.closest('.tp-ch'); if (ch) { var bc = ch.dataset.bc.split(',').map(Number); if (window.innerWidth <= 768) close(); try { navigateToBibleVerse(bc[0], bc[1], 1); } catch (er) {} return; }
       var v = e.target.closest('.cc-v'); if (!v) return; var i = +v.dataset.i;
@@ -24810,7 +24887,7 @@ window.RoutePlay = (function () {
     var L = m.querySelector('.cc-l');
     if (!dbReady()) { L.innerHTML = '<div class="cc-note">성경 DB를 먼저 열어 주십시오.<br>성구사전은 이 기기에 연 성경 DB(.bdb)로 색인을 만듭니다 — 개역개정 DB를 열면 개역개정으로, 개역한글 DB를 열면 개역한글로 찾습니다.</div>'; return; }
     if (!(IDX && IDXDB === sqliteDbInstance)) L.innerHTML = '<div class="cc-note">색인을 만드는 중입니다… (처음 한 번, 몇 초)</div>';
-    loadTop();
+    loadTop(); loadXr();
     loadLem().then(function (j) {
       if (!j) { L.innerHTML = '<div class="cc-note">낱말표(concord_lemma.json)를 받지 못했습니다. 인터넷 연결을 확인해 주십시오.</div>'; return; }
       setTimeout(function () {
