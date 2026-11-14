@@ -19639,7 +19639,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261111-2`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261113-2`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23206,7 +23206,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curSub = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=b20261111-2', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=b20261113-2', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -23544,6 +23544,9 @@ function krvDef(e, field) {
       + '#tm-era-ban{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) scale(.85);z-index:950;pointer-events:none;background:rgba(255,253,248,.94);border:3px solid #7d3529;border-radius:16px;padding:10px 26px;text-align:center;font-size:26px;font-weight:800;color:#3b2a1e;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transition:opacity .45s,transform .45s;white-space:nowrap}'
       + '#tm-era-ban.on{opacity:1;transform:translate(-50%,-50%) scale(1)}#tm-era-ban small{display:block;font-size:13px;font-weight:700;color:#8a4b14;margin:2px 0}'
       + '@media (max-width:768px){#tm-era-ban{font-size:19px;padding:8px 16px}}'
+      + '#tm-cap{position:absolute;left:50%;top:12px;transform:translate(-50%,-8px);z-index:940;pointer-events:none;max-width:min(560px,calc(100% - 90px));background:rgba(59,42,30,.88);color:#fff;border-radius:22px;padding:7px 16px;font-size:15px;line-height:1.4;text-align:center;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;transition:opacity .35s,transform .35s}'
+      + '#tm-cap.on{opacity:1;transform:translate(-50%,0)}#tm-cap .tc-y{color:#fcd34d;font-weight:700;margin-right:8px}#tm-cap .tc-r{color:#d6c7b8;font-size:12px;margin-left:8px;white-space:nowrap}'
+      + '@media (max-width:768px){#tm-cap{font-size:13px;top:8px;max-width:calc(100% - 70px)}}'
       + '.tm-lb{background:#b42318 !important;color:#fff !important;border:none !important;font-weight:700;font-size:12px;padding:1px 6px !important;box-shadow:0 1px 4px rgba(0,0,0,.3) !important}'
       + '.tm-lb:before{display:none}.tm-lb2{background:rgba(255,255,255,.9) !important;color:#7d3529 !important;border:1px solid #e2c9bd !important;font-size:11px;padding:0 5px !important}.tm-lb2:before{display:none}'
       + '#chrono-modal .ch-view{display:flex;gap:4px;margin-left:auto}#chrono-modal .ch-view button{background:rgba(255,255,255,.15);color:#fff}#chrono-modal .ch-view button.on{background:#fff;color:#7d3529;font-weight:700}'
@@ -23833,7 +23836,7 @@ function krvDef(e, field) {
     b.querySelector('.tm-w').innerHTML = ww.length ? '<span class="wl">🌍 같은 무렵</span>' + ww.map(wchip).join('') : '';
     if (tipMode === 'cur') curTip();
     else if (tipMode === 'chip') { tipMode = null; tip(''); }
-    if (settle) { try { eraBanner(x); } catch (e) {} }
+    if (settle) { try { eraBanner(x); storyCap(x); } catch (e) {} }
     drawPlaces(lo, hi, settle);
   }
   /* (b20261111-1 kjm 「모션그래픽 — 2. 연대기 재생」) 사건이 옮겨 갈 때 지도 위에 움직임을 준다.
@@ -23850,13 +23853,14 @@ function krvDef(e, field) {
     var ring = L.marker(to, { icon: L.divIcon({ className: 'tm-ring', iconSize: [70, 70] }), interactive: false, zIndexOffset: 800 });
     trailL.addLayer(ring); setTimeout(function () { trailL.removeLayer(ring); }, 2300);
     if (!from || (Math.abs(from[0] - to[0]) < 0.02 && Math.abs(from[1] - to[1]) < 0.02)) return;
-    // 지난 선들은 옅게, 5개 넘으면 지움
-    trailL.eachLayer(function (l) { if (l._tmTrail) { l._tmAge = (l._tmAge || 0) + 1; if (l._tmAge > 5) trailL.removeLayer(l); else l.setStyle({ opacity: Math.max(.12, .55 - l._tmAge * .09), weight: 2.5 }); } });
+    // (b20261113-1 kjm 「더 또렷하게」) 지난 선은 시대가 바뀔 때까지 남김 — 실선으로 굳히고 조금 옅게
+    trailL.eachLayer(function (l) { if (l._tmTrail && !l._tmDot) { l._tmAge = (l._tmAge || 0) + 1; l.setStyle({ opacity: Math.max(.35, .75 - l._tmAge * .05), weight: 3.5, dashArray: null }); } });
+    var stop = L.circleMarker(from, { radius: 4, color: '#fff', weight: 1.5, fillColor: '#7d3529', fillOpacity: .9, interactive: false }); stop._tmTrail = true; stop._tmDot = true; trailL.addLayer(stop);
     // 굽은 선(가운데를 옆으로 조금 띄움)
     var mx = (from[0] + to[0]) / 2, my = (from[1] + to[1]) / 2, dx = to[0] - from[0], dy = to[1] - from[1];
     var cx = mx - dy * .22, cy = my + dx * .22, pts = [];
     for (var i = 0; i <= 40; i++) { var t = i / 40, a = (1 - t) * (1 - t), b2 = 2 * (1 - t) * t, c = t * t; pts.push([a * from[0] + b2 * cx + c * to[0], a * from[1] + b2 * cy + c * to[1]]); }
-    var line = L.polyline([pts[0]], { color: '#b42318', weight: 3.5, opacity: .85, dashArray: '7,6', interactive: false });
+    var line = L.polyline([pts[0]], { color: '#b42318', weight: 4.5, opacity: .9, dashArray: '8,6', interactive: false });
     line._tmTrail = true; trailL.addLayer(line);
     var dot = L.circleMarker(pts[0], { radius: 5, color: '#fff', weight: 2, fillColor: '#b42318', fillOpacity: 1, interactive: false });
     trailL.addLayer(dot);
@@ -23872,6 +23876,8 @@ function krvDef(e, field) {
   function eraBanner(x) {
     if (lastEra === x.e) return; var first = lastEra === null; lastEra = x.e;
     if (first) return;
+    // 시대가 바뀌면 그 시대 동안 쌓인 길은 지운다
+    if (trailL) { var keep = []; trailL.eachLayer(function (l) { if (l._tmTrail) keep.push(l); }); keep.forEach(function (l) { trailL.removeLayer(l); }); } lastPt = null;
     var mp = (typeof map !== 'undefined' && map.getContainer) ? map.getContainer() : null; if (!mp) return;
     var el = document.getElementById('tm-era-ban');
     if (!el) { el = document.createElement('div'); el.id = 'tm-era-ban'; mp.appendChild(el); }
@@ -23881,7 +23887,17 @@ function krvDef(e, field) {
     el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
     clearTimeout(eraT); eraT = setTimeout(function () { el.classList.remove('on'); }, 2600);
   }
-  function clearMotion() { if (trailL && typeof map !== 'undefined') { trailL.clearLayers(); } lastPt = null; lastEra = null; trailN++; }
+  // (b20261113-1) 사건 제목 자막 — 지명이 없는 사건도 지도 위에 무엇이 일어났는지 보이게
+  var capT = null;
+  function storyCap(x) {
+    var mp = (typeof map !== 'undefined' && map.getContainer) ? map.getContainer() : null; if (!mp || !x) return;
+    var el = document.getElementById('tm-cap');
+    if (!el) { el = document.createElement('div'); el.id = 'tm-cap'; mp.appendChild(el); }
+    el.innerHTML = '<span class="tc-y">' + esc(x.y || '') + '</span><b>' + esc(x.t || '') + '</b>' + (x.r ? '<span class="tc-r">' + esc(x.r) + '</span>' : '');
+    el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
+    clearTimeout(capT); capT = setTimeout(function () { el.classList.remove('on'); }, playT ? 60000 : 4500);
+  }
+  function clearMotion() { var c = document.getElementById('tm-cap'); if (c) c.classList.remove('on'); if (trailL && typeof map !== 'undefined') { trailL.clearLayers(); } lastPt = null; lastEra = null; trailN++; }
   var aLayer = null;
   // (b20261110-5 kjm 고고학 정리) 기록(글이 있는 것)·유물(물건)·유적(장소) 구분, 학계 논란 표시
   window.archKind = function (a) { return a && a.kind === '유적' ? '🏛' : a && a.kind === '유물' ? '🏺' : '📜'; };
@@ -24025,7 +24041,7 @@ function krvDef(e, field) {
 </script>
 
 <script>
-/* (b20261110-5 kjm 「가장 효율적인 1개 — 델리치 히브리어 신약」)
+/* (b20261110-3 kjm 「가장 효율적인 1개 — 델리치 히브리어 신약」)
    비교보기에서 히브리어 신약 낱말을 누르면, 구약 히브리어에 같은 꼴이 있는지 찾아
    스트롱 번호 후보와 형태를 보여 주고 첫 후보의 원어 뜻(StrongEngine)을 바로 펼친다.
    자료: dhnt.json(본문), dhnt_lex.json(꼴 → 후보). 둘 다 공개 자료. */
@@ -24043,7 +24059,7 @@ window.HebNT = (function () {
     document.head.appendChild(l);
   }
   function load() {
-    if (!LP) LP = fetch('./dhnt_lex.json?v=20261110-1', { cache: 'no-cache' })
+    if (!LP) LP = fetch('./dhnt_lex.json?v=20261113-1', { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { LEX = j || { w: {}, pre: {} }; return LEX; })
       .catch(function () { LEX = { w: {}, pre: {} }; LP = null; return LEX; });
@@ -24098,13 +24114,15 @@ window.HebNT = (function () {
         h += '<div><span class="hp-b">' + KIND[e[0]] + '</span>';
         if (e[1]) h += '<span class="hp-b">앞말: ' + e[1].split('').map(function (c) { return c + ' ' + ((L.pre || {})[c] || ''); }).join(' · ') + '</span>';
         if (e[3]) h += '<span class="hp-b">뒷말: ' + esc(fin(e[3])) + '</span>';
+        if (e[4]) h += '<span class="hp-b" style="background:#bbf7d0;color:#14532d">✔ 신약 문맥으로 고른 뜻</span>';
         h += '</div><div>';
         e[2].forEach(function (c, i) {
-          var lab = /^H\d+/.test(c[0]) ? c[0] + (c[1] ? ' · ' + c[1] + '번' : '') : '뜻';
+          var lab = /^H\d+/.test(c[0]) ? c[0] + (c[1] ? ' · ' + c[1] + '번' : '') : (c[0].length <= 14 ? c[0] : '뜻');
           h += '<button class="hp-c" onclick="HebNT.pick(' + i + ')">' + esc(lab) + '</button>';
         });
         h += '</div>';
-        if (e[2].length > 1) h += '<div class="hp-m">후보가 여럿이면 구약에서 더 많이 쓰인 것이 앞에 있어요. 문맥에 맞는 것을 골라 보세요.</div>';
+        if (e[5]) h += '<div class="hp-m">이 꼴은 신약에서도 문맥에 따라 뜻이 갈려요. 다른 후보도 눌러 보세요.</div>';
+        else if (e[2].length > 1 && !e[4]) h += '<div class="hp-m">후보가 여럿이면 구약에서 더 많이 쓰인 것이 앞에 있어요. 문맥에 맞는 것을 골라 보세요.</div>';
         h += '<div class="hp-m" id="heb-morph"></div><div id="heb-strong-slot"></div>';
       }
       h += '<div class="hp-n">델리치 히브리어 신약(공개) · 구약 꼴 대조: WLC·OSHB 형태분석</div>';
