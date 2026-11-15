@@ -19704,7 +19704,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-18`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-19`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25120,6 +25120,7 @@ window.RoutePlay = (function () {
   #aid-modal .ad-bar input { flex: 1 1 180px; }
   #aid-modal .ad-chip { border: 1px solid #d6c7a8; background: #fffaf0; color: #4c3a1e; border-radius: 14px; padding: 3px 10px; cursor: pointer; font-size: 13px; }
   #aid-modal .ad-chip.on { background: #4c3a1e; color: #fff; }
+  #aid-modal mark { background: #fde68a; color: inherit; padding: 0 1px; border-radius: 2px; }
   #aid-modal .ad-l { flex: 1; overflow: auto; padding: 10px 14px 18px; font-size: 14.5px; line-height: 1.7; }
   #aid-modal .ad-sec { margin: 14px 0 6px; font-weight: 700; color: #4c3a1e; border-bottom: 1px solid #ede4d3; padding-bottom: 2px; }
   #aid-modal .ad-row { padding: 6px 4px; border-bottom: 1px dashed #eef2f7; cursor: pointer; }
@@ -25297,21 +25298,75 @@ window.RoutePlay = (function () {
     row.insertAdjacentElement('afterend', d);
   }
 
-  /* 📖 책 소개 */
+  /* 📖 책 소개 — (b20261114-19) 책 찾기 · 66권 한눈에 · 인물/지명/핵심 낱말 */
+  var BGROUP = [[1, 5, '율법서'], [6, 17, '역사서'], [18, 22, '시가서'], [23, 27, '대선지서'], [28, 39, '소선지서'], [40, 43, '복음서'], [44, 44, '역사서'], [45, 57, '바울 서신'], [58, 65, '일반 서신'], [66, 66, '예언서']];
+  function bgroup(b) { for (var i = 0; i < BGROUP.length; i++) if (b >= BGROUP[i][0] && b <= BGROUP[i][1]) return BGROUP[i][2]; return ''; }
+  function nz(s) { return String(s || '').replace(/\s+/g, '').toLowerCase(); }
+  /* 찾기: 책 이름·줄임말이 먼저, 그다음 인물·지명·핵심 낱말·주제·줄거리·짜임·저자 */
+  function bookSearch(q) {
+    var k = nz(q); if (!k) return [];
+    var F = [['people', '인물', 40], ['places', '지명', 35], ['kw', '핵심 낱말', 35], ['theme', '중심 주제', 20], ['outline', '짜임', 20], ['summary', '줄거리', 15], ['author', '저자', 12], ['christ', '그리스도', 10]];
+    var out = [];
+    AID.books.forEach(function (x) {
+      var nm = nz(bookName(x.b)), ab = nz(AB[x.b]), sc = 0, why = [];
+      if (k === nm || k === ab) sc = 100; else if (nm.indexOf(k) === 0) sc = 80; else if (ab.indexOf(k) === 0 && k.length >= ab.length) sc = 75; else if (nm.indexOf(k) >= 0) sc = 60;
+      if (k === String(x.b)) sc = Math.max(sc, 90);
+      F.forEach(function (f) {
+        var v = f[0] === 'outline' ? (x.outline || []).map(function (o) { return o[0]; }).join(' · ') : String(x[f[0]] || '');
+        var i = nz(v).indexOf(k); if (i < 0) return;
+        sc = Math.max(sc, f[2]); if (why.length < 2) {
+          var j = v.replace(/\s+/g, ' ').indexOf(q.trim()); if (j < 0) j = 0;
+          var a = Math.max(0, j - 18), snip = (a ? '…' : '') + v.slice(a, j + q.trim().length + 30) + (j + q.trim().length + 30 < v.length ? '…' : '');
+          why.push('<span class="ad-k">' + f[1] + '</span>' + esc(snip).split(esc(q.trim())).join('<mark>' + esc(q.trim()) + '</mark>'));
+        }
+      });
+      if (sc) out.push({ b: x.b, sc: sc, why: why });
+    });
+    return out.sort(function (a, b) { return b.sc - a.sc || a.b - b.b; });
+  }
   function rBook(L) {
     var b = ST.book || curBook(); ST.book = b;
-    bar('<select class="ad-bsel">' + AID.books.map(function (x) { return '<option value="' + x.b + '"' + (x.b === b ? ' selected' : '') + '>' + x.b + '. ' + esc(bookName(x.b)) + '</option>'; }).join('') + '</select>'
-      + '<button class="ad-chip" data-bk="-1">◀</button><button class="ad-chip" data-bk="1">▶</button><span class="ad-k">지금 읽는 책이 먼저 나옵니다</span>');
-    var sel = M.querySelector('.ad-bsel'); sel.onchange = function () { ST.book = +sel.value; rBook(L); };
-    M.querySelectorAll('[data-bk]').forEach(function (bt) { bt.onclick = function () { ST.book = Math.min(66, Math.max(1, b + (+bt.dataset.bk))); rBook(L); }; });
+    bar('<input class="ad-q ad-bq" placeholder="책 찾기 — 이름·줄임말·인물·지명·낱말 (예: 롬, 요셉, 갈멜, 새 언약)" value="' + esc(ST.bq || '') + '">'
+      + '<button class="ad-chip' + (ST.bgrid ? ' on' : '') + '" data-bgrid="1" title="66권을 갈래별로 한눈에">📚 66권</button>'
+      + '<select class="ad-bsel">' + AID.books.map(function (x) { return '<option value="' + x.b + '"' + (x.b === b ? ' selected' : '') + '>' + x.b + '. ' + esc(bookName(x.b)) + '</option>'; }).join('') + '</select>'
+      + '<button class="ad-chip" data-bk="-1" title="앞 책">◀</button><button class="ad-chip" data-bk="1" title="다음 책">▶</button>');
+    var q = M.querySelector('.ad-bq');
+    q.oninput = function () { ST.bq = q.value; ST.bgrid = false; M.querySelector('[data-bgrid]').classList.remove('on'); drawBook(L); };
+    q.onkeydown = function (e) { if (e.key === 'Enter') { var r = bookSearch(q.value); if (r.length) { ST.book = r[0].b; ST.bq = ''; rBook(L); } } else if (e.key === 'Escape' && q.value) { e.stopPropagation(); q.value = ''; ST.bq = ''; drawBook(L); } };
+    M.querySelector('[data-bgrid]').onclick = function () { ST.bgrid = !ST.bgrid; ST.bq = ''; rBook(L); };
+    var sel = M.querySelector('.ad-bsel'); sel.onchange = function () { ST.book = +sel.value; ST.bq = ''; ST.bgrid = false; rBook(L); };
+    M.querySelectorAll('[data-bk]').forEach(function (bt) { bt.onclick = function () { ST.book = Math.min(66, Math.max(1, b + (+bt.dataset.bk))); ST.bq = ''; ST.bgrid = false; rBook(L); }; });
+    drawBook(L);
+  }
+  function drawBook(L) {
+    var b = ST.book;
+    if (ST.bq && nz(ST.bq)) {
+      var r = bookSearch(ST.bq);
+      L.innerHTML = '<div class="ad-note" style="padding:2px 2px 6px">「' + esc(ST.bq.trim()) + '」 — ' + (r.length ? r.length + '권 (Enter: 첫 책 열기)' : '찾은 책이 없습니다. 책 이름의 앞 글자나 인물·지명으로 찾아보십시오.') + '</div>'
+        + r.map(function (x) { return '<div class="ad-row" data-act="bookopen" data-b="' + x.b + '"><b>' + esc(bookName(x.b)) + '</b> <small style="color:#94a3b8">' + AB[x.b] + ' · ' + (x.b <= 39 ? '구약' : '신약') + ' ' + bgroup(x.b) + '</small>' + (x.why.length ? '<div style="font-size:13px;color:#475569">' + x.why.join('<br>') + '</div>' : '') + '</div>'; }).join('');
+      return;
+    }
+    if (ST.bgrid) {
+      var h = '';
+      [['구약 39권', 1, 39], ['신약 27권', 40, 66]].forEach(function (t) {
+        h += '<div class="ad-sec">' + t[0] + '</div>';
+        BGROUP.filter(function (g) { return g[0] >= t[1] && g[1] <= t[2]; }).forEach(function (g) {
+          var bs = []; for (var i = g[0]; i <= g[1]; i++) bs.push(i);
+          h += '<div style="margin:4px 0 8px"><span class="ad-k" style="display:inline-block;min-width:64px">' + g[2] + ' ' + bs.length + '</span>' + bs.map(function (i) { return '<span class="ad-chip' + (i === b ? ' on' : '') + '" data-act="bookopen" data-b="' + i + '" style="display:inline-block;margin:2px 3px 2px 0">' + esc(bookName(i)) + '</span>'; }).join('') + '</div>';
+        });
+      });
+      L.innerHTML = h + '<div class="ad-src">책을 누르면 그 책 소개가 열립니다.</div>'; return;
+    }
     var x = AID.books.find(function (q) { return q.b === b; }); if (!x) { L.innerHTML = ''; return; }
-    var h = '<h3 style="margin:2px 0 8px;color:#4c3a1e">' + esc(bookName(b)) + ' <small style="color:#94a3b8;font-weight:400">' + (b <= 39 ? '구약' : '신약') + ' ' + b + '번째 책</small></h3>';
+    var chip = function (v) { return String(v || '').split(/\s*,\s*/).filter(Boolean).map(function (w) { return '<span class="ad-chip" data-act="bookq" data-q="' + esc(w.replace(/\(.*?\)/g, '').trim()) + '" title="이 낱말이 나오는 책 찾기" style="display:inline-block;margin:1px 3px 1px 0;font-size:12.5px">' + esc(w) + '</span>'; }).join(''); };
+    var h = '<h3 style="margin:2px 0 8px;color:#4c3a1e">' + esc(bookName(b)) + ' <small style="color:#94a3b8;font-weight:400">' + (b <= 39 ? '구약' : '신약') + ' ' + b + '번째 책 · ' + (x.g || bgroup(b)) + (x.ch ? ' · ' + x.ch + (b === 19 ? '편' : '장') : '') + '</small></h3>';
     h += '<div class="ad-box">' + [['저자', x.author], ['기록 연대', x.date], ['받는 이', x.to], ['중심 주제', x.theme]].filter(function (q) { return q[1]; }).map(function (q) { return '<div><span class="ad-k">' + q[0] + '</span>' + esc(q[1]) + '</div>'; }).join('') + '</div>';
+    if (x.people || x.places || x.kw) h += '<div style="margin:2px 0 6px">' + [['주요 인물', x.people], ['주요 지명', x.places], ['핵심 낱말', x.kw]].filter(function (q) { return q[1]; }).map(function (q) { return '<div style="margin:2px 0"><span class="ad-k" style="display:inline-block;min-width:64px">' + q[0] + '</span>' + chip(q[1]) + '</div>'; }).join('') + '</div>';
     h += '<div style="margin:8px 0">' + esc(x.summary) + '</div>';
     h += '<div class="ad-sec">짜임</div>' + (x.outline || []).map(function (o, i) { return '<div class="ad-row" data-open="o" data-refs="' + esc(o[1]) + '"><b>' + (i + 1) + '.</b> ' + esc(o[0]) + ' ' + spanChip(o[1]) + '</div>'; }).join('');
     if (x.key) h += '<div class="ad-sec">핵심 구절</div>' + verseLines(x.key, 8);
     if (x.christ) h += '<div class="ad-sec">이 책에서 보는 그리스도</div><div>' + esc(x.christ) + '</div>';
-    h += '<div class="ad-src">' + esc(AID.src || '') + '</div>';
+    h += '<div class="ad-src">' + esc(AID.src || '') + ' · 낱말 단추를 누르면 그 낱말이 나오는 다른 책을 찾습니다.</div>';
     L.innerHTML = h;
   }
   /* 🕊 사복음서 대조 */
@@ -25459,6 +25514,8 @@ window.RoutePlay = (function () {
   }
   function act(a, el) {
     var L = M.querySelector('.ad-l');
+    if (a === 'bookopen') { ST.book = +el.dataset.b; ST.bq = ''; ST.bgrid = false; rBook(L); L.scrollTop = 0; return; }
+    if (a === 'bookq') { ST.bq = el.dataset.q; ST.bgrid = false; rBook(L); L.scrollTop = 0; return; }
     if (a === 'per') { ST.pid = +el.dataset.pid; ST.pick = null; var p = pdb().find(function (x) { return x.id === ST.pid; }); if (p) ST.tq = p.name_ko; rTree(L); return; }
     if (a === 'pcard') { var q = pdb().find(function (x) { return x.id === +el.dataset.pid; }); if (q) { try { PersonEngine.showPopup(q, q.name_ko); } catch (e) {} setTimeout(arrange, 0); } return; }
     if (a === 'bmdel') { var o = BM(); delete o[el.dataset.k]; lsSet('kjm_bookmarks', o); decorate(); rBM(L); return; }
