@@ -19692,7 +19692,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-12`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-13`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -24567,7 +24567,7 @@ window.RoutePlay = (function () {
   }
 </style>
 <script>
-/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제 · b20261114-10 점검 고침 · b20261114-11 📜 율법 613 계명)
+/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제 · b20261114-10 점검 고침 · b20261114-11 📜 율법 613 계명 · b20261114-13 관주 창 613·주제, 본문 📜)
    📇 성구사전: 낱말을 넣으면 그 낱말이 나오는 모든 구절을 찾는다.
    - 공개 파일 concord_lemma.json 은 낱말꼴 → 기본형 표만 들어 있다(kiwi 형태소 분석, 개역한글·개역개정 낱말꼴). 성경 본문은 없다.
    - 색인은 이 기기에 연 성경 DB(.bdb)로 처음 열 때 한 번 만든다 → 개역개정 DB면 개역개정으로, 개역한글 DB면 개역한글로 찾는다.
@@ -24598,6 +24598,28 @@ window.RoutePlay = (function () {
       TOP.src = j.src || ''; TOP.srcT = j.srcT || ''; TOP.srcM = j.srcM || ''; return TOP;
     }).catch(function () { return null; });
     return TPP;
+  }
+  /* (b20261114-13) 절 → 그 절이 든 주제 · 613 계명 */
+  var VT = null;
+  function vTopics(b, c, v) {
+    if (!TOP) return [];
+    if (!VT) {
+      VT = new Map();
+      TOP.forEach(function (t, ti) {
+        t.s.forEach(function (x) {
+          x[2].forEach(function (r) {
+            if (!r[2]) return;
+            for (var q = r[2]; q <= Math.min(r[3], r[2] + 20); q++) {
+              var key = r[0] * 1000000 + r[1] * 1000 + q, a = VT.get(key); if (!a) VT.set(key, a = []);
+              var last = a[a.length - 1];
+              if (t.w === 'M') a.push({ t: ti, lab: x[1] || '' });
+              else if (!last || last.t !== ti) a.push({ t: ti });
+            }
+          });
+        });
+      });
+    }
+    return VT.get(b * 1000000 + c * 1000 + v) || [];
   }
   function topicsFor(w, prefix) {
     if (!TOP) return [];
@@ -24637,6 +24659,7 @@ window.RoutePlay = (function () {
   function xrefRender() {
     var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
     bks.innerHTML = '';
+    if (!TOP) { loadTop().then(function () { if (cur && cur.k === 'xref') render(); }); }
     if (!XR) { L.innerHTML = '<div class="cc-note">관주 자료(concord_xref.json)를 받는 중입니다…</div>'; loadXr().then(function (x) { if (x) render(); else L.innerHTML = '<div class="cc-note">관주 자료를 받지 못했습니다.</div>'; }); return; }
     var x = cur, lst = xList(x.b, x.c, x.v), me = IDX.K.get(x.b * 1000000 + x.c * 1000 + x.v);
     info.innerHTML = (x.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 돌아가기</button>' : '')
@@ -24649,6 +24672,18 @@ window.RoutePlay = (function () {
       h += row.replace('<div class="cc-v tp-v"', '<div class="cc-v"');
     });
     if (!lst.length) h += '<div class="cc-note">이 절에는 관주가 없습니다.</div>';
+    var vt = vTopics(x.b, x.c, x.v), m6 = vt.filter(function (q) { return TOP[q.t].w === 'M'; }), ot = vt.filter(function (q) { return TOP[q.t].w !== 'M'; });
+    if (m6.length || ot.length) {
+      var th = '<div class="xr-tp" style="margin:6px 0 8px;padding:6px 8px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;font-size:13.5px;line-height:1.7">';
+      m6.forEach(function (q) { var n = (q.lab.match(/^(\d+)\./) || [])[1] || ''; th += '<div class="tp-h"><span class="see" data-t="' + q.t + '" data-hl="' + esc(n ? n + '. ' : '') + '" style="cursor:pointer;color:#7c2d12">📜 613 계명 ' + esc(q.lab) + '</span></div>'; });
+      if (ot.length) {
+        var seen = {}, parts = [];
+        ot.forEach(function (q) { var k = TOP[q.t].k; if (seen[k] != null) { parts[seen[k]].w += '·' + SRCN[TOP[q.t].w][0]; return; } seen[k] = parts.length; parts.push({ t: q.t, k: k, w: SRCN[TOP[q.t].w][0] }); });
+        th += '<div class="tp-h">📑 이 절이 든 주제 ' + parts.length + ': ' + parts.slice(0, 40).map(function (q) { return '<span class="see" data-t="' + q.t + '" style="cursor:pointer;text-decoration:underline dotted">' + esc(q.k) + '</span><small style="color:#94a3b8">' + q.w + '</small>'; }).join(' · ') + (parts.length > 40 ? ' 외 ' + (parts.length - 40) : '') + '</div>';
+      }
+      h = h.replace(/^(<div class="xr-me[\s\S]*?<\/div>)/, '$1' + th + '</div>');
+      if (h.indexOf('class="xr-tp"') < 0) h = th + '</div>' + h;
+    }
     h += '<div class="tp-src">' + esc(XR.src) + '</div>';
     L.innerHTML = h; L.scrollTop = 0;
   }
@@ -24659,12 +24694,17 @@ window.RoutePlay = (function () {
     var bc = document.getElementById('bible-content'); if (!bc) return;
     bc.querySelectorAll('.xref-btn').forEach(function (e) { e.remove(); });
     if (!xrOn()) return;
-    loadXr().then(function (x) {
-      if (!x) return;
+    Promise.all([loadXr(), loadTop()]).then(function (xx) {
+      var x = xx[0]; if (!x) return;
       bc.querySelectorAll('.verse-row[data-bc]').forEach(function (row) {
         var p = row.dataset.bc.split('-').map(Number), v = parseInt(String(row.id).replace('verse-row-', ''), 10); if (!v) return;
-        var n = xList(p[0], p[1], v).length; if (!n) return;
         var vt = row.querySelector(':scope > .verse-text'); if (!vt || row.querySelector(':scope > .xref-btn')) return;
+        if (p[0] <= 5 && TOP) {   // (b20261114-13) 계명이 든 절에 📜
+          var m6 = vTopics(p[0], p[1], v).filter(function (q) { return TOP[q.t].w === 'M'; });
+          if (m6.length) { var mb = document.createElement('button'); mb.className = 'xref-btn'; mb.textContent = '📜'; mb.title = '613 계명 — ' + m6.map(function (q) { return q.lab; }).join(' / ');
+            mb.onclick = function (e) { e.stopPropagation(); window.openXref(p[0], p[1], v); }; vt.insertAdjacentElement('afterend', mb); }
+        }
+        var n = xList(p[0], p[1], v).length; if (!n) return;
         var bt = document.createElement('button'); bt.className = 'xref-btn'; bt.textContent = '🔗' + n; bt.title = '관주 — 이어진 성구';
         bt.onclick = function (e) { e.stopPropagation(); window.openXref(p[0], p[1], v); };
         vt.insertAdjacentElement('afterend', bt);
@@ -24701,12 +24741,13 @@ window.RoutePlay = (function () {
     if (!q) return out;
     for (var i = 0; i < LEM.length; i++) {
       var w = LEM[i]; if (!IDX.P[i].length) continue;
-      if (w === q) out.push(i); else if (w.indexOf(q) === 0) pre.push(i); else if (q.length > 1 && w.indexOf(q) > 0) mid.push(i);
+      if (w === q || baseName(w) === q) out.push(i); else if (w.indexOf(q) === 0) pre.push(i); else if (q.length > 1 && w.indexOf(q) > 0) mid.push(i);
     }
     var ids = S2L.get(strip(q)); if (ids) ids.forEach(function (i) { if (out.indexOf(i) < 0 && IDX.P[i].length) out.push(i); });   // 넣은 낱말 그대로인 기본형이 맨 앞, 그 꼴이 속한 기본형이 다음
     function byN(a, b) { return IDX.P[b].length - IDX.P[a].length; }
     pre.sort(byN); mid.sort(byN);
-    return out.concat(pre, mid).slice(0, 40);
+    var ex = out.filter(function (i) { return baseName(LEM[i]) === q; }).sort(byN); out = ex.concat(out.filter(function (i) { return ex.indexOf(i) < 0; }));
+    return out.concat(pre, mid).filter(function (x, k, a) { return a.indexOf(x) === k; }).slice(0, 40);   // (b20261114-13) 뜻 나눈 낱말이 두 번 나오지 않게
   }
   /* (b20261114-6 kjm 「구절마다 원어 나누기」) 관리자 기기에 어절 원어 분석(krvnMorph, 개역개정 어절 차례)이 있으면
      고른 낱말이 나오는 어절의 원어 번호로 구절을 나눈다 — 예: 사랑 → 아가페·아가파오·필레오. 어절 수가 안 맞는 절(다른 번역 DB 등)은 「맞춤 안 됨」. */
@@ -24777,7 +24818,7 @@ window.RoutePlay = (function () {
   function relRender() {
     var m = document.getElementById('conc-modal'), box = m.querySelector('.cc-rel');
     if (!cur || cur.k !== 'lem') { box.style.display = 'none'; box.innerHTML = ''; return; }
-    var w = LEM[cur.i], noun = !/다$/.test(w), h = '';   // (주제 보기일 때는 위에서 돌아감)
+    var w = baseName(LEM[cur.i]), noun = !/다$/.test(w), h = '';   /* (b20261114-13) 「눈(보는 눈)」처럼 뜻 나눈 낱말은 괄호 뗀 이름으로 사전·주제 찾기 */   // (주제 보기일 때는 위에서 돌아감)
     // ① 사전
     var items = [], rel = [];
     try {
@@ -24852,7 +24893,7 @@ window.RoutePlay = (function () {
   function topicRender() {
     var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
     var t = TOP[cur.t], nref = 0; t.s.forEach(function (x) { nref += x[2].length; });
-    info.innerHTML = (cur.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 「' + esc(cur.from.k === 'lem' ? LEM[cur.from.i] : cur.from.q || '') + '」</button>' : '') + '<b>📑 주제 「' + esc(t.k) + '」 <small>' + SRCN[t.w] + '</small></b> — 소제목 ' + t.s.length + ' · 성구 ' + nref + '곳';
+    info.innerHTML = (cur.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 「' + esc(cur.from.k === 'lem' ? LEM[cur.from.i] : cur.from.k === 'xref' ? AB[cur.from.b] + ' ' + cur.from.c + ':' + cur.from.v : cur.from.k === 'topic' ? TOP[cur.from.t].k : cur.from.q || '') + '」</button>' : '') + '<b>📑 주제 「' + esc(t.k) + '」 <small>' + SRCN[t.w] + '</small></b> — 소제목 ' + t.s.length + ' · 성구 ' + nref + '곳';
     bks.innerHTML = '';
     var h = '';
     t.s.forEach(function (x) {
@@ -24868,6 +24909,8 @@ window.RoutePlay = (function () {
     });
     h += '<div class="tp-src">' + esc((t.w === 'T' ? TOP.srcT : t.w === 'M' ? TOP.srcM : TOP.src) || '') + '</div>';
     L.innerHTML = h; L.scrollTop = 0;
+    if (cur.hl) { var hd = Array.from(L.querySelectorAll('.tp-h')).find(function (d) { return d.textContent.indexOf(cur.hl) === 0; });
+      if (hd) { hd.style.background = '#fef3c7'; hd.style.borderRadius = '6px'; L.scrollTop = Math.max(0, hd.offsetTop - L.offsetTop - 8); } }
   }
   function more(list) {
     var L = document.getElementById('conc-modal').querySelector('.cc-l');
@@ -24978,7 +25021,7 @@ window.RoutePlay = (function () {
     m.querySelector('.cc-bks').onclick = function (e) { var b = e.target.closest('button[data-b]'); if (!b) return; curBk = +b.dataset.b; render(); };
     m.querySelector('.cc-l').onclick = function (e) {
       var xb = e.target.closest('.xr'); if (xb) { var q3 = xb.dataset.x.split(',').map(Number); loadXr().then(function () { cur = { k: 'xref', b: q3[0], c: q3[1], v: q3[2], from: cur }; render(); }); return; }
-      var sh = e.target.closest('.tp-h .see, .tp-h.see'); if (sh) { cur = { k: 'topic', t: +sh.dataset.t }; render(); return; }
+      var sh = e.target.closest('.tp-h .see, .tp-h.see'); if (sh) { cur = { k: 'topic', t: +sh.dataset.t, from: cur, hl: sh.dataset.hl || '' }; render(); return; }
       var ch = e.target.closest('.tp-ch'); if (ch) { var bc = ch.dataset.bc.split(',').map(Number); if (window.innerWidth <= 768) close(); try { navigateToBibleVerse(bc[0], bc[1], 1); } catch (er) {} return; }
       var v = e.target.closest('.cc-v'); if (!v) return; var i = +v.dataset.i;
       if (window.innerWidth <= 768 && !m.classList.contains('sheet')) close();
