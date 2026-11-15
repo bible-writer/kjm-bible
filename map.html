@@ -19795,7 +19795,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-28`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-29`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25430,7 +25430,7 @@ window.RoutePlay = (function () {
       return;
     }
     m.innerHTML = '<div id="kjm-yt-pick">' + (m._pick || '') + '</div>'
-      + ch.map(function (c) { return '<a href="' + ytChUrl(c, o.q) + '" target="_blank" rel="noopener">🔎 ' + esc(c.n || c.h) + '에서 「' + esc(o.q) + '」</a>'; }).join('')
+      + ch.map(function (c) { return '<a href="' + ytChUrl(c, o.qs || o.q) + '" target="_blank" rel="noopener">🔎 ' + esc(c.n || c.h) + '에서 「' + esc(o.q) + '」</a>'; }).join('')
       + '<a href="' + ytS(o.full || o.q) + '" target="_blank" rel="noopener" style="color:#94a3b8">🌐 유튜브 전체에서 「' + esc(o.full || o.q) + '」 <span style="font-size:11.5px">(확인 안 된 결과)</span></a>'
       + '<a href="#" data-yt="edit" style="font-size:13px;color:#7c5c20">⚙ 찾을 채널 고르기 · 넣기</a>'
       + '<small>📺 는 골라 둔 개요 영상(바이블프로젝트 한국어), 🔎 는 그 채널 안에서만 찾습니다. 🌐 는 ' + esc(YTNOTE) + '</small>';
@@ -25454,7 +25454,9 @@ window.RoutePlay = (function () {
     var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
     var b = bs ? parseInt(bs.value, 10) : 0, c = cs ? parseInt(cs.value, 10) : 0; if (!b || !c) return null;
     var nm = bookName(b) + ' ' + c + (b === 19 ? '편' : '장');
-    return { q: nm, full: nm + ' 강해', b: b, c: c };
+    /* (b20261114-29 kjm 「요한복음 4:15-26절은 있는데」) 교회 채널은 본문을 「요한복음 4:15-26」처럼 적어서 「4장」으로는 거의 못 찾음.
+     * 따옴표 낱말 묶음 "요한복음 4" 로 찾으면 4:15-26 · 4장 모두 잡힘(지구촌교회 1→10개, CTS설교TV 26→29개, 시험 2026-11-15) */
+    return { q: nm, qs: '"' + bookName(b) + ' ' + c + '"', full: nm + ' 강해', b: b, c: c };
   }
   window.kjmYTMenu = function (el, o) { ytMenu(el, o); };
   document.addEventListener('click', function (e) {
