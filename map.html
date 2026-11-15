@@ -19695,7 +19695,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-16`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-17`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25221,7 +25221,28 @@ window.RoutePlay = (function () {
 
   /* ── 창 ── */
   var M = null, TAB = 'book', ST = {};
-  function close() { if (M) { M.style.display = 'none'; document.getElementById('aid-bk').style.display = 'none'; } }
+  function close() { if (M) { M.style.display = 'none'; document.getElementById('aid-bk').style.display = 'none'; M.style.left = ''; M.style.transform = ''; } }
+  /* (b20261114-17) 인물창과 겹치지 않게: 인물창을 도우미 위로 올리고, 넓은 화면에서는 나란히 */
+  /* 오른쪽 위에 뜨는 설명창들(인물·사전·원어·낱말) */
+  var SIDE = [['person-info-panel', 10049], ['term-info-panel', 10049], ['strong-info-panel', 10050], ['word-panel', 10050]];
+  function arrange() {
+    if (!M || M.style.display !== 'flex') return;
+    var vw = window.innerWidth, PS = [];
+    SIDE.forEach(function (d) { var e = document.getElementById(d[0]); if (e && e.style.display !== 'none' && getComputedStyle(e).display !== 'none' && e.offsetWidth) { e.style.zIndex = String(d[1]); PS.push(e); } });
+    if (!PS.length) { M.style.left = ''; M.style.transform = ''; return; }
+    if (vw <= 768) return;
+    var w = M.offsetWidth, pw = Math.max.apply(null, PS.map(function (e) { return e.offsetWidth; })), gap = 12;
+    if (vw >= w + pw + gap + 16) {
+      var x = Math.max(8, Math.round((vw - w - pw - gap) / 2));
+      M.style.left = x + 'px'; M.style.transform = 'translateY(-50%)';
+      var t = Math.max(8, Math.round(M.getBoundingClientRect().top));
+      PS.forEach(function (P) { P.style.left = (x + w + gap) + 'px'; P.style.right = 'auto'; P.style.top = t + 'px'; });
+    } else {
+      M.style.left = ''; M.style.transform = '';
+      PS.forEach(function (P) { P.style.left = 'auto'; P.style.right = '12px'; P.style.top = '12px'; });
+    }
+  }
+  document.addEventListener('click', function () { if (M && M.style.display === 'flex') setTimeout(arrange, 60); });
   function ensure() {
     if (M) return M;
     var bk = document.createElement('div'); bk.id = 'aid-bk'; bk.onclick = close; document.body.appendChild(bk);
@@ -25246,7 +25267,9 @@ window.RoutePlay = (function () {
     M.style.display = 'flex'; document.getElementById('aid-bk').style.display = window.innerWidth <= 768 ? 'block' : 'none';
     var L = M.querySelector('.ad-l'); L.innerHTML = '<div class="ad-note">자료를 받는 중입니다…</div>';
     loadAid().then(function () { render(); });
+    setTimeout(arrange, 0);
   };
+  window.addEventListener('resize', function () { arrange(); });
   function bar(h) { M.querySelector('.ad-bar').innerHTML = h || ''; M.querySelector('.ad-bar').style.display = h ? 'flex' : 'none'; }
   function render() {
     M.querySelectorAll('.ad-tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === TAB); });
@@ -25428,7 +25451,7 @@ window.RoutePlay = (function () {
   function act(a, el) {
     var L = M.querySelector('.ad-l');
     if (a === 'per') { ST.pid = +el.dataset.pid; ST.pick = null; var p = pdb().find(function (x) { return x.id === ST.pid; }); if (p) ST.tq = p.name_ko; rTree(L); return; }
-    if (a === 'pcard') { var q = pdb().find(function (x) { return x.id === +el.dataset.pid; }); if (q) { try { PersonEngine.showPopup(q, q.name_ko); } catch (e) {} } return; }
+    if (a === 'pcard') { var q = pdb().find(function (x) { return x.id === +el.dataset.pid; }); if (q) { try { PersonEngine.showPopup(q, q.name_ko); } catch (e) {} setTimeout(arrange, 0); } return; }
     if (a === 'bmdel') { var o = BM(); delete o[el.dataset.k]; lsSet('kjm_bookmarks', o); decorate(); rBM(L); return; }
     if (a === 'bmnote') { var o2 = BM(), k = el.dataset.k, n = prompt('메모 (비우면 지움)', (o2[k] && o2[k].n) || ''); if (n == null) return; o2[k].n = n.trim(); lsSet('kjm_bookmarks', o2); rBM(L); return; }
     if (a === 'bmmem') { var r = el.dataset.k.split('-').map(Number); memAdd(r[0] + '.' + r[1] + '.' + r[2] + '.' + r[2]); toast('🧠 암송 목록에 넣었습니다'); return; }
