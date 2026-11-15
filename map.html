@@ -19692,7 +19692,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-13`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-14`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -24567,7 +24567,7 @@ window.RoutePlay = (function () {
   }
 </style>
 <script>
-/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제 · b20261114-10 점검 고침 · b20261114-11 📜 율법 613 계명 · b20261114-13 관주 창 613·주제, 본문 📜)
+/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제 · b20261114-10 점검 고침 · b20261114-11 📜 율법 613 계명 · b20261114-13 관주 창 613·주제, 본문 📜 · b20261114-14 ❓ 사용법)
    📇 성구사전: 낱말을 넣으면 그 낱말이 나오는 모든 구절을 찾는다.
    - 공개 파일 concord_lemma.json 은 낱말꼴 → 기본형 표만 들어 있다(kiwi 형태소 분석, 개역한글·개역개정 낱말꼴). 성경 본문은 없다.
    - 색인은 이 기기에 연 성경 DB(.bdb)로 처음 열 때 한 번 만든다 → 개역개정 DB면 개역개정으로, 개역한글 DB면 개역한글로 찾는다.
@@ -24866,7 +24866,7 @@ window.RoutePlay = (function () {
   }
   function render() {
     var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
-    if (!cur) { relRender(); orgRender(null); info.textContent = ''; bks.innerHTML = ''; L.innerHTML = '<div class="cc-note">낱말을 넣고 아래에서 기본형을 고르십시오. 예: 사랑, 믿음, 은혜, 여호와, 회개<br>「글자 그대로」를 고르면 넣은 글자가 그대로 들어 있는 구절을 찾습니다(두 낱말 이상도 됩니다).</div>'; return; }
+    if (!cur) { relRender(); orgRender(null); info.textContent = ''; bks.innerHTML = ''; L.innerHTML = '<div class="cc-note">낱말을 넣고 아래에서 기본형을 고르십시오. 예: 사랑, 믿음, 은혜, 여호와, 회개 · 처음이면 위의 「❓ 사용법」을 눌러 보십시오.<br>「글자 그대로」를 고르면 넣은 글자가 그대로 들어 있는 구절을 찾습니다(두 낱말 이상도 됩니다).</div>'; return; }
     relRender();
     if (cur.k === 'topic') { orgRender(null); topicRender(); return; }
     if (cur.k === 'xref') { orgRender(null); xrefRender(); return; }
@@ -24951,7 +24951,7 @@ window.RoutePlay = (function () {
   function ui() {
     var bk = document.createElement('div'); bk.id = 'conc-bk'; document.body.appendChild(bk);
     var m = document.createElement('div'); m.id = 'conc-modal';
-    m.innerHTML = '<div class="cc-h"><b>📇 성구사전</b><button class="cc-xb" title="본문 각 절 끝에 🔗 관주 단추 보이기/숨기기">🔗 본문 ' + (xrOn() ? '켬' : '끔') + '</button><button class="cc-x" title="닫기">✕</button></div>'
+    m.innerHTML = '<div class="cc-h"><b>📇 성구사전</b><button class="cc-hb" title="성구사전 쓰는 법" style="font-size:12px">❓ 사용법</button><button class="cc-xb" title="본문 각 절 끝에 🔗 관주 단추 보이기/숨기기">🔗 본문 ' + (xrOn() ? '켬' : '끔') + '</button><button class="cc-x" title="닫기">✕</button></div>'
       + '<div class="cc-s"><input class="cc-q" placeholder="낱말·주제·장절 (예: 사랑, 은혜, 요 3:16)" autocomplete="off"><label class="cc-mode"><input type="checkbox" class="cc-raw">글자 그대로</label></div>'
       + '<div class="cc-sug"></div><div class="cc-info"></div><div class="cc-rel"></div><div class="cc-org"></div><div class="cc-bks"></div><div class="cc-l"></div>';
     document.body.appendChild(m);
@@ -25002,6 +25002,26 @@ window.RoutePlay = (function () {
       m.querySelector('.cc-edge.l').addEventListener('pointerdown', function (e) { drag(e, 'l'); });
       window.addEventListener('resize', function () { if (m.style.display !== 'none') m._box(); });
     })(); m.querySelector('.cc-x').onclick = close;
+    /* (b20261114-14 kjm 「성구사전 사용법 안내」) */
+    m.querySelector('.cc-hb').onclick = function () {
+      var L = m.querySelector('.cc-l');
+      ['.cc-sug', '.cc-rel', '.cc-org', '.cc-bks'].forEach(function (q) { var e = m.querySelector(q); if (e) e.innerHTML = ''; });
+      m.querySelector('.cc-info').innerHTML = '<button class="cc-hback" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 돌아가기</button><b>❓ 성구사전 쓰는 법</b>';
+      m.querySelector('.cc-hback').onclick = function () { render(); };
+      var H = [
+        ['🔎 낱말 찾기', '낱말을 넣고 아래 칩에서 기본형을 고르면 그 낱말이 나오는 절이 모두 나옵니다(「사랑」 558절). 「이르다(말하다)」「이르다(닿다)」처럼 꼴은 같고 뜻이 다른 낱말은 나누어 두었습니다. 「글자 그대로」에 표시하면 넣은 글자가 들어 있는 절을 그대로 찾습니다.'],
+        ['📚 책별로 거르기', '결과 위의 권 단추(창 · 출 …)를 누르면 그 책만 봅니다. 절을 누르면 본문 그 자리로 갑니다.'],
+        ['📖 사전 · 주제 줄', '낱말 결과 위에 그 낱말을 다룬 성경사전 항목과 주제(📑)가 함께 나옵니다. 누르면 바로 엽니다.'],
+        ['📑 주제 찾기', '네이브·토리 주제 5천여 개(우리말). 「겸손」「기도」처럼 주제 이름을 넣고 📑 칩을 누릅니다. 「→ 다른 주제」를 누르면 그 주제로 가고, 위의 「←」로 돌아옵니다.'],
+        ['🔗 관주(관련 구절)', '「요 3:16」처럼 장절을 넣거나, 위의 「🔗 본문 켬」을 눌러 본문 각 절 끝에 생긴 🔗 숫자를 누르면 그 절과 이어진 구절이 관련도 차례로 나옵니다. 노란 상자에는 그 절이 든 주제가 나옵니다.'],
+        ['📜 율법 613 계명', '「613」「계명」「율법」을 넣으면 마이모니데스의 613 계명(하라 248 · 하지 말라 365)이 14권·76분류로 나옵니다. 모세오경에서 🔗을 켜면 계명이 든 절에 📜 단추가 붙고, 누르면 그 계명으로 갑니다.'],
+        ['🪟 창 다루기', '큰 화면: 창 머리를 끌어 옮기고, 가장자리·모서리를 끌어 크기를 바꿉니다. 머리를 두 번 누르면 처음 자리로. 휴대폰: 아래에서 올라오는 창입니다.'],
+        ['📋 본문 복사', '본문에서 여러 절을 골라 복사하면 「1 본문」「2 본문」… 한 줄씩, 끝에 (요 3:1-3)이 붙습니다.'],
+        ['ℹ️ 알아 두기', '성구사전은 이 기기에 연 성경 DB로 찾습니다(개역개정 DB를 열면 개역개정으로). 처음 한 번 색인을 만드느라 몇 초 걸립니다.']
+      ];
+      L.innerHTML = '<div style="padding:4px 2px;line-height:1.7;font-size:14px">' + H.map(function (h) { return '<div style="margin:0 0 10px"><b>' + h[0] + '</b><br>' + h[1] + '</div>'; }).join('') + '<div class="tp-src">주제: 네이브(1896)·토리(1897) 공개 저작물 · 관주: OpenBible.info(CC BY) · 613 계명: BibleData(CC BY 4.0) · 우리말 © kjm</div></div>';
+      L.scrollTop = 0;
+    };
     m.querySelector('.cc-xb').onclick = function () { var on = !xrOn(); try { localStorage.setItem('kjm_xref_btn', on ? '1' : '0'); } catch (e) {} this.textContent = '🔗 본문 ' + (on ? '켬' : '끔'); xrDecorate(); };
     var qi = m.querySelector('.cc-q'), tm = null;
     qi.oninput = function () { clearTimeout(tm); tm = setTimeout(sugRender, 150); };
