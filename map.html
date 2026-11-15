@@ -1880,6 +1880,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <button id="btn-drive-redirect" title="폰에서 구글 창이 「popup_closed」로 닫힐 때 — 창 대신 이 페이지가 구글로 갔다가 돌아옵니다">📱 구글 로그인 (페이지 이동 · 폰용)</button>
             <button id="btn-appdata-sync" class="admin-only" onclick="appdataSync(true)">📥 앱자료 받기 (드라이브 성경지도_앱자료) <span id="menu-state-appdata" style="color:#94a3b8;font-size:0.85em"></span></button>
             <label class="menu-check"><input type="checkbox" id="chk-drive-autobackup"> 10분마다 Drive 자동백업</label>
+            <button class="admin-only" onclick="if(window.kjmSelfCheck)kjmSelfCheck()" title="성경 DB·66권 본문·인물 가계도·지명·도우미·공개 자료 파일·화면 오류를 한 번에 봅니다 (새 판 올리기 전에)">🩺 앱 점검 (새 판 올리기 전에)</button>
 
             <div class="menu-sect admin-only">편집 이력</div>
             <button id="btn-coord-overrides" onclick="openCoordOverrideManager()">📍 좌표 보정 이력</button>
@@ -15642,6 +15643,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <a class="link-btn primary" href="${encodeURI(mapUrl)}" target="_blank" rel="noopener">📍 구글 지도</a>
             <a class="link-btn" href="https://www.google.com/maps?layer=c&cbll=${item.lat},${item.lng}" target="_blank" rel="noopener">📷 거리뷰</a>
             <a class="link-btn" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('성경 ' + (item.name||'') + ' ' + englishName + ' ' + modernName + ' 고고학 성지')}" target="_blank" rel="noopener">🖼 구글 이미지 더보기</a>
+            ${(function(){ var ev = window.kjmPlaceEvents ? window.kjmPlaceEvents(item.id) : null; return (item.id != null && (ev === null || ev.length)) ? `<a class="link-btn kjm-tt-open" href="#" data-pid="${item.id}" data-pname="${String(item.name||'').replace(/"/g,'')}" title="이 곳에서 일어난 일을 시대 차례로">🕰 시간 여행${ev && ev.length ? ' ' + ev.length : ''}</a>` : ''; })()}
             <a class="link-btn kjm-yt-open" data-ytq="${(item.name||'').replace(/"/g,'')}" data-ytfull="${('성경 ' + (item.name||'') + ' 성지').replace(/"/g,'')}" href="https://www.youtube.com/results?search_query=${encodeURIComponent('성경 ' + (item.name||'') + ' 성지')}" target="_blank" rel="noopener">▶ 유튜브</a>
           </div>
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">좌표·사진 출처: OpenBible.info Bible Geocoding Data (CC BY 4.0, 사진은 사진마다 적힌 라이선스)${(item.eastonId||item.smithId||item.eastonKo||item.eastonEn||item.smithKo||item.smithEn) ? ' · 해설: Easton/Smith Bible Dictionary 참조' : ''}${item.isbeId != null ? ' · ISBE(1915, Public Domain — CrossWire)' : ''} · 한글 번역 © kjm, 무단 전재·배포 금지 · 성경 인용: 개역개정판 © 대한성서공회</div>
@@ -19795,7 +19797,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-29`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-30`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -20762,7 +20764,7 @@ function initRegionPanel() {
 }
 
 // ===== 성경 경로 =====
-var BIBLE_ROUTES = {"아브라함 여정 (우르→가나안)":{"color":"#8c564b","weight":3,"dashArray":"10,6","points":[[30.96,46.1,"우르 (갈대아)"],[36.86,39.03,"하란"],[32.57,35.68,"세겜"],[31.93,35.5,"벧엘"],[30.05,31.23,"애굽"],[31.25,34.84,"브엘세바"],[31.52,35.27,"헤브론 (마므레)"]]},"야곱 여정 (브엘세바→하란→세겜)":{"color":"#e377c2","weight":3,"dashArray":"10,6","points":[[31.25,34.84,"브엘세바"],[31.93,35.5,"벧엘 (야곱의 사닥다리)"],[36.86,39.03,"하란 (라반)"],[32.32,35.62,"마하나임"],[32.38,35.75,"브니엘 (씨름)"],[32.22,35.29,"세겜"]]},"요셉 애굽행":{"color":"#bcbd22","weight":2.5,"dashArray":"6,6","points":[[32.4,35.23,"도단 (형제에게 팔림)"],[30.05,31.23,"애굽 (바로 궁)"],[30.85,32.35,"고센 (가족 정착)"]]},"출애굽 (이집트→가나안)":{"color":"#e6550d","weight":3,"dashArray":"8,6","points":[[30.05,31.23,"라암셋"],[30.55,32.0,"숙곳"],[30.45,32.35,"에담"],[29.95,32.55,"비하히롯 (홍해 도하)"],[29.57,32.66,"마라"],[29.25,32.98,"엘림"],[28.7,33.62,"르비딤"],[28.54,33.98,"시내산"],[30.62,34.39,"가데스바네아"],[30.83,35.39,"에시온게벨"],[31.77,35.6,"여리고"]]},"포로기 (예루살렘→바벨론)":{"color":"#7f7f7f","weight":3,"dashArray":"12,8","points":[[31.78,35.23,"예루살렘 (멸망 BC586)"],[34.45,36.72,"리블라 (시드기야 심판)"],[36.83,38.01,"갈그미스 경유"],[36.86,39.03,"하란 경유"],[32.54,44.42,"바벨론 (포로)"]]},"에스라 귀환 (바벨론→예루살렘)":{"color":"#17becf","weight":3,"dashArray":"10,5","points":[[32.54,44.42,"바벨론 (출발)"],[36.83,38.01,"갈그미스 경유"],[35.13,36.75,"하맛 경유"],[33.51,36.29,"다메섹 경유"],[31.78,35.23,"예루살렘 (성전 재건)"]]},"예수님 공생애":{"color":"#ff7f0e","weight":3,"dashArray":"6,4","points":[[31.7,35.21,"베들레헴 (탄생)"],[30.05,31.23,"애굽 (피난)"],[32.7,35.3,"나사렛 (성장)"],[32.88,35.55,"가나 (첫 기적)"],[32.84,35.52,"갈릴리 호수"],[32.88,35.53,"가버나움 (사역 본부)"],[33.27,35.22,"두로시돈 지역"],[32.9,35.7,"벳새다"],[32.76,35.69,"데가볼리"],[33.25,35.6,"가이사랴 빌립보"],[32.37,35.54,"사마리아"],[31.86,35.46,"베다니"],[31.78,35.23,"예루살렘 (수난·부활)"],[31.78,35.24,"감람산 (승천)"]]},"빌립 전도 여행":{"color":"#aec7e8","weight":2.5,"dashArray":"6,6","points":[[31.78,35.23,"예루살렘 (출발)"],[32.28,35.25,"사마리아"],[31.5,34.46,"가사 광야 (에디오피아 내시)"],[31.82,34.65,"아소도"],[32.82,35.0,"가이사랴 (정착)"]]},"바울 1차 선교여행":{"color":"#1f77b4","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[36.12,35.92,"실루기아"],[35.18,33.92,"살라미"],[34.77,32.4,"바보"],[36.97,30.85,"버가"],[38.3,31.17,"비시디아안디옥"],[37.87,32.49,"이고니온"],[37.58,32.45,"루스드라"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라(복귀)"],[38.3,31.17,"비시디아안디옥(복귀)"],[36.97,30.85,"버가(복귀)"],[36.88,30.63,"앗달리아"],[36.2,36.15,"안디옥(귀환)"]]},"바울 2차 선교여행":{"color":"#2ca02c","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[37.0,35.32,"다소"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라"],[39.76,26.18,"드로아"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[40.47,22.35,"베뢰아"],[37.97,23.72,"아덴"],[37.94,22.93,"고린도"],[37.94,27.34,"에베소"],[32.82,35.0,"가이사랴"],[31.78,35.23,"예루살렘"],[36.2,36.15,"안디옥(귀환)"]]},"바울 3차 선교여행":{"color":"#9467bd","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[37.87,32.49,"이고니온"],[37.94,27.34,"에베소"],[39.76,26.18,"드로아"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[37.94,22.93,"고린도"],[40.94,24.41,"빌립보(복귀)"],[39.76,26.18,"드로아(복귀)"],[39.1,26.55,"미둘레네"],[37.53,27.28,"밀레도"],[36.41,28.22,"로도"],[36.83,35.5,"두로"],[32.82,35.0,"가이사랴"],[31.78,35.23,"예루살렘"]]},"바울 로마 호송 항해":{"color":"#d62728","weight":3,"dashArray":"5,8","points":[[32.82,35.0,"가이사랴"],[33.87,35.51,"시돈"],[36.6,34.63,"미라"],[35.2,24.47,"미항"],[35.93,15.1,"멜리데"],[37.06,15.28,"수라구사"],[38.9,16.5,"레기온"],[40.9,14.27,"보디올"],[41.9,12.5,"로마"]]}};
+var BIBLE_ROUTES = {"아브라함 여정 (우르→가나안)":{"color":"#8c564b","weight":3,"dashArray":"10,6","points":[[30.96,46.1,"우르 (갈대아)"],[36.86,39.03,"하란"],[32.21,35.28,"세겜"],[31.93,35.5,"벧엘"],[30.05,31.23,"애굽"],[31.25,34.84,"브엘세바"],[31.52,35.27,"헤브론 (마므레)"]]},"야곱 여정 (브엘세바→하란→세겜)":{"color":"#e377c2","weight":3,"dashArray":"10,6","points":[[31.25,34.84,"브엘세바"],[31.93,35.5,"벧엘 (야곱의 사닥다리)"],[36.86,39.03,"하란 (라반)"],[32.32,35.62,"마하나임"],[32.38,35.75,"브니엘 (씨름)"],[32.22,35.29,"세겜"]]},"요셉 애굽행":{"color":"#bcbd22","weight":2.5,"dashArray":"6,6","points":[[32.4,35.23,"도단 (형제에게 팔림)"],[30.05,31.23,"애굽 (바로 궁)"],[30.85,32.35,"고센 (가족 정착)"]]},"출애굽 (이집트→가나안)":{"color":"#e6550d","weight":3,"dashArray":"8,6","points":[[30.05,31.23,"라암셋"],[30.55,32.0,"숙곳"],[30.45,32.35,"에담"],[29.95,32.55,"비하히롯 (홍해 도하)"],[29.57,32.66,"마라"],[29.25,32.98,"엘림"],[28.7,33.62,"르비딤"],[28.54,33.98,"시내산"],[30.62,34.39,"가데스바네아"],[29.55,34.98,"에시온게벨"],[31.77,35.6,"여리고"]]},"포로기 (예루살렘→바벨론)":{"color":"#7f7f7f","weight":3,"dashArray":"12,8","points":[[31.78,35.23,"예루살렘 (멸망 BC586)"],[34.45,36.72,"리블라 (시드기야 심판)"],[36.83,38.01,"갈그미스 경유"],[36.86,39.03,"하란 경유"],[32.54,44.42,"바벨론 (포로)"]]},"에스라 귀환 (바벨론→예루살렘)":{"color":"#17becf","weight":3,"dashArray":"10,5","points":[[32.54,44.42,"바벨론 (출발)"],[36.83,38.01,"갈그미스 경유"],[35.13,36.75,"하맛 경유"],[33.51,36.29,"다메섹 경유"],[31.78,35.23,"예루살렘 (성전 재건)"]]},"예수님 공생애":{"color":"#ff7f0e","weight":3,"dashArray":"6,4","points":[[31.7,35.21,"베들레헴 (탄생)"],[30.05,31.23,"애굽 (피난)"],[32.7,35.3,"나사렛 (성장)"],[32.88,35.55,"가나 (첫 기적)"],[32.84,35.52,"갈릴리 호수"],[32.88,35.53,"가버나움 (사역 본부)"],[33.27,35.22,"두로시돈 지역"],[32.9,35.7,"벳새다"],[32.76,35.69,"데가볼리"],[33.25,35.6,"가이사랴 빌립보"],[32.28,35.2,"사마리아"],[31.86,35.46,"베다니"],[31.78,35.23,"예루살렘 (수난·부활)"],[31.78,35.24,"감람산 (승천)"]]},"빌립 전도 여행":{"color":"#aec7e8","weight":2.5,"dashArray":"6,6","points":[[31.78,35.23,"예루살렘 (출발)"],[32.28,35.25,"사마리아"],[31.5,34.46,"가사 광야 (에디오피아 내시)"],[31.82,34.65,"아소도"],[32.5,34.89,"가이사랴 (정착)"]]},"바울 1차 선교여행":{"color":"#1f77b4","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[36.12,35.92,"실루기아"],[35.18,33.92,"살라미"],[34.77,32.4,"바보"],[36.97,30.85,"버가"],[38.3,31.17,"비시디아안디옥"],[37.87,32.49,"이고니온"],[37.58,32.45,"루스드라"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라(복귀)"],[38.3,31.17,"비시디아안디옥(복귀)"],[36.97,30.85,"버가(복귀)"],[36.88,30.63,"앗달리아"],[36.2,36.15,"안디옥(귀환)"]]},"바울 2차 선교여행":{"color":"#2ca02c","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[36.91,34.89,"다소"],[37.35,33.35,"더베"],[37.58,32.45,"루스드라"],[39.76,26.18,"드로아"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[40.47,22.35,"베뢰아"],[37.97,23.72,"아덴"],[37.94,22.93,"고린도"],[37.94,27.34,"에베소"],[32.5,34.89,"가이사랴"],[31.78,35.23,"예루살렘"],[36.2,36.15,"안디옥(귀환)"]]},"바울 3차 선교여행":{"color":"#9467bd","weight":3,"dashArray":"10,5","points":[[36.2,36.15,"안디옥"],[37.87,32.49,"이고니온"],[37.94,27.34,"에베소"],[39.76,26.18,"드로아"],[40.94,24.41,"빌립보"],[40.62,22.97,"데살로니가"],[37.94,22.93,"고린도"],[40.94,24.41,"빌립보(복귀)"],[39.76,26.18,"드로아(복귀)"],[39.1,26.55,"미둘레네"],[37.53,27.28,"밀레도"],[36.41,28.22,"로도"],[33.27,35.2,"두로"],[32.5,34.89,"가이사랴"],[31.78,35.23,"예루살렘"]]},"바울 로마 호송 항해":{"color":"#d62728","weight":3,"dashArray":"5,8","points":[[32.5,34.89,"가이사랴"],[33.56,35.37,"시돈"],[36.6,34.63,"미라"],[34.93,24.8,"미항"],[35.93,14.41,"멜리데"],[37.06,15.28,"수라구사"],[38.11,15.64,"레기온"],[40.9,14.27,"보디올"],[41.9,12.5,"로마"]]}};
 
 var routeIndividualLayers = {};
 
@@ -25891,6 +25893,219 @@ window.RoutePlay = (function () {
       ref.parentNode.insertBefore(bt, ref.nextSibling);
     }, 60);
   });
+
+  /* ═══ (b20261114-30 kjm 추천 ③) 🩺 앱 스스로 점검 — 관리자 메뉴 「🩺 앱 점검」
+   * 새 판을 올리기 전에 눌러 본다: 성경 DB 수 · 66권 첫 장 열기(절 수 대조) · 인물 가계도 연결 · 지명 좌표 · 도우미 7탭 · 공개 자료 파일 · 화면 오류.
+   * 결과는 창에 ✓/⚠/✗ 로, 「결과 복사」로 Claude 에게 붙여 줄 수 있다. 화면 위치는 끝나면 돌아온다. */
+  function scSleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function scWait(fn, ms) { return new Promise(function (res) { var t0 = Date.now(); (function lp() { var v = null; try { v = fn(); } catch (e) {} if (v || Date.now() - t0 > ms) res(v); else setTimeout(lp, 60); })(); }); }
+  var SC_FILES = ['placeDatabase.json', 'personDatabase.json', 'termDatabase.json', 'verseLinks.json', 'chronology.json', 'study_aids.json', 'concord_topic.json', 'concord_lemma.json', 'concord_xref.json', 'bullinger_fig.json', 'comm_gloss.json', 'dhnt.json', 'dhnt_lex.json', 'murray_ab.json', 'murray_hc.json', 'murray_sp.json', 'spurgeon_me.json', 'spurgeon_fc.json', 'bagster_dl.json', 'niv_idiom.json', 'niv_gloss.json', 'strongDict.json', 'easton_full.json', 'smith_full.json', 'audioTimes.json'];
+  window.kjmSelfCheck = async function (opt) {
+    opt = opt || {};
+    var M2 = document.getElementById('kjm-sc'); if (M2) M2.remove();
+    M2 = document.createElement('div'); M2.id = 'kjm-sc';
+    M2.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10070;width:min(560px,calc(100vw - 16px));max-height:calc(100vh - 24px);overflow:auto;background:#fff;color:#1e293b;border:1px solid #d6c7a8;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);font-size:14px';
+    M2.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#4c3a1e;color:#fff;border-radius:12px 12px 0 0"><b style="flex:1">🩺 앱 점검</b><button id="kjm-sc-copy" style="display:none">결과 복사</button><button id="kjm-sc-x" style="border:0;background:none;color:#fff;font-size:18px;cursor:pointer">✕</button></div><div id="kjm-sc-l" style="padding:8px 12px 12px"></div>';
+    document.body.appendChild(M2);
+    var L = M2.querySelector('#kjm-sc-l'), out = [], t0 = Date.now(), errs = [];
+    M2.querySelector('#kjm-sc-x').onclick = function () { M2.remove(); };
+    var onErr = function (e) { errs.push(String(e && (e.message || (e.reason && e.reason.message) || e.reason) || e).slice(0, 160)); };
+    window.addEventListener('error', onErr); window.addEventListener('unhandledrejection', onErr);
+    function row(st, name, msg) { out.push([st, name, msg]); L.innerHTML = out.map(function (r) { return '<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #f1ece2"><span style="width:20px">' + r[0] + '</span><b style="min-width:110px">' + esc(r[1]) + '</b><span style="flex:1;color:#475569;word-break:break-all">' + esc(r[2]) + '</span></div>'; }).join('') + '<div id="kjm-sc-now" style="color:#94a3b8;padding-top:6px"></div>'; }
+    function now(t) { var n = document.getElementById('kjm-sc-now'); if (n) n.textContent = t; else L.insertAdjacentHTML('beforeend', '<div id="kjm-sc-now" style="color:#94a3b8;padding-top:6px">' + esc(t) + '</div>'); }
+    var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
+    var back = [bs ? +bs.value : 0, cs ? +cs.value : 0];
+    /* 1. 성경 DB */
+    var dbc = null;
+    now('성경 DB 세는 중…');
+    try {
+      if (!dbOK()) row('⚠', '성경 DB', '아직 열리지 않음 — 본문을 한 번 연 뒤 다시 점검하십시오');
+      else {
+        var S = detectedSchema, r = sqliteDbInstance.exec('SELECT ' + S.book + ', ' + S.chapter + ', COUNT(*) FROM ' + S.table + ' GROUP BY ' + S.book + ', ' + S.chapter)[0];
+        dbc = {}; var nb = {}, nv = 0; (r ? r.values : []).forEach(function (v) { dbc[v[0] + '.' + v[1]] = v[2]; nb[v[0]] = (nb[v[0]] || 0) + 1; nv += v[2]; });
+        var bad = []; try { BIBLE_BOOKS.forEach(function (b) { if ((nb[b.id] || 0) !== b.chapters) bad.push(b.abbr + ' ' + (nb[b.id] || 0) + '/' + b.chapters); }); } catch (e) {}
+        row(bad.length ? '✗' : '✓', '성경 DB', Object.keys(nb).length + '권 · ' + Object.keys(dbc).length + '장 · ' + nv.toLocaleString() + '절' + (bad.length ? ' — 장 수 다름: ' + bad.slice(0, 6).join(', ') : ''));
+      }
+    } catch (e) { row('✗', '성경 DB', e.message); }
+    /* 2. 66권 첫 장 열기 */
+    if (dbc && typeof navigateToBibleVerse === 'function') {
+      var miss = [], t1 = Date.now();
+      for (var b = 1; b <= 66; b++) {
+        now('본문 여는 중… ' + bookName(b) + ' 1장');
+        try {
+          navigateToBibleVerse(b, 1, 1);
+          var ok = await scWait(function () { var t = document.querySelector('#bible-content > .chapter-title'); return t && t.textContent.indexOf(bookName(b) + ' 1') === 0 && document.querySelectorAll('#bible-content .verse-row').length ? t : null; }, 4000);
+          var n = document.querySelectorAll('#bible-content .verse-row').length, want = dbc[b + '.1'];
+          if (!ok) miss.push(bookName(b) + ' 안 열림'); else if (want && n < want) miss.push(bookName(b) + ' 1장 ' + n + '/' + want + '절');
+        } catch (e) { miss.push(bookName(b) + ': ' + e.message); }
+      }
+      row(miss.length ? '✗' : '✓', '본문 66권', miss.length ? miss.slice(0, 8).join(' · ') : '66권 1장 모두 열림, 절 수 맞음 (평균 ' + Math.round((Date.now() - t1) / 66) + 'ms)');
+      try { if (back[0]) { navigateToBibleVerse(back[0], back[1] || 1, 1); } } catch (e) {}
+    }
+    /* 3. 인물 가계도 */
+    now('인물 가계도 잇는 중…');
+    try {
+      var P = pdb();
+      if (!P.length) row('⚠', '인물 가계도', '인명 사전을 아직 받지 않음');
+      else {
+        var tot = 0, lost = 0, thrown = [], loop = 0, un = 0;
+        P.forEach(function (p) {
+          try {
+            ['parents', 'siblings', 'partners', 'offspring'].forEach(function (f) {
+              String(p[f] || '').split(/[,+]/).forEach(function (t) { t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return; tot++; if (!pLook(t)) lost++; });
+            });
+            var cur = p, seen = [p];
+            for (var i = 0; i < 6; i++) { GAP.clear(); UNC.clear(); var pa = rel(cur, 'parents'); if (!pa.length) break; if (seen.indexOf(pa[0]) >= 0) { loop++; break; } if (isUn(pa[0])) un++; seen.push(pa[0]); cur = pa[0]; }
+          } catch (e) { thrown.push(pName(p) + ': ' + e.message); }
+        });
+        GAP.clear(); UNC.clear();
+        var st = thrown.length || un ? '✗' : (lost > 40 ? '⚠' : '✓');
+        row(st, '인물 가계도', P.length.toLocaleString() + '명 · 관계 ' + tot.toLocaleString() + ' 중 못 잇는 것 ' + lost + (un ? ' · 「이름 없음」 ' + un : '') + (loop ? ' · 되돌이 ' + loop : '') + (thrown.length ? ' · 오류: ' + thrown.slice(0, 3).join(' / ') : '') + ' (못 잇는 것은 대부분 「~의 아버지」로 적힌 지명)');
+      }
+    } catch (e) { row('✗', '인물 가계도', e.message); }
+    /* 4. 지명 */
+    try {
+      var PL = (typeof placeDatabase !== 'undefined' && Array.isArray(placeDatabase)) ? placeDatabase : [];
+      if (!PL.length) row('⚠', '지명', '지명 자료가 아직 없음');
+      else {
+        var nol = PL.filter(function (x) { return x.lat == null || x.lat === '' || x.lng == null || x.lng === ''; });   /* 위치를 모르는 곳(놋 땅·아사셀 등) — 일부러 비워 둠 */
+        var badc = PL.filter(function (x) { if (nol.indexOf(x) >= 0) return false; var a = +x.lat, o = +x.lng; return !(isFinite(a) && isFinite(o)) || a < 10 || a > 50 || o < -10 || o > 70; });
+        row(badc.length ? '⚠' : '✓', '지명', PL.length.toLocaleString() + '곳 · 위치 모름 ' + nol.length + '곳(일부러 비움: ' + nol.slice(0, 5).map(function (x) { return x.name; }).join(', ') + ') · 좌표 이상 ' + badc.length + (badc.length ? ' (' + badc.slice(0, 5).map(function (x) { return x.name; }).join(', ') + ')' : ''));
+      }
+    } catch (e) { row('✗', '지명', e.message); }
+    /* 5. 도우미 7탭 */
+    now('도우미 탭 여는 중…');
+    try {
+      var A = await loadAid(), tabs = ['book', 'harm', 'pm', 'meas', 'tree', 'bm', 'mem'], tb = [];
+      for (var k = 0; k < tabs.length; k++) {
+        window.openStudyAids(tabs[k]); await scSleep(250);
+        var l2 = M && M.querySelector('.ad-l'); if (!l2 || !l2.innerHTML.trim()) tb.push(tabs[k] + ' 빈 화면');
+      }
+      close();
+      var nv2 = A ? (A.books || []).reduce(function (s, x) { return s + (x.vid || []).length; }, 0) : 0;
+      row(tb.length || !A ? '✗' : '✓', '도우미', (A ? '자료 ' + (A.v || '?') + ' · 책 ' + (A.books || []).length + '권 · 영상 ' + nv2 + '개 · ' : '자료 못 받음 · ') + (tb.length ? tb.join(', ') : '7탭 모두 열림'));
+    } catch (e) { row('✗', '도우미', e.message); }
+    /* 6. 공개 자료 파일 */
+    if (opt.files !== false) {
+      var fb = [], fv = [];
+      for (var f = 0; f < SC_FILES.length; f++) {
+        now('자료 파일 받아 보는 중… ' + SC_FILES[f]);
+        try {
+          var rr = await fetch(SC_FILES[f] + '?sc=' + Date.now(), { cache: 'no-store' });
+          if (!rr.ok) { fb.push(SC_FILES[f] + ' ' + rr.status); continue; }
+          var j = await rr.json(), ver = j && (j.version || j.v || (j.meta && j.meta.version)) || '';
+          fv.push(SC_FILES[f].replace('.json', '') + (ver ? ' ' + ver : '') + (j && j.kjmlock ? '🔒' : ''));
+        } catch (e) { fb.push(SC_FILES[f] + ' 읽기 실패(' + e.message.slice(0, 40) + ')'); }
+      }
+      row(fb.length ? '✗' : '✓', '자료 파일', (fb.length ? '문제: ' + fb.join(' · ') + ' / ' : '') + fv.length + '개 정상 — ' + fv.join(', '));
+    }
+    /* 7. 화면 오류 */
+    window.removeEventListener('error', onErr); window.removeEventListener('unhandledrejection', onErr);
+    row(errs.length ? '✗' : '✓', '화면 오류', errs.length ? errs.slice(0, 5).join(' / ') : '점검 중 오류 없음');
+    var ver2 = ''; try { ver2 = (document.body.innerText.match(/b20\d{6}-\d+/) || [''])[0]; } catch (e) {}
+    var bad3 = out.filter(function (r) { return r[0] === '✗'; }).length, warn = out.filter(function (r) { return r[0] === '⚠'; }).length;
+    now((bad3 ? '✗ 문제 ' + bad3 + '곳' : warn ? '⚠ 살펴볼 것 ' + warn + '곳' : '✓ 이상 없음') + ' · ' + ver2 + ' · ' + ((Date.now() - t0) / 1000).toFixed(1) + '초');
+    var txt = '🩺 앱 점검 ' + ver2 + ' ' + new Date().toLocaleString() + '\n' + out.map(function (r) { return r[0] + ' ' + r[1] + ': ' + r[2]; }).join('\n');
+    var cb = M2.querySelector('#kjm-sc-copy'); cb.style.display = ''; cb.onclick = function () { try { navigator.clipboard.writeText(txt); cb.textContent = '복사됨'; } catch (e) {} };
+    return { ok: !bad3, warn: warn, text: txt };
+  };
+
+  /* ═══ (b20261114-30 kjm 추천 ①) 🕰 한 장소의 시간 여행 — 지명 창 「🕰 시간 여행」
+   * 연대기(chronology.json)의 사건마다 붙은 지명 번호(P)로, 그곳에서 일어난 일을 시대 차례로 모아 보인다.
+   * 사건을 누르면 본문으로, 「연대기」를 누르면 연대기 창의 그 사건으로 간다. */
+  function ttData() { return window._chronoData || null; }
+  window.kjmPlaceEvents = function (pid) { var d = ttData(); if (!d) return null; pid = +pid; return d.items.filter(function (x) { return (x.P || []).indexOf(pid) >= 0; }).sort(function (a, b) { return a.n - b.n; }); };
+  function ttRef(x) { var R = (x.R || [])[0]; return R ? R : null; }
+  function ttClose() { var m = document.getElementById('kjm-tt'); if (m) m.remove(); }
+  window.kjmTimeTravel = function (pid, name) {
+    ttClose();
+    var m = document.createElement('div'); m.id = 'kjm-tt';
+    m.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10065;width:min(480px,calc(100vw - 16px));max-height:min(78vh,760px);display:flex;flex-direction:column;background:#fffdf8;color:#2e2922;border:1px solid #e2d6bf;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);font-size:14px';
+    var nm = String(name || '').replace(/\s*\(.*\)/, '');
+    m.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#7d3529;color:#fff;border-radius:12px 12px 0 0"><b style="flex:1">🕰 ' + esc(nm) + ' — 시간 여행</b><button data-tt="x" style="border:0;background:none;color:#fff;font-size:18px;cursor:pointer">✕</button></div><div class="tt-b" style="overflow:auto;padding:8px 12px 12px">불러오는 중…</div>';
+    document.body.appendChild(m);
+    var B = m.querySelector('.tt-b');
+    var go2 = function () {
+      var d = ttData(), ev = window.kjmPlaceEvents(pid) || [];
+      if (!d) { B.textContent = '연대기 자료(chronology.json)를 받지 못했습니다.'; return; }
+      if (!ev.length) { B.innerHTML = '<div style="color:#64748b">연대기에 이 곳과 이어 둔 사건이 아직 없습니다.</div>'; return; }
+      var eras = d.eras || [], h = '', lastE = -1, ne = 0;
+      ev.forEach(function (x) {
+        if (x.e !== lastE) { lastE = x.e; ne++; h += '<div style="margin:10px 0 4px;padding:3px 8px;background:#f3e7dc;color:#7d3529;border-radius:6px;font-weight:700;font-size:13px">' + esc(eras[x.e] || x.g || '') + '</div>'; }
+        var R = ttRef(x);
+        h += '<div style="display:flex;gap:8px;padding:6px 4px;border-bottom:1px dashed #eadfcb">'
+          + '<div style="flex:1;cursor:pointer" data-tt="go" data-r="' + (R ? R.join('.') : '') + '" title="본문으로"><b>' + esc(x.t) + '</b>' + (x.y ? ' <small style="color:#94a3b8">' + esc(x.y) + '</small>' : '') + '<div style="color:#475569;font-size:13px">' + esc(x.i || '') + '</div></div>'
+          + '<div style="text-align:right;white-space:nowrap"><span data-tt="go" data-r="' + (R ? R.join('.') : '') + '" style="color:#1d4ed8;cursor:pointer;font-size:13px">' + esc(x.r || '') + '</span><br><span data-tt="chr" data-n="' + x.n + '" style="color:#7d3529;cursor:pointer;font-size:12px">연대기 ›</span></div></div>';
+      });
+      B.innerHTML = '<div style="color:#64748b;font-size:13px;margin-bottom:2px">' + ne + '개 시대 · 사건 ' + ev.length + '개 — 연대기 차례</div>' + h
+        + '<div style="color:#94a3b8;font-size:11.5px;margin-top:8px">사건과 지명 잇기: 이 앱의 성경사건연대기 자료. 같은 이름의 다른 곳(예: 벧엘(유다 남방))은 그 지명 창에서 따로 봅니다.</div>';
+    };
+    var p = window.loadChronology ? window.loadChronology() : Promise.resolve(null);
+    Promise.resolve(p).then(go2);
+    m.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-tt]'); if (!t) return;
+      var a = t.dataset.tt;
+      if (a === 'x') ttClose();
+      else if (a === 'go' && t.dataset.r) { var r = t.dataset.r.split('.').map(Number); ttClose(); try { if (window.map && map.closePopup) map.closePopup(); } catch (e2) {} try { navigateToBibleVerse(r[0], r[1], r[2] || 1); } catch (e3) {} }
+      else if (a === 'chr' && window.openChronology) { ttClose(); window.openChronology(+t.dataset.n); }
+    });
+  };
+  document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('.kjm-tt-open'); if (!t) return; e.preventDefault(); e.stopPropagation(); window.kjmTimeTravel(t.dataset.pid, t.dataset.pname); }, true);
+  try { if (window.loadChronology) setTimeout(function () { window.loadChronology(); }, 4000); } catch (e) {}
+
+  /* ═══ (b20261114-30 kjm 추천 ②) 📏 여정 거리와 걸린 날 — 경로 창 각 줄 아래
+   * 지점 사이 직선거리(구면)를 더하고, 걸어서는 하루 25km 로 어림. 바닷길(SEA)은 걸어서 날수에서 뺀다.
+   * 성경이 날수·달수를 적은 곳은 따로 알림(BIB). 실제 길은 굽어 직선보다 1.2~1.5배쯤 길다. */
+  var RSEA = { '바울 1차 선교여행': ['실루기아>살라미', '바보>버가', '앗달리아>안디옥(귀환)'], '바울 2차 선교여행': ['드로아>빌립보', '고린도>에베소', '에베소>가이사랴'], '바울 3차 선교여행': ['드로아(복귀)>미둘레네', '미둘레네>밀레도', '밀레도>로도', '로도>두로', '두로>가이사랴'], '바울 로마 호송 항해': ['*'] };
+  var RLAND = { '바울 로마 호송 항해': ['보디올>로마'] };
+  var RBIB = {
+    '출애굽 (이집트→가나안)': '애굽을 떠난 지 셋째 달에 시내 광야에 이름(출 19:1). 호렙(시내산)에서 가데스 바네아까지는 열하룻길(신 1:2) — 이 지도로 직선 약 235km, 하루 20km 남짓.',
+    '에스라 귀환 (바벨론→예루살렘)': '첫째 달 초하루에 바벨론을 떠나 다섯째 달 초하루에 예루살렘에 이름(스 7:9) — 약 넉 달. 직선 약 1,380km, 쉬는 날까지 넣어 하루 11km 꼴.',
+    '바울 로마 호송 항해': '멜리데에서 석 달을 지낸 뒤 다시 배를 탐(행 28:11). 보디올에서 로마까지는 걸어감(행 28:13-16).',
+    '야곱 여정 (브엘세바→하란→세겜)': '라반이 이레 길을 쫓아와 길르앗 산에서 야곱을 따라잡음(창 31:23).'
+  };
+  function hvKm(a, b, c, d) { var r = Math.PI / 180, x = Math.sin((c - a) * r / 2), y = Math.sin((d - b) * r / 2); var h = x * x + Math.cos(a * r) * Math.cos(c * r) * y * y; return 12742 * Math.asin(Math.sqrt(h)); }
+  function rShort(n) { return String(n || '').replace(/\s*\(.*?\)\s*/g, function (m) { return /복귀|귀환/.test(m) ? m.trim() : ''; }).trim(); }
+  window.kjmRouteInfo = function (name) {
+    var R; try { R = BIBLE_ROUTES[name]; } catch (e) { return null; } if (!R || !R.points) return null;
+    var P = R.points, legs = [], km = 0, land = 0, seaAll = (RSEA[name] || []).indexOf('*') >= 0;
+    for (var i = 0; i < P.length - 1; i++) {
+      var a = rShort(P[i][2]), b = rShort(P[i + 1][2]), k = hvKm(P[i][0], P[i][1], P[i + 1][0], P[i + 1][1]);
+      var key = a + '>' + b, sea = seaAll ? (RLAND[name] || []).indexOf(key) < 0 : (RSEA[name] || []).indexOf(key) >= 0;
+      legs.push([P[i][2], P[i + 1][2], Math.round(k), sea]); km += k; if (!sea) land += k;
+    }
+    return { km: Math.round(km), land: Math.round(land), sea: Math.round(km - land), days: Math.round(land / 25), legs: legs, bib: RBIB[name] || '' };
+  };
+  function rFmt(n) { return Number(n).toLocaleString(); }
+  function rLine(name) {
+    var I = window.kjmRouteInfo(name); if (!I) return '';
+    return '<div class="kjm-rt" style="font-size:10.5px;color:#7c5c20;margin-top:2px">📏 약 ' + rFmt(I.km) + 'km'
+      + (I.land ? ' · 걸어서 약 ' + rFmt(I.days) + '일 길' : '') + (I.sea ? ' · 바닷길 ' + rFmt(I.sea) + 'km' : '')
+      + ' <span class="kjm-rt-more" data-route="' + esc(name) + '" style="color:#1d4ed8;cursor:pointer;text-decoration:underline">구간 보기</span></div>';
+  }
+  function rDecorate() {
+    var body = document.getElementById('route-panel-body'); if (!body) return;
+    body.querySelectorAll('input.rte-chk[data-route]').forEach(function (c) {
+      var lab = c.closest('label'); if (!lab || lab.querySelector('.kjm-rt')) return;
+      var sp = lab.querySelector('span:last-child'); if (sp) sp.insertAdjacentHTML('beforeend', rLine(c.getAttribute('data-route')));
+    });
+  }
+  window.kjmRouteLegs = function (name) {
+    var I = window.kjmRouteInfo(name); if (!I) return;
+    ttClose();
+    var m = document.createElement('div'); m.id = 'kjm-tt';
+    m.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10065;width:min(460px,calc(100vw - 16px));max-height:min(78vh,760px);display:flex;flex-direction:column;background:#fffdf8;color:#2e2922;border:1px solid #e2d6bf;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);font-size:14px';
+    var acc = 0, h = I.legs.map(function (l, i) { acc += l[2]; return '<tr><td style="padding:5px 4px;color:#94a3b8">' + (i + 1) + '</td><td style="padding:5px 4px">' + esc(rShort(l[0])) + ' → ' + esc(rShort(l[1])) + (l[3] ? ' <span title="바닷길">⛵</span>' : '') + '</td><td style="padding:5px 4px;text-align:right;white-space:nowrap">' + rFmt(l[2]) + 'km</td><td style="padding:5px 4px;text-align:right;white-space:nowrap;color:#64748b">' + (l[3] ? '배' : '약 ' + Math.max(1, Math.round(l[2] / 25)) + '일') + '</td><td style="padding:5px 4px;text-align:right;color:#94a3b8;white-space:nowrap">' + rFmt(acc) + '</td></tr>'; }).join('');
+    m.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#7d3529;color:#fff;border-radius:12px 12px 0 0"><b style="flex:1">📏 ' + esc(name) + '</b><button data-tt="x" style="border:0;background:none;color:#fff;font-size:18px;cursor:pointer">✕</button></div>'
+      + '<div style="overflow:auto;padding:8px 12px 12px"><div style="margin-bottom:6px">모두 약 <b>' + rFmt(I.km) + 'km</b>' + (I.land ? ' · 걸어서 약 <b>' + rFmt(I.days) + '일</b> 길(하루 25km)' : '') + (I.sea ? ' · 바닷길 ' + rFmt(I.sea) + 'km' : '') + '</div>'
+      + (I.bib ? '<div style="background:#fff7ed;border-radius:6px;padding:6px 8px;margin-bottom:6px;font-size:13px">📖 ' + esc(I.bib) + '</div>' : '')
+      + '<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:#94a3b8;font-size:12px"><th></th><th style="text-align:left">구간</th><th style="text-align:right">거리</th><th style="text-align:right">걸어서</th><th style="text-align:right">누적</th></tr>' + h + '</table>'
+      + '<div style="color:#94a3b8;font-size:11.5px;margin-top:8px">지점 사이 직선거리입니다. 실제 길은 산과 골짜기를 돌아 1.2~1.5배쯤 깁니다. 걸어서 날수는 하루 25km로 어림했고, 머문 날은 넣지 않았습니다. ⛵ 는 배로 간 구간.</div></div>';
+    document.body.appendChild(m);
+    m.addEventListener('click', function (e) { if (e.target.closest('[data-tt="x"]')) ttClose(); });
+  };
+  document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('.kjm-rt-more'); if (!t) return; e.preventDefault(); e.stopPropagation(); window.kjmRouteLegs(t.dataset.route); }, true);
+  (function rWatch() { var body = document.getElementById('route-panel-body'); if (!body) { setTimeout(rWatch, 1000); return; } rDecorate(); new MutationObserver(rDecorate).observe(body, { childList: true }); })();
 })();
 </script>
 
