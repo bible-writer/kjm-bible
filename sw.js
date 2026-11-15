@@ -1,8 +1,11 @@
+// 성경지도 PWA Service Worker v4.7.0 (b20261114-18: 자료 파일은 바뀌었을 때만 받기)
+// (v4.7.0) .json 자료는 cache:'no-cache' — 브라우저가 서버에 「바뀌었나?」만 묻고(ETag·Last-Modified), 그대로면 304로 끝나 다시 받지 않는다.
+//   옛 사본을 내주는 일은 없다(늘 서버에 확인). map.html 은 예전처럼 no-store + ?t=.
 // 성경지도 PWA Service Worker v4.6.0 (418차: map.html 중간 캐시 건너뛰기)
 // [변경] 네트워크 우선 요청에 cache:'no-store'를 명시해, 서비스워커의 "네트워크 우선" 의도와
 // 달리 브라우저 자체 HTTP 캐시에서 오래된 사본을 받아오던 문제를 해결함.
 // (fetch()만 쓰면 서비스워커 Cache API는 우회해도 브라우저 HTTP 캐시는 그대로 거칠 수 있음)
-const CACHE_NAME = 'bible-map-v4.6.0';
+const CACHE_NAME = 'bible-map-v4.7.0';
 
 // 핵심 캐시 대상
 const CORE_ASSETS = [
@@ -70,7 +73,7 @@ self.addEventListener('fetch', event => {
   // placeDatabase.json, personDatabase.json은 항상 네트워크 우선 (업데이트 반영), 브라우저 캐시도 우회
   if (url.pathname.endsWith('placeDatabase.json') || url.pathname.endsWith('personDatabase.json')) {
     event.respondWith(
-      fetch(event.request, { cache: 'no-store' }).then(response => {
+      fetch(event.request, { cache: 'no-cache' }).then(response => {
         const clone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         return response;
@@ -114,7 +117,7 @@ self.addEventListener('fetch', event => {
   // 일반 요청: 네트워크 → 캐시 폴백
   // cache:'no-store'로 브라우저 자체 HTTP 캐시까지 우회해서, "고쳤는데 안 바뀐다" 문제를 방지
   event.respondWith(
-    fetch(event.request, { cache: 'no-store' }).then(response => {
+    fetch(event.request, { cache: url.pathname.endsWith('.json') ? 'no-cache' : 'no-store' }).then(response => {
       if (response.ok && event.request.method === 'GET') {
         const clone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
