@@ -19793,7 +19793,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-20`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-22`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25163,7 +25163,7 @@ window.RoutePlay = (function () {
   }
   window.openConcordance = function (word) {
     var m = document.getElementById('conc-modal') || ui();
-    m.style.display = 'flex'; if (m._box) m._box();
+    m.style.display = 'flex'; m.style.zIndex = ''; if (m._box) m._box();   // (b20261114-22) 다시 열면 맨 앞
     var L = m.querySelector('.cc-l');
     if (!dbReady()) { L.innerHTML = '<div class="cc-note">성경 DB를 먼저 열어 주십시오.<br>성구사전은 이 기기에 연 성경 DB(.bdb)로 색인을 만듭니다 — 개역개정 DB를 열면 개역개정으로, 개역한글 DB를 열면 개역한글로 찾습니다.</div>'; return; }
     if (!(IDX && IDXDB === sqliteDbInstance)) L.innerHTML = '<div class="cc-note">색인을 만드는 중입니다… (처음 한 번, 몇 초)</div>';
@@ -25200,6 +25200,7 @@ window.RoutePlay = (function () {
     background: #fff; border-radius: 12px; box-shadow: 0 12px 40px rgba(15,23,42,.3); z-index: 10047; display: none; flex-direction: column; overflow: hidden; color: #1e293b; }
   #aid-modal .ad-h { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #4c3a1e; color: #fff; }
   #aid-modal .ad-h b { font-size: 16px; }
+  #aid-modal .ad-h .ad-x { margin-left: 6px; }
   #aid-modal .ad-h button { margin-left: auto; background: rgba(255,255,255,.15); color: #fff; border: 0; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 14px; }
   #aid-modal .ad-tabs { display: flex; gap: 4px; padding: 8px 10px 0; border-bottom: 1px solid #e2e8f0; overflow-x: auto; flex: none; }
   #aid-modal .ad-tabs button { flex: none; border: 1px solid #e2e8f0; border-bottom: 0; background: #f8fafc; border-radius: 8px 8px 0 0; padding: 6px 11px; cursor: pointer; font-size: 13.5px; color: #475569; }
@@ -25346,11 +25347,12 @@ window.RoutePlay = (function () {
     if (M) return M;
     var bk = document.createElement('div'); bk.id = 'aid-bk'; bk.onclick = close; document.body.appendChild(bk);
     M = document.createElement('div'); M.id = 'aid-modal';
-    M.innerHTML = '<div class="ad-h"><b>📚 성경 도우미</b><button class="ad-x" title="닫기">✕</button></div>'
+    M.innerHTML = '<div class="ad-h"><b>📚 성경 도우미</b><button class="ad-hp" title="도우미 쓰는 법" style="font-size:12.5px">❓ 사용법</button><button class="ad-x" title="닫기">✕</button></div>'
       + '<div class="ad-tabs">' + [['book', '📖 책 소개'], ['harm', '🕊 사복음서 대조'], ['pm', '✨ 비유·기적'], ['meas', '⚖ 도량형·화폐·시간'], ['tree', '🌳 가계도'], ['bm', '🔖 책갈피'], ['mem', '🧠 암송']].map(function (t) { return '<button data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>'
       + '<div class="ad-bar"></div><div class="ad-l"></div>';
     document.body.appendChild(M);
     M.querySelector('.ad-x').onclick = close;
+    M.querySelector('.ad-hp').onclick = help;
     M.querySelector('.ad-tabs').onclick = function (e) { var b = e.target.closest('button[data-tab]'); if (b) { TAB = b.dataset.tab; render(); } };
     M.querySelector('.ad-l').addEventListener('click', function (e) {
       var g = e.target.closest('[data-go]'); if (g) { e.stopPropagation(); go(g.dataset.go); return; }
@@ -25363,12 +25365,47 @@ window.RoutePlay = (function () {
   }
   window.openStudyAids = function (tab) {
     ensure(); if (tab) TAB = tab;
-    M.style.display = 'flex'; document.getElementById('aid-bk').style.display = window.innerWidth <= 768 ? 'block' : 'none';
+    M.style.display = 'flex'; M.style.zIndex = ''; document.getElementById('aid-bk').style.display = window.innerWidth <= 768 ? 'block' : 'none';
     var L = M.querySelector('.ad-l'); L.innerHTML = '<div class="ad-note">자료를 받는 중입니다…</div>';
     loadAid().then(function () { render(); });
     setTimeout(arrange, 0);
   };
   window.addEventListener('resize', function () { arrange(); });
+  /* (b20261114-22) 큰 화면에서 떠 있는 창(도우미·성구사전)은 「누른 창이 맨 앞」:
+   * 창 밖을 누르면 그 창을 뒤로(3000) 보내 새로 여는 도감·성구사전 등이 가려지지 않게 하고, 창 안을 누르면 다시 앞으로.
+   * 폰은 창이 화면을 덮는 아래 판이라 그대로 둔다. 설명창(인물·사전·원어·낱말)을 누를 때는 도우미를 그대로 둔다. */
+  var FRONT = [['aid-modal', '10047'], ['conc-modal', '9999']];
+  document.addEventListener('pointerdown', function (e) {
+    if (window.innerWidth <= 768) return;
+    var t = e.target; if (!t || !t.closest) return;
+    if (t.closest('#person-info-panel,#term-info-panel,#strong-info-panel,#word-panel,#aid-vm')) return;
+    FRONT.forEach(function (f) {
+      var el = document.getElementById(f[0]); if (!el || el.style.display === 'none' || !el.offsetWidth) return;
+      el.style.zIndex = el.contains(t) ? f[1] : '3000';
+    });
+  }, true);
+  /* (b20261114-21) ❓ 사용법 */
+  function help() {
+    M.querySelectorAll('.ad-tabs button').forEach(function (b) { b.classList.remove('on'); });
+    bar('<button class="ad-chip ad-hb">← 돌아가기</button><span class="ad-k">📚 성경 도우미 쓰는 법</span>');
+    M.querySelector('.ad-hb').onclick = function () { render(); };
+    var H = [
+      ['📖 책 소개', '66권마다 저자·기록 연대·받는 이·중심 주제·줄거리·짜임·핵심 구절·이 책에서 보는 그리스도, 그리고 주요 인물·지명·핵심 낱말. 짜임 줄을 누르면 그 본문이 펼쳐지고, 장절을 누르면 본문 그 자리로 갑니다.'],
+      ['🔎 책 찾기', '찾기 칸에 책 이름·줄임말(「롬」「갈」), 사람(「요셉」), 지명(「갈멜」), 낱말(「새 언약」)을 넣으면 그 책이 나옵니다. Enter 를 누르면 첫 책이 열리고, Esc 는 지웁니다. 「📚 66권」은 율법서·역사서·시가서·선지서·복음서·서신서 갈래로 66권을 한눈에 보여 줍니다. 책 머리의 인물·지명·낱말 단추를 누르면 그 낱말이 나오는 다른 책을 찾습니다.'],
+      ['🕊 사복음서 대조', '예수님의 생애 220 사건을 차례대로. 줄을 누르면 네 복음서 본문이 나란히 나옵니다. 「오병이어」「변화산」「주기도문」 같은 별명으로도 찾습니다.'],
+      ['✨ 비유·기적', '예수님의 비유 39 · 기적 35 · 구약 기적 28 · 사도들의 기적 18. 줄을 누르면 본문이 펼쳐집니다.'],
+      ['⚖ 도량형·화폐·시간', '규빗·에바·세겔·달란트·데나리온·제삼시·히브리 달과 절기 등 70 낱말의 관계와 오늘날 어림값. 찾기 칸에 낱말을 넣으면 그 줄만 보입니다.'],
+      ['🌳 가계도', '인물 이름을 넣고 Enter. 윗대 6대 · 배우자 · 형제 · 자녀 · 손주가 나옵니다. 이름을 누르면 그 사람 중심으로 다시 그리고, 「인물 설명 열기」는 인물 창을 엽니다(넓은 화면에서는 도우미 옆에 나란히).'],
+      ['🔢 절 번호 메뉴', '본문에서 절 번호를 누르면 🔖 책갈피 · 🧠 암송에 넣기 · 🔗 관주·주제 · 📋 이 절 복사 · 📚 도우미 열기가 나옵니다(낭독 막대가 켜져 있을 때는 낭독 동작).'],
+      ['🔖 책갈피', '넣은 절이 성경 차례/넣은 차례로 모입니다. 📝 메모를 달 수 있고, 본문 절 번호 옆에 🔖 가 붙습니다.'],
+      ['🧠 암송', '내 암송과 기본 암송 268구절. 보기 → 1단계(넷 중 하나) → 2단계(절반) → 3단계(모두, 첫 글자 힌트)로 빈칸이 늘어납니다. 밑줄을 누르면 그 낱말이 보이고, 다 외우면 ✅ 외웠음.'],
+      ['💾 저장과 백업', '책갈피·암송은 이 기기(브라우저)에 저장되며, ⋯ 메뉴의 「백업」 파일에도 함께 들어갑니다. 다른 기기에서 백업을 복원하면 합쳐집니다.'],
+      ['ℹ️ 알아 두기', '성경 본문은 이 기기에 연 성경 DB에서 꺼내 보입니다(도우미 자료에는 장절만 있음). 책 소개·대조표 제목·풀이는 우리말로 새로 쓴 것이고, 저자·연대는 전통적 견해를 먼저 적고 다른 견해를 짧게 함께 적었습니다. 가계도는 STEPBible TIPNR(CC BY 4.0) 자료입니다.']
+    ];
+    var L = M.querySelector('.ad-l');
+    L.innerHTML = '<div style="line-height:1.75;font-size:14px">' + H.map(function (h) { return '<div style="margin:0 0 11px"><b style="color:#4c3a1e">' + h[0] + '</b><br>' + esc(h[1]) + '</div>'; }).join('') + '</div>';
+    L.scrollTop = 0;
+  }
   function bar(h) { M.querySelector('.ad-bar').innerHTML = h || ''; M.querySelector('.ad-bar').style.display = h ? 'flex' : 'none'; }
   function render() {
     M.querySelectorAll('.ad-tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === TAB); });
