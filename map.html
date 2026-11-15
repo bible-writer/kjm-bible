@@ -19793,7 +19793,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-22`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-23`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25548,9 +25548,26 @@ window.RoutePlay = (function () {
     var m = new Map(); P.forEach(function (p) { if (!p || !p.name_en) return; var a = p.name_en + '@' + p.first_ref; if (!m.has(a)) m.set(a, p); var b = a + '-' + p.last_book; if (!m.has(b)) m.set(b, p); });
     PK = { m: m, n: P.length }; return PK;
   }
+  /* (b20261114-23) 인명 자료(TIPNR)는 족보 사이에 「이름 없음(Unnamed#n)」 대를 넣어 두기도 한다(예: 마 1:15 맛단과 야곱 사이 9대).
+   * 윗대를 그릴 때는 이름 없는 대를 건너 이름 있는 조상까지 올라가고, 본문이 바로 「낳고」라 한 같은 절 안이면 그대로 아버지로,
+   * 다른 곳이면 「사이 대 생략」 표시를 붙인다(GAP). */
+  var GAP = new Map();
+  function isUn(q) { return /^Unnamed/.test(q && q.name_en || ''); }
   function rel(p, f) {
     var m = pIndex().m, out = [];
-    String(p && p[f] || '').split(/[,+]/).forEach(function (t) { t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return; var q = m.get(t) || m.get(t.split('-')[0]); if (q && out.indexOf(q) < 0) out.push(q); });
+    String(p && p[f] || '').split(/[,+]/).forEach(function (t) {
+      t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return; var q = m.get(t) || m.get(t.split('-')[0]);
+      if (q && f === 'parents' && isUn(q)) {
+        var k = 0, sameVerse = String(q.first_ref || '') === String(p.first_ref || '');
+        while (q && isUn(q) && k < 20) { var pp = String(q.parents || '').split(/[,+]/)[0].replace(/\([^)]*\)/g, '').trim(); q = pp ? (m.get(pp) || m.get(pp.split('-')[0])) : null; k++; }
+        if (q && !isUn(q)) { if (!sameVerse) GAP.set(q, k); } else q = null;
+      } else if (q && f === 'offspring' && isUn(q)) {
+        var j = 0, sv = String(q.first_ref || '') === String(p.first_ref || '');
+        while (q && isUn(q) && j < 20) { var oo = String(q.offspring || '').split(',')[0].replace(/\([^)]*\)/g, '').trim(); q = oo ? (m.get(oo) || m.get(oo.split('-')[0])) : null; j++; }
+        if (q && !isUn(q)) { if (!sv) GAP.set(q, j); } else q = null;
+      }
+      if (q && !(f !== 'parents' && isUn(q)) && out.indexOf(q) < 0) out.push(q);
+    });
     return out;
   }
   function pName(p) { return p.name_ko || p.name_en; }
@@ -25563,26 +25580,28 @@ window.RoutePlay = (function () {
     q.onchange = q.onkeydown = function (e) { if (e.type === 'keydown' && e.key !== 'Enter') return; ST.tq = q.value.trim(); var c = P.filter(function (p) { return p.name_ko === ST.tq; }); ST.pid = c.length ? c.sort(function (a, b) { return (b.verse_count || 0) - (a.verse_count || 0); })[0].id : null; ST.pick = c.length > 1 ? c.map(function (p) { return p.id; }) : null; draw(); };
     q.oninput = function () { var v = q.value.trim(), dl = M.querySelector('#ad-plist'); if (!v) { dl.innerHTML = ''; return; } var seen = {}; dl.innerHTML = P.filter(function (p) { return p.name_ko && p.name_ko.indexOf(v) === 0 && !seen[p.name_ko] && (seen[p.name_ko] = 1); }).slice(0, 20).map(function (p) { return '<option value="' + esc(p.name_ko) + '">'; }).join(''); };
     function draw() {
-      var me = P.find(function (p) { return p.id === ST.pid; });
+      var me = P.find(function (p) { return p.id === ST.pid; }); GAP.clear();
       if (!me) { L.innerHTML = '<div class="ad-note">인물 이름을 넣고 Enter 를 누르십시오. 예: 다윗, 룻, 야곱, 요셉, 사울</div>'; return; }
       var h = '';
       if (ST.pick && ST.pick.length > 1) h += '<div class="ad-box"><span class="ad-k">같은 이름 ' + ST.pick.length + '명</span>' + ST.pick.map(function (id) { var p = P.find(function (x) { return x.id === id; }); return p ? pBtn(p, p.id === me.id) : ''; }).join(' ') + '</div>';
       /* 윗대: 아버지 쪽으로 6대 */
       var up = [], cur = me;
-      for (var i = 0; i < 6; i++) { var pa = rel(cur, 'parents'); if (!pa.length) break; up.unshift(pa); cur = pa[0]; }
+      var seen = [me];
+      for (var i = 0; i < 6; i++) { var pa = rel(cur, 'parents'); if (!pa.length || seen.indexOf(pa[0]) >= 0) break; up.unshift(pa); seen.push(pa[0]); cur = pa[0]; }
       var tree = '<div class="ad-tree">';
-      up.forEach(function (g, i) { tree += '<div class="ad-gen"><span class="lab">' + (up.length - i) + '대 위</span>' + g.map(function (p) { return pBtn(p); }).join(' ') + '</div>'; });
+      up.forEach(function (g, i) { tree += '<div class="ad-gen"><span class="lab">' + (up.length - i) + '대 위</span>' + g.map(function (p) { return pBtn(p) + (GAP.has(p) ? ' <small class="ad-k" title="인명 자료가 사이에 이름 없는 대를 두었습니다">(조상 · 사이 대 생략)</small>' : ''); }).join(' ') + '</div>'; });
       var sib = rel(me, 'siblings'), par = rel(me, 'partners'), kid = rel(me, 'offspring');
       tree += '<div class="ad-gen"><span class="lab">본인</span>' + pBtn(me, true) + (par.length ? ' <span class="ad-k">배우자</span>' + par.map(function (p) { return pBtn(p); }).join(' ') : '') + '</div>';
       if (sib.length) tree += '<div class="ad-gen"><span class="lab">형제자매</span>' + sib.map(function (p) { return pBtn(p); }).join(' ') + '</div>';
       if (kid.length) {
-        tree += '<div class="ad-gen"><span class="lab">자녀</span>' + kid.map(function (p) { return pBtn(p); }).join(' ') + '</div>';
+        tree += '<div class="ad-gen"><span class="lab">자녀</span>' + kid.map(function (p) { return pBtn(p) + (GAP.has(p) ? ' <small class="ad-k">(자손 · 사이 대 생략)</small>' : ''); }).join(' ') + '</div>';
         var gk = []; kid.forEach(function (k) { rel(k, 'offspring').forEach(function (g) { if (gk.indexOf(g) < 0) gk.push(g); }); });
-        if (gk.length) tree += '<div class="ad-gen"><span class="lab">손주</span>' + gk.slice(0, 40).map(function (p) { return pBtn(p); }).join(' ') + (gk.length > 40 ? ' …' : '') + '</div>';
+        if (gk.length) tree += '<div class="ad-gen"><span class="lab">손주</span>' + gk.slice(0, 40).map(function (p) { return pBtn(p) + (GAP.has(p) ? ' <small class="ad-k">(자손 · 사이 대 생략)</small>' : ''); }).join(' ') + (gk.length > 40 ? ' …' : '') + '</div>';
       }
       tree += '</div>';
       h += tree;
-      h += '<div class="ad-box" style="margin-top:12px"><b>' + esc(pName(me)) + '</b> ' + esc(me.description_ko || '') + (me.first_ref ? ' <span class="ad-k">처음 나오는 곳</span>' + refChips(osisRef(me.first_ref)) : '') + ' <button class="ad-btn" data-act="pcard" data-pid="' + me.id + '">인물 설명 열기</button></div>';
+      h += '<div class="ad-box" style="margin-top:12px"><b>' + esc(pName(me)) + '</b> ' + esc(me.description_ko || '') + (me.first_ref ? ' <span class="ad-k">처음 나오는 곳</span>' + refChips(me.name_en === 'Jesus' && /^Isa\.7\.14/.test(me.first_ref) ? '40.1.1.1' : osisRef(me.first_ref)) : '')
+        + (me.name_en === 'Jesus' && /@Mat\.1\./.test(String(me.parents || '')) ? '<div class="ad-k" style="margin-top:4px">윗대는 마태복음 1장(요셉 쪽, 다윗 왕가) 계보입니다. 누가복음 3:23-38 계보(헬리…)는 마리아 쪽으로 보는 견해가 많습니다.</div>' : '') + ' <button class="ad-btn" data-act="pcard" data-pid="' + me.id + '">인물 설명 열기</button></div>';
       h += '<div class="ad-src">인명 사전의 가족 칸(STEPBible TIPNR, CC BY 4.0)으로 그립니다. 윗대는 아버지 쪽으로 따라갑니다.</div>';
       L.innerHTML = h;
     }
