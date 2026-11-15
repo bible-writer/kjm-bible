@@ -2181,6 +2181,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       이 책(<span id="commentary-empty-bookname"></span>)에 등록된 주석이 없습니다.<br>
       <button class="btn-catalog-trigger" id="btn-commentary-empty-add" style="margin-top:10px;background:#b45309">⚙ 주석 등록하기</button>
     </div>
+    <!-- (b20261114-20 kjm 「그방법을 좋겟다」) 이 절, 다른 주석에서 — 지금 절을 풀이한 다른 주석의 첫 줄, 누르면 그 주석으로 -->
+    <div id="commentary-others" style="display:none;flex:none;max-height:34%;overflow:hidden;flex-direction:column;background:#fffbeb;border-top:2px solid #f59e0b"></div>
     <!-- 주석 패널 내 플로팅 네비게이션 버튼 (PDF/DB 공용) -->
     <div id="commentary-nav-buttons" style="position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:999">
       <button onclick="commentaryNavScroll('home')" style="width:36px;height:36px;border:none;border-radius:50%;background:rgba(30,41,59,0.8);color:#e2e8f0;font-size:14px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.3)" title="맨 위로">⏫</button>
@@ -10766,6 +10768,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       });
     }
     async function deleteCommentaryItem(id) {
+      try { if (typeof CommOthers !== 'undefined') CommOthers.forget(id); } catch (e) {}
       // 기억해 둔 PDF 도 함께 버린다(2026-09-12)
       try {
         if (typeof Commentary !== 'undefined' && Commentary._pdfCache && Commentary._pdfCache.has(id)) {
@@ -11619,6 +11622,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           populateChapterJumpForItem(item);
           localStorage.setItem(`commentary_last_item_book_${item.bookId}`, String(itemId));
           if (typeof applyCommentaryFontSize === 'function') applyCommentaryFontSize(commentaryFontSize);
+          try { CommOthers.show(item.bookId, chapter, vNum, itemId); } catch (e) { console.warn('[다른 주석]', e); }
           // 글 주석 위 필기: 이 절의 필기를 불러옴
           InkEngine.mode = 'text';
           InkEngine.resizeText();
@@ -11772,6 +11776,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           } else {
             const page = findPageForVerse(fullItem, chapter, vNum);
             await this.openViewer(item.id, page);
+            try { CommOthers.show(bookId, chapter, vNum, item.id); } catch (e) { console.warn('[다른 주석]', e); }
             if (!silent) showToast(`${chapter}:${vNum} 절 → ${page}페이지로 이동`, 'success');
           }
         } catch (err) {
@@ -11780,6 +11785,90 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         }
       }
     };
+    /* ── (b20261114-20) 이 절, 다른 주석에서 ──
+     * 주석창은 하나 그대로 두고, 아래 띠에 같은 책의 다른 주석이 이 절을 어떻게 풀었는지 첫 줄을 보인다.
+     * 글 주석(json)은 그 절(없으면 앞 절부터 이어지는 풀이)의 첫 문장, PDF 주석은 몇 쪽인지. 누르면 그 주석으로 바꿔 연다.
+     * 띠는 접을 수 있고(이 기기에 기억), 다른 주석이 없으면 보이지 않는다. 주석 항목은 최근 8개만 메모리에 둔다. */
+    const CommOthers = (() => {
+      const cache = new Map();
+      async function full(id) {
+        if (cache.has(id)) { const v = cache.get(id); cache.delete(id); cache.set(id, v); return v; }
+        const it = await getCommentaryItem(id); cache.set(id, it);
+        while (cache.size > 8) cache.delete(cache.keys().next().value);
+        return it;
+      }
+      function plain(t) {
+        return String(t || '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
+      }
+      function firstLine(t) {
+        let p = plain(t); if (localStorage.getItem('commentary_eng_to_kor') !== 'off') { try { p = englishBookNamesToKorean(p); } catch (e) {} }
+        const m = p.match(/^(.{20,140}?[.!?。」](?=\s|$))/);
+        const s = m ? m[1] : p.slice(0, 120);
+        return s + (s.length < p.length ? ' …' : '');
+      }
+      /* 그 절의 글 — 정확한 절이 없으면 같은 장의 앞 절(그 절부터 이어지는 풀이) */
+      function textAt(it, c, v) {
+        const vt = it.versesText || {}; if (vt[c + ':' + v]) return { t: vt[c + ':' + v], from: v };
+        let best = null; Object.keys(vt).forEach(k => { const [cc, vv] = k.split(':').map(Number); if (cc === c && vv <= v && (!best || vv > best)) best = vv; });
+        return best ? { t: vt[c + ':' + best], from: best } : null;
+      }
+      function hasPage(it, c, v) {
+        const vm = it.verseMap || {}; if (vm[c + ':' + v]) return true;
+        return Object.keys(vm).some(k => +k.split(':')[0] === c) || !!(it.chapterMap && it.chapterMap[c]);
+      }
+      function open(el) { const on = el.style.display !== 'none'; return on; }
+      let tok = 0, last = null;
+      async function show(bookId, c, v, curId) {
+        const box = document.getElementById('commentary-others'); if (!box) return;
+        last = [bookId, c, v, curId];
+        const items = (commentaryIndexByBook[bookId] || []).filter(it => it.id !== curId);
+        if (!items.length) { box.style.display = 'none'; navPos(); return; }
+        const my = ++tok;
+        const rows = [];
+        for (const it of items) {
+          let f = null; try { f = await full(it.id); } catch (e) {}
+          if (my !== tok) return;
+          if (!f) continue;
+          const name = (typeof commentaryGroupName === 'function' ? commentaryGroupName(it) : it.name);
+          if (f.type === 'json') {
+            const r = textAt(f, c, v); if (!r) continue;
+            rows.push({ id: it.id, name, tag: r.from === v ? '' : c + ':' + r.from + '절부터', line: firstLine(r.t) });
+          } else if (hasPage(f, c, v)) {
+            rows.push({ id: it.id, name, tag: 'PDF ' + findPageForVerse(f, c, v) + '쪽', line: '' });
+          }
+        }
+        if (my !== tok) return;
+        if (!rows.length) { box.style.display = 'none'; navPos(); return; }
+        const folded = localStorage.getItem('kjm_comm_others') === '0';
+        box.innerHTML = '<div onclick="CommOthers.fold()" style="display:flex;align-items:center;gap:6px;padding:5px 12px;cursor:pointer;font-size:12.5px;font-weight:700;color:#92400e;flex:none;user-select:none">'
+          + '<span>' + (folded ? '▸' : '▾') + '</span><span>📚 이 절, 다른 주석에서 (' + rows.length + ')</span><span style="margin-left:auto;font-weight:400;color:#b45309">' + c + ':' + v + ' · 누르면 그 주석으로</span></div>'
+          + (folded ? '' : '<div style="overflow-y:auto;padding:0 10px 8px">' + rows.map(r =>
+            '<div onclick="CommOthers.go(' + r.id + ')" style="padding:5px 6px;border-top:1px dashed #fcd34d;cursor:pointer;font-size:13px;line-height:1.5;color:#1e293b" onmouseover="this.style.background=\'#fef3c7\'" onmouseout="this.style.background=\'\'">'
+            + '<b style="color:#92400e">' + escHtml(r.name) + '</b>' + (r.tag ? ' <small style="color:#a16207">' + escHtml(r.tag) + '</small>' : '')
+            + (r.line ? '<div style="color:#475569">' + escHtml(r.line) + '</div>' : '') + '</div>').join('') + '</div>');
+        box.style.display = 'flex';
+        navPos();
+      }
+      /* 오른쪽 아래 둥근 단추(맨 위·앞 쪽…)가 띠를 가리지 않게 */
+      function navPos() {
+        const nav = document.getElementById('commentary-nav-buttons'), box = document.getElementById('commentary-others');
+        if (nav) nav.style.bottom = ((box && box.style.display !== 'none' ? box.offsetHeight : 0) + 16) + 'px';
+      }
+      async function go(id) {
+        if (!last) return; const [b, c, v] = last;
+        try {
+          const f = await full(id); if (!f) return;
+          if (f.type === 'json') await Commentary.showTextViewer(id, f, c, v);
+          else { await Commentary.openViewer(id, findPageForVerse(f, c, v)); show(b, c, v, id); }
+          try { localStorage.setItem('commentary_last_item_book_' + b, String(id)); } catch (e) {}
+        } catch (e) { console.warn('[다른 주석 열기]', e); }
+      }
+      function fold() { try { localStorage.setItem('kjm_comm_others', localStorage.getItem('kjm_comm_others') === '0' ? '1' : '0'); } catch (e) {} if (last) show.apply(null, last); }
+      function forget(id) { cache.delete(id); }
+      try { const bx = document.getElementById('commentary-others'); if (bx && window.ResizeObserver) new ResizeObserver(navPos).observe(bx); } catch (e) {}
+      return { show, go, fold, forget, navPos };
+    })();
+    window.CommOthers = CommOthers;
     // 어떤 항목이 어떤 주석에 속하는지 판단할 때 쓰는 이름
     // (CDB/AAB는 "매튜헨리 창세기"처럼 "주석이름 + 책이름"으로 저장되므로 책이름을 떼어낸다)
     function commentaryGroupName(it) {
@@ -19704,7 +19793,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-19`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-20`;
         document.title = `바이블 맵 스터디`;
       }
     }
