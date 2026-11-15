@@ -19793,7 +19793,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-25`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-26`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25409,6 +25409,8 @@ window.RoutePlay = (function () {
   function bar(h) { M.querySelector('.ad-bar').innerHTML = h || ''; M.querySelector('.ad-bar').style.display = h ? 'flex' : 'none'; }
   function render() {
     M.querySelectorAll('.ad-tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === TAB); });
+    /* (b20261114-26) 휴대폰처럼 좁으면 탭 줄이 옆으로 밀리므로, 고른 탭이 보이게 옮긴다 */
+    try { var tb = M.querySelector('.ad-tabs'), on = tb && tb.querySelector('button.on'); if (on && (on.offsetLeft < tb.scrollLeft || on.offsetLeft + on.offsetWidth > tb.scrollLeft + tb.clientWidth)) tb.scrollLeft = on.offsetLeft - 8; } catch (e) {}
     var L = M.querySelector('.ad-l');
     if (!AID && ['book', 'harm', 'pm', 'meas'].indexOf(TAB) >= 0) { bar(''); L.innerHTML = '<div class="ad-note">도우미 자료(study_aids.json)를 받지 못했습니다. 인터넷 연결을 확인해 주십시오.</div>'; return; }
     ({ book: rBook, harm: rHarm, pm: rPM, meas: rMeas, tree: rTree, bm: rBM, mem: rMem })[TAB](L);
