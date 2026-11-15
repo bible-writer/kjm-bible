@@ -4562,6 +4562,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           ${enLine}
           ${moreBtn}
           ${articleBody}
+          <div style="margin-top:8px"><a class="kjm-yt-open" data-ytq="${escHtml(p.name_ko || clickedName || '')}" data-ytfull="${escHtml('성경 인물 ' + (p.name_ko || clickedName || '') + (briefest && !/시대/.test(briefest) ? ' ' + briefest : ''))}" href="https://www.youtube.com/results?search_query=${encodeURIComponent('성경 인물 ' + (p.name_ko || clickedName || '') + (briefest && !/시대/.test(briefest) ? ' ' + briefest : ''))}" target="_blank" rel="noopener" style="font-size:0.85em;color:#b91c1c;text-decoration:none;border:1px solid #fecaca;background:#fff5f5;border-radius:12px;padding:2px 10px">▶ 유튜브에서 찾기</a> <span style="font-size:0.7em;color:#94a3b8">믿을 만한 채널 안에서 찾습니다</span></div>
           ${sourceCredit}
         `;
         panel.style.display = 'block';
@@ -15641,6 +15642,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <a class="link-btn primary" href="${encodeURI(mapUrl)}" target="_blank" rel="noopener">📍 구글 지도</a>
             <a class="link-btn" href="https://www.google.com/maps?layer=c&cbll=${item.lat},${item.lng}" target="_blank" rel="noopener">📷 거리뷰</a>
             <a class="link-btn" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent('성경 ' + (item.name||'') + ' ' + englishName + ' ' + modernName + ' 고고학 성지')}" target="_blank" rel="noopener">🖼 구글 이미지 더보기</a>
+            <a class="link-btn kjm-yt-open" data-ytq="${(item.name||'').replace(/"/g,'')}" data-ytfull="${('성경 ' + (item.name||'') + ' 성지').replace(/"/g,'')}" href="https://www.youtube.com/results?search_query=${encodeURIComponent('성경 ' + (item.name||'') + ' 성지')}" target="_blank" rel="noopener">▶ 유튜브</a>
           </div>
           <div style="margin-top:10px;padding-top:6px;border-top:1px dashed #e2e8f0;font-size:9px;color:#c4c9d4;line-height:1.4">좌표·사진 출처: OpenBible.info Bible Geocoding Data (CC BY 4.0, 사진은 사진마다 적힌 라이선스)${(item.eastonId||item.smithId||item.eastonKo||item.eastonEn||item.smithKo||item.smithEn) ? ' · 해설: Easton/Smith Bible Dictionary 참조' : ''}${item.isbeId != null ? ' · ISBE(1915, Public Domain — CrossWire)' : ''} · 한글 번역 © kjm, 무단 전재·배포 금지 · 성경 인용: 개역개정판 © 대한성서공회</div>
         </div>
@@ -19793,7 +19795,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-26`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-28`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25208,6 +25210,17 @@ window.RoutePlay = (function () {
   #aid-modal .ad-bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #f1f5f9; flex: none; }
   #aid-modal .ad-bar input, #aid-modal .ad-bar select { border: 1px solid #cbd5e1; border-radius: 8px; padding: 6px 9px; font-size: 14px; min-width: 0; }
   #aid-modal .ad-bar input { flex: 1 1 180px; }
+  #aid-modal a.ad-chip { text-decoration: none; display: inline-block; margin: 2px 3px 2px 0; }
+  #aid-modal a.ad-yt { border-color: #fecaca; background: #fff5f5; color: #b91c1c; }
+  .kjm-yt-btn { display: inline-block; margin-left: 8px; padding: 1px 9px; border: 1px solid #fecaca; border-radius: 12px; background: #fff5f5; color: #b91c1c; font-size: 12.5px; font-weight: 600; cursor: pointer; vertical-align: middle; user-select: none; }
+  #kjm-yt-menu { position: fixed; z-index: 10060; background: #fff; border: 1px solid #e2d6bf; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.18); padding: 8px; max-width: min(340px, calc(100vw - 16px)); font-size: 14px; color: #1e293b; }
+  #kjm-yt-menu a { display: block; padding: 7px 8px; border-radius: 7px; color: #1e293b; text-decoration: none; }
+  #kjm-yt-menu a:hover { background: #fff5f5; }
+  #kjm-yt-menu button { border: 1px solid #d6c7a8; background: #fffaf0; color: #4c3a1e; border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 13px; }
+  #kjm-yt-menu small { display: block; color: #94a3b8; font-size: 11.5px; padding: 4px 8px 0; line-height: 1.4; }
+  body.dark-mode #kjm-yt-menu, body.dark #kjm-yt-menu { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+  body.dark-mode #kjm-yt-menu a, body.dark #kjm-yt-menu a { color: #e2e8f0; }
+  body.dark-mode #kjm-yt-menu a:hover, body.dark #kjm-yt-menu a:hover { background: #334155; }
   #aid-modal .ad-chip { border: 1px solid #d6c7a8; background: #fffaf0; color: #4c3a1e; border-radius: 14px; padding: 3px 10px; cursor: pointer; font-size: 13px; }
   #aid-modal .ad-chip.on { background: #4c3a1e; color: #fff; }
   #aid-modal mark { background: #fde68a; color: inherit; padding: 0 1px; border-radius: 2px; }
@@ -25263,6 +25276,15 @@ window.RoutePlay = (function () {
 
   /* ── 자료 ── */
   var AID = null, AIDP = null;
+  /* (b20261114-27 kjm 「성경 관련 유튜브 쉽게 찾기」 · b-28 채널 안에서 찾기) ▶ 유튜브 —
+   * 책 소개·장: 골라 둔 영상(바이블프로젝트 한국어 책별 개요, study_aids.json 1.0.3 의 vid — 2026-11-15 영상이 있는지 확인)
+   * 장·인물·지명: 유튜브 검색 바로가기(결과는 유튜브가 고름 — 안내를 붙인다). 영상을 앱 안에 넣지 않고 유튜브로 연다. */
+  var YTW = 'https://www.youtube.com/watch?v=', YTS = 'https://www.youtube.com/results?search_query=';
+  var YTNOTE = '유튜브가 고른 결과이며, 이 앱이 내용을 확인하지 않았습니다.';
+  function ytS(q) { return YTS + encodeURIComponent(q); }
+  window.kjmYTSearch = ytS; window.kjmYTNote = YTNOTE;
+  function vidFor(x, c) { return (x && x.vid || []).filter(function (v) { return !c || !v[2] || (v[2] <= c && c <= v[3]); }); }
+  function vidLabel(b, v) { return (v[1] || bookName(b)) + (v[2] ? ' ' + v[2] + '~' + v[3] + (b === 19 ? '편' : '장') : '') + ' 개요'; }
   function loadAid() {
     if (AID) return Promise.resolve(AID); if (AIDP) return AIDP;
     AIDP = fetch('study_aids.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { AID = j; return j; }).catch(function () { return null; });
@@ -25311,11 +25333,12 @@ window.RoutePlay = (function () {
   /* ── 책갈피 · 암송 저장 (kjm_bookmarks: {"b-c-v": {t, n}} · kjm_memory: [{r, t, ok}]) ── */
   function BM() { return ls('kjm_bookmarks', {}); }
   function MEM() { return ls('kjm_memory', []); }
-  window.aidBackupData = function () { return { bookmarks: BM(), memory: MEM() }; };
+  window.aidBackupData = function () { var o = { bookmarks: BM(), memory: MEM() }; var y = ls('kjm_yt_ch', null); if (y) o.ytch = y; return o; };
   window.aidRestoreData = function (o) {
     if (!o || typeof o !== 'object') return;
     if (o.bookmarks && typeof o.bookmarks === 'object') { var b = BM(); Object.keys(o.bookmarks).forEach(function (k) { if (!b[k]) b[k] = o.bookmarks[k]; }); lsSet('kjm_bookmarks', b); }
     if (Array.isArray(o.memory)) { var m = MEM(); o.memory.forEach(function (x) { if (x && x.r && !m.some(function (y) { return y.r === x.r; })) m.push(x); }); lsSet('kjm_memory', m); }
+    if (Array.isArray(o.ytch)) lsSet('kjm_yt_ch', o.ytch);
     decorate();
   };
 
@@ -25371,6 +25394,94 @@ window.RoutePlay = (function () {
     setTimeout(arrange, 0);
   };
   window.addEventListener('resize', function () { arrange(); });
+  /* 본문 장 제목 옆 ▶ 영상 단추 · 인물창·지명창 ▶ 유튜브 → 같은 메뉴
+   * (b20261114-28 kjm 「이단 차단」→「믿을 만한 채널 안에서만 찾기 + 추가할 수 있게」)
+   * 채널 안 검색(https://www.youtube.com/@채널/search?query=) — 이단 이름은 어디에도 적지 않는다. 기본 4곳은 2026-11-15 시험함. */
+  var YTDEF = [{ h: '@cbsbibleschool', n: 'CBS성서학당' }, { h: '@cgn', n: 'CGN' }, { h: '@ctspreach', n: 'CTS설교TV' }, { h: '@cts_tv', n: 'CTS기독교TV' }];
+  function ytCh() { var v = ls('kjm_yt_ch', null); return Array.isArray(v) ? v : YTDEF.slice(); }
+  function ytChUrl(c, q) { return 'https://www.youtube.com/' + c.h + '/search?query=' + encodeURIComponent(q); }
+  function ytParse(t) {
+    t = String(t || '').trim(); var m;
+    if ((m = /youtube\.com\/(@[^\/?#\s]+)/i.exec(t)) || (m = /^(@[^\/?#\s]+)$/.exec(t))) return decodeURIComponent(m[1]);
+    if ((m = /youtube\.com\/(channel\/UC[\w-]{20,})/i.exec(t)) || (m = /^(UC[\w-]{20,})$/.exec(t))) return /^UC/.test(m[1]) ? 'channel/' + m[1] : m[1];
+    return '';
+  }
+  function ytClose() { var m = document.getElementById('kjm-yt-menu'); if (m) m.remove(); }
+  function ytPlace(m, btn) { var r = btn.getBoundingClientRect(), w = m.offsetWidth; m.style.left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) + 'px'; m.style.top = Math.max(8, Math.min(r.bottom + 6, window.innerHeight - m.offsetHeight - 8)) + 'px'; }
+  /* o: { q: 채널 안에서 찾을 말, full: 유튜브 전체 검색 말, b, c: 장 메뉴면 책·장(개요 영상) } */
+  function ytMenu(btn, o) {
+    ytClose();
+    var m = document.createElement('div'); m.id = 'kjm-yt-menu'; m._o = o; m._btn = btn;
+    document.body.appendChild(m); ytDraw(m); ytPlace(m, btn);
+    if (o.b) loadAid().then(function (A) {
+      var x = A && (A.books || []).find(function (q) { return q.b === o.b; }), pk = document.getElementById('kjm-yt-pick'); if (!x || !pk) return;
+      m._pick = vidFor(x, o.c).map(function (v) { return '<a href="' + YTW + v[0] + '" target="_blank" rel="noopener">📺 ' + esc(vidLabel(o.b, v)) + ' <span style="color:#94a3b8;font-size:12px">바이블프로젝트</span></a>'; }).join(''); pk.innerHTML = m._pick; ytPlace(m, btn);
+    });
+  }
+  function ytDraw(m) {
+    var o = m._o, ch = ytCh();
+    if (m._edit) {
+      m.innerHTML = '<div style="font-weight:700;padding:2px 6px 6px">⚙ 찾을 채널 고르기</div>'
+        + ch.map(function (c, i) { return '<div style="display:flex;align-items:center;gap:6px;padding:4px 6px"><span style="flex:1">' + esc(c.n || c.h) + ' <span style="color:#94a3b8;font-size:12px">' + esc(c.h) + '</span></span><button data-yt="up" data-i="' + i + '" title="위로">▲</button><button data-yt="del" data-i="' + i + '" title="빼기">✕</button></div>'; }).join('')
+        + (ch.length ? '' : '<small>채널이 없습니다. 아래에 넣거나 「기본으로」를 누르십시오.</small>')
+        + '<div style="display:flex;gap:4px;padding:6px"><input id="kjm-yt-add" placeholder="채널 주소 또는 @이름" style="flex:1;min-width:0;padding:5px 7px;border:1px solid #d6c7a8;border-radius:6px"><input id="kjm-yt-nm" placeholder="보일 이름" style="width:90px;padding:5px 7px;border:1px solid #d6c7a8;border-radius:6px"><button data-yt="add">넣기</button></div>'
+        + '<small id="kjm-yt-msg">유튜브에서 채널을 열고 주소창 주소(예: youtube.com/@cbsbibleschool)를 붙여 넣으십시오. 이 기기에만 저장되며 「백업」에 함께 들어갑니다.</small>'
+        + '<div style="display:flex;gap:6px;padding:8px 6px 2px"><button data-yt="reset">↺ 기본으로</button><span style="flex:1"></span><button data-yt="done">✓ 다 됐음</button></div>';
+      return;
+    }
+    m.innerHTML = '<div id="kjm-yt-pick">' + (m._pick || '') + '</div>'
+      + ch.map(function (c) { return '<a href="' + ytChUrl(c, o.q) + '" target="_blank" rel="noopener">🔎 ' + esc(c.n || c.h) + '에서 「' + esc(o.q) + '」</a>'; }).join('')
+      + '<a href="' + ytS(o.full || o.q) + '" target="_blank" rel="noopener" style="color:#94a3b8">🌐 유튜브 전체에서 「' + esc(o.full || o.q) + '」 <span style="font-size:11.5px">(확인 안 된 결과)</span></a>'
+      + '<a href="#" data-yt="edit" style="font-size:13px;color:#7c5c20">⚙ 찾을 채널 고르기 · 넣기</a>'
+      + '<small>📺 는 골라 둔 개요 영상(바이블프로젝트 한국어), 🔎 는 그 채널 안에서만 찾습니다. 🌐 는 ' + esc(YTNOTE) + '</small>';
+  }
+  function ytAct(m, a, i) {
+    var ch = ytCh();
+    if (a === 'edit') { m._edit = true; }
+    else if (a === 'done') { m._edit = false; }
+    else if (a === 'reset') { lsSet('kjm_yt_ch', YTDEF.slice()); }
+    else if (a === 'del') { ch.splice(i, 1); lsSet('kjm_yt_ch', ch); }
+    else if (a === 'up' && i > 0) { var t = ch[i - 1]; ch[i - 1] = ch[i]; ch[i] = t; lsSet('kjm_yt_ch', ch); }
+    else if (a === 'add') {
+      var inp = document.getElementById('kjm-yt-add'), nm = document.getElementById('kjm-yt-nm'), h = ytParse(inp && inp.value), msg = document.getElementById('kjm-yt-msg');
+      if (!h) { if (msg) { msg.textContent = '채널 주소를 알아보지 못했습니다. youtube.com/@이름 또는 youtube.com/channel/UC… 꼴로 넣으십시오.'; msg.style.color = '#b91c1c'; } return; }
+      if (!ch.some(function (c) { return c.h.toLowerCase() === h.toLowerCase(); })) ch.push({ h: h, n: (nm && nm.value.trim()) || h.replace(/^@|^channel\//, '') });
+      lsSet('kjm_yt_ch', ch);
+    }
+    ytDraw(m); ytPlace(m, m._btn);
+  }
+  function ytChapterOpts() {
+    var bs = document.getElementById('book-select'), cs = document.getElementById('chapter-select');
+    var b = bs ? parseInt(bs.value, 10) : 0, c = cs ? parseInt(cs.value, 10) : 0; if (!b || !c) return null;
+    var nm = bookName(b) + ' ' + c + (b === 19 ? '편' : '장');
+    return { q: nm, full: nm + ' 강해', b: b, c: c };
+  }
+  window.kjmYTMenu = function (el, o) { ytMenu(el, o); };
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('.kjm-yt-btn, .kjm-yt-open');
+    if (t) {
+      e.preventDefault(); e.stopPropagation();
+      var cur = document.getElementById('kjm-yt-menu'); if (cur && cur._btn === t) { ytClose(); return; }
+      var o = t.classList.contains('kjm-yt-btn') ? ytChapterOpts() : { q: t.dataset.ytq || '', full: t.dataset.ytfull || t.dataset.ytq || '' };
+      if (o && o.q) ytMenu(t, o); return;
+    }
+    var m = document.getElementById('kjm-yt-menu'); if (!m) return;
+    if (!(e.target.closest && e.target.closest('#kjm-yt-menu'))) { ytClose(); return; }
+    var act = e.target.closest('[data-yt]');
+    if (act) { e.preventDefault(); e.stopPropagation(); ytAct(m, act.dataset.yt, +act.dataset.i || 0); return; }
+    if (e.target.closest('a')) setTimeout(ytClose, 50);
+  }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target && e.target.id === 'kjm-yt-add') { var m = document.getElementById('kjm-yt-menu'); if (m) ytAct(m, 'add', 0); } });
+  function ytBtn() {
+    var bc = document.getElementById('bible-content'); if (!bc) return;
+    var t = bc.querySelector(':scope > .chapter-title'); if (!t || t.querySelector('.kjm-yt-btn')) return;
+    var s = document.createElement('span'); s.className = 'kjm-yt-btn'; s.textContent = '▶ 영상'; s.title = '이 장 관련 유튜브 영상 (골라 둔 개요 영상 · 검색)';
+    t.appendChild(s);
+  }
+  (function ytWatch() {
+    var bc = document.getElementById('bible-content'); if (!bc) { setTimeout(ytWatch, 800); return; }
+    ytBtn(); new MutationObserver(function () { ytBtn(); }).observe(bc, { childList: true });
+  })();
   /* (b20261114-22) 큰 화면에서 떠 있는 창(도우미·성구사전)은 「누른 창이 맨 앞」:
    * 창 밖을 누르면 그 창을 뒤로(3000) 보내 새로 여는 도감·성구사전 등이 가려지지 않게 하고, 창 안을 누르면 다시 앞으로.
    * 폰은 창이 화면을 덮는 아래 판이라 그대로 둔다. 설명창(인물·사전·원어·낱말)을 누를 때는 도우미를 그대로 둔다. */
@@ -25494,6 +25605,11 @@ window.RoutePlay = (function () {
     h += '<div class="ad-sec">짜임</div>' + (x.outline || []).map(function (o, i) { return '<div class="ad-row" data-open="o" data-refs="' + esc(o[1]) + '"><b>' + (i + 1) + '.</b> ' + esc(o[0]) + ' ' + spanChip(o[1]) + '</div>'; }).join('');
     if (x.key) h += '<div class="ad-sec">핵심 구절</div>' + verseLines(x.key, 8);
     if (x.christ) h += '<div class="ad-sec">이 책에서 보는 그리스도</div><div>' + esc(x.christ) + '</div>';
+    var vs = vidFor(x, 0), va = AID.vidAll || {};
+    h += '<div class="ad-sec">▶ 영상으로 보기</div><div>' + vs.map(function (v) { return '<a class="ad-chip ad-yt" href="' + YTW + v[0] + '" target="_blank" rel="noopener" title="바이블프로젝트 한국어 · 유튜브에서 열림">▶ ' + esc(vidLabel(b, v)) + '</a>'; }).join('')
+      + ((b <= 39 ? va.ot : va.nt) ? '<a class="ad-chip ad-yt" href="' + YTW + (b <= 39 ? va.ot : va.nt) + '" target="_blank" rel="noopener">▶ ' + (b <= 39 ? '구약' : '신약') + ' 전체 개요</a>' : '')
+      + '<a class="ad-chip kjm-yt-open" href="' + ytS(bookName(b) + ' 강해') + '" target="_blank" rel="noopener" data-ytq="' + esc(bookName(b)) + '" data-ytfull="' + esc(bookName(b) + ' 강해') + '">🔎 「' + esc(bookName(b)) + '」 믿을 만한 채널에서 찾기</a></div>'
+      + '<div class="ad-src" style="margin-top:2px">' + esc(AID.srcV || '') + '</div>';
     h += '<div class="ad-src">' + esc(AID.src || '') + ' · 낱말 단추를 누르면 그 낱말이 나오는 다른 책을 찾습니다.</div>';
     L.innerHTML = h;
   }
