@@ -19692,7 +19692,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-14`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-15`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -24567,7 +24567,7 @@ window.RoutePlay = (function () {
   }
 </style>
 <script>
-/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제 · b20261114-10 점검 고침 · b20261114-11 📜 율법 613 계명 · b20261114-13 관주 창 613·주제, 본문 📜 · b20261114-14 ❓ 사용법)
+/* (b20261114-3 kjm 「성구사전 만들수 있나?」 → 「map 안에」 「기본형으로 묶기」 · b20261114-4 사전·원어 줄 · b20261114-5 📑 네이브 주제 · b20261114-6 원어별 나누기·휴대폰 · b20261114-7 🔗 관주 · b20261114-8 창 옮기기·크기, 바탕 안 가림 · b20261114-9 📑 토리 주제 · b20261114-10 점검 고침 · b20261114-11 📜 율법 613 계명 · b20261114-13 관주 창 613·주제, 본문 📜 · b20261114-14 ❓ 사용법 · b20261114-15 원어별 기능어 모음)
    📇 성구사전: 낱말을 넣으면 그 낱말이 나오는 모든 구절을 찾는다.
    - 공개 파일 concord_lemma.json 은 낱말꼴 → 기본형 표만 들어 있다(kiwi 형태소 분석, 개역한글·개역개정 낱말꼴). 성경 본문은 없다.
    - 색인은 이 기기에 연 성경 DB(.bdb)로 처음 열 때 한 번 만든다 → 개역개정 DB면 개역개정으로, 개역한글 DB면 개역한글로 찾는다.
@@ -24752,6 +24752,13 @@ window.RoutePlay = (function () {
   /* (b20261114-6 kjm 「구절마다 원어 나누기」) 관리자 기기에 어절 원어 분석(krvnMorph, 개역개정 어절 차례)이 있으면
      고른 낱말이 나오는 어절의 원어 번호로 구절을 나눈다 — 예: 사랑 → 아가페·아가파오·필레오. 어절 수가 안 맞는 절(다른 번역 DB 등)은 「맞춤 안 됨」. */
   function normCode(c) { var m = /^([HG])0*(\d+)([A-Za-z]?)$/.exec(String(c).trim()); return m ? m[1] + m[2] + m[3] : ''; }
+  /* (b20261114-15 kjm 「y」) 관리자 원어별 줄: 전치사·접속사·관사 같은 기능어 번호는 「기능어」 하나로 모음.
+     한 어절에 뜻 낱말 번호가 함께 있으면 기능어 번호는 빼고, 기능어 번호만 있는 어절만 「기능어」로. */
+  var FW = { H0853: 1, H0413: 1, H5921: 1, H5973: 1, H0854: 1, H3588: 1, H0834: 1, H3605: 1, H0518: 1, H3808: 1, H0408: 1, H4480: 1, H5704: 1, H8478: 1, H6440: 0,
+    H1571: 1, H0637: 1, H3651: 1, H2009: 1, H2088: 1, H1931: 1, H0859: 1, H0589: 1, H0595: 1, H0587: 1, H1992: 1, H0428: 1, H4100: 1, H4310: 1, H0335: 1, H0349: 1, H3541: 1, H6258: 1, H0227: 1,
+    G1722: 1, G1519: 1, G1537: 1, G3588: 1, G2532: 1, G1161: 1, G1909: 1, G4314: 1, G1223: 1, G3326: 1, G5259: 1, G0575: 1, G3844: 1, G4012: 1, G5228: 1, G2596: 1, G1063: 1, G3767: 1, G0235: 1, G3754: 1,
+    G2443: 1, G1487: 1, G3361: 1, G3756: 1, G0302: 1, G1437: 1, G5613: 1, G2531: 1, G0846: 1, G3778: 1, G1565: 1, G3739: 1, G5101: 1, G5100: 1, G1473: 1, G4771: 1, G2249: 1, G5210: 1, G1438: 1, G3956: 1, G4862: 1, G1715: 1, G3694: 1, G0473: 1, G1799: 1 };
+  function isFW(c) { var m = /^([HG])(\d+)/.exec(c); if (!m) return false; if (m[1] === 'H' && +m[2] >= 9000) return true; var k = m[1] + ('0000' + m[2]).slice(-4); return FW[k] === 1; }
   function codeSplit() {
     if (!cur || cur.k !== 'lem') return null;
     var KM = (typeof krvnMorph !== 'undefined') ? krvnMorph : null; if (!KM || !KM.v) return null;
@@ -24763,7 +24770,8 @@ window.RoutePlay = (function () {
       var got = [];
       ws.forEach(function (w, k) {
         var ids = S2L.get(strip(w)); if (!ids || ids.indexOf(i0) < 0) return;
-        String(arr[k][0] || '').split(',').forEach(function (c) { c = normCode(c); if (c && got.indexOf(c) < 0) got.push(c); });
+        var cs0 = String(arr[k][0] || '').split(',').map(normCode).filter(Boolean), real = cs0.filter(function (c) { return !isFW(c); });
+        (real.length ? real : cs0.length ? ['*'] : []).forEach(function (c) { if (got.indexOf(c) < 0) got.push(c); });
       });
       if (!got.length) got = ['-'];
       vc.set(i, got);
@@ -24775,10 +24783,13 @@ window.RoutePlay = (function () {
   function orgRender(cs) {
     var box = document.getElementById('conc-modal').querySelector('.cc-org');
     if (!cs) { box.style.display = 'none'; box.innerHTML = ''; return; }
-    var keys = Array.from(cs.by.keys()).sort(function (a, b) { return cs.by.get(b).length - cs.by.get(a).length; });
+    var tail = function (k) { return k === '*' || k === '-' || k === '?' ? 1 : 0; };
+    var keys = Array.from(cs.by.keys()).sort(function (a, b) { return tail(a) - tail(b) || cs.by.get(b).length - cs.by.get(a).length; });
+    var main = keys.filter(function (k) { return !tail(k); }), rest = keys.filter(tail);
+    keys = main.slice(0, 16).concat(rest);
     var D = (typeof strongKoDict !== 'undefined' && strongKoDict) ? strongKoDict : {};
-    box.innerHTML = '<span class="lab">원어별</span><button data-c=""' + (cur.code ? '' : ' class="on"') + '>전체</button>' + keys.slice(0, 16).map(function (c) {
-      var e = D[c] || D[c.replace(/[A-Za-z]$/, '')] || D[c + 'a'] || D[c + 'b'] || {}, nm = c === '?' ? '맞춤 안 됨' : c === '-' ? '번호 없음' : c + ' ' + (e.k || '');
+    box.innerHTML = '<span class="lab">원어별</span><button data-c=""' + (cur.code ? '' : ' class="on"') + '>전체</button>' + keys.map(function (c) {
+      var e = D[c] || D[c.replace(/[A-Za-z]$/, '')] || D[c + 'a'] || D[c + 'b'] || {}, nm = c === '?' ? '맞춤 안 됨' : c === '-' ? '번호 없음' : c === '*' ? '기능어(전치사 등)' : c + ' ' + (e.m ? String(e.m).split(/[:;,·]/)[0].trim().slice(0, 12) : (e.k || ''));
       return '<button data-c="' + c + '"' + (cur.code === c ? ' class="on"' : '') + ' title="' + esc(e.m || '') + '">' + esc(nm) + '<small>' + cs.by.get(c).length + '</small></button>';
     }).join('');
     box.style.display = 'flex';
