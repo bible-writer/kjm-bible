@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>성경 필사 Mobile v1-14 (음성입력)</title>
+<title>성경 필사 Mobile v1-15 (음성입력)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Gowun+Batang:wght@400;700&display=swap');
@@ -823,7 +823,7 @@ html, body { height: 100%; background: var(--bg); font-family: "Gowun Batang", s
   <div id="voiceWritingStatus" style="font-size:13px;color:var(--accent);margin-top:6px;min-height:18px;text-align:center;"></div>
   <div style="display:flex;gap:8px;margin-top:10px;">
     <button class="m-btn btn-gold" onclick="saveWriting()" style="flex:1;">💾 저장</button>
-    <button class="m-btn btn-outline" onclick="deleteWritingM()" style="color:#c00;border-color:#c00;flex:0 0 auto;padding:10px 16px;">🗑 삭제</button>
+    <button class="m-btn btn-outline" onclick="deleteWritingM()" style="color:#c00;border-color:#c00;flex:0 0 auto;width:auto;padding:10px 16px;">🗑 삭제</button><!-- v1-15: width:auto — .m-btn 의 width:100% 때문에 저장 단추가 눌리고 삭제가 화면 밖으로 넘치던 것 -->
   </div>
 </div>
 
