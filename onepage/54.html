@@ -9,9 +9,10 @@ body{padding:8px 0}
 .wrap{margin:0 auto 10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.18);background:#fff}
 .wrap>div{transform-origin:0 0}
 #mv-btn{position:fixed;right:12px;bottom:12px;z-index:9;border:0;border-radius:22px;padding:10px 16px;background:#1F3A5F;color:#fff;font:700 14px 'Noto Sans KR',sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer}
+#mv-sp{position:fixed;right:12px;bottom:60px;z-index:9;border:1px solid #CBD5E1;border-radius:16px;padding:6px 12px;background:#fff;color:#1F3A5F;font:700 12.5px 'Noto Sans KR',sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer}
 #mv-btn:disabled{opacity:.6;cursor:default}
 svg[data-mvsvg]{cursor:pointer}
-@media print{#mv-btn{display:none}[data-mv]{opacity:1!important;transform:none!important}}
+@media print{#mv-btn,#mv-sp{display:none}[data-mv]{opacity:1!important;transform:none!important}}
 @page{size:A3 portrait;margin:0}
 @media print{html,body{background:#fff;padding:0}.wrap{width:auto!important;height:auto!important;margin:0;box-shadow:none;overflow:visible;break-after:page}.wrap:last-of-type{break-after:auto}.wrap>div{transform:none!important}}
 </style></head><body>
@@ -22,12 +23,15 @@ svg[data-mvsvg]{cursor:pointer}
 document.querySelectorAll('.wrap').forEach(function(d){d.style.width=w+'px';d.style.height=Math.ceil(1587*s)+'px';d.firstElementChild.style.transform='scale('+s+')';});}
 fit();addEventListener('resize',fit);})();
 </script>
+<button id="mv-sp" type="button" title="움직이는 빠르기 바꾸기"></button>
 <button id="mv-btn" type="button" title="연대표와 지도를 순서대로 움직여 보여 줍니다">▶ 움직여 보기</button>
 <script>
 (function(){
-var NS='http://www.w3.org/2000/svg',busy=false,uid=0;
-function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
-function fade(el,on,ms){el.style.transition=ms?('opacity '+ms+'ms, transform '+ms+'ms'):'none';el.style.opacity=on?'1':'0';}
+var NS='http://www.w3.org/2000/svg',busy=false,uid=0,SP=[['느리게',1.6],['보통',1],['빠르게',0.55]],si=1;
+try{var _v=localStorage.getItem('kjm_mv_speed');if(_v!==null&&+_v>=0&&+_v<3)si=+_v;}catch(e){}
+function T(ms){return Math.round(ms*SP[si][1]);}
+function wait(ms){return new Promise(function(r){setTimeout(r,T(ms));});}
+function fade(el,on,ms){ms=T(ms);el.style.transition=ms?('opacity '+ms+'ms, transform '+ms+'ms'):'none';el.style.opacity=on?'1':'0';}
 function svgs(kind){return Array.prototype.filter.call(document.querySelectorAll('svg'),function(v){return v.querySelector('[data-mv="'+kind+'"]');});}
 function drawPath(p,ms){
   var svg=p.ownerSVGElement,len=p.getTotalLength(),vb=svg.viewBox.baseVal,id='mvm'+(++uid);
@@ -37,8 +41,8 @@ function drawPath(p,ms){
   c.setAttribute('stroke-width','10');c.setAttribute('stroke-linecap','round');c.setAttribute('stroke-linejoin','round');
   c.style.strokeDasharray=len;c.style.strokeDashoffset=len;m.appendChild(c);svg.insertBefore(m,svg.firstChild);
   p.setAttribute('mask','url(#'+id+')');p.style.opacity='1';
-  c.getBoundingClientRect();c.style.transition='stroke-dashoffset '+ms+'ms ease-in-out';c.style.strokeDashoffset='0';
-  return wait(ms+60).then(function(){p.removeAttribute('mask');m.remove();});
+  c.getBoundingClientRect();c.style.transition='stroke-dashoffset '+T(ms)+'ms ease-in-out';c.style.strokeDashoffset='0';
+  return wait(ms+80).then(function(){p.removeAttribute('mask');m.remove();});
 }
 function playTL(svg){
   var ev=Array.prototype.slice.call(svg.querySelectorAll('[data-mv="tl"]')).sort(function(a,b){return a.dataset.x-b.dataset.x;});
@@ -46,9 +50,9 @@ function playTL(svg){
   ev.forEach(function(g){fade(g,false,0);g.style.transform='translateY(6px)';});
   var p=Promise.resolve();
   if(ax){var L=+ax.getAttribute('x2')-ax.getAttribute('x1');ax.style.transition='none';ax.style.strokeDasharray=L;ax.style.strokeDashoffset=L;ax.getBoundingClientRect();
-    ax.style.transition='stroke-dashoffset 700ms ease-out';ax.style.strokeDashoffset='0';p=wait(500);}
-  ev.forEach(function(g){p=p.then(function(){fade(g,true,450);g.style.transform='none';return wait(Math.max(160,2600/ev.length));});});
-  return p.then(function(){return wait(400);}).then(function(){if(ax){ax.style.strokeDasharray='';ax.style.strokeDashoffset='';}});
+    ax.style.transition='stroke-dashoffset '+T(1400)+'ms ease-out';ax.style.strokeDashoffset='0';p=wait(1300);}
+  ev.forEach(function(g){p=p.then(function(){fade(g,true,800);g.style.transform='none';return wait(900);});});
+  return p.then(function(){return wait(1200);}).then(function(){if(ax){ax.style.strokeDasharray='';ax.style.strokeDashoffset='';}});
 }
 function playMap(svg){
   var rs=Array.prototype.slice.call(svg.querySelectorAll('[data-mv="route"]'));
@@ -56,12 +60,12 @@ function playMap(svg){
   var leads=svg.querySelectorAll('[data-mv="lead"]');
   rs.forEach(function(r){fade(r,false,0);});pins.forEach(function(g){fade(g,false,0);g.style.transformOrigin=g.dataset.cx+'px '+g.dataset.cy+'px';g.style.transformBox='view-box';g.style.transform='scale(.3)';});
   Array.prototype.forEach.call(leads,function(l){fade(l,false,0);});
-  var p=wait(300);
-  pins.forEach(function(g){p=p.then(function(){fade(g,true,380);g.style.transform='none';var l=svg.querySelector('[data-mv="lead"][data-n="'+g.dataset.n+'"]');if(l)fade(l,true,380);return wait(Math.max(220,3200/pins.length));});});
-  rs.forEach(function(r){p=p.then(function(){return drawPath(r,2200);});});
+  var p=wait(800);
+  pins.forEach(function(g){p=p.then(function(){fade(g,true,800);g.style.transform='none';var l=svg.querySelector('[data-mv="lead"][data-n="'+g.dataset.n+'"]');if(l)fade(l,true,800);return wait(1000);});});
+  rs.forEach(function(r){p=p.then(function(){return wait(600);}).then(function(){return drawPath(r,5000);});});
   return p;
 }
-function go(svg){svg.scrollIntoView({behavior:'smooth',block:'center'});return wait(650);}
+function go(svg){svg.scrollIntoView({behavior:'smooth',block:'center'});return wait(1200);}
 async function playAll(){
   if(busy)return;busy=true;var b=document.getElementById('mv-btn');b.disabled=true;b.textContent='… 움직이는 중';
   try{for(var t of svgs('tl')){await go(t);await playTL(t);}
@@ -69,6 +73,8 @@ async function playAll(){
   finally{busy=false;b.disabled=false;b.textContent='▶ 다시 보기';}
 }
 document.getElementById('mv-btn').addEventListener('click',playAll);
+var sp=document.getElementById('mv-sp');function spl(){sp.textContent='빠르기: '+SP[si][0];}spl();
+sp.addEventListener('click',function(){si=(si+2)%3;try{localStorage.setItem('kjm_mv_speed',si);}catch(e){}spl();});
 svgs('tl').concat(svgs('pin')).forEach(function(v){v.setAttribute('data-mvsvg','1');v.setAttribute('title','누르면 이 그림만 다시 움직입니다');
   v.addEventListener('click',function(){if(busy)return;busy=true;(v.querySelector('[data-mv="tl"]')?playTL(v):playMap(v)).then(function(){busy=false;});});});
 addEventListener('beforeprint',function(){document.querySelectorAll('[data-mv]').forEach(function(e){e.style.opacity='1';e.style.transform='none';e.removeAttribute('mask');});});
