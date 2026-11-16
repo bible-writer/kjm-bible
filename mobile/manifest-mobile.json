@@ -1,0 +1,18 @@
+{
+  "name": "성경 필사 모바일",
+  "short_name": "성경필사",
+  "description": "폰에서 성경을 옮겨 쓰고 묵상·기도·감사를 기록하는 앱",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdf8ef",
+  "theme_color": "#8b6914",
+  "lang": "ko",
+  "categories": ["education", "books"],
+  "icons": [
+    { "src": "../icon-writing-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "../icon-writing-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

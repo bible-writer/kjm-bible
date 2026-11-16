@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>성경 필사 Mobile v1-15 (음성입력)</title>
+<title>성경 필사 Mobile v1-16 (음성입력)</title>
+<!-- v1-16 (2026-11-16): 폰 홈 화면에 설치(PWA) — 설치 정보 manifest-mobile.json, 서비스워커는 위 폴더의 sw-writing.js 를 이 폴더(mobile/) 범위로 씀 -->
+<link rel="manifest" href="manifest-mobile.json">
+<meta name="theme-color" content="#8b6914">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="성경필사">
+<link rel="apple-touch-icon" href="../icon-writing-192.png">
+<link rel="icon" type="image/png" href="../icon-writing-192.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&family=Gowun+Batang:wght@400;700&display=swap');
@@ -4042,6 +4050,15 @@ async function init() {
   document.getElementById('wBookSel').addEventListener('change', updateChapSel);
 }
 init();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('../sw-writing.js', { scope: './' })
+      .then(reg => console.log('[PWA-Mobile] SW 등록:', reg.scope))
+      .catch(err => console.warn('[PWA-Mobile] SW 실패:', err));
+  });
+}
 </script>
 </body>
 </html>
