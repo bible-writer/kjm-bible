@@ -19797,7 +19797,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-36`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-37`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -25261,6 +25261,7 @@ window.RoutePlay = (function () {
   #aid-modal .ad-gen .lab { width: 64px; color: #64748b; font-size: 12.5px; flex: none; }
   #aid-modal .ad-p { border: 1px solid #c4b5fd; background: #f5f3ff; color: #5b21b6; border-radius: 8px; padding: 3px 9px; cursor: pointer; font-size: 13.5px; }
   #aid-modal .ad-p.me { background: #5b21b6; color: #fff; font-weight: 700; }
+  #aid-modal .ad-pl { border-color: #86efac; background: #f0fdf4; color: #166534; }
   #aid-modal .ad-p small { color: #94a3b8; margin-left: 3px; }
   #aid-modal .ad-p.me small { color: #ddd6fe; }
   #aid-modal .ad-w { display: inline-block; min-width: 1.4em; border-bottom: 2px solid #94a3b8; color: transparent; cursor: pointer; margin: 0 2px; border-radius: 2px; }
@@ -25628,7 +25629,7 @@ window.RoutePlay = (function () {
       ['✡ 메시아 예언', '구약의 메시아 예언과 신약의 성취 44쌍을 오심 · 사역 · 고난 주간 · 부활과 그 뒤로 나눴습니다. 줄을 누르면 예언 본문과 성취 본문이 나란히 펼쳐집니다.'],
       ['⚖ 도량형·화폐·시간', '규빗·에바·세겔·달란트·데나리온·제삼시·히브리 달과 절기 등 74 낱말의 관계와 오늘날 어림값. 찾기 칸에 낱말을 넣으면 그 줄만 보입니다.'],
       ['▶ 영상', '도우미의 사건·비유·기적·왕·선지자·메시아 예언 줄마다 붙은 ▶ 를 누르면 그 본문(예: "누가복음 15")으로 믿을 만한 채널 안에서 찾습니다. 책 소개 끝 「▶ 영상으로 보기」는 골라 둔 바이블프로젝트 한국어 개요 영상. 본문 장 제목 옆 「▶ 영상」 · 인물 창 · 지명 창의 ▶ 는 믿을 만한 채널 안에서 찾고, ⚙ 로 채널을 넣고 뺄 수 있습니다.'],
-      ['🌳 가계도', '인물 이름을 넣고 Enter. 윗대 6대 · 배우자 · 형제 · 자녀 · 손주가 나옵니다. 이름을 누르면 그 사람 중심으로 다시 그리고, 「인물 설명 열기」는 인물 창을 엽니다(넓은 화면에서는 도우미 옆에 나란히).'],
+      ['🌳 가계도', '인물 이름을 넣고 Enter. 윗대 6대 · 배우자 · 형제 · 자녀 · 손주가 나옵니다. 이름을 누르면 그 사람 중심으로 다시 그리고, 「인물 설명 열기」는 인물 창을 엽니다(넓은 화면에서는 도우미 옆에 나란히). 본문이 「○○의 아버지」라 한 곳이 성읍이면 초록 📍 단추로 나오고, 누르면 지도에서 그 성읍을 보여 줍니다(도우미를 다시 열면 가계도로 돌아옴). 인명 사전에 따로 없는 사람은 「사전에 없음」 줄에 이름만 보입니다.'],
       ['🔢 절 번호 메뉴', '본문에서 절 번호를 누르면 🔖 책갈피 · 🧠 암송에 넣기 · 🔗 관주·주제 · 📋 이 절 복사 · 📚 도우미 열기가 나옵니다(낭독 막대가 켜져 있을 때는 낭독 동작).'],
       ['🔖 책갈피', '넣은 절이 성경 차례/넣은 차례로 모입니다. 📝 메모를 달 수 있고, 본문 절 번호 옆에 🔖 가 붙습니다.'],
       ['🧠 암송', '내 암송과 기본 암송 268구절. 보기 → 1단계(넷 중 하나) → 2단계(절반) → 3단계(모두, 첫 글자 힌트)로 빈칸이 늘어납니다. 밑줄을 누르면 그 낱말이 보이고, 다 외우면 ✅ 외웠음.'],
@@ -25812,8 +25813,37 @@ window.RoutePlay = (function () {
   var PNOTE = {
     'Zerubbabel@1Ch.3.19': '스룹바벨의 아버지는 스 3:2 · 학 1:1 · 마 1:12에는 스알디엘, 대상 3:19에는 브다야로 나옵니다(인명 자료는 브다야를 따름). 스알디엘의 법적 아들(형사취수)로 보는 견해가 많습니다.',
     'David@Rut.4.17': '나하스(삼하 17:25)는 다윗의 누이 아비가일의 아버지로 나옵니다. 이새의 다른 이름인지, 다윗 어머니의 앞 남편인지 견해가 갈려 (?)로 표시했습니다.',
+    'Jeshua@1Ch.24.11': '인명 자료가 다윗 때 제사장 반열의 예수아(대상 24:11)와 귀환 때 대제사장 예수아(스 10:18 「요사닥의 아들 예수아」)를 한 사람으로 묶어 두어, 아버지 여호사닥(요사닥)을 (?)로 표시했습니다.',
+    'Pashhur@1Ch.9.12': '아버지 말기야(대상 9:12)는 인명 사전에 따로 실려 있지 않습니다. 렘 21:1의 말기야와 같은 사람인지는 확실하지 않습니다.',
     'Noah@Gen.5.29': '창세기는 노아의 아내 이름을 밝히지 않습니다. 「나아마」는 유대 전승의 추측이라 (?)로 표시했습니다.'
   };
+  /* (b20261114-37) 인명 자료(TIPNR)의 가족 칸이 사람 대신 같은 이름의 지명을 가리키거나 사전에 없는 사람을 가리키는 곳 19개.
+   * PFIX: 「인물|칸|원래 글자」 → 맞는 사람(끝에 ? 이면 (?) 표시) · '' 이면 사전에 없는 사람으로 보인다. */
+  var PFIX = {
+    'Hamor@Gen.33.19|offspring|Shechem@Gen.12.6-Act': 'Shechem@Gen.33.19',
+    'Machir@Gen.50.23|offspring|Gilead@Gen.31.21-Zec': 'Gilead@Num.26.29-1Ch',
+    'Hammelech@Jer.36.26|offspring|Malchijah@1Ch.9.12-Neh': 'Malchiah@Jer.21.1',
+    'Jerahmeel@Jer.36.26|siblings|Malchijah@1Ch.9.12-Neh': 'Malchiah@Jer.21.1',
+    'Jeshua@1Ch.24.11|parents|Jozadak@Ezr.10.18': 'Jehozadak@1Ch.6.14-Zec?',
+    'Pashhur@1Ch.9.12|parents|Malchijah@1Ch.9.12-Neh': ''
+  };
+  var PNONE = { 'Malchijah@1Ch.9.12-Neh': '말기야 (대상 9:12 · 느 11:12)' };
+  /* 「~의 아버지」로 적힌 성읍 → 지명 사전 번호. 르호보암의 드고아는 자녀가 아니라 세운 성읍(대하 11:6) */
+  var PPLACE = { 'Gibeon@Jos.9.3-Ezk': 507, 'Tekoa@2Sa.14.2-Amo': 1197, 'Keilah@Jos.15.44-Neh': 726, 'Beth-gader@1Ch.2.51': 222, 'Zanoah@Jos.15.34-Neh': 1306, 'Ge-harashim@1Ch.4.14-Neh': 487, 'Eshtemoa@Jos.15.50-1Ch': 432, 'Beth-zur@Jos.15.58-Neh': 256, 'Bethlehem@Gen.35.16-Jhn': 233, 'Kiriath-jearim@Jos.9.17-Jer': 742, 'Ir-nahash@1Ch.4.12': 650, 'Etam@1Ch.4.3-': 435 };
+  var PBUILT = { 'Rehoboam@1Ki.11.43': '대하 11:6' };
+  function pFix(p, f, t) { var k = pKey(p) + '|' + f + '|' + t; return Object.prototype.hasOwnProperty.call(PFIX, k) ? PFIX[k] : null; }
+  /* 가족 칸에서 사람으로 못 잇는 것: 지명·사전에 없는 사람 */
+  function relOther(p, f) {
+    var pl = [], none = [];
+    String(p && p[f] || '').split(/[,+]/).forEach(function (t) {
+      t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return; var x = pFix(p, f, t);
+      if (x === '') { none.push(PNONE[t] || t.split('@')[0]); return; }
+      if (x === null && !pLook(t) && PPLACE[t]) pl.push(PPLACE[t]);
+    });
+    return { pl: pl, none: none };
+  }
+  var PLKO = { 507: '기브온', 1197: '드고아', 726: '그일라', 222: '벧가델', 1306: '사노아', 487: '게하라심', 432: '에스드모아', 256: '벧술', 233: '베들레헴', 742: '기럇여아림', 650: '이르나하스', 435: '에담' };
+  function plBtn(id) { var P = (typeof placeDatabase !== 'undefined' && Array.isArray(placeDatabase)) ? placeDatabase : [], x = P.find(function (q) { return q.id === id; }); return x ? '<button class="ad-p ad-pl" data-act="plgo" data-plid="' + id + '" title="지도에서 보기">📍 ' + esc(String(x.name || '').replace(/\s*\(.*$/, '')) + '</button>' : '<span class="ad-p ad-pl">📍 ' + esc(PLKO[id] || '') + '</span>'; }
   function pKey(p) { return p ? p.name_en + '@' + p.first_ref : ''; }
   /* (b20261114-25) 인명 자료(TIPNR) 영어 꼬리표가 본문과 다른 곳 — 가계도 안에서만 바로잡아 보인다 */
   var PLAB = {
@@ -25832,7 +25862,9 @@ window.RoutePlay = (function () {
   function rel(p, f) {
     var m = pIndex().m, out = [];
     String(p && p[f] || '').split(/[,+]/).forEach(function (t) {
-      var unc = /\(\?\)/.test(t); t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return; var q = pLook(t);
+      var unc = /\(\?\)/.test(t); t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return;
+      var fx = pFix(p, f, t); if (fx === '') return; if (fx) { if (/\?$/.test(fx)) unc = true; t = fx.replace(/\?$/, ''); }
+      var q = pLook(t);
       if (q && (unc || (XUNC[pKey(p)] || []).indexOf(pKey(q)) >= 0)) UNC.add(q);
       if (q && f === 'parents' && isUn(q)) {
         var k = 0, sameVerse = String(q.first_ref || '') === String(p.first_ref || '');
@@ -25880,12 +25912,16 @@ window.RoutePlay = (function () {
       up.forEach(function (g, i) { tree += '<div class="ad-gen"><span class="lab">' + (up.length - i) + '대 위</span>' + g.map(function (p) { return chipX(p, '조상'); }).join(' ') + '</div>'; });
       var sib = rel(me, 'siblings'), par = rel(me, 'partners'), kid = rel(me, 'offspring');
       tree += '<div class="ad-gen"><span class="lab">본인</span>' + pBtn(me, true) + (par.length ? ' <span class="ad-k">배우자</span>' + par.map(function (p) { return chipX(p, ''); }).join(' ') : '') + '</div>';
+      var oPa = relOther(me, 'parents'), oSi = relOther(me, 'siblings'), oKi = relOther(me, 'offspring');
+      var noneTxt = oPa.none.map(function (n) { return '<span class="ad-k">아버지 ' + esc(n) + '</span>'; }).concat(oSi.none.concat(oKi.none).map(function (n) { return '<span class="ad-k">' + esc(n) + '</span>'; }));
+      if (noneTxt.length) tree += '<div class="ad-gen"><span class="lab">사전에 없음</span>' + noneTxt.join(' ') + '</div>';
       if (sib.length) tree += '<div class="ad-gen"><span class="lab">형제자매</span>' + sib.map(function (p) { return chipX(p, ''); }).join(' ') + '</div>';
       if (kid.length) {
         tree += '<div class="ad-gen"><span class="lab">자녀</span>' + kid.map(function (p) { return chipX(p, '자손'); }).join(' ') + '</div>';
         var gk = []; kid.forEach(function (k) { rel(k, 'offspring').forEach(function (g) { if (gk.indexOf(g) < 0) gk.push(g); }); });
         if (gk.length) tree += '<div class="ad-gen"><span class="lab">손주</span>' + gk.slice(0, 40).map(function (p) { return chipX(p, '자손'); }).join(' ') + (gk.length > 40 ? ' …' : '') + '</div>';
       }
+      if (oKi.pl.length) tree += '<div class="ad-gen"><span class="lab">' + (PBUILT[pKey(me)] ? '세운 성읍' : '📍 성읍') + '</span>' + oKi.pl.map(plBtn).join(' ') + ' <small class="ad-k">' + (PBUILT[pKey(me)] ? '자녀가 아니라 건축한 성읍(' + PBUILT[pKey(me)] + ')' : '본문의 「~의 아버지」는 이 성읍을 세우거나 다스린 조상이라는 뜻') + '</small></div>';
       tree += '</div>';
       h += tree;
       h += '<div class="ad-box" style="margin-top:12px"><b>' + esc(pName(me)) + '</b> ' + esc(me.description_ko || '') + (me.first_ref ? ' <span class="ad-k">처음 나오는 곳</span>' + refChips(me.name_en === 'Jesus' && /^Isa\.7\.14/.test(me.first_ref) ? '40.1.1.1' : osisRef(me.first_ref)) : '')
@@ -25959,6 +25995,7 @@ window.RoutePlay = (function () {
     if (a === 'bookopen') { ST.book = +el.dataset.b; ST.bq = ''; ST.bgrid = false; rBook(L); L.scrollTop = 0; return; }
     if (a === 'bookq') { ST.bq = el.dataset.q; ST.bgrid = false; rBook(L); L.scrollTop = 0; return; }
     if (a === 'per') { ST.pid = +el.dataset.pid; ST.pick = null; var p = pdb().find(function (x) { return x.id === ST.pid; }); if (p) ST.tq = p.name_ko; rTree(L); return; }
+    if (a === 'plgo') { var pl = (typeof placeDatabase !== 'undefined' && Array.isArray(placeDatabase)) ? placeDatabase.find(function (x) { return x.id === +el.dataset.plid; }) : null; if (pl) { close(); try { BibleGeoEngine.flyToPlace(pl); } catch (e) {} try { showToast('📚 도우미를 다시 열면 이 가계도로 돌아옵니다.'); } catch (e) {} } return; }
     if (a === 'pcard') { var q = pdb().find(function (x) { return x.id === +el.dataset.pid; }); if (q) { try { PersonEngine.showPopup(q, q.name_ko); } catch (e) {} setTimeout(arrange, 0); } return; }
     if (a === 'bmdel') { var o = BM(); delete o[el.dataset.k]; lsSet('kjm_bookmarks', o); decorate(); rBM(L); return; }
     if (a === 'bmnote') { var o2 = BM(), k = el.dataset.k, n = prompt('메모 (비우면 지움)', (o2[k] && o2[k].n) || ''); if (n == null) return; o2[k].n = n.trim(); lsSet('kjm_bookmarks', o2); rBM(L); return; }
@@ -26078,11 +26115,11 @@ window.RoutePlay = (function () {
       var P = pdb();
       if (!P.length) row('⚠', '인물 가계도', '인명 사전을 아직 받지 않음');
       else {
-        var tot = 0, lost = 0, thrown = [], loop = 0, un = 0;
+        var tot = 0, lost = 0, thrown = [], loop = 0, un = 0, plc = 0, nodb = 0;
         P.forEach(function (p) {
           try {
             ['parents', 'siblings', 'partners', 'offspring'].forEach(function (f) {
-              String(p[f] || '').split(/[,+]/).forEach(function (t) { t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return; tot++; if (!pLook(t)) lost++; });
+              String(p[f] || '').split(/[,+]/).forEach(function (t) { t = t.replace(/\([^)]*\)/g, '').trim(); if (!t) return; tot++; var fx = pFix(p, f, t); if (fx === '') { nodb++; return; } if (fx) t = fx.replace(/\?$/, ''); if (pLook(t)) return; if (PPLACE[t]) plc++; else lost++; });
             });
             var cur = p, seen = [p];
             for (var i = 0; i < 6; i++) { GAP.clear(); UNC.clear(); var pa = rel(cur, 'parents'); if (!pa.length) break; if (seen.indexOf(pa[0]) >= 0) { loop++; break; } if (isUn(pa[0])) un++; seen.push(pa[0]); cur = pa[0]; }
@@ -26090,7 +26127,7 @@ window.RoutePlay = (function () {
         });
         GAP.clear(); UNC.clear();
         var st = thrown.length || un ? '✗' : (lost > 40 ? '⚠' : '✓');
-        row(st, '인물 가계도', P.length.toLocaleString() + '명 · 관계 ' + tot.toLocaleString() + ' 중 못 잇는 것 ' + lost + (un ? ' · 「이름 없음」 ' + un : '') + (loop ? ' · 되돌이 ' + loop : '') + (thrown.length ? ' · 오류: ' + thrown.slice(0, 3).join(' / ') : '') + ' (못 잇는 것은 대부분 「~의 아버지」로 적힌 지명)');
+        row(st, '인물 가계도', P.length.toLocaleString() + '명 · 관계 ' + tot.toLocaleString() + ' 중 못 잇는 것 ' + lost + (plc ? ' · 📍 지명(「~의 아버지」) ' + plc : '') + (nodb ? ' · 사전에 없는 사람 ' + nodb : '') + (un ? ' · 「이름 없음」 ' + un : '') + (loop ? ' · 되돌이 ' + loop : '') + (thrown.length ? ' · 오류: ' + thrown.slice(0, 3).join(' / ') : '') + (lost ? ' (자료 확인 필요)' : ''));
       }
     } catch (e) { row('✗', '인물 가계도', e.message); }
     /* 4. 지명 */
