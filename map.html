@@ -19797,7 +19797,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-34`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-35`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23529,7 +23529,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curSub = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=v17', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=v18', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
@@ -25220,6 +25220,11 @@ window.RoutePlay = (function () {
   #aid-modal .ad-bar input { flex: 1 1 180px; }
   #aid-modal a.ad-chip { text-decoration: none; display: inline-block; margin: 2px 3px 2px 0; }
   #aid-modal a.ad-yt { border-color: #fecaca; background: #fff5f5; color: #b91c1c; }
+  #aid-modal .ad-al { color: #7c5c20; background: #fdf6e3; border-radius: 6px; padding: 0 5px; font-size: 11.5px; }
+  /* (b20261114-35 큰 글씨 점검) 좁은 화면(글씨를 크게 키운 휴대폰)에서 머리줄이 두 줄로 꺾이지 않게 */
+  #aid-modal .ad-h b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  @media (max-width: 340px) { #aid-modal .ad-hpt { display: none; } #kjm-tt .rt-acc { display: none; } }
+  #kjm-yt-menu .yt-add { flex-wrap: wrap; } #kjm-yt-menu .yt-add input { flex: 1 1 120px; }
   #aid-modal .ad-ytm { display: inline-block; margin-left: 4px; padding: 0 7px; border: 1px solid #fecaca; border-radius: 10px; background: #fff5f5; color: #b91c1c; font-size: 11.5px; line-height: 18px; cursor: pointer; vertical-align: middle; }
   .kjm-yt-btn { display: inline-block; margin-left: 8px; padding: 1px 9px; border: 1px solid #fecaca; border-radius: 12px; background: #fff5f5; color: #b91c1c; font-size: 12.5px; font-weight: 600; cursor: pointer; vertical-align: middle; user-select: none; }
   #kjm-yt-menu { position: fixed; z-index: 10060; background: #fff; border: 1px solid #e2d6bf; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.18); padding: 8px; max-width: min(340px, calc(100vw - 16px)); font-size: 14px; color: #1e293b; }
@@ -25292,10 +25297,10 @@ window.RoutePlay = (function () {
   var YTNOTE = '유튜브가 고른 결과이며, 이 앱이 내용을 확인하지 않았습니다.';
   function ytS(q) { return YTS + encodeURIComponent(q); }
   /* 도우미 줄 ▶ : 본문 첫 장절 → 채널 안 "책 장", 전체 검색은 「제목 설교」 */
-  function ytRow(refStr, title, kind) {
+  function ytRow(refStr, title, kind, alias) {
     var r = refs(refStr)[0]; if (!r) return '';
     var bc = bookName(r[0]) + ' ' + r[1], lab = title + ' · ' + AB[r[0]] + ' ' + r[1] + (r[0] === 19 ? '편' : '장');
-    return ' <span class="kjm-yt-open ad-ytm" title="이 본문 영상 찾기 (믿을 만한 채널)" data-ytq="' + esc(title) + '" data-ytlab="' + esc(lab) + '" data-ytqs="' + esc('"' + bc + '"') + '" data-ytfull="' + esc(title + ' ' + (kind || '설교')) + '">▶</span>';
+    return ' <span class="kjm-yt-open ad-ytm" title="이 본문 영상 찾기 (믿을 만한 채널)" data-ytq="' + esc(title) + '" data-ytlab="' + esc(lab) + '" data-ytqs="' + esc('"' + bc + '"') + '" data-ytfull="' + esc((alias || title) + ' ' + (kind || '설교')) + '">▶</span>';
   }
   window.kjmYTSearch = ytS; window.kjmYTNote = YTNOTE;
   function vidFor(x, c) { return (x && x.vid || []).filter(function (v) { return !c || !v[2] || (v[2] <= c && c <= v[3]); }); }
@@ -25385,7 +25390,7 @@ window.RoutePlay = (function () {
     if (M) return M;
     var bk = document.createElement('div'); bk.id = 'aid-bk'; bk.onclick = close; document.body.appendChild(bk);
     M = document.createElement('div'); M.id = 'aid-modal';
-    M.innerHTML = '<div class="ad-h"><b>📚 성경 도우미</b><button class="ad-hp" title="도우미 쓰는 법" style="font-size:12.5px">❓ 사용법</button><button class="ad-x" title="닫기">✕</button></div>'
+    M.innerHTML = '<div class="ad-h"><b>📚 성경 도우미</b><button class="ad-hp" title="도우미 쓰는 법" style="font-size:12.5px">❓<span class="ad-hpt"> 사용법</span></button><button class="ad-x" title="닫기">✕</button></div>'
       + '<div class="ad-tabs">' + [['find', '🔎 찾기'], ['book', '📖 책 소개'], ['harm', '🕊 사복음서 대조'], ['pm', '✨ 비유·기적'], ['king', '👑 왕과 선지자'], ['mes', '✡ 메시아 예언'], ['meas', '⚖ 도량형·화폐·시간'], ['tree', '🌳 가계도'], ['bm', '🔖 책갈피'], ['mem', '🧠 암송']].map(function (t) { return '<button data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>'
       + '<div class="ad-bar"></div><div class="ad-l"></div>';
     document.body.appendChild(M);
@@ -25445,7 +25450,7 @@ window.RoutePlay = (function () {
       m.innerHTML = '<div style="font-weight:700;padding:2px 6px 6px">⚙ 찾을 채널 고르기</div>'
         + ch.map(function (c, i) { return '<div style="display:flex;align-items:center;gap:6px;padding:4px 6px"><span style="flex:1">' + esc(c.n || c.h) + ' <span style="color:#94a3b8;font-size:12px">' + esc(c.h) + '</span></span><button data-yt="up" data-i="' + i + '" title="위로">▲</button><button data-yt="del" data-i="' + i + '" title="빼기">✕</button></div>'; }).join('')
         + (ch.length ? '' : '<small>채널이 없습니다. 아래에 넣거나 「기본으로」를 누르십시오.</small>')
-        + '<div style="display:flex;gap:4px;padding:6px"><input id="kjm-yt-add" placeholder="채널 주소 또는 @이름" style="flex:1;min-width:0;padding:5px 7px;border:1px solid #d6c7a8;border-radius:6px"><input id="kjm-yt-nm" placeholder="보일 이름" style="width:90px;padding:5px 7px;border:1px solid #d6c7a8;border-radius:6px"><button data-yt="add">넣기</button></div>'
+        + '<div class="yt-add" style="display:flex;gap:4px;padding:6px"><input id="kjm-yt-add" placeholder="채널 주소 또는 @이름" style="flex:1;min-width:0;padding:5px 7px;border:1px solid #d6c7a8;border-radius:6px"><input id="kjm-yt-nm" placeholder="보일 이름" style="width:90px;padding:5px 7px;border:1px solid #d6c7a8;border-radius:6px"><button data-yt="add">넣기</button></div>'
         + '<small id="kjm-yt-msg">유튜브에서 채널을 열고 주소창 주소(예: youtube.com/@cbsbibleschool)를 붙여 넣으십시오. 이 기기에만 저장되며 「백업」에 함께 들어갑니다.</small>'
         + '<div style="display:flex;gap:6px;padding:8px 6px 2px"><button data-yt="reset">↺ 기본으로</button><span style="flex:1"></span><button data-yt="done">✓ 다 됐음</button></div>';
       return;
@@ -25591,9 +25596,9 @@ window.RoutePlay = (function () {
       h += sec('📖 책 소개', (A.books || []).filter(function (x) { return hit(bookName(x.b), w) || hit(AB[x.b], w) || ['theme', 'summary', 'people', 'places', 'kw', 'author', 'christ'].some(function (k) { return hit(x[k], w); }); }).map(function (x) {
         var why = ['people', 'places', 'kw', 'theme'].filter(function (k) { return hit(x[k], w); }).map(function (k) { return { people: '인물', places: '지명', kw: '낱말', theme: '주제' }[k]; });
         return row('book', ' data-b="' + x.b + '"', '<b>' + esc(bookName(x.b)) + '</b>', why.length ? esc(why.join('·')) + '에 「' + esc(w) + '」' : esc(String(x.theme || '').slice(0, 50))); }));
-      h += sec('🕊 사복음서 사건', (A.harmony || []).filter(function (x) { return hit(x.t, w) || hit(x.sec, w) || (HAL[w] && hit(x.t, HAL[w])); }).map(function (x) { return row('harm', '', x.n + '. ' + esc(x.t), esc(x.sec)); }));
+      h += sec('🕊 사복음서 사건', (A.harmony || []).filter(function (x) { return hit(x.t, w) || hit(x.sec, w) || hit(x.a, w) || (HAL[w] && hit(x.t, HAL[w])); }).map(function (x) { return row('harm', '', x.n + '. ' + esc(x.t) + (x.a ? ' <small class="ad-al">' + esc(x.a) + '</small>' : ''), esc(x.sec)); }));
       var PMK = [['parables', '비유'], ['miracles', '예수님 기적'], ['ot_miracles', '구약 기적'], ['apostle_miracles', '사도 기적']], pmr = [];
-      PMK.forEach(function (k) { ((A.pm || {})[k[0]] || []).forEach(function (x) { if (hit(x.t, w) || hit(x.p, w) || hit(x.who, w)) pmr.push('<div class="ad-row" data-act="fgo" data-tab="pm" data-k="' + k[0] + '" data-q="' + esc(w) + '"><b>' + esc(x.t) + '</b> <small style="color:#94a3b8">' + k[1] + (x.who ? ' · ' + esc(x.who) : '') + '</small><br><small style="color:#64748b">' + esc(x.p || '') + '</small></div>'); }); });
+      PMK.forEach(function (k) { ((A.pm || {})[k[0]] || []).forEach(function (x) { if (hit(x.t, w) || hit(x.p, w) || hit(x.who, w) || hit(x.a, w)) pmr.push('<div class="ad-row" data-act="fgo" data-tab="pm" data-k="' + k[0] + '" data-q="' + esc(w) + '"><b>' + esc(x.t) + '</b>' + (x.a ? ' <small class="ad-al">' + esc(x.a) + '</small>' : '') + ' <small style="color:#94a3b8">' + k[1] + (x.who ? ' · ' + esc(x.who) : '') + '</small><br><small style="color:#64748b">' + esc(x.p || '') + '</small></div>'); }); });
       h += sec('✨ 비유와 기적', pmr);
       var D = window._chronoData;
       if (D) h += sec('👑 왕과 선지자', (D.kings || []).filter(function (k) { return hit(k.n, w) || hit(k.x, w); }).map(function (k) { return row('king', '', '<b>' + esc(k.n) + '</b> <small style="color:#94a3b8">' + esc(k.k === '이스라엘' ? '북이스라엘' : k.k === '유다' ? '유다' : '통일 왕국') + ' 왕 · ' + esc(k.y) + '</small>', esc(k.x || '')); })
@@ -25617,7 +25622,7 @@ window.RoutePlay = (function () {
       ['📖 책 소개', '66권마다 저자·기록 연대·받는 이·중심 주제·줄거리·짜임·핵심 구절·이 책에서 보는 그리스도, 그리고 주요 인물·지명·핵심 낱말. 짜임 줄을 누르면 그 본문이 펼쳐지고, 장절을 누르면 본문 그 자리로 갑니다.'],
       ['🔎 책 찾기', '찾기 칸에 책 이름·줄임말(「롬」「갈」), 사람(「요셉」), 지명(「갈멜」), 낱말(「새 언약」)을 넣으면 그 책이 나옵니다. Enter 를 누르면 첫 책이 열리고, Esc 는 지웁니다. 「📚 66권」은 율법서·역사서·시가서·선지서·복음서·서신서 갈래로 66권을 한눈에 보여 줍니다. 책 머리의 인물·지명·낱말 단추를 누르면 그 낱말이 나오는 다른 책을 찾습니다.'],
       ['🕊 사복음서 대조', '예수님의 생애 220 사건을 차례대로. 줄을 누르면 네 복음서 본문이 나란히 나옵니다. 「오병이어」「변화산」「주기도문」 같은 별명으로도 찾습니다.'],
-      ['🔎 찾기', '맨 앞 탭. 낱말 하나로 도우미 전체를 한꺼번에 찾습니다 — 책 소개 · 사복음서 사건 · 비유·기적 · 왕과 선지자 · 메시아 예언 · 도량형 · 암송 구절 · 가계도 인물. 결과를 누르면 그 탭으로 가서 그 줄만 보여 줍니다(예: 「달란트」 → 비유와 도량형, 「다윗」 → 책 소개·왕·예언·가계도).'],
+      ['🔎 찾기', '맨 앞 탭. 흔히 부르는 이름(탕자 · 오병이어 · 산상수훈 · 변화산 · 바디매오 · 사자굴 등, 줄 옆 노란 글씨)으로도 찾습니다. 낱말 하나로 도우미 전체를 한꺼번에 찾습니다 — 책 소개 · 사복음서 사건 · 비유·기적 · 왕과 선지자 · 메시아 예언 · 도량형 · 암송 구절 · 가계도 인물. 결과를 누르면 그 탭으로 가서 그 줄만 보여 줍니다(예: 「달란트」 → 비유와 도량형, 「다윗」 → 책 소개·왕·예언·가계도).'],
       ['✨ 비유·기적', '예수님의 비유 48 · 기적 35 · 구약 기적 44 · 사도들의 기적 22. 줄을 누르면 본문이 펼쳐집니다. 찾기 탭에서 왔을 때는 그 낱말이 든 줄만 보이고, 위의 「… ✕」를 누르면 모두 보입니다.'],
       ['👑 왕과 선지자', '통일 왕국 · 북이스라엘 · 유다의 왕 42명을 차례대로. 다스린 해(틸레 연대) · 「여호와 보시기에」 선/악 · 본문 · 같은 때 활동한 선지자가 나옵니다. 「선지자」를 고르면 사무엘부터 세례 요한까지 23명과 그때의 왕. 장절을 누르면 본문으로 갑니다.'],
       ['✡ 메시아 예언', '구약의 메시아 예언과 신약의 성취 44쌍을 오심 · 사역 · 고난 주간 · 부활과 그 뒤로 나눴습니다. 줄을 누르면 예언 본문과 성취 본문이 나란히 펼쳐집니다.'],
@@ -25742,10 +25747,10 @@ window.RoutePlay = (function () {
       var s = '', last = '', n = 0;
       AID.harmony.forEach(function (x, i) {
         var q = HAL[ST.hq] || ST.hq;
-        if (ST.hq && x.t.indexOf(q) < 0 && x.sec.indexOf(q) < 0 && x.t.indexOf(ST.hq) < 0) return;
+        if (ST.hq && x.t.indexOf(q) < 0 && x.sec.indexOf(q) < 0 && x.t.indexOf(ST.hq) < 0 && String(x.a || '').indexOf(ST.hq) < 0) return;
         if (x.sec !== last) { s += '<div class="ad-sec">' + esc(x.sec) + '</div>'; last = x.sec; }
         var cnt = ['mt', 'mk', 'lk', 'jn'].filter(function (c) { return x[c]; }).length; n++;
-        s += '<div class="ad-row" data-open="harm" data-i="' + i + '"><b>' + x.n + '.</b> ' + esc(x.t) + ' <small style="color:#94a3b8">(' + cnt + '복음서)</small>' + ytRow(x.mt || x.mk || x.lk || x.jn, x.t) + '<br>' + ['mt', 'mk', 'lk', 'jn'].map(function (c) { return x[c] ? refChips(x[c]) : ''; }).join('') + '</div>';
+        s += '<div class="ad-row" data-open="harm" data-i="' + i + '"><b>' + x.n + '.</b> ' + esc(x.t) + ' <small style="color:#94a3b8">(' + cnt + '복음서)</small>' + (x.a ? ' <small class="ad-al">' + esc(x.a) + '</small>' : '') + ytRow(x.mt || x.mk || x.lk || x.jn, x.t, '설교', x.a) + '<br>' + ['mt', 'mk', 'lk', 'jn'].map(function (c) { return x[c] ? refChips(x[c]) : ''; }).join('') + '</div>';
       });
       L.innerHTML = (n ? s : '<div class="ad-note">찾는 사건이 없습니다.</div>') + '<div class="ad-src">' + esc(AID.srcH || '') + '</div>';
     }
@@ -25757,11 +25762,11 @@ window.RoutePlay = (function () {
     var k = ST.pm || 'parables'; ST.pm = k;
     bar(K.map(function (q) { return '<button class="ad-chip' + (q[0] === k ? ' on' : '') + '" data-pm="' + q[0] + '">' + q[1] + ' ' + ((AID.pm[q[0]] || []).length) + '</button>'; }).join(''));
     M.querySelectorAll('[data-pm]').forEach(function (b) { b.onclick = function () { ST.pm = b.dataset.pm; rPM(L); }; });
-    var arr = (AID.pm[k] || []).filter(function (x) { return !ST.pmq || (x.t + ' ' + (x.p || '') + ' ' + (x.who || '')).indexOf(ST.pmq) >= 0; }), by = {}, order = [];
+    var arr = (AID.pm[k] || []).filter(function (x) { return !ST.pmq || (x.t + ' ' + (x.p || '') + ' ' + (x.who || '') + ' ' + (x.a || '')).indexOf(ST.pmq) >= 0; }), by = {}, order = [];
     if (ST.pmq) bar(M.querySelector('.ad-bar').innerHTML + '<span class="ad-chip on" data-act="pmqx" title="걸러 보기 풀기">「' + esc(ST.pmq) + '」 ✕</span>');
     arr.forEach(function (x, i) { var g = x.g || x.who || ''; if (!by[g]) { by[g] = []; order.push(g); } by[g].push(x); });
     var s = '<div class="ad-note" style="padding-top:0">줄을 누르면 본문이 펼쳐집니다.</div>';
-    order.forEach(function (g) { s += (g ? '<div class="ad-sec">' + esc(g) + ' (' + by[g].length + ')</div>' : '') + by[g].map(function (x) { return '<div class="ad-row" data-open="pm" data-refs="' + esc(x.refs) + '">' + esc(x.t) + (x.who && x.g ? ' <small style="color:#94a3b8">' + esc(x.who) + '</small>' : '') + ytRow(x.refs, x.t + (k === 'parables' ? ' 비유' : ''), '설교') + ' ' + refChips(x.refs) + (x.p ? '<br><small style="color:#64748b">' + esc(x.p) + '</small>' : '') + '</div>'; }).join(''); });
+    order.forEach(function (g) { s += (g ? '<div class="ad-sec">' + esc(g) + ' (' + by[g].length + ')</div>' : '') + by[g].map(function (x) { return '<div class="ad-row" data-open="pm" data-refs="' + esc(x.refs) + '">' + esc(x.t) + (x.who && x.g ? ' <small style="color:#94a3b8">' + esc(x.who) + '</small>' : '') + (x.a ? ' <small class="ad-al">' + esc(x.a) + '</small>' : '') + ytRow(x.refs, x.t + (k === 'parables' ? ' 비유' : ''), '설교', x.a ? x.a.split('·')[0] + (k === 'parables' && !/비유/.test(x.a) ? ' 비유' : '') : '') + ' ' + refChips(x.refs) + (x.p ? '<br><small style="color:#64748b">' + esc(x.p) + '</small>' : '') + '</div>'; }).join(''); });
     L.innerHTML = s + '<div class="ad-src">' + esc(AID.srcP || '') + '</div>';
   }
   /* ⚖ 도량형·화폐·시간 */
@@ -26223,11 +26228,11 @@ window.RoutePlay = (function () {
     ttClose();
     var m = document.createElement('div'); m.id = 'kjm-tt';
     m.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10065;width:min(460px,calc(100vw - 16px));max-height:min(78vh,760px);display:flex;flex-direction:column;background:#fffdf8;color:#2e2922;border:1px solid #e2d6bf;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.25);font-size:14px';
-    var acc = 0, h = I.legs.map(function (l, i) { acc += l[2]; return '<tr><td style="padding:5px 4px;color:#94a3b8">' + (i + 1) + '</td><td style="padding:5px 4px">' + esc(rShort(l[0])) + ' → ' + esc(rShort(l[1])) + (l[3] ? ' <span title="바닷길">⛵</span>' : '') + '</td><td style="padding:5px 4px;text-align:right;white-space:nowrap">' + rFmt(l[2]) + 'km</td><td style="padding:5px 4px;text-align:right;white-space:nowrap;color:#64748b">' + (l[3] ? '배' : '약 ' + Math.max(1, Math.round(l[2] / 25)) + '일') + '</td><td style="padding:5px 4px;text-align:right;color:#94a3b8;white-space:nowrap">' + rFmt(acc) + '</td></tr>'; }).join('');
+    var acc = 0, h = I.legs.map(function (l, i) { acc += l[2]; return '<tr><td style="padding:5px 4px;color:#94a3b8">' + (i + 1) + '</td><td style="padding:5px 4px">' + esc(rShort(l[0])) + ' → ' + esc(rShort(l[1])) + (l[3] ? ' <span title="바닷길">⛵</span>' : '') + '</td><td style="padding:5px 4px;text-align:right;white-space:nowrap">' + rFmt(l[2]) + 'km</td><td style="padding:5px 4px;text-align:right;white-space:nowrap;color:#64748b">' + (l[3] ? '배' : '약 ' + Math.max(1, Math.round(l[2] / 25)) + '일') + '</td><td class="rt-acc" style="padding:5px 4px;text-align:right;color:#94a3b8;white-space:nowrap">' + rFmt(acc) + '</td></tr>'; }).join('');
     m.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#7d3529;color:#fff;border-radius:12px 12px 0 0"><b style="flex:1">📏 ' + esc(name) + '</b><button data-tt="x" style="border:0;background:none;color:#fff;font-size:18px;cursor:pointer">✕</button></div>'
       + '<div style="overflow:auto;padding:8px 12px 12px"><div style="margin-bottom:6px">모두 약 <b>' + rFmt(I.km) + 'km</b>' + (I.land ? ' · 걸어서 약 <b>' + rFmt(I.days) + '일</b> 길(하루 25km)' : '') + (I.sea ? ' · 바닷길 ' + rFmt(I.sea) + 'km' : '') + '</div>'
       + (I.bib ? '<div style="background:#fff7ed;border-radius:6px;padding:6px 8px;margin-bottom:6px;font-size:13px">📖 ' + esc(I.bib) + '</div>' : '')
-      + '<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:#94a3b8;font-size:12px"><th></th><th style="text-align:left">구간</th><th style="text-align:right">거리</th><th style="text-align:right">걸어서</th><th style="text-align:right">누적</th></tr>' + h + '</table>'
+      + '<table style="width:100%;border-collapse:collapse;font-size:13px"><tr style="color:#94a3b8;font-size:12px"><th></th><th style="text-align:left">구간</th><th style="text-align:right">거리</th><th style="text-align:right">걸어서</th><th class="rt-acc" style="text-align:right">누적</th></tr>' + h + '</table>'
       + '<div style="color:#94a3b8;font-size:11.5px;margin-top:8px">지점 사이 직선거리입니다. 실제 길은 산과 골짜기를 돌아 1.2~1.5배쯤 깁니다. 걸어서 날수는 하루 25km로 어림했고, 머문 날은 넣지 않았습니다. ⛵ 는 배로 간 구간.</div></div>';
     document.body.appendChild(m);
     m.addEventListener('click', function (e) { if (e.target.closest('[data-tt="x"]')) ttClose(); });
