@@ -19797,7 +19797,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-35`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-36`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -23529,7 +23529,7 @@ function krvDef(e, field) {
 (function () {
   var DATA = null, P = null, curEra = -1, curSub = -1, curT = '', VIEW = 'list', KO = ['','창','출','레','민','신','수','삿','룻','삼상','삼하','왕상','왕하','대상','대하','스','느','에','욥','시','잠','전','아','사','렘','애','겔','단','호','욜','암','옵','욘','미','나','합','습','학','슥','말'];
   function load() {
-    if (!P) P = fetch('./chronology.json?v=v18', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
+    if (!P) P = fetch('./chronology.json?v=v19', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { DATA = j; window._chronoData = j; return j; }).catch(function () { return null; });
     return P;
   }
