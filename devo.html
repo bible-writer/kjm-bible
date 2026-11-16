@@ -108,6 +108,24 @@ nav.bar .today b{font-size:15px;font-weight:700;color:var(--ac);padding:2px 0}
 /* (2026-11-03 kjm 「묵상앱 읽기 기능?」) 소리로 읽기 — 읽는 문단 표시 */
 .speaking{background:var(--ac-soft);border-radius:6px;box-shadow:0 0 0 6px var(--ac-soft)}
 nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
+/* (2026-11-16 kjm 「QT 노트를 묵상 앱에도」) ✍️ QT 노트 — 성경지도 묵상 창의 QT 노트와 같은 자리에 저장(같은 기기·같은 브라우저면 서로 보임) */
+.books button.qtb{color:var(--ac)}
+.qt-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.qt-top select,.qt-pick select,.qt-pick input{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 8px;font-size:15px}
+.qt-pick{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 10px}
+.qt-pick input{width:7em}
+.qt-txt{font-family:var(--serif);font-size:calc(var(--fs) - 1px);line-height:1.8;margin:0 0 12px;padding:2px 0 2px 14px;border-left:3px solid var(--ac)}
+.qt-txt sup{color:var(--ac);margin-right:2px}
+.qt-hint{font-size:12.5px;color:var(--sub);margin:0 0 14px;line-height:1.6}
+.qt-step{margin:0 0 14px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.qt-step .t{font-weight:700;color:var(--ac);margin:0 0 4px}
+.qt-step ul{margin:0 0 8px 1.1em;padding:0;font-size:13px;color:var(--sub);line-height:1.6}
+.qt-step textarea{width:100%;min-height:96px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;font-size:16px;line-height:1.6;background:var(--bg);color:var(--ink);resize:vertical}
+.qt-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.qt-bar .st{margin-right:auto;font-size:12.5px;color:var(--sub)}
+.qt-bar button,.qt-top button{border:1px solid var(--line);background:var(--ac-soft);color:var(--ac);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:14px}
+.qt-li{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:12px 2px;cursor:pointer;line-height:1.55;color:var(--ink)}
+.qt-li small{color:var(--sub)}
 </style>
 </head>
 <body>
@@ -157,7 +175,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-  var book = BOOKS[ls('devo_book')] ? ls('devo_book') : 'me';
+  var book = (BOOKS[ls('devo_book')] || ls('devo_book') === 'qt') ? ls('devo_book') : 'me';
   var DATA = {}, cur = null;
 
   /* ── 화면 설정 ── */
@@ -183,7 +201,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
 
   /* ── 날짜 ── */
   function todayKey() { var t = new Date(); return { m: t.getMonth() + 1, d: t.getDate(), p: t.getHours() < 15 ? 'a' : 'e' }; }
-  function B() { return BOOKS[book]; }
+  function B() { return BOOKS[book] || BOOKS.me; }
   function find(k) {
     var D = DATA[book] || [];
     for (var i = 0; i < D.length; i++) {
@@ -300,7 +318,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
       } catch (e) { res(null); }
     });
   }
-  function krvState() { var e = $('#krv-st'); if (e) e.textContent = KR ? '— 개역개정 (이 기기)' : '— 개역한글'; }
+  function krvState() { var e = $('#krv-st'); if (e) e.textContent = KR ? '— 개역개정 (이 기기)' : '— 개역한글'; if (book === 'qt' && QT) QT.open(); }   // QT 노트는 성경 DB가 생기거나 없어지면 본문 줄을 다시 그린다
   function ktext(x) {
     if (!KR || !x.kq) return x.text;
     var T = x.text.slice(), by = {};
@@ -320,6 +338,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
     return '<p' + (poem ? ' class="poem"' : '') + '>' + esc(t) + '</p>';
   }
   function show(i, keepScroll) {
+    if (book === 'qt') { QT.open(); return; }   // QT 노트를 보고 있을 때(성경 DB를 넣은 뒤 등)는 노트를 다시 그린다
     if (window._sayStop) window._sayStop();
     var D = DATA[book] || [], x = D[i];
     if (!x) { $('#main').innerHTML = '<div class="empty">이 날의 묵상이 없습니다. 「오늘」을 눌러 보세요.</div>'; return; }
@@ -342,8 +361,8 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
     $('#today').innerHTML = '<b>오늘</b>' + (isToday ? '읽는 중' : label(tk).replace(/ (아침|저녁)$/, ''));
     if (!keepScroll) window.scrollTo(0, 0);
   }
-  function go(dir) { if (!cur) return; var k = step(cur, dir), i = find(k); if (i >= 0) show(i); }
-  function goToday() { var i = find(todayKey()); show(i >= 0 ? i : 0); }
+  function go(dir) { if (book === 'qt') { QT.move(dir); return; } if (!cur) return; var k = step(cur, dir), i = find(k); if (i >= 0) show(i); }
+  function goToday() { if (book === 'qt') { QT.move(0); return; } var i = find(todayKey()); show(i >= 0 ? i : 0); }
 
   KRP.then(function (k) {
     krvState();
@@ -364,6 +383,8 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
   function setBook(id) {
     book = id; ls('devo_book', id); root.dataset.book = id; applyTheme();
     document.querySelectorAll('.books button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.k === id); });
+    if (window._sayStop) window._sayStop();
+    if (id === 'qt') { KRP.then(function () { if (book === 'qt') QT.open(); }); return; }
     $('#main').innerHTML = '<div class="empty">묵상을 불러오는 중입니다…</div>';
     Promise.all([load(id), KRP]).then(function () {
       if (book !== id) return;
@@ -379,7 +400,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
   }
 
   /* ── 책 단추 ── */
-  $('.books').innerHTML = Object.keys(BOOKS).map(function (k) { return '<button data-k="' + k + '">' + BOOKS[k].name + '</button>'; }).join('');
+  $('.books').innerHTML = Object.keys(BOOKS).map(function (k) { return '<button data-k="' + k + '">' + BOOKS[k].name + '</button>'; }).join('') + '<button data-k="qt" class="qtb">✍️ QT 노트</button>';
   document.querySelectorAll('.books button').forEach(function (b) { b.onclick = function () { if (b.dataset.k !== book) setBook(b.dataset.k); }; });
 
   /* ── 아래 막대 ── */
@@ -394,7 +415,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
     if (document.querySelector('.sheet.on') || /INPUT/.test(document.activeElement.tagName)) return;
     if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1);
   });
-  $('#find').onclick = function () { openSheet('#s-find'); $('#qhint').textContent = '『' + B().name + '』에서 찾습니다.'; setTimeout(function () { $('#q').focus(); }, 50); };
+  $('#find').onclick = function () { openSheet('#s-find'); $('#qhint').textContent = book === 'qt' ? '내 QT 노트에서 찾습니다.' : '『' + B().name + '』에서 찾습니다.'; setTimeout(function () { $('#q').focus(); }, 50); };
   $('#opt').onclick = function () { openSheet('#s-opt'); };
   $('#krv-bdb').onclick = function () { $('#krv-file').click(); };
   $('#krv-del').onclick = function () { if (!KR) { toast('지금은 개역한글입니다'); return; } krvDrop(); ls('kjm_krv_tried', '1'); krvState(); var i = cur ? find(cur) : -1; if (i >= 0) show(i, true); toast('개역개정 사본을 지웠습니다'); };
@@ -407,7 +428,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
   };
   document.querySelectorAll('[data-fs]').forEach(function (b) { b.onclick = function () { fs = Math.max(14, Math.min(28, fs + parseInt(b.dataset.fs, 10))); ls('devo_fs', fs); applyFs(); toast('글자 ' + fs); }; });
   document.querySelectorAll('[data-th]').forEach(function (b) { b.onclick = function () { theme = b.dataset.th; ls('devo_theme', theme); applyTheme(); }; });
-  $('#about').innerHTML = '하루 한 편씩 읽는 묵상집 여섯 권입니다. 본문을 옆으로 밀면 앞 날·다음 날로 넘어갑니다. 성구 아래 「성경에서 읽기」를 누르면 성경지도에서 그 절이 열립니다. 아래 「🔊 듣기」를 누르면 소리로 읽어 주고(문단을 두 번 누르면 그 문단부터), 빠르기는 여기서 고릅니다.<br>홈 화면에 추가하면 앱처럼 쓸 수 있고, 한 번 연 책은 인터넷 없이도 읽힙니다.';
+  $('#about').innerHTML = '하루 한 편씩 읽는 묵상집 여섯 권과 ✍️ QT 노트(성경지도 묵상 창의 QT 노트와 같은 노트, 이 기기에 저장)입니다. 본문을 옆으로 밀면 앞 날·다음 날로 넘어갑니다. 성구 아래 「성경에서 읽기」를 누르면 성경지도에서 그 절이 열립니다. 아래 「🔊 듣기」를 누르면 소리로 읽어 주고(문단을 두 번 누르면 그 문단부터), 빠르기는 여기서 고릅니다.<br>홈 화면에 추가하면 앱처럼 쓸 수 있고, 한 번 연 책은 인터넷 없이도 읽힙니다.';
 
   /* ── 🔊 소리로 읽기 (2026-11-03 kjm 「묵상앱 읽기 기능?」) ──
      기기의 음성 읽기(speechSynthesis, 한국어)로 제목 → 성구 → 본문을 차례로 읽는다. 각주는 건너뛴다.
@@ -472,7 +493,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
   }
   window._sayStop = function () { if (sayOn || sayEl) { sayStop(); sayLast = 0; } };
   var sayLast = 0;   // 멈춘 자리 — 다시 누르면 그 문장부터
-  $('#say').onclick = function () { if (sayOn) { sayLast = sayI; sayStop(); toast('멈췄습니다 — 다시 누르면 이어서 읽습니다'); } else { sayStart(sayLast); } };
+  $('#say').onclick = function () { if (book === 'qt' && !sayOn) { toast('듣기는 묵상집에서 됩니다'); return; } if (sayOn) { sayLast = sayI; sayStop(); toast('멈췄습니다 — 다시 누르면 이어서 읽습니다'); } else { sayStart(sayLast); } };
   if (SY && SY.onvoiceschanged !== undefined) SY.onvoiceschanged = function () {};
   // 본문 문단을 길게 눌러(또는 두 번 눌러) 그 문단부터 읽기
   $('#main').addEventListener('dblclick', function (e) {
@@ -488,6 +509,7 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
   function search() {
     var q = $('#q').value.trim(), D = DATA[book] || [], out = [];
     if (!q) { $('#res').innerHTML = ''; return; }
+    if (book === 'qt') { QT.search(q); return; }
     var rm = q.match(/^([가-힣]{1,3})\s*(\d+)(?::(\d+))?$/);
     D.forEach(function (x, i) {
       if (rm) { if (vvs(x).some(function (v) { var r = (v.ref || '').match(/^([가-힣]{1,3})\s*(\d+):?(\d+)?/); return r && r[1] === rm[1] && r[2] === rm[2] && (!rm[3] || r[3] === rm[3]); })) out.push(i); }
@@ -514,6 +536,115 @@ nav.bar #say[aria-pressed="true"] b{color:var(--ac)}
 
   var tt = null;
   function toast(s) { var e = $('#toast'); e.textContent = s; e.classList.add('on'); clearTimeout(tt); tt = setTimeout(function () { e.classList.remove('on'); }, 1200); }
+
+  /* ── ✍️ QT 노트 (2026-11-16 kjm 「QT 노트를 폰·묵상 앱에도」) ──
+     성경지도 🌅 묵상 창의 QT 노트와 같은 틀·같은 저장 자리(localStorage kjm_qt_notes {날짜:{b,c,v,mt,s1..s4|p1..p6,at}}, kjm_qt_mt).
+     같은 기기·같은 브라우저에서는 지도에서 쓴 노트가 여기 보이고, 여기서 쓴 노트가 지도에 보인다.
+     본문 글은 이 기기에 개역개정 DB를 넣었을 때만 보인다(공개 파일에는 성경 본문이 없음). 아래 막대 ‹ › 는 하루씩, 「오늘」은 오늘 노트. */
+  var QT = (function () {
+    var KEY = 'kjm_qt_notes', day = null, tm = null;
+    var M4 = [
+      { k: 's1', t: '1. 본문 파악 — 무엇이 쓰여 있나', q: ['누가 누구에게 말하고, 무슨 일이 일어나나요?', '되풀이되거나 눈에 띄는 말은 무엇인가요?', '이 본문에서 하나님(예수님)은 어떤 분으로 나오나요?'] },
+      { k: 's2', t: '2. 오늘과 연결 — 그때의 뜻이 오늘 나에게', q: ['처음 들은 사람들에게 이 말씀은 무슨 뜻이었을까요?', '같은 진리가 오늘 내 삶·가정·교회·일터의 어디에 닿나요?', '하나님에 대해, 나에 대해 새로 깨달은 것은?'] },
+      { k: 's3', t: '3. 적용 — 오늘 할 일 하나', q: ['오늘(이번 주) 실제로 할 일 한 가지를 적으세요.', '누구에게, 언제, 어떻게? 작고 분명하게.'] },
+      { k: 's4', t: '4. 기도와 기록 — 말씀으로 드리는 기도', q: ['깨달은 것을 감사·회개·간구로 하나님께 아뢰세요.', '오늘 마음에 새길 한 구절을 적어 두세요.'] }
+    ];
+    var M6 = [
+      { k: 'p1', t: '1. 찬양과 기도 — 마음 열기', q: ['찬송 한 곡이나 짧은 기도로 시작하세요.', '염려를 내려놓고, 오늘 말씀에 순종할 마음을 구하세요.'] },
+      { k: 'p2', t: '2. 본문 읽기 — 오늘 주시는 말씀', q: ['본문을 두세 번 천천히 읽으세요.', '마음에 와닿거나 궁금한 구절을 적어 두세요.'] },
+      { k: 'p3', t: '3. 묵상하기 — 왜 이 말씀을 주셨나', q: ['이 말씀으로 하나님은 내게 무엇을 말씀하시나요?', '하나님은 어떤 분이시고, 나는 어떤 사람인가요?'] },
+      { k: 'p4', t: '4. 적용하기 — 오늘 할 일', q: ['오늘 실제로 할 일 한 가지를 구체적으로 적으세요.'] },
+      { k: 'p5', t: '5. 기도 — 순종할 힘을 구함', q: ['깨달은 대로 살 지혜와 용기를 구하세요.', '오늘 하루를 맡기는 기도를 적으세요.'] },
+      { k: 'p6', t: '6. 나눔 — 함께 나눌 말', q: ['소그룹이나 가족에게 나눌 말씀과 결단을 짧게 적으세요.'] }
+    ];
+    var NM = ['창세기','출애굽기','레위기','민수기','신명기','여호수아','사사기','룻기','사무엘상','사무엘하','열왕기상','열왕기하','역대상','역대하','에스라','느헤미야','에스더','욥기','시편','잠언','전도서','아가','이사야','예레미야','예레미야애가','에스겔','다니엘','호세아','요엘','아모스','오바댜','요나','미가','나훔','하박국','스바냐','학개','스가랴','말라기',
+      '마태복음','마가복음','누가복음','요한복음','사도행전','로마서','고린도전서','고린도후서','갈라디아서','에베소서','빌립보서','골로새서','데살로니가전서','데살로니가후서','디모데전서','디모데후서','디도서','빌레몬서','히브리서','야고보서','베드로전서','베드로후서','요한일서','요한이서','요한삼서','유다서','요한계시록'];
+    var CH = [50,40,27,36,34,24,21,4,31,24,22,25,29,36,10,13,10,42,150,31,12,8,66,52,5,48,12,14,3,9,1,4,7,3,3,3,2,14,4,28,16,24,21,28,16,16,13,6,6,4,4,5,3,6,4,3,1,13,5,5,3,5,1,1,1,22];
+    var WD = '일월화수목금토';
+    function MT() { return ls('kjm_qt_mt') === '6' ? '6' : '4'; }
+    function stepsOf(n) { var t = n && n.at ? (n.mt || '4') : MT(); return t === '6' ? M6 : M4; }
+    function all() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } }
+    function put(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); return true; } catch (e) { return false; } }
+    function ymd(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+    function today() { return ymd(new Date()); }
+    function dlabel(s) { var d = new Date(s + 'T12:00:00'); return (d.getMonth() + 1) + '월 ' + d.getDate() + '일 (' + WD[d.getDay()] + ')'; }
+    function vr(s) { var m = /^\s*(\d+)\s*(?:[-–~]\s*(\d+))?\s*$/.exec(s || ''); return m ? [+m[1], m[2] ? +m[2] : +m[1]] : null; }
+    function lastBC() { var A = all(), ks = Object.keys(A).sort().reverse(); for (var i = 0; i < ks.length; i++) { var n = A[ks[i]]; if (n && n.b) return { b: +n.b, c: +n.c || 1 }; } return { b: 1, c: 1 }; }
+    function verses(b, c, v) {
+      var r = vr(v); if (!r || !KR) return '';
+      var out = []; for (var i = r[0]; i <= Math.min(r[1], r[0] + 60); i++) { var t = getV(b, c, i); if (t == null) break; out.push('<sup>' + i + '</sup>' + esc(t)); }
+      return out.join(' ');
+    }
+    function save() {
+      var m = $('#main'), A = all(), n = A[day] || {}, S = stepsOf(A[day]);
+      n.b = +m.querySelector('.qt-bk').value; n.c = +m.querySelector('.qt-ch').value; n.v = m.querySelector('.qt-v').value.trim(); n.mt = S === M6 ? '6' : '4';
+      S.forEach(function (x) { n[x.k] = m.querySelector('.qt-' + x.k).value; });
+      var empty = !n.v && S.every(function (x) { return !String(n[x.k] || '').trim(); });
+      if (empty) delete A[day]; else { n.at = new Date().toISOString(); A[day] = n; }
+      var ok = put(A), st = m.querySelector('.qt-bar .st');
+      if (st) st.textContent = ok ? (empty ? '빈 노트(저장 안 함)' : '✔ 이 기기에 저장됨 ' + new Date().toTimeString().slice(0, 5)) : '⚠ 저장 실패 — 브라우저 저장 공간을 확인하세요';
+    }
+    function later() { clearTimeout(tm); tm = setTimeout(save, 600); }
+    function render() {
+      var A = all(), n = A[day] || {}, S = stepsOf(A[day] || null), lb = lastBC(), b = +n.b || lb.b, c = +n.c || lb.c;
+      var d = new Date(day + 'T12:00:00');
+      var h = '<div class="when"><span class="big">' + (d.getMonth() + 1) + '.' + d.getDate() + '</span><span class="unit">' + WD[d.getDay()] + '요일' + (day === today() ? ' · 오늘' : '') + '</span></div>'
+        + '<div class="author">✍️ QT 노트 · 성경지도 묵상 창의 QT 노트와 같은 노트입니다</div>'
+        + '<div class="qt-top"><select class="qt-mt" aria-label="QT 방식"><option value="4"' + (S === M4 ? ' selected' : '') + '>본문 중심 4단계</option><option value="6"' + (S === M6 ? ' selected' : '') + '>생명의 삶 6단계</option></select>'
+        + '<button class="qt-list">🗂 지난 노트</button></div>'
+        + '<div class="qt-pick"><select class="qt-bk" aria-label="책">' + NM.map(function (x, i) { return '<option value="' + (i + 1) + '"' + (i + 1 === b ? ' selected' : '') + '>' + x + '</option>'; }).join('') + '</select>'
+        + '<select class="qt-ch" aria-label="장">' + chOpts(b, c) + '</select>'
+        + '<input class="qt-v" inputmode="numeric" placeholder="절 (예: 1-12)" value="' + esc(n.v || '') + '">'
+        + '<a class="qt-open" style="font-size:13px;color:var(--link)" href="map.html?goto=' + b + '.' + c + '.' + ((vr(n.v) || [1])[0]) + '">성경에서 읽기</a></div>'
+        + '<div class="qt-txt"' + (verses(b, c, n.v) ? '' : ' style="display:none"') + '>' + verses(b, c, n.v) + '</div>'
+        + '<div class="qt-hint">' + (KR ? '' : '본문 글은 「가 글자」 창에서 개역개정 DB를 넣으면 여기 함께 보입니다. ') + (S === M6 ? '본문을 읽으며 와닿는 말씀을 붙잡고, 적용과 나눔까지 이어 가 보세요.' : '1단계는 본문에 쓰인 대로, 2–4단계는 내 말로 적습니다.') + '</div>'
+        + S.map(function (x) { return '<div class="qt-step"><div class="t">' + esc(x.t) + '</div><ul>' + x.q.map(function (q) { return '<li>' + esc(q) + '</li>'; }).join('') + '</ul><textarea class="qt-' + x.k + '" rows="4">' + esc(n[x.k] || '') + '</textarea></div>'; }).join('')
+        + '<div class="qt-bar"><span class="st">' + (n.at ? '✔ 저장됨 ' + n.at.slice(0, 16).replace('T', ' ') : '쓰면 저절로 저장됩니다') + '</span><button class="qt-copy">📋 복사</button></div>'
+        + '<div class="foot">본문 중심 4단계(권호 『본문 중심의 말씀 묵상』, 두란노 2022) · 생명의 삶 6단계(두란노) — 단계 이름만 참고하고 질문은 새로 씀 · 노트는 이 기기에만 저장됩니다(성경지도 ⋯ 백업에 함께 담김).</div>';
+      var m = $('#main'); m.innerHTML = h;
+      m.querySelectorAll('textarea').forEach(function (t) { t.addEventListener('input', later); });
+      var bk = m.querySelector('.qt-bk'), ch = m.querySelector('.qt-ch'), vi = m.querySelector('.qt-v');
+      function txt() { var t = verses(+bk.value, +ch.value, vi.value), e = m.querySelector('.qt-txt'); e.innerHTML = t; e.style.display = t ? '' : 'none'; m.querySelector('.qt-open').href = 'map.html?goto=' + bk.value + '.' + ch.value + '.' + ((vr(vi.value) || [1])[0]); }
+      bk.onchange = function () { ch.innerHTML = chOpts(+bk.value, 1); save(); txt(); };
+      ch.onchange = function () { save(); txt(); };
+      vi.addEventListener('input', later); vi.addEventListener('change', function () { save(); txt(); });
+      m.querySelector('.qt-list').onclick = list;
+      m.querySelector('.qt-mt').onchange = function () {
+        var v = this.value, A2 = all(), cu = A2[day] || null, has = cu && (stepsOf(cu) === M6 ? '6' : '4') !== v && stepsOf(cu).some(function (x) { return String(cu[x.k] || '').trim(); });
+        if (has && !confirm('이 날 노트는 다른 방식으로 적혀 있습니다. 바꾸면 그 칸들은 숨겨집니다(지우지는 않음). 바꿀까요?')) { this.value = stepsOf(cu) === M6 ? '6' : '4'; return; }
+        ls('kjm_qt_mt', v); if (A2[day]) { A2[day].mt = v; put(A2); } render();
+      };
+      m.querySelector('.qt-copy').onclick = function () {
+        save(); var x = all()[day] || {}, S2 = stepsOf(all()[day] || null);
+        var s = dlabel(day) + ' QT · ' + NM[+bk.value - 1] + ' ' + ch.value + ':' + (x.v || '') + '\n\n' + S2.map(function (y) { return '■ ' + y.t + '\n' + (x[y.k] || '').trim(); }).join('\n\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(s).then(function () { toast('복사했습니다'); }, function () { window.prompt('복사해 가세요', s); });
+        else window.prompt('복사해 가세요', s);
+      };
+      var tk = today(); $('#today').innerHTML = '<b>오늘</b>' + (day === tk ? 'QT' : (+tk.slice(5, 7)) + '.' + (+tk.slice(8, 10)));
+    }
+    function chOpts(b, c) { var o = ''; for (var i = 1; i <= CH[b - 1]; i++) o += '<option value="' + i + '"' + (i === c ? ' selected' : '') + '>' + i + (b === 19 ? '편' : '장') + '</option>'; return o; }
+    function first(n) { return String(n.s1 || n.s2 || n.s3 || n.s4 || n.p3 || n.p2 || n.p4 || n.p5 || n.p6 || n.p1 || '').trim(); }
+    function li(k, n, extra) { return '<button class="qt-li" data-day="' + k + '"><small>' + dlabel(k) + ' · ' + esc(NM[(+n.b || 1) - 1]) + ' ' + (n.c || '') + (n.v ? ':' + esc(n.v) : '장') + '</small><br>' + (extra || esc(first(n).slice(0, 60))) + '</button>'; }
+    function list() {
+      var A = all(), ks = Object.keys(A).sort().reverse(), m = $('#main');
+      m.innerHTML = '<div class="when"><span class="unit">🗂 지난 QT 노트 · ' + ks.length + '장</span></div>'
+        + (ks.length ? ks.map(function (k) { return li(k, A[k]); }).join('') : '<div class="empty">아직 적은 QT 노트가 없습니다.</div>')
+        + '<div class="qt-bar" style="margin-top:12px"><span class="st"></span><button class="qt-back">← 오늘 노트</button></div>';
+      m.querySelectorAll('.qt-li').forEach(function (e) { e.onclick = function () { day = e.dataset.day; render(); window.scrollTo(0, 0); }; });
+      m.querySelector('.qt-back').onclick = function () { day = today(); render(); };
+      window.scrollTo(0, 0);
+    }
+    return {
+      open: function () { if (!day) day = today(); root.dataset.book = 'qt'; render(); window.scrollTo(0, 0); },
+      move: function (dir) { if (dir === 0) day = today(); else { var d = new Date(day + 'T12:00:00'); d.setDate(d.getDate() + dir); day = ymd(d); } render(); window.scrollTo(0, 0); },
+      search: function (q) {
+        var A = all(), ks = Object.keys(A).sort().reverse().filter(function (k) { var n = A[k]; return Object.keys(n).some(function (f) { return /^[sp]\d$|^v$/.test(f) && String(n[f]).indexOf(q) >= 0; }) || NM[(+n.b || 1) - 1].indexOf(q) >= 0; });
+        if (!ks.length) { $('#res').innerHTML = '<div class="hint" style="padding:12px 16px">「' + esc(q) + '」이(가) 들어간 QT 노트가 없습니다.</div>'; return; }
+        $('#res').innerHTML = '<div class="hint" style="padding:0 16px">' + ks.length + '장</div>' + ks.map(function (k) { return li(k, A[k]); }).join('');
+        $('#res').querySelectorAll('.qt-li').forEach(function (e) { e.onclick = function () { closeSheets(); day = e.dataset.day; render(); window.scrollTo(0, 0); }; });
+      }
+    };
+  })();
 
   setBook(book);
 

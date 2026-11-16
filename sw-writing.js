@@ -1,12 +1,15 @@
-// 성경 필사 + QT — PWA Service Worker v1.0.0 (2026-11-16)
+// 성경 필사 + QT — PWA Service Worker v1.0.1 (2026-11-16)
+// (1.0.1) 폰 전용 화면(mobile/)도 이 파일을 mobile/ 범위로 씀 — 처음 설치 때 mobile 화면도 저장, 끊겼을 때 mobile 은 mobile 화면으로.
 // 범위(scope)는 './index' — 같은 사이트의 지도 앱(sw.js, 전체), 묵상(devo_sw.js), ISBE(isbe_sw.js)와 겹치지 않게 index.html 만 맡는다.
 // 받는 방법: 네트워크 우선(늘 새 판), 끊겼을 때만 저장해 둔 사본. 성경 DB 파일(.bdb)은 건드리지 않는다.
-const CACHE_NAME = 'bible-writing-v1.0.0';
+const CACHE_NAME = 'bible-writing-v1.0.1';
 const CORE_ASSETS = [
   './index.html',
   './manifest-writing.json',
   './icon-writing-192.png',
   './icon-writing-512.png',
+  './mobile/index.html',
+  './mobile/manifest-mobile.json',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.js',
   'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.2/sql-wasm.wasm'
@@ -46,7 +49,7 @@ self.addEventListener('fetch', event => {
       fetch(fresh.toString(), { cache: 'no-store' }).then(r => {
         if (r.ok) { const c = r.clone(); caches.open(CACHE_NAME).then(ca => ca.put(clean, c)); }
         return r.ok ? r : caches.match(clean).then(m => m || r);
-      }).catch(() => caches.match(clean).then(m => m || caches.match('./index.html')))
+      }).catch(() => caches.match(clean).then(m => m || caches.match(/\/mobile\//.test(url.pathname) ? './mobile/index.html' : './index.html')))
     );
     return;
   }

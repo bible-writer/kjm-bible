@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>성경 필사 + QT (v172)</title>
+<title>성경 필사 + QT (v173)</title>
   <!-- PWA 설정 -->
   <link rel="manifest" href="manifest-writing.json">
   <meta name="theme-color" content="#6366f1">
@@ -3953,7 +3953,7 @@
     <div class="split-left">
       <div class="text-display" id="textDisplay">
         <div class="text-display-header">
-          <div class="text-display-title" id="sourceTitleLabel">📖 본문 (개역개정4)</div>
+          <div class="text-display-title" id="sourceTitleLabel">📖 본문 (성경 DB 없음)</div>
           <div style="display:flex; gap:4px; flex-wrap:wrap;">
             <button class="text-edit-btn" onclick="changeSourceFontSize(-2)" title="본문 글자 작게">가−</button>
             <button class="text-edit-btn" onclick="changeSourceFontSize(2)" title="본문 글자 크게">가+</button>
@@ -13883,7 +13883,8 @@ async function openBibleDBT(buf, version) {
 function updateSourceTitleLabel(version) {
   const el = document.getElementById('sourceTitleLabel');
   if (!el) return;
-  const name = version || localStorage.getItem('bible_dbVersion') || '개역개정4';
+  // v173: 성경 DB를 아직 안 넣었으면 「성경 DB 없음」 (전에는 늘 「개역개정4」로 보였음)
+  const name = version || (window._bdbLoaded ? (localStorage.getItem('bible_dbVersion') || '성경') : '성경 DB 없음');
   el.textContent = '📖 본문 (' + name + ')';
 }
 
