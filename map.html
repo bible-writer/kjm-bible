@@ -1874,6 +1874,9 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             <button id="menu-open-krvn" onclick="menuPickFile('krvn')">📘 어절 원어 분석 등록 <span id="menu-state-krvn" style="color:#94a3b8;font-size:0.85em"></span></button>
             <button id="menu-drop-file" onclick="menuDropFile()">🗑️ 등록한 파일 지우기</button>
 
+            <div class="menu-sect">알리기</div>
+            <button id="menu-report">✉ 틀린 곳 알리기</button>
+
             <div class="menu-sect">백업</div>
             <button id="btn-import-backup-trigger">💾 백업에서 복원</button>
             <button id="btn-drive-connect">🔗 Google Drive 연동</button>
@@ -1974,6 +1977,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         <button class="rb-go" id="read-btn">조회</button>
 
         <span class="rb-right">
+          <button class="rb-icon" id="btn-readplan" title="통독 진도 (읽은 장·통독표)">📅</button>
           <button class="rb-icon" id="btn-book-grid" title="책 고르기">📖</button>
           <button class="rb-icon" id="btn-chap-grid" title="장 고르기">🔢</button>
           <button class="rb-icon" id="btn-krv-sn" title="개역개정 어절마다 스트롱 번호를 작게 (어절 원어 분석 등록 필요) — 번호를 누르면 원어 뜻">H#</button>
@@ -2920,6 +2924,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
             if (pkg.userCustomKeywordMap) { userCustomKeywordMap = pkg.userCustomKeywordMap; await setLocalItem('saved_custom_keyword_map', pkg.userCustomKeywordMap); }
             if (pkg.qtNotes && typeof pkg.qtNotes === 'object') { try { var _q = JSON.parse(localStorage.getItem('kjm_qt_notes') || '{}') || {}; Object.keys(pkg.qtNotes).forEach(function (k) { var a = _q[k], b = pkg.qtNotes[k]; if (!a || String(b.at || '') > String(a.at || '')) _q[k] = b; }); localStorage.setItem('kjm_qt_notes', JSON.stringify(_q)); } catch (e) {} }   // (b20261114-1) QT 노트: 날짜마다 더 새것을 남김
             if (pkg.aids && typeof window.aidRestoreData === 'function') { try { window.aidRestoreData(pkg.aids); } catch (e) {} }   // (b20261114-16) 📚 책갈피·암송
+            if (pkg.readLog && window.ReadPlan) { try { window.ReadPlan.restoreData(pkg.readLog); } catch (e) {} }   // (b20261114-38) 📅 읽음 기록
             if (pkg.savedPaneWidth)     { document.getElementById('left-pane').style.width = pkg.savedPaneWidth; }
             if (pkg.savedFontSize)      { applyFontSize(pkg.savedFontSize); }
             // [보정A] 백업에 담긴 좌표 보정 이력 복원
@@ -13086,6 +13091,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         termDatabaseMeta: termDatabaseMeta,
         qtNotes: (function () { try { return JSON.parse(localStorage.getItem('kjm_qt_notes') || 'null'); } catch (e) { return null; } })(),   // (b20261114-1) ✍️ QT 노트
         aids: (typeof window.aidBackupData === 'function' ? window.aidBackupData() : null),   // (b20261114-16) 📚 책갈피·암송
+        readLog: (window.ReadPlan ? window.ReadPlan.backupData() : null),   // (b20261114-38) 📅 읽음 기록·통독표
         deltas: {
           place: await BackupDelta.delta('place'),
           term: await BackupDelta.delta('term'),
@@ -13117,6 +13123,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
 
       if (gdriveAccessToken) {
         const ok = await gdriveUploadJson(jsonStr);
+        if (ok && window.ReadPlan) window.ReadPlan.markBackup();   // (b20261114-38) 백업 알림
         if (ok && !silent) showToast("Google Drive에도 백업이 저장되었습니다.", "success");
         else if (!ok) showToast("Drive 업로드 실패 — 연동을 다시 확인해 주세요.", "warn");
       } else if (silent) {
@@ -13143,6 +13150,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      if (window.ReadPlan) window.ReadPlan.markBackup();   // (b20261114-38) 백업 알림
 
       showToast(`${placeDatabase.length}개 지명, 구절 및 모든 설정이 백업 파일로 저장되었습니다.`, 'success')
     };
@@ -13177,6 +13185,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
           }
           if (pkg.qtNotes && typeof pkg.qtNotes === 'object') { try { var _q = JSON.parse(localStorage.getItem('kjm_qt_notes') || '{}') || {}; Object.keys(pkg.qtNotes).forEach(function (k) { var a = _q[k], b = pkg.qtNotes[k]; if (!a || String(b.at || '') > String(a.at || '')) _q[k] = b; }); localStorage.setItem('kjm_qt_notes', JSON.stringify(_q)); } catch (e) {} }   // (b20261114-1) QT 노트: 날짜마다 더 새것을 남김
           if (pkg.aids && typeof window.aidRestoreData === 'function') { try { window.aidRestoreData(pkg.aids); } catch (e) {} }   // (b20261114-16) 📚 책갈피·암송
+            if (pkg.readLog && window.ReadPlan) { try { window.ReadPlan.restoreData(pkg.readLog); } catch (e) {} }   // (b20261114-38) 📅 읽음 기록
           if (pkg.savedPaneWidth) {
             leftPane.style.width = pkg.savedPaneWidth;
             await setLocalItem("saved_pane_width", pkg.savedPaneWidth);
@@ -19493,6 +19502,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       try { applyKrvStrong(container); } catch (e) { console.warn('스트롱 번호 표시 생략', e); }
       try { renderChapterChips(container); } catch (e) { console.warn('장 등장 칩 생략', e); }
       try { if (window.FigTags) FigTags.apply(container, bookId, chapter, verses); } catch (e) { console.warn('비유법 표시 생략', e); }
+      try { if (window.ReadPlan) ReadPlan.onChapter(bookId, chapter, container); } catch (e) { console.warn('읽음 막대 생략', e); }   // (b20261114-38) 📅 통독 진도
 
       // 현재 장의 모든 지명을 지도에 표시 + fitBounds
       showChapterPlaces(container);
@@ -19797,7 +19807,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-37`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-38`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -26276,6 +26286,307 @@ window.RoutePlay = (function () {
   };
   document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('.kjm-rt-more'); if (!t) return; e.preventDefault(); e.stopPropagation(); window.kjmRouteLegs(t.dataset.route); }, true);
   (function rWatch() { var body = document.getElementById('route-panel-body'); if (!body) { setTimeout(rWatch, 1000); return; } rDecorate(); new MutationObserver(rDecorate).observe(body, { childList: true }); })();
+})();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+ * (b20261114-38) 📅 통독 진도 · 💾 백업 알림 · ✉ 틀린 곳 알리기
+ *   목장 식구들이 날마다 쓰도록 기본기를 보탠다(2026-11-16 kjm 「보완」 방향).
+ *   - 읽음 기록 localStorage kjm_read_log {"책-장": 읽은 시각(ms)}
+ *   - 통독표   localStorage kjm_read_plan {id, start:'YYYY-MM-DD'}
+ *   - 마지막 백업 시각 kjm_last_backup(ms) · 알림 미룸 kjm_bk_snooze(ms) · 처음 본 날 kjm_bk_seen(ms)
+ *   통독표는 장 수를 날짜에 고르게 나눠 앱이 스스로 만든다(남의 통독표를 옮기지 않음).
+ * ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  var LOG = 'kjm_read_log', PLAN = 'kjm_read_plan', LASTBK = 'kjm_last_backup', SNOOZE = 'kjm_bk_snooze', SEEN = 'kjm_bk_seen';
+  var BUILD = 'b20261114-38';
+  function ls(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
+  function toast(m, t, d) { try { showToast(m, t || 'info', d || 3000); } catch (e) { } }
+  function books() { try { return BIBLE_BOOKS; } catch (e) { return []; } }
+  function bookOf(id) { var b = books(); for (var i = 0; i < b.length; i++) if (b[i].id === id) return b[i]; return null; }
+  function key(b, c) { return b + '-' + c; }
+  function getLog() { var o = ls(LOG, {}); return (o && typeof o === 'object') ? o : {}; }
+  function isRead(b, c) { return !!getLog()[key(b, c)]; }
+  function setRead(b, c, on) { var o = getLog(); if (on) o[key(b, c)] = Date.now(); else delete o[key(b, c)]; lsSet(LOG, o); }
+
+  /* ── 날짜: 기기 시간(현지) 기준 'YYYY-MM-DD' ── */
+  function ymd(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function parseYmd(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+  function dayDiff(a, b) { return Math.round((b - a) / 86400000); }   // 하루 단위(서머타임 없음 — 반올림으로 충분)
+  function todayDate() { var n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); }
+
+  /* ── 통독표: 장 목록을 날짜 수에 고르게 나눔 ── */
+  function chaptersOf(from, to) { var out = []; books().forEach(function (b) { if (b.id >= from && b.id <= to) for (var c = 1; c <= b.chapters; c++) out.push([b.id, c]); }); return out; }
+  function split(list, days) { var out = []; for (var d = 0; d < days; d++) { var s = Math.floor(d * list.length / days), e = Math.floor((d + 1) * list.length / days); out.push(list.slice(s, e)); } return out; }
+  var PLANS = {
+    seq365: { name: '1년 1독 — 창세기부터 차례대로', days: 365, make: function () { return split(chaptersOf(1, 66), 365); } },
+    otnt365: { name: '1년 1독 — 구약과 신약을 나란히', days: 365, make: function () { var o = split(chaptersOf(1, 39), 365), n = split(chaptersOf(40, 66), 365); return o.map(function (x, i) { return x.concat(n[i]); }); } },
+    nt90: { name: '신약 90일', days: 90, make: function () { return split(chaptersOf(40, 66), 90); } },
+    gospel40: { name: '사복음서 40일', days: 40, make: function () { return split(chaptersOf(40, 43), 40); } },
+    ps150: { name: '시편 150일 (하루 한 편)', days: 150, make: function () { return split(chaptersOf(19, 19), 150); } }
+  };
+  var _cache = {};
+  function planDays(id) { if (!PLANS[id]) return null; return _cache[id] || (_cache[id] = PLANS[id].make()); }
+  function curPlan() { var p = ls(PLAN, null); if (!p || !PLANS[p.id] || !parseYmd(p.start)) return null; return p; }
+  function dayIndex(p, date) { return dayDiff(parseYmd(p.start), date || todayDate()); }   // 0 = 첫날
+  function ref(b, c) { var bk = bookOf(b); return (bk ? bk.abbr : b) + ' ' + c; }
+  function rangeText(list) {   // [[1,1],[1,2],[1,3]] → 「창 1–3」, 책이 바뀌면 쉼표
+    var parts = [], i = 0;
+    while (i < list.length) { var b = list[i][0], s = list[i][1], e = s; while (i + 1 < list.length && list[i + 1][0] === b && list[i + 1][1] === e + 1) { i++; e++; } var bk = bookOf(b); parts.push((bk ? bk.abbr : b) + ' ' + (s === e ? s : s + '–' + e)); i++; }
+    return parts.join(', ');
+  }
+  function lateList(p) {   // 오늘 전까지 계획에 있었는데 안 읽은 장
+    var d = planDays(p.id), idx = Math.min(dayIndex(p), d.length), out = [], log = getLog();
+    for (var i = 0; i < idx; i++) d[i].forEach(function (x) { if (!log[key(x[0], x[1])]) out.push(x); });
+    return out;
+  }
+
+  /* ── 모양 ── */
+  var st = document.createElement('style');
+  st.textContent = ''
+    + '.rp-end{margin:22px 4px 10px;padding:12px 10px;border-top:1px dashed #cbd5e1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}'
+    + '.rp-end button{border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:18px;padding:7px 14px;font-size:14px;cursor:pointer;line-height:1.2}'
+    + '.rp-end button.rp-on{background:#dcfce7;border-color:#86efac;color:#166534;font-weight:700}'
+    + '.rp-end button.rp-next{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;font-weight:700}'
+    + '.rp-end .rp-today{flex-basis:100%;text-align:center;font-size:12.5px;color:#64748b}'
+    + '.rp-end .rp-today a{color:#1d4ed8;cursor:pointer;text-decoration:underline}'
+    + '.rp-end .rp-rep{border:none;background:none;color:#94a3b8;font-size:12px;padding:4px 6px}'
+    + '#rp-modal,#rp-rep-modal{position:fixed;inset:0;z-index:100050;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center}'
+    + '#rp-modal .rp-box,#rp-rep-modal .rp-box{background:#fff;color:#1e293b;border-radius:12px;width:min(560px,96vw);max-height:92vh;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.25)}'
+    + '.rp-h{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid #e2e8f0;font-size:16px}'
+    + '.rp-h b{flex:1}.rp-h button{border:none;background:none;font-size:18px;cursor:pointer;color:#64748b}'
+    + '.rp-b{overflow:auto;padding:12px 14px 16px;font-size:14px}'
+    + '.rp-card{border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;margin-bottom:12px}'
+    + '.rp-card h4{margin:0 0 8px;font-size:14px;color:#0f172a}'
+    + '.rp-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}'
+    + '.rp-row select,.rp-row input{font-size:14px;padding:5px 6px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#1e293b}'
+    + '.rp-btn{border:1px solid #cbd5e1;background:#f8fafc;color:#334155;border-radius:6px;padding:5px 10px;font-size:13.5px;cursor:pointer}'
+    + '.rp-btn.rp-pri{background:#2563eb;border-color:#2563eb;color:#fff}'
+    + '.rp-chip{display:inline-block;border:1px solid #cbd5e1;border-radius:14px;padding:4px 10px;margin:3px 3px 0 0;font-size:13.5px;cursor:pointer;background:#fff;color:#334155}'
+    + '.rp-chip.rp-on{background:#dcfce7;border-color:#86efac;color:#166534}'
+    + '.rp-bar{height:10px;background:#e2e8f0;border-radius:5px;overflow:hidden;margin:6px 0 2px}.rp-bar i{display:block;height:100%;background:#22c55e}'
+    + '.rp-small{font-size:12px;color:#64748b}'
+    + '.rp-books{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:5px}'
+    + '.rp-bk{border:1px solid #e2e8f0;border-radius:7px;padding:4px 2px 3px;text-align:center;cursor:pointer;font-size:12.5px;background:#fff;color:#334155}'
+    + '.rp-bk.rp-done{background:#dcfce7;border-color:#86efac}.rp-bk.rp-sel{outline:2px solid #2563eb}'
+    + '.rp-bk .rp-mini{height:4px;background:#e2e8f0;border-radius:2px;margin:3px 4px 0;overflow:hidden}.rp-bk .rp-mini i{display:block;height:100%;background:#22c55e}'
+    + '.rp-chs{display:grid;grid-template-columns:repeat(auto-fill,minmax(36px,1fr));gap:4px;margin-top:8px}'
+    + '.rp-ch{border:1px solid #e2e8f0;border-radius:5px;text-align:center;padding:5px 0;font-size:12.5px;cursor:pointer;background:#fff;color:#334155}'
+    + '.rp-ch.rp-on{background:#22c55e;border-color:#16a34a;color:#fff;font-weight:700}'
+    + '.rp-sect{font-size:12px;color:#64748b;margin:10px 0 4px}'
+    + '#rp-rep-modal textarea{width:100%;box-sizing:border-box;min-height:90px;font-size:14px;padding:8px;border:1px solid #cbd5e1;border-radius:6px;color:#1e293b;background:#fff}'
+    + '#rp-rep-modal pre{white-space:pre-wrap;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:8px;font-size:12.5px;margin:8px 0;color:#334155}'
+    + '#rp-bk-note{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;z-index:100040;background:#fffbeb;border:1px solid #fcd34d;color:#78350f;border-radius:10px;padding:10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.18);font-size:14px;width:min(440px,94vw);display:flex;flex-wrap:wrap;gap:8px;align-items:center}'
+    + '#rp-bk-note span{flex:1 1 100%}#rp-bk-note button{border:1px solid #f59e0b;background:#fff;color:#92400e;border-radius:6px;padding:5px 10px;font-size:13.5px;cursor:pointer}#rp-bk-note button.rp-pri{background:#f59e0b;color:#fff}'
+    + '@media (max-width:768px){#rp-modal .rp-box{width:100vw;max-height:100%;height:100%;border-radius:0}.rp-end button{font-size:15px;padding:9px 14px}}';
+  document.head.appendChild(st);
+
+  /* ── 장 끝 막대 ── */
+  function goChapter(b, c) { try { closeModal(); setSelectValuesAndLoad(b, c); } catch (e) { } }
+  function nextOf(b, c) { var bk = bookOf(b); if (!bk) return null; if (c < bk.chapters) return [b, c + 1]; var nb = bookOf(b + 1); return nb ? [nb.id, 1] : null; }
+  function todayLine() {
+    var p = curPlan(); if (!p) return '';
+    var d = planDays(p.id), i = dayIndex(p);
+    if (i < 0) return '📅 통독은 ' + esc(p.start) + '에 시작합니다';
+    if (i >= d.length) { var late = lateList(p).length; return late ? '📅 통독표 날짜가 끝났습니다 · 아직 안 읽은 장 ' + late + '개 · <a data-rp="open">진도 보기</a>' : '📅 통독표를 다 읽었습니다 🎉'; }
+    var t = d[i], left = t.filter(function (x) { return !isRead(x[0], x[1]); });
+    var first = left[0];
+    return '📅 ' + (i + 1) + '일째 오늘 읽을 곳: ' + esc(rangeText(t)) + (left.length ? ' · 남은 ' + left.length + '장' + (first ? ' · <a data-rp="go" data-b="' + first[0] + '" data-c="' + first[1] + '">' + esc(ref(first[0], first[1])) + ' 읽기</a>' : '') : ' · 다 읽음 ✓');
+  }
+  function drawEnd(container, b, c) {
+    if (!container) return;
+    var old = container.querySelector('.rp-end'); if (old) old.remove();
+    var on = isRead(b, c), nx = nextOf(b, c);
+    var div = document.createElement('div'); div.className = 'rp-end'; div.dataset.b = b; div.dataset.c = c;
+    div.innerHTML = '<button data-rp="toggle" class="' + (on ? 'rp-on' : '') + '">' + (on ? '✓ 읽음' : '☐ 이 장 다 읽음') + '</button>'
+      + (nx ? '<button data-rp="next" class="rp-next">' + (on ? '다음 장 ▶' : '다 읽고 다음 장 ▶') + '</button>' : '')
+      + '<button data-rp="open" title="통독 진도">📅 진도</button>'
+      + '<div class="rp-today">' + todayLine() + '</div>'
+      + '<button data-rp="report" class="rp-rep" title="이 장에서 틀린 글자·잘못된 연결을 보면 알려 주세요">✉ 틀린 곳 알리기</button>';
+    container.appendChild(div);
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('[data-rp]'); if (!t) return;
+    var bar = t.closest('.rp-end'), act = t.dataset.rp;
+    var b = bar ? +bar.dataset.b : 0, c = bar ? +bar.dataset.c : 0;
+    if (act === 'toggle') { setRead(b, c, !isRead(b, c)); drawEnd(bar.parentNode, b, c); afterMark(); }
+    else if (act === 'next') { if (!isRead(b, c)) { setRead(b, c, true); afterMark(); } var n = nextOf(b, c); if (n) goChapter(n[0], n[1]); }
+    else if (act === 'open') { e.preventDefault(); openModal(); }
+    else if (act === 'go') { e.preventDefault(); goChapter(+t.dataset.b, +t.dataset.c); }
+    else if (act === 'report') { openReport(b, c); }
+  });
+  function afterMark() {
+    var p = curPlan(); if (!p) return;
+    var d = planDays(p.id), i = dayIndex(p); if (i < 0 || i >= d.length) return;
+    if (d[i].every(function (x) { return isRead(x[0], x[1]); })) {
+      var k = 'kjm_rp_done_' + ymd(todayDate());
+      if (!ls(k, false)) { lsSet(k, true); toast('오늘 읽을 곳을 다 읽었습니다 ✓', 'success', 3500); }
+    }
+  }
+
+  /* ── 진도 창 ── */
+  var selBook = 0, editMode = false, viewDay = null;
+  function closeModal() { var m = document.getElementById('rp-modal'); if (m) m.remove(); }
+  function openModal() { closeModal(); viewDay = null; var m = document.createElement('div'); m.id = 'rp-modal'; m.innerHTML = '<div class="rp-box"><div class="rp-h"><b>📅 통독 진도</b><button data-x="1" title="닫기">✕</button></div><div class="rp-b"></div></div>'; document.body.appendChild(m); m.addEventListener('click', onModal); m.addEventListener('change', onModal); render(); }
+  function render() {
+    var m = document.getElementById('rp-modal'); if (!m) return;
+    var body = m.querySelector('.rp-b'), log = getLog(), p = curPlan(), h = '';
+    var total = 0, done = 0; books().forEach(function (bk) { for (var c = 1; c <= bk.chapters; c++) { total++; if (log[key(bk.id, c)]) done++; } });
+    // 통독표
+    h += '<div class="rp-card"><h4>통독표</h4>';
+    if (p) {
+      var d = planDays(p.id), i = dayIndex(p), vi = viewDay == null ? Math.max(0, Math.min(i, d.length - 1)) : viewDay;
+      var pt = 0, pd = 0; d.forEach(function (x) { x.forEach(function (y) { pt++; if (log[key(y[0], y[1])]) pd++; }); });
+      h += '<div>' + esc(PLANS[p.id].name) + ' <span class="rp-small">· ' + esc(p.start) + ' 시작</span></div>';
+      h += '<div class="rp-bar"><i style="width:' + (pt ? Math.round(pd * 100 / pt) : 0) + '%"></i></div><div class="rp-small">' + pd + ' / ' + pt + '장 (' + (pt ? Math.round(pd * 100 / pt) : 0) + '%)'
+        + (i >= 0 && i < d.length ? ' · 오늘은 ' + (i + 1) + '일째 / ' + d.length + '일' : (i < 0 ? ' · 아직 시작 전' : ' · 날짜가 끝남')) + '</div>';
+      var dt = new Date(parseYmd(p.start).getTime() + vi * 86400000);
+      h += '<div class="rp-row" style="margin-top:8px"><button class="rp-btn" data-day="-1">‹</button><b>' + (vi + 1) + '일째 · ' + (dt.getMonth() + 1) + '월 ' + dt.getDate() + '일' + (vi === i ? ' (오늘)' : '') + '</b><button class="rp-btn" data-day="1">›</button>' + (vi !== i && i >= 0 && i < d.length ? '<button class="rp-btn" data-day="0">오늘</button>' : '') + '</div><div>';
+      d[vi].forEach(function (x) { var on = !!log[key(x[0], x[1])]; h += '<span class="rp-chip' + (on ? ' rp-on' : '') + '" data-go="' + x[0] + '-' + x[1] + '">' + (on ? '✓ ' : '') + esc(ref(x[0], x[1])) + '</span>'; });
+      h += '</div>';
+      var late = lateList(p);
+      if (late.length) h += '<div class="rp-sect">밀린 장 ' + late.length + '개</div><div>' + late.slice(0, 30).map(function (x) { return '<span class="rp-chip" data-go="' + x[0] + '-' + x[1] + '">' + esc(ref(x[0], x[1])) + '</span>'; }).join('') + (late.length > 30 ? ' <span class="rp-small">외 ' + (late.length - 30) + '개</span>' : '') + '</div>';
+      h += '<div class="rp-row" style="margin-top:10px"><button class="rp-btn" data-plan="change">통독표 바꾸기</button><button class="rp-btn" data-plan="stop">통독표 그만두기</button></div>';
+    }
+    if (!p || m._chooser) {
+      h += '<div class="rp-row" style="margin-top:6px"><select data-f="plan">' + Object.keys(PLANS).map(function (k) { return '<option value="' + k + '"' + (p && p.id === k ? ' selected' : '') + '>' + esc(PLANS[k].name) + '</option>'; }).join('') + '</select>'
+        + '<label class="rp-small">시작일 <input type="date" data-f="start" value="' + esc(p ? p.start : ymd(todayDate())) + '"></label><button class="rp-btn rp-pri" data-plan="set">' + (p ? '이것으로 바꾸기' : '시작하기') + '</button></div>'
+        + '<div class="rp-small" style="margin-top:6px">장 수를 날짜에 고르게 나눈 표입니다. 이미 읽음으로 표시한 장은 그대로 셉니다.</div>';
+    }
+    h += '</div>';
+    // 전체 진도
+    h += '<div class="rp-card"><h4>성경 전체 ' + done + ' / ' + total + '장 (' + (total ? Math.round(done * 100 / total) : 0) + '%)</h4><div class="rp-bar"><i style="width:' + (total ? done * 100 / total : 0) + '%"></i></div>';
+    [['OT', '구약'], ['NT', '신약']].forEach(function (tg) {
+      h += '<div class="rp-sect">' + tg[1] + '</div><div class="rp-books">';
+      books().filter(function (bk) { return bk.testament === tg[0]; }).forEach(function (bk) {
+        var n = 0; for (var c = 1; c <= bk.chapters; c++) if (log[key(bk.id, c)]) n++;
+        h += '<div class="rp-bk' + (n === bk.chapters ? ' rp-done' : '') + (selBook === bk.id ? ' rp-sel' : '') + '" data-bk="' + bk.id + '">' + esc(bk.abbr) + ' <span class="rp-small">' + n + '/' + bk.chapters + '</span><div class="rp-mini"><i style="width:' + (n * 100 / bk.chapters) + '%"></i></div></div>';
+      });
+      h += '</div>';
+      var sb = bookOf(selBook);
+      if (sb && sb.testament === tg[0]) {
+        h += '<div class="rp-row" style="margin-top:8px"><b>' + esc(sb.name) + '</b><label class="rp-small"><input type="checkbox" data-f="edit"' + (editMode ? ' checked' : '') + '> 눌러서 읽음 고치기</label>'
+          + (editMode ? '<button class="rp-btn" data-all="1">모두 읽음</button><button class="rp-btn" data-all="0">모두 지움</button>' : '') + '</div>'
+          + '<div class="rp-small">' + (editMode ? '장을 누르면 읽음 표시가 켜지고 꺼집니다.' : '장을 누르면 그 장으로 갑니다.') + '</div><div class="rp-chs">';
+        for (var c2 = 1; c2 <= sb.chapters; c2++) h += '<div class="rp-ch' + (log[key(sb.id, c2)] ? ' rp-on' : '') + '" data-ch="' + c2 + '">' + c2 + '</div>';
+        h += '</div>';
+      }
+    });
+    h += '</div>';
+    h += '<div class="rp-small">읽음 기록은 이 기기에만 저장됩니다. 다른 기기로 옮기거나 잃지 않으려면 위쪽 「백업」 단추로 파일을 받아 두세요(⋯ → 「백업에서 복원」으로 되살림).</div>';
+    h += '<div class="rp-row" style="margin-top:10px"><button class="rp-btn" data-wipe="1">' + (m._wipe ? '한 번 더 누르면 읽음 기록을 모두 지웁니다' : '읽음 기록 모두 지우기') + '</button></div>';
+    var sc = body.scrollTop; body.innerHTML = h; body.scrollTop = sc;
+  }
+  function onModal(e) {
+    var m = document.getElementById('rp-modal'), t = e.target;
+    if (e.type === 'change') { if (t.dataset.f === 'edit') { editMode = t.checked; render(); } return; }
+    if (t === m || t.closest('[data-x]')) { closeModal(); refreshEnd(); return; }
+    var g = t.closest('[data-go]'); if (g) { var a = g.dataset.go.split('-'); goChapter(+a[0], +a[1]); return; }
+    var bk = t.closest('[data-bk]'); if (bk) { selBook = selBook === +bk.dataset.bk ? 0 : +bk.dataset.bk; render(); return; }
+    var ch = t.closest('[data-ch]'); if (ch) { var cc = +ch.dataset.ch; if (editMode) { setRead(selBook, cc, !isRead(selBook, cc)); render(); } else goChapter(selBook, cc); return; }
+    var al = t.closest('[data-all]'); if (al) { var sb = bookOf(selBook), o = getLog(); for (var i = 1; i <= sb.chapters; i++) { if (al.dataset.all === '1') { if (!o[key(sb.id, i)]) o[key(sb.id, i)] = Date.now(); } else delete o[key(sb.id, i)]; } lsSet(LOG, o); render(); return; }
+    var dy = t.closest('[data-day]'); if (dy) { var p = curPlan(), d = planDays(p.id), i0 = Math.max(0, Math.min(dayIndex(p), d.length - 1)), cur = viewDay == null ? i0 : viewDay, s = +dy.dataset.day; viewDay = s === 0 ? null : Math.max(0, Math.min(d.length - 1, cur + s)); render(); return; }
+    var pl = t.closest('[data-plan]'); if (pl) {
+      var act = pl.dataset.plan;
+      if (act === 'change') { m._chooser = !m._chooser; render(); }
+      else if (act === 'stop') { try { localStorage.removeItem(PLAN); } catch (x) { } m._chooser = false; render(); }
+      else if (act === 'set') { var id = m.querySelector('[data-f=plan]').value, sd = m.querySelector('[data-f=start]').value; if (!parseYmd(sd)) { toast('시작일을 골라 주세요', 'warn'); return; } lsSet(PLAN, { id: id, start: sd }); m._chooser = false; viewDay = null; render(); toast('통독표를 정했습니다 — ' + PLANS[id].name, 'success'); }
+      return;
+    }
+    if (t.closest('[data-wipe]')) { if (m._wipe) { lsSet(LOG, {}); m._wipe = false; toast('읽음 기록을 지웠습니다', 'info'); } else { m._wipe = true; setTimeout(function () { if (m._wipe) { m._wipe = false; render(); } }, 4000); } render(); return; }
+  }
+  function refreshEnd() { var bar = document.querySelector('#bible-content .rp-end'); if (bar) drawEnd(bar.parentNode, +bar.dataset.b, +bar.dataset.c); }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (document.getElementById('rp-rep-modal')) document.getElementById('rp-rep-modal').remove(); else if (document.getElementById('rp-modal')) { closeModal(); refreshEnd(); } } });
+
+  /* ── ✉ 틀린 곳 알리기 ── */
+  function openReport(b, c) {
+    var old = document.getElementById('rp-rep-modal'); if (old) old.remove();
+    if (!b) { try { b = curBookId(); c = curChapterNo(); } catch (e) { b = 0; } }
+    var bk = bookOf(b), admin = false; try { admin = isAdminMode(); } catch (e) { }
+    var m = document.createElement('div'); m.id = 'rp-rep-modal';
+    m.innerHTML = '<div class="rp-box"><div class="rp-h"><b>✉ 틀린 곳 알리기</b><button data-x="1" title="닫기">✕</button></div><div class="rp-b">'
+      + '<div class="rp-small">본문 글자, 인명·지명·용어 풀이, 지도 자리, 가계도 연결 등에서 틀린 것을 보셨으면 적어 주세요. 「보내기」를 누르면 카톡 같은 앱을 골라 보낼 수 있고, 안 되면 글이 복사됩니다.</div>'
+      + '<div class="rp-row" style="margin:10px 0 6px"><label>자리: <b>' + (bk ? esc(bk.name) + ' ' + c + '장' : '—') + '</b></label><label class="rp-small">절 <input data-f="v" type="number" min="1" style="width:64px" placeholder="몇 절"></label></div>'
+      + '<textarea data-f="msg" placeholder="예) 12절 「○○」 지명을 누르면 다른 곳이 나옵니다 / 인물 창 설명에 오타가 있습니다"></textarea>'
+      + '<pre data-f="pre"></pre>'
+      + '<div class="rp-row"><button class="rp-btn rp-pri" data-r="send">보내기</button><button class="rp-btn" data-r="copy">글 복사</button></div></div></div>';
+    document.body.appendChild(m);
+    function text() {
+      var v = m.querySelector('[data-f=v]').value, msg = m.querySelector('[data-f=msg]').value.trim();
+      var dev = (window.innerWidth <= 768 ? '폰' : 'PC') + (admin ? '·관리자' : '');
+      return '[바이블 맵 스터디 · 틀린 곳]\n자리: ' + (bk ? bk.name + ' ' + c + '장' + (v ? ' ' + v + '절' : '') : '—') + '\n내용: ' + (msg || '(적지 않음)') + '\n판: ' + BUILD + ' · ' + dev + ' · ' + ymd(new Date());
+    }
+    function upd() { m.querySelector('[data-f=pre]').textContent = text(); }
+    upd(); m.addEventListener('input', upd);
+    function copy(s) {
+      if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(s).then(function () { return true; }, function () { return fallback(s); });
+      return Promise.resolve(fallback(s));
+    }
+    function fallback(s) { try { var ta = document.createElement('textarea'); ta.value = s; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); var ok = document.execCommand('copy'); ta.remove(); return ok; } catch (e) { return false; } }
+    m.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t === m || t.closest('[data-x]')) { m.remove(); return; }
+      var r = t.closest('[data-r]'); if (!r) return;
+      var s = text();
+      if (r.dataset.r === 'send' && navigator.share) { navigator.share({ text: s }).then(function () { m.remove(); }, function () { }); return; }
+      copy(s).then(function (ok) { toast(ok ? '글을 복사했습니다 — 카톡 등에 붙여 보내 주세요' : '복사가 안 됩니다 — 위 글을 길게 눌러 복사해 주세요', ok ? 'success' : 'warn', 4500); });
+    });
+    setTimeout(function () { try { m.querySelector('[data-f=msg]').focus(); } catch (e) { } }, 50);
+  }
+
+  /* ── 💾 백업 알림: 내 기록이 있는데 오래 백업하지 않았으면 한 번 알림 ── */
+  function myDataCount() {
+    var n = 0;
+    try { n += Object.keys(ls('kjm_qt_notes', {}) || {}).length; } catch (e) { }
+    try { n += Object.keys(getLog()).length; } catch (e) { }
+    try { if (typeof window.aidBackupData === 'function') { var a = window.aidBackupData() || {}; ['bookmarks', 'memory'].forEach(function (k) { var v = a[k]; if (v) n += Array.isArray(v) ? v.length : Object.keys(v).length; }); } } catch (e) { }
+    return n;
+  }
+  function checkBackup() {
+    var n = myDataCount(); if (!n) return;
+    var now = Date.now(), last = +ls(LASTBK, 0) || 0, seen = +ls(SEEN, 0) || 0, snooze = +ls(SNOOZE, 0) || 0;
+    if (!last && !seen) { lsSet(SEEN, now); return; }   // 처음 본 날은 알리지 않음 — 2주 뒤부터
+    if (snooze > now) return;
+    var since = last ? now - last : now - seen, limit = last ? 30 : 14;
+    if (since < limit * 86400000) return;
+    if (document.getElementById('rp-bk-note')) return;
+    var days = Math.floor(since / 86400000);
+    var d = document.createElement('div'); d.id = 'rp-bk-note';
+    d.innerHTML = '<span>💾 ' + (last ? '마지막 백업 뒤 ' + days + '일이 지났습니다.' : '아직 백업한 적이 없습니다.') + ' QT 노트·책갈피·읽음 기록(' + n + '개)은 이 기기에만 있어 폰을 바꾸거나 브라우저 기록을 지우면 사라집니다.</span>'
+      + '<button class="rp-pri" data-bk="now">지금 백업</button><button data-bk="later">7일 뒤에</button>';
+    document.body.appendChild(d);
+    d.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-bk]'); if (!b) return;
+      if (b.dataset.bk === 'now') { var btn = document.getElementById('btn-export-backup'); if (btn) btn.click(); }
+      else lsSet(SNOOZE, now + 7 * 86400000);
+      d.remove();
+    });
+  }
+
+  /* ── 밖에서 부르는 곳 ── */
+  window.ReadPlan = {
+    onChapter: function (b, c, container) { drawEnd(container, b, c); },
+    open: openModal,
+    report: openReport,
+    backupData: function () { var o = { log: getLog() }; var p = ls(PLAN, null); if (p) o.plan = p; return o; },
+    restoreData: function (d) {
+      if (!d || typeof d !== 'object') return;
+      if (d.log && typeof d.log === 'object') { var o = getLog(); Object.keys(d.log).forEach(function (k) { if (!o[k] || d.log[k] > o[k]) o[k] = d.log[k]; }); lsSet(LOG, o); }   // 읽음은 합침(지운 것은 되살아남)
+      if (d.plan && PLANS[d.plan.id] && !curPlan()) lsSet(PLAN, d.plan);   // 이 기기에 통독표가 없을 때만
+      refreshEnd();
+    },
+    markBackup: function () { lsSet(LASTBK, Date.now()); try { localStorage.removeItem(SNOOZE); } catch (e) { } var n = document.getElementById('rp-bk-note'); if (n) n.remove(); },
+    _plans: PLANS, _days: planDays, _check: checkBackup
+  };
+  function init() {
+    var b = document.getElementById('btn-readplan'); if (b) b.addEventListener('click', function (e) { e.stopPropagation(); openModal(); });
+    var r = document.getElementById('menu-report'); if (r) r.addEventListener('click', function () { openReport(0, 0); });
+    setTimeout(checkBackup, 8000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
 
