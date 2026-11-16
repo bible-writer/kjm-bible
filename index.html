@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>성경 필사 + QT (v171)</title>
+<title>성경 필사 + QT (v172)</title>
   <!-- PWA 설정 -->
   <link rel="manifest" href="manifest-writing.json">
   <meta name="theme-color" content="#6366f1">
@@ -1173,6 +1173,19 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
+  }
+  /* v172 (2026-11-16): 폰 폭에서 탭 글자가 한 자씩 세로로 늘어서던 것 → 한 줄로 두고 옆으로 밀어 보기, 머리 제목이 오른쪽 위 단추와 겹치지 않게 */
+  @media (max-width: 600px) {
+    .main-tabs, .sticky-top .main-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 4px; }
+    .main-tabs::-webkit-scrollbar { display: none; }
+    .main-tab, .sticky-top .main-tab { flex: 0 0 auto; white-space: nowrap; letter-spacing: 0; padding: 10px 12px; font-size: 14px; }
+    header { padding-left: 84px; padding-right: 84px; }
+    h1 { letter-spacing: 0.2em; }
+    .subtitle { letter-spacing: 0.05em; font-size: 13px; }
+    body .help-btn { right: 8px; }
+    body .sticky-toggle { right: 46px; }
+    .text-display-title { white-space: nowrap; letter-spacing: 0; margin-right: 6px; }
+    .text-display-header { gap: 6px; }
   }
   .main-tab.active {
     background: linear-gradient(135deg, #5c4a30 0%, #8b6f47 100%);
