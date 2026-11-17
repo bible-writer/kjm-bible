@@ -19808,7 +19808,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-40`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-41`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -26302,7 +26302,7 @@ window.RoutePlay = (function () {
  * ═══════════════════════════════════════════════════════════════════════════ */
 (function () {
   var LOG = 'kjm_read_log', PLAN = 'kjm_read_plan', LASTBK = 'kjm_last_backup', SNOOZE = 'kjm_bk_snooze', SEEN = 'kjm_bk_seen';
-  var BUILD = 'b20261114-40';
+  var BUILD = 'b20261114-41';
   function ls(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
@@ -26598,7 +26598,7 @@ window.RoutePlay = (function () {
  * fetch 로 받아 iframe srcdoc 에 넣는다 → 서비스워커 일반 요청 길로 캐시되어, 한 번 본 책은 인터넷 없이도 열린다.
  * 들어가는 곳: 읽을 자리 줄 📄 단추(지금 읽는 책) · 📚 도우미 「책 소개」의 「📄 한 장 정리 보기」 */
 (function () {
-  var VER = 'b20261114-40';
+  var VER = 'b20261114-41';
   var css = document.createElement('style');
   css.textContent = ''
     + '#op-modal{position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.55);display:flex;align-items:center;justify-content:center}'
