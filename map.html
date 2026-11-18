@@ -7556,6 +7556,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         container.appendChild(row);
       });
       rawdictShownCount += slice.length;
+      kjmMarkTerms(container, kjmHLTerms('rawdict', q));
 
       if (rawdictShownCount < filtered.length) {
         loadMoreWrap.innerHTML = `<button onclick="renderRawDictResults(false)" style="padding:6px 16px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;cursor:pointer;font-size:0.85em">더 보기 (${filtered.length - rawdictShownCount}개 남음)</button>`;
@@ -8946,6 +8947,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       });
       card.innerHTML = h;
       res.style.display = 'none'; card.style.display = 'block';
+      try { kjmMarkTerms(card, kjmHL.dict); } catch (e) {}
       const lm = document.getElementById('dict-load-more-wrap'); if (lm) lm.style.display = 'none';
       card.querySelector('#dict-card-back').onclick = closeDictCard;
       card.querySelectorAll('[data-act]').forEach(b => b.onclick = () => {
@@ -9150,6 +9152,42 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       for (const w of q.not) if (t.indexOf(w) >= 0) return false;
       return true;
     }
+    /* (b20261114-43 kjm 「결과값 채색되게. 찾는값」) 찾는 말 칠하기 — 위 검색어는 노랑, 결과 안에서 조건은 하늘색 */
+    const kjmHL = {};
+    function kjmHLTerms(pre, mainQ) {
+      const rq = kjmParseCond((document.getElementById(pre + '-refine') || {}).value);
+      const main = String(mainQ || '').trim().toLowerCase();
+      const ref = rq.all.concat(...rq.any).filter(Boolean);
+      kjmHL[pre] = { main: main ? [main] : [], ref: ref };
+      return kjmHL[pre];
+    }
+    function kjmMarkTerms(root, hl) {
+      if (!root || !hl) return;
+      const list = [];
+      (hl.main || []).forEach(t => t && list.push([t, 'kjm-hl-m']));
+      (hl.ref || []).forEach(t => t && list.push([t, 'kjm-hl-r']));
+      if (!list.length) return;
+      list.sort((a, b) => b[0].length - a[0].length);
+      const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp('(' + list.map(x => esc(x[0])).join('|') + ')', 'gi');
+      const cls = {}; list.forEach(x => { if (!cls[x[0]]) cls[x[0]] = x[1]; });
+      const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => {
+        const p = n.parentNode; if (!p || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (p.closest && p.closest('mark,script,style,textarea,input,select,button')) return NodeFilter.FILTER_REJECT;
+        re.lastIndex = 0; return re.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } });
+      const nodes = []; while (tw.nextNode()) nodes.push(tw.currentNode);
+      nodes.forEach(n => {
+        const frag = document.createDocumentFragment(); const txt = n.nodeValue; let last = 0; re.lastIndex = 0; let m;
+        while ((m = re.exec(txt))) {
+          if (m.index > last) frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+          const mk = document.createElement('mark'); mk.className = cls[m[0].toLowerCase()] || 'kjm-hl-m'; mk.textContent = m[0]; frag.appendChild(mk);
+          last = m.index + m[0].length; if (!m[0].length) re.lastIndex++;
+        }
+        if (last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+        n.parentNode.replaceChild(frag, n);
+      });
+    }
+    (function () { const st = document.createElement('style'); st.textContent = 'mark.kjm-hl-m{background:#fde68a;color:inherit;border-radius:2px;padding:0 1px}mark.kjm-hl-r{background:#a5f3fc;color:inherit;border-radius:2px;padding:0 1px;box-shadow:inset 0 -2px 0 #0891b2}'; document.head.appendChild(st); })();
     function kjmRefineUi(pre, mainQ, before, after, rerender) {
       const row = document.getElementById(pre + '-refine-row'), inp = document.getElementById(pre + '-refine'), nEl = document.getElementById(pre + '-refine-n');
       if (!row || !inp) return;
@@ -9244,6 +9282,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         container.appendChild(row);
       });
       dictShownCount += slice.length;
+      kjmMarkTerms(container, kjmHLTerms('dict', q));
 
       if (dictShownCount < filtered.length) {
         loadMoreWrap.innerHTML = `<button onclick="renderDictResults(false)" style="padding:6px 16px;border:1px solid #cbd5e1;border-radius:6px;background:#fff;cursor:pointer;font-size:0.85em">더 보기 (${filtered.length - dictShownCount}개 남음)</button>`;
