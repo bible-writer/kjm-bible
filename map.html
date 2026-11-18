@@ -1079,9 +1079,10 @@ function kjmDebounce(fn, ms) { var t = null; return function () { var self = thi
       display: flex; gap: 4px; padding: 4px 8px; background: #f1f5f9;
       border-bottom: 1px solid #e2e8f0; align-items: center;
     }
+    #bible-search-bar { flex-wrap: wrap; }
     #bible-search-input {
-      flex: 1; padding: 5px 8px; border: 1px solid #cbd5e1; border-radius: 6px;
-      font-size: 13px; outline: none; min-width: 0;
+      flex: 1 1 160px; padding: 5px 8px; border: 1px solid #cbd5e1; border-radius: 6px;
+      font-size: 13px; outline: none; min-width: 140px;
     }
     #bible-search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,.15); }
     #bible-search-input::placeholder { color: #94a3b8; }
@@ -1824,7 +1825,8 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         <h1 id="app-title">바이블 맵 스터디</h1>
         <p id="app-subtitle">읽고, 찾아가고, 원어로 깊이</p>
       </div>
-      <button id="btn-toggle-map" class="btn-header-map-toggle" title="지도 패널 표시/숨김">🗺 지도</button>
+      <span style="display:flex;gap:6px;align-items:center"><button id="btn-help" title="바이블 맵 사용법 — 기능 안내" style="flex-shrink:0;background:#0f766e;color:#fff;border:1px solid #14b8a6;border-radius:6px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">❓ 사용법</button>
+      <button id="btn-toggle-map" class="btn-header-map-toggle" title="지도 패널 표시/숨김">🗺 지도</button></span>
     </div>
     <!-- 2026-09-12: 상태줄이 한 줄로 줄어 접을 게 없어졌다. JS 가 이 id 를 쓰므로 감춘다 -->
     <div id="header-toggle-bar" onclick="toggleHeaderCollapse()" style="display:none">▲ 접기</div>
@@ -2013,8 +2015,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
 
     <!-- 성경 본문 검색 바 -->
     <div id="bible-search-bar">
-      <input type="text" id="bible-search-input" placeholder="성경 본문 검색 (예: 광야, 창1:1, 창세기 3:15)" autocomplete="off">
+      <input type="text" id="bible-search-input" placeholder="본문 검색 (예: 광야 · 사랑 하나님 · 광야 | 사막 · 사랑 -미워 · 창1:1)" title="띄어 쓰면 모두 든 절 · | 는 하나라도 · -낱말 은 빼기 · &quot;따옴표&quot; 는 붙은 그대로" autocomplete="off">
       <select id="bs-trans-select" title="검색할 번역 선택"><option value="master">개역개정</option></select>
+      <select id="bs-range" title="찾을 범위" style="flex:0 0 auto;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#334155;font-size:12px;padding:4px 4px;cursor:pointer"><option value="all">전체</option><option value="ot">구약</option><option value="nt">신약</option><option value="book">이 책</option></select>
+      <label id="bs-within-l" title="지금 나온 결과 안에서만 다시 찾기" style="display:none;font-size:11.5px;color:#475569;white-space:nowrap;cursor:pointer"><input type="checkbox" id="bs-within" style="vertical-align:middle;margin:0 2px 0 0">결과 안에서</label>
       <button class="bs-btn" id="bs-btn-go" title="검색 실행">🔍</button>
       <button class="bs-btn" id="bs-btn-close" title="검색 닫기" style="display:none;">✕</button>
       <button class="bs-btn" id="bs-btn-tts" title="본문 읽기 (TTS)">🔊</button>
@@ -19808,7 +19812,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-42`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-43`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21400,11 +21404,55 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           .replace(/<\/?[A-Za-z][A-Za-z0-9]*(?: [^>]*?)?>/g, '');
       }
 
+      /* ── (b20261114-43 kjm 「성경 본문 다단 검색」) 여러 낱말 조건 ──
+       * 띄어 쓰기 = 모두 들어 있는 절(그리고) · a | b = 하나라도(또는) · -a = 빼기 · "…" = 붙은 그대로 */
+      function parseBsQuery(raw) {
+        const q = { all: [], any: [], not: [], terms: [] };
+        const toks = [];
+        String(raw).replace(/"([^"]+)"|(\S+)/g, function(m, ph, w) { toks.push(ph != null ? { t: ph.trim(), ph: true } : { t: w, ph: false }); return m; });
+        // 「광야 | 사막」처럼 띄어 쓴 | 를 앞뒤 낱말과 묶는다
+        const merged = [];
+        for (let i = 0; i < toks.length; i++) {
+          const k = toks[i];
+          if (!k.ph && k.t === '|' && merged.length && i + 1 < toks.length) { const nx = toks[++i]; merged[merged.length - 1] = { t: merged[merged.length - 1].t + '|' + nx.t, ph: false, or: true }; continue; }
+          if (!k.ph && merged.length && /^\|/.test(k.t)) { merged[merged.length - 1] = { t: merged[merged.length - 1].t + k.t, ph: false, or: true }; continue; }
+          if (!k.ph && merged.length && /\|$/.test(merged[merged.length - 1].t)) { merged[merged.length - 1] = { t: merged[merged.length - 1].t + k.t, ph: false, or: true }; continue; }
+          merged.push(k);
+        }
+        merged.forEach(function(k) {
+          const t = k.t;
+          if (!t) return;
+          if (!k.ph && t.length > 1 && t[0] === '-') { q.not.push(t.slice(1)); return; }
+          if (!k.ph && t.indexOf('|') >= 0) { const g = t.split('|').map(x => x.trim()).filter(Boolean); if (g.length > 1) { q.any.push(g); g.forEach(x => q.terms.push(x)); } else if (g.length) { q.all.push(g[0]); q.terms.push(g[0]); } return; }
+          q.all.push(t); q.terms.push(t);
+        });
+        q.multi = (q.all.length + q.any.length + q.not.length) > 1 || q.any.length > 0 || q.not.length > 0;
+        return q;
+      }
+      function bsMatch(q, text) {
+        const t = String(text).toLowerCase();
+        for (const w of q.all) if (t.indexOf(w.toLowerCase()) < 0) return false;
+        for (const g of q.any) if (!g.some(w => t.indexOf(w.toLowerCase()) >= 0)) return false;
+        for (const w of q.not) if (t.indexOf(w.toLowerCase()) >= 0) return false;
+        return true;
+      }
+      function bsInRange(bookId) {
+        const r = (document.getElementById('bs-range') || {}).value || 'all';
+        if (r === 'ot') return bookId <= 39;
+        if (r === 'nt') return bookId >= 40;
+        if (r === 'book') { const cur = parseInt((document.getElementById('book-select') || {}).value, 10); return !cur || bookId === cur; }
+        return true;
+      }
+      let bsLastKeys = null;   // 「결과 안에서」 — 앞 결과의 절들
+      function bsKeyOk(b, c, v) { const w = document.getElementById('bs-within'); return !(w && w.checked && bsLastKeys) || bsLastKeys.has(b + '_' + c + '_' + v); }
+
       /* ── 선택한 번역에서 키워드 검색 ── */
       function searchInTranslation(key, keyword, maxResults) {
         const tr = translationRegistry[key];
         if (!tr) return [];
-        const kw = keyword.toLowerCase();
+        const Q = parseBsQuery(keyword);
+        const _wiOn = (function(){ const w = document.getElementById('bs-within'); return !!(w && w.checked && bsLastKeys); })();
+        if (!Q.terms.length && !(_wiOn && Q.not.length)) return [];
         /* 상한에 걸려 잘렸는지 알리려고 전체 수를 따로 적어 둔다 */
         window._searchTotal = null;
 
@@ -21416,10 +21464,11 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           let total = 0;
           for (const k in map) {
             const text = map[k];
-            if (!text || String(text).toLowerCase().indexOf(kw) < 0) continue;
+            if (!text) continue;
+            const p = k.split('_');
+            if (!bsInRange(Number(p[0])) || !bsKeyOk(p[0], p[1], p[2]) || !bsMatch(Q, stripVerseTags(text))) continue;
             total++;
             if (out.length >= maxResults) continue;
-            const p = k.split('_');
             out.push({ bookId: Number(p[0]), chapter: Number(p[1]), verse: Number(p[2]), text: String(text) });
           }
           window._searchTotal = total;
@@ -21432,13 +21481,21 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
         const sc = (key === 'master') ? detectedSchema : tr.schema;
         if (!db || !sc) return null;
         try {
-          const safeKw = keyword.replace(/'/g, "''");
-          const sql = 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '" WHERE "' + sc.content + '" LIKE \'%' + safeKw + '%\' ORDER BY CAST("' + sc.book + '" AS INTEGER), CAST("' + sc.chapter + '" AS INTEGER), CAST("' + sc.verse + '" AS INTEGER) LIMIT ' + maxResults;
+          const lk = function(w) { return '"' + sc.content + '" LIKE \'%' + String(w).replace(/'/g, "''") + '%\''; };
+          const conds = Q.all.map(lk).concat(Q.any.map(function(g) { return '(' + g.map(lk).join(' OR ') + ')'; }));
+          if (!conds.length) conds.push('1');
+          const sql = 'SELECT "' + sc.book + '", "' + sc.chapter + '", "' + sc.verse + '", "' + sc.content + '" FROM "' + sc.table + '" WHERE ' + conds.join(' AND ') + ' ORDER BY CAST("' + sc.book + '" AS INTEGER), CAST("' + sc.chapter + '" AS INTEGER), CAST("' + sc.verse + '" AS INTEGER)';
           const res = db.exec(sql);
           if (!res.length) return [];
-          return res[0].values.map(function(r) {
-            return { bookId: Number(r[0]), chapter: Number(r[1]), verse: Number(r[2]), text: String(r[3] || '') };
+          const out = []; let total = 0;
+          res[0].values.forEach(function(r) {
+            const b = Number(r[0]), c = Number(r[1]), v = Number(r[2]), tx = String(r[3] || '');
+            if (!bsInRange(b) || !bsKeyOk(b, c, v) || !bsMatch(Q, stripVerseTags(tx))) return;
+            total++;
+            if (out.length < maxResults) out.push({ bookId: b, chapter: c, verse: v, text: tx });
           });
+          window._searchTotal = total;
+          return out;
         } catch(e) { console.warn('searchInTranslation error:', e); return []; }
       }
 
@@ -21503,13 +21560,24 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           return;
         }
 
-        const kw = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const _q = parseBsQuery(query);
+        const _ts = (_q.terms.length ? _q.terms : [query]).slice().sort((a, b) => b.length - a.length);
+        const kw = _ts.map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
         const re = kw ? new RegExp('(' + kw + ')', 'gi') : null;
 
         let h = '<div class="bsr-summary">\ud83d\udcd6 ' + (transLabel ? '[' + escHtml(transLabel) + '] ' : '') + '"' + escHtml(query) + '" \uac80\uc0c9 \uacb0\uacfc: ' + results.length + '\uac74'
           + ((window._searchTotal && window._searchTotal > results.length)
               ? ' \u2014 \ubaa8\ub450 ' + window._searchTotal.toLocaleString() + '\uac74 \uac00\uc6b4\ub370 \uc55e\uc758 ' + results.length + '\uac74'
               : '') + '</div>';
+        const _rg = { all: '', ot: '구약', nt: '신약', book: '이 책' }[(document.getElementById('bs-range') || {}).value || 'all'];
+        const _cond = [];
+        if (_q.all.length) _cond.push('모두: ' + _q.all.join(', '));
+        _q.any.forEach(g => _cond.push('하나라도: ' + g.join(' 또는 ')));
+        if (_q.not.length) _cond.push('뺌: ' + _q.not.join(', '));
+        const _wi = document.getElementById('bs-within');
+        if ((_q.multi || _rg || (_wi && _wi.checked && bsLastKeys)) && !isRef)
+          h += '<div class="bsr-summary" style="font-weight:500;padding-top:4px;padding-bottom:6px">' + escHtml((_q.multi ? _cond : []).concat(_rg ? ['범위: ' + _rg] : []).concat((_wi && _wi.checked && bsLastKeys) ? ['앞 결과 ' + bsLastKeys.size + '절 안에서'] : []).join(' · ')) + '</div>';
+        if (!isRef) { bsLastKeys = new Set(results.map(r => r.bookId + '_' + r.chapter + '_' + r.verse)); const L = document.getElementById('bs-within-l'); if (L) L.style.display = ''; }
         h += '<div id="bible-search-results">';
 
         results.forEach(function(r) {
@@ -21526,7 +21594,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
             if (re && !isRef) dt = dt.replace(re, '<mark>$1</mark>');
           }
 
-          const places = findRelatedPlaces(r.bookId, r.chapter, r.verse, query);
+          const places = findRelatedPlaces(r.bookId, r.chapter, r.verse, _q.terms[0] || query);
           let pt = '';
           places.forEach(function(p) {
             pt += ' <span class="bsr-place-tag" onclick="event.stopPropagation();BibleGeoEngine.flyToPlace(placeDatabase.find(x=>x.id===' + p.id + '))" title="\uc9c0\ub3c4\uc5d0\uc11c \ubcf4\uae30">\ud83d\udccd' + escHtml(p.name) + '</span>';
@@ -21613,6 +21681,9 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           savedContentHtml = '';
           isSearchMode = false;
           bsClose.style.display = 'none';
+          bsLastKeys = null;
+          const _w = document.getElementById('bs-within'); if (_w) _w.checked = false;
+          const _l = document.getElementById('bs-within-l'); if (_l) _l.style.display = 'none';
         }
       }
       window.closeBibleSearch = closeBibleSearch;
@@ -21640,6 +21711,10 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
         bsSel.addEventListener('change', function() { if (bsInput.value.trim()) executeBibleSearch(); });
       }
       bsInput.addEventListener('focus', refreshTransOptions);
+      const bsRange = document.getElementById('bs-range');
+      if (bsRange) bsRange.addEventListener('change', function() { if (bsInput.value.trim() && !parseVerseRef(bsInput.value.trim())) { const w = document.getElementById('bs-within'); if (w) w.checked = false; executeBibleSearch(); } });
+      /* 밖(성구사전 등)에서 본문 검색을 여는 문 */
+      window.openBibleSearch = function(q) { if (!bsInput) return; refreshTransOptions(); if (bsSel) bsSel.value = 'master'; const w = document.getElementById('bs-within'); if (w) w.checked = false; bsInput.value = q; executeBibleSearch(); try { bsInput.focus(); } catch (e) {} };
       bsGo.addEventListener('click', executeBibleSearch);
       bsInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') executeBibleSearch();
@@ -25008,7 +25083,8 @@ window.RoutePlay = (function () {
     if (cs && cur.code) all = cs.by.get(cur.code) || [];
     all.forEach(function (i) { var b = IDX.B[i]; cnt[b] = (cnt[b] || 0) + 1; if (b <= 39) ot++; });
     var name = (cur.k === 'lem' ? '「' + LEM[cur.i] + '」' : '글자 그대로 「' + cur.q + '」') + (cur.code ? ' · ' + (cur.code === '?' ? '맞춤 안 됨' : cur.code) : '');
-    info.innerHTML = '<b>' + esc(name) + '</b> — ' + all.length + '구절 (구약 ' + ot + ' · 신약 ' + (all.length - ot) + ')' + (curBk ? ' · <b>' + AB[curBk] + '</b> ' + (cnt[curBk] || 0) + '구절만 보는 중' : '');
+    info.innerHTML = '<b>' + esc(name) + '</b> — ' + all.length + '구절 (구약 ' + ot + ' · 신약 ' + (all.length - ot) + ')' + (curBk ? ' · <b>' + AB[curBk] + '</b> ' + (cnt[curBk] || 0) + '구절만 보는 중' : '')
+      + (all.length && window.openBibleSearch ? ' <button class="cc-bsq" data-q="' + esc(cur.k === 'lem' ? String(LEM[cur.i]).replace(/하다$/, '') : cur.q) + '" onclick="if(innerWidth<760){var x=document.querySelector(\'#conc-modal .cc-x\');if(x)x.click();}openBibleSearch(this.dataset.q)" title="본문 검색 칸으로 넘겨 다른 낱말과 함께 찾기 (예: 사랑 하나님 · 사랑 -미워)" style="font-size:11.5px;padding:1px 7px;margin-left:4px;border:1px solid #93c5fd;background:#eff6ff;color:#1d4ed8;border-radius:5px;cursor:pointer">🔍 본문 검색으로 더 좁히기</button>' : '');
     bks.innerHTML = all.length ? '<button data-b="0"' + (curBk ? '' : ' class="on"') + '>전체</button>' + Object.keys(cnt).map(Number).sort(function (a, b) { return a - b; }).map(function (b) {
       return '<button data-b="' + b + '" class="' + (b > 39 ? 'nt' : '') + (b === curBk ? ' on' : '') + '">' + AB[b] + ' ' + cnt[b] + '</button>';
     }).join('') : '';
@@ -26315,7 +26391,7 @@ window.RoutePlay = (function () {
  * ═══════════════════════════════════════════════════════════════════════════ */
 (function () {
   var LOG = 'kjm_read_log', PLAN = 'kjm_read_plan', LASTBK = 'kjm_last_backup', SNOOZE = 'kjm_bk_snooze', SEEN = 'kjm_bk_seen';
-  var BUILD = 'b20261114-42';
+  var BUILD = 'b20261114-43';
   function ls(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
@@ -26683,5 +26759,103 @@ window.RoutePlay = (function () {
 })();
 </script>
 
+<script>
+/* (b20261114-43 kjm 「map 사용방법 도움말이 필요하지 않을까?」) ❓ 사용법 — 전체 안내. 이름 단추를 누르면 그 기능이 열린다 */
+(function () {
+  var G = function (id, t) { return '<button class="hp-go" data-go="' + id + '">' + t + '</button>'; };
+  var SEC = [
+    ['처음 한 번', '<ul>'
+      + '<li>성경 글은 내 기기에 있는 성경 파일(.bdb)을 등록해야 보입니다. ' + G('menu-open-bdb', '⋯ → 📖 성경DB 열기') + '로 한 번 등록하면 다음부터는 저절로 열립니다.</li>'
+      + '<li>등록한 것·표시한 것은 <b>이 기기 안에만</b> 저장됩니다. 다른 기기와 맞추려면 아래 「저장과 백업」을 보십시오.</li>'
+      + '<li>휴대폰에서는 화면 아래 <b>📖 본문 / 🗺 지도</b> 탭으로 오갑니다.</li></ul>'],
+    ['본문 읽기', '<ul>'
+      + '<li><b>구약/신약 → 책 → 장</b>을 고르고 「조회」. ◀ ▶ 는 앞·뒤 장. ' + G('btn-book-grid', '📖 책 고르기') + ' ' + G('btn-chap-grid', '🔢 장 고르기') + '는 큰 칸으로 고릅니다.</li>'
+      + '<li>글자 크기 ' + G('btn-font-inc', 'A+') + ' ' + G('btn-font-dec', 'A−') + ' · 글꼴 ' + G('btn-font-family', '가') + ' · 밤 화면 ' + G('btn-screen-mode', '🌙') + '</li>'
+      + '<li>장 끝 「☐ 이 장 다 읽음」을 누르면 ' + G('btn-readplan', '📅 통독 진도') + '에 쌓입니다.</li>'
+      + '<li>장 위 「▶ 영상」은 이 장에 맞는 유튜브 영상, 「🕰 이 장의 사건」은 연대기로 갑니다.</li>'
+      + '<li>장 끝 「✉ 틀린 곳 알리기」로 틀린 글자·잘못된 연결을 알려 주십시오.</li></ul>'],
+    ['본문 낱말 누르기', '<ul>'
+      + '<li><span class="hp-c" style="background:#dbeafe;color:#1d4ed8">지명</span> 누르면 지도에서 그곳으로 날아갑니다.</li>'
+      + '<li><span class="hp-c" style="background:#fce7f3;color:#be185d">인명</span> 누르면 그 사람 풀이·가계도.</li>'
+      + '<li><span class="hp-c" style="background:#ecfdf5;color:#047857">용어</span> 누르면 낱말 풀이와 원어(히브리어·헬라어) 뜻.</li>'
+      + '<li>절 끝 <b>🔗 숫자</b>는 관주(이어 읽을 구절). 「📇 성구사전 → 🔗 본문 켬」으로 켜고 끕니다.</li></ul>'],
+    ['본문 검색 (여러 낱말)', '<p>왼쪽 검색 칸에 넣고 🔍 또는 Enter.</p>'
+      + '<table class="hp-t"><tr><th>이렇게 넣으면</th><th>찾는 것</th></tr>'
+      + '<tr><td><code>광야</code></td><td>「광야」가 든 절</td></tr>'
+      + '<tr><td><code>사랑 하나님</code></td><td>두 낱말이 <b>모두</b> 든 절 (띄어 쓰기)</td></tr>'
+      + '<tr><td><code>광야 | 사막</code></td><td>둘 중 <b>하나라도</b> 든 절</td></tr>'
+      + '<tr><td><code>사랑 -미워</code></td><td>「사랑」은 있고 「미워」는 <b>없는</b> 절</td></tr>'
+      + '<tr><td><code>"하나님의 사랑"</code></td><td>따옴표 안 글이 <b>붙은 그대로</b> 든 절</td></tr>'
+      + '<tr><td><code>요3:16</code> · <code>창세기 3장</code></td><td>그 절·장으로 바로 이동</td></tr>'
+      + '<tr><td><code>H157</code> · <code>G26</code></td><td>그 원어 번호가 쓰인 구절</td></tr></table>'
+      + '<ul><li>옆의 칸으로 <b>전체 / 구약 / 신약 / 이 책</b>만 찾을 수 있습니다.</li>'
+      + '<li>결과가 나오면 「☐ 결과 안에서」가 생깁니다. 켜고 다시 찾으면 <b>나온 결과 안에서만</b> 좁힙니다.</li>'
+      + '<li>✕ 를 누르면 본문으로 돌아갑니다. 결과 줄을 누르면 그 절로 갑니다.</li></ul>'],
+    ['번역 · 듣기', '<ul>'
+      + '<li>' + G('btn-add-trans', '＋ 번역 추가') + '로 다른 번역을 넣고, ' + G('btn-compare-mode', '⇔ 비교보기') + '로 나란히 봅니다.</li>'
+      + '<li>' + G('bs-btn-audio', '🎧') + ' 성경 낭독(녹음) · 🔊 기기 음성으로 읽기</li></ul>'],
+    ['지도', '<ul>'
+      + '<li>' + G('btn-toggle-map', '🗺 지도') + ' 지도 칸 보이기·숨기기 · 위 검색 칸에 지명(한글·영문)이나 구절.</li>'
+      + '<li>' + G('btn-regions', '🗺 지역') + ' 성경 시대 땅 나눔 · ' + G('btn-routes', '🛤 경로') + ' 출애굽·바울 선교 길 · 「📍 표시」 지명 글자 늘 보이기.</li>'
+      + '<li>지도 바탕은 「🌫 연한 지도」 칸에서 바꿉니다. 🚶 를 켜고 지도를 누르면 그곳 거리 사진.</li></ul>'],
+    ['위쪽 단추들', '<table class="hp-t">'
+      + '<tr><td>' + G('btn-open-catalog', '📖 도감') + '</td><td>성경 지명 모두 — 그림·설명</td></tr>'
+      + '<tr><td>' + G('btn-open-dict', '📚 사전') + '</td><td>인물·지명·용어 사전</td></tr>'
+      + '<tr><td>' + G('btn-open-conc', '📇 성구사전') + '</td><td>낱말이 나오는 모든 구절 · 원어별 · 주제 · 관주 (창 안 「❓ 사용법」)</td></tr>'
+      + '<tr><td>' + G('btn-open-aid', '📚 도우미') + '</td><td>책 소개 · 사복음서 대조 · 비유·기적 · 도량형 · 가계도 · 암송 (창 안 「❓ 사용법」)</td></tr>'
+      + '<tr><td>' + G('btn-open-chrono', '🕰 연대기') + '</td><td>성경 사건을 때 차례로</td></tr>'
+      + '<tr><td>' + G('btn-open-tmap', '⏳ 시간') + '</td><td>사건 띠를 끌면 그 무렵 지명이 지도에 켜짐</td></tr>'
+      + '<tr><td>' + G('btn-open-devo', '🌅 묵상') + '</td><td>오늘의 묵상 글</td></tr>'
+      + '<tr><td>' + G('btn-onepage', '📄 한 장으로') + '</td><td>지금 책을 A3 두 장으로 정리 (개요·인물·연대표·지도·영상)</td></tr>'
+      + '<tr><td>' + G('btn-toggle-commentary', '📖 주석') + '</td><td>이 책에 넣어 둔 주석 PDF</td></tr>'
+      + '<tr><td>' + G('btn-open-rawdict', '📜 원문') + '</td><td>영어 성경사전 원문</td></tr></table>'],
+    ['저장과 백업', '<ul>'
+      + '<li>' + G('btn-export-backup', '백업') + ' 내 표시·설정을 파일로 받기. 다른 기기에서 「⋯ → 💾 백업에서 복원」.</li>'
+      + '<li>「⋯ → 🔗 Google Drive 연동」을 켜 두면 기기끼리 맞출 수 있습니다.</li>'
+      + '<li>「동기화 ▾」는 새로 고친 지명·인명·용어 자료를 받아 옵니다.</li></ul>']
+  ];
+  function open() {
+    var m = document.getElementById('hp-modal');
+    if (!m) {
+      var st = document.createElement('style');
+      st.textContent = '#hp-modal{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:100050;display:flex;align-items:center;justify-content:center}'
+        + '#hp-box{background:#fff;border-radius:12px;width:min(640px,94vw);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,.3);font-size:14px;color:#1e293b;line-height:1.6}'
+        + '#hp-box .hp-h{display:flex;align-items:center;gap:8px;padding:12px 16px;background:#1e3a5f;color:#fff;border-radius:12px 12px 0 0;font-size:16px}'
+        + '#hp-box .hp-h b{flex:1}#hp-box .hp-x{background:none;border:0;color:#fff;font-size:20px;cursor:pointer}'
+        + '#hp-box .hp-b{overflow:auto;padding:8px 14px 14px}'
+        + '#hp-box details{border-bottom:1px solid #e2e8f0}#hp-box summary{cursor:pointer;padding:9px 2px;font-weight:700;font-size:15px;color:#1e3a5f}'
+        + '#hp-box ul{margin:0 0 10px;padding-left:20px}#hp-box li{margin:3px 0}#hp-box p{margin:2px 0 6px}'
+        + '#hp-box .hp-go{border:1px solid #93c5fd;background:#eff6ff;color:#1d4ed8;border-radius:5px;padding:0 6px;font-size:13px;cursor:pointer;white-space:nowrap}'
+        + '#hp-box .hp-go:hover{background:#dbeafe}'
+        + '#hp-box .hp-c{border-radius:4px;padding:0 5px;font-weight:600}'
+        + '#hp-box .hp-t{border-collapse:collapse;width:100%;margin:4px 0 10px;font-size:13.5px}#hp-box .hp-t td,#hp-box .hp-t th{border:1px solid #e2e8f0;padding:4px 7px;text-align:left;vertical-align:top}#hp-box .hp-t th{background:#f1f5f9}'
+        + '#hp-box code{background:#fef9c3;border-radius:3px;padding:0 4px;font-size:13px}'
+        + '#hp-box .hp-f{padding:8px 16px;border-top:1px solid #e2e8f0;font-size:12.5px;color:#64748b}';
+      document.head.appendChild(st);
+      m = document.createElement('div'); m.id = 'hp-modal';
+      m.innerHTML = '<div id="hp-box"><div class="hp-h"><b>❓ 바이블 맵 사용법</b><button class="hp-x" title="닫기">✕</button></div><div class="hp-b">'
+        + SEC.map(function (s, i) { return '<details' + (i < 2 ? ' open' : '') + '><summary>' + s[0] + '</summary>' + s[1] + '</details>'; }).join('')
+        + '</div><div class="hp-f">파란 이름 단추를 누르면 그 기능이 바로 열립니다. 단추마다 마우스를 올리면 짧은 설명이 나옵니다.</div></div>';
+      document.body.appendChild(m);
+      m.addEventListener('click', function (e) {
+        if (e.target === m || e.target.closest('.hp-x')) { m.style.display = 'none'; return; }
+        var g = e.target.closest('.hp-go'); if (!g) return;
+        var el = document.getElementById(g.dataset.go);
+        m.style.display = 'none';
+        if (!el) return;
+        var bibleSide = /^(btn-book-grid|btn-chap-grid|btn-font|btn-readplan|btn-add-trans|btn-compare|bs-btn|menu-open|btn-onepage|btn-export|btn-screen)/.test(g.dataset.go);
+        if (window.innerWidth < 760 && typeof switchMobileTab === 'function') switchMobileTab(bibleSide ? 'bible' : 'map');
+        if (el.closest('.menu-panel')) { el.click(); return; }
+        setTimeout(function () { el.click(); }, 60);
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && m.style.display !== 'none') m.style.display = 'none'; });
+    }
+    m.style.display = 'flex';
+  }
+  window.openMapHelp = open;
+  function bind() { var b = document.getElementById('btn-help'); if (b) b.addEventListener('click', open); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind); else bind();
+})();
+</script>
 </body>
 </html>
