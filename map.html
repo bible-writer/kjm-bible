@@ -2297,7 +2297,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       </div>
       <div id="dict-refine-row" style="display:none;align-items:center;gap:6px;margin-top:8px;padding:5px 8px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;font-size:0.82em;color:#0c4a6e">
         <span style="white-space:nowrap;font-weight:600" title="위에서 찾은 결과를 조건으로 더 좁힙니다">🔎 결과 안에서</span>
-        <input type="text" id="dict-refine" autocomplete="off" placeholder="예: 왕 -사울 · 제사장 | 선지자 · "언약궤"" title="띄어 쓰면 모두 든 것 · | 는 하나라도 · -낱말 은 빼기 · &quot;따옴표&quot; 는 붙은 그대로 — 풀이 글 전체에서 찾습니다" style="flex:1;min-width:120px;padding:4px 7px;border:1px solid #93c5fd;border-radius:5px;font-size:1em">
+        <input type="text" id="dict-refine" autocomplete="off" placeholder="예: 왕 -사울 · 제사장 | 선지자 · "언약궤"" title="띄어 쓰면 모두 든 것 · | 는 하나라도 · -낱말 은 빼기 · &quot;따옴표&quot; 는 붙은 그대로 · 낱말 첫머리부터 맞는 것만(나이 → 나이가 ○, 하나이다 ✕) · 낱말 속까지는 *나이 — 풀이 글 전체에서 찾습니다" style="flex:1;min-width:120px;padding:4px 7px;border:1px solid #93c5fd;border-radius:5px;font-size:1em">
         <span id="dict-refine-n" style="white-space:nowrap;color:#0369a1"></span>
         <button id="dict-refine-x" title="조건 지우기" style="border:0;background:none;cursor:pointer;color:#64748b;font-size:1.05em">✕</button>
       </div>
@@ -2331,7 +2331,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       </div>
       <div id="rawdict-refine-row" style="display:none;align-items:center;gap:6px;margin-top:8px;padding:5px 8px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;font-size:0.82em;color:#0c4a6e">
         <span style="white-space:nowrap;font-weight:600" title="위에서 찾은 결과를 조건으로 더 좁힙니다">🔎 결과 안에서</span>
-        <input type="text" id="rawdict-refine" autocomplete="off" placeholder="예: king -Saul · temple | tabernacle · 제사장 · "Holy of Holies"" title="띄어 쓰면 모두 든 것 · | 는 하나라도 · -낱말 은 빼기 · &quot;따옴표&quot; 는 붙은 그대로 — 풀이 글 전체에서 찾습니다" style="flex:1;min-width:120px;padding:4px 7px;border:1px solid #93c5fd;border-radius:5px;font-size:1em">
+        <input type="text" id="rawdict-refine" autocomplete="off" placeholder="예: king -Saul · temple | tabernacle · 제사장 · "Holy of Holies"" title="띄어 쓰면 모두 든 것 · | 는 하나라도 · -낱말 은 빼기 · &quot;따옴표&quot; 는 붙은 그대로 · 낱말 첫머리부터 맞는 것만(나이 → 나이가 ○, 하나이다 ✕) · 낱말 속까지는 *나이 — 풀이 글 전체에서 찾습니다" style="flex:1;min-width:120px;padding:4px 7px;border:1px solid #93c5fd;border-radius:5px;font-size:1em">
         <span id="rawdict-refine-n" style="white-space:nowrap;color:#0369a1"></span>
         <button id="rawdict-refine-x" title="조건 지우기" style="border:0;background:none;cursor:pointer;color:#64748b;font-size:1.05em">✕</button>
       </div>
@@ -9145,11 +9145,25 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       q.empty = !q.all.length && !q.any.length && !q.not.length;
       return q;
     }
+    /* (b20261114-43 kjm 「"나이" 로 찾았더니 "하나이다" 의 나이가 칠해짐」)
+     * 낱말 첫머리부터 맞는 것만 — 「나이」는 나이·나이가·나이를 은 찾고 하나이다·사나이 는 안 찾는다(뒤에 붙는 조사·어미는 됨).
+     * 낱말 속 글자까지 찾으려면 앞에 * (예: *나이). */
+    const KJM_WCH = /[\p{L}\p{N}]/u;
+    function kjmHas(t, w) {
+      if (!w) return true;
+      if (w[0] === '*') return w.length > 1 ? t.indexOf(w.slice(1)) >= 0 : true;
+      let i = t.indexOf(w);
+      while (i >= 0) {
+        if (i === 0 || !KJM_WCH.test(t[i - 1])) return true;
+        i = t.indexOf(w, i + 1);
+      }
+      return false;
+    }
     function kjmMatchCond(q, text) {
       const t = String(text || '').toLowerCase();
-      for (const w of q.all) if (t.indexOf(w) < 0) return false;
-      for (const g of q.any) if (!g.some(w => t.indexOf(w) >= 0)) return false;
-      for (const w of q.not) if (t.indexOf(w) >= 0) return false;
+      for (const w of q.all) if (!kjmHas(t, w)) return false;
+      for (const g of q.any) if (!g.some(w => kjmHas(t, w))) return false;
+      for (const w of q.not) if (kjmHas(t, w)) return false;
       return true;
     }
     /* (b20261114-43 kjm 「결과값 채색되게. 찾는값」) 찾는 말 칠하기 — 위 검색어는 노랑, 결과 안에서 조건은 하늘색 */
@@ -9157,7 +9171,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
     function kjmHLTerms(pre, mainQ) {
       const rq = kjmParseCond((document.getElementById(pre + '-refine') || {}).value);
       const main = String(mainQ || '').trim().toLowerCase();
-      const ref = rq.all.concat(...rq.any).filter(Boolean);
+      const ref = rq.all.concat(...rq.any).filter(w => w && w !== '*');
       kjmHL[pre] = { main: main ? [main] : [], ref: ref };
       return kjmHL[pre];
     }
@@ -9169,8 +9183,10 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
       if (!list.length) return;
       list.sort((a, b) => b[0].length - a[0].length);
       const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const re = new RegExp('(' + list.map(x => esc(x[0])).join('|') + ')', 'gi');
-      const cls = {}; list.forEach(x => { if (!cls[x[0]]) cls[x[0]] = x[1]; });
+      // 위 검색어(노랑)는 예전처럼 어디든, 결과 안에서 조건(하늘)은 낱말 첫머리만(* 붙이면 어디든)
+      const pat = x => (x[1] === 'kjm-hl-r' && x[0][0] !== '*') ? '(?<![\\p{L}\\p{N}])' + esc(x[0]) : esc(x[0].replace(/^\*/, ''));
+      const re = new RegExp('(' + list.map(pat).join('|') + ')', 'giu');
+      const cls = {}; list.forEach(x => { const k = x[0].replace(/^\*/, ''); if (!cls[k]) cls[k] = x[1]; });
       const tw = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => {
         const p = n.parentNode; if (!p || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
         if (p.closest && p.closest('mark,script,style,textarea,input,select,button')) return NodeFilter.FILTER_REJECT;
@@ -26947,7 +26963,7 @@ window.RoutePlay = (function () {
       + '<li>지도 바탕은 「🌫 연한 지도」 칸에서 바꿉니다. 🚶 를 켜고 지도를 누르면 그곳 거리 사진.</li></ul>'],
     ['위쪽 단추들', '<table class="hp-t">'
       + '<tr><td>' + G('btn-open-catalog', '📖 도감') + '</td><td>성경 지명 모두 — 그림·설명</td></tr>'
-      + '<tr><td>' + G('btn-open-dict', '📚 사전') + '</td><td>인물·지명·용어 사전 — 찾은 뒤 「🔎 결과 안에서」 칸으로 풀이 글까지 조건을 걸어 좁히기</td></tr>'
+      + '<tr><td>' + G('btn-open-dict', '📚 사전') + '</td><td>인물·지명·용어 사전 — 찾은 뒤 「🔎 결과 안에서」 칸으로 풀이 글까지 조건을 걸어 좁히기 (낱말 첫머리부터 맞춤: 나이 → 나이가 ○ · 하나이다 ✕ / 낱말 속까지는 <code>*나이</code>)</td></tr>'
       + '<tr><td>' + G('btn-open-conc', '📇 성구사전') + '</td><td>낱말이 나오는 모든 구절 · 원어별 · 주제 · 관주 (창 안 「❓ 사용법」)</td></tr>'
       + '<tr><td>' + G('btn-open-aid', '📚 도우미') + '</td><td>책 소개 · 사복음서 대조 · 비유·기적 · 도량형 · 가계도 · 암송 (창 안 「❓ 사용법」)</td></tr>'
       + '<tr><td>' + G('btn-open-chrono', '🕰 연대기') + '</td><td>성경 사건을 때 차례로</td></tr>'
