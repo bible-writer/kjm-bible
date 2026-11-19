@@ -1115,6 +1115,9 @@ function kjmDebounce(fn, ms) { var t = null; return function () { var self = thi
     }
     .bsr-item:hover { background: #eff6ff; }
     .bsr-chips { position:sticky; top:-16px; z-index:5; max-height:40vh; overflow-y:auto; display:flex; flex-wrap:wrap; gap:4px; padding:6px 10px; border-bottom:1px solid #e2e8f0; background:#fff; font-size:12px; }
+    .bsr-tools { display:flex; gap:6px; justify-content:flex-end; padding:4px 10px 0; }
+    .bsr-tool { border:1px solid #cbd5e1; background:#fff; color:#334155; border-radius:6px; padding:2px 10px; font-size:12px; cursor:pointer; }
+    .bsr-tool:hover { background:#f1f5f9; }
     .bsr-chips-bk { display:none; } .bsr-chips.bk .bsr-chips-bk { display:contents; } .bsr-bkt { border:0; background:none; color:#2563eb; cursor:pointer; font-size:12px; padding:1px 4px; }
     .bsr-chip { border:1px solid #cbd5e1; background:#f8fafc; color:#334155; border-radius:12px; padding:1px 8px; cursor:pointer; font-size:12px; }
     .bsr-chip.nt { background:#fff7ed; border-color:#fdba74; }
@@ -2022,7 +2025,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
 
     <!-- 성경 본문 검색 바 -->
     <div id="bible-search-bar">
-      <input type="text" id="bible-search-input" placeholder="본문 검색 (예: 광야 · 사랑 하나님 · 광야 | 사막 · 사랑 -미워 · 창1:1)" title="띄어 쓰면 모두 든 절 · | 는 하나라도 · -낱말 은 빼기 · &quot;따옴표&quot; 는 붙은 그대로" autocomplete="off">
+      <input type="text" id="bible-search-input" list="bs-recent" placeholder="본문 검색 (예: 광야 · 사랑 하나님 · 광야 | 사막 · 사랑 -미워 · 창1:1)" title="띄어 쓰면 모두 든 절 · | 는 하나라도 · -낱말 은 빼기 · &quot;따옴표&quot; 는 붙은 그대로" autocomplete="off">
       <select id="bs-trans-select" title="검색할 번역 선택"><option value="master">개역개정</option></select>
       <select id="bs-range" title="찾을 범위" style="flex:0 0 auto;border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#334155;font-size:12px;padding:4px 4px;cursor:pointer"><option value="all">전체</option><option value="ot">구약</option><option value="nt">신약</option><option value="book">이 책</option></select>
       <label id="bs-within-l" title="지금 나온 결과 안에서만 다시 찾기" style="display:none;font-size:11.5px;color:#475569;white-space:nowrap;cursor:pointer"><input type="checkbox" id="bs-within" style="vertical-align:middle;margin:0 2px 0 0">결과 안에서</label>
@@ -19945,7 +19948,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-43`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-44`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -21719,6 +21722,7 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
         const _chip = function(f, label, n, on, nt) { return '<button class="bsr-chip' + (on ? ' on' : '') + (nt ? ' nt' : '') + '" data-f="' + f + '">' + escHtml(label) + ' <small>' + n + '</small></button>'; };
         h += '<div class="bsr-chips">' + _chip('all', '전체', _all.length, true) + (_ot ? _chip('ot', '구약', _ot) : '') + (_all.length - _ot ? _chip('nt', '신약', _all.length - _ot, false, true) : '')
           + (Object.keys(_bc).length > 1 ? '<button class="bsr-bkt">책별 ▾</button><span class="bsr-chips-bk">' + Object.keys(_bc).map(Number).sort(function(a, b) { return a - b; }).map(function(b) { const bo = BIBLE_BOOKS.find(x => x.id === b); return _chip(String(b), bo ? bo.abbr : '?', _bc[b], false, b >= 40); }).join('') + '</span>' : '') + '</div>';
+        h += '<div class="bsr-tools"><button class="bsr-tool" data-tool="copy" title="지금 보이는 결과(전체·구약·신약·책 고른 것) 모두를 「장절 본문」 줄로 복사">📋 복사</button><button class="bsr-tool" data-tool="print" title="지금 보이는 결과를 인쇄용 화면으로">🖨 인쇄</button></div>';
         h += '<div id="bible-search-results"></div><div id="bsr-more-wrap"></div>';
         contentEl.innerHTML = h;
         contentEl.scrollTop = 0;
@@ -21734,6 +21738,26 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
           moreEl.innerHTML = left > 0 ? '<button class="bsr-more">▼ 더 보기 (' + Math.min(300, left) + '절 · 남은 ' + left.toLocaleString() + '절)</button>' : '';
         }
         moreEl.addEventListener('click', function(e) { if (e.target.closest('.bsr-more')) _draw(); });
+        /* (b20261114-44 kjm 「검색 결과 복사·인쇄」) 고른 단추(전체·구약·신약·책)에 맞는 결과 모두 — 더 보기로 안 펼친 것까지 */
+        const _lab = r => { const bo = BIBLE_BOOKS.find(x => x.id === r.bookId); return (bo ? bo.abbr : r.bookId) + ' ' + r.chapter + ':' + r.verse; };
+        const _txt = r => stripVerseTags(String(r.text || '')).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+        const _head = () => '「' + query + '」 ' + _cur.length + '절' + (_cur !== _all ? ' (' + (contentEl.querySelector('.bsr-chip.on') || {}).innerText + ')' : '');
+        contentEl.querySelectorAll('.bsr-tool').forEach(function(btn) { btn.onclick = function() {
+          if (btn.dataset.tool === 'copy') {
+            const s = _head().replace(/\s+/g, ' ') + '\n' + _cur.map(r => _lab(r) + ' ' + _txt(r)).join('\n');
+            const done = () => showToast(_cur.length + '절을 복사했습니다.', 'success');
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(s).then(done, () => { const ta = document.createElement('textarea'); ta.value = s; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) {} ta.remove(); });
+            else { const ta = document.createElement('textarea'); ta.value = s; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) {} ta.remove(); }
+          } else {
+            const terms = (_q.terms.length ? _q.terms : [query]).slice().sort((a, b) => b.length - a.length).map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            const re2 = terms.length ? new RegExp('(' + terms.join('|') + ')', 'gi') : null;
+            const body = _cur.map(r => '<div class="v"><b>' + escHtml(_lab(r)) + '</b> ' + (re2 ? escHtml(_txt(r)).replace(re2, '<mark>$1</mark>') : escHtml(_txt(r))) + '</div>').join('');
+            const w = window.open('', '_blank');
+            if (!w) { showToast('새 창이 막혔습니다. 팝업 허용 후 다시 눌러 주십시오.', 'info'); return; }
+            w.document.write('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>' + escHtml(_head()) + '</title><style>body{font-family:"Noto Sans KR",sans-serif;margin:24px;color:#111;font-size:13px;line-height:1.65}h1{font-size:17px;margin:0 0 10px}.v{padding:3px 0;border-bottom:1px solid #eee;break-inside:avoid}b{color:#1e3a8a;margin-right:4px}mark{background:#fde68a}@media print{button{display:none}}</style></head><body><button onclick="print()" style="float:right;padding:6px 14px">🖨 인쇄</button><h1>' + escHtml(_head()) + '</h1>' + body + '</body></html>');
+            w.document.close(); setTimeout(function () { try { w.focus(); w.print(); } catch (e) {} }, 400);
+          }
+        }; });
         contentEl.querySelector('.bsr-chips').addEventListener('click', function(e) {
           const t = e.target.closest('.bsr-bkt');
           if (t) { const box = t.parentElement; box.classList.toggle('bk'); t.textContent = box.classList.contains('bk') ? '책별 ▴' : '책별 ▾'; return; }
@@ -21779,9 +21803,23 @@ function toggleHeaderCollapse() { /* 하는 일 없음 */ }
       }
 
       /* ── 메인 검색 실행 ── */
+      /* (b20261114-44 kjm 「최근 찾은 말 기억」) 이 기기에 10개까지 — 검색 칸을 누르면 아래로 펼쳐짐(datalist) */
+      function bsRecentLoad() { try { return JSON.parse(localStorage.getItem('kjm_bs_recent') || '[]'); } catch (e) { return []; } }
+      function bsRecentDraw() {
+        let dl = document.getElementById('bs-recent'); if (!dl) { dl = document.createElement('datalist'); dl.id = 'bs-recent'; document.body.appendChild(dl); }
+        dl.innerHTML = bsRecentLoad().map(q => '<option value="' + escHtml(q) + '">').join('');
+      }
+      function bsRecentAdd(q) {
+        if (!q || q.length > 60) return;
+        const a = bsRecentLoad().filter(x => x !== q); a.unshift(q);
+        try { localStorage.setItem('kjm_bs_recent', JSON.stringify(a.slice(0, 10))); } catch (e) {}
+        bsRecentDraw();
+      }
+      bsRecentDraw();
       function executeBibleSearch() {
         const raw = bsInput.value.trim();
         if (!raw) { showToast('\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud574 \uc8fc\uc138\uc694.', 'info'); return; }
+        bsRecentAdd(raw);
         let transKey = (bsSel && bsSel.value) || 'master';
 
         // 'H7225' 꼴을 넣으면 어느 번역이 골라져 있든 원어코드 검색으로 보낸다.
@@ -24879,6 +24917,8 @@ window.RoutePlay = (function () {
   #conc-modal .tp-v { margin-left: 8px; } #conc-modal .tp-h.see { cursor: pointer; text-decoration: underline dotted; }
   #conc-modal .tp-ch { display: inline-block; margin: 2px 4px 2px 8px; padding: 1px 8px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; cursor: pointer; font-size: 13px; }
   #conc-modal .tp-src { font-size: 12px; color: #94a3b8; margin: 14px 0 4px; }
+  #conc-modal .tp-nt { margin: 0 0 4px 18px; font-size: 12.5px; color: #64748b; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  #conc-modal .tp-nt .tp-ntc { display: inline-block; padding: 0 8px; border: 1px solid #fdba74; background: #fff7ed; color: #9a3412; border-radius: 999px; cursor: pointer; font-size: 12px; line-height: 1.7; }
   #conc-modal .tp-about { font-size: 12.5px; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px 10px; margin: 0 0 8px; line-height: 1.6; }
   #conc-modal .tp-about summary { cursor: pointer; color: #2563eb; font-weight: 600; }
   #conc-modal .tp-about[open] { padding-bottom: 8px; }
@@ -25315,7 +25355,17 @@ window.RoutePlay = (function () {
       out += '<div class="cc-v tp-v" data-i="' + i + '"><span class="r">' + AB[b] + ' ' + c + ':' + v + '</span>' + esc(IDX.T[i]) + xrBadge(b, c, v) + '</div>'; }
     return out;
   }
+  /* (b20261114-44 kjm 「📜 계명과 신약 잇기」) 계명 절의 관주 가운데 신약 절(관련도 차례) 앞 4곳 */
+  function m6NT(rs) {
+    var seen = {}, out = [];
+    rs.forEach(function (r) { if (!r[2]) return; for (var v = r[2]; v <= Math.min(r[3], r[2] + 5); v++) xList(r[0], r[1], v).forEach(function (q) {
+      var b = XR.B[q[0]], c = XR.C[q[0]], vv = XR.V[q[0]]; if (b < 40) return; var k = b + '.' + c + '.' + vv; if (seen[k]) return; seen[k] = 1; out.push([b, c, vv]); }); });
+    if (!out.length) return '';
+    return '<div class="tp-nt">✝ 신약 ' + out.slice(0, 4).map(function (x) { var i = IDX.K.get(x[0] * 1000000 + x[1] * 1000 + x[2]);
+      return '<span class="tp-ntc"' + (i == null ? '' : ' data-i="' + i + '"') + ' title="' + esc(i == null ? '' : IDX.T[i]) + '">' + AB[x[0]] + ' ' + x[1] + ':' + x[2] + '</span>'; }).join('') + '</div>';
+  }
   function topicRender() {
+    if (TOP[cur.t] && TOP[cur.t].w === 'M' && !XR) { loadXr().then(function () { if (cur && cur.k === 'topic') render(); }); }
     var m = document.getElementById('conc-modal'), info = m.querySelector('.cc-info'), bks = m.querySelector('.cc-bks'), L = m.querySelector('.cc-l');
     var t = TOP[cur.t], nref = 0; t.s.forEach(function (x) { nref += x[2].length; });
     info.innerHTML = (cur.from ? '<button class="tp-back" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:1px 8px;margin-right:6px;cursor:pointer">← 「' + esc(cur.from.k === 'lem' ? LEM[cur.from.i] : cur.from.k === 'xref' ? AB[cur.from.b] + ' ' + cur.from.c + ':' + cur.from.v : cur.from.k === 'topic' ? TOP[cur.from.t].k : cur.from.q || '') + '」</button>' : '') + '<b>📑 주제 「' + esc(t.k) + '」 <small>' + SRCN[t.w] + '</small></b> — 소제목 ' + t.s.length + ' · 성구 ' + nref + '곳';
@@ -25327,6 +25377,7 @@ window.RoutePlay = (function () {
       if (see) {   // (b20261114-10) 「→ 가 · 나」 여러 주제로 이어짐 — 이름마다 누르는 고리
         h += '<div class="tp-h d' + Math.min(2, x[0]) + '">→ ' + seeT.split(/\s*·\s*/).map(function (nm) { var ti = findT(nm); return ti >= 0 ? '<span class="see" data-t="' + ti + '" style="cursor:pointer;text-decoration:underline dotted">' + esc(nm) + '</span>' : esc(nm); }).join(' · ') + '</div>';
       } else if (lab) h += '<div class="tp-h d' + Math.min(2, x[0]) + '">' + esc(lab) + '</div>';
+      if (t.w === 'M' && x[2].length && XR) h += m6NT(x[2]);
       x[2].forEach(function (r) {
         if (!r[2]) h += '<span class="tp-ch" data-bc="' + r[0] + ',' + r[1] + '">📖 ' + AB[r[0]] + ' ' + r[1] + (r[0] === 19 ? '편' : '장') + ' 전체</span>';
         else h += vline(r[0], r[1], r[2], r[3]);
@@ -25472,14 +25523,20 @@ window.RoutePlay = (function () {
       var xb = e.target.closest('.xr'); if (xb) { var q3 = xb.dataset.x.split(',').map(Number); loadXr().then(function () { cur = { k: 'xref', b: q3[0], c: q3[1], v: q3[2], from: cur }; render(); }); return; }
       var sh = e.target.closest('.tp-h .see, .tp-h.see'); if (sh) { cur = { k: 'topic', t: +sh.dataset.t, from: cur, hl: sh.dataset.hl || '' }; render(); return; }
       var ch = e.target.closest('.tp-ch'); if (ch) { var bc = ch.dataset.bc.split(',').map(Number); if (window.innerWidth <= 768) close(); try { navigateToBibleVerse(bc[0], bc[1], 1); } catch (er) {} return; }
+      var nt = e.target.closest('.tp-ntc'); if (nt) { if (nt.dataset.i) { var ni = +nt.dataset.i; if (window.innerWidth <= 768 && !m.classList.contains('sheet')) close(); try { navigateToBibleVerse(IDX.B[ni], IDX.C[ni], IDX.V[ni]); } catch (er) {} } return; }
       var v = e.target.closest('.cc-v'); if (!v) return; var i = +v.dataset.i;
       if (window.innerWidth <= 768 && !m.classList.contains('sheet')) close();
       try { navigateToBibleVerse(IDX.B[i], IDX.C[i], IDX.V[i]); } catch (er) { console.error(er); }
     };
     return m;
   }
+  window.open613 = function (n) {
+    loadTop().then(function () { if (!TOP) return; var ti = TOP.findIndex(function (t) { return t.w === 'M'; }); if (ti >= 0) window.openConcTopic(ti, n ? n + '. ' : ''); });
+  };
   window.openConcTopic = function (t, hl) {
     window.openConcordance();
+    var cm = document.getElementById('conc-modal'), am = document.getElementById('aid-modal');
+    if (cm && am && am.style.display === 'flex') cm.style.zIndex = String((parseInt(getComputedStyle(am).zIndex, 10) || 10047) + 1);   /* 도우미에서 📜 을 눌렀을 때 성구사전이 도우미 뒤에 숨지 않게 */
     var k = 0, iv = setInterval(function () {
       if (++k > 60) { clearInterval(iv); return; }
       if (!(TOP && IDX && IDXDB === sqliteDbInstance)) return;
@@ -25707,7 +25764,7 @@ window.RoutePlay = (function () {
     var bk = document.createElement('div'); bk.id = 'aid-bk'; bk.onclick = close; document.body.appendChild(bk);
     M = document.createElement('div'); M.id = 'aid-modal';
     M.innerHTML = '<div class="ad-h"><b>📚 성경 도우미 <span style="font-size:11.5px;font-weight:400;opacity:.75">(끌어서 이동)</span></b><button class="ad-hp" title="도우미 쓰는 법" style="font-size:12.5px">❓<span class="ad-hpt"> 사용법</span></button><button class="ad-x" title="닫기">✕</button></div>'
-      + '<div class="ad-tabs">' + [['find', '🔎 찾기'], ['book', '📖 책 소개'], ['harm', '🕊 사복음서 대조'], ['pm', '✨ 비유·기적'], ['king', '👑 왕과 선지자'], ['mes', '✡ 메시아 예언'], ['meas', '⚖ 도량형·화폐·시간'], ['tree', '🌳 가계도'], ['bm', '🔖 책갈피'], ['mem', '🧠 암송']].map(function (t) { return '<button data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>'
+      + '<div class="ad-tabs">' + [['find', '🔎 찾기'], ['book', '📖 책 소개'], ['harm', '🕊 사복음서 대조'], ['pm', '✨ 비유·기적'], ['king', '👑 왕과 선지자'], ['mes', '✡ 메시아 예언'], ['sac', '🔥 제사·절기'], ['meas', '⚖ 도량형·화폐·시간'], ['tree', '🌳 가계도'], ['bm', '🔖 책갈피'], ['mem', '🧠 암송']].map(function (t) { return '<button data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>'
       + '<div class="ad-bar"></div><div class="ad-l"></div>';
     document.body.appendChild(M);
     M.querySelector('.ad-x').onclick = close;
@@ -25997,7 +26054,7 @@ window.RoutePlay = (function () {
     try { var tb = M.querySelector('.ad-tabs'), on = tb && tb.querySelector('button.on'); if (on && (on.offsetLeft < tb.scrollLeft || on.offsetLeft + on.offsetWidth > tb.scrollLeft + tb.clientWidth)) tb.scrollLeft = on.offsetLeft - 8; } catch (e) {}
     var L = M.querySelector('.ad-l');
     if (!AID && ['book', 'harm', 'pm', 'meas', 'mes', 'find'].indexOf(TAB) >= 0) { bar(''); L.innerHTML = '<div class="ad-note">도우미 자료(study_aids.json)를 받지 못했습니다. 인터넷 연결을 확인해 주십시오.</div>'; return; }
-    ({ find: rFind, book: rBook, harm: rHarm, pm: rPM, king: rKing, mes: rMes, meas: rMeas, tree: rTree, bm: rBM, mem: rMem })[TAB](L);
+    ({ find: rFind, book: rBook, harm: rHarm, pm: rPM, king: rKing, mes: rMes, sac: rSac, meas: rMeas, tree: rTree, bm: rBM, mem: rMem })[TAB](L);
     L.scrollTop = 0;
   }
   function openRow(row) {
@@ -26120,6 +26177,50 @@ window.RoutePlay = (function () {
     var s = '<div class="ad-note" style="padding-top:0">줄을 누르면 본문이 펼쳐집니다.</div>';
     order.forEach(function (g) { s += (g ? '<div class="ad-sec">' + esc(g) + ' (' + by[g].length + ')</div>' : '') + by[g].map(function (x) { return '<div class="ad-row" data-open="pm" data-refs="' + esc(x.refs) + '">' + esc(x.t) + (x.who && x.g ? ' <small style="color:#94a3b8">' + esc(x.who) + '</small>' : '') + (x.a ? ' <small class="ad-al">' + esc(x.a) + '</small>' : '') + ytRow(x.refs, x.t + (k === 'parables' ? ' 비유' : ''), '설교', x.a ? x.a.split('·')[0] + (k === 'parables' && !/비유/.test(x.a) ? ' 비유' : '') : '') + ' ' + refChips(x.refs) + (x.p ? '<br><small style="color:#64748b">' + esc(x.p) + '</small>' : '') + '</div>'; }).join(''); });
     L.innerHTML = s + '<div class="ad-src">' + esc(AID.srcP || '') + '</div>';
+  }
+  /* 🔥 제사·절기 — (b20261114-44 kjm 「레위기가 중요하거든」 → 도우미에 제사·절기 탭)
+   * 글은 우리가 쓴 요약(성경 본문 인용 없음), 장절만 고리. 줄을 누르면 본문이 펼쳐짐(개역개정 DB 연 기기만).
+   * 📜 = 그 제사·절기의 613 계명으로(성구사전). 신약 「흔히 잇는 곳」은 예표로 보는 해석이 섞여 있음을 밝힘. */
+  var SAC = [
+    { g: '5대 제사 (레 1~7장)', note: '제물을 드리는 사람·방법·뜻이 제사마다 다릅니다. 레 6~7장은 제사장이 지킬 규례를 다시 적은 곳입니다.', it: [
+      { t: '번제', s: '온전히 태워 드림', r: '3.1.1.17 3.6.8.13', w: '흠 없는 수컷 소·양·염소. 가난하면 산비둘기나 집비둘기', h: '가죽 말고는 모두 제단에서 태움(가죽은 제사장 몫, 7:8)', m: '하나님께 온전히 바치는 헌신. 안수하여 속죄를 받음(1:4)', nt: '49.5.2.2 45.12.1.1 58.10.5.10', c: 350 },
+      { t: '소제', s: '곡식을 드림', r: '3.2.1.16 3.6.14.23', w: '고운 가루에 기름과 유향, 또는 구운 떡', h: '누룩과 꿀은 넣지 않고 소금을 침(2:11~13). 한 움큼만 태우고 나머지는 제사장 몫', m: '수고한 열매를 드리는 감사와 헌신', nt: '50.4.18.18 43.6.35.35', c: 361 },
+      { t: '화목제', s: '함께 먹는 잔치', r: '3.3.1.17 3.7.11.36', w: '흠 없는 소·양·염소(수컷·암컷 모두)', h: '기름과 콩팥은 태우고, 가슴과 오른쪽 뒷다리는 제사장 몫, 나머지는 드린 사람이 먹음. 감사제·서원제·자원제가 있음(7:12~16)', m: '하나님과 화평을 누리고 함께 기뻐함', nt: '49.2.14.16 51.1.20.20', c: 359 },
+      { t: '속죄제', s: '모르고 지은 죄', r: '3.4.1.35 3.5.1.13 3.6.24.30', w: '사람에 따라 다름 — 제사장·온 회중은 수송아지, 족장은 숫염소, 백성은 암염소나 어린 암양, 가난하면 비둘기 두 마리나 고운 가루(5:7~11)', h: '피를 뿌리고 기름을 태움. 제사장·회중의 것은 고기를 진영 밖에서 불사름(4:12, 21)', m: '죄를 씻고 하나님과의 사이를 회복함', nt: '58.13.11.12 47.5.21.21', c: 352 },
+      { t: '속건제', s: '손해를 갚음', r: '3.5.14.19 3.6.1.7 3.7.1.10', w: '흠 없는 숫양', h: '성물이나 이웃에게 끼친 손해를 갚고 오분의 일을 더함(5:16, 6:5)', m: '잘못을 배상하며 관계를 바로잡음', nt: '23.53.10.10 40.5.23.24', c: 355 }
+    ] },
+    { g: '7대 절기 (레 23장)', note: '유대력 1월(아빕·니산)은 양력 3~4월, 3월(시완)은 5~6월, 7월(에다님·티쉬리)은 9~10월쯤입니다. 유월절·칠칠절·초막절에는 남자들이 모두 예루살렘에 올라갔습니다(신 16:16).', it: [
+      { t: '유월절', s: '1월 14일 저녁', r: '3.23.4.5 2.12.1.14', h: '어린양을 잡아 그 피를 문에 바르고 고기를 먹음', m: '애굽에서 건지신 일을 기념', nt: '46.5.7.7 43.1.29.29', c: 96 },
+      { t: '무교절', s: '1월 15~21일', r: '3.23.6.8 2.12.15.20', h: '이레 동안 누룩 없는 떡을 먹음', m: '급히 나온 출애굽, 죄에서 떠난 삶', nt: '46.5.8.8', c: 114 },
+      { t: '초실절(첫 이삭)', s: '무교절 중 안식일 이튿날', r: '3.23.9.14', h: '보리 첫 이삭 한 단을 흔들어 바침', m: '첫 열매를 하나님께', nt: '46.15.20.23', c: 384 },
+      { t: '칠칠절(맥추절·오순절)', s: '첫 이삭부터 50일째, 3월', r: '3.23.15.22 5.16.9.12', h: '밀 추수를 감사하며 새 곡식으로 떡 두 개를 드림', m: '추수 감사', nt: '44.2.1.4', c: 100 },
+      { t: '나팔절', s: '7월 1일', r: '3.23.23.25 4.29.1.6', h: '나팔을 불어 기념하는 성회로 쉼', m: '하나님 앞에 모임을 알림', nt: '52.4.16.16 46.15.52.52', c: 116 },
+      { t: '속죄일', s: '7월 10일', r: '3.23.26.32 3.16.1.34', h: '대제사장이 지성소에 들어가 백성의 죄를 속함. 백성은 스스로 괴롭게 함(금식)', m: '한 해의 죄를 씻음', nt: '58.9.7.12 58.9.24.28', c: 94 },
+      { t: '초막절(수장절)', s: '7월 15~21일 + 8일째 성회', r: '3.23.33.43 5.16.13.15', h: '이레 동안 초막에 머물며 추수를 기뻐함', m: '광야에서 지켜 주신 일을 기억', nt: '43.7.2.2 43.7.37.39', c: 117 }
+    ] }
+  ];
+  function rSac(L) {
+    bar('<input class="ad-q" placeholder="찾기 (예: 유월절, 속죄, 비둘기, 오순절)" value="' + esc(ST.sq || '') + '">');
+    var q = M.querySelector('.ad-q'); q.oninput = function () { ST.sq = q.value.trim(); draw(); };
+    function draw() {
+      var s = '<div class="ad-note" style="padding-top:0">줄을 누르면 본문이 펼쳐집니다. 장절 단추는 그 자리로, 📜 은 성구사전의 613 계명으로 갑니다.</div>';
+      SAC.forEach(function (G) {
+        var it = G.it.filter(function (x) { return !ST.sq || [x.t, x.s, x.w, x.h, x.m].join(' ').indexOf(ST.sq) >= 0; }); if (!it.length) return;
+        s += '<div class="ad-sec">' + esc(G.g) + '</div><div class="ad-note" style="padding:2px 4px 8px">' + esc(G.note) + '</div>';
+        s += it.map(function (x) {
+          return '<div class="ad-row ad-sac" data-open="pm" data-refs="' + esc(x.r) + '"><div><b style="font-size:15px">' + esc(x.t) + '</b> <small style="color:#9a3412">' + esc(x.s) + '</small>' + ytRow(x.r, x.t, '설교')
+            + ' <span class="ad-ref" data-act="m613" data-n="' + x.c + '" title="613 계명 ' + x.c + '번으로 (성구사전)">📜 ' + x.c + '</span></div>'
+            + '<table class="ad-t" style="margin:6px 0 2px"><tbody>'
+            + (x.w ? '<tr><th style="width:5.5em">드리는 것</th><td>' + esc(x.w) + '</td></tr>' : '')
+            + '<tr><th style="width:5.5em">' + (x.w ? '어떻게' : '하는 일') + '</th><td>' + esc(x.h) + '</td></tr>'
+            + '<tr><th>뜻</th><td>' + esc(x.m) + '</td></tr>'
+            + '<tr><th>본문</th><td>' + refChips(x.r) + '</td></tr>'
+            + '<tr><th>신약</th><td>' + refChips(x.nt) + ' <small style="color:#94a3b8">흔히 잇는 곳</small></td></tr></tbody></table></div>';
+        }).join('');
+      });
+      L.innerHTML = s + '<div class="ad-src">요약: 레위기 1~7장·23장, 출 12장, 민 28~29장, 신 16장을 바탕으로 우리말로 정리 © kjm · 신약 「흔히 잇는 곳」은 그리스도 안에서 이루어졌다고 보는 해석을 따른 것입니다.</div>';
+    }
+    draw();
   }
   /* ⚖ 도량형·화폐·시간 */
   function rMeas(L) {
@@ -26334,6 +26435,7 @@ window.RoutePlay = (function () {
       + (ST.ml === 'preset' ? '<div class="ad-src">기본 암송 구절은 필사 앱의 암송 목록(장절)과 같습니다.</div>' : '');
   }
   function act(a, el) {
+    if (a === 'm613') { if (window.open613) window.open613(+el.dataset.n); return; }
     var L = M.querySelector('.ad-l');
     if (a === 'kfind' || a === 'pfind') { ST.kg = a === 'kfind' ? '전체' : '선지자'; ST.kq = el.dataset.q; rKing(L); return; }
     if (a === 'pmqx') { ST.pmq = ''; rPM(L); return; }
@@ -26641,7 +26743,7 @@ window.RoutePlay = (function () {
  * ═══════════════════════════════════════════════════════════════════════════ */
 (function () {
   var LOG = 'kjm_read_log', PLAN = 'kjm_read_plan', LASTBK = 'kjm_last_backup', SNOOZE = 'kjm_bk_snooze', SEEN = 'kjm_bk_seen';
-  var BUILD = 'b20261114-43';
+  var BUILD = 'b20261114-44';
   function ls(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
