@@ -19948,7 +19948,7 @@ body:not(.admin-mode) .name-editable { border-bottom: none !important; cursor: d
         if (titleEl) titleEl.textContent = `바이블 맵 스터디`;   // (b20261008-4 kjm 「5」) 옛 이름: 성경 66권 인터랙티브 독서 지도
         // 판 딱지 — 어느 map.html이 돌고 있는지 눈으로 가릴 수 있게 붙인다.
         // 고칠 때마다 이 숫자를 올릴 것
-        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-45`;
+        if (subEl)   subEl.textContent   = `읽고, 찾아가고, 원어로 깊이 · b20261114-46`;
         document.title = `바이블 맵 스터디`;
       }
     }
@@ -26138,9 +26138,10 @@ window.RoutePlay = (function () {
     h += '<div class="ad-sec">짜임</div>' + (x.outline || []).map(function (o, i) { return '<div class="ad-row" data-open="o" data-refs="' + esc(o[1]) + '"><b>' + (i + 1) + '.</b> ' + esc(o[0]) + ' ' + spanChip(o[1]) + '</div>'; }).join('');
     if (x.key) h += '<div class="ad-sec">핵심 구절</div>' + verseLines(x.key, 8);
     if (x.christ) h += '<div class="ad-sec">이 책에서 보는 그리스도</div><div>' + esc(x.christ) + '</div>';
+    /* (b20261114-46 kjm 「map에 유튜브 주소링크」) 우리 「한 장으로 보는 성경」 3분 요약 영상 — study_aids.json books[].my(영상 id)가 있는 책만 단추 */
     var vs = vidFor(x, 0), va = AID.vidAll || {};
     h += '<div class="ad-sec">📄 한 장 정리</div><div><span class="ad-chip" style="display:inline-block;margin:2px 0;cursor:pointer" title="이 책을 A3 두 장으로 정리한 것 — 개요·짜임새·인물·연대표·지도·목장 나눔" onclick="window.OnePage&&OnePage.open(' + b + ')">📄 한 장 정리 보기 (A3 두 장)</span></div>';   // (b20261114-39)
-    h += '<div class="ad-sec">▶ 영상으로 보기</div><div>' + vs.map(function (v) { return '<a class="ad-chip ad-yt" href="' + YTW + v[0] + '" target="_blank" rel="noopener" title="바이블프로젝트 한국어 · 유튜브에서 열림">▶ ' + esc(vidLabel(b, v)) + '</a>'; }).join('')
+    h += '<div class="ad-sec">▶ 영상으로 보기</div><div>' + (x.my ? '<a class="ad-chip ad-yt" href="' + YTW + esc(x.my) + '" target="_blank" rel="noopener" title="한 장으로 보는 성경 · 이 책 3분 요약 영상 (유튜브에서 열림)" style="font-weight:700;background:#1f3a5f;color:#f7f3eb;border-color:#1f3a5f">▶ 3분 요약 · 한 장으로 보는 성경</a>' : '') + vs.map(function (v) { return '<a class="ad-chip ad-yt" href="' + YTW + v[0] + '" target="_blank" rel="noopener" title="바이블프로젝트 한국어 · 유튜브에서 열림">▶ ' + esc(vidLabel(b, v)) + '</a>'; }).join('')
       + ((b <= 39 ? va.ot : va.nt) ? '<a class="ad-chip ad-yt" href="' + YTW + (b <= 39 ? va.ot : va.nt) + '" target="_blank" rel="noopener">▶ ' + (b <= 39 ? '구약' : '신약') + ' 전체 개요</a>' : '')
       + '<a class="ad-chip kjm-yt-open" href="' + ytS(bookName(b) + ' 강해') + '" target="_blank" rel="noopener" data-ytq="' + esc(bookName(b)) + '" data-ytfull="' + esc(bookName(b) + ' 강해') + '">🔎 「' + esc(bookName(b)) + '」 믿을 만한 채널에서 찾기</a></div>'
       + '<div class="ad-src" style="margin-top:2px">' + esc(AID.srcV || '') + '</div>';
@@ -26743,7 +26744,7 @@ window.RoutePlay = (function () {
  * ═══════════════════════════════════════════════════════════════════════════ */
 (function () {
   var LOG = 'kjm_read_log', PLAN = 'kjm_read_plan', LASTBK = 'kjm_last_backup', SNOOZE = 'kjm_bk_snooze', SEEN = 'kjm_bk_seen';
-  var BUILD = 'b20261114-45';
+  var BUILD = 'b20261114-46';
   function ls(k, d) { try { var v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   function esc(s) { return String(s == null ? '' : s).replace(/[<>&"]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]; }); }
